@@ -7,6 +7,10 @@ name: Worst-case cost
 #
 # Reads nothing from the response body except what it needs; the actual token
 # counts come from the [usage] lines the routes now log, read from Vercel after.
+#
+# Two halves, separately switchable, because each spends real credit:
+#   interview — the conversation, 12 turns
+#   optimize  — the rewrite, one call at the maximum input the route accepts
 
 on:
   workflow_dispatch:
@@ -15,6 +19,14 @@ on:
         description: "Where to test"
         type: string
         default: "https://cv.rabit.sa"
+      run_interview:
+        description: "Drive the 12-turn conversation (~14 model calls)"
+        type: boolean
+        default: true
+      run_optimize:
+        description: "Measure the rewrite at maximum input (1 model call)"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -24,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Drive one maximally expensive conversation
+        if: ${{ inputs.run_interview }}
         env:
           BASE: ${{ inputs.base_url }}
         run: |
@@ -53,6 +66,11 @@ jobs:
           calls=0
 
           for i in $(seq 0 11); do
+            # The product's own burst limit is 6 requests per 20s. A tight loop
+            # trips it and the run stops measuring at turn 9 — pace to the limit
+            # so what we measure is the conversation, not the rate limiter.
+            [ "$i" -gt 0 ] && sleep 4
+
             msg=$(jq -r ".[$i]" turns.json)
             jq -n --arg a "$msg" --slurpfile p profile.json --slurpfile h history.json \
               '{action:"turn", lang:"ar", answer:$a, profile:$p[0], history:$h[0]}' > body.json
@@ -71,11 +89,12 @@ jobs:
 
             [ "$code" = "200" ] || continue
 
-            # Merge the patch forward, the way the browser client does.
+            # Merge the patch forward, the way the browser client does. Both the
+            # patch and the woven lines have to survive, so build the merged
+            # object in one expression that can still see both inputs.
             jq -s '.[0] * (.[1].profile_patch // {})
-                   | .wovenLines = ((.wovenLines // []) + (.[1].resume_lines // []))' \
-              profile.json out.json > merged.json 2>/dev/null \
-              || jq --slurpfile o out.json '. * ($o[0].profile_patch // {})' profile.json > merged.json
+                   + {wovenLines: ((.[0].wovenLines // []) + (.[1].resume_lines // []))}' \
+              profile.json out.json > merged.json
             mv merged.json profile.json
 
             jq -n --slurpfile h history.json --arg u "$msg" --arg a "$say" \
@@ -84,10 +103,66 @@ jobs:
           done
 
           echo "════════════════════════════════════════════════"
-          echo "model calls made from this conversation: $calls"
+          echo "requests made from this conversation: $calls"
           echo "final profile the interview accumulated:"
           jq '{role, years_of_experience, industry, skills, education,
                wovenLines: (.wovenLines // [] | length)}' profile.json
+          echo "the resume text the interview produced:"
+          jq -r '.wovenLines // [] | .[]' profile.json
           echo
           echo "Token counts are NOT in these responses by design — read the"
           echo "[usage] lines from Vercel runtime logs for the real numbers."
+
+      - name: Measure the rewrite at the maximum input the route accepts
+        if: ${{ inputs.run_optimize }}
+        env:
+          BASE: ${{ inputs.base_url }}
+        run: |
+          # The rewrite is the single most expensive call in the product, and it
+          # is the one the conversation never reaches in a metered run. Its
+          # ceiling is not "a long resume" — it is the route's own limits:
+          # 8000 chars of resume and 4000 of job description, against a 6000
+          # max_tokens rewrite. Anything a real user does costs less than this.
+          python3 - <<'PY' > body.json
+          import json
+          role = ("Senior Accountant — Al Rajhi Trading Company, Riyadh | 2018 - 2024\n"
+                  "- Managed month-end close across 15 branches and reconciled 40M SAR in annual revenue\n"
+                  "- Led the migration from manual ledgers to SAP FICO, cutting close time by 30%\n"
+                  "- Supervised a team of 6 junior accountants and reviewed all VAT filings\n"
+                  "- Built the cash-flow forecasting model used by the CFO for quarterly planning\n")
+          head = ("Abdulaziz Alanazi\nRiyadh, Saudi Arabia | someone@example.com | +966500000000\n\n"
+                  "SUMMARY\nAccounting professional with broad experience across retail and trading.\n\n"
+                  "SKILLS\nSAP FICO, Oracle Financials, Excel modelling, IFRS, VAT, ZATCA e-invoicing\n\n"
+                  "EXPERIENCE\n")
+          resume = head
+          n = 0
+          while len(resume) + len(role) <= 8000:
+              resume += role.replace("2018 - 2024", f"{2018-n*6} - {2024-n*6}"); n += 1
+          jd_unit = ("Responsibilities: prepare monthly financial statements, manage the general "
+                     "ledger, reconcile bank accounts, oversee accounts payable and receivable, "
+                     "ensure IFRS compliance, support external audits, and maintain ZATCA "
+                     "e-invoicing readiness. Requirements: SAP or Oracle ERP, advanced Excel, "
+                     "SOCPA membership preferred, 5+ years in a similar role. ")
+          jd = ""
+          while len(jd) + len(jd_unit) <= 4000:
+              jd += jd_unit
+          print(json.dumps({"resume": resume, "jobDescription": jd,
+                            "uiLang": "ar", "outLang": "both"}))
+          PY
+
+          echo "resume chars:  $(jq -r '.resume | length' body.json)  (route cap 8000)"
+          echo "jd chars:      $(jq -r '.jobDescription | length' body.json)  (route cap 4000)"
+          echo "outLang: both — the most expensive setting, it writes the CV twice"
+          echo
+
+          code=$(curl -sS -o out.ndjson -w '%{http_code}' --max-time 300 \
+            -X POST "$BASE/api/optimize" \
+            -H "Content-Type: application/json" --data @body.json || echo 000)
+          echo "HTTP $code   response bytes: $(wc -c < out.ndjson)"
+          # NDJSON: the last line carries the result. Print its shape, not its text.
+          tail -n 1 out.ndjson | jq '{score, afterScore,
+              summaryChars: (.d.matchSummary // "" | length),
+              resumeChars:  (.d.optimizedResume // "" | length)} // .' 2>/dev/null \
+            || tail -c 400 out.ndjson
+          echo
+          echo "The [usage] line for this call is the product's per-resume ceiling."
