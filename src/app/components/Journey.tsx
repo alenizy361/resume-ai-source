@@ -118,7 +118,7 @@ const T = {
     t2: "مقابلة فيديو مباشرة", t2d: "تدرّب بصوتك مع محاور ذكي يقيّم إجاباتك ويعطيك ملاحظات فورية.",
     t3: "تحسين لينكدإن", t3d: "ملف متناسق مع سيرتك — عناوين ونبذة وكلمات يبحث عنها مسؤولو التوظيف.",
     q1: "هل الذكاء يختلق خبرات أو أرقام؟",
-    a1: "أبداً. القاعدة الأولى هي الصدق: يعيد صياغة ما تكتبه أنت فقط بلغة مهنية، وأي رقم ناقص يُترك لك مكان مخصص لتعبئته بنفسك.",
+    a1: "لا يختلق أرقاماً ولا جهات عمل ولا تواريخ ولا شهادات — هذه حقائقك وحدك. لكنه يوفّر وقتك: يكتب لك مسودة المهام والمهارات المعتادة لمسماك الوظيفي لتعدّلها أو تحذف ما لا ينطبق عليك، فلا تبدأ من صفحة فارغة. ما تبقيه أنت هو ما يدخل سيرتك.",
     q2: "هل السيرة متوافقة مع أنظمة ATS؟",
     a2: "نعم — كل القوالب بعمود واحد وبدون جداول تكسر القراءة الآلية، وتظهر لك درجة توافق واضحة قبل التحميل.",
     q3: "أحتاج أسوّي حساب؟",
@@ -194,7 +194,7 @@ const T = {
     t2: "Live Video Interview", t2d: "Practice out loud with an AI interviewer that scores your answers instantly.",
     t3: "LinkedIn Optimizer", t3d: "A profile aligned with your resume — headline, about, and keywords recruiters search.",
     q1: "Does the AI invent experience or numbers?",
-    a1: "Never. Rule one is honesty: it only rephrases what you write into professional language, and any missing number is left as a slot for you to fill.",
+    a1: "It never invents a number, an employer, a date, or a certification — those are yours alone. What it does do is save you the blank page: it drafts the duties and skills typical of your job title so you edit them and delete whatever does not apply to you. What you keep is what goes in your resume.",
     q2: "Is the resume ATS-compatible?",
     a2: "Yes — every template is single-column with no parsing-breaking tables, and you see a clear match score before downloading.",
     q3: "Do I need an account?",
@@ -509,7 +509,12 @@ export default function Journey({ lang }: { lang: Lang }) {
         if (typeof ex?.header === "string") head = ex.header;
         else if (ex?.header && typeof ex.header === "object") {
           const h = ex.header as Record<string, unknown>;
-          head = [h.title, h.company].filter(Boolean).join(" — ") + (h.start_date ? ` | ${h.start_date}` : "");
+          // ATS parsers place a role by its date RANGE, not a lone start date —
+          // render "Jan 2019 – Present", and fall back to whichever end exists.
+          const from = String(h.start_date || "").trim();
+          const to = String(h.end_date || "").trim();
+          const period = from && to ? `${from} – ${to}` : from || to;
+          head = [h.title, h.company].filter(Boolean).join(" — ") + (period ? ` | ${period}` : "");
         }
         const bullets = Array.isArray(ex?.bullets) ? (ex.bullets as unknown[]).map((b) => `- ${String(b).replace(/^[-•]\s*/, "")}`) : [];
         if (!head) { n.wovenLines.push(...bullets); continue; }

@@ -105,6 +105,7 @@ const TURN_SCHEMA = {
                   title: { type: "string" },
                   company: { type: "string" },
                   start_date: { type: "string" },
+                  end_date: { type: "string" },
                 },
               },
               bullets: { type: "array", items: { type: "string" } },
@@ -125,6 +126,51 @@ const TURN_SCHEMA = {
     },
   },
 } as const;
+
+/**
+ * Shape of a drafted role. Duties and skills only — no employers, no dates, and
+ * no metrics. A duty the user did not perform is one they delete in a second; a
+ * fabricated number in their resume is one they cannot defend in an interview,
+ * so the schema gives the model nowhere to put one.
+ */
+const DRAFT_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["duties", "skills"],
+  properties: {
+    duties: { type: "array", items: { type: "string" } },
+    skills: { type: "array", items: { type: "string" } },
+    note: { type: "string" },
+  },
+} as const;
+
+const DRAFT_PROMPT = `You draft the FIRST DRAFT of a resume's experience section for a job title, so
+the user edits instead of writing from scratch. They will see every line and
+delete what does not apply to them, so cover what the role typically involves —
+but understand exactly where the line is.
+
+WRITE (the user can confirm or delete these):
+- 6-8 duty lines that a competent holder of this title actually performs.
+  Action verb + real scope + the systems or standards the work runs on.
+  Written in first person's professional register, ready to paste.
+- 6-10 HARD skills, tools, systems, and certifications that ATS scans for in
+  THIS title in the Saudi/Gulf market. No soft-skill filler.
+
+NEVER WRITE (these are the user's facts alone, and inventing them is forgery
+they would have to defend in an interview):
+- Numbers, percentages, amounts, headcounts, or any metric. Not even a plausible
+  one, not even as a range, not even as a [bracketed placeholder].
+- Employer names, dates, tenures, locations, degrees, or named certifications
+  the user has not said they hold.
+- Anything phrased as a completed achievement ("cut costs", "grew revenue",
+  "led a team of"). Duties describe the work, not results the user did not report.
+
+Write "Reconciled supplier accounts and prepared monthly closing entries in SAP",
+never "Reconciled 200+ supplier accounts, cutting close time 30%".
+
+Use web search when it sharpens the answer for this title in this market —
+current tools, current certifications, the vocabulary live postings actually use.
+Prefer what employers ask for today over what a textbook says.`;
 
 const SYSTEM_PROMPT = `You are "المستشار" — a senior Saudi career advisor and professional resume
 STRATEGIST inside cv.rabit.sa. You are NOT a casual chatbot: you run a tight,
@@ -180,9 +226,13 @@ profile_patch.summary — you write it, you don't ask about it.
   to years_of_experience (a number). Industry goes to industry.
 - Use EXACTLY these keys: role, years_of_experience, industry, name, contact,
   summary, skills, education{degree,university,graduation_year}, certifications,
-  experiences[{header{title,company,start_date},bullets[]}]. No variants.
+  experiences[{header{title,company,start_date,end_date},bullets[]}]. No variants.
 - Never emit a field as "" to mean "unchanged" — omit it instead.
-- start_date is when THAT JOB began. A graduation year is not a start date.
+- start_date is when THAT JOB began; end_date is when it ended, or "Present" for
+  the current one. ATS parsers read the RANGE — a role with no dates is a role
+  they cannot place in time, so ask for them once and never leave them empty.
+  A graduation year is not a start date. Format both as "Month YYYY" (or "YYYY"
+  if that is all the user knows).
 
 # NEVER PUT THESE IN A RESUME
 National ID / Iqama number, IBAN or any bank detail, passport number, SSN,
@@ -300,6 +350,43 @@ async function callAnthropicTurn(system: string, user: string): Promise<Record<s
   try { return JSON.parse(text.text); } catch { return null; }
 }
 
+/**
+ * Draft a role, with live web search available. The search tool is declared on
+ * every call and the model decides when a lookup helps — a forced search per
+ * request would spend money and seconds on titles it already knows cold.
+ *
+ * Server tools run their own loop and can stop with `pause_turn` before the
+ * answer exists; resuming is required, or a searched draft silently comes back
+ * truncated.
+ */
+async function callAnthropicDraft(user: string): Promise<Record<string, unknown> | null> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error("no-key");
+  const client = new Anthropic({ apiKey: key, timeout: 50000, maxRetries: 1 });
+  const messages: Anthropic.MessageParam[] = [{ role: "user", content: user }];
+
+  for (let hop = 0; hop < 4; hop++) {
+    const res = await client.messages.create({
+      model: modelFor("anthropic"),
+      max_tokens: 8000,
+      system: `${DRAFT_PROMPT}\n\n# TODAY\n${todayContext()}`,
+      tools: [{ type: "web_search_20260209", name: "web_search", max_uses: 4 }],
+      output_config: { effort: "low", format: { type: "json_schema", schema: DRAFT_SCHEMA } },
+      messages,
+    });
+    if (res.stop_reason === "refusal") return null;
+    if (res.stop_reason === "pause_turn") {
+      // The server-tool loop hit its iteration cap — hand the turn back to resume.
+      messages.push({ role: "assistant", content: res.content });
+      continue;
+    }
+    const text = res.content.find((b) => b.type === "text");
+    if (!text || text.type !== "text") return null;
+    try { return JSON.parse(text.text); } catch { return null; }
+  }
+  return null;
+}
+
 async function callLLM(messages: Msg[], maxTokens: number): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("no-key");
@@ -404,7 +491,10 @@ export async function POST(req: NextRequest) {
 
     let body;
     try { body = JSON.parse(rawBody); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
-    const action = body?.action === "turn" ? "turn" : body?.action === "gaps" ? "gaps" : "rephrase";
+    const action = body?.action === "turn" ? "turn"
+      : body?.action === "gaps" ? "gaps"
+      : body?.action === "draft" ? "draft"
+      : "rephrase";
     const outputLang = body?.lang === "ar" ? "ar" : body?.lang === "both" ? "both" : "en";
     const langWord = outputLang === "ar" ? "Arabic (فصحى professional)" : outputLang === "both" ? "English, then an Arabic version" : "English";
     const uiAr = outputLang !== "en";
@@ -417,6 +507,53 @@ export async function POST(req: NextRequest) {
 
     // The model has no clock; without this it reads a past year as the future.
     const systemPrompt = `${SYSTEM_PROMPT}\n\n# TODAY\n${todayContext()}`;
+
+    /* ── action="draft" — write the role's duties and skills so the user edits ── */
+    if (action === "draft") {
+      if (PROVIDER !== "anthropic") {
+        // Be explicit rather than silently returning nothing: live search is not
+        // something the NVIDIA path can do, so the caller needs to know why.
+        return NextResponse.json({ error: "Drafting requires AI_PROVIDER=anthropic." }, { status: 501 });
+      }
+      if (!targetRole) return NextResponse.json({ error: "A job title is required." }, { status: 400 });
+
+      const years = Number(body?.profile?.years_of_experience ?? body?.years) || null;
+      const industry = String(body?.profile?.industry || body?.industry || "").slice(0, 80);
+      const jobAd = String(body?.jobAd || "").slice(0, 3000);
+
+      const draftMsg = `JOB TITLE: ${targetRole}
+${years ? `YEARS OF EXPERIENCE: ${years} (pitch the seniority of the duties to this)` : ""}
+${industry ? `INDUSTRY: ${industry}` : ""}
+${jobAd ? `TARGET JOB AD — mirror its vocabulary and required skills where they genuinely apply:\n${jobAd}` : ""}
+OUTPUT LANGUAGE: ${langWord}.
+
+Draft the duties and skills for this title.`;
+
+      let d: Record<string, unknown> | null;
+      try { d = await callAnthropicDraft(draftMsg); }
+      catch (e) { console.error("Interview draft error:", e instanceof Error ? e.message : e); d = null; }
+      if (!d) return NextResponse.json({ error: "busy" }, { status: 502 });
+
+      // Same guards as everywhere else: a drafted line is still a line that can
+      // reach the PDF, so placeholders and PII do not get a pass for being ours.
+      const budget = { left: 0 };
+      const clean = (v: unknown, cap: number): string[] =>
+        (Array.isArray(v) ? v : []).map(String)
+          .map((s) => stripPlaceholders(s.replace(/^[-•*]\s*/, "").trim(), true, budget))
+          .filter((s) => s.length > 2).slice(0, cap);
+
+      const piiHits: string[] = [];
+      const payload = scrubDeep({
+        duties: clean(d.duties, 8),
+        skills: clean(d.skills, 10),
+        note: typeof d.note === "string" ? d.note.slice(0, 240) : "",
+      }, piiHits);
+      if (piiHits.length) console.warn("interview/draft: scrubbed PII", [...new Set(piiHits)].join(","));
+      if (!payload.duties.length && !payload.skills.length) {
+        return NextResponse.json({ error: "busy" }, { status: 502 });
+      }
+      return NextResponse.json(payload);
+    }
 
     /* ── action="turn" — the full conversation brain ── */
     if (action === "turn") {
@@ -466,7 +603,7 @@ Run ANALYZE -> DECIDE (ASK|DEEPEN|REPHRASE|SUGGEST|FINISH) -> ACT, following THE
 - The CURRENT PROFILE is the WHOLE memory you have: it already holds role, years_of_experience, industry, experiences, wovenLines (the resume lines written so far) and summary. A fact that is in there has ALREADY been answered — never ask for it again. NEVER restate, reword, or recap a line that already exists.
 - Read RECENT CONVERSATION before you write "say": if you already asked something there, do not ask it again in any wording.
 - resume_lines = ONLY brand-new EXPERIENCE-section lines for facts the user JUST provided. A job-header line carries NO leading dash; every achievement bullet starts with "- " — the client uses that difference to lay the section out, so it matters. Education, skills, summary, name, contact travel ONLY inside profile_patch — NEVER in resume_lines. At FINISH, resume_lines must be [] unless a genuinely new fact just arrived.
-- Experience entries also go to profile_patch.experiences:[{header:{title,company,start_date},bullets[]}] so the client can lay them out; when refining an EXISTING entry, re-emit that whole entry (the client replaces it).
+- Experience entries also go to profile_patch.experiences:[{header:{title,company,start_date,end_date},bullets[]}] so the client can lay them out; when refining an EXISTING entry, re-emit that whole entry (the client replaces it).
 - Emit profile_patch.summary once axes 1-3 have content (rewrite it silently as facts grow — preserving stated years EXACTLY: ٦ سنوات stays ٦, never becomes ٤). The summary is finished prose that gets printed: it may NEVER contain a [bracketed placeholder].
 - FINISH only when role + summary + at least one quantified experience + skills + education + name + contact ALL exist — and you MUST have emitted profile_patch.summary by then (compose it from real facts; if the material is incomplete, ASK for the missing piece instead of finishing). When you FINISH, "say" is a warm one-line farewell announcing the build — never a question.
 

@@ -51,7 +51,7 @@ const structuredData = {
       "@type": "FAQPage",
       mainEntity: [
         { "@type": "Question", name: "Is the resume scan free?", acceptedAnswer: { "@type": "Answer", text: "Yes. The ATS match score, missing keywords, skills-gap analysis, and a preview of improvements are free. The full rewritten resume and downloads unlock with a one-time payment." } },
-        { "@type": "Question", name: "Does it invent experience or skills?", acceptedAnswer: { "@type": "Answer", text: "No. The engine can only reorganize and reword your own facts. It never adds a number, employer, degree, or skill you didn't provide — it marks missing metrics with a placeholder instead." } },
+        { "@type": "Question", name: "Does it invent experience or skills?", acceptedAnswer: { "@type": "Answer", text: "It never invents a number, employer, date, degree, or certification — those come from you alone. To save you the blank page it drafts the duties and skills typical of your job title, which you then edit and prune; only what you keep goes into your resume." } },
         { "@type": "Question", name: "Is it a subscription?", acceptedAnswer: { "@type": "Answer", text: "No subscription. Pay once — SAR 35 for 24-hour full access or SAR 99 for 90 days. There is a 7-day money-back guarantee." } },
         { "@type": "Question", name: "Does it support Arabic?", acceptedAnswer: { "@type": "Answer", text: "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back." } },
       ],
