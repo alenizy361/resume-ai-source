@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import {
   computeProgress, gateFinish, isRepeat, normalizePatch, scrubDeep,
-  sensitiveTopic, statedAge, stripPlaceholders, hasDigits,
+  sensitiveTopic, statedAge, stripPlaceholders, hasDigits, todayContext,
 } from "@/app/lib/interviewGuards";
 
 export const maxDuration = 60;
@@ -34,6 +35,96 @@ export const maxDuration = 60;
 
 /** A resume interview turn is a sentence, not a payload. */
 const MAX_BODY_BYTES = 24 * 1024;
+
+/**
+ * The Advisor is the product; it was the only route hardwired to one provider
+ * while /api/optimize and /api/cover-letter could already run on Claude. Set
+ * AI_PROVIDER=anthropic (plus ANTHROPIC_API_KEY) to move the interview brain
+ * over. Unset, everything behaves exactly as before.
+ */
+const PROVIDER = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
+
+/**
+ * One AI_MODEL is shared by every route, so a value valid for one provider is a
+ * 404 on the other. Resolve per provider instead of trusting it blindly.
+ */
+function modelFor(provider: string): string {
+  const shared = process.env.AI_MODEL || "";
+  if (provider === "anthropic") {
+    return process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-opus-5");
+  }
+  return process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) ||
+    "meta/llama-4-maverick-17b-128e-instruct";
+}
+
+/**
+ * The turn contract as a schema rather than a hope. With structured outputs the
+ * model cannot return malformed JSON, cannot invent key names, and cannot slip
+ * a field past FIELD DISCIPLINE — the three things extractJson was papering over.
+ */
+const TURN_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["axis", "action", "say"],
+  properties: {
+    axis: { type: "integer", enum: [1, 2, 3, 4, 5, 6] },
+    action: { type: "string", enum: ["ASK", "DEEPEN", "REPHRASE", "SUGGEST", "FINISH"] },
+    say: { type: "string" },
+    profile_patch: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        role: { type: "string" },
+        years_of_experience: { type: "integer" },
+        industry: { type: "string" },
+        name: { type: "string" },
+        contact: { type: "string" },
+        summary: { type: "string" },
+        skills: { type: "string" },
+        certifications: { type: "string" },
+        education: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            degree: { type: "string" },
+            university: { type: "string" },
+            graduation_year: { type: "string" },
+          },
+        },
+        experiences: {
+          type: "array",
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["header"],
+            properties: {
+              header: {
+                type: "object",
+                additionalProperties: false,
+                properties: {
+                  title: { type: "string" },
+                  company: { type: "string" },
+                  start_date: { type: "string" },
+                },
+              },
+              bullets: { type: "array", items: { type: "string" } },
+            },
+          },
+        },
+      },
+    },
+    resume_lines: { type: "array", items: { type: "string" } },
+    chips: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["label"],
+        properties: { label: { type: "string" } },
+      },
+    },
+  },
+} as const;
 
 const SYSTEM_PROMPT = `You are "المستشار" — a senior Saudi career advisor and professional resume
 STRATEGIST inside cv.rabit.sa. You are NOT a casual chatbot: you run a tight,
@@ -184,10 +275,35 @@ const MINOR_REPLY = {
   },
 };
 
+/**
+ * The turn, on Claude, with the contract enforced as a JSON schema. Returns the
+ * parsed object directly — there is nothing to extract and nothing to guess.
+ *
+ * Thinking is left ON (the Opus 5 default) and held down with effort instead:
+ * disabling it is the documented cause of internal tags leaking into the visible
+ * response, and `say` is shown to the user verbatim.
+ */
+async function callAnthropicTurn(system: string, user: string): Promise<Record<string, unknown> | null> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error("no-key");
+  const client = new Anthropic({ apiKey: key, timeout: 25000, maxRetries: 1 });
+  const res = await client.messages.create({
+    model: modelFor("anthropic"),
+    max_tokens: 8000,
+    system,
+    output_config: { effort: "low", format: { type: "json_schema", schema: TURN_SCHEMA } },
+    messages: [{ role: "user", content: user }],
+  });
+  if (res.stop_reason === "refusal") return null;
+  const text = res.content.find((b) => b.type === "text");
+  if (!text || text.type !== "text") return null;
+  try { return JSON.parse(text.text); } catch { return null; }
+}
+
 async function callLLM(messages: Msg[], maxTokens: number): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("no-key");
-  const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const model = modelFor("nvidia");
   let out = "";
   // One silent retry — the live interview must survive a transient upstream blip.
   for (let attempt = 0; attempt < 2 && !out; attempt++) {
@@ -296,7 +412,11 @@ export async function POST(req: NextRequest) {
     const text = String(body?.text || body?.answer || "").slice(0, 1500);
     const stateSummary = String(body?.stateSummary || "").slice(0, 2500);
 
-    if (!process.env.NVIDIA_API_KEY) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+    const providerKey = PROVIDER === "anthropic" ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
+    if (!providerKey) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+
+    // The model has no clock; without this it reads a past year as the future.
+    const systemPrompt = `${SYSTEM_PROMPT}\n\n# TODAY\n${todayContext()}`;
 
     /* ── action="turn" — the full conversation brain ── */
     if (action === "turn") {
@@ -354,9 +474,15 @@ Respond with STRICT JSON ONLY, exactly this shape:
 {"think":"1-2 sentence private analysis","axis":2,"action":"ASK|DEEPEN|REPHRASE|SUGGEST|FINISH","say":"acknowledge in one clause, then <=40 words, one question max, aimed at the NEXT missing axis","profile_patch":{only changed fields},"resume_lines":["..."],"chips":[{"label":"...","patch":{}}]}
 Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; never invent; never rewrite a date to something that did not happen; bullets 1-4 as content supports; no placeholder when the number exists. One question per message, max 10 questions, one DEEPEN per axis.`;
 
-      const raw = await callLLM([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: userMsg }], 700);
-      if (!raw) return NextResponse.json({ error: "busy" }, { status: 502 });
-      const j = extractJson(raw);
+      let j: Record<string, unknown> | null;
+      if (PROVIDER === "anthropic") {
+        // Schema-constrained: malformed JSON is not a failure mode here.
+        try { j = await callAnthropicTurn(systemPrompt, userMsg); }
+        catch (e) { console.error("Interview anthropic error:", e instanceof Error ? e.message : e); j = null; }
+      } else {
+        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700);
+        j = raw ? extractJson(raw) : null;
+      }
       if (!j) return NextResponse.json({ error: "busy" }, { status: 502 });
 
       const resumeLines = Array.isArray(j.resume_lines)
@@ -429,7 +555,7 @@ One per line, format exactly: question | field   (field ∈ extras, skills, duti
 Target role: ${targetRole || "not given"}
 ${stateSummary}
 Output ONLY the lines.`;
-      const raw = await callLLM([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: userMsg }], 400);
+      const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 400);
       if (!raw) return NextResponse.json({ error: "busy" }, { status: 502 });
       const gaps = raw.split("\n").map((l) => l.trim().replace(/^[-•*]\s*/, "")).filter((l) => l.includes("|"))
         .map((l) => { const [q = "", f = ""] = l.split("|").map((p) => p.trim()); const field = ["extras", "skills", "duties", "education"].includes(f) ? f : "extras"; return { q, field }; })
@@ -451,7 +577,7 @@ CANDIDATE'S OWN WORDS:
 ${text}
 
 Respond with STRICT JSON ONLY: {"lines":["- ...", "..."]}`;
-    const raw = await callLLM([{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: userMsg }], 500);
+    const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 500);
     if (!raw) return NextResponse.json({ error: "busy" }, { status: 502 });
     const j = extractJson(raw);
     let lines: string[] = [];

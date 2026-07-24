@@ -20,6 +20,24 @@
  *                       سنتين" and "I have a 3-year gap because of depression".
  */
 
+/* ────────────────────────── time ────────────────────────── */
+
+/**
+ * The model has no clock. Without being told, it reasons from whenever its
+ * training data ended — which is why "توظفت ٢٠٢٥" came back as a date in the
+ * future. Every prompt that reasons about dates gets this block.
+ */
+export function todayContext(now: Date = new Date()): string {
+  const iso = now.toISOString().slice(0, 10);
+  const year = now.getUTCFullYear();
+  return `TODAY'S DATE IS ${iso}. The current year is ${year}.
+Any year up to and including ${year} is the PAST — treat it as a real date the
+user lived, never as a future or hypothetical one. Only a year after ${year} is
+the future. Compute durations from ${year}: someone who graduated in ${year - 3}
+graduated 3 years ago, and someone hired in ${year - 1} has been there about a year.
+Never tell the user a date of theirs is in the future unless it is after ${year}.`;
+}
+
 /* ────────────────────────── digits ────────────────────────── */
 
 const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";

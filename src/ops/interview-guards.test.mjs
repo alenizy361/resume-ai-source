@@ -1,6 +1,6 @@
 import {
   scrubPii, scrubDeep, normalizePatch, computeProgress, gateFinish,
-  statedAge, sensitiveTopic, isRepeat, stripPlaceholders,
+  statedAge, sensitiveTopic, isRepeat, stripPlaceholders, todayContext,
 } from "../app/lib/interviewGuards.ts";
 
 let pass = 0, fail = 0;
@@ -105,6 +105,18 @@ for (const real of ["محاسب", "Nurse", "Sales Manager", "مهندس مدني
   ok(`"${real}" passes as a real title`, normalizePatch({ role: real }, { sourceText: "" }).roleNeedsTitle === false);
 }
 eq("a flagged sector is filed as industry", normalizePatch({ role: "سياحة" }, { sourceText: "" }).patch.industry, "سياحة");
+
+
+console.log("\n── the model has no clock: 2025 must read as the past ──");
+const ctx = todayContext(new Date("2026-07-24T00:00:00Z"));
+ok("states today's actual date", ctx.includes("2026-07-24"));
+ok("names the current year", ctx.includes("The current year is 2026"));
+ok("declares 2026 and earlier as past", /up to and including 2026 is the PAST/.test(ctx));
+ok("only after 2026 is future", /Only a year after 2026 is/.test(ctx));
+ok("gives a duration example anchored to now", ctx.includes("2023"));
+ok("forbids calling the user's date future", /future unless it is after 2026/.test(ctx));
+const ctx2 = todayContext(new Date("2031-01-05T00:00:00Z"));
+ok("rolls forward with the clock, not hardcoded", ctx2.includes("2031") && !ctx2.includes("2026"));
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
