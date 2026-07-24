@@ -36,12 +36,34 @@ jobs:
         env:
           NV: ${{ secrets.NVIDIA_API_KEY }}
           AN: ${{ secrets.ANTHROPIC_API_KEY }}
+          # A key put in the wrong store or under a near-miss name reads to the
+          # owner as "it's there" and to the runner as absent. Naming the exact
+          # variants tells us which mistake it was instead of guessing.
+          NV_ALT1: ${{ secrets.NVIDIA_KEY }}
+          NV_ALT2: ${{ secrets.NVIDIA_API }}
+          NV_ALT3: ${{ secrets.NVIDIA }}
+          NV_ALT4: ${{ secrets.NVIDIA_APIKEY }}
+          NV_VAR: ${{ vars.NVIDIA_API_KEY }}
+          AN_ALT1: ${{ secrets.ANTHROPIC_KEY }}
+          AN_ALT2: ${{ secrets.CLAUDE_API_KEY }}
         run: |
-          # Length only — never the value. A missing secret otherwise shows up as
-          # a confusing 401 several minutes into a run.
-          echo "NVIDIA_API_KEY   : ${#NV} chars"
-          echo "ANTHROPIC_API_KEY: ${#AN} chars"
-          [ -n "$NV" ] || [ -n "$AN" ] || { echo "::error::no provider key configured"; exit 1; }
+          # Lengths only — never a value. GitHub also masks any secret it knows.
+          echo "── Actions repository secrets ──"
+          echo "NVIDIA_API_KEY    : ${#NV} chars"
+          echo "ANTHROPIC_API_KEY : ${#AN} chars"
+          echo "── near-miss names, in case it was typed differently ──"
+          echo "NVIDIA_KEY        : ${#NV_ALT1}"
+          echo "NVIDIA_API        : ${#NV_ALT2}"
+          echo "NVIDIA            : ${#NV_ALT3}"
+          echo "NVIDIA_APIKEY     : ${#NV_ALT4}"
+          echo "ANTHROPIC_KEY     : ${#AN_ALT1}"
+          echo "CLAUDE_API_KEY    : ${#AN_ALT2}"
+          echo "── Variables tab (not Secrets) ──"
+          echo "vars.NVIDIA_API_KEY: ${#NV_VAR}"
+          [ -n "$NV" ] || [ -n "$AN" ] || {
+            echo "::error::No key reached the runner. If a length above is non-zero, the key exists under that name — tell me which and I will use it. If every length is 0, the key is in a store Actions cannot read (Codespaces or Dependabot secrets), or in another repo."
+            exit 1
+          }
 
       - name: Bench
         working-directory: src
