@@ -104,5 +104,56 @@ eq("a header is left alone", dashify("أخصائي أشعة — دلة"), "أخ�
   ok("skills precede education", out.indexOf("SKILLS") < out.indexOf("EDUCATION"));
 }
 
+
+/* ── the sixteen-duty CV, replayed exactly ──
+ * Taken verbatim from the live build at commit 1008af5, where two turns of
+ * rewording put sixteen duties under one hospital. Every previous suite passed
+ * while this was happening, because the suites tested the pieces and not the
+ * path the product actually takes.
+ */
+{
+  let p = { ...EMPTY_PROFILE };
+  // Turn 1: the model drafts into experiences.
+  p = mergePatch(p, {
+    role: "أخصائي أشعة",
+    experiences: [{ header: { title: "أخصائي أشعة" }, bullets: [
+      "قام بإجراء الفحوصات الشعاعية للمرضى باستخدام أحدث التقنيات",
+      "ساعد في تحليل وتفسير الصور الشعاعية",
+      "عمل على تطبيق إجراءات السلامة من الإشعاع في بيئة العمل",
+      "تعاون مع الفريق الطبي لتقديم رعاية شاملة للمرضى",
+    ] }],
+  });
+  // Turn 1 ALSO mirrors the same duties into resume_lines, undashed — this is
+  // what leaked four headings onto the CV.
+  p.wovenLines = weaveLoose(p.wovenLines, [
+    "قام بإجراء الفحوصات الشعاعية للمرضى باستخدام أحدث التقنيات",
+    "ساعد في تحليل وتفسير الصور الشعاعية",
+    "عمل على تطبيق إجراءات السلامة من الإشعاع في بيئة العمل",
+    "تعاون مع الفريق الطبي لتقديم رعاية شاملة للمرضى",
+  ]);
+  // Turn 5: the employer is learned and the duties come back reworded.
+  p = mergePatch(p, {
+    experiences: [{
+      header: { title: "أخصائي أشعة", company: "مستشفى دلة", start_date: "سبتمبر 2024", end_date: "الآن" },
+      bullets: [
+        "أعد فحوصات الأشعة التشخيصية باستخدام أجهزة متقدمة مثل MRI وCT وX-ray",
+        "تأكد من جودة الصور الشعاعية وملاءمتها للتشخيص الطبي",
+        "سجل نتائج الفحوصات بدقة في أنظمة إدارة المستشفى",
+        "تعاون مع أطباء الأشعة لضمان دقة التقارير الطبية",
+        "حافظ على معايير السلامة الإشعاعية وطبق إجراءات الحماية من الإشعاع",
+        "أشرف على صيانة أجهزة الأشعة وضمان صلاحيتها للاستخدام",
+      ],
+    }],
+  });
+
+  const headers = p.wovenLines.filter((l) => !/^[-•]/.test(l.trim()));
+  const bullets = p.wovenLines.filter((l) => /^[-•]/.test(l.trim()));
+  eq("the hospital appears once", headers.length, 1);
+  ok("the header carries the full period", headers[0].includes("سبتمبر 2024") && headers[0].includes("الآن"), headers[0]);
+  ok("the sixteen duties are within budget", bullets.length <= 6, `${bullets.length} bullets`);
+  ok("no duty lost its dash", p.wovenLines.slice(1).every((l) => /^- /.test(l)) || headers.length === 1);
+  ok("the structured store is the source", Array.isArray(p.roles) && p.roles.length === 1, JSON.stringify(p.roles?.length));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

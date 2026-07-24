@@ -1,6 +1,6 @@
 import {
   scrubPii, scrubDeep, normalizePatch, computeProgress, gateFinish,
-  statedAge, sensitiveTopic, isRepeat, stripPlaceholders, todayContext,
+  statedAge, sensitiveTopic, isRepeat, stripPlaceholders, todayContext, yearsAreGrounded,
 } from "../app/lib/interviewGuards.ts";
 
 let pass = 0, fail = 0;
@@ -41,8 +41,8 @@ eq("role is the title only", s4.patch.role, "Nurse");
 eq("years extracted", s4.patch.years_of_experience, 5);
 
 console.log("\n── scenario 11: years / years_of_experience / yoe collapse to one key ──");
-eq("years -> years_of_experience", normalizePatch({ years: "5" }, { sourceText: "" }).patch.years_of_experience, 5);
-eq("yoe -> years_of_experience", normalizePatch({ yoe: 8 }, { sourceText: "" }).patch.years_of_experience, 8);
+eq("years -> years_of_experience", normalizePatch({ years: "5" }, { sourceText: "5 years in emergency care" }).patch.years_of_experience, 5);
+eq("yoe -> years_of_experience", normalizePatch({ yoe: 8 }, { sourceText: "عندي ٨ سنوات" }).patch.years_of_experience, 8);
 
 console.log("\n── scenario 22: graduation-year forgery ──");
 const s22 = normalizePatch(
@@ -66,9 +66,21 @@ eq("all six axes = 100", computeProgress({
   role: "محاسب", summary: "ملخص مهني حقيقي", wovenLines: ["- سطر"], skills: "SAP", education: "بكالوريوس", name: "محمد", contact: "05x",
 }), 100);
 eq("FINISH on an incomplete profile downgrades to ASK", gateFinish("FINISH", { role: "محاسب" }).action, "ASK");
-eq("FINISH on a complete profile stands", gateFinish("FINISH", {
-  role: "محاسب", summary: "س", wovenLines: ["- س"], skills: "SAP", name: "محمد", contact: "05x",
+eq("FINISH on a genuinely complete profile stands", gateFinish("FINISH", {
+  role: "محاسب", summary: "ملخص مهني حقيقي", wovenLines: ["- سطر خبرة"], skills: "SAP",
+  education: "بكالوريوس محاسبة", name: "محمد", contact: "05x",
 }).action, "FINISH");
+// A live run finished at 83% because the gate omitted education while the
+// progress bar counted it: the product said "your CV is ready" with a sixth of
+// the resume missing. The gate and the bar are now the same function.
+eq("FINISH blocked when only education is missing", gateFinish("FINISH", {
+  role: "أخصائي أشعة", summary: "ملخص مهني حقيقي", wovenLines: ["- سطر خبرة"], skills: "PACS",
+  name: "عبدالعزيز", contact: "05x",
+}).action, "ASK");
+eq("that same profile reads 83 on the bar", computeProgress({
+  role: "أخصائي أشعة", summary: "ملخص مهني حقيقي", wovenLines: ["- سطر خبرة"], skills: "PACS",
+  name: "عبدالعزيز", contact: "05x",
+}), 83);
 
 console.log("\n── #18: minors ──");
 eq("ابغى اشتغل وعمري ١٥ سنة", statedAge("ابغى اشتغل وعمري ١٥ سنة"), 15);
@@ -120,3 +132,26 @@ ok("rolls forward with the clock, not hardcoded", ctx2.includes("2031") && !ctx2
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
+
+console.log("\n── a number the user never said: the live \"7 سنوات\" invention ──");
+// The exact turn from the run at commit 1008af5: the user gave a start date and
+// the model answered "7 سنوات خبرة في الأشعة — واضح". Seven is nowhere in it.
+const inv = normalizePatch(
+  { years_of_experience: 7 },
+  { sourceText: "اشتغل في مستشفى دلة من سبتمبر ٢٠٢٤ الى الحين" },
+);
+ok("invented 7 is refused", inv.patch.years_of_experience === undefined);
+ok("the refusal is recorded", inv.dropped.some((d) => d.includes("not-in-source")));
+
+ok("a stated figure is kept",
+  normalizePatch({ years_of_experience: 7 }, { sourceText: "عندي ٧ سنوات خبرة" }).patch.years_of_experience === 7);
+ok("a figure derivable from a span is kept",
+  normalizePatch({ years_of_experience: 4 }, { sourceText: "من ٢٠٢٠ الى ٢٠٢٤" }).patch.years_of_experience === 4);
+ok("an open-ended span grounds the count",
+  yearsAreGrounded(2, "اشتغل من ٢٠٢٤ الى الحين"));
+ok("a figure already established survives a restatement",
+  normalizePatch({ years_of_experience: 7 }, { sourceText: "اكمل", existing: { years_of_experience: 7 } })
+    .patch.years_of_experience === 7);
+ok("off-by-one is tolerated, not off-by-five",
+  yearsAreGrounded(5, "من ٢٠٢٠ الى ٢٠٢٤") && !yearsAreGrounded(9, "من ٢٠٢٠ الى ٢٠٢٤"));
+

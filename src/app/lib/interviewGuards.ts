@@ -221,7 +221,12 @@ function splitRole(raw: string): { role: string; years?: number } {
  */
 export function normalizePatch(
   raw: Record<string, unknown>,
-  opts: { sourceText: string; existing?: Record<string, unknown> } = { sourceText: "" },
+  opts: {
+    sourceText: string;
+    existing?: Record<string, unknown>;
+    /** Everything the USER has said this session, for grounding numeric claims. */
+    saidByUser?: string;
+  } = { sourceText: "" },
 ): NormalizedPatch {
   const dropped: string[] = [];
   const patch: Record<string, unknown> = {};
@@ -257,13 +262,37 @@ export function normalizePatch(
     }
   }
 
-  // ── years: one canonical key
+  // ── years: one canonical key, and it must be GROUNDED
   for (const k of YEARS_KEYS) {
     if (patch.years_of_experience !== undefined) break;
     const v = (raw as Record<string, unknown>)[k];
     const n = typeof v === "number" ? v : typeof v === "string" ? Number(foldDigits(v).replace(/[^\d.]/g, "")) : NaN;
     if (Number.isFinite(n) && n >= 0 && n <= 60) patch.years_of_experience = Math.round(n);
     else if (v !== undefined) dropped.push(k);
+  }
+  /*
+   * A number the user never said is a number they cannot defend.
+   *
+   * A live run answered "اشتغل في مستشفى دلة من سبتمبر ٢٠٢٤ الى الحين" with
+   * "7 سنوات خبرة في الأشعة — واضح". Seven appears nowhere in the conversation;
+   * the model produced it and the resume would have carried it into an interview.
+   *
+   * The rule comes from production slot-filling practice: the value of a
+   * non-categorical slot must be present in the conversation, checked AFTER the
+   * model rather than requested of it. Here "present" means either the digits
+   * themselves, or a span of years the number can be derived from — so
+   * "من ٢٠٢٠ الى ٢٠٢٤" grounds 4, and nothing grounds an invention.
+   */
+  if (patch.years_of_experience !== undefined && opts?.sourceText !== undefined) {
+    const claimed = Number(patch.years_of_experience);
+    // Grounded against everything the USER has said, not only this turn — a
+    // figure given three questions ago is still the user's, and refusing it
+    // would be its own bug.
+    const ground = [opts.sourceText, opts.saidByUser ?? ""].join(" ");
+    if (!yearsAreGrounded(claimed, ground, opts.existing)) {
+      delete patch.years_of_experience;
+      dropped.push(`years_of_experience:${claimed}-not-in-source`);
+    }
   }
 
   // ── plain string fields
@@ -392,14 +421,17 @@ export function computeProgress(p: ProfileLike): number {
  */
 export function gateFinish(action: string, merged: ProfileLike): { action: string; blocked: boolean } {
   if (action !== "FINISH") return { action, blocked: false };
-  const ok =
-    Boolean(merged.role) &&
-    Boolean(merged.summary) &&
-    ((merged.wovenLines?.length ?? 0) > 0 || (merged.experiences?.length ?? 0) > 0) &&
-    Boolean(merged.skills) &&
-    Boolean(merged.name) &&
-    Boolean(merged.contact);
-  return ok ? { action: "FINISH", blocked: false } : { action: "ASK", blocked: true };
+  /*
+   * The gate is computeProgress, not a shorter list beside it.
+   *
+   * It used to check role, summary, experience, skills, name and contact — and
+   * omit education, which the progress bar counts. A live run finished at 83%:
+   * the product said "your CV is ready" on the third turn while its own progress
+   * bar said a sixth of the resume was missing. Two definitions of done is one
+   * too many, so there is now one.
+   */
+  const done = computeProgress(merged) >= 100;
+  return done ? { action: "FINISH", blocked: false } : { action: "ASK", blocked: true };
 }
 
 /* ────────────────────── people, not fields ────────────────────── */
@@ -484,4 +516,41 @@ export function detectLanguages(text: string, lang: "ar" | "en" = "ar"): string 
     if (re.test(t) && !found.includes(name[lang])) found.push(name[lang]);
   }
   return found.join(lang === "ar" ? "، " : ", ");
+}
+
+/* ─────────────────── grounding numbers ─────────────────── */
+
+/**
+ * Can this years-of-experience figure be traced to something the user said?
+ *
+ * True when the number itself appears, when it was already established earlier
+ * in the profile, or when the text states a span it follows from — a user who
+ * says "من ٢٠٢٠ الى ٢٠٢٤" has said four years without writing the digit. A
+ * tolerance of one year absorbs partial years honestly; more than that is the
+ * model guessing.
+ */
+export function yearsAreGrounded(
+  claimed: number,
+  sourceText: string,
+  existing?: Record<string, unknown>,
+): boolean {
+  if (!Number.isFinite(claimed)) return false;
+  // Already established: a later turn restating it is not a new claim.
+  const prior = Number(existing?.years_of_experience);
+  if (Number.isFinite(prior) && Math.abs(prior - claimed) <= 1) return true;
+
+  const text = foldDigits(String(sourceText || ""));
+
+  // The figure stated outright.
+  if (new RegExp(`(?<!\\\\d)${claimed}(?!\\\\d)`).test(text)) return true;
+
+  // A span of calendar years it follows from. "الحين"/"present" closes at today.
+  const years = (text.match(/(?<!\d)(19|20)\d{2}(?!\d)/g) || []).map(Number);
+  if (years.length) {
+    const openEnded = /الحين|الان|الآن|حالي|present|now|current/i.test(text);
+    const from = Math.min(...years);
+    const to = openEnded ? new Date().getUTCFullYear() : Math.max(...years);
+    if (Math.abs((to - from) - claimed) <= 1) return true;
+  }
+  return false;
 }

@@ -712,7 +712,14 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
       // against date rewrites, then scrubbed of anything that must not be printed.
       const norm = normalizePatch(
         (j.profile_patch && typeof j.profile_patch === "object" ? j.profile_patch : {}) as Record<string, unknown>,
-        { sourceText: text, existing: profile as Record<string, unknown> },
+        {
+          sourceText: text,
+          existing: profile as Record<string, unknown>,
+          // The user's own words this session, so a figure they gave three
+          // questions ago still counts as theirs.
+          saidByUser: history.filter((h) => (h.who || h.role) === "user")
+            .map((h) => h.text || h.content).join(" ").slice(0, 2000),
+        },
       );
       const piiHits: string[] = [];
       const patch = scrubDeep(norm.patch, piiHits);

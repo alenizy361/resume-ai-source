@@ -280,7 +280,16 @@ export default function Journey({ lang }: { lang: Lang }) {
   const [buildFail, setBuildFail] = useState(false);
   const [tpl, setTpl] = useState<TemplateDef>(TEMPLATE_CATALOG[0]);
   const [tplPicked, setTplPicked] = useState(false);
-  const [outChoice, setOutChoice] = useState<OutLang>(lang);
+  /*
+   * The RESUME's language, which is not the interface's language.
+   *
+   * This used to default to the UI language, so a Saudi user reading Arabic got
+   * an Arabic CV by default — the opposite of what this market applies with, and
+   * a default that walks straight into the PDF export's Arabic block. English is
+   * the default because it is what Saudi employers and their ATS read; Arabic
+   * stays one click away for whoever genuinely wants it.
+   */
+  const [outChoice, setOutChoice] = useState<OutLang>("en");
   const [langBusy, setLangBusy] = useState(false);
   const [langErr, setLangErr] = useState(false);
   const [downloaded, setDownloaded] = useState(false);

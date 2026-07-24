@@ -13,7 +13,9 @@
  * upgrades one that does not, rather than starting a new job beside it.
  */
 
-import { dedupeBullets } from "./resumeDoc.ts";
+import {
+  type Role, dedupeBullets, upsertRole, rolesToLines, rolesFromProfile,
+} from "./resumeDoc.ts";
 
 export interface Profile {
   role: string; name: string; contact: string; summary: string;
@@ -25,6 +27,14 @@ export interface Profile {
    * certifications with issuing bodies and expiry dates.
    */
   certifications: string; languages: string;
+  /**
+   * The experience section, structured. This is the store; `wovenLines` is a
+   * rendering of it, kept because the template and the optimizer both read flat
+   * text. Three live builds put sixteen near-identical duties on one job while
+   * the flat list WAS the store, because a list of strings can only be appended
+   * to — nothing could say "this role's duties are these six and no others".
+   */
+  roles: Role[];
   wovenLines: string[]; jobAd: string;
   yearsOfExperience: number | null; industry: string; graduationYear: string;
   draftedFor: string;
@@ -32,7 +42,7 @@ export interface Profile {
 
 export const EMPTY_PROFILE: Profile = {
   role: "", name: "", contact: "", summary: "", education: "", skills: "",
-  extras: [], wovenLines: [], jobAd: "",
+  extras: [], roles: [], wovenLines: [], jobAd: "",
   certifications: "", languages: "",
   yearsOfExperience: null, industry: "", graduationYear: "", draftedFor: "",
 };
@@ -151,28 +161,46 @@ export function weaveRole(lines: string[], header: string, bullets: string[]): s
 }
 
 /**
- * Free-form resume_lines from the brain. They arrive as a mix of headers and
- * duties, and a duty that lost its dash must not become a heading — nor may a
- * line restate a job that is already on the resume.
+ * Free-form resume_lines from the brain.
+ *
+ * These are the lines that produced sixteen duties on one job. They arrive as a
+ * mix of headers and duties, worded differently each turn, and the old exact
+ * string check let every rewording land beside its twin. They now go into the
+ * SAME structured roles the patch does: a non-dashed line opens or matches a
+ * role, dashed lines attach to it, and the role's own budget and meaning-based
+ * dedupe apply. There is no separate pile for them to grow in.
  */
 export function weaveLoose(lines: string[], incoming: string[]): string[] {
-  let out = [...lines];
+  let roles = rolesFromProfile({ wovenLines: lines });
+  // Anything before the first header has no role to belong to; keep it as-is.
+  const orphans = roles.length ? [] : lines.filter((l) => IS_BULLET.test(l.trim()));
+
+  let current: { title: string; company: string; start: string; end: string } | null =
+    roles.length ? { ...roles[roles.length - 1] } : null;
+
   for (const raw of incoming) {
     const line = String(raw).trim();
     if (!line) continue;
+
     if (IS_BULLET.test(line)) {
       const body = line.replace(/^[-•]\s*/, "").trim();
-      if (!out.some((l) => l.replace(/^[-•]\s*/, "").trim() === body)) out.push(dashify(line));
+      if (!current) { if (!orphans.includes(line)) orphans.push(dashify(line)); continue; }
+      roles = upsertRole(roles, { ...current, bullets: [body] });
       continue;
     }
-    // A non-dashed line naming a job we already have is a restatement, not a
-    // new section — this is exactly how one employer became three.
-    const key = roleKey(line);
-    const dup = key && out.some((l) => !IS_BULLET.test(l.trim()) && sameJob(roleKey(l), key));
-    if (dup) continue;
-    out = [...out, line];
+
+    // A header. Parse it, then let upsertRole decide whether it is a new job or
+    // the one we already have written differently.
+    const clean = line.replace(HEADER_PLACEHOLDER, "").trim();
+    const [who, period = ""] = clean.split("|").map((x) => x.trim());
+    const [title, company = ""] = who.split(/\s+—\s+|\s+في\s+|\s+at\s+/i).map((x) => x.trim());
+    const [start = "", end = ""] = period.split(/\s*[–—]\s*/).map((x) => x.trim());
+    if (!title) continue;
+    current = { title, company, start, end };
+    roles = upsertRole(roles, { ...current, bullets: [] });
   }
-  return out;
+
+  return [...orphans, ...rolesToLines(roles)];
 }
 
 /** Fold one profile_patch into the profile. */
@@ -215,22 +243,28 @@ export function mergePatch(p: Profile, patch: Record<string, unknown>): Profile 
   const jobAd = str(patch.jobAd, 3000); if (jobAd) n.jobAd = jobAd;
   if (Array.isArray(patch.extras)) n.extras.push(...patch.extras.map(String).slice(0, 6));
 
+  // Older sessions hold their experience only as flat lines; read them back so
+  // a draft started before this change is not lost.
+  if (!n.roles.length && n.wovenLines.length) n.roles = rolesFromProfile({ wovenLines: n.wovenLines });
+
   if (Array.isArray(patch.experiences)) {
     for (const ex of patch.experiences as Array<Record<string, unknown>>) {
-      let head = "";
-      if (typeof ex?.header === "string") head = ex.header;
-      else if (ex?.header && typeof ex.header === "object") {
-        const h = ex.header as Record<string, unknown>;
-        const from = String(h.start_date || "").trim();
-        const to = String(h.end_date || "").trim();
-        const period = from && to ? `${from} – ${to}` : from || to;
-        head = [h.title, h.company].filter(Boolean).join(" — ") + (period ? ` | ${period}` : "");
+      const h = (ex?.header && typeof ex.header === "object" ? ex.header : {}) as Record<string, unknown>;
+      // A header may still arrive as one string; split it back into its parts.
+      let title = String(h.title || ""), company = String(h.company || "");
+      let start = String(h.start_date || ""), end = String(h.end_date || "");
+      if (typeof ex?.header === "string") {
+        const [who, period = ""] = ex.header.split("|").map((x) => x.trim());
+        [title, company = ""] = who.split(/\s+—\s+|\s+في\s+/).map((x) => x.trim());
+        [start = "", end = ""] = period.split(/\s*[–—]\s*/).map((x) => x.trim());
       }
-      const bullets = Array.isArray(ex?.bullets)
-        ? (ex.bullets as unknown[]).map((b) => `- ${String(b).replace(/^[-•]\s*/, "")}`)
-        : [];
-      n.wovenLines = weaveRole(n.wovenLines, head, bullets);
+      const bullets = Array.isArray(ex?.bullets) ? (ex.bullets as unknown[]).map(String) : [];
+      n.roles = upsertRole(n.roles, {
+        title, company, location: String(h.location || ""), start, end, bullets,
+      });
     }
+    // Derived, never accumulated.
+    n.wovenLines = rolesToLines(n.roles);
   }
   return n;
 }
