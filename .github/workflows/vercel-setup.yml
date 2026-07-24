@@ -21,6 +21,10 @@ on:
         description: "Connect this GitHub repository to the Vercel project"
         type: boolean
         default: true
+      replace_existing_link:
+        description: "Detach whatever repo is linked first (Vercel will not relink over one)"
+        type: boolean
+        default: false
       root_directory:
         description: "Root directory of the app inside the repo"
         type: string
@@ -106,6 +110,37 @@ jobs:
           echo "HTTP $code"
           jq '{rootDirectory}' /tmp/root.json 2>/dev/null || cat /tmp/root.json
           [ "$code" = "200" ] || { echo "::error::Failed to set rootDirectory"; exit 1; }
+
+      - name: Detach the repository currently linked
+        if: ${{ inputs.link_repo && inputs.replace_existing_link }}
+        run: |
+          # The project was linked to alenizy361/SIRA — a repo holding one 6-byte
+          # README and nothing else, which is why every deployment came from the
+          # CLI rather than from a push. Vercel refuses to relink over an existing
+          # link, so it has to come off first. The unlink route is not in the
+          # public reference, so try the known forms and take the first that works.
+          detach () {
+            local desc="$1"; shift
+            code=$(curl -sS -o /tmp/unlink.json -w '%{http_code}' "$@")
+            echo "  $desc -> HTTP $code"
+            [ "$code" = "200" ] || [ "$code" = "204" ]
+          }
+          echo "Detaching:"
+          detach "POST /unlink" -X POST \
+              -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              -H "Content-Type: application/json" -d '{}' \
+              "$API/v9/projects/$PROJECT_ID/unlink?teamId=$TEAM_ID" \
+            || detach "DELETE /link" -X DELETE \
+              -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              "$API/v9/projects/$PROJECT_ID/link?teamId=$TEAM_ID" \
+            || detach "PATCH link:null" -X PATCH \
+              -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              -H "Content-Type: application/json" -d '{"link": null}' \
+              "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID" \
+            || { echo "::error::Every detach route failed"; jq '.' /tmp/unlink.json 2>/dev/null || cat /tmp/unlink.json; exit 1; }
+          echo "Link is now:"
+          curl -sS -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID" | jq '.link'
 
       - name: Connect the GitHub repository
         if: ${{ inputs.link_repo }}
