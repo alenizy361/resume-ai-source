@@ -30,22 +30,35 @@ function requireNvidiaKey() {
   process.exit(1);
 }
 
-/** The cases a resume builder must not fail. */
+/**
+ * The cases a resume builder must not fail.
+ *
+ * The third is the one most users here actually are: they speak Arabic, they
+ * name their job in Arabic, and they want an English CV because that is what
+ * the employer's ATS reads. A model can pass the pure-Arabic and pure-English
+ * cases and still fail this one by answering in the language it was asked in
+ * rather than the language it was told to write.
+ */
 const CASES = [
   {
     id: "cashier-ar",
-    label: "كاشير (Arabic out)",
+    label: "كاشير — مدخل عربي، سيرة عربية",
     opts: { role: "كاشير", industry: "تجزئة", langWord: "Arabic" },
   },
   {
     id: "radiographer-ar",
-    label: "أخصائي أشعة (Arabic out)",
+    label: "أخصائي أشعة — مدخل عربي، سيرة عربية",
     opts: { role: "أخصائي أشعة", years: 4, industry: "الرعاية الصحية", langWord: "Arabic" },
   },
   {
-    id: "accountant-en",
-    label: "محاسب (English out)",
+    id: "accountant-ar-to-en",
+    label: "محاسب — مدخل عربي، سيرة إنجليزية",
     opts: { role: "محاسب", years: 7, industry: "المقاولات", langWord: "English" },
+  },
+  {
+    id: "sales-en",
+    label: "Sales Manager — مدخل إنجليزي، سيرة إنجليزية",
+    opts: { role: "Sales Manager", years: 5, industry: "FMCG distribution", langWord: "English" },
   },
 ];
 
@@ -217,6 +230,10 @@ for (const model of models) {
   let total = 0, failed = 0, ms = 0, tin = 0, tout = 0;
   const detail = [];
   for (const c of CASES) {
+    // NVIDIA's free tier allows 40 requests a minute. Forty calls fired as fast
+    // as they return would measure the rate limiter, not the models — the same
+    // mistake the cost run made against this product's own limiter.
+    await new Promise((r) => setTimeout(r, 1500));
     const r = await draft(model, c.opts);
     ms += r.ms;
     if (!r.ok) { failed++; detail.push({ case: c.id, err: r.err }); continue; }
