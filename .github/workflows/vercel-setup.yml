@@ -1,0 +1,175 @@
+name: Vercel project setup
+
+# Applies the Vercel project settings that cannot be committed to a repository:
+# deployment protection, the Git connection, the root directory, and environment
+# variables. It runs here rather than from a developer machine because the token
+# stays a GitHub Actions secret and is never pasted anywhere it would persist.
+#
+# Required secret:  VERCEL_TOKEN         (Account Settings -> Tokens, scope: the team)
+# Optional secrets: NVIDIA_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN
+#
+# Every step prints the API response, so a failure says why instead of just failing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      disable_protection:
+        description: "Disable Vercel Authentication so the public can reach the site"
+        type: boolean
+        default: true
+      link_repo:
+        description: "Connect this GitHub repository to the Vercel project"
+        type: boolean
+        default: true
+      root_directory:
+        description: "Root directory of the app inside the repo"
+        type: string
+        default: "src"
+      production_branch:
+        description: "Branch that deploys to production"
+        type: string
+        default: "main"
+      push_env:
+        description: "Push the optional secrets above as Vercel environment variables"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  TEAM_ID: team_hjF234hbm43fAcQlbEVkuHvh
+  PROJECT_ID: prj_3wzppJtktFzcQVKvR6Bzn4AB8ipU
+  API: https://api.vercel.com
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the token is present and valid
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "::error::VERCEL_TOKEN secret is not set. Add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          code=$(curl -sS -o /tmp/user.json -w '%{http_code}' \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$API/v2/user")
+          if [ "$code" != "200" ]; then
+            echo "::error::Token rejected by Vercel (HTTP $code). Check that it has not expired and is scoped to the right team."
+            jq -r '.error.message // .' /tmp/user.json || cat /tmp/user.json
+            exit 1
+          fi
+          echo "Authenticated as: $(jq -r '.user.username // .user.email' /tmp/user.json)"
+
+      - name: Show the project state before any change
+        run: |
+          curl -sS -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID" > /tmp/before.json
+          jq '{name, rootDirectory, ssoProtection, passwordProtection, live,
+               link: (.link | if . == null then null else {type, repo, org, productionBranch} end)}' /tmp/before.json
+
+      - name: Disable Vercel Authentication
+        if: ${{ inputs.disable_protection }}
+        run: |
+          # {"ssoProtection": null} is the documented way to turn it off entirely.
+          code=$(curl -sS -o /tmp/sso.json -w '%{http_code}' -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"ssoProtection": null}' \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID")
+          echo "HTTP $code"
+          jq '{ssoProtection}' /tmp/sso.json 2>/dev/null || cat /tmp/sso.json
+          [ "$code" = "200" ] || { echo "::error::Failed to disable protection"; exit 1; }
+
+      - name: Set the root directory
+        run: |
+          code=$(curl -sS -o /tmp/root.json -w '%{http_code}' -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg d '${{ inputs.root_directory }}' '{rootDirectory: $d}')" \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID")
+          echo "HTTP $code"
+          jq '{rootDirectory}' /tmp/root.json 2>/dev/null || cat /tmp/root.json
+          [ "$code" = "200" ] || { echo "::error::Failed to set rootDirectory"; exit 1; }
+
+      - name: Connect the GitHub repository
+        if: ${{ inputs.link_repo }}
+        run: |
+          # Needs the Vercel GitHub App to have access to this repository. If it
+          # does not, Vercel answers 4xx here and the message says so.
+          code=$(curl -sS -o /tmp/link.json -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg repo "$GITHUB_REPOSITORY" '{type:"github", repo:$repo}')" \
+            "$API/v9/projects/$PROJECT_ID/link?teamId=$TEAM_ID")
+          echo "HTTP $code"
+          cat /tmp/link.json | jq '.' 2>/dev/null || cat /tmp/link.json
+          if [ "$code" != "200" ]; then
+            echo "::error::Could not link $GITHUB_REPOSITORY. Most likely the Vercel GitHub App is not installed on this repository — install it at https://github.com/apps/vercel and grant access, then re-run."
+            exit 1
+          fi
+
+      - name: Set the production branch
+        if: ${{ inputs.link_repo }}
+        run: |
+          code=$(curl -sS -o /tmp/branch.json -w '%{http_code}' -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg b '${{ inputs.production_branch }}' '{link:{productionBranch:$b}}')" \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID")
+          echo "HTTP $code"
+          jq '.link | {type, repo, productionBranch}' /tmp/branch.json 2>/dev/null || cat /tmp/branch.json
+
+      - name: Push environment variables
+        if: ${{ inputs.push_env }}
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: |
+          # upsert=true so re-running this workflow updates rather than conflicts.
+          put_env () {
+            local key="$1" value="$2" type="$3"
+            if [ -z "$value" ]; then
+              echo "· $key — secret not set here, leaving whatever Vercel already has"
+              return
+            fi
+            code=$(curl -sS -o /tmp/env.json -w '%{http_code}' -X POST \
+              -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -nc --arg k "$key" --arg v "$value" --arg t "$type" \
+                    '{key:$k, value:$v, type:$t, target:["production","preview","development"]}')" \
+              "$API/v10/projects/$PROJECT_ID/env?teamId=$TEAM_ID&upsert=true")
+            # The value is never echoed — only the key and the outcome.
+            echo "· $key -> HTTP $code"
+            [ "$code" = "200" ] || [ "$code" = "201" ] || jq -r '.error.message // empty' /tmp/env.json
+          }
+          put_env NVIDIA_API_KEY "$NVIDIA_API_KEY" encrypted
+          put_env UPSTASH_REDIS_REST_URL "$UPSTASH_REDIS_REST_URL" encrypted
+          put_env UPSTASH_REDIS_REST_TOKEN "$UPSTASH_REDIS_REST_TOKEN" encrypted
+
+      - name: Show the project state after
+        run: |
+          curl -sS -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$API/v9/projects/$PROJECT_ID?teamId=$TEAM_ID" > /tmp/after.json
+          jq '{name, rootDirectory, ssoProtection, passwordProtection, live,
+               link: (.link | if . == null then null else {type, repo, org, productionBranch} end)}' /tmp/after.json
+          echo "--- environment variable keys now on the project (names only) ---"
+          curl -sS -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$API/v9/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
+            | jq -r '.envs[]? | "· \(.key)  [\(.target | join(","))]"' | sort -u
+
+      - name: Confirm the site answers without a login
+        run: |
+          # The real test: a plain request carrying no Vercel credentials at all.
+          code=$(curl -sS -o /tmp/home.html -w '%{http_code}' -L --max-time 30 https://cv.rabit.sa || echo 000)
+          echo "cv.rabit.sa -> HTTP $code"
+          if [ "$code" = "200" ] && grep -qi "<title>" /tmp/home.html; then
+            echo "PUBLIC: $(grep -o '<title>[^<]*</title>' /tmp/home.html | head -1)"
+          elif [ "$code" = "401" ] || [ "$code" = "403" ]; then
+            echo "::error::Still gated (HTTP $code) — protection did not come off."
+            exit 1
+          else
+            echo "::warning::Unexpected response $code"
+          fi
