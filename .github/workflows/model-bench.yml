@@ -1,0 +1,54 @@
+name: Model bench
+
+# Which model should this product run on? Answered by running the product's own
+# drafting prompt against every candidate and reading what comes back, rather
+# than by trusting a leaderboard that never saw an Arabic job title.
+#
+# Needs the NVIDIA_API_KEY repository secret (and ANTHROPIC_API_KEY to include
+# Claude in the comparison). Each model costs 3 calls.
+
+on:
+  workflow_dispatch:
+    inputs:
+      models:
+        description: "Comma-separated model ids. Empty = every chat model in the NVIDIA catalogue."
+        type: string
+        default: ""
+      list_only:
+        description: "Only print the catalogue, spend nothing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Confirm the key reached the runner
+        env:
+          NV: ${{ secrets.NVIDIA_API_KEY }}
+          AN: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Length only — never the value. A missing secret otherwise shows up as
+          # a confusing 401 several minutes into a run.
+          echo "NVIDIA_API_KEY   : ${#NV} chars"
+          echo "ANTHROPIC_API_KEY: ${#AN} chars"
+          [ -n "$NV" ] || [ -n "$AN" ] || { echo "::error::no provider key configured"; exit 1; }
+
+      - name: Bench
+        working-directory: src
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODELS: ${{ inputs.models }}
+        run: |
+          node --experimental-strip-types ops/model-bench.mjs \
+            ${{ inputs.list_only && '--list' || '' }}
