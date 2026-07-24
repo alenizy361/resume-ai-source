@@ -84,6 +84,10 @@ const TURN_SCHEMA = {
         summary: { type: "string" },
         skills: { type: "string" },
         certifications: { type: "string" },
+        // Its own field, and its own section on the resume. Languages folded
+        // into "skills" is how "أجيد العربية والإنجليزية" disappeared from a
+        // finished CV that had a LANGUAGES section in every competing template.
+        languages: { type: "string" },
         education: {
           type: "object",
           additionalProperties: false,
@@ -179,6 +183,7 @@ certifications. Six axes:
    engineer → stack/tools; radiographer → CT/MRI, PACS, radiation protection).
    No soft-skill fluff. The user prunes what they do not have.
 5. EDUCATION & CERTS — degree, university, graduation year; certifications
+   (issuing body and validity when the user gives them); languages spoken
    (CPA, CMA, PMP, AWS...) if they exist — ask, never assume.
 6. IDENTITY — full name + phone or email for the header.
 Once axes 1-3 have real content, SILENTLY compose the professional summary
@@ -191,7 +196,7 @@ profile_patch.summary — you write it, you don't ask about it.
   ("سياحة"), never a status ("خريج جديد"), never "Title, 5 years in X". Years go
   to years_of_experience (a number). Industry goes to industry.
 - Use EXACTLY these keys: role, years_of_experience, industry, name, contact,
-  summary, skills, education{degree,university,graduation_year}, certifications,
+  summary, skills, education{degree,university,graduation_year}, certifications, languages,
   experiences[{header{title,company,start_date,end_date},bullets[]}]. No variants.
 - Never emit a field as "" to mean "unchanged" — omit it instead.
 - start_date is when THAT JOB began; end_date is when it ended, or "Present" for

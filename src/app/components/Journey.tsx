@@ -27,28 +27,16 @@ import { TEMPLATE_CATALOG } from "../lib/templateCatalog";
 import type { TemplateDef } from "../lib/templateCatalog";
 import { saveResume } from "../lib/localdata";
 import "../journey.css";
+import {
+  type Profile, EMPTY_PROFILE, mergePatch, weaveLoose,
+  assembleResume as sharedAssemble,
+} from "@/app/lib/mergeProfile";
 
 type Lang = "ar" | "en";
 type OutLang = "en" | "ar" | "both";
 interface Msg { who: "ai" | "user"; text: string; typing?: boolean }
 interface Chip { label: string; patch?: Record<string, unknown> }
-interface Profile {
-  role: string; name: string; contact: string; summary: string;
-  education: string; skills: string; extras: string[];
-  wovenLines: string[]; jobAd: string;
-  /**
-   * The brain has no memory of its own — whatever is not in here is not in its
-   * next prompt. These three used to be dropped on the floor, so the interview
-   * asked "كم سنة خبرة؟" three turns in a row after being told "٧ سنوات".
-   */
-  yearsOfExperience: number | null; industry: string; graduationYear: string;
-  /** Which role we already drafted duties for, so a later turn does not redraft. */
-  draftedFor: string;
-}
-const EMPTY: Profile = {
-  role: "", name: "", contact: "", summary: "", education: "", skills: "", extras: [], wovenLines: [], jobAd: "",
-  yearsOfExperience: null, industry: "", graduationYear: "", draftedFor: "",
-};
+const EMPTY = EMPTY_PROFILE;
 
 const T = {
   ar: {
@@ -472,69 +460,9 @@ export default function Journey({ lang }: { lang: Lang }) {
   }
 
   /* ═══ merge a profile_patch from the brain ═══ */
-  function mergePatch(p: Profile, patch: Record<string, unknown>): Profile {
-    const n = { ...p, extras: [...p.extras], wovenLines: [...p.wovenLines] };
-    if (typeof patch.name === "string" && patch.name) n.name = patch.name.slice(0, 100);
-    if (typeof patch.contact === "string" && patch.contact) n.contact = patch.contact.slice(0, 200);
-    if (typeof patch.role === "string" && patch.role) n.role = patch.role.slice(0, 120);
-    if (typeof patch.targetRole === "string" && patch.targetRole) n.role = patch.targetRole.slice(0, 120);
-    if (typeof patch.summary === "string" && patch.summary) n.summary = patch.summary.slice(0, 700);
-    if (typeof patch.industry === "string" && patch.industry) n.industry = patch.industry.slice(0, 80);
-    if (typeof patch.drafted_for === "string" && patch.drafted_for) n.draftedFor = patch.drafted_for.slice(0, 120);
-    if (typeof patch.years_of_experience === "number" && patch.years_of_experience >= 0) n.yearsOfExperience = patch.years_of_experience;
-    if (typeof patch.education === "string" && patch.education) n.education = patch.education.slice(0, 400);
-    // The brain now sends education as {degree, university, graduation_year};
-    // flatten it for display but keep the year addressable so a later turn cannot
-    // quietly rewrite it (the server refuses the change, this is the record of it).
-    if (patch.education && typeof patch.education === "object" && !Array.isArray(patch.education)) {
-      const e = patch.education as Record<string, unknown>;
-      const gy = String(e.graduation_year || "").match(/\d{4}/)?.[0] || "";
-      if (gy && !n.graduationYear) n.graduationYear = gy;
-      const line = [
-        [e.degree, e.field].filter(Boolean).map(String).join(" — "),
-        e.university ? String(e.university) : "",
-        n.graduationYear,
-      ].filter(Boolean).join(" · ");
-      if (line && !n.education.includes(line)) n.education = n.education ? `${n.education}\n${line}` : line;
-    }
-    if (typeof patch.certifications === "string" && patch.certifications) {
-      const cert = patch.certifications.slice(0, 300);
-      if (!n.education.includes(cert)) n.education = n.education ? `${n.education}\n${cert}` : cert;
-    }
-    if (typeof patch.skills === "string" && patch.skills) n.skills = String(patch.skills).slice(0, 400);
-    if (Array.isArray(patch.skills)) n.skills = patch.skills.map(String).filter(Boolean).slice(0, 12).join("، ");
-    if (typeof patch.jobAd === "string" && patch.jobAd) n.jobAd = patch.jobAd.slice(0, 3000);
-    if (Array.isArray(patch.extras)) n.extras.push(...patch.extras.map(String).slice(0, 6));
-    if (Array.isArray(patch.experiences)) {
-      for (const ex of patch.experiences as Array<Record<string, unknown>>) {
-        // header may arrive as a string or as {title, company, start_date}
-        let head = "";
-        if (typeof ex?.header === "string") head = ex.header;
-        else if (ex?.header && typeof ex.header === "object") {
-          const h = ex.header as Record<string, unknown>;
-          // ATS parsers place a role by its date RANGE, not a lone start date —
-          // render "Jan 2019 – Present", and fall back to whichever end exists.
-          const from = String(h.start_date || "").trim();
-          const to = String(h.end_date || "").trim();
-          const period = from && to ? `${from} – ${to}` : from || to;
-          head = [h.title, h.company].filter(Boolean).join(" — ") + (period ? ` | ${period}` : "");
-        }
-        const bullets = Array.isArray(ex?.bullets) ? (ex.bullets as unknown[]).map((b) => `- ${String(b).replace(/^[-•]\s*/, "")}`) : [];
-        if (!head) { n.wovenLines.push(...bullets); continue; }
-        const at = n.wovenLines.indexOf(head);
-        if (at === -1) {
-          n.wovenLines.push(head, ...bullets);
-        } else {
-          // replace the existing entry (header + its bullets up to the next header)
-          let end = at + 1;
-          while (end < n.wovenLines.length && /^[-•]/.test(n.wovenLines[end].trim())) end++;
-          n.wovenLines.splice(at, end - at, head, ...bullets);
-        }
-      }
-    }
-    return n;
-  }
-
+  // The merge lives in app/lib/mergeProfile.ts so the same code decides what a
+  // resume looks like here and in the tools that verify it. A live build printed
+  // one hospital as three jobs while this logic was private to the component.
   /* ═══ THE BRAIN TURN — real /api/interview ═══ */
   async function sendTurn(answer: string, seedProfile?: Profile) {
     const base = seedProfile ?? profile;
@@ -571,7 +499,10 @@ export default function Journey({ lang }: { lang: Lang }) {
     const merged = mergePatch(base, data.profile_patch || {});
     // FINISH recaps are ignored — the profile already holds every line
     const newLines = data.action === "FINISH" ? [] : (Array.isArray(data.resume_lines) ? data.resume_lines.map(String).filter(Boolean) : []);
-    for (const ln of newLines) if (!merged.wovenLines.includes(ln)) merged.wovenLines.push(ln);
+    // weaveLoose, not a plain includes() check: the brain restates a job it
+    // already gave us in slightly different words, and an exact-string test let
+    // every restatement through as a new section of the resume.
+    merged.wovenLines = weaveLoose(merged.wovenLines, newLines);
     setProfile(merged);
     if (typeof data.progress === "number") {
       const pv = data.progress > 0 && data.progress <= 1 ? data.progress * 100 : data.progress;
@@ -664,19 +595,8 @@ export default function Journey({ lang }: { lang: Lang }) {
 
   /* ═══ assemble + finalize (real /api/optimize) ═══ */
   const finalizeRef = useRef(false);
-  function assembleResume(p: Profile): string {
-    // canonical ATS order: header → summary → experience → skills → education → extras
-    const parts: string[] = [];
-    if (p.name) parts.push(p.name);
-    if (p.contact) parts.push(p.contact);
-    if (p.role) parts.push(p.role);
-    if (p.summary) parts.push(`\n${rtl ? "الملخص المهني" : "PROFESSIONAL SUMMARY"}\n${p.summary}`);
-    if (p.wovenLines.length) parts.push(`\n${rtl ? "الخبرة العملية" : "WORK EXPERIENCE"}\n${p.wovenLines.join("\n")}`);
-    if (p.skills) parts.push(`\n${rtl ? "المهارات" : "SKILLS"}\n${p.skills}`);
-    if (p.education) parts.push(`\n${rtl ? "التعليم والشهادات" : "EDUCATION & CERTIFICATIONS"}\n${p.education}`);
-    if (p.extras.length) parts.push(`\n${rtl ? "إضافات" : "ADDITIONAL"}\n${p.extras.map((x) => `- ${x}`).join("\n")}`);
-    return parts.join("\n");
-  }
+  const assembleResume = (p: Profile) => sharedAssemble(p, rtl);
+
   async function finalize(p: Profile) {
     setScorePhase("working"); setBuildFail(false);
     try {

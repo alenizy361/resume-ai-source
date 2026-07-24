@@ -9,8 +9,9 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit",
-    "bench": "node --experimental-strip-types ops/model-bench.mjs"
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge",
+    "bench": "node --experimental-strip-types ops/model-bench.mjs",
+    "test:merge": "node --experimental-strip-types ops/merge.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

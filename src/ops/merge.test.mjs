@@ -1,0 +1,108 @@
+/**
+ * The duplicate-employer bug, pinned.
+ *
+ * Every case here is taken from a real build against the live product, where
+ * one job at one hospital printed as three separate jobs on the finished CV.
+ *
+ *   node --experimental-strip-types src/ops/merge.test.mjs
+ */
+
+import {
+  EMPTY_PROFILE, mergePatch, roleKey, weaveLoose, weaveRole, dashify, assembleResume,
+} from "../app/lib/mergeProfile.ts";
+
+let pass = 0, fail = 0;
+const ok = (name, cond, detail = "") => {
+  if (cond) { pass++; console.log(`✅ ${name}`); }
+  else { fail++; console.log(`❌ ${name}${detail ? ` — ${detail}` : ""}`); }
+};
+const eq = (name, got, want) => ok(name, got === want, `got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+
+/* ── roleKey: the three spellings the live run produced ── */
+const A = "أخصائي أشعة — مستشفى دلة | سبتمبر 2024";
+const B = "أخصائي أشعة في مستشفى دلة";
+const C = "أخصائي أشعة — مستشفى دلة | [add your real dates]";
+eq("same job, dash form vs في form", roleKey(A), roleKey(B));
+eq("same job, placeholder date ignored", roleKey(A), roleKey(C));
+ok("a different employer is a different job",
+  roleKey(A) !== roleKey("أخصائي أشعة — مستشفى الحرس الوطني | يونيو 2022"));
+ok("a different title is a different job",
+  roleKey(A) !== roleKey("متدرب أشعة — مستشفى دلة | سبتمبر 2024"));
+eq("English at-form matches dash form",
+  roleKey("Radiographer at Dallah Hospital"), roleKey("Radiographer — Dallah Hospital | 2024"));
+
+/* ── weaveRole: the same job must not appear twice ── */
+{
+  let lines = [];
+  lines = weaveRole(lines, "أخصائي أشعة", ["- مهمة أولى"]);
+  lines = weaveRole(lines, A, ["- مهمة ثانية"]);
+  lines = weaveRole(lines, C, ["- مهمة ثالثة"]);
+  const headers = lines.filter((l) => !/^[-•]/.test(l));
+  eq("one employer yields one header", headers.length, 1);
+  eq("the header with real dates wins", headers[0], A);
+  eq("bullets from every turn survive", lines.filter((l) => /^-/.test(l)).length, 3);
+}
+
+/* ── the header must never carry a placeholder ── */
+{
+  const lines = weaveRole([], "أخصائي أشعة — مستشفى دلة | September [add your real year]", []);
+  ok("placeholder stripped from header", !/\[/.test(lines[0]), lines[0]);
+}
+
+/* ── weaveLoose: prose restating a known job is not a new section ── */
+{
+  let lines = weaveRole([], A, ["- مهمة"]);
+  lines = weaveLoose(lines, ["أخصائي أشعة في مستشفى دلة", "قمت بتشغيل أجهزة الأشعة"]);
+  const headers = lines.filter((l) => !/^[-•]/.test(l));
+  eq("restated job adds no second header", headers.length, 2); // the role header + the loose duty
+  ok("the loose duty is kept", lines.some((l) => l.includes("قمت بتشغيل")));
+}
+{
+  const lines = weaveLoose([], ["- مهمة", "- مهمة"]);
+  eq("identical bullets are not repeated", lines.length, 1);
+}
+eq("a dashed line keeps one dash", dashify("- مهمة"), "- مهمة");
+eq("a bullet char becomes a dash", dashify("• مهمة"), "- مهمة");
+eq("a header is left alone", dashify("أخصائي أشعة — دلة"), "أخصائي أشعة — دلة");
+
+/* ── mergePatch end to end, mirroring the live turns ── */
+{
+  let p = { ...EMPTY_PROFILE };
+  p = mergePatch(p, { role: "أخصائي أشعة", experiences: [{ header: { title: "أخصائي أشعة" }, bullets: ["مهمة أ"] }] });
+  p = mergePatch(p, {
+    experiences: [{
+      header: { title: "أخصائي أشعة", company: "مستشفى دلة", start_date: "سبتمبر 2024", end_date: "الآن" },
+      bullets: ["مهمة ب"],
+    }],
+  });
+  const headers = p.wovenLines.filter((l) => !/^[-•]/.test(l));
+  eq("merge keeps one employer", headers.length, 1);
+  ok("merge keeps the date range", headers[0].includes("سبتمبر 2024") && headers[0].includes("الآن"), headers[0]);
+  eq("bullets are dashed", p.wovenLines.filter((l) => /^- /.test(l)).length, 2);
+}
+
+/* ── education and certifications still fold in ── */
+{
+  let p = { ...EMPTY_PROFILE };
+  p = mergePatch(p, { education: { degree: "بكالوريوس", university: "جامعة الملك سعود", graduation_year: "2022" } });
+  p = mergePatch(p, { certifications: "تصنيف الهيئة السعودية, BLS", languages: "العربية (الأم)، الإنجليزية" });
+  ok("degree recorded", p.education.includes("بكالوريوس"));
+  ok("graduation year captured", p.graduationYear === "2022");
+  ok("certifications get their own field", p.certifications.includes("BLS"));
+  ok("certifications stay out of education", !p.education.includes("BLS"));
+  ok("languages get their own field", p.languages.includes("الإنجليزية"));
+  const out = assembleResume(p, false);
+  ok("CERTIFICATIONS is its own section", out.includes("CERTIFICATIONS & TRAINING"));
+  ok("LANGUAGES is its own section", out.includes("LANGUAGES"));
+}
+
+/* ── assembleResume keeps the ATS order ── */
+{
+  const p = { ...EMPTY_PROFILE, name: "عبدالعزيز", role: "أخصائي أشعة", skills: "MRI", education: "بكالوريوس" };
+  const out = assembleResume(p, false);
+  ok("summary heading precedes skills heading", out.indexOf("WORK EXPERIENCE") < out.indexOf("SKILLS") || !out.includes("WORK EXPERIENCE"));
+  ok("skills precede education", out.indexOf("SKILLS") < out.indexOf("EDUCATION"));
+}
+
+console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
+process.exit(fail === 0 ? 0 : 1);
