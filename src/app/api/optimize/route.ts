@@ -4,6 +4,7 @@ import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
+import { languageHonoured, LANGUAGE_RETRY } from "@/app/lib/resumeLang";
 
 /**
  * Provider-agnostic optimizer.
@@ -31,7 +32,12 @@ const PROMPT = (resume: string, jobDescription: string, uiLang?: string, outLang
   const hasJd = jobDescription.trim().length >= 30;
   return `You are a senior ATS (applicant tracking system) analyst and executive resume writer. ${hasJd ? "Perform a rigorous, honest analysis of this resume against this job description." : "The user provided ONLY a resume (no target job). Perform a rigorous GENERAL improvement: infer their likely target role from the resume itself and make the resume as strong as possible for that role."}
 
-LANGUAGE HANDLING: The resume or job description may be in Arabic, English, or mixed. Understand both. ${resumeLangRule} ${uiLang === "ar" ? "CRITICAL — THE USER'S INTERFACE IS ARABIC. You MUST write the SUMMARY, EVERY IMPROVEMENTS line (both the problem and the fix), and EVERY ANALYSIS bullet in ARABIC. This is mandatory and non-negotiable: write them in Arabic EVEN IF the resume and the job description are entirely in English. Do NOT output these sections in English under any circumstance. Only the keyword lists (MISSING/PRESENT/GAPS) and the optimizedResume stay in English." : "If the user's resume was mostly Arabic, write matchSummary, improvements, and ANALYSIS bullets in Arabic; otherwise in English."} Keywords stay in English (that's what ATS systems match on).
+LANGUAGE HANDLING — two different languages, decided separately. The resume or job description may be in Arabic, English, or mixed; understand both.
+
+  (a) WHAT YOU SAY TO THE USER — the ANALYSIS bullets, SUMMARY, and IMPROVEMENTS lines: ${uiLang === "ar" ? "ARABIC, always, even if the resume and job description are entirely in English. This is how the user reads your advice." : "the language the user's resume is mostly written in."}
+  (b) THE REWRITTEN RESUME ITSELF — everything after the RESUME: marker: ${resumeLangRule}
+
+(a) and (b) are independent and must not be conflated. Writing the resume in the language of (a) is the single most common failure of this task and it makes the output unusable — the user chose the resume's language deliberately, because it is the language the employer's ATS reads. Keyword lists (MISSING/PRESENT/GAPS) always stay in English, whatever (a) and (b) are.
 
 RESUME:
 ${resume}
@@ -83,9 +89,14 @@ EXAMPLE of the expected transformation (source line → bullets):
 NOTE how the example elaborates the STATED work with professional vocabulary without inventing facts — do exactly this for every role.
 
 COVERAGE GUARANTEE (verify before finishing — dropping content is a FAILED result):
-- Every employer, every role, every date range, every degree/certificate, every skill, and every language from the source MUST appear in the output. If the source has 2 jobs, the output has 2 jobs. No merging, no dropping, no "and more".
+- Every employer, every role, every date range, every degree/certificate, every skill, and every language from the source MUST appear in the output.
+- The candidate's job title must appear in the header, under their name. A build
+  dropped it and the CV opened with a name and nothing saying what the person does.
+- A LANGUAGES section in the source stays a LANGUAGES section in the output, and
+  CERTIFICATIONS stays separate from EDUCATION — merging them loses the section a
+  recruiter in a licensed profession scans first. If the source has 2 jobs, the output has 2 jobs. No merging, no dropping, no "and more".
 
-- Structure: Name/contact, PROFESSIONAL SUMMARY (3-4 lines, contains the job title), SKILLS (grouped, front-loading required skills the candidate genuinely has), EXPERIENCE (reverse-chronological), EDUCATION
+- Structure: Name, then the job title on its own line directly under it, then contact, then PROFESSIONAL SUMMARY (3-4 lines, contains the job title), SKILLS (grouped, front-loading required skills the candidate genuinely has), EXPERIENCE (reverse-chronological), EDUCATION
 - Plain text, standard headings, ATS-parseable
 
 OUTPUT FORMAT — plain text with EXACTLY these section markers, in this order (NO JSON, no markdown):
@@ -279,7 +290,8 @@ async function streamNvidia(
   jobDescription: string,
   onDelta: (text: string) => void,
   uiLang?: string,
-  outLang?: string
+  outLang?: string,
+  extra = ""
 ): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
@@ -303,7 +315,7 @@ async function streamNvidia(
       stream_options: { include_usage: true },
       messages: [
         { role: "system", content: "You are an expert ATS resume analyst. ABSOLUTE RULE: never invent any number, employer, date, degree, certification, or achievement not present in the user's input — write [add your real number] where a metric is missing. Follow the user's OUTPUT FORMAT exactly: ANALYSIS bullets, then the SCORE/SUMMARY/MISSING/PRESENT/GAPS/IMPROVEMENTS/RESUME sections as plain text. Never output JSON or markdown." },
-        { role: "user", content: PROMPT(resume, jobDescription, uiLang, outLang) },
+        { role: "user", content: PROMPT(resume, jobDescription, uiLang, outLang) + extra },
       ],
     }),
   });
@@ -357,7 +369,7 @@ async function streamNvidia(
   return full;
 }
 
-async function callAnthropic(resume: string, jobDescription: string): Promise<string> {
+async function callAnthropic(resume: string, jobDescription: string, extra = ""): Promise<string> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
   const model = process.env.AI_MODEL || "claude-sonnet-5";
@@ -450,11 +462,14 @@ export async function POST(req: NextRequest) {
         // The model occasionally emits malformed JSON — retry once; only the
         // first attempt streams thinking to the user (the retry is silent).
         let done = false;
+        let langMiss = false;
         const t0 = Date.now();
         for (let attempt = 0; attempt < 2 && !done; attempt++) {
-          // A full generation takes ~40s; don't start a retry we can't finish
-          // inside the platform's 60s cap.
-          if (attempt > 0 && Date.now() - t0 > 12000) break;
+          // Don't start a retry we cannot finish. This budget was written against
+          // a 60s platform cap and never updated when maxDuration became 300 — at
+          // 12s it was shorter than a single generation, so the retry it guarded
+          // had never once run. A generation costs ~25-40s; allow a second one.
+          if (attempt > 0 && Date.now() - t0 > 150_000) break;
           try {
             let inThinking = attempt === 0;
             let pending = "";
@@ -488,12 +503,25 @@ export async function POST(req: NextRequest) {
                 if (forwarded > 4000) inThinking = false;
               }
             };
+            // Attempt 1 tells the model exactly what it got wrong last time.
+            const extra = attempt > 0 && langMiss ? LANGUAGE_RETRY(outLang) : "";
             const raw = await (PROVIDER === "anthropic"
-              ? callAnthropic(resume, jd)
-              : streamNvidia(resume, jd, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang));
+              ? callAnthropic(resume, jd, extra)
+              : streamNvidia(resume, jd, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang, extra));
 
             if (!raw.trim()) throw new Error("Empty response from AI provider");
             const result = parseSections(raw);
+            // A resume in the wrong language is unusable — the user picked the
+            // language because it is the one the employer's ATS reads. Retry
+            // once rather than shipping it.
+            if (!languageHonoured(result.optimizedResume, outLang)) {
+              langMiss = true;
+              if (attempt === 0) {
+                console.error(`Optimize: resume returned in the wrong language (wanted ${outLang || "en"}) — retrying`);
+                continue;
+              }
+              console.error("Optimize: wrong language survived the retry — sending anyway");
+            }
             // Freemium (watermark model): EVERYONE gets the full rewritten resume
             // — the growth lever is a free, usable result that spreads. Free users
             // download it with a "cv.rabit.sa" watermark (applied client-side);

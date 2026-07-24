@@ -4,6 +4,7 @@ import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import {
   computeProgress, gateFinish, isRepeat, normalizePatch, scrubDeep,
   sensitiveTopic, statedAge, stripPlaceholders, hasDigits, todayContext,
+  detectLanguages,
 } from "@/app/lib/interviewGuards";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 import { DRAFT_PROMPT, DRAFT_SCHEMA, draftUserMessage } from "@/app/lib/prompts";
@@ -665,6 +666,19 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
        * is known and that role still has no bullets, the route drafts them.
        * One extra model call, only on the turn where a role first appears.
        */
+      /*
+       * Languages the user just stated.
+       *
+       * The schema gained a `languages` field and the resume gained a LANGUAGES
+       * section, and a live build answered "أجيد العربية والإنجليزية" with FINISH
+       * and filled neither. A field nothing populates is a field that does not
+       * exist, so the sentence is read here instead of being left to the model.
+       */
+      if (!patch.languages) {
+        const spoken = detectLanguages(text, outputLang === "ar" ? "ar" : "en");
+        if (spoken) patch.languages = spoken;
+      }
+
       const knownRole = String(patch.role || (profile as Record<string, unknown>).role || "");
       const alreadyDrafted = Boolean((profile as Record<string, unknown>).drafted_for) &&
         (profile as Record<string, unknown>).drafted_for === knownRole;

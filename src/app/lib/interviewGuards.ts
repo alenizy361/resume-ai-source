@@ -445,3 +445,43 @@ export function isRepeat(say: string, history: Array<{ who?: string; role?: stri
     .slice(-3)
     .some((h) => norm(String(h.text || h.content || "")) === target);
 }
+
+/* ─────────────────── languages ─────────────────── */
+
+/** Language names as users write them, mapped to how a resume should print them. */
+const LANGUAGE_NAMES: Array<[RegExp, { ar: string; en: string }]> = [
+  [/عرب(?:ي|ية|يه)|arabic/i, { ar: "العربية", en: "Arabic" }],
+  [/[إا]نجليزي(?:ة|ه)?|[إا]نقليزي|english/i, { ar: "الإنجليزية", en: "English" }],
+  [/فرنسي(?:ة|ه)?|french/i, { ar: "الفرنسية", en: "French" }],
+  [/[أا]لماني(?:ة|ه)?|german/i, { ar: "الألمانية", en: "German" }],
+  [/[أا]ردو|urdu/i, { ar: "الأردية", en: "Urdu" }],
+  [/فلبيني|تاغالوغ|tagalog|filipino/i, { ar: "الفلبينية", en: "Filipino" }],
+  [/هندي|hindi/i, { ar: "الهندية", en: "Hindi" }],
+  [/صيني|chinese|mandarin/i, { ar: "الصينية", en: "Chinese" }],
+  [/تركي(?:ة|ه)?|turkish/i, { ar: "التركية", en: "Turkish" }],
+];
+
+/**
+ * Only fires when the user is talking about speaking a language, never on a
+ * passing mention. "درست في بريطانيا" names no ability; "أجيد الإنجليزية" does.
+ * Narrow on purpose — the same discipline the PII rules use.
+ */
+const SPEAKS = /[أا]جيد|[أا]تحدث|[أا]تكلم|لغ(?:تي|اتي|ة)|طليق|بطلاق|ملم بـ?|fluent|native|speak|bilingual|mother tongue/i;
+
+/**
+ * Pull stated languages out of a turn.
+ *
+ * The interview gained a `languages` field and a LANGUAGES section, and a live
+ * build showed the model answering "أجيد العربية والإنجليزية" with FINISH and
+ * filling neither. A field nothing populates is a field that does not exist, so
+ * the route reads the sentence itself rather than asking the model to remember.
+ */
+export function detectLanguages(text: string, lang: "ar" | "en" = "ar"): string {
+  const t = String(text || "");
+  if (!SPEAKS.test(t)) return "";
+  const found: string[] = [];
+  for (const [re, name] of LANGUAGE_NAMES) {
+    if (re.test(t) && !found.includes(name[lang])) found.push(name[lang]);
+  }
+  return found.join(lang === "ar" ? "، " : ", ");
+}
