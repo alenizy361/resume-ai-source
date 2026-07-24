@@ -1,0 +1,35 @@
+name: Sample CV
+
+# Builds one resume end to end against the live product and prints it, so
+# "what does it actually produce?" is answered by the product rather than by
+# reading its prompt. Spends roughly nine model calls.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Where to build against"
+        type: string
+        default: "https://cv.rabit.sa"
+      out_lang:
+        description: "Language of the finished CV: en, ar, or both"
+        type: string
+        default: "en"
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build one resume and print it
+        working-directory: src
+        env:
+          BASE: ${{ inputs.base_url }}
+          OUT_LANG: ${{ inputs.out_lang }}
+        run: node --experimental-strip-types ops/sample-cv.mjs
