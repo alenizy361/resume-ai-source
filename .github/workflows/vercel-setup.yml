@@ -37,6 +37,10 @@ on:
         description: "Push the optional secrets above as Vercel environment variables"
         type: boolean
         default: true
+      probe_api:
+        description: "Call the deployed /api/interview once to prove the guards are live (costs one model call)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -208,6 +212,37 @@ jobs:
           curl -sS -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
             "$API/v9/projects/$PROJECT_ID/env?teamId=$TEAM_ID" \
             | jq -r '.envs[]? | "· \(.key)  [\(.target | join(","))]"' | sort -u
+
+      - name: Confirm the guards are live on the deployed API
+        if: ${{ inputs.probe_api }}
+        run: |
+          # Scenario 45 from the live run: the Arabic national ID + IBAN that the
+          # Advisor stored into contact, headed for the PDF. One real call, which
+          # costs one model invocation — it checks both P0 fixes at once.
+          curl -sS -o /tmp/api.json -w 'HTTP %{http_code}\n' --max-time 40 \
+            -X POST https://cv.rabit.sa/api/interview \
+            -H "Content-Type: application/json" \
+            -d '{"action":"turn","lang":"ar","answer":"رقم هويتي 1098765432 وايبان SA0380000000608010167519","profile":{},"history":[]}'
+          echo "--- response ---"
+          jq '.' /tmp/api.json 2>/dev/null || cat /tmp/api.json
+          echo "--- checks ---"
+          fail=0
+          if jq -e 'has("think")' /tmp/api.json >/dev/null 2>&1; then
+            echo "  ✗ think is still returned to the browser"; fail=1
+          else
+            echo "  ✓ think is not in the response"
+          fi
+          if grep -qE '1098765432|SA0380000000608010167519' /tmp/api.json; then
+            echo "  ✗ national ID or IBAN survived into the response"; fail=1
+          else
+            echo "  ✓ national ID and IBAN scrubbed"
+          fi
+          if jq -e 'has("progress") and has("action") and has("say")' /tmp/api.json >/dev/null 2>&1; then
+            echo "  ✓ contract intact (action / say / progress present)"
+          else
+            echo "  ✗ response shape unexpected"; fail=1
+          fi
+          [ "$fail" = "0" ] || { echo "::error::The deployed API is not running the guarded code"; exit 1; }
 
       - name: Confirm the site answers without a login
         run: |
