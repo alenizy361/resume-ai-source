@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI } from "@/app/lib/usage";
 
 export const maxDuration = 300;
 
@@ -103,6 +104,8 @@ async function streamNvidia(prompt: string, onDelta: (t: string) => void): Promi
         top_p: 0.9,
         max_tokens: 3600,
         stream: true,
+        // A streamed OpenAI-compatible response reports no usage unless asked.
+        stream_options: { include_usage: true },
         messages: [
           { role: "system", content: "You are an expert CV writer. Follow the OUTPUT FORMAT exactly: ANALYSIS bullets, then FINAL_CV: with the plain-text CV, then TIPS: lines. Never output JSON or markdown bold." },
           { role: "user", content: prompt },
@@ -118,6 +121,8 @@ async function streamNvidia(prompt: string, onDelta: (t: string) => void): Promi
     throw new Error(`NVIDIA API ${res.status}: ${(await res.text()).slice(0, 200)}`);
   }
 
+  const t0 = Date.now();
+  let usageChunk: unknown = null;
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let full = "";
@@ -134,6 +139,11 @@ async function streamNvidia(prompt: string, onDelta: (t: string) => void): Promi
       if (!t.startsWith("data:")) continue;
       const p = t.slice(5).trim();
       if (p === "[DONE]") continue;
+      // The usage chunk arrives last and carries an empty choices array.
+      try {
+        const parsed = JSON.parse(p);
+        if (parsed?.usage) usageChunk = parsed;
+      } catch { /* not the usage chunk */ }
       try {
         const delta = JSON.parse(p)?.choices?.[0]?.delta?.content;
         if (delta) {
@@ -148,6 +158,11 @@ async function streamNvidia(prompt: string, onDelta: (t: string) => void): Promi
   } finally {
     clearTimeout(timeout);
   }
+  logUsage({
+    route: "build-cv", op: "build", provider: "nvidia", model,
+    ...fromOpenAI(usageChunk), ms: Date.now() - t0,
+    ...(usageChunk ? {} : { note: "no-usage-chunk" }),
+  });
   return full;
 }
 

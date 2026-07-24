@@ -3,6 +3,7 @@ import { verifyPass, verifyEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/
 import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 
 export const maxDuration = 300;
 
@@ -32,6 +33,7 @@ async function callNvidia(resume: string, jobDescription: string): Promise<strin
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
   const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const t0 = Date.now();
 
   const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
     method: "POST",
@@ -49,6 +51,7 @@ async function callNvidia(resume: string, jobDescription: string): Promise<strin
   });
   if (!res.ok) throw new Error(`NVIDIA API ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const data = await res.json();
+  logUsage({ route: "cover-letter", op: "write", provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
   return data?.choices?.[0]?.message?.content ?? "";
 }
 
@@ -56,6 +59,7 @@ async function callAnthropic(resume: string, jobDescription: string): Promise<st
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
   const model = process.env.AI_MODEL || "claude-sonnet-5";
+  const t0 = Date.now();
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
@@ -63,6 +67,7 @@ async function callAnthropic(resume: string, jobDescription: string): Promise<st
   });
   if (!res.ok) throw new Error(`Anthropic API ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const data = await res.json();
+  logUsage({ route: "cover-letter", op: "write", provider: "anthropic", model, ...fromAnthropic(data), ms: Date.now() - t0 });
   return data?.content?.[0]?.text ?? "";
 }
 

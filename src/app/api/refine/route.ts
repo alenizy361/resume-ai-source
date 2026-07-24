@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI } from "@/app/lib/usage";
 
 export const maxDuration = 60;
 
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
     const key = process.env.NVIDIA_API_KEY;
     if (!key) throw new Error("NVIDIA_API_KEY is not set");
     const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+    const t0 = Date.now();
 
     const prompt = `You are helping build a CV field-by-field. ${rule}
 ${targetRole ? `The person's target role is: ${targetRole}.` : ""}
@@ -61,6 +63,7 @@ NOTE: <ملاحظة قصيرة جداً بالعربية الفصحى عما ف�
         });
         if (!res.ok) throw new Error(`NVIDIA ${res.status}`);
         const data = await res.json();
+        logUsage({ route: "refine", op: "field", provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
         out = (data?.choices?.[0]?.message?.content ?? "").trim();
       } catch (e) {
         if (attempt === 1) throw e;

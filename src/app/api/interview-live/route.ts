@@ -3,6 +3,7 @@ import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { verifyPass, ACCESS_COOKIE } from "@/app/lib/access";
 import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
+import { logUsage, fromOpenAI } from "@/app/lib/usage";
 
 export const maxDuration = 60;
 
@@ -58,6 +59,7 @@ async function callModel(prompt: string, system: string, maxTokens: number): Pro
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
   const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const t0 = Date.now();
   const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
@@ -68,6 +70,7 @@ async function callModel(prompt: string, system: string, maxTokens: number): Pro
   });
   if (!res.ok) throw new Error(`NVIDIA ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const data = await res.json();
+  logUsage({ route: "interview-live", op: "coach", provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
   return data?.choices?.[0]?.message?.content ?? "";
 }
 

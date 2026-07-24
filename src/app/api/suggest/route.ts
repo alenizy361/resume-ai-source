@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI } from "@/app/lib/usage";
 
 export const maxDuration = 60;
 
@@ -51,6 +52,7 @@ export async function POST(req: NextRequest) {
     const key = process.env.NVIDIA_API_KEY;
     if (!key) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
     const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+    const t0 = Date.now();
 
     const prompt = `You are a CV writing assistant embedded in a form field. ${KIND_RULES[kind]}
 
@@ -85,6 +87,7 @@ Output ONLY the field content itself — no intro, no explanation, no markdown b
     }
     if (!res.ok) return NextResponse.json({ error: "The assistant is busy — try again." }, { status: 502 });
     const data = await res.json();
+    logUsage({ route: "suggest", op: kind, provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
     const text = String(data?.choices?.[0]?.message?.content || "").replace(/\*\*/g, "").trim();
     if (!text) return NextResponse.json({ error: "The assistant is busy — try again." }, { status: 502 });
 

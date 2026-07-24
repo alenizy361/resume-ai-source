@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI } from "@/app/lib/usage";
 
 export const maxDuration = 300;
 
@@ -143,6 +144,9 @@ export async function POST(req: NextRequest) {
         });
         if (!res.ok) throw new Error(`NVIDIA API ${res.status}: ${(await res.text()).slice(0, 200)}`);
         const data = await res.json();
+        // Logged per attempt: a retry spends tokens too, and a ledger that only
+        // counts the successful attempt understates what a flaky model costs.
+        logUsage({ route: "tools", op: String(mode), provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
         const raw = data?.choices?.[0]?.message?.content ?? "";
         if (!raw.trim()) throw new Error("Empty response");
         let candidate: Record<string, unknown>;
