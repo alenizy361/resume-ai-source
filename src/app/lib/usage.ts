@@ -22,6 +22,8 @@ export interface UsageLine {
   cacheRead?: number;
   cacheWrite?: number;
   ms: number;
+  /** Why a line's counts are untrustworthy, when they are. Absent means clean. */
+  note?: string;
 }
 
 /** OpenAI-compatible (NVIDIA) usage block. */

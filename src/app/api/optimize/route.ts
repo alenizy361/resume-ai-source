@@ -346,10 +346,15 @@ async function streamNvidia(
       }
     }
   }
+  // Log before returning — a meter placed after the return is not a meter.
+  logUsage({
+    route: "optimize", op: "optimize", provider: "nvidia", model,
+    ...fromOpenAI(usageChunk), ms: Date.now() - t0,
+    // A stream that ended without a usage chunk is a silent measurement gap;
+    // say so in the ledger rather than logging a confident zero.
+    ...(usageChunk ? {} : { note: "no-usage-chunk" }),
+  });
   return full;
-  if (usageChunk) {
-    logUsage({ route: "optimize", op: "optimize", provider: "nvidia", model, ...fromOpenAI(usageChunk), ms: Date.now() - t0 });
-  }
 }
 
 async function callAnthropic(resume: string, jobDescription: string): Promise<string> {
