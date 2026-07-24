@@ -46,6 +46,20 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
+      - name: Which secrets can this workflow actually see?
+        # Names only. The JSON arrives via env rather than inline so the command
+        # echo cannot carry it, and values never leave jq.
+        env:
+          SECRET_NAMES: ${{ toJSON(secrets) }}
+        run: |
+          echo "Secrets visible to this run:"
+          echo "$SECRET_NAMES" | jq -r 'keys[]' | sed 's/^/  · /'
+          echo
+          echo "Expected: VERCEL_TOKEN"
+          echo "$SECRET_NAMES" | jq -e 'has("VERCEL_TOKEN")' >/dev/null \
+            && echo "  found ✓" \
+            || echo "  MISSING — it is not an Actions repository secret on this repo under this exact name."
+
       - name: Check the token is present and valid
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
