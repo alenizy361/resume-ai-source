@@ -144,17 +144,17 @@ const DRAFT_SCHEMA = {
   },
 } as const;
 
-const DRAFT_PROMPT = `You draft the FIRST DRAFT of a resume's experience section for a job title, so
-the user edits instead of writing from scratch. They will see every line and
-delete what does not apply to them, so cover what the role typically involves —
-but understand exactly where the line is.
-
-WRITE (the user can confirm or delete these):
-- 6-8 duty lines that a competent holder of this title actually performs.
+/**
+ * The drafting rules live here ONCE. They are inlined into the interview's system
+ * prompt and used as the drafter's own system prompt, so the two cannot drift
+ * into disagreeing about what may be written.
+ */
+const DRAFTING_DOCTRINE = `WRITE (the user sees every line and deletes what does not apply):
+- 4-6 duty lines that a competent holder of this title actually performs.
   Action verb + real scope + the systems or standards the work runs on.
-  Written in first person's professional register, ready to paste.
-- 6-10 HARD skills, tools, systems, and certifications that ATS scans for in
-  THIS title in the Saudi/Gulf market. No soft-skill filler.
+  Professional register, ready to paste into a resume.
+- HARD skills, tools, systems and certifications that ATS scans for in THIS
+  title in the Saudi/Gulf market. No soft-skill filler.
 
 NEVER WRITE (these are the user's facts alone, and inventing them is forgery
 they would have to defend in an interview):
@@ -168,11 +168,18 @@ they would have to defend in an interview):
 Write "Reconciled supplier accounts and prepared monthly closing entries in SAP",
 never "Reconciled 200+ supplier accounts, cutting close time 30%".
 
+ELEVATE the user's words, never echo them. "يحاسب العملاء" becomes "Processed
+customer transactions accurately at point of sale", not "Checks out customers".`;
+
+const DRAFT_PROMPT = `You draft the first version of a resume's experience section for a job title, so
+the user edits instead of writing from scratch.
+
+${DRAFTING_DOCTRINE}
+
 If a web search tool is available to you, use it when it sharpens the answer for
 this title in this market — current tools, current certifications, the vocabulary
-live postings actually use. Prefer what employers ask for today over what a
-textbook says. If no search tool is available, write from what you know of the
-role; do not mention searching and do not apologise for its absence.`;
+live postings actually use. If no search tool is available, write from what you
+know of the role; do not mention searching and do not apologise for its absence.`;
 
 const SYSTEM_PROMPT = `You are "المستشار" — a senior Saudi career advisor and professional resume
 STRATEGIST inside cv.rabit.sa. You are NOT a casual chatbot: you run a tight,
@@ -405,7 +412,39 @@ async function callAnthropicDraft(user: string): Promise<Record<string, unknown>
   return null;
 }
 
-async function callLLM(messages: Msg[], maxTokens: number): Promise<string> {
+/**
+ * @param json ask the endpoint to constrain the reply to a JSON object. Every
+ *   "busy" 502 this route has ever returned was extractJson failing on prose the
+ *   model wrapped around its JSON — three of them in a 100-scenario run. JSON
+ *   mode removes the cause rather than retrying past it. If the deployment does
+ *   not accept response_format the first attempt fails and the retry drops the
+ *   parameter, so support is discovered instead of assumed.
+ */
+/**
+ * Draft a role's duties and skills. The single entry point: the draft endpoint
+ * and the turn's guaranteed backfill both come through here, so which provider
+ * runs it, and what a draft is allowed to contain, are decided in one place.
+ */
+async function draftRole(opts: {
+  role: string; years: number | null; industry: string; jobAd: string; langWord: string;
+}): Promise<Record<string, unknown> | null> {
+  const msg = `JOB TITLE: ${opts.role}
+${opts.years ? `YEARS OF EXPERIENCE: ${opts.years} (pitch the seniority of the duties to this)` : ""}
+${opts.industry ? `INDUSTRY: ${opts.industry}` : ""}
+${opts.jobAd ? `TARGET JOB AD — mirror its vocabulary where it genuinely applies:\n${opts.jobAd}` : ""}
+OUTPUT LANGUAGE: ${opts.langWord}.
+
+Draft the duties and skills for this title.`;
+
+  if (PROVIDER === "anthropic") return callAnthropicDraft(msg);
+  const raw = await callLLM([
+    { role: "system", content: `${DRAFT_PROMPT}\n\n# TODAY\n${todayContext()}` },
+    { role: "user", content: `${msg}\n\nRespond with STRICT JSON ONLY: {"duties":["..."],"skills":["..."]}` },
+  ], 900, true);
+  return raw ? extractJson(raw) : null;
+}
+
+async function callLLM(messages: Msg[], maxTokens: number, json = false): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("no-key");
   const model = modelFor("nvidia");
@@ -419,7 +458,12 @@ async function callLLM(messages: Msg[], maxTokens: number): Promise<string> {
         method: "POST",
         headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
         signal: ctrl.signal,
-        body: JSON.stringify({ model, temperature: 0.4, top_p: 0.9, max_tokens: maxTokens, messages }),
+        body: JSON.stringify({
+          model, temperature: 0.4, top_p: 0.9, max_tokens: maxTokens, messages,
+          // Only on the first attempt: the retry is also the fallback for an
+          // endpoint that rejects the parameter outright.
+          ...(json && attempt === 0 ? { response_format: { type: "json_object" } } : {}),
+        }),
       });
       if (res.ok) {
         const data = await res.json();
@@ -533,29 +577,16 @@ export async function POST(req: NextRequest) {
       // so NVIDIA drafts from its own knowledge rather than answering 501.
       if (!targetRole) return NextResponse.json({ error: "A job title is required." }, { status: 400 });
 
-      const years = Number(body?.profile?.years_of_experience ?? body?.years) || null;
-      const industry = String(body?.profile?.industry || body?.industry || "").slice(0, 80);
-      const jobAd = String(body?.jobAd || "").slice(0, 3000);
-
-      const draftMsg = `JOB TITLE: ${targetRole}
-${years ? `YEARS OF EXPERIENCE: ${years} (pitch the seniority of the duties to this)` : ""}
-${industry ? `INDUSTRY: ${industry}` : ""}
-${jobAd ? `TARGET JOB AD — mirror its vocabulary and required skills where they genuinely apply:\n${jobAd}` : ""}
-OUTPUT LANGUAGE: ${langWord}.
-
-Draft the duties and skills for this title.`;
 
       let d: Record<string, unknown> | null;
       try {
-        if (PROVIDER === "anthropic") {
-          d = await callAnthropicDraft(draftMsg);
-        } else {
-          const raw = await callLLM([
-            { role: "system", content: `${DRAFT_PROMPT}\n\n# TODAY\n${todayContext()}` },
-            { role: "user", content: `${draftMsg}\n\nRespond with STRICT JSON ONLY: {"duties":["..."],"skills":["..."]}` },
-          ], 900);
-          d = raw ? extractJson(raw) : null;
-        }
+        d = await draftRole({
+          role: targetRole,
+          years: Number(body?.profile?.years_of_experience ?? body?.years) || null,
+          industry: String(body?.profile?.industry || body?.industry || "").slice(0, 80),
+          jobAd: String(body?.jobAd || "").slice(0, 3000),
+          langWord,
+        });
       } catch (e) { console.error("Interview draft error:", e instanceof Error ? e.message : e); d = null; }
       if (!d) return NextResponse.json({ error: "busy" }, { status: 502 });
 
@@ -627,9 +658,10 @@ Run ANALYZE -> DECIDE (ASK|DEEPEN|REPHRASE|SUGGEST|FINISH) -> ACT, following THE
 - Identify the current axis (1 ROLE&YEARS | 2 CURRENT ROLE | 3 PAST ROLES | 4 SKILLS | 5 EDUCATION&CERTS | 6 IDENTITY), capture the user's facts into it, then either DEEPEN it once or ADVANCE to the next incomplete axis.
 - The CURRENT PROFILE is the WHOLE memory you have: it already holds role, years_of_experience, industry, experiences, wovenLines (the resume lines written so far) and summary. A fact that is in there has ALREADY been answered — never ask for it again. NEVER restate, reword, or recap a line that already exists.
 - Read RECENT CONVERSATION before you write "say": if you already asked something there, do not ask it again in any wording.
-- The moment you have a title + employer (dates can follow), DRAFT that role's
-  bullets into experiences[].bullets and resume_lines in the SAME turn. Do not
-  wait to be asked and do not ask permission — drafting is the product.
+- A JOB TITLE ALONE is enough to draft. "كاشير في سوبرماركت" needs no employer
+  and no dates before you write — draft that role's bullets into
+  experiences[].bullets in the SAME turn, then ask for the employer and dates.
+  Do not wait to be asked and do not ask permission — drafting is the product.
 - resume_lines = ONLY brand-new EXPERIENCE-section lines for facts the user JUST
   provided OR duties you just drafted for a role they just named. A job-header line carries NO leading dash; every achievement bullet starts with "- " — the client uses that difference to lay the section out, so it matters. Education, skills, summary, name, contact travel ONLY inside profile_patch — NEVER in resume_lines. At FINISH, resume_lines must be [] unless a genuinely new fact just arrived.
 - Experience entries also go to profile_patch.experiences:[{header:{title,company,start_date,end_date},bullets[]}] so the client can lay them out; when refining an EXISTING entry, re-emit that whole entry (the client replaces it).
@@ -646,7 +678,7 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
         try { j = await callAnthropicTurn(systemPrompt, userMsg); }
         catch (e) { console.error("Interview anthropic error:", e instanceof Error ? e.message : e); j = null; }
       } else {
-        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700);
+        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700, true);
         j = raw ? extractJson(raw) : null;
       }
       if (!j) return NextResponse.json({ error: "busy" }, { status: 502 });
@@ -665,6 +697,57 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
       const patch = scrubDeep(norm.patch, piiHits);
       if (norm.dropped.length) console.warn("interview: dropped fields", norm.dropped.join(","));
       if (piiHits.length) console.warn("interview: scrubbed PII", [...new Set(piiHits)].join(","));
+
+      /*
+       * Drafting is guaranteed here, not requested in the prompt. The live run
+       * showed the model capturing role:"كاشير" and then returning bullets:[] —
+       * an instruction it is free to skip is an instruction that gets skipped,
+       * which is the same lesson as the honesty guards. So: the moment a title
+       * is known and that role still has no bullets, the route drafts them.
+       * One extra model call, only on the turn where a role first appears.
+       */
+      const knownRole = String(patch.role || (profile as Record<string, unknown>).role || "");
+      const alreadyDrafted = Boolean((profile as Record<string, unknown>).drafted_for) &&
+        (profile as Record<string, unknown>).drafted_for === knownRole;
+      const patchExps = Array.isArray(patch.experiences) ? patch.experiences as Array<Record<string, unknown>> : [];
+      const hasBullets = patchExps.some((e) => Array.isArray(e.bullets) && e.bullets.length > 0);
+
+      let draftedSkills = "";
+      if (knownRole && !alreadyDrafted && !hasBullets && !resumeLines.length) {
+        try {
+          const d = await draftRole({
+            role: knownRole,
+            years: Number(patch.years_of_experience ?? (profile as Record<string, unknown>).years_of_experience) || null,
+            industry: String(patch.industry || (profile as Record<string, unknown>).industry || ""),
+            jobAd: String((profile as Record<string, unknown>).jobAd || ""),
+            langWord,
+          });
+          if (d) {
+            const budget = { left: 0 };
+            const duties = (Array.isArray(d.duties) ? d.duties : []).map(String)
+              .map((x) => stripPlaceholders(x.replace(/^[-•*]\s*/, "").trim(), true, budget))
+              .filter((x) => x.length > 2).slice(0, 6);
+            const skills = (Array.isArray(d.skills) ? d.skills : []).map(String)
+              .map((x) => x.trim()).filter(Boolean).slice(0, 10);
+            if (duties.length) {
+              // Attach to the role's entry so the client lays it out, and mirror
+              // into resume_lines so the live preview fills in immediately.
+              const head = patchExps[0]?.header && typeof patchExps[0].header === "object"
+                ? patchExps[0].header as Record<string, unknown>
+                : { title: knownRole, company: "", start_date: "", end_date: "" };
+              patch.experiences = [{ header: head, bullets: duties }];
+              resumeLines.push(...duties.map((x) => `- ${x}`));
+            }
+            if (skills.length && !patch.skills) draftedSkills = skills.join("، ");
+            if (draftedSkills) patch.skills = draftedSkills;
+            // Remember what we drafted for, so the next turn does not redraft.
+            patch.drafted_for = knownRole;
+          }
+        } catch (e) {
+          // A failed draft must not fail the turn — the conversation continues.
+          console.error("interview: draft backfill failed:", e instanceof Error ? e.message : e);
+        }
+      }
 
       // Progress and FINISH are decided from the merged profile, not from the
       // model's self-report (which was 0 or 17 and nothing else in the live run).

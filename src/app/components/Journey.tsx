@@ -42,10 +42,12 @@ interface Profile {
    * asked "كم سنة خبرة؟" three turns in a row after being told "٧ سنوات".
    */
   yearsOfExperience: number | null; industry: string; graduationYear: string;
+  /** Which role we already drafted duties for, so a later turn does not redraft. */
+  draftedFor: string;
 }
 const EMPTY: Profile = {
   role: "", name: "", contact: "", summary: "", education: "", skills: "", extras: [], wovenLines: [], jobAd: "",
-  yearsOfExperience: null, industry: "", graduationYear: "",
+  yearsOfExperience: null, industry: "", graduationYear: "", draftedFor: "",
 };
 
 const T = {
@@ -478,6 +480,7 @@ export default function Journey({ lang }: { lang: Lang }) {
     if (typeof patch.targetRole === "string" && patch.targetRole) n.role = patch.targetRole.slice(0, 120);
     if (typeof patch.summary === "string" && patch.summary) n.summary = patch.summary.slice(0, 700);
     if (typeof patch.industry === "string" && patch.industry) n.industry = patch.industry.slice(0, 80);
+    if (typeof patch.drafted_for === "string" && patch.drafted_for) n.draftedFor = patch.drafted_for.slice(0, 120);
     if (typeof patch.years_of_experience === "number" && patch.years_of_experience >= 0) n.yearsOfExperience = patch.years_of_experience;
     if (typeof patch.education === "string" && patch.education) n.education = patch.education.slice(0, 400);
     // The brain now sends education as {degree, university, graduation_year};
@@ -553,6 +556,7 @@ export default function Journey({ lang }: { lang: Lang }) {
             education: base.education, graduation_year: base.graduationYear,
             skills: base.skills, summary: base.summary,
             years_of_experience: base.yearsOfExperience, industry: base.industry,
+            drafted_for: base.draftedFor, jobAd: base.jobAd,
             wovenLines: base.wovenLines.slice(-30), outputLang: outChoice,
           },
           history: history.map((m) => ({ who: m.who, text: m.text })),
