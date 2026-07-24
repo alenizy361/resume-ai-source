@@ -8,8 +8,24 @@ import {
 } from "@/app/lib/interviewGuards";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 import { DRAFT_PROMPT, DRAFT_SCHEMA, draftUserMessage } from "@/app/lib/prompts";
+import { rolesFromProfile, rolesDigest, BULLET_CAP_CURRENT } from "@/app/lib/resumeDoc";
 
 export const maxDuration = 60;
+
+/**
+ * The wall this route must finish inside.
+ *
+ * A turn can cost two model calls: the conversation turn, then a drafting call
+ * when a new role appears. Each had a 25s timeout and one silent retry — up to
+ * 100s of work inside a 60s cap, so the platform killed the request and the user
+ * saw a 502. The QA report counted three of those in a hundred and called them
+ * transient; they were arithmetic.
+ *
+ * Every model call now takes the time that is actually left, and drafting is
+ * skipped rather than started when there is not enough of it.
+ */
+const TURN_BUDGET_MS = 52_000;
+const MIN_DRAFT_MS = 14_000;
 
 /**
  * "المستشار" — the Advisor's conversation BRAIN (not a rephraser). Three actions,
@@ -390,6 +406,7 @@ async function callAnthropicDraft(user: string): Promise<Record<string, unknown>
  */
 async function draftRole(opts: {
   role: string; years: number | null; industry: string; jobAd: string; langWord: string;
+  deadline?: number;
 }): Promise<Record<string, unknown> | null> {
   const msg = draftUserMessage(opts);
 
@@ -397,11 +414,11 @@ async function draftRole(opts: {
   const raw = await callLLM([
     { role: "system", content: `${DRAFT_PROMPT}\n\n# TODAY\n${todayContext()}` },
     { role: "user", content: `${msg}\n\nRespond with STRICT JSON ONLY: {"duties":["..."],"skills":["..."]}` },
-  ], 900, true, "draft");
+  ], 900, true, "draft", opts.deadline ?? Infinity);
   return raw ? extractJson(raw) : null;
 }
 
-async function callLLM(messages: Msg[], maxTokens: number, json = false, op = "turn"): Promise<string> {
+async function callLLM(messages: Msg[], maxTokens: number, json = false, op = "turn", deadline = Infinity): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("no-key");
   const model = modelFor("nvidia");
@@ -409,8 +426,12 @@ async function callLLM(messages: Msg[], maxTokens: number, json = false, op = "t
   const t0 = Date.now();
   // One silent retry — the live interview must survive a transient upstream blip.
   for (let attempt = 0; attempt < 2 && !out; attempt++) {
+    // Never wait past the request's own deadline — a call that outlives the
+    // platform cap returns nothing to anyone.
+    const left = Math.min(25_000, deadline - Date.now());
+    if (left <= 1_000) break;
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25000);
+    const timer = setTimeout(() => ctrl.abort(), left);
     try {
       const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
@@ -521,6 +542,9 @@ export async function POST(req: NextRequest) {
     const langWord = outputLang === "ar" ? "Arabic (فصحى professional)" : outputLang === "both" ? "English, then an Arabic version" : "English";
     const uiAr = outputLang !== "en";
     const targetRole = String(body?.targetRole || body?.profile?.role || "").slice(0, 120);
+    // One clock for the whole request; every model call reads from it.
+    const startedAt = Date.now();
+    const deadline = startedAt + TURN_BUDGET_MS;
     const text = String(body?.text || body?.answer || "").slice(0, 1500);
     const stateSummary = String(body?.stateSummary || "").slice(0, 2500);
 
@@ -609,8 +633,40 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      /*
+       * What the model is allowed to see of itself.
+       *
+       * This used to be JSON.stringify(profile).slice(0, 2600) — a cut that lands
+       * mid-object, so the model received INVALID JSON under a heading calling it
+       * "the WHOLE memory you have". It could not read the duties it had already
+       * drafted, so every turn it drafted them again in slightly different words,
+       * and three live builds ended with ten near-identical duties on one job.
+       *
+       * Now the bulky part (the roles and their bullets) is summarised to a
+       * bounded digest that states what is written, and the small part (the
+       * facts) is sent whole. Neither is ever cut in the middle of a value.
+       */
+      const profileRoles = rolesFromProfile(profile as Record<string, unknown>);
+      const profileFacts = {
+        role: (profile as Record<string, unknown>).role ?? "",
+        years_of_experience: (profile as Record<string, unknown>).years_of_experience ?? null,
+        industry: (profile as Record<string, unknown>).industry ?? "",
+        name: (profile as Record<string, unknown>).name ?? "",
+        contact: (profile as Record<string, unknown>).contact ?? "",
+        summary: String((profile as Record<string, unknown>).summary ?? "").slice(0, 700),
+        skills: String((profile as Record<string, unknown>).skills ?? "").slice(0, 400),
+        education: String((profile as Record<string, unknown>).education ?? "").slice(0, 400),
+        certifications: String((profile as Record<string, unknown>).certifications ?? "").slice(0, 400),
+        languages: String((profile as Record<string, unknown>).languages ?? "").slice(0, 200),
+      };
+
       const userMsg = `OUTPUT LANGUAGE for resume_lines: ${langWord}.
-CURRENT PROFILE (JSON): ${JSON.stringify(profile).slice(0, 2600)}
+WHAT IS ALREADY ON THE RESUME — these duties are WRITTEN. Do not write them again
+in other words; a rewrite of a line that exists is a duplicate on the user's CV:
+${rolesDigest(profileRoles)}
+
+EVERYTHING ELSE KNOWN (JSON, complete — never truncated):
+${JSON.stringify(profileFacts)}
 RECENT CONVERSATION: ${history.map((h) => `${h.who || h.role}: ${h.text || h.content}`).join("\n").slice(0, 1500)}
 THE USER JUST SAID: "${text || "(start the interview)"}"
 
@@ -622,6 +678,11 @@ Run ANALYZE -> DECIDE (ASK|DEEPEN|REPHRASE|SUGGEST|FINISH) -> ACT, following THE
   and no dates before you write — draft that role's bullets into
   experiences[].bullets in the SAME turn, then ask for the employer and dates.
   Do not wait to be asked and do not ask permission — drafting is the product.
+- BULLET BUDGET, hard: at most 6 bullets for the CURRENT role and 4 for any past
+  one. A recruiter reads the recent job and skims the rest; a job carrying ten
+  lines gets none of them read. If a role already has its budget (the digest
+  above states the count), write NOTHING for it — refine an existing line by
+  re-emitting that one line, never by adding another beside it.
 - resume_lines = ONLY brand-new EXPERIENCE-section lines for facts the user JUST
   provided OR duties you just drafted for a role they just named. A job-header line carries NO leading dash; every achievement bullet starts with "- " — the client uses that difference to lay the section out, so it matters. Education, skills, summary, name, contact travel ONLY inside profile_patch — NEVER in resume_lines. At FINISH, resume_lines must be [] unless a genuinely new fact just arrived.
 - Experience entries also go to profile_patch.experiences:[{header:{title,company,start_date,end_date},bullets[]}] so the client can lay them out; when refining an EXISTING entry, re-emit that whole entry (the client replaces it).
@@ -638,7 +699,7 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
         try { j = await callAnthropicTurn(systemPrompt, userMsg); }
         catch (e) { console.error("Interview anthropic error:", e instanceof Error ? e.message : e); j = null; }
       } else {
-        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700, true, "turn");
+        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700, true, "turn", deadline);
         j = raw ? extractJson(raw) : null;
       }
       if (!j) return NextResponse.json({ error: "busy" }, { status: 502 });
@@ -686,9 +747,11 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
       const hasBullets = patchExps.some((e) => Array.isArray(e.bullets) && e.bullets.length > 0);
 
       let draftedSkills = "";
-      if (knownRole && !alreadyDrafted && !hasBullets && !resumeLines.length) {
+      const timeLeft = deadline - Date.now();
+      if (knownRole && !alreadyDrafted && !hasBullets && !resumeLines.length && timeLeft >= MIN_DRAFT_MS) {
         try {
           const d = await draftRole({
+            deadline,
             role: knownRole,
             years: Number(patch.years_of_experience ?? (profile as Record<string, unknown>).years_of_experience) || null,
             industry: String(patch.industry || (profile as Record<string, unknown>).industry || ""),
@@ -699,7 +762,7 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
             const budget = { left: 0 };
             const duties = (Array.isArray(d.duties) ? d.duties : []).map(String)
               .map((x) => stripPlaceholders(x.replace(/^[-•*]\s*/, "").trim(), true, budget))
-              .filter((x) => x.length > 2).slice(0, 6);
+              .filter((x) => x.length > 2).slice(0, BULLET_CAP_CURRENT);
             const skills = (Array.isArray(d.skills) ? d.skills : []).map(String)
               .map((x) => x.trim()).filter(Boolean).slice(0, 10);
             if (duties.length) {

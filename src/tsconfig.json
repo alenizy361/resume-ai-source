@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    // The ops/ test scripts run under `node --experimental-strip-types`,
+    // whose ESM resolver requires the explicit .ts extension. Allowing it here
+    // lets one import path satisfy both the compiler and the test runner.
+    "allowImportingTsExtensions": true,
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

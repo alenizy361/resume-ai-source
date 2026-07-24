@@ -13,6 +13,8 @@
  * upgrades one that does not, rather than starting a new job beside it.
  */
 
+import { dedupeBullets } from "./resumeDoc.ts";
+
 export interface Profile {
   role: string; name: string; contact: string; summary: string;
   education: string; skills: string; extras: string[];
@@ -34,6 +36,12 @@ export const EMPTY_PROFILE: Profile = {
   certifications: "", languages: "",
   yearsOfExperience: null, industry: "", graduationYear: "", draftedFor: "",
 };
+
+/**
+ * The budget a single role may spend, matching what recruiters actually read:
+ * six on the current job, fewer on older ones. The live product was emitting ten.
+ */
+const BULLET_BUDGET = 6;
 
 /** A bullet, as opposed to a role header. */
 const IS_BULLET = /^[-•]/;
@@ -60,6 +68,7 @@ export function roleKey(header: string): string {
     .replace(/[ً-ْ]/g, "")             // Arabic diacritics
     .replace(/[أإآ]/g, "ا")
     .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")   // alef maqsura and ya are written interchangeably
     .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .replace(/\s+/g, " ")
     .trim()
@@ -123,13 +132,13 @@ export function weaveRole(lines: string[], header: string, bullets: string[]): s
   // Same job. Keep whichever header states the period, and union the bullets so
   // a later turn's detail is added rather than replacing what came before.
   const end = bulletRun(out, at);
+  // Deduped by MEANING and capped. An exact-string check was the last place a
+  // rewording of an existing duty could still land beside it, and the live runs
+  // showed the model rewording constantly.
   const existing = out.slice(at + 1, end);
-  const seen = new Set(existing.map((b) => b.replace(/^[-•]\s*/, "").trim()));
-  const merged = [...existing];
-  for (const b of bullets) {
-    const body = b.replace(/^[-•]\s*/, "").trim();
-    if (body && !seen.has(body)) { seen.add(body); merged.push(b); }
-  }
+  const merged = dedupeBullets([...existing, ...bullets])
+    .slice(0, BULLET_BUDGET)
+    .map((b) => `- ${b}`);
   // Prefer the header that says more: a period beats none, and failing that the
   // longer key (title + employer) beats a bare title.
   const prev = out[at];
