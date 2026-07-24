@@ -1,0 +1,118 @@
+name: Product check
+
+# Replays the scenarios that failed in the 100-scenario run against the LIVE
+# endpoint, so a claim about the product is backed by the product's own answer
+# rather than by reading the prompt. Each scenario costs one model call.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Where to test"
+        type: string
+        default: "https://cv.rabit.sa"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Replay the failing scenarios
+        env:
+          BASE: ${{ inputs.base_url }}
+        run: |
+          cat > cases.json <<'JSON'
+          [
+            {
+              "id": "7 · cashier",
+              "was": "asked \"كم عدد العمليات التي تتعامل معها يومياً؟\" and left bullets []",
+              "want": "drafts the cashier's duties instead of asking for a number",
+              "body": {"action":"turn","lang":"ar","answer":"أشتغل كاشير في سوبرماركت وابغى اطور نفسي","profile":{},"history":[]}
+            },
+            {
+              "id": "user's example · radiographer",
+              "was": "n/a — the case the product owner raised",
+              "want": "drafts radiography duties from the title alone",
+              "body": {"action":"turn","lang":"ar","answer":"انا اخصائي اشعة في مستشفى","profile":{},"history":[]}
+            },
+            {
+              "id": "date · hired in 2025",
+              "was": "told the user their own hire year was in the future",
+              "want": "treats 2025 as the past",
+              "body": {"action":"turn","lang":"ar","answer":"توظفت سنة ٢٠٢٥ في مستشفى الملك فهد","profile":{"role":"اخصائي اشعة"},"history":[]}
+            },
+            {
+              "id": "1 · civil engineer",
+              "was": "summary contained \"متخصص في [أضف التخصص]\" — printed on the PDF",
+              "want": "no bracketed placeholder anywhere",
+              "body": {"action":"turn","lang":"ar","answer":"أنا مهندس مدني وشتغلت ٤ سنوات في شركة مقاولات بالرياض","profile":{},"history":[]}
+            },
+            {
+              "id": "draft endpoint · cashier",
+              "was": "did not exist",
+              "want": "duties + skills written for the title",
+              "body": {"action":"draft","lang":"ar","targetRole":"كاشير","profile":{"industry":"تجزئة"}}
+            }
+          ]
+          JSON
+
+          fail=0
+          for i in $(seq 0 4); do
+            id=$(jq -r ".[$i].id" cases.json)
+            was=$(jq -r ".[$i].was" cases.json)
+            want=$(jq -r ".[$i].want" cases.json)
+            echo "════════════════════════════════════════════════════════"
+            echo "SCENARIO: $id"
+            echo "  before: $was"
+            echo "  expect: $want"
+            echo "────────────────────────────────────────────────────────"
+            jq -c ".[$i].body" cases.json > body.json
+            code=$(curl -sS -o out.json -w '%{http_code}' --max-time 60 \
+              -X POST "$BASE/api/interview" \
+              -H "Content-Type: application/json" --data @body.json || echo 000)
+            echo "HTTP $code"
+            jq '.' out.json 2>/dev/null || cat out.json
+            echo "──── checks ────"
+
+            if [ "$code" != "200" ]; then echo "  ✗ request failed"; fail=1; continue; fi
+
+            # Nothing bracketed may ever reach a printed resume.
+            if grep -qE '\[(أضف|add)[^]]*\]' out.json; then
+              echo "  ✗ bracketed placeholder present"; fail=1
+            else
+              echo "  ✓ no bracketed placeholder"
+            fi
+
+            # think must never reach the browser.
+            if jq -e 'has("think")' out.json >/dev/null 2>&1; then
+              echo "  ✗ think leaked"; fail=1
+            else
+              echo "  ✓ think absent"
+            fi
+
+            case "$id" in
+              *cashier|*radiographer)
+                n=$(jq '[.profile_patch.experiences[]?.bullets[]?, .resume_lines[]?, .duties[]?] | length' out.json)
+                echo "  drafted lines: $n"
+                [ "$n" -ge 3 ] && echo "  ✓ drafted instead of interrogating" \
+                               || { echo "  ✗ still not drafting"; fail=1; }
+                say=$(jq -r '.say // ""' out.json)
+                if echo "$say" | grep -qE 'كم عدد|كم نسبة|ما هي مهامك|مهامك اليومية'; then
+                  echo "  ✗ still chasing duties/numbers: $say"; fail=1
+                else
+                  echo "  ✓ no duty/number interrogation"
+                fi ;;
+              date*)
+                say=$(jq -r '.say // ""' out.json)
+                if echo "$say" | grep -qE 'المستقبل|مستقبلي|future|لم تحن'; then
+                  echo "  ✗ still calls a past year the future"; fail=1
+                else
+                  echo "  ✓ 2025 not treated as future"
+                fi ;;
+            esac
+          done
+
+          echo "════════════════════════════════════════════════════════"
+          [ "$fail" = "0" ] && echo "ALL SCENARIOS PASS" || { echo "::error::Some scenarios still fail"; exit 1; }
