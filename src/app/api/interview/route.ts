@@ -5,6 +5,7 @@ import {
   computeProgress, gateFinish, isRepeat, normalizePatch, scrubDeep,
   sensitiveTopic, statedAge, stripPlaceholders, hasDigits, todayContext,
 } from "@/app/lib/interviewGuards";
+import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 
 export const maxDuration = 60;
 
@@ -362,6 +363,7 @@ async function callAnthropicTurn(system: string, user: string): Promise<Record<s
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("no-key");
   const client = new Anthropic({ apiKey: key, timeout: 25000, maxRetries: 1 });
+  const t0 = Date.now();
   const res = await client.messages.create({
     model: modelFor("anthropic"),
     max_tokens: 8000,
@@ -389,6 +391,7 @@ async function callAnthropicDraft(user: string): Promise<Record<string, unknown>
   if (!key) throw new Error("no-key");
   const client = new Anthropic({ apiKey: key, timeout: 50000, maxRetries: 1 });
   const messages: Anthropic.MessageParam[] = [{ role: "user", content: user }];
+  const t0 = Date.now();
 
   for (let hop = 0; hop < 4; hop++) {
     const res = await client.messages.create({
@@ -399,6 +402,7 @@ async function callAnthropicDraft(user: string): Promise<Record<string, unknown>
       output_config: { effort: "low", format: { type: "json_schema", schema: DRAFT_SCHEMA } },
       messages,
     });
+    logUsage({ route: "interview", op: "draft", provider: "anthropic", model: res.model, ...fromAnthropic(res), ms: Date.now() - t0 });
     if (res.stop_reason === "refusal") return null;
     if (res.stop_reason === "pause_turn") {
       // The server-tool loop hit its iteration cap — hand the turn back to resume.
@@ -440,15 +444,16 @@ Draft the duties and skills for this title.`;
   const raw = await callLLM([
     { role: "system", content: `${DRAFT_PROMPT}\n\n# TODAY\n${todayContext()}` },
     { role: "user", content: `${msg}\n\nRespond with STRICT JSON ONLY: {"duties":["..."],"skills":["..."]}` },
-  ], 900, true);
+  ], 900, true, "draft");
   return raw ? extractJson(raw) : null;
 }
 
-async function callLLM(messages: Msg[], maxTokens: number, json = false): Promise<string> {
+async function callLLM(messages: Msg[], maxTokens: number, json = false, op = "turn"): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("no-key");
   const model = modelFor("nvidia");
   let out = "";
+  const t0 = Date.now();
   // One silent retry — the live interview must survive a transient upstream blip.
   for (let attempt = 0; attempt < 2 && !out; attempt++) {
     const ctrl = new AbortController();
@@ -468,6 +473,8 @@ async function callLLM(messages: Msg[], maxTokens: number, json = false): Promis
       if (res.ok) {
         const data = await res.json();
         out = String(data?.choices?.[0]?.message?.content || "").trim();
+        const u = fromOpenAI(data);
+        logUsage({ route: "interview", op, provider: "nvidia", model, ...u, ms: Date.now() - t0 });
       } else {
         console.error(`Interview upstream ${res.status} (attempt ${attempt + 1})`);
       }
@@ -678,7 +685,7 @@ Honor THE ONE LAW: preserve every number/currency/proper-noun the user gave; nev
         try { j = await callAnthropicTurn(systemPrompt, userMsg); }
         catch (e) { console.error("Interview anthropic error:", e instanceof Error ? e.message : e); j = null; }
       } else {
-        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700, true);
+        const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 700, true, "turn");
         j = raw ? extractJson(raw) : null;
       }
       if (!j) return NextResponse.json({ error: "busy" }, { status: 502 });
@@ -804,7 +811,7 @@ One per line, format exactly: question | field   (field ∈ extras, skills, duti
 Target role: ${targetRole || "not given"}
 ${stateSummary}
 Output ONLY the lines.`;
-      const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 400);
+      const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 400, false, "gaps");
       if (!raw) return NextResponse.json({ error: "busy" }, { status: 502 });
       const gaps = raw.split("\n").map((l) => l.trim().replace(/^[-•*]\s*/, "")).filter((l) => l.includes("|"))
         .map((l) => { const [q = "", f = ""] = l.split("|").map((p) => p.trim()); const field = ["extras", "skills", "duties", "education"].includes(f) ? f : "extras"; return { q, field }; })
@@ -826,7 +833,7 @@ CANDIDATE'S OWN WORDS:
 ${text}
 
 Respond with STRICT JSON ONLY: {"lines":["- ...", "..."]}`;
-    const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 500);
+    const raw = await callLLM([{ role: "system", content: systemPrompt }, { role: "user", content: userMsg }], 500, false, "rephrase");
     if (!raw) return NextResponse.json({ error: "busy" }, { status: 502 });
     const j = extractJson(raw);
     let lines: string[] = [];

@@ -1,0 +1,93 @@
+name: Worst-case cost
+
+# What one resume costs when the user is as unhelpful as a real user gets:
+# rambling, off-topic, contradicting themselves, answering a different question,
+# and taking the full question budget to say what a good user says in three turns.
+# The point is the ceiling, not the average — you price for the ceiling.
+#
+# Reads nothing from the response body except what it needs; the actual token
+# counts come from the [usage] lines the routes now log, read from Vercel after.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Where to test"
+        type: string
+        default: "https://cv.rabit.sa"
+
+permissions:
+  contents: read
+
+jobs:
+  stress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Drive one maximally expensive conversation
+        env:
+          BASE: ${{ inputs.base_url }}
+        run: |
+          # A user who volunteers nothing useful, changes their mind, pads every
+          # answer, and drags the interview to its 10-question ceiling.
+          cat > turns.json <<'JSON'
+          [
+            "السلام عليكم كيف الحال ان شاء الله بخير انا جاي عشان اسوي سيره ذاتيه بس ما ادري وش المفروض اكتب بالضبط يعني انت وش تنصحني اسوي",
+            "ما ادري صراحه",
+            "يمكن محاسب او يمكن مبيعات ما استقريت بعد وانت وش رايك ايهم افضل بالسوق حاليا وش اللي عليه طلب اكثر",
+            "خلاص محاسب",
+            "لا غيرت رايي خلني كاشير احسن لان اشتغلت كاشير قبل فتره طويله في محل صغير عند اهلي",
+            "نسيت اسم المحل والله ومو متذكر السنه بالضبط يمكن قبل خمس سنوات او ست",
+            "قلت لك ما اتذكر ليش تسال مره ثانيه",
+            "طيب كم باقي من الاسئله وكم بتاخذ وقت وهل السيره بتكون مجانيه ولا لازم ادفع",
+            "اوك كمل",
+            "نفس الجواب السابق",
+            "خلاص كفايه اعطني السيره الحين",
+            "لا لحظه ابي اضيف اني اجيد الانجليزيه شوي وعندي رخصه قياده"
+          ]
+          JSON
+
+          # The profile is threaded forward exactly as the real client does it —
+          # a stateless replay would understate the input tokens badly.
+          echo '{}' > profile.json
+          echo '[]' > history.json
+          calls=0
+
+          for i in $(seq 0 11); do
+            msg=$(jq -r ".[$i]" turns.json)
+            jq -n --arg a "$msg" --slurpfile p profile.json --slurpfile h history.json \
+              '{action:"turn", lang:"ar", answer:$a, profile:$p[0], history:$h[0]}' > body.json
+
+            code=$(curl -sS -o out.json -w '%{http_code}' --max-time 90 \
+              -X POST "$BASE/api/interview" \
+              -H "Content-Type: application/json" --data @body.json || echo 000)
+            calls=$((calls+1))
+
+            say=$(jq -r '.say // .error // ""' out.json)
+            act=$(jq -r '.action // "-"' out.json)
+            prog=$(jq -r '.progress // 0' out.json)
+            lines=$(jq '[.resume_lines[]?] | length' out.json 2>/dev/null || echo 0)
+            printf 'turn %-2s HTTP %s  %-8s progress %-3s +%s lines  %s\n' \
+              "$((i+1))" "$code" "$act" "$prog" "$lines" "$(echo "$say" | head -c 90)"
+
+            [ "$code" = "200" ] || continue
+
+            # Merge the patch forward, the way the browser client does.
+            jq -s '.[0] * (.[1].profile_patch // {})
+                   | .wovenLines = ((.wovenLines // []) + (.[1].resume_lines // []))' \
+              profile.json out.json > merged.json 2>/dev/null \
+              || jq --slurpfile o out.json '. * ($o[0].profile_patch // {})' profile.json > merged.json
+            mv merged.json profile.json
+
+            jq -n --slurpfile h history.json --arg u "$msg" --arg a "$say" \
+              '$h[0] + [{who:"user",text:$u},{who:"ai",text:$a}] | .[-12:]' > h2.json
+            mv h2.json history.json
+          done
+
+          echo "════════════════════════════════════════════════"
+          echo "model calls made from this conversation: $calls"
+          echo "final profile the interview accumulated:"
+          jq '{role, years_of_experience, industry, skills, education,
+               wovenLines: (.wovenLines // [] | length)}' profile.json
+          echo
+          echo "Token counts are NOT in these responses by design — read the"
+          echo "[usage] lines from Vercel runtime logs for the real numbers."

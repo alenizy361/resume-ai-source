@@ -3,6 +3,7 @@ import { verifyPass, verifyEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/
 import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 
 /**
  * Provider-agnostic optimizer.
@@ -297,6 +298,9 @@ async function streamNvidia(
       // Headroom so a long, detailed CV's full rewrite is never cut off mid-output.
       max_tokens: 6000,
       stream: true,
+      // Without this a streamed response reports no usage at all, which is why
+      // the most expensive single call in the product was also the unmeasured one.
+      stream_options: { include_usage: true },
       messages: [
         { role: "system", content: "You are an expert ATS resume analyst. ABSOLUTE RULE: never invent any number, employer, date, degree, certification, or achievement not present in the user's input — write [add your real number] where a metric is missing. Follow the user's OUTPUT FORMAT exactly: ANALYSIS bullets, then the SCORE/SUMMARY/MISSING/PRESENT/GAPS/IMPROVEMENTS/RESUME sections as plain text. Never output JSON or markdown." },
         { role: "user", content: PROMPT(resume, jobDescription, uiLang, outLang) },
@@ -309,6 +313,8 @@ async function streamNvidia(
     throw new Error(`NVIDIA API ${res.status}: ${body.slice(0, 300)}`);
   }
 
+  const t0 = Date.now();
+  let usageChunk: unknown = null;
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let full = "";
@@ -324,6 +330,11 @@ async function streamNvidia(
       if (!trimmed.startsWith("data:")) continue;
       const payload = trimmed.slice(5).trim();
       if (payload === "[DONE]") continue;
+      // The usage chunk arrives last and carries an empty choices array.
+      try {
+        const parsed = JSON.parse(payload);
+        if (parsed?.usage) usageChunk = parsed;
+      } catch { /* not the usage chunk */ }
       try {
         const delta = JSON.parse(payload)?.choices?.[0]?.delta?.content;
         if (delta) {
@@ -336,12 +347,16 @@ async function streamNvidia(
     }
   }
   return full;
+  if (usageChunk) {
+    logUsage({ route: "optimize", op: "optimize", provider: "nvidia", model, ...fromOpenAI(usageChunk), ms: Date.now() - t0 });
+  }
 }
 
 async function callAnthropic(resume: string, jobDescription: string): Promise<string> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
   const model = process.env.AI_MODEL || "claude-sonnet-5";
+  const t0 = Date.now();
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -362,6 +377,7 @@ async function callAnthropic(resume: string, jobDescription: string): Promise<st
     throw new Error(`Anthropic API ${res.status}: ${body.slice(0, 300)}`);
   }
   const data = await res.json();
+  logUsage({ route: "optimize", op: "optimize", provider: "anthropic", model, ...fromAnthropic(data), ms: Date.now() - t0 });
   return data?.content?.[0]?.text ?? "";
 }
 
