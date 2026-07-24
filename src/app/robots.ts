@@ -1,1 +1,11 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YVJvdXRlIH0gZnJvbSAibmV4dCI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiByb2JvdHMoKTogTWV0YWRhdGFSb3V0ZS5Sb2JvdHMgewogIHJldHVybiB7CiAgICBydWxlczogeyB1c2VyQWdlbnQ6ICIqIiwgYWxsb3c6ICIvIiwgZGlzYWxsb3c6IFsiL2FwaS8iLCAiL3BheS8iXSB9LAogICAgc2l0ZW1hcDogYCR7QkFTRX0vc2l0ZW1hcC54bWxgLAogICAgaG9zdDogQkFTRSwKICB9Owp9Cg=="}
+import type { MetadataRoute } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/pay/"] },
+    sitemap: `${BASE}/sitemap.xml`,
+    host: BASE,
+  };
+}

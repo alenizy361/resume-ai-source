@@ -1,1 +1,73 @@
-{"data":"InVzZSBjbGllbnQiOwoKLyoqCiAqIEZyZWUgInRhbGtpbmcgcGVyc29uIiBpbnRlcnZpZXdlciDigJQgYW4gaWxsdXN0cmF0ZWQgU1ZHIGh1bWFuIGZhY2UgdGhhdCBibGlua3MKICogYW5kIG1vdmVzIGl0cyBtb3V0aCB3aGlsZSB0aGUgQUkgaXMgc3BlYWtpbmcgKGRyaXZlbiBieSB0aGUgYHNwZWFraW5nYCBwcm9wLAogKiB3aXJlZCB0byBzcGVlY2hTeW50aGVzaXMgc3RhcnQvZW5kKS4gTm8gcGFpZCBzdHJlYW1pbmctYXZhdGFyIHNlcnZpY2UgbmVlZGVkOwogKiBnaXZlcyBhIHJlYWwgInNvbWVvbmUgaXMgdGFsa2luZyB0byB5b3UiIGZlZWwgZm9yIHRoZSBsaXZlIG1vY2sgaW50ZXJ2aWV3LgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSW50ZXJ2aWV3ZXJBdmF0YXIoeyBzcGVha2luZyA9IGZhbHNlLCBsYWJlbCA9ICLYp9mE2YXZj9mC2KfYqNmQ2YQiLCBsYW5nID0gImFyIiB9OiB7IHNwZWFraW5nPzogYm9vbGVhbjsgbGFiZWw/OiBzdHJpbmc7IGxhbmc/OiAiYXIiIHwgImVuIiB9KSB7CiAgY29uc3Qgc3RhdHVzID0gbGFuZyA9PT0gImVuIiA/IChzcGVha2luZyA/ICLCtyBzcGVha2luZ+KApiIgOiAiwrcgbGlzdGVuaW5nIikgOiAoc3BlYWtpbmcgPyAiwrcg2YrYqtit2K/Zkdir4oCmIiA6ICLCtyDZitmG2LXYqiIpOwogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBoLWZ1bGwgdy1mdWxsIGZsZXgtY29sIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBnYXAtMyI+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZWxhdGl2ZSBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciIgc3R5bGU9e3sgd2lkdGg6IDE3MiwgaGVpZ2h0OiAxNzIgfX0+CiAgICAgICAge3NwZWFraW5nICYmICgKICAgICAgICAgIDw+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iaWEtcmluZyIgc3R5bGU9e3sgYW5pbWF0aW9uRGVsYXk6ICIwcyIgfX0gLz4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJpYS1yaW5nIiBzdHlsZT17eyBhbmltYXRpb25EZWxheTogIjAuNnMiIH19IC8+CiAgICAgICAgICA8Lz4KICAgICAgICApfQogICAgICAgIDxkaXYgY2xhc3NOYW1lPXtgaWEtZmFjZSAke3NwZWFraW5nID8gImlhLXNwZWFraW5nIiA6ICJpYS1pZGxlIn1gfT4KICAgICAgICAgIDxzdmcgdmlld0JveD0iMCAwIDE2MCAxNjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBhcmlhLWhpZGRlbj4KICAgICAgICAgICAgPGRlZnM+CiAgICAgICAgICAgICAgPGNsaXBQYXRoIGlkPSJpYS1jbGlwIj48Y2lyY2xlIGN4PSI4MCIgY3k9IjgwIiByPSI3NiIgLz48L2NsaXBQYXRoPgogICAgICAgICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iaWEtYmciIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcENvbG9yPSIjN2MzYWVkIiAvPjxzdG9wIG9mZnNldD0iMSIgc3RvcENvbG9yPSIjNGMxZDk1IiAvPgogICAgICAgICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgICAgIDwvZGVmcz4KICAgICAgICAgICAgPGcgY2xpcFBhdGg9InVybCgjaWEtY2xpcCkiPgogICAgICAgICAgICAgIDxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiBmaWxsPSJ1cmwoI2lhLWJnKSIgLz4KICAgICAgICAgICAgICB7Lyogc2hvdWxkZXJzIC8gY29sbGFyICovfQogICAgICAgICAgICAgIDxwYXRoIGQ9Ik0yOCAxNjhjMC0yNiAyNC00MCA1Mi00MHM1MiAxNCA1MiA0MHYxMEgyOHoiIGZpbGw9IiMxZjI5MzciIC8+CiAgICAgICAgICAgICAgPHBhdGggZD0iTTYyIDEzMCBMODAgMTUwIEw5OCAxMzAgTDkyIDEyMiBINjggWiIgZmlsbD0iI2U1ZTdlYiIgLz4KICAgICAgICAgICAgICA8cGF0aCBkPSJNNzggMTI4IGg0IGwtMiAyMCB6IiBmaWxsPSIjOWNhM2FmIiAvPgogICAgICAgICAgICAgIHsvKiBuZWNrICovfQogICAgICAgICAgICAgIDxyZWN0IHg9IjcwIiB5PSIxMDQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyNCIgcng9IjgiIGZpbGw9IiNlM2FjODYiIC8+CiAgICAgICAgICAgICAgey8qIGhlYWQgKi99CiAgICAgICAgICAgICAgPGVsbGlwc2UgY3g9IjgwIiBjeT0iNzQiIHJ4PSIzNCIgcnk9IjM4IiBmaWxsPSIjZjBiZDk3IiAvPgogICAgICAgICAgICAgIHsvKiBoYWlyICovfQogICAgICAgICAgICAgIDxwYXRoIGQ9Ik00NCA3MmMwLTI0IDE2LTQwIDM2LTQwczM2IDE2IDM2IDQwYzAtMTAtNi0xNi0xMC0xNiAyLTgtNi0xNi0xNC0xNi00LTgtMjQtOC0zMCAyLTEwIDItMTggMTItMTggMzB6IiBmaWxsPSIjM2YyZDIzIiAvPgogICAgICAgICAgICAgIHsvKiBlYXJzICovfQogICAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQ2IiBjeT0iNzgiIHI9IjYiIGZpbGw9IiNlM2FjODYiIC8+PGNpcmNsZSBjeD0iMTE0IiBjeT0iNzgiIHI9IjYiIGZpbGw9IiNlM2FjODYiIC8+CiAgICAgICAgICAgICAgey8qIGV5ZWJyb3dzICovfQogICAgICAgICAgICAgIDxyZWN0IHg9IjU4IiB5PSI2MiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjMuNCIgcng9IjEuNyIgZmlsbD0iIzNmMmQyMyIgLz4KICAgICAgICAgICAgICA8cmVjdCB4PSI4NiIgeT0iNjIiIHdpZHRoPSIxNiIgaGVpZ2h0PSIzLjQiIHJ4PSIxLjciIGZpbGw9IiMzZjJkMjMiIC8+CiAgICAgICAgICAgICAgey8qIGV5ZXMgKGJsaW5rKSAqL30KICAgICAgICAgICAgICA8ZyBjbGFzc05hbWU9ImlhLWV5ZSI+PGVsbGlwc2UgY3g9IjY2IiBjeT0iNzIiIHJ4PSI2IiByeT0iNi42IiBmaWxsPSIjZmZmIiAvPjxjaXJjbGUgY3g9IjY2IiBjeT0iNzMiIHI9IjMiIGZpbGw9IiMyYTIxMTgiIC8+PC9nPgogICAgICAgICAgICAgIDxnIGNsYXNzTmFtZT0iaWEtZXllIj48ZWxsaXBzZSBjeD0iOTQiIGN5PSI3MiIgcng9IjYiIHJ5PSI2LjYiIGZpbGw9IiNmZmYiIC8+PGNpcmNsZSBjeD0iOTQiIGN5PSI3MyIgcj0iMyIgZmlsbD0iIzJhMjExOCIgLz48L2c+CiAgICAgICAgICAgICAgey8qIG5vc2UgKi99CiAgICAgICAgICAgICAgPHBhdGggZD0iTTgwIDc2IHY5IGwtNCAzIiBmaWxsPSJub25lIiBzdHJva2U9IiNjOThmNmEiIHN0cm9rZVdpZHRoPSIyLjQiIHN0cm9rZUxpbmVjYXA9InJvdW5kIiBzdHJva2VMaW5lam9pbj0icm91bmQiIC8+CiAgICAgICAgICAgICAgey8qIG1vdXRoIChhbmltYXRlcyB3aGlsZSBzcGVha2luZykgKi99CiAgICAgICAgICAgICAgPGcgY2xhc3NOYW1lPXtzcGVha2luZyA/ICJpYS1tb3V0aC10YWxrIiA6ICJpYS1tb3V0aC1pZGxlIn0gc3R5bGU9e3sgdHJhbnNmb3JtT3JpZ2luOiAiODBweCA5NnB4IiB9fT4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik03MCA5NiBxMTAgOCAyMCAwIHEtMTAgNCAtMjAgMHoiIGZpbGw9IiM3YTNiMzQiIC8+CiAgICAgICAgICAgICAgPC9nPgogICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjgwIiBjeT0iODAiIHI9Ijc2IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xMikiIHN0cm9rZVdpZHRoPSIyIiAvPgogICAgICAgICAgPC9zdmc+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PgoKICAgICAgey8qIEVxdWFsaXplciAqL30KICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaC02IGl0ZW1zLWVuZCBnYXAtMSI+CiAgICAgICAge1swLCAxLCAyLCAzLCA0LCA1LCA2XS5tYXAoKGkpID0+ICgKICAgICAgICAgIDxzcGFuIGtleT17aX0gY2xhc3NOYW1lPXtzcGVha2luZyA/ICJpYS1iYXIiIDogImlhLWJhci1pZGxlIn0gc3R5bGU9e3sgYW5pbWF0aW9uRGVsYXk6IGAke2kgKiAwLjA4fXNgIH19IC8+CiAgICAgICAgKSl9CiAgICAgIDwvZGl2PgoKICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yIHRleHQtc20gZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iaW5saW5lLWJsb2NrIGgtMiB3LTIgcm91bmRlZC1mdWxsIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiBzcGVha2luZyA/ICIjYTc4YmZhIiA6ICJ2YXIoLS1mYWludCkiLCBib3hTaGFkb3c6IHNwZWFraW5nID8gIjAgMCA4cHggI2E3OGJmYSIgOiAibm9uZSIgfX0gLz4KICAgICAgICB7bGFiZWx9IHtzdGF0dXN9CiAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgKTsKfQo="}
+"use client";
+
+/**
+ * Free "talking person" interviewer — an illustrated SVG human face that blinks
+ * and moves its mouth while the AI is speaking (driven by the `speaking` prop,
+ * wired to speechSynthesis start/end). No paid streaming-avatar service needed;
+ * gives a real "someone is talking to you" feel for the live mock interview.
+ */
+export default function InterviewerAvatar({ speaking = false, label = "المُقابِل", lang = "ar" }: { speaking?: boolean; label?: string; lang?: "ar" | "en" }) {
+  const status = lang === "en" ? (speaking ? "· speaking…" : "· listening") : (speaking ? "· يتحدّث…" : "· ينصت");
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+      <div className="relative flex items-center justify-center" style={{ width: 172, height: 172 }}>
+        {speaking && (
+          <>
+            <span className="ia-ring" style={{ animationDelay: "0s" }} />
+            <span className="ia-ring" style={{ animationDelay: "0.6s" }} />
+          </>
+        )}
+        <div className={`ia-face ${speaking ? "ia-speaking" : "ia-idle"}`}>
+          <svg viewBox="0 0 160 160" width="150" height="150" aria-hidden>
+            <defs>
+              <clipPath id="ia-clip"><circle cx="80" cy="80" r="76" /></clipPath>
+              <linearGradient id="ia-bg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#7c3aed" /><stop offset="1" stopColor="#4c1d95" />
+              </linearGradient>
+            </defs>
+            <g clipPath="url(#ia-clip)">
+              <rect width="160" height="160" fill="url(#ia-bg)" />
+              {/* shoulders / collar */}
+              <path d="M28 168c0-26 24-40 52-40s52 14 52 40v10H28z" fill="#1f2937" />
+              <path d="M62 130 L80 150 L98 130 L92 122 H68 Z" fill="#e5e7eb" />
+              <path d="M78 128 h4 l-2 20 z" fill="#9ca3af" />
+              {/* neck */}
+              <rect x="70" y="104" width="20" height="24" rx="8" fill="#e3ac86" />
+              {/* head */}
+              <ellipse cx="80" cy="74" rx="34" ry="38" fill="#f0bd97" />
+              {/* hair */}
+              <path d="M44 72c0-24 16-40 36-40s36 16 36 40c0-10-6-16-10-16 2-8-6-16-14-16-4-8-24-8-30 2-10 2-18 12-18 30z" fill="#3f2d23" />
+              {/* ears */}
+              <circle cx="46" cy="78" r="6" fill="#e3ac86" /><circle cx="114" cy="78" r="6" fill="#e3ac86" />
+              {/* eyebrows */}
+              <rect x="58" y="62" width="16" height="3.4" rx="1.7" fill="#3f2d23" />
+              <rect x="86" y="62" width="16" height="3.4" rx="1.7" fill="#3f2d23" />
+              {/* eyes (blink) */}
+              <g className="ia-eye"><ellipse cx="66" cy="72" rx="6" ry="6.6" fill="#fff" /><circle cx="66" cy="73" r="3" fill="#2a2118" /></g>
+              <g className="ia-eye"><ellipse cx="94" cy="72" rx="6" ry="6.6" fill="#fff" /><circle cx="94" cy="73" r="3" fill="#2a2118" /></g>
+              {/* nose */}
+              <path d="M80 76 v9 l-4 3" fill="none" stroke="#c98f6a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+              {/* mouth (animates while speaking) */}
+              <g className={speaking ? "ia-mouth-talk" : "ia-mouth-idle"} style={{ transformOrigin: "80px 96px" }}>
+                <path d="M70 96 q10 8 20 0 q-10 4 -20 0z" fill="#7a3b34" />
+              </g>
+            </g>
+            <circle cx="80" cy="80" r="76" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Equalizer */}
+      <div className="flex h-6 items-end gap-1">
+        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          <span key={i} className={speaking ? "ia-bar" : "ia-bar-idle"} style={{ animationDelay: `${i * 0.08}s` }} />
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--muted)" }}>
+        <span className="inline-block h-2 w-2 rounded-full" style={{ background: speaking ? "#a78bfa" : "var(--faint)", boxShadow: speaking ? "0 0 8px #a78bfa" : "none" }} />
+        {label} {status}
+      </div>
+    </div>
+  );
+}

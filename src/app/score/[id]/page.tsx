@@ -1,1 +1,86 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IFNoYXJlQnV0dG9ucyBmcm9tICIuLi8uLi9jb21wb25lbnRzL1NoYXJlQnV0dG9ucyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgovLyBpZCBlbmNvZGVzIHRoZSBzY29yZSwgZS5nLiAiOTIiIOKAlCBrZWVwcyBpdCBzdGF0ZWxlc3MgYW5kIGluc3RhbnRseSBzaGFyZWFibGUuCi8vID9sYW5nPWFyIHJlbmRlcnMgdGhlIHNoYXJlZCBjYXJkIGluIEFyYWJpYyArIFJUTCAodGhlIEFSIG9wdGltaXplciBsaW5rcyBoZXJlKS4KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoCiAgeyBwYXJhbXMsIHNlYXJjaFBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGlkOiBzdHJpbmcgfT47IHNlYXJjaFBhcmFtczogUHJvbWlzZTx7IGxhbmc/OiBzdHJpbmcgfT4gfQopOiBQcm9taXNlPE1ldGFkYXRhPiB7CiAgY29uc3QgeyBpZCB9ID0gYXdhaXQgcGFyYW1zOwogIGNvbnN0IHBhcnNlZCA9IHBhcnNlSW50KGlkKTsKICBpZiAoTnVtYmVyLmlzTmFOKHBhcnNlZCkgfHwgcGFyc2VkIDwgMCB8fCBwYXJzZWQgPiAxMDApIG5vdEZvdW5kKCk7CiAgY29uc3Qgc2NvcmUgPSBwYXJzZWQ7CiAgY29uc3QgYXIgPSAoYXdhaXQgc2VhcmNoUGFyYW1zKS5sYW5nID09PSAiYXIiOwogIGNvbnN0IGltZyA9IGAke0JBU0V9L2FwaS9vZz9zY29yZT0ke3Njb3JlfWA7CiAgY29uc3QgdGl0bGUgPSBhcgogICAgPyBg2LPZitix2KrZiiDYrdi12YTYqiAke3Njb3JlfS8xMDAg2YHZiiDZgdit2LUg2KPZhti42YXYqSDYp9mE2KrZiNi42YrZgSDigJQg2KfZgdit2LUg2LPZitix2KrZgyDZhdis2KfZhtin2YtgCiAgICA6IGBNeSByZXN1bWUgc2NvcmVkICR7c2NvcmV9LzEwMCBvbiBBVFMg4oCUIGNoZWNrIHlvdXJzIGZyZWVgOwogIGNvbnN0IGRlc2NyaXB0aW9uID0gYXIKICAgID8gIti02YjZgSDZhtiz2KjYqSDYqtmI2KfZgdmCINiz2YrYsdiq2YMg2YXYuSDYo9mG2LjZhdipINin2YTYqtmI2LjZitmBINmB2YjYsdin2Ysg2YjZhdis2KfZhtin2Ysg4oCUINmI2KfYudix2YEg2KfZhNmD2YTZhdin2Kog2KfZhNmF2YHYqtin2K3ZitipINin2YTZhtin2YLYtdipINio2KfZhNi22KjYty4iCiAgICA6ICJTZWUgeW91ciByZXN1bWUncyBBVFMgbWF0Y2ggc2NvcmUgaW5zdGFudGx5IGFuZCBmcmVlIOKAlCB0aGVuIGdldCB0aGUgZXhhY3Qga2V5d29yZHMgeW91J3JlIG1pc3NpbmcuIjsKICBjb25zdCBvZ0Rlc2NyaXB0aW9uID0gYXIgPyAi2KfYrdi12YQg2LnZhNmJINmG2KrZitis2Kkg2KrZiNin2YHZgiDYs9mK2LHYqtmDINmF2KzYp9mG2KfZiyDYrtmE2KfZhCDYq9mI2KfZhtmNLiIgOiAiR2V0IHlvdXIgZnJlZSBBVFMgcmVzdW1lIHNjb3JlIGluIHNlY29uZHMuIjsKICByZXR1cm4gewogICAgdGl0bGUsCiAgICBkZXNjcmlwdGlvbiwKICAgIG9wZW5HcmFwaDogeyB0aXRsZSwgZGVzY3JpcHRpb246IG9nRGVzY3JpcHRpb24sIGltYWdlczogW3sgdXJsOiBpbWcsIHdpZHRoOiAxMjAwLCBoZWlnaHQ6IDYzMCB9XSwgdHlwZTogIndlYnNpdGUiIH0sCiAgICB0d2l0dGVyOiB7IGNhcmQ6ICJzdW1tYXJ5X2xhcmdlX2ltYWdlIiwgdGl0bGUsIGltYWdlczogW2ltZ10gfSwKICB9Owp9CgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBTY29yZVBhZ2UoCiAgeyBwYXJhbXMsIHNlYXJjaFBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGlkOiBzdHJpbmcgfT47IHNlYXJjaFBhcmFtczogUHJvbWlzZTx7IGxhbmc/OiBzdHJpbmcgfT4gfQopIHsKICBjb25zdCB7IGlkIH0gPSBhd2FpdCBwYXJhbXM7CiAgY29uc3QgcGFyc2VkID0gcGFyc2VJbnQoaWQpOwogIGlmIChOdW1iZXIuaXNOYU4ocGFyc2VkKSB8fCBwYXJzZWQgPCAwIHx8IHBhcnNlZCA+IDEwMCkgbm90Rm91bmQoKTsKICBjb25zdCBzY29yZSA9IHBhcnNlZDsKICBjb25zdCBhciA9IChhd2FpdCBzZWFyY2hQYXJhbXMpLmxhbmcgPT09ICJhciI7CiAgY29uc3QgYWNjZW50ID0gc2NvcmUgPj0gNzUgPyAiI2E3OGJmYSIgOiBzY29yZSA+PSA1NSA/ICIjZmJiZjI0IiA6ICIjZjg3MTcxIjsKICBjb25zdCBsYWJlbCA9IGFyCiAgICA/IHNjb3JlID49IDc1ID8gItmF2LHYtNmR2K0g2YTZhNmC2KjZiNmEIiA6IHNjb3JlID49IDU1ID8gIti52YTZiSDYp9mE2K3Yr9mI2K8iIDogItmK2K3Yqtin2Kwg2KrYrdiz2YrZhiIKICAgIDogc2NvcmUgPj0gNzUgPyAiU2hvcnRsaXN0ZWQiIDogc2NvcmUgPj0gNTUgPyAiQm9yZGVybGluZSIgOiAiTmVlZHMgd29yayI7CiAgY29uc3Qgc2hhcmVVcmwgPSBhciA/IGAke0JBU0V9L3Njb3JlLyR7c2NvcmV9P2xhbmc9YXJgIDogYCR7QkFTRX0vc2NvcmUvJHtzY29yZX1gOwogIGNvbnN0IHNoYXJlVGV4dCA9IGFyCiAgICA/IGDYs9mK2LHYqtmKINit2LXZhNiqICR7c2NvcmV9LzEwMCDZgdmKINmB2K3YtSDYo9mG2LjZhdipINin2YTYqtmI2LjZitmBIPCfkYAg2KfZgdit2LUg2LPZitix2KrZgyDZhdis2KfZhtin2Ys6YAogICAgOiBgTXkgcmVzdW1lIHNjb3JlZCAke3Njb3JlfS8xMDAgb24gdGhlIEFUUyBjaGVjayDwn5GAIENoZWNrIHlvdXJzIGZyZWU6YDsKCiAgcmV0dXJuICgKICAgIDxtYWluCiAgICAgIGRpcj17YXIgPyAicnRsIiA6ICJsdHIifQogICAgICBsYW5nPXthciA/ICJhciIgOiAiZW4ifQogICAgICBjbGFzc05hbWU9ImZsZXggbWluLWgtc2NyZWVuIGZsZXgtY29sIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBweC02IHB5LTEyIgogICAgICBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19CiAgICA+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIHctZnVsbCBtYXgtdy1tZCBwLTggdGV4dC1jZW50ZXIiIHN0eWxlPXt7IGJvcmRlckNvbG9yOiBgJHthY2NlbnR9NTVgIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBnYXAtMi41Ij4KICAgICAgICAgIDxPcmJCcmFuZCBzaXplPXsyNn0gLz4KICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij5TaXJhPC9zcGFuPgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC02IGZvbnQtbW9ubyB0ZXh0LXhzIHVwcGVyY2FzZSB0cmFja2luZy1bMC4yZW1dIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+CiAgICAgICAgICB7YXIgPyAi2YbYs9io2Kkg2KrZiNin2YHZgiDYs9mK2LHYqtmKINmF2Lkg2KPZhti42YXYqSDYp9mE2KrZiNi42YrZgSIgOiAiQVRTIFJlc3VtZSBTY29yZSJ9CiAgICAgICAgPC9kaXY+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im15LTIgZmxleCBpdGVtcy1iYXNlbGluZSBqdXN0aWZ5LWNlbnRlciBnYXAtMSIgZGlyPSJsdHIiPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJmb250LW1vbm8gdGV4dC03eGwgZm9udC1ib2xkIHRhYnVsYXItbnVtcyIgc3R5bGU9e3sgY29sb3I6IGFjY2VudCB9fT57c2NvcmV9PC9zcGFuPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJmb250LW1vbm8gdGV4dC0yeGwiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT4vMTAwPC9zcGFuPgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi02IGlubGluZS1ibG9jayByb3VuZGVkLWxnIHB4LTMgcHktMSBmb250LW1vbm8gdGV4dC14cyBmb250LWJvbGQiIHN0eWxlPXt7IGJhY2tncm91bmQ6IGAke2FjY2VudH0xYWAsIGNvbG9yOiBhY2NlbnQsIGJvcmRlcjogYDFweCBzb2xpZCAke2FjY2VudH00MGAgfX0+e2xhYmVsfTwvZGl2PgoKICAgICAgICA8U2hhcmVCdXR0b25zIHVybD17c2hhcmVVcmx9IHRleHQ9e3NoYXJlVGV4dH0gYXI9e2FyfSAvPgoKICAgICAgICA8TGluayBocmVmPXthciA/ICIvYXIvb3B0aW1pemUiIDogIi9vcHRpbWl6ZSJ9IGNsYXNzTmFtZT0iYnRuLWFjY2VudCBtdC02IGJsb2NrIHctZnVsbCBweS0zIj4KICAgICAgICAgIHthciA/ICLYp9mB2K3YtSDYs9mK2LHYqtmKINmF2KzYp9mG2KfZiyDihpAiIDogIkNoZWNrIG15IG93biByZXN1bWUgZnJlZSDihpIifQogICAgICAgIDwvTGluaz4KICAgICAgICA8cCBjbGFzc05hbWU9Im10LTMgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT4KICAgICAgICAgIHthciA/ICLZhdis2KfZhtmKIMK3INio2K/ZiNmGINiq2LPYrNmK2YQgwrcg2K7ZhNin2YQg2KvZiNin2YbZjSIgOiAiRnJlZSDCtyBObyBzaWduLXVwIMK3IHNlY29uZHMifQogICAgICAgIDwvcD4KICAgICAgPC9kaXY+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import ShareButtons from "../../components/ShareButtons";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+// id encodes the score, e.g. "92" — keeps it stateless and instantly shareable.
+// ?lang=ar renders the shared card in Arabic + RTL (the AR optimizer links here).
+export async function generateMetadata(
+  { params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ lang?: string }> }
+): Promise<Metadata> {
+  const { id } = await params;
+  const parsed = parseInt(id);
+  if (Number.isNaN(parsed) || parsed < 0 || parsed > 100) notFound();
+  const score = parsed;
+  const ar = (await searchParams).lang === "ar";
+  const img = `${BASE}/api/og?score=${score}`;
+  const title = ar
+    ? `سيرتي حصلت ${score}/100 في فحص أنظمة التوظيف — افحص سيرتك مجاناً`
+    : `My resume scored ${score}/100 on ATS — check yours free`;
+  const description = ar
+    ? "شوف نسبة توافق سيرتك مع أنظمة التوظيف فوراً ومجاناً — واعرف الكلمات المفتاحية الناقصة بالضبط."
+    : "See your resume's ATS match score instantly and free — then get the exact keywords you're missing.";
+  const ogDescription = ar ? "احصل على نتيجة توافق سيرتك مجاناً خلال ثوانٍ." : "Get your free ATS resume score in seconds.";
+  return {
+    title,
+    description,
+    openGraph: { title, description: ogDescription, images: [{ url: img, width: 1200, height: 630 }], type: "website" },
+    twitter: { card: "summary_large_image", title, images: [img] },
+  };
+}
+
+export default async function ScorePage(
+  { params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ lang?: string }> }
+) {
+  const { id } = await params;
+  const parsed = parseInt(id);
+  if (Number.isNaN(parsed) || parsed < 0 || parsed > 100) notFound();
+  const score = parsed;
+  const ar = (await searchParams).lang === "ar";
+  const accent = score >= 75 ? "#a78bfa" : score >= 55 ? "#fbbf24" : "#f87171";
+  const label = ar
+    ? score >= 75 ? "مرشّح للقبول" : score >= 55 ? "على الحدود" : "يحتاج تحسين"
+    : score >= 75 ? "Shortlisted" : score >= 55 ? "Borderline" : "Needs work";
+  const shareUrl = ar ? `${BASE}/score/${score}?lang=ar` : `${BASE}/score/${score}`;
+  const shareText = ar
+    ? `سيرتي حصلت ${score}/100 في فحص أنظمة التوظيف 👀 افحص سيرتك مجاناً:`
+    : `My resume scored ${score}/100 on the ATS check 👀 Check yours free:`;
+
+  return (
+    <main
+      dir={ar ? "rtl" : "ltr"}
+      lang={ar ? "ar" : "en"}
+      className="flex min-h-screen flex-col items-center justify-center px-6 py-12"
+      style={{ background: "var(--bg)", color: "var(--fg)" }}
+    >
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <div className="card w-full max-w-md p-8 text-center" style={{ borderColor: `${accent}55` }}>
+        <div className="flex items-center justify-center gap-2.5">
+          <OrbBrand size={26} />
+          <span className="text-[15px] font-bold tracking-tight">Sira</span>
+        </div>
+        <div className="mt-6 font-mono text-xs uppercase tracking-[0.2em]" style={{ color: "var(--faint)" }}>
+          {ar ? "نسبة توافق سيرتي مع أنظمة التوظيف" : "ATS Resume Score"}
+        </div>
+        <div className="my-2 flex items-baseline justify-center gap-1" dir="ltr">
+          <span className="font-mono text-7xl font-bold tabular-nums" style={{ color: accent }}>{score}</span>
+          <span className="font-mono text-2xl" style={{ color: "var(--faint)" }}>/100</span>
+        </div>
+        <div className="mb-6 inline-block rounded-lg px-3 py-1 font-mono text-xs font-bold" style={{ background: `${accent}1a`, color: accent, border: `1px solid ${accent}40` }}>{label}</div>
+
+        <ShareButtons url={shareUrl} text={shareText} ar={ar} />
+
+        <Link href={ar ? "/ar/optimize" : "/optimize"} className="btn-accent mt-6 block w-full py-3">
+          {ar ? "افحص سيرتي مجاناً ←" : "Check my own resume free →"}
+        </Link>
+        <p className="mt-3 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          {ar ? "مجاني · بدون تسجيل · خلال ثوانٍ" : "Free · No sign-up · seconds"}
+        </p>
+      </div>
+    </main>
+  );
+}

@@ -1,1 +1,12 @@
-{"data":"Ly8gUkZDIDkxMTYgc2VjdXJpdHkudHh0IOKAlCBhIGNvbnRhY3QgY2hhbm5lbCBmb3Igc2VjdXJpdHkgcmVzZWFyY2hlcnMuCmV4cG9ydCBjb25zdCBkeW5hbWljID0gImZvcmNlLXN0YXRpYyI7CgpleHBvcnQgZnVuY3Rpb24gR0VUKCkgewogIGNvbnN0IGJvZHkgPSBbCiAgICAiQ29udGFjdDogbWFpbHRvOmFsYW56aWFiZHVsYXppejRAZ21haWwuY29tIiwKICAgICJQcmVmZXJyZWQtTGFuZ3VhZ2VzOiBhciwgZW4iLAogICAgIkNhbm9uaWNhbDogaHR0cHM6Ly9jdi5yYWJpdC5zYS8ud2VsbC1rbm93bi9zZWN1cml0eS50eHQiLAogICAgIkV4cGlyZXM6IDIwMjctMDEtMDFUMDA6MDA6MDAuMDAwWiIsCiAgXS5qb2luKCJcbiIpICsgIlxuIjsKICByZXR1cm4gbmV3IFJlc3BvbnNlKGJvZHksIHsgaGVhZGVyczogeyAiQ29udGVudC1UeXBlIjogInRleHQvcGxhaW47IGNoYXJzZXQ9dXRmLTgiIH0gfSk7Cn0K"}
+// RFC 9116 security.txt — a contact channel for security researchers.
+export const dynamic = "force-static";
+
+export function GET() {
+  const body = [
+    "Contact: mailto:alanziabdulaziz4@gmail.com",
+    "Preferred-Languages: ar, en",
+    "Canonical: https://cv.rabit.sa/.well-known/security.txt",
+    "Expires: 2027-01-01T00:00:00.000Z",
+  ].join("\n") + "\n";
+  return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+}

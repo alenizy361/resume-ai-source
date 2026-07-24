@@ -1,1 +1,186 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgZ3JhbnRQYXNzLCBncmFudEVudFBhc3MsIEFDQ0VTU19DT09LSUUsIEVOVF9DT09LSUUgfSBmcm9tICJAL2FwcC9saWIvYWNjZXNzIjsKaW1wb3J0IHsgcmVhZFNlc3Npb24sIGNyZWF0ZVNlc3Npb24sIFNFU1NJT05fQ09PS0lFLCBjcmVhdGVNYWdpY1Rva2VuIH0gZnJvbSAiQC9hcHAvbGliL3Nlc3Npb24iOwppbXBvcnQgeyBncmFudEVudGl0bGVtZW50LCBnZXRPcmRlckVtYWlsIH0gZnJvbSAiQC9hcHAvbGliL2VudGl0bGVtZW50cyI7CmltcG9ydCB7IHNpZ25UeCwgUEFZX0JJTkRfQ09PS0lFIH0gZnJvbSAiQC9hcHAvbGliL3BheWJpbmQiOwppbXBvcnQgeyBzZW5kRW1haWwsIGVtYWlsU2hlbGwgfSBmcm9tICJAL2FwcC9saWIvZW1haWwiOwoKY29uc3QgQVBQX1VSTCA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1heER1cmF0aW9uID0gMzA7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuUEFZTElOS19CQVNFX1VSTCB8fCAiaHR0cHM6Ly9yZXN0YXBpLnBheWxpbmsuc2EiOwoKLy8gVGhlIGV4cGVjdGVkIHByaWNlIHBlciBwbGFuIOKAlCBtdXN0IG1hdGNoIGFwcC9hcGkvcGF5L3JvdXRlLnRzLiBWZXJpZmljYXRpb24KLy8gY2hlY2tzIHRoZSBhbW91bnQgUGF5bGluayBhY3R1YWxseSBjb2xsZWN0ZWQgYWdhaW5zdCB0aGlzIHNvIGFuIHVuZGVycGFpZCBvcgovLyB0YW1wZXJlZCBpbnZvaWNlIGNhbid0IHVubG9jayBhIGZ1bGwgZW50aXRsZW1lbnQuCmNvbnN0IFBMQU5fUFJJQ0U6IFJlY29yZDxzdHJpbmcsIG51bWJlcj4gPSB7CiAgc2luZ2xlOiBOdW1iZXIocHJvY2Vzcy5lbnYuUFJJQ0VfU0lOR0xFIHx8IDM1KSwKICBjb21wbGV0ZTogTnVtYmVyKHByb2Nlc3MuZW52LlBSSUNFX0NPTVBMRVRFIHx8IDk5KSwKICBtb250aGx5OiBOdW1iZXIocHJvY2Vzcy5lbnYuUFJJQ0VfTU9OVEhMWSB8fCA3NSksIC8vIGxlZ2FjeSAoYmFja3dhcmQtY29tcGF0KQp9OwoKYXN5bmMgZnVuY3Rpb24gYXV0aGVudGljYXRlKCk6IFByb21pc2U8c3RyaW5nPiB7CiAgY29uc3QgYXBpSWQgPSBwcm9jZXNzLmVudi5QQVlMSU5LX0FQSV9JRDsKICBjb25zdCBzZWNyZXRLZXkgPSBwcm9jZXNzLmVudi5QQVlMSU5LX1NFQ1JFVF9LRVk7CiAgaWYgKCFhcGlJZCB8fCAhc2VjcmV0S2V5KSB0aHJvdyBuZXcgRXJyb3IoIlBheWxpbmsgY3JlZGVudGlhbHMgYXJlIG5vdCBjb25maWd1cmVkIik7CiAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goYCR7QkFTRX0vYXBpL2F1dGhgLCB7CiAgICBtZXRob2Q6ICJQT1NUIiwKICAgIGhlYWRlcnM6IHsgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiwgQWNjZXB0OiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgYXBpSWQsIHNlY3JldEtleSwgcGVyc2lzdFRva2VuOiAiZmFsc2UiIH0pLAogIH0pOwogIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYGF1dGggJHtyZXMuc3RhdHVzfWApOwogIHJldHVybiAoYXdhaXQgcmVzLmpzb24oKSkuaWRfdG9rZW47Cn0KCi8qKiBDb25maXJtIGEgcGF5bWVudCBzZXJ2ZXItc2lkZSB2aWEgR2V0IEludm9pY2Ug4oCUIG5ldmVyIHRydXN0IHRoZSByZWRpcmVjdCBhbG9uZS4gKi8KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIEdFVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIGNvbnN0IHRyYW5zYWN0aW9uTm8gPSByZXEubmV4dFVybC5zZWFyY2hQYXJhbXMuZ2V0KCJ0cmFuc2FjdGlvbk5vIik7CiAgICBpZiAoIXRyYW5zYWN0aW9uTm8pIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiTWlzc2luZyB0cmFuc2FjdGlvbk5vIiB9LCB7IHN0YXR1czogNDAwIH0pOwoKICAgIGNvbnN0IHRva2VuID0gYXdhaXQgYXV0aGVudGljYXRlKCk7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChgJHtCQVNFfS9hcGkvZ2V0SW52b2ljZS8ke2VuY29kZVVSSUNvbXBvbmVudCh0cmFuc2FjdGlvbk5vKX1gLCB7CiAgICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke3Rva2VufWAsIEFjY2VwdDogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICB9KTsKICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYGdldEludm9pY2UgJHtyZXMuc3RhdHVzfWApOwogICAgY29uc3QgaW52ID0gYXdhaXQgcmVzLmpzb24oKTsKCiAgICBjb25zdCBzdGF0dXMgPSBTdHJpbmcoaW52Lm9yZGVyU3RhdHVzIHx8ICIiKS50b0xvd2VyQ2FzZSgpOwogICAgY29uc3QgcGFpZCA9IHN0YXR1cyA9PT0gInBhaWQiOwoKICAgIC8vIFRoZSBvcmRlciBudW1iZXIgY2FycmllcyB0aGUgcGxhbiB3ZSBpbnZvaWNlZCAoUkEtPHBsYW4+LS4uLikuIFBheWxpbmsKICAgIC8vIHJldHVybnMgaXQgbmVzdGVkIHVuZGVyIGdhdGV3YXlPcmRlclJlcXVlc3QsIG5vdCBhdCB0aGUgdG9wIGxldmVsLgogICAgY29uc3Qgb3JkZXJOdW1iZXIgPSBTdHJpbmcoaW52Lm9yZGVyTnVtYmVyIHx8IGludi5nYXRld2F5T3JkZXJSZXF1ZXN0Py5vcmRlck51bWJlciB8fCAiIik7CiAgICBjb25zdCBvcmRlclBsYW5SYXcgPSBvcmRlck51bWJlci5zcGxpdCgiLSIpWzFdOwogICAgY29uc3Qgb3JkZXJQbGFuID0KICAgICAgb3JkZXJQbGFuUmF3ID09PSAiY29tcGxldGUiID8gImNvbXBsZXRlIgogICAgICA6IG9yZGVyUGxhblJhdyA9PT0gIm1vbnRobHkiID8gIm1vbnRobHkiCiAgICAgIDogb3JkZXJQbGFuUmF3ID09PSAic2luZ2xlIiA/ICJzaW5nbGUiCiAgICAgIDogIiI7CgogICAgLy8gRGVyaXZlIHRoZSBwbGFuIGZyb20gd2hhdCBQYXlsaW5rIEFDVFVBTExZIGNvbGxlY3RlZCDigJQgdGhlIGFtb3VudCBpcyB0aGUKICAgIC8vIHNvdXJjZSBvZiB0cnV0aCBmb3IgZW50aXRsZW1lbnQgdmFsdWUsIHNvIGEgbW9udGhseSBidXllciBpcyBuZXZlcgogICAgLy8gc2lsZW50bHkgZG93bmdyYWRlZCB0byBzaW5nbGUganVzdCBiZWNhdXNlIHRoZSBvcmRlciBudW1iZXIgd2FzIG1pc3Npbmcgb3IKICAgIC8vIGdhcmJsZWQuIENyb3NzLWNoZWNrZWQgd2l0aCB0aGUgb3JkZXIgcGxhbjogaWYgdGhleSBkaXNhZ3JlZSB0aGUgYW1vdW50CiAgICAvLyB3aW5zIChncmFudCBleGFjdGx5IHdoYXQgd2FzIHBhaWQgZm9yIOKAlCBuZXZlciBtb3JlLCBuZXZlciBhIGRvd25ncmFkZSkuCiAgICBjb25zdCBFUFMgPSAwLjAxOwogICAgY29uc3QgcGFpZEFtb3VudCA9IE51bWJlcihpbnYuYW1vdW50KSB8fCAwOwogICAgLy8gTGFkZGVyIGZyb20gaGlnaGVzdCBwcmljZSBkb3duIOKAlCBncmFudCBleGFjdGx5IHRoZSB0aWVyIHRoZSBhbW91bnQgY292ZXJzLgogICAgY29uc3QgYW1vdW50UGxhbiA9CiAgICAgIHBhaWRBbW91bnQgKyBFUFMgPj0gUExBTl9QUklDRS5jb21wbGV0ZSA/ICJjb21wbGV0ZSIKICAgICAgOiBwYWlkQW1vdW50ICsgRVBTID49IFBMQU5fUFJJQ0UubW9udGhseSA/ICJtb250aGx5IgogICAgICA6IHBhaWRBbW91bnQgKyBFUFMgPj0gUExBTl9QUklDRS5zaW5nbGUgPyAic2luZ2xlIgogICAgICA6ICIiOwogICAgY29uc3QgcGxhbiA9IGFtb3VudFBsYW4gfHwgb3JkZXJQbGFuIHx8ICJzaW5nbGUiOwoKICAgIC8vIEd1YXJkIGFnYWluc3QgdW5kZXJwYWlkIC8gdGFtcGVyZWQgaW52b2ljZXM6IHRoZSBhbW91bnQgUGF5bGluayBhY3R1YWxseQogICAgLy8gY29sbGVjdGVkIG11c3QgY292ZXIgdGhlIHJlc29sdmVkIHBsYW4ncyBwcmljZSBiZWZvcmUgd2UgZ3JhbnQgYW55dGhpbmcuCiAgICBjb25zdCBleHBlY3RlZCA9IFBMQU5fUFJJQ0VbcGxhbl0gPz8gSW5maW5pdHk7CiAgICBjb25zdCBhbW91bnRPayA9IHBhaWRBbW91bnQgKyBFUFMgPj0gZXhwZWN0ZWQ7CiAgICBjb25zdCBlbnRpdGxlZCA9IHBhaWQgJiYgYW1vdW50T2s7CgogICAgY29uc3QgcmVzMiA9IE5leHRSZXNwb25zZS5qc29uKHsKICAgICAgcGFpZCwKICAgICAgc3RhdHVzOiBpbnYub3JkZXJTdGF0dXMgfHwgIlVua25vd24iLAogICAgICBhbW91bnQ6IGludi5hbW91bnQsCiAgICAgIG9yZGVyTnVtYmVyLAogICAgICBwbGFuLAogICAgICBhbW91bnRPaywKICAgIH0pOwoKICAgIC8vIElzIHRoaXMgdGhlIGJyb3dzZXIgdGhhdCBpbml0aWF0ZWQgdGhlIGNoZWNrb3V0PyBPbmx5IHRoZW4gZG8gd2UgdHJ1c3QgaXQKICAgIC8vIGVub3VnaCB0byBhdXRvLXNpZ24taW4gLyB3cml0ZSB0aGUgY3Jvc3MtZGV2aWNlIGFjY291bnQgZW50aXRsZW1lbnQuCiAgICBjb25zdCBiaW5kQ29va2llID0gcmVxLmNvb2tpZXMuZ2V0KFBBWV9CSU5EX0NPT0tJRSk/LnZhbHVlIHx8ICIiOwogICAgY29uc3QgW2JpbmRUeCwgYmluZFNpZ10gPSBiaW5kQ29va2llLnNwbGl0KCIuIik7CiAgICBjb25zdCBib3VuZFRvQ2FsbGVyID0gISFiaW5kVHggJiYgYmluZFR4ID09PSB0cmFuc2FjdGlvbk5vICYmIGJpbmRTaWcgPT09IHNpZ25UeCh0cmFuc2FjdGlvbk5vKTsKCiAgICAvLyBBIGRldmljZSBwYXNzIG11c3QgYmUgRUFSTkVEIOKAlCBuZXZlciBoYW5kZWQgb3V0IG9uIGEgYmFyZSB0cmFuc2FjdGlvbk5vLCBvcgogICAgLy8gYSBsZWFrZWQvc2hhcmVkIHJlZmVyZW5jZSB3b3VsZCB1bmxvY2sgZnJlZSBhY2Nlc3MgKHJldmVudWUgbGVhaykuIFRoZQogICAgLy8gc3Ryb25nZXN0IHByb29mIGlzIHRoZSBwYXktYmluZCBjb29raWUgKHRoaXMgYnJvd3NlciBzdGFydGVkIHRoZSBjaGVja291dCkuCiAgICAvLyBCdXQgdGhhdCBjb29raWUgaGFzIG9ubHkgYSAyaCBUVEwsIHNvIGEgZ2VudWluZSBidXllciB3aG8gbGluZ2VycyBvbiB0aGUKICAgIC8vIGhvc3RlZCBwYXltZW50IHBhZ2Ugd291bGQgYmUgd3JvbmdseSBkZW5pZWQgb25jZSBpdCBleHBpcmVzLiBGb3IgdGhlbSB3ZQogICAgLy8gZmFsbCBiYWNrIHRvIHRoZSBzZXJ2ZXItc2lkZSByZS12ZXJpZmljYXRpb24gd2UganVzdCBwZXJmb3JtZWQ6IHRoZSBpbnZvaWNlCiAgICAvLyBpcyBjb25maXJtZWQgUEFJRCwgdGhlIGFtb3VudCBtYXRjaGVzIGEga25vd24gcGxhbiBwcmljZSwgYW5kIHRoZSBvcmRlcgogICAgLy8gbnVtYmVyIGlzIG9uZSBvZiBvdXJzIChSQS08cGxhbj4tLi4uKS4gRWl0aGVyIHByb29mIGdyYW50cyB0aGUgc2FtZS1kZXZpY2UKICAgIC8vIHBhc3M7IG9ubHkgdGhlIGJpbmQgY29va2llIGlzIHRydXN0ZWQgZW5vdWdoIHRvIEFMU08gYXV0by1zaWduLWluIC8gd3JpdGUKICAgIC8vIHRoZSBhY2NvdW50IGVudGl0bGVtZW50ICh0aGF0IHBhdGggaXMgdW5jaGFuZ2VkIGJlbG93KS4KICAgIC8vIEEgREVWSUNFIHBhc3MgKGFuIGFub255bW91cyBodHRwT25seSBjb29raWUgdGhhdCB1bmxvY2tzIHRoaXMgYnJvd3NlciB3aXRoCiAgICAvLyBubyBzaWduLWluKSBtdXN0IGJlIHRpZWQgdG8gdGhlIGJyb3dzZXIgdGhhdCBhY3R1YWxseSBwYWlkIOKAlCB0aGUgcGF5LWJpbmQKICAgIC8vIGNvb2tpZSwgd2hpY2ggaXMgSE1BQy1zaWduZWQgb3ZlciB0aGlzIHRyYW5zYWN0aW9uTm8gYW5kIHNldCBodHRwT25seSBhdAogICAgLy8gY2hlY2tvdXQuIEl0IENBTk5PVCBiZSBmb3JnZWQgZnJvbSBhIGxlYWtlZC9zaGFyZWQgdHJhbnNhY3Rpb25Obywgc28gaXQgaXMKICAgIC8vIHRoZSBvbmx5IHByb29mIHdlIHRydXN0IGZvciBhIGRldmljZSBwYXNzLiBXZSBkZWxpYmVyYXRlbHkgZG8gTk9UIGdyYW50IGEKICAgIC8vIGRldmljZSBwYXNzIG9uIGEgYmFyZSAidGhlIGludm9pY2UgaXMgcGFpZCIgcmUtdmVyaWZpY2F0aW9uLCBiZWNhdXNlIGFueW9uZQogICAgLy8gd2hvIG9idGFpbnMgYSB2YWxpZCBwYWlkIHRyYW5zYWN0aW9uTm8gKGUuZy4gYSBzaGFyZWQgY2FsbGJhY2sgVVJMKSBjb3VsZAogICAgLy8gb3RoZXJ3aXNlIG1pbnQgdW5saW1pdGVkIHBhc3Nlcy4gQnV5ZXJzIHdpdGhvdXQgdGhlIGJpbmQgY29va2llIChjbGVhcmVkCiAgICAvLyBjb29raWVzLCBhIGRpZmZlcmVudCBkZXZpY2UsIGEgdmVyeSBsb25nIGRlbGF5KSByZWNvdmVyIHRocm91Z2ggdGhlCiAgICAvLyBBQ0NPVU5UIGVudGl0bGVtZW50IGJlbG93ICsgbWFnaWMtbGluayBzaWduLWluIOKAlCBuZXZlciBhIGRldmljZSBwYXNzLgogICAgaWYgKGVudGl0bGVkKSB7CiAgICAgIGNvbnN0IG5vdyA9IERhdGUubm93KCk7CiAgICAgIGNvbnN0IHdpbmRvd1NlYyA9CiAgICAgICAgcGxhbiA9PT0gImNvbXBsZXRlIiA/IDkwICogMjQgKiA2MCAqIDYwCiAgICAgICAgOiBwbGFuID09PSAibW9udGhseSIgPyAzMCAqIDI0ICogNjAgKiA2MAogICAgICAgIDogMjQgKiA2MCAqIDYwOwogICAgICBjb25zdCB1bnRpbCA9IG5vdyArIHdpbmRvd1NlYyAqIDEwMDA7CgogICAgICAvLyBBTFdBWVMgcGVyc2lzdCB0aGUgZHVyYWJsZSBhY2NvdW50IGVudGl0bGVtZW50LCBrZXllZCBzdHJpY3RseSB0byB0aGUKICAgICAgLy8gYnV5ZXIncyBvd24gZW1haWwgY2FwdHVyZWQgYXQgY2hlY2tvdXQg4oCUIG5ldmVyIHRoZSBjYWxsZXIg4oCUIHNvIGl0IGNhbid0CiAgICAgIC8vIGxlYWsgYWNjZXNzLCB5ZXQgYSBwYWlkIGJ1eWVyIGlzIG5ldmVyIHBlcm1hbmVudGx5IGxvY2tlZCBvdXQgYW5kIGNhbgogICAgICAvLyByZWNsYWltIGFjY2VzcyBvbiBhbnkgZGV2aWNlIGJ5IHNpZ25pbmcgaW4uCiAgICAgIGNvbnN0IG9yZGVyRW1haWwgPSBhd2FpdCBnZXRPcmRlckVtYWlsKG9yZGVyTnVtYmVyKTsKICAgICAgaWYgKG9yZGVyRW1haWwpIHsKICAgICAgICB0cnkgewogICAgICAgICAgYXdhaXQgZ3JhbnRFbnRpdGxlbWVudChvcmRlckVtYWlsLCB1bnRpbCk7CiAgICAgICAgfSBjYXRjaCAoZSkgewogICAgICAgICAgY29uc29sZS5lcnJvcigiZ3JhbnRFbnRpdGxlbWVudCAob3JkZXIpIGZhaWxlZDoiLCBlKTsKICAgICAgICB9CiAgICAgICAgLy8gUmVjZWlwdCArIHJlY292ZXJ5OiBlbWFpbCB0aGUgYnV5ZXIgYSBzaWduLWluIGxpbmsgc28gdGhleSBjYW4gb3BlbgogICAgICAgIC8vIHRoZWlyIHBhaWQgYWNjZXNzIGZyb20gQU5ZIGRldmljZSAobm90IGp1c3QgdGhlIGJyb3dzZXIgdGhhdCBwYWlkKS4KICAgICAgICB0cnkgewogICAgICAgICAgY29uc3QgcGxhbk5hbWUgPSBwbGFuID09PSAiY29tcGxldGUiID8gIkNvbXBsZXRlIFBhY2sgKDkwIGRheXMpIiA6IHBsYW4gPT09ICJtb250aGx5IiA/ICJNb250aGx5IiA6ICJPbmUtdGltZSAoMjQgaG91cnMpIjsKICAgICAgICAgIGNvbnN0IHVudGlsU3RyID0gbmV3IERhdGUodW50aWwpLnRvSVNPU3RyaW5nKCkuc2xpY2UoMCwgMTApOwogICAgICAgICAgY29uc3Qgc2lnbmluID0gYCR7QVBQX1VSTH0vYXBpL2F1dGgvdmVyaWZ5P3Rva2VuPSR7ZW5jb2RlVVJJQ29tcG9uZW50KGNyZWF0ZU1hZ2ljVG9rZW4ob3JkZXJFbWFpbCwgbm93KSl9YDsKICAgICAgICAgIGF3YWl0IHNlbmRFbWFpbCh7CiAgICAgICAgICAgIHRvOiBvcmRlckVtYWlsLAogICAgICAgICAgICBzdWJqZWN0OiAiWW91ciBTaXJhIHJlY2VpcHQgJiBhY2Nlc3MgbGluayIsCiAgICAgICAgICAgIGh0bWw6IGVtYWlsU2hlbGwoYAogICAgICAgICAgICAgIDxoMiBzdHlsZT0ibWFyZ2luOjAgMCA4cHgiPlBheW1lbnQgcmVjZWl2ZWQg4oCUIHRoYW5rIHlvdSEg4pyFPC9oMj4KICAgICAgICAgICAgICA8cD5Zb3VyIDxzdHJvbmc+JHtwbGFuTmFtZX08L3N0cm9uZz4gYWNjZXNzIGlzIGFjdGl2ZSB1bnRpbCA8c3Ryb25nPiR7dW50aWxTdHJ9PC9zdHJvbmc+LjwvcD4KICAgICAgICAgICAgICA8cD5PcGVuIHlvdXIgcGFpZCBhY2Nlc3MgZnJvbSBhbnkgZGV2aWNlIHdpdGggdGhpcyBsaW5rICh2YWxpZCAxNSBtaW47IHlvdSBzdGF5IHNpZ25lZCBpbiBhZnRlcik6PC9wPgogICAgICAgICAgICAgIDxwPjxhIGhyZWY9IiR7c2lnbmlufSIgc3R5bGU9ImRpc3BsYXk6aW5saW5lLWJsb2NrO2JhY2tncm91bmQ6IzdjM2FlZDtjb2xvcjojZmZmZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7cGFkZGluZzoxMnB4IDI0cHg7Ym9yZGVyLXJhZGl1czo4cHg7dGV4dC1kZWNvcmF0aW9uOm5vbmUiPk9wZW4gbXkgYWNjb3VudCDihpI8L2E+PC9wPgogICAgICAgICAgICAgIDxwIHN0eWxlPSJjb2xvcjojNjY2O2ZvbnQtc2l6ZToxM3B4Ij5QbGFuOiAke3BsYW5OYW1lfTxici8+QWNjZXNzIHVudGlsOiAke3VudGlsU3RyfTxici8+Ny1kYXkgbW9uZXktYmFjayBndWFyYW50ZWUgYXBwbGllcy48L3A+YCksCiAgICAgICAgICB9KTsKICAgICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgICBjb25zb2xlLmVycm9yKCJyZWNlaXB0IGVtYWlsIGZhaWxlZDoiLCBlKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIC8vIEV2ZXJ5dGhpbmcgYmVsb3cgdW5sb2NrcyBUSElTIGJyb3dzZXIgZGlyZWN0bHkg4oCUIGdhdGVkIG9uIHRoZSBiaW5kIGNvb2tpZS4KICAgICAgaWYgKGJvdW5kVG9DYWxsZXIpIHsKICAgICAgICByZXMyLmNvb2tpZXMuc2V0KEFDQ0VTU19DT09LSUUsIGdyYW50UGFzcyhwbGFuLCBub3cpLCB7CiAgICAgICAgICBodHRwT25seTogdHJ1ZSwgc2VjdXJlOiB0cnVlLCBzYW1lU2l0ZTogImxheCIsIHBhdGg6ICIvIiwgbWF4QWdlOiB3aW5kb3dTZWMsCiAgICAgICAgfSk7CiAgICAgICAgLy8gVGhlIGJpbmRpbmcgaXMgb25lLXRpbWUg4oCUIGNsZWFyIGl0IG5vdyB0aGF0IGl0J3MgYmVlbiByZWRlZW1lZC4KICAgICAgICByZXMyLmNvb2tpZXMuc2V0KFBBWV9CSU5EX0NPT0tJRSwgIiIsIHsgaHR0cE9ubHk6IHRydWUsIHNlY3VyZTogdHJ1ZSwgc2FtZVNpdGU6ICJsYXgiLCBwYXRoOiAiLyIsIG1heEFnZTogMCB9KTsKCiAgICAgICAgY29uc3QgYnV5ZXJFbWFpbCA9IG9yZGVyRW1haWwgfHwgcmVhZFNlc3Npb24ocmVxLmNvb2tpZXMuZ2V0KFNFU1NJT05fQ09PS0lFKT8udmFsdWUsIG5vdyk7CiAgICAgICAgaWYgKGJ1eWVyRW1haWwpIHsKICAgICAgICAgIC8vIFNpZ25lZCBodHRwT25seSBmYWxsYmFjayByZWFkIGJ5IHRoZSBlbnRpdGxlbWVudCBjaGVjayB3aGVuIHRoZQogICAgICAgICAgLy8gc2VydmVyIHN0b3JlIG1pc3NlcyDigJQgbmV2ZXIgZ3JhbnRzIGFjY2VzcyBhbG9uZSAoY2FsbGVyIG11c3QgYWxzbyBiZQogICAgICAgICAgLy8gc2lnbmVkIGluIGFzIHRoaXMgc2FtZSBlbWFpbCkuCiAgICAgICAgICByZXMyLmNvb2tpZXMuc2V0KEVOVF9DT09LSUUsIGdyYW50RW50UGFzcyhidXllckVtYWlsLCB1bnRpbCksIHsKICAgICAgICAgICAgaHR0cE9ubHk6IHRydWUsIHNlY3VyZTogdHJ1ZSwgc2FtZVNpdGU6ICJsYXgiLCBwYXRoOiAiLyIsIG1heEFnZTogd2luZG93U2VjLAogICAgICAgICAgfSk7CiAgICAgICAgICAvLyBBdXRvLXNpZ24taW4gb24gdGhlIHBheWluZyBicm93c2VyIOKAlCBwYXlpbmcgSVMgcHJvb2Ygb2Ygb3duZXIgaW50ZW50LgogICAgICAgICAgcmVzMi5jb29raWVzLnNldChTRVNTSU9OX0NPT0tJRSwgY3JlYXRlU2Vzc2lvbihidXllckVtYWlsLCBub3cpLCB7CiAgICAgICAgICAgIGh0dHBPbmx5OiB0cnVlLCBzZWN1cmU6IHRydWUsIHNhbWVTaXRlOiAibGF4IiwgcGF0aDogIi8iLCBtYXhBZ2U6IDMwICogMjQgKiA2MCAqIDYwLAogICAgICAgICAgfSk7CiAgICAgICAgfQogICAgICB9CiAgICB9CiAgICByZXR1cm4gcmVzMjsKICB9IGNhdGNoIChlcnIpIHsKICAgIGNvbnNvbGUuZXJyb3IoIlZlcmlmeSBlcnJvcjoiLCBlcnIpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJDb3VsZCBub3QgdmVyaWZ5IHBheW1lbnQuIiwgcGFpZDogZmFsc2UgfSwgeyBzdGF0dXM6IDUwMCB9KTsKICB9Cn0K"}
+import { NextRequest, NextResponse } from "next/server";
+import { grantPass, grantEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
+import { readSession, createSession, SESSION_COOKIE, createMagicToken } from "@/app/lib/session";
+import { grantEntitlement, getOrderEmail } from "@/app/lib/entitlements";
+import { signTx, PAY_BIND_COOKIE } from "@/app/lib/paybind";
+import { sendEmail, emailShell } from "@/app/lib/email";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const maxDuration = 30;
+
+const BASE = process.env.PAYLINK_BASE_URL || "https://restapi.paylink.sa";
+
+// The expected price per plan — must match app/api/pay/route.ts. Verification
+// checks the amount Paylink actually collected against this so an underpaid or
+// tampered invoice can't unlock a full entitlement.
+const PLAN_PRICE: Record<string, number> = {
+  single: Number(process.env.PRICE_SINGLE || 35),
+  complete: Number(process.env.PRICE_COMPLETE || 99),
+  monthly: Number(process.env.PRICE_MONTHLY || 75), // legacy (backward-compat)
+};
+
+async function authenticate(): Promise<string> {
+  const apiId = process.env.PAYLINK_API_ID;
+  const secretKey = process.env.PAYLINK_SECRET_KEY;
+  if (!apiId || !secretKey) throw new Error("Paylink credentials are not configured");
+  const res = await fetch(`${BASE}/api/auth`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ apiId, secretKey, persistToken: "false" }),
+  });
+  if (!res.ok) throw new Error(`auth ${res.status}`);
+  return (await res.json()).id_token;
+}
+
+/** Confirm a payment server-side via Get Invoice — never trust the redirect alone. */
+export async function GET(req: NextRequest) {
+  try {
+    const transactionNo = req.nextUrl.searchParams.get("transactionNo");
+    if (!transactionNo) return NextResponse.json({ error: "Missing transactionNo" }, { status: 400 });
+
+    const token = await authenticate();
+    const res = await fetch(`${BASE}/api/getInvoice/${encodeURIComponent(transactionNo)}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+    });
+    if (!res.ok) throw new Error(`getInvoice ${res.status}`);
+    const inv = await res.json();
+
+    const status = String(inv.orderStatus || "").toLowerCase();
+    const paid = status === "paid";
+
+    // The order number carries the plan we invoiced (RA-<plan>-...). Paylink
+    // returns it nested under gatewayOrderRequest, not at the top level.
+    const orderNumber = String(inv.orderNumber || inv.gatewayOrderRequest?.orderNumber || "");
+    const orderPlanRaw = orderNumber.split("-")[1];
+    const orderPlan =
+      orderPlanRaw === "complete" ? "complete"
+      : orderPlanRaw === "monthly" ? "monthly"
+      : orderPlanRaw === "single" ? "single"
+      : "";
+
+    // Derive the plan from what Paylink ACTUALLY collected — the amount is the
+    // source of truth for entitlement value, so a monthly buyer is never
+    // silently downgraded to single just because the order number was missing or
+    // garbled. Cross-checked with the order plan: if they disagree the amount
+    // wins (grant exactly what was paid for — never more, never a downgrade).
+    const EPS = 0.01;
+    const paidAmount = Number(inv.amount) || 0;
+    // Ladder from highest price down — grant exactly the tier the amount covers.
+    const amountPlan =
+      paidAmount + EPS >= PLAN_PRICE.complete ? "complete"
+      : paidAmount + EPS >= PLAN_PRICE.monthly ? "monthly"
+      : paidAmount + EPS >= PLAN_PRICE.single ? "single"
+      : "";
+    const plan = amountPlan || orderPlan || "single";
+
+    // Guard against underpaid / tampered invoices: the amount Paylink actually
+    // collected must cover the resolved plan's price before we grant anything.
+    const expected = PLAN_PRICE[plan] ?? Infinity;
+    const amountOk = paidAmount + EPS >= expected;
+    const entitled = paid && amountOk;
+
+    const res2 = NextResponse.json({
+      paid,
+      status: inv.orderStatus || "Unknown",
+      amount: inv.amount,
+      orderNumber,
+      plan,
+      amountOk,
+    });
+
+    // Is this the browser that initiated the checkout? Only then do we trust it
+    // enough to auto-sign-in / write the cross-device account entitlement.
+    const bindCookie = req.cookies.get(PAY_BIND_COOKIE)?.value || "";
+    const [bindTx, bindSig] = bindCookie.split(".");
+    const boundToCaller = !!bindTx && bindTx === transactionNo && bindSig === signTx(transactionNo);
+
+    // A device pass must be EARNED — never handed out on a bare transactionNo, or
+    // a leaked/shared reference would unlock free access (revenue leak). The
+    // strongest proof is the pay-bind cookie (this browser started the checkout).
+    // But that cookie has only a 2h TTL, so a genuine buyer who lingers on the
+    // hosted payment page would be wrongly denied once it expires. For them we
+    // fall back to the server-side re-verification we just performed: the invoice
+    // is confirmed PAID, the amount matches a known plan price, and the order
+    // number is one of ours (RA-<plan>-...). Either proof grants the same-device
+    // pass; only the bind cookie is trusted enough to ALSO auto-sign-in / write
+    // the account entitlement (that path is unchanged below).
+    // A DEVICE pass (an anonymous httpOnly cookie that unlocks this browser with
+    // no sign-in) must be tied to the browser that actually paid — the pay-bind
+    // cookie, which is HMAC-signed over this transactionNo and set httpOnly at
+    // checkout. It CANNOT be forged from a leaked/shared transactionNo, so it is
+    // the only proof we trust for a device pass. We deliberately do NOT grant a
+    // device pass on a bare "the invoice is paid" re-verification, because anyone
+    // who obtains a valid paid transactionNo (e.g. a shared callback URL) could
+    // otherwise mint unlimited passes. Buyers without the bind cookie (cleared
+    // cookies, a different device, a very long delay) recover through the
+    // ACCOUNT entitlement below + magic-link sign-in — never a device pass.
+    if (entitled) {
+      const now = Date.now();
+      const windowSec =
+        plan === "complete" ? 90 * 24 * 60 * 60
+        : plan === "monthly" ? 30 * 24 * 60 * 60
+        : 24 * 60 * 60;
+      const until = now + windowSec * 1000;
+
+      // ALWAYS persist the durable account entitlement, keyed strictly to the
+      // buyer's own email captured at checkout — never the caller — so it can't
+      // leak access, yet a paid buyer is never permanently locked out and can
+      // reclaim access on any device by signing in.
+      const orderEmail = await getOrderEmail(orderNumber);
+      if (orderEmail) {
+        try {
+          await grantEntitlement(orderEmail, until);
+        } catch (e) {
+          console.error("grantEntitlement (order) failed:", e);
+        }
+        // Receipt + recovery: email the buyer a sign-in link so they can open
+        // their paid access from ANY device (not just the browser that paid).
+        try {
+          const planName = plan === "complete" ? "Complete Pack (90 days)" : plan === "monthly" ? "Monthly" : "One-time (24 hours)";
+          const untilStr = new Date(until).toISOString().slice(0, 10);
+          const signin = `${APP_URL}/api/auth/verify?token=${encodeURIComponent(createMagicToken(orderEmail, now))}`;
+          await sendEmail({
+            to: orderEmail,
+            subject: "Your Sira receipt & access link",
+            html: emailShell(`
+              <h2 style="margin:0 0 8px">Payment received — thank you! ✅</h2>
+              <p>Your <strong>${planName}</strong> access is active until <strong>${untilStr}</strong>.</p>
+              <p>Open your paid access from any device with this link (valid 15 min; you stay signed in after):</p>
+              <p><a href="${signin}" style="display:inline-block;background:#7c3aed;color:#ffffff;font-weight:bold;padding:12px 24px;border-radius:8px;text-decoration:none">Open my account →</a></p>
+              <p style="color:#666;font-size:13px">Plan: ${planName}<br/>Access until: ${untilStr}<br/>7-day money-back guarantee applies.</p>`),
+          });
+        } catch (e) {
+          console.error("receipt email failed:", e);
+        }
+      }
+
+      // Everything below unlocks THIS browser directly — gated on the bind cookie.
+      if (boundToCaller) {
+        res2.cookies.set(ACCESS_COOKIE, grantPass(plan, now), {
+          httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: windowSec,
+        });
+        // The binding is one-time — clear it now that it's been redeemed.
+        res2.cookies.set(PAY_BIND_COOKIE, "", { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 0 });
+
+        const buyerEmail = orderEmail || readSession(req.cookies.get(SESSION_COOKIE)?.value, now);
+        if (buyerEmail) {
+          // Signed httpOnly fallback read by the entitlement check when the
+          // server store misses — never grants access alone (caller must also be
+          // signed in as this same email).
+          res2.cookies.set(ENT_COOKIE, grantEntPass(buyerEmail, until), {
+            httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: windowSec,
+          });
+          // Auto-sign-in on the paying browser — paying IS proof of owner intent.
+          res2.cookies.set(SESSION_COOKIE, createSession(buyerEmail, now), {
+            httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 30 * 24 * 60 * 60,
+          });
+        }
+      }
+    }
+    return res2;
+  } catch (err) {
+    console.error("Verify error:", err);
+    return NextResponse.json({ error: "Could not verify payment.", paid: false }, { status: 500 });
+  }
+}

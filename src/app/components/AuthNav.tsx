@@ -1,1 +1,48 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwppbXBvcnQgTGluayBmcm9tICJuZXh0L2xpbmsiOwoKLyoqCiAqIFNlc3Npb24tYXdhcmUgbmF2IGxpbmtzLiBTaG93cyAiU2lnbiBpbiIgd2hlbiBsb2dnZWQgb3V0LCBhbmQgdGhlIHVzZXIncwogKiBlbWFpbCArIEFjY291bnQgbGluayB3aGVuIGxvZ2dlZCBpbiDigJQgc28gY2xpY2tpbmcgYSBtYWdpYyBsaW5rIHZpc2libHkgRE9FUwogKiBzb21ldGhpbmcuIFJlbmRlcnMgbm90aGluZyBhdXRoLXJlbGF0ZWQgdW50aWwgL2FwaS9hdXRoL21lIGFuc3dlcnMgKG5vIGZsYXNoKS4KICovCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEF1dGhOYXYoeyBhciA9IGZhbHNlIH06IHsgYXI/OiBib29sZWFuIH0pIHsKICBjb25zdCBbbWUsIHNldE1lXSA9IHVzZVN0YXRlPHsgc2lnbmVkSW46IGJvb2xlYW47IGVtYWlsPzogc3RyaW5nOyB1bmxpbWl0ZWQ/OiBib29sZWFuIH0gfCBudWxsPihudWxsKTsKCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGZldGNoKCIvYXBpL2F1dGgvbWUiKQogICAgICAudGhlbigocikgPT4gci5qc29uKCkpCiAgICAgIC50aGVuKHNldE1lKQogICAgICAuY2F0Y2goKCkgPT4gc2V0TWUoeyBzaWduZWRJbjogZmFsc2UgfSkpOwogIH0sIFtdKTsKCiAgY29uc3QgcHJpY2luZ0hyZWYgPSBhciA/ICIvYXIjcHJpY2luZyIgOiAiLyNwcmljaW5nIjsKCiAgaWYgKCFtZSkgcmV0dXJuIDxzcGFuIGNsYXNzTmFtZT0idy0yNCIgLz47IC8vIHJlc2VydmUgc3BhY2UsIG5vIGZsYXNoCgogIGlmIChtZS5zaWduZWRJbikgewogICAgcmV0dXJuICgKICAgICAgPD4KICAgICAgICA8TGluayBocmVmPSIvYWNjb3VudCIgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImlubGluZS1ibG9jayBoLTIgdy0yIHJvdW5kZWQtZnVsbCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWFjY2VudCkiIH19IC8+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9Im1heC13LTQwIHRydW5jYXRlIiBkaXI9Imx0ciI+e21lLmVtYWlsfTwvc3Bhbj4KICAgICAgICA8L0xpbms+CiAgICAgICAge21lLnVubGltaXRlZCA/ICgKICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hY2NvdW50IiBjbGFzc05hbWU9ImJ0bi1naG9zdCBweC00IHB5LTIgdGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWFjY2VudCkiIH19PgogICAgICAgICAgICB7YXIgPyAi2LrZitixINmF2K3Yr9mI2K8g4pyTIiA6ICJVbmxpbWl0ZWQg4pyTIn0KICAgICAgICAgIDwvTGluaz4KICAgICAgICApIDogKAogICAgICAgICAgPGEgaHJlZj17cHJpY2luZ0hyZWZ9IGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC00IHB5LTIgdGV4dC1zbSI+e2FyID8gItmB2KrYrSDYutmK2LEg2YXYrdiv2YjYryDihpAiIDogIlVubG9jayB1bmxpbWl0ZWQg4oaSIn08L2E+CiAgICAgICAgKX0KICAgICAgPC8+CiAgICApOwogIH0KCiAgcmV0dXJuICgKICAgIDw+CiAgICAgIDxMaW5rIGhyZWY9Ii9sb2dpbiIgY2xhc3NOYW1lPSJ0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e2FyID8gItiq2LPYrNmK2YQg2KfZhNiv2K7ZiNmEIiA6ICJTaWduIGluIn08L0xpbms+CiAgICAgIDxhIGhyZWY9e3ByaWNpbmdIcmVmfSBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPnthciA/ICLZgdiq2K0g2LrZitixINmF2K3Yr9mI2K8g4oaQIiA6ICJVbmxvY2sgdW5saW1pdGVkIOKGkiJ9PC9hPgogICAgPC8+CiAgKTsKfQo="}
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+/**
+ * Session-aware nav links. Shows "Sign in" when logged out, and the user's
+ * email + Account link when logged in — so clicking a magic link visibly DOES
+ * something. Renders nothing auth-related until /api/auth/me answers (no flash).
+ */
+export default function AuthNav({ ar = false }: { ar?: boolean }) {
+  const [me, setMe] = useState<{ signedIn: boolean; email?: string; unlimited?: boolean } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then(setMe)
+      .catch(() => setMe({ signedIn: false }));
+  }, []);
+
+  const pricingHref = ar ? "/ar#pricing" : "/#pricing";
+
+  if (!me) return <span className="w-24" />; // reserve space, no flash
+
+  if (me.signedIn) {
+    return (
+      <>
+        <Link href="/account" className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "var(--accent)" }} />
+          <span className="max-w-40 truncate" dir="ltr">{me.email}</span>
+        </Link>
+        {me.unlimited ? (
+          <Link href="/account" className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+            {ar ? "غير محدود ✓" : "Unlimited ✓"}
+          </Link>
+        ) : (
+          <a href={pricingHref} className="btn-accent px-4 py-2 text-sm">{ar ? "فتح غير محدود ←" : "Unlock unlimited →"}</a>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Link href="/login" className="text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
+      <a href={pricingHref} className="btn-accent px-4 py-2 text-sm">{ar ? "فتح غير محدود ←" : "Unlock unlimited →"}</a>
+    </>
+  );
+}

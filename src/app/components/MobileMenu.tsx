@@ -1,1 +1,75 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VTdGF0ZSwgdXNlRWZmZWN0IH0gZnJvbSAicmVhY3QiOwppbXBvcnQgTGluayBmcm9tICJuZXh0L2xpbmsiOwoKLyoqIEhhbWJ1cmdlciBtZW51IGZvciBzbWFsbCBzY3JlZW5zIOKAlCB0aGUgaGVhZGVyJ3Mgc2Vjb25kYXJ5IGxpbmtzICh3aGljaCBhcmUKICogIGhpZGRlbiBiZWxvdyBgc21gKSBjb2xsYXBzZSBpbnRvIHRoaXMsIElOQ0xVRElORyB0aGUgc2Vzc2lvbi1hd2FyZSBTaWduIGluIC8KICogIEFjY291bnQgbGluayB0aGF0IHdhcyBvdGhlcndpc2UgdW5yZWFjaGFibGUgb24gbW9iaWxlLiBQb3NpdGlvbmVkIGluc2lkZSBhCiAqICBgcmVsYXRpdmVgIHdyYXBwZXIgc28gdGhlIGRyb3Bkb3duIGFuY2hvcnMgdW5kZXIgdGhlIGJ1dHRvbiByZWxpYWJseS4gKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gTW9iaWxlTWVudSh7IGFyID0gZmFsc2UgfTogeyBhcj86IGJvb2xlYW4gfSkgewogIGNvbnN0IFtvcGVuLCBzZXRPcGVuXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCBbc2lnbmVkSW4sIHNldFNpZ25lZEluXSA9IHVzZVN0YXRlPGJvb2xlYW4gfCBudWxsPihudWxsKTsKCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGZldGNoKCIvYXBpL2F1dGgvbWUiKS50aGVuKChyKSA9PiByLmpzb24oKSkudGhlbigoZCkgPT4gc2V0U2lnbmVkSW4oISFkLnNpZ25lZEluKSkuY2F0Y2goKCkgPT4gc2V0U2lnbmVkSW4oZmFsc2UpKTsKICB9LCBbXSk7CgogIGNvbnN0IGFjY3QgPSBhcgogICAgPyAoc2lnbmVkSW4gPyB7IGhyZWY6ICIvYWNjb3VudCIsIGxhYmVsOiAi4pePINit2LPYp9io2YoiIH0gOiB7IGhyZWY6ICIvbG9naW4iLCBsYWJlbDogItiq2LPYrNmK2YQg2KfZhNiv2K7ZiNmEIiB9KQogICAgOiAoc2lnbmVkSW4gPyB7IGhyZWY6ICIvYWNjb3VudCIsIGxhYmVsOiAi4pePIEFjY291bnQiIH0gOiB7IGhyZWY6ICIvbG9naW4iLCBsYWJlbDogIlNpZ24gaW4iIH0pOwoKICBjb25zdCBsaW5rcyA9IGFyCiAgICA/IFsKICAgICAgICB7IGhyZWY6ICIvYXIvb3B0aW1pemUiLCBsYWJlbDogItin2YHYrdi1INiz2YrYsdiq2YMiIH0sCiAgICAgICAgeyBocmVmOiAiL2FyL2J1aWxkZXIiLCBsYWJlbDogItin2KjZhtmQINiz2YrYsdiq2YMiIH0sCiAgICAgICAgeyBocmVmOiAiL2FyI3ByaWNpbmciLCBsYWJlbDogItin2YTYo9iz2LnYp9ixIiB9LAogICAgICAgIGFjY3QsCiAgICAgICAgeyBocmVmOiAiLyIsIGxhYmVsOiAiRW5nbGlzaCIgfSwKICAgICAgXQogICAgOiBbCiAgICAgICAgeyBocmVmOiAiL29wdGltaXplIiwgbGFiZWw6ICJTY2FuIG15IHJlc3VtZSIgfSwKICAgICAgICB7IGhyZWY6ICIvYnVpbGQiLCBsYWJlbDogIkNWIEJ1aWxkZXIiIH0sCiAgICAgICAgeyBocmVmOiAiLyNwcmljaW5nIiwgbGFiZWw6ICJQcmljaW5nIiB9LAogICAgICAgIGFjY3QsCiAgICAgICAgeyBocmVmOiAiL2FyIiwgbGFiZWw6ICLYudix2KjZiiIgfSwKICAgICAgXTsKCiAgcmV0dXJuICgKICAgIDxkaXYgY2xhc3NOYW1lPSJyZWxhdGl2ZSBzbTpoaWRkZW4iPgogICAgICA8YnV0dG9uCiAgICAgICAgb25DbGljaz17KCkgPT4gc2V0T3BlbigodikgPT4gIXYpfQogICAgICAgIGFyaWEtbGFiZWw9Ik1lbnUiCiAgICAgICAgYXJpYS1leHBhbmRlZD17b3Blbn0KICAgICAgICBjbGFzc05hbWU9ImZsZXggaC0xMCB3LTEwIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciByb3VuZGVkLWxnIgogICAgICAgIHN0eWxlPXt7IGJvcmRlcjogIjFweCBzb2xpZCB2YXIoLS1saW5lKSIsIGJhY2tncm91bmQ6ICJ2YXIoLS1zdXJmYWNlKSIgfX0KICAgICAgPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJzcGFjZS15LTEuNSI+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImJsb2NrIGgtMC41IHctNSByb3VuZGVkIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tZmcpIiB9fSAvPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJibG9jayBoLTAuNSB3LTUgcm91bmRlZCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWZnKSIgfX0gLz4KICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iYmxvY2sgaC0wLjUgdy01IHJvdW5kZWQiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1mZykiIH19IC8+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvYnV0dG9uPgogICAgICB7b3BlbiAmJiAoCiAgICAgICAgPD4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmaXhlZCBpbnNldC0wIHotNDAiIG9uQ2xpY2s9eygpID0+IHNldE9wZW4oZmFsc2UpfSBzdHlsZT17eyBiYWNrZ3JvdW5kOiAicmdiYSgwLDAsMCwwLjUpIiB9fSAvPgogICAgICAgICAgPGRpdgogICAgICAgICAgICBjbGFzc05hbWU9e2BhYnNvbHV0ZSB6LTUwIG10LTMgbWluLXctNTIgcm91bmRlZC14bCBwLTIgJHthciA/ICJsZWZ0LTAiIDogInJpZ2h0LTAifWB9CiAgICAgICAgICAgIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1zdXJmYWNlKSIsIGJvcmRlcjogIjFweCBzb2xpZCB2YXIoLS1saW5lKSIsIGJveFNoYWRvdzogIjAgMjBweCA1MHB4IC0xNXB4IHJnYmEoMCwwLDAsMC43KSIgfX0KICAgICAgICAgID4KICAgICAgICAgICAge2xpbmtzLm1hcCgobCkgPT4gKAogICAgICAgICAgICAgIDxMaW5rCiAgICAgICAgICAgICAgICBrZXk9e2wuaHJlZiArIGwubGFiZWx9CiAgICAgICAgICAgICAgICBocmVmPXtsLmhyZWZ9CiAgICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBzZXRPcGVuKGZhbHNlKX0KICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iYmxvY2sgcm91bmRlZC1sZyBweC00IHB5LTMgdGV4dC1zbSBmb250LXNlbWlib2xkIgogICAgICAgICAgICAgICAgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19CiAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAge2wubGFiZWx9CiAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvPgogICAgICApfQogICAgPC9kaXY+CiAgKTsKfQo="}
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+
+/** Hamburger menu for small screens — the header's secondary links (which are
+ *  hidden below `sm`) collapse into this, INCLUDING the session-aware Sign in /
+ *  Account link that was otherwise unreachable on mobile. Positioned inside a
+ *  `relative` wrapper so the dropdown anchors under the button reliably. */
+export default function MobileMenu({ ar = false }: { ar?: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me").then((r) => r.json()).then((d) => setSignedIn(!!d.signedIn)).catch(() => setSignedIn(false));
+  }, []);
+
+  const acct = ar
+    ? (signedIn ? { href: "/account", label: "● حسابي" } : { href: "/login", label: "تسجيل الدخول" })
+    : (signedIn ? { href: "/account", label: "● Account" } : { href: "/login", label: "Sign in" });
+
+  const links = ar
+    ? [
+        { href: "/ar/optimize", label: "افحص سيرتك" },
+        { href: "/ar/builder", label: "ابنِ سيرتك" },
+        { href: "/ar#pricing", label: "الأسعار" },
+        acct,
+        { href: "/", label: "English" },
+      ]
+    : [
+        { href: "/optimize", label: "Scan my resume" },
+        { href: "/build", label: "CV Builder" },
+        { href: "/#pricing", label: "Pricing" },
+        acct,
+        { href: "/ar", label: "عربي" },
+      ];
+
+  return (
+    <div className="relative sm:hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Menu"
+        aria-expanded={open}
+        className="flex h-10 w-10 items-center justify-center rounded-lg"
+        style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
+      >
+        <div className="space-y-1.5">
+          <span className="block h-0.5 w-5 rounded" style={{ background: "var(--fg)" }} />
+          <span className="block h-0.5 w-5 rounded" style={{ background: "var(--fg)" }} />
+          <span className="block h-0.5 w-5 rounded" style={{ background: "var(--fg)" }} />
+        </div>
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} style={{ background: "rgba(0,0,0,0.5)" }} />
+          <div
+            className={`absolute z-50 mt-3 min-w-52 rounded-xl p-2 ${ar ? "left-0" : "right-0"}`}
+            style={{ background: "var(--surface)", border: "1px solid var(--line)", boxShadow: "0 20px 50px -15px rgba(0,0,0,0.7)" }}
+          >
+            {links.map((l) => (
+              <Link
+                key={l.href + l.label}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-4 py-3 text-sm font-semibold"
+                style={{ color: "var(--fg)" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

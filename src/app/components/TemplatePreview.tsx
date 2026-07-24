@@ -1,1 +1,43 @@
-{"data":"aW1wb3J0IHsgVGVtcGxhdGVEYXRhIH0gZnJvbSAiLi4vbGliL3RlbXBsYXRlcyI7CgovKiogUmVuZGVycyBhIHJlYWxpc3RpYyBzYW1wbGUgcmVzdW1lIGluIHRoZSBnaXZlbiB0ZW1wbGF0ZSdzIHZpc3VhbCBzdHlsZSDigJQKICogIGEgcmVhbCBwcmV2aWV3IHRoYXQgYWxzbyBnaXZlcyB0aGUgU0VPIHBhZ2UgdW5pcXVlIHZpc3VhbCBjb250ZW50LiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBUZW1wbGF0ZVByZXZpZXcoeyB0IH06IHsgdDogVGVtcGxhdGVEYXRhIH0pIHsKICBjb25zdCBzaWRlYmFyID0gdC5sYXlvdXQgPT09ICJzaWRlYmFyIjsKICBjb25zdCBIID0gKHsgY2hpbGRyZW4gfTogeyBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlIH0pID0+ICgKICAgIDxkaXYgc3R5bGU9e3sgY29sb3I6IHQuYWNjZW50LCBmb250V2VpZ2h0OiA3MDAsIGZvbnRTaXplOiAxMSwgbGV0dGVyU3BhY2luZzogMSwgdGV4dFRyYW5zZm9ybTogInVwcGVyY2FzZSIsIGJvcmRlckJvdHRvbTogYDJweCBzb2xpZCAke3QuYWNjZW50fWAsIHBhZGRpbmdCb3R0b206IDMsIG1hcmdpbkJvdHRvbTogNiwgbWFyZ2luVG9wOiAxMiB9fT57Y2hpbGRyZW59PC9kaXY+CiAgKTsKICBjb25zdCBib2R5ID0gKAogICAgPD4KICAgICAgPGRpdiBzdHlsZT17eyBmb250U2l6ZTogMjIsIGZvbnRXZWlnaHQ6IDgwMCwgY29sb3I6IHQubGF5b3V0ID09PSAiYm9sZCIgPyB0LmFjY2VudCA6ICIjMTExIiB9fT5TYXJhIEFsLU90YWliaTwvZGl2PgogICAgICA8ZGl2IHN0eWxlPXt7IGZvbnRTaXplOiAxMCwgY29sb3I6ICIjNTU1IiwgbWFyZ2luVG9wOiAyIH19Pk1hcmtldGluZyBTcGVjaWFsaXN0IMK3IHNhcmFAZW1haWwuY29tIMK3IFJpeWFkaDwvZGl2PgogICAgICA8SD5TdW1tYXJ5PC9IPgogICAgICA8ZGl2IHN0eWxlPXt7IGZvbnRTaXplOiAxMCwgY29sb3I6ICIjMzMzIiwgbGluZUhlaWdodDogMS41IH19PlJlc3VsdHMtZHJpdmVuIE1hcmtldGluZyBTcGVjaWFsaXN0IHdpdGggNCsgeWVhcnMgZ3Jvd2luZyBicmFuZCBlbmdhZ2VtZW50IGFuZCBzYWxlcyB0aHJvdWdoIGRhdGEtbGVkIHNvY2lhbCBjYW1wYWlnbnMuPC9kaXY+CiAgICAgIDxIPkV4cGVyaWVuY2U8L0g+CiAgICAgIDxkaXYgc3R5bGU9e3sgZm9udFNpemU6IDEwLjUsIGZvbnRXZWlnaHQ6IDcwMCwgY29sb3I6ICIjMTExIiB9fT5TYWxlcyAmYW1wOyBTb2NpYWwgTGVhZCDigJQgTmFoZGkgKDIwMjLigJMyMDI0KTwvZGl2PgogICAgICA8dWwgc3R5bGU9e3sgbWFyZ2luOiAiNHB4IDAiLCBwYWRkaW5nSW5saW5lU3RhcnQ6IDE2LCBmb250U2l6ZTogOS41LCBjb2xvcjogIiMzMzMiLCBsaW5lSGVpZ2h0OiAxLjUgfX0+CiAgICAgICAgPGxpPkdyZXcgSW5zdGFncmFtIGVuZ2FnZW1lbnQgNDAlIHZpYSBhIHdlZWtseSBjb250ZW50IGNhbGVuZGFyPC9saT4KICAgICAgICA8bGk+VHJhaW5lZCAyIHN0YWZmIGFuZCBsaWZ0ZWQgYnJhbmNoIE5QUyAxMiBwb2ludHM8L2xpPgogICAgICA8L3VsPgogICAgICA8SD5FZHVjYXRpb248L0g+CiAgICAgIDxkaXYgc3R5bGU9e3sgZm9udFNpemU6IDEwLCBjb2xvcjogIiMzMzMiIH19PkJCQSwgS2luZyBTYXVkIFVuaXZlcnNpdHkg4oCUIDIwMjE8L2Rpdj4KICAgIDwvPgogICk7CiAgcmV0dXJuICgKICAgIDxkaXYgc3R5bGU9e3sgYmFja2dyb3VuZDogIiNmZmYiLCBjb2xvcjogIiMxMTEiLCBib3JkZXJSYWRpdXM6IDEwLCBwYWRkaW5nOiBzaWRlYmFyID8gMCA6IDIyLCBmb250RmFtaWx5OiB0LmZvbnQsIGJveFNoYWRvdzogIjAgMjBweCA2MHB4IC0yMHB4IHJnYmEoMCwwLDAsMC42KSIsIG92ZXJmbG93OiAiaGlkZGVuIiwgYXNwZWN0UmF0aW86ICIxIC8gMS4zIiwgZGlzcGxheTogImZsZXgiIH19PgogICAgICB7c2lkZWJhciA/ICgKICAgICAgICA8PgogICAgICAgICAgPGRpdiBzdHlsZT17eyB3aWR0aDogIjM0JSIsIGJhY2tncm91bmQ6IHQuYWNjZW50LCBjb2xvcjogIiNmZmYiLCBwYWRkaW5nOiAxNiB9fT4KICAgICAgICAgICAgPGRpdiBzdHlsZT17eyBmb250U2l6ZTogMTYsIGZvbnRXZWlnaHQ6IDgwMCB9fT5TYXJhIEFsLU90YWliaTwvZGl2PgogICAgICAgICAgICA8ZGl2IHN0eWxlPXt7IGZvbnRTaXplOiA5LCBtYXJnaW5Ub3A6IDgsIG9wYWNpdHk6IDAuOSB9fT5zYXJhQGVtYWlsLmNvbTxiciAvPlJpeWFkaDwvZGl2PgogICAgICAgICAgICA8ZGl2IHN0eWxlPXt7IGZvbnRXZWlnaHQ6IDcwMCwgZm9udFNpemU6IDEwLCBtYXJnaW5Ub3A6IDE0LCB0ZXh0VHJhbnNmb3JtOiAidXBwZXJjYXNlIiB9fT5Ta2lsbHM8L2Rpdj4KICAgICAgICAgICAgPGRpdiBzdHlsZT17eyBmb250U2l6ZTogOSwgbWFyZ2luVG9wOiA0LCBsaW5lSGVpZ2h0OiAxLjcgfX0+U29jaWFsIE1lZGlhPGJyIC8+R29vZ2xlIEFkczxiciAvPkNhbnZhIMK3IEV4Y2VsPC9kaXY+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgZmxleDogMSwgcGFkZGluZzogMTYgfX0+e2JvZHl9PC9kaXY+CiAgICAgICAgPC8+CiAgICAgICkgOiAoCiAgICAgICAgPGRpdiBzdHlsZT17eyBmbGV4OiAxIH19Pntib2R5fTwvZGl2PgogICAgICApfQogICAgPC9kaXY+CiAgKTsKfQo="}
+import { TemplateData } from "../lib/templates";
+
+/** Renders a realistic sample resume in the given template's visual style —
+ *  a real preview that also gives the SEO page unique visual content. */
+export default function TemplatePreview({ t }: { t: TemplateData }) {
+  const sidebar = t.layout === "sidebar";
+  const H = ({ children }: { children: React.ReactNode }) => (
+    <div style={{ color: t.accent, fontWeight: 700, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", borderBottom: `2px solid ${t.accent}`, paddingBottom: 3, marginBottom: 6, marginTop: 12 }}>{children}</div>
+  );
+  const body = (
+    <>
+      <div style={{ fontSize: 22, fontWeight: 800, color: t.layout === "bold" ? t.accent : "#111" }}>Sara Al-Otaibi</div>
+      <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>Marketing Specialist · sara@email.com · Riyadh</div>
+      <H>Summary</H>
+      <div style={{ fontSize: 10, color: "#333", lineHeight: 1.5 }}>Results-driven Marketing Specialist with 4+ years growing brand engagement and sales through data-led social campaigns.</div>
+      <H>Experience</H>
+      <div style={{ fontSize: 10.5, fontWeight: 700, color: "#111" }}>Sales &amp; Social Lead — Nahdi (2022–2024)</div>
+      <ul style={{ margin: "4px 0", paddingInlineStart: 16, fontSize: 9.5, color: "#333", lineHeight: 1.5 }}>
+        <li>Grew Instagram engagement 40% via a weekly content calendar</li>
+        <li>Trained 2 staff and lifted branch NPS 12 points</li>
+      </ul>
+      <H>Education</H>
+      <div style={{ fontSize: 10, color: "#333" }}>BBA, King Saud University — 2021</div>
+    </>
+  );
+  return (
+    <div style={{ background: "#fff", color: "#111", borderRadius: 10, padding: sidebar ? 0 : 22, fontFamily: t.font, boxShadow: "0 20px 60px -20px rgba(0,0,0,0.6)", overflow: "hidden", aspectRatio: "1 / 1.3", display: "flex" }}>
+      {sidebar ? (
+        <>
+          <div style={{ width: "34%", background: t.accent, color: "#fff", padding: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 800 }}>Sara Al-Otaibi</div>
+            <div style={{ fontSize: 9, marginTop: 8, opacity: 0.9 }}>sara@email.com<br />Riyadh</div>
+            <div style={{ fontWeight: 700, fontSize: 10, marginTop: 14, textTransform: "uppercase" }}>Skills</div>
+            <div style={{ fontSize: 9, marginTop: 4, lineHeight: 1.7 }}>Social Media<br />Google Ads<br />Canva · Excel</div>
+          </div>
+          <div style={{ flex: 1, padding: 16 }}>{body}</div>
+        </>
+      ) : (
+        <div style={{ flex: 1 }}>{body}</div>
+      )}
+    </div>
+  );
+}

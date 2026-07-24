@@ -1,1 +1,37 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgU2VvTGFuZGluZyBmcm9tICIuLi9jb21wb25lbnRzL1Nlb0xhbmRpbmciOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkZyZWUgUmVzdW1lIENoZWNrZXIg4oCUIEluc3RhbnQgQUkgU2NvcmUgJiBGZWVkYmFjayIsCiAgZGVzY3JpcHRpb246CiAgICAiRnJlZSBBSSByZXN1bWUgY2hlY2tlci4gR2V0IGFuIGluc3RhbnQgc2NvcmUsIGtleXdvcmQgZmVlZGJhY2ssIGFuZCBpbXByb3ZlbWVudCB0aXBzIHRhaWxvcmVkIHRvIHRoZSBqb2IgeW91IHdhbnQuIE5vIHNpZ24tdXAsIHJlc3VsdHMgaW4gdW5kZXIgYSBtaW51dGUuIiwKICBrZXl3b3JkczogImZyZWUgcmVzdW1lIGNoZWNrZXIsIHJlc3VtZSBjaGVja2VyIGZyZWUsIEFJIHJlc3VtZSBjaGVja2VyLCByZXN1bWUgcmV2aWV3IGZyZWUsIHJlc3VtZSBzY29yZSBjaGVja2VyIiwKICBhbHRlcm5hdGVzOiB7IGNhbm9uaWNhbDogYCR7QkFTRX0vZnJlZS1yZXN1bWUtY2hlY2tlcmAgfSwKICBvcGVuR3JhcGg6IHsgdGl0bGU6ICJGcmVlIFJlc3VtZSBDaGVja2VyIOKAlCBJbnN0YW50IEFJIFNjb3JlIiwgZGVzY3JpcHRpb246ICJHZXQgaW5zdGFudCwgam9iLXNwZWNpZmljIHJlc3VtZSBmZWVkYmFjayBhbmQgYSBzY29yZSBpbiB1bmRlciBhIG1pbnV0ZS4gRnJlZS4iLCB0eXBlOiAid2Vic2l0ZSIgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFBhZ2UoKSB7CiAgcmV0dXJuICgKICAgIDxTZW9MYW5kaW5nCiAgICAgIGV5ZWJyb3c9IkZyZWUgY2hlY2sg4oCUIGFsd2F5cyIKICAgICAgaDE9IkdldCB5b3VyIHJlc3VtZSBjaGVja2VkIGJ5IEFJIOKAlCIKICAgICAgaDFBY2NlbnQ9ImZyZWUsIGluIHVuZGVyIGEgbWludXRlIgogICAgICBpbnRybz0iVXBsb2FkIG9yIHBhc3RlIHlvdXIgcmVzdW1lIOKAlCB3aXRoIG9yIHdpdGhvdXQgYSB0YXJnZXQgam9iIOKAlCBhbmQgb3VyIEFJIGNoZWNrcyBpdCBpbnN0YW50bHk6IGEgbWF0Y2ggc2NvcmUgd2l0aCB0aGUgcmVhc29ucyBiZWhpbmQgaXQsIHRoZSBrZXl3b3JkcyB5b3UncmUgbWlzc2luZywgeW91ciBza2lsbHMgZ2FwLCBhbmQgdGhlIHdlYWsgbGluZXMgdG8gZml4LiBUaGUgY2hlY2sgYW5kIGZ1bGwgYW5hbHlzaXMgYXJlIGZyZWUsIGV2ZXJ5IHRpbWUsIG5vIGFjY291bnQgYW5kIG5vIGNhcmQuIE9ubHkgdGhlIGNvbXBsZXRlIHJld3JpdHRlbiByZXN1bWUgaXMgYSBwYWlkIHVubG9jayDigJQgYW5kIHdlIHRlbGwgeW91IHRoYXQgdXBmcm9udC4iCiAgICAgIGJ1bGxldHM9e1sKICAgICAgICB7IHRpdGxlOiAiV2hhdCdzIGZyZWUgKGFsd2F5cykiLCBib2R5OiAiVGhlIDDigJMxMDAgc2NvcmUgYW5kIHdoeSwgbWlzc2luZyB2cyBwcmVzZW50IGtleXdvcmRzLCBza2lsbHMtZ2FwIHJlcG9ydCwgYW5kIHRoZSBzcGVjaWZpYyB3ZWFrIHBvaW50cyB0byBmaXguIFVubGltaXRlZCBjaGVja3MsIG5vIGNhcmQuIiB9LAogICAgICAgIHsgdGl0bGU6ICJXaGF0J3MgcGFpZCAoYW5kIHdoeSkiLCBib2R5OiAiVGhlIGNvbXBsZXRlIHJld3JpdHRlbiByZXN1bWUsIFBERiBleHBvcnQsIGFuZCBjb3ZlciBsZXR0ZXIg4oCUIFNBUiAzNSAofiQ5KSBvbmNlIG9yIFNBUiA5OSBvbmUtdGltZS4gVGhlIGFuYWx5c2lzIHRlbGxzIHlvdSBleGFjdGx5IHdoYXQgeW91J2QgYmUgcGF5aW5nIGZvciBmaXJzdC4iIH0sCiAgICAgICAgeyB0aXRsZTogIlVwbG9hZCBQREYgb3IgV29yZCIsIGJvZHk6ICJObyBjb3B5LXBhc3RpbmcgcmVxdWlyZWQuIERyb3AgaW4geW91ciBleGlzdGluZyBQREYgb3IgV29yZCByZXN1bWUgYW5kIHdlJ2xsIHJlYWQgaXQgYXV0b21hdGljYWxseSDigJQgYW5kIG5ldmVyIHN0b3JlIGl0IG9uIG91ciBzZXJ2ZXJzLiIgfSwKICAgICAgICB7IHRpdGxlOiAiTm8gaW52ZW50ZWQgZmFjdHMiLCBib2R5OiAiVGhlIHJld3JpdGUgbmV2ZXIgYWRkcyBhIG51bWJlciwgc2tpbGwsIG9yIGNyZWRlbnRpYWwgeW91IGRpZG4ndCBwcm92aWRlLiBNaXNzaW5nIG1ldHJpY3MgYXJlIG1hcmtlZCBbYWRkIHlvdXIgcmVhbCBudW1iZXJdIGZvciB5b3UgdG8gZmlsbCBpbi4iIH0sCiAgICAgIF19CiAgICAgIGZhcXM9e1sKICAgICAgICB7IHE6ICJJcyB0aGlzIHJlc3VtZSBjaGVja2VyIGFjdHVhbGx5IGZyZWU/IiwgYTogIlllcyDigJQgdGhlIHNjb3JlLCBrZXl3b3JkIGFuYWx5c2lzLCBza2lsbHMgZ2FwLCBhbmQgaW1wcm92ZW1lbnQgbGlzdCBhcmUgZnJlZSBldmVyeSB0aW1lLCB3aXRoIG5vIHNpZ24tdXAgb3IgY3JlZGl0IGNhcmQuIFRoZSBjb21wbGV0ZSByZXdyaXR0ZW4gcmVzdW1lIGlzIHRoZSBwYWlkIHBhcnQgKFNBUiAzNSBvbmUtdGltZSBvciBTQVIgOTkgb25lLXRpbWUpLiIgfSwKICAgICAgICB7IHE6ICJXaGF0IGZpbGUgdHlwZXMgY2FuIEkgdXBsb2FkPyIsIGE6ICJQREYsIFdvcmQgKC5kb2N4KSwgYW5kIHBsYWluIHRleHQuIFRoZSB0b29sIGV4dHJhY3RzIHRoZSB0ZXh0IGF1dG9tYXRpY2FsbHkgc28geW91IGRvbid0IGhhdmUgdG8gY29weSBhbmQgcGFzdGUg4oCUIGFuZCB5b3VyIGZpbGUgaXMgbmV2ZXIgc3RvcmVkIG9uIG91ciBzZXJ2ZXJzLiIgfSwKICAgICAgICB7IHE6ICJXaGF0IGRvZXMgdGhlIGNoZWNrZXIgYW5hbHl6ZT8iLCBhOiAiSW4gdGFyZ2V0IG1vZGUgaXQgY29tcGFyZXMgeW91ciByZXN1bWUgdG8gYSBzcGVjaWZpYyBqb2IgZGVzY3JpcHRpb246IGtleXdvcmQgbWF0Y2gsIHNraWxscyBjb3ZlcmFnZSwgYW5kIGJ1bGxldCBzdHJlbmd0aC4gSW4gZ2VuZXJhbCBtb2RlIGl0IHNjb3JlcyBvdmVyYWxsIHF1YWxpdHk6IGltcGFjdCwgc3RydWN0dXJlLCBhbmQgY2xhcml0eS4iIH0sCiAgICAgICAgeyBxOiAiV2lsbCBpdCBpbnZlbnQgYWNoaWV2ZW1lbnRzIHRvIGJvb3N0IG15IHNjb3JlPyIsIGE6ICJOZXZlci4gVGhlIGVuZ2luZSBpcyBjb25zdHJhaW5lZCBmcm9tIGFkZGluZyBhbnkgZmFjdCB5b3UgZGlkbid0IHByb3ZpZGUg4oCUIHdoZXJlIGEgbWV0cmljIGlzIG1pc3NpbmcgaXQgd3JpdGVzIFthZGQgeW91ciByZWFsIG51bWJlcl0gaW5zdGVhZCBvZiBtYWtpbmcgb25lIHVwLiIgfSwKICAgICAgXX0KICAgICAgY3RhTGluZT0iQ2hlY2sgeW91ciByZXN1bWUgZnJlZSByaWdodCBub3ciCiAgICAvPgogICk7Cn0K"}
+import type { Metadata } from "next";
+import SeoLanding from "../components/SeoLanding";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Free Resume Checker — Instant AI Score & Feedback",
+  description:
+    "Free AI resume checker. Get an instant score, keyword feedback, and improvement tips tailored to the job you want. No sign-up, results in under a minute.",
+  keywords: "free resume checker, resume checker free, AI resume checker, resume review free, resume score checker",
+  alternates: { canonical: `${BASE}/free-resume-checker` },
+  openGraph: { title: "Free Resume Checker — Instant AI Score", description: "Get instant, job-specific resume feedback and a score in under a minute. Free.", type: "website" },
+};
+
+export default function Page() {
+  return (
+    <SeoLanding
+      eyebrow="Free check — always"
+      h1="Get your resume checked by AI —"
+      h1Accent="free, in under a minute"
+      intro="Upload or paste your resume — with or without a target job — and our AI checks it instantly: a match score with the reasons behind it, the keywords you're missing, your skills gap, and the weak lines to fix. The check and full analysis are free, every time, no account and no card. Only the complete rewritten resume is a paid unlock — and we tell you that upfront."
+      bullets={[
+        { title: "What's free (always)", body: "The 0–100 score and why, missing vs present keywords, skills-gap report, and the specific weak points to fix. Unlimited checks, no card." },
+        { title: "What's paid (and why)", body: "The complete rewritten resume, PDF export, and cover letter — SAR 35 (~$9) once or SAR 99 one-time. The analysis tells you exactly what you'd be paying for first." },
+        { title: "Upload PDF or Word", body: "No copy-pasting required. Drop in your existing PDF or Word resume and we'll read it automatically — and never store it on our servers." },
+        { title: "No invented facts", body: "The rewrite never adds a number, skill, or credential you didn't provide. Missing metrics are marked [add your real number] for you to fill in." },
+      ]}
+      faqs={[
+        { q: "Is this resume checker actually free?", a: "Yes — the score, keyword analysis, skills gap, and improvement list are free every time, with no sign-up or credit card. The complete rewritten resume is the paid part (SAR 35 one-time or SAR 99 one-time)." },
+        { q: "What file types can I upload?", a: "PDF, Word (.docx), and plain text. The tool extracts the text automatically so you don't have to copy and paste — and your file is never stored on our servers." },
+        { q: "What does the checker analyze?", a: "In target mode it compares your resume to a specific job description: keyword match, skills coverage, and bullet strength. In general mode it scores overall quality: impact, structure, and clarity." },
+        { q: "Will it invent achievements to boost my score?", a: "Never. The engine is constrained from adding any fact you didn't provide — where a metric is missing it writes [add your real number] instead of making one up." },
+      ]}
+      ctaLine="Check your resume free right now"
+    />
+  );
+}

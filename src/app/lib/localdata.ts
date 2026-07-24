@@ -1,1 +1,100 @@
-{"data":"InVzZSBjbGllbnQiOwoKLyoqCiAqIERldmljZS1sb2NhbCB1c2VyIGRhdGEgKHYxIG9mIHRoZSBhY2NvdW50IHN5c3RlbSk6IHNjYW4gaGlzdG9yeSwgc2F2ZWQKICogcmVzdW1lcywgYW5kIGEgbWluaSBqb2ItYXBwbGljYXRpb24gdHJhY2tlciDigJQgYWxsIGluIGxvY2FsU3RvcmFnZS4KICoKICogRGVsaWJlcmF0ZWx5IGxvY2FsLWZpcnN0OiBpdCBtYXRjaGVzIHRoZSBwcml2YWN5IHBsZWRnZSAoInlvdXIgcmVzdW1lIGlzCiAqIG5ldmVyIHN0b3JlZCBvbiBvdXIgc2VydmVycyIpIGFuZCBuZWVkcyBubyBzaWdudXAuIFRoZSBkYXRhIG1vZGVsIG1pcnJvcnMKICogdGhlIHBsYW5uZWQgVXBzdGFzaCBzY2hlbWEgKHU6PGVtYWlsPjpzY2FucyAvIDpyZXN1bWVzIC8gOmpvYnMpIHNvIGEgbGF0ZXIKICogc2VydmVyIHN5bmMgaXMgYSB0cmFuc3BvcnQgc3dhcCwgbm90IGEgcmVkZXNpZ24uCiAqLwoKZXhwb3J0IGludGVyZmFjZSBTY2FuRW50cnkgewogIGlkOiBzdHJpbmc7CiAgdHM6IG51bWJlcjsKICBzY29yZTogbnVtYmVyOwogIG1vZGU6ICJnZW5lcmFsIiB8ICJ0YXJnZXQiOwogIGpvYlRpdGxlOiBzdHJpbmc7IC8vIGZpcnN0IGxpbmUgb2YgdGhlIEpELCBvciAiR2VuZXJhbCByZXZpZXciCiAgbGFuZzogImVuIiB8ICJhciI7CiAgcmVzdWx0OiB1bmtub3duOyAvLyB0aGUgZnVsbCBPcHRpbWl6ZVJlc3VsdCwgZm9yIG9uZS1jbGljayByZXN0b3JlCn0KCmV4cG9ydCBpbnRlcmZhY2UgU2F2ZWRSZXN1bWUgewogIGlkOiBzdHJpbmc7CiAgdHM6IG51bWJlcjsKICB0aXRsZTogc3RyaW5nOwogIHNvdXJjZTogImJ1aWx0IiB8ICJvcHRpbWl6ZWQiOwogIHRleHQ6IHN0cmluZzsKfQoKZXhwb3J0IHR5cGUgSm9iU3RhdHVzID0gInNhdmVkIiB8ICJhcHBsaWVkIiB8ICJpbnRlcnZpZXciIHwgIm9mZmVyIiB8ICJyZWplY3RlZCI7CmV4cG9ydCBpbnRlcmZhY2UgSm9iRW50cnkgewogIGlkOiBzdHJpbmc7CiAgdHM6IG51bWJlcjsKICBjb21wYW55OiBzdHJpbmc7CiAgdGl0bGU6IHN0cmluZzsKICB1cmw6IHN0cmluZzsKICBzdGF0dXM6IEpvYlN0YXR1czsKICBub3RlOiBzdHJpbmc7Cn0KCmNvbnN0IHVpZCA9ICgpID0+IE1hdGgucmFuZG9tKCkudG9TdHJpbmcoMzYpLnNsaWNlKDIsIDEwKTsKCmZ1bmN0aW9uIHJlYWQ8VD4oa2V5OiBzdHJpbmcpOiBUW10gewogIHRyeSB7CiAgICBjb25zdCByYXcgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShrZXkpOwogICAgcmV0dXJuIHJhdyA/IChKU09OLnBhcnNlKHJhdykgYXMgVFtdKSA6IFtdOwogIH0gY2F0Y2ggewogICAgcmV0dXJuIFtdOwogIH0KfQoKZnVuY3Rpb24gd3JpdGU8VD4oa2V5OiBzdHJpbmcsIGxpc3Q6IFRbXSwgY2FwOiBudW1iZXIpIHsKICB0cnkgewogICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oa2V5LCBKU09OLnN0cmluZ2lmeShsaXN0LnNsaWNlKDAsIGNhcCkpKTsKICB9IGNhdGNoIHsKICAgIC8qIHN0b3JhZ2UgZnVsbCDigJQgZHJvcCBvbGRlc3QgYW5kIHJldHJ5IG9uY2UgKi8KICAgIHRyeSB7CiAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKGtleSwgSlNPTi5zdHJpbmdpZnkobGlzdC5zbGljZSgwLCBNYXRoLm1heCgxLCBNYXRoLmZsb29yKGNhcCAvIDIpKSkpKTsKICAgIH0gY2F0Y2ggeyAvKiBnaXZlIHVwIHNpbGVudGx5ICovIH0KICB9Cn0KCi8vIOKUgOKUgCBTY2FuIGhpc3RvcnkgKGNhcCAxMCkg4pSA4pSACmV4cG9ydCBmdW5jdGlvbiBhZGRTY2FuKGU6IE9taXQ8U2NhbkVudHJ5LCAiaWQiIHwgInRzIj4pIHsKICBjb25zdCBsaXN0ID0gcmVhZDxTY2FuRW50cnk+KCJyYV9zY2FuX2hpc3RvcnkiKTsKICBsaXN0LnVuc2hpZnQoeyAuLi5lLCBpZDogdWlkKCksIHRzOiBEYXRlLm5vdygpIH0pOwogIHdyaXRlKCJyYV9zY2FuX2hpc3RvcnkiLCBsaXN0LCAxMCk7Cn0KZXhwb3J0IGNvbnN0IGdldFNjYW5zID0gKCkgPT4gcmVhZDxTY2FuRW50cnk+KCJyYV9zY2FuX2hpc3RvcnkiKTsKZXhwb3J0IGZ1bmN0aW9uIHJlbW92ZVNjYW4oaWQ6IHN0cmluZykgewogIHdyaXRlKCJyYV9zY2FuX2hpc3RvcnkiLCBnZXRTY2FucygpLmZpbHRlcigocykgPT4gcy5pZCAhPT0gaWQpLCAxMCk7Cn0KCi8vIOKUgOKUgCBTYXZlZCByZXN1bWVzIChjYXAgMTApIOKUgOKUgApleHBvcnQgZnVuY3Rpb24gc2F2ZVJlc3VtZShlOiBPbWl0PFNhdmVkUmVzdW1lLCAiaWQiIHwgInRzIj4pIHsKICBjb25zdCBsaXN0ID0gcmVhZDxTYXZlZFJlc3VtZT4oInJhX3NhdmVkX3Jlc3VtZXMiKTsKICAvLyBSZXBsYWNlIGFuIGlkZW50aWNhbC10ZXh0IGR1cGxpY2F0ZSBpbnN0ZWFkIG9mIHN0YWNraW5nIGNvcGllcy4KICBjb25zdCBmaWx0ZXJlZCA9IGxpc3QuZmlsdGVyKChyKSA9PiByLnRleHQgIT09IGUudGV4dCk7CiAgZmlsdGVyZWQudW5zaGlmdCh7IC4uLmUsIGlkOiB1aWQoKSwgdHM6IERhdGUubm93KCkgfSk7CiAgd3JpdGUoInJhX3NhdmVkX3Jlc3VtZXMiLCBmaWx0ZXJlZCwgMTApOwp9CmV4cG9ydCBjb25zdCBnZXRSZXN1bWVzID0gKCkgPT4gcmVhZDxTYXZlZFJlc3VtZT4oInJhX3NhdmVkX3Jlc3VtZXMiKTsKZXhwb3J0IGZ1bmN0aW9uIHJlbW92ZVJlc3VtZShpZDogc3RyaW5nKSB7CiAgd3JpdGUoInJhX3NhdmVkX3Jlc3VtZXMiLCBnZXRSZXN1bWVzKCkuZmlsdGVyKChyKSA9PiByLmlkICE9PSBpZCksIDEwKTsKfQoKLy8g4pSA4pSAIEpvYiB0cmFja2VyIChjYXAgNTApIOKUgOKUgApleHBvcnQgZnVuY3Rpb24gYWRkSm9iKGU6IE9taXQ8Sm9iRW50cnksICJpZCIgfCAidHMiPikgewogIGNvbnN0IGxpc3QgPSByZWFkPEpvYkVudHJ5PigicmFfam9icyIpOwogIGxpc3QudW5zaGlmdCh7IC4uLmUsIGlkOiB1aWQoKSwgdHM6IERhdGUubm93KCkgfSk7CiAgd3JpdGUoInJhX2pvYnMiLCBsaXN0LCA1MCk7Cn0KZXhwb3J0IGNvbnN0IGdldEpvYnMgPSAoKSA9PiByZWFkPEpvYkVudHJ5PigicmFfam9icyIpOwpleHBvcnQgZnVuY3Rpb24gdXBkYXRlSm9iKGlkOiBzdHJpbmcsIHBhdGNoOiBQYXJ0aWFsPEpvYkVudHJ5PikgewogIHdyaXRlKCJyYV9qb2JzIiwgZ2V0Sm9icygpLm1hcCgoaikgPT4gKGouaWQgPT09IGlkID8geyAuLi5qLCAuLi5wYXRjaCB9IDogaikpLCA1MCk7Cn0KZXhwb3J0IGZ1bmN0aW9uIHJlbW92ZUpvYihpZDogc3RyaW5nKSB7CiAgd3JpdGUoInJhX2pvYnMiLCBnZXRKb2JzKCkuZmlsdGVyKChqKSA9PiBqLmlkICE9PSBpZCksIDUwKTsKfQo="}
+"use client";
+
+/**
+ * Device-local user data (v1 of the account system): scan history, saved
+ * resumes, and a mini job-application tracker — all in localStorage.
+ *
+ * Deliberately local-first: it matches the privacy pledge ("your resume is
+ * never stored on our servers") and needs no signup. The data model mirrors
+ * the planned Upstash schema (u:<email>:scans / :resumes / :jobs) so a later
+ * server sync is a transport swap, not a redesign.
+ */
+
+export interface ScanEntry {
+  id: string;
+  ts: number;
+  score: number;
+  mode: "general" | "target";
+  jobTitle: string; // first line of the JD, or "General review"
+  lang: "en" | "ar";
+  result: unknown; // the full OptimizeResult, for one-click restore
+}
+
+export interface SavedResume {
+  id: string;
+  ts: number;
+  title: string;
+  source: "built" | "optimized";
+  text: string;
+}
+
+export type JobStatus = "saved" | "applied" | "interview" | "offer" | "rejected";
+export interface JobEntry {
+  id: string;
+  ts: number;
+  company: string;
+  title: string;
+  url: string;
+  status: JobStatus;
+  note: string;
+}
+
+const uid = () => Math.random().toString(36).slice(2, 10);
+
+function read<T>(key: string): T[] {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function write<T>(key: string, list: T[], cap: number) {
+  try {
+    localStorage.setItem(key, JSON.stringify(list.slice(0, cap)));
+  } catch {
+    /* storage full — drop oldest and retry once */
+    try {
+      localStorage.setItem(key, JSON.stringify(list.slice(0, Math.max(1, Math.floor(cap / 2)))));
+    } catch { /* give up silently */ }
+  }
+}
+
+// ── Scan history (cap 10) ──
+export function addScan(e: Omit<ScanEntry, "id" | "ts">) {
+  const list = read<ScanEntry>("ra_scan_history");
+  list.unshift({ ...e, id: uid(), ts: Date.now() });
+  write("ra_scan_history", list, 10);
+}
+export const getScans = () => read<ScanEntry>("ra_scan_history");
+export function removeScan(id: string) {
+  write("ra_scan_history", getScans().filter((s) => s.id !== id), 10);
+}
+
+// ── Saved resumes (cap 10) ──
+export function saveResume(e: Omit<SavedResume, "id" | "ts">) {
+  const list = read<SavedResume>("ra_saved_resumes");
+  // Replace an identical-text duplicate instead of stacking copies.
+  const filtered = list.filter((r) => r.text !== e.text);
+  filtered.unshift({ ...e, id: uid(), ts: Date.now() });
+  write("ra_saved_resumes", filtered, 10);
+}
+export const getResumes = () => read<SavedResume>("ra_saved_resumes");
+export function removeResume(id: string) {
+  write("ra_saved_resumes", getResumes().filter((r) => r.id !== id), 10);
+}
+
+// ── Job tracker (cap 50) ──
+export function addJob(e: Omit<JobEntry, "id" | "ts">) {
+  const list = read<JobEntry>("ra_jobs");
+  list.unshift({ ...e, id: uid(), ts: Date.now() });
+  write("ra_jobs", list, 50);
+}
+export const getJobs = () => read<JobEntry>("ra_jobs");
+export function updateJob(id: string, patch: Partial<JobEntry>) {
+  write("ra_jobs", getJobs().map((j) => (j.id === id ? { ...j, ...patch } : j)), 50);
+}
+export function removeJob(id: string) {
+  write("ra_jobs", getJobs().filter((j) => j.id !== id), 50);
+}

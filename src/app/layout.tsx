@@ -1,1 +1,102 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgeyBoZWFkZXJzIH0gZnJvbSAibmV4dC9oZWFkZXJzIjsKaW1wb3J0IHsgQW5hbHl0aWNzIH0gZnJvbSAiQHZlcmNlbC9hbmFseXRpY3MvbmV4dCI7CmltcG9ydCBPcmJQcm92aWRlciBmcm9tICIuL2NvbXBvbmVudHMvb3JiL09yYlByb3ZpZGVyIjsKaW1wb3J0ICIuL2dsb2JhbHMuY3NzIjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgbWV0YWRhdGFCYXNlOiBuZXcgVVJMKEJBU0UpLAogIHRpdGxlOiAiU2lyYSDigJQgSG9uZXN0IEFJIFJlc3VtZSBPcHRpbWl6ZXIgKE5vLUZhYnJpY2F0aW9uIEVuZ2luZSkiLAogIGRlc2NyaXB0aW9uOgogICAgIk9wdGltaXplIHlvdXIgcmVzdW1lIHdpdGggQUkgaW4gMTAgc2Vjb25kcy4gRnJlZSBBVFMgbWF0Y2ggc2NvcmUsIG1pc3Npbmcga2V5d29yZHMsIGFuZCBhIHJld3JpdHRlbiByZXN1bWUgYWxpZ25lZCB0byBhbnkgam9iIGRlc2NyaXB0aW9uIOKAlCB3aXRob3V0IGludmVudGluZyBhIHNpbmdsZSBmYWN0IHlvdSBkaWRuJ3QgcHJvdmlkZS4iLAogIGtleXdvcmRzOiAicmVzdW1lIG9wdGltaXplciwgQVRTIHJlc3VtZSwgQUkgcmVzdW1lIHdyaXRlciwgcmVzdW1lIGNoZWNrZXIsIEFUUyByZXN1bWUgY2hlY2tlciwgam9iIGFwcGxpY2F0aW9uLCBjb3ZlciBsZXR0ZXIgZ2VuZXJhdG9yIiwKICBvcGVuR3JhcGg6IHsKICAgIHRpdGxlOiAiU2lyYSDigJQgSG9uZXN0IEFJIFJlc3VtZSBPcHRpbWl6YXRpb24gaW4gMTAgU2Vjb25kcyIsCiAgICBkZXNjcmlwdGlvbjogIkZyZWUgQVRTIHNjb3JlICsgYW5hbHlzaXMsIGFuZCBhIHJld3JpdHRlbiByZXN1bWUgdGhhdCBuZXZlciBpbnZlbnRzIGZhY3RzIHlvdSBkaWRuJ3QgcHJvdmlkZS4iLAogICAgdHlwZTogIndlYnNpdGUiLAogICAgdXJsOiBCQVNFLAogICAgc2l0ZU5hbWU6ICJTaXJhIiwKICB9LAogIHR3aXR0ZXI6IHsgY2FyZDogInN1bW1hcnlfbGFyZ2VfaW1hZ2UiLCB0aXRsZTogIlNpcmEg4oCUIEhvbmVzdCBBSSBSZXN1bWUgT3B0aW1pemF0aW9uIiwgZGVzY3JpcHRpb246ICJGcmVlIEFUUyBzY29yZSArIGEgbm8tZmFicmljYXRpb24gcmV3cml0ZSBpbiAxMCBzZWNvbmRzLiIgfSwKfTsKCi8vIFJpY2ggc3RydWN0dXJlZCBkYXRhIOKAlCBPcmdhbml6YXRpb24gKyBTb2Z0d2FyZUFwcGxpY2F0aW9uICh3aXRoIHJlYWwgU0FSCi8vIG9mZmVycykgKyBGQVFQYWdlLiBObyBhZ2dyZWdhdGVSYXRpbmcvcmV2aWV3IGlzIGVtaXR0ZWQgYmVjYXVzZSB3ZSBoYXZlIG5vCi8vIHZlcmlmaWVkIHJhdGluZ3MgeWV0LCBhbmQgdGhlIGJyYW5kIHByb21pc2UgaXMgemVybyBmYWJyaWNhdGlvbi4KY29uc3Qgc3RydWN0dXJlZERhdGEgPSB7CiAgIkBjb250ZXh0IjogImh0dHBzOi8vc2NoZW1hLm9yZyIsCiAgIkBncmFwaCI6IFsKICAgIHsKICAgICAgIkB0eXBlIjogIk9yZ2FuaXphdGlvbiIsCiAgICAgICJAaWQiOiBgJHtCQVNFfS8jb3JnYCwKICAgICAgbmFtZTogIlNpcmEiLAogICAgICB1cmw6IEJBU0UsCiAgICAgIGRlc2NyaXB0aW9uOiAiSG9uZXN0IEFJIHJlc3VtZSBvcHRpbWl6ZXIgZm9yIHRoZSBTYXVkaSwgR3VsZiwgYW5kIGdsb2JhbCBqb2IgbWFya2V0cy4iLAogICAgfSwKICAgIHsKICAgICAgIkB0eXBlIjogIlNvZnR3YXJlQXBwbGljYXRpb24iLAogICAgICBuYW1lOiAiU2lyYSIsCiAgICAgIGFwcGxpY2F0aW9uQ2F0ZWdvcnk6ICJCdXNpbmVzc0FwcGxpY2F0aW9uIiwKICAgICAgb3BlcmF0aW5nU3lzdGVtOiAiV2ViIiwKICAgICAgcHVibGlzaGVyOiB7ICJAaWQiOiBgJHtCQVNFfS8jb3JnYCB9LAogICAgICBkZXNjcmlwdGlvbjogIkFJIHJlc3VtZSBvcHRpbWl6ZXIgdGhhdCBzY29yZXMgeW91ciByZXN1bWUgYWdhaW5zdCBhIGpvYiBkZXNjcmlwdGlvbiwgZmluZHMgbWlzc2luZyBBVFMga2V5d29yZHMsIGFuZCByZXdyaXRlcyBpdCB0byBwYXNzIGFwcGxpY2FudCB0cmFja2luZyBzeXN0ZW1zIOKAlCB3aXRob3V0IGludmVudGluZyBmYWN0cyB5b3UgZGlkbid0IHByb3ZpZGUuIiwKICAgICAgb2ZmZXJzOiBbCiAgICAgICAgeyAiQHR5cGUiOiAiT2ZmZXIiLCBwcmljZTogIjM1IiwgcHJpY2VDdXJyZW5jeTogIlNBUiIsIG5hbWU6ICJPbmUtdGltZSBvcHRpbWl6YXRpb24g4oCUIDI0LWhvdXIgZnVsbCBhY2Nlc3MiIH0sCiAgICAgICAgeyAiQHR5cGUiOiAiT2ZmZXIiLCBwcmljZTogIjk5IiwgcHJpY2VDdXJyZW5jeTogIlNBUiIsIG5hbWU6ICJDb21wbGV0ZSBQYWNrIOKAlCA5MC1kYXkgZnVsbCBhY2Nlc3MgKG9uZS10aW1lKSIgfSwKICAgICAgXSwKICAgIH0sCiAgICB7CiAgICAgICJAdHlwZSI6ICJGQVFQYWdlIiwKICAgICAgbWFpbkVudGl0eTogWwogICAgICAgIHsgIkB0eXBlIjogIlF1ZXN0aW9uIiwgbmFtZTogIklzIHRoZSByZXN1bWUgc2NhbiBmcmVlPyIsIGFjY2VwdGVkQW5zd2VyOiB7ICJAdHlwZSI6ICJBbnN3ZXIiLCB0ZXh0OiAiWWVzLiBUaGUgQVRTIG1hdGNoIHNjb3JlLCBtaXNzaW5nIGtleXdvcmRzLCBza2lsbHMtZ2FwIGFuYWx5c2lzLCBhbmQgYSBwcmV2aWV3IG9mIGltcHJvdmVtZW50cyBhcmUgZnJlZS4gVGhlIGZ1bGwgcmV3cml0dGVuIHJlc3VtZSBhbmQgZG93bmxvYWRzIHVubG9jayB3aXRoIGEgb25lLXRpbWUgcGF5bWVudC4iIH0gfSwKICAgICAgICB7ICJAdHlwZSI6ICJRdWVzdGlvbiIsIG5hbWU6ICJEb2VzIGl0IGludmVudCBleHBlcmllbmNlIG9yIHNraWxscz8iLCBhY2NlcHRlZEFuc3dlcjogeyAiQHR5cGUiOiAiQW5zd2VyIiwgdGV4dDogIk5vLiBUaGUgZW5naW5lIGNhbiBvbmx5IHJlb3JnYW5pemUgYW5kIHJld29yZCB5b3VyIG93biBmYWN0cy4gSXQgbmV2ZXIgYWRkcyBhIG51bWJlciwgZW1wbG95ZXIsIGRlZ3JlZSwgb3Igc2tpbGwgeW91IGRpZG4ndCBwcm92aWRlIOKAlCBpdCBtYXJrcyBtaXNzaW5nIG1ldHJpY3Mgd2l0aCBhIHBsYWNlaG9sZGVyIGluc3RlYWQuIiB9IH0sCiAgICAgICAgeyAiQHR5cGUiOiAiUXVlc3Rpb24iLCBuYW1lOiAiSXMgaXQgYSBzdWJzY3JpcHRpb24/IiwgYWNjZXB0ZWRBbnN3ZXI6IHsgIkB0eXBlIjogIkFuc3dlciIsIHRleHQ6ICJObyBzdWJzY3JpcHRpb24uIFBheSBvbmNlIOKAlCBTQVIgMzUgZm9yIDI0LWhvdXIgZnVsbCBhY2Nlc3Mgb3IgU0FSIDk5IGZvciA5MCBkYXlzLiBUaGVyZSBpcyBhIDctZGF5IG1vbmV5LWJhY2sgZ3VhcmFudGVlLiIgfSB9LAogICAgICAgIHsgIkB0eXBlIjogIlF1ZXN0aW9uIiwgbmFtZTogIkRvZXMgaXQgc3VwcG9ydCBBcmFiaWM/IiwgYWNjZXB0ZWRBbnN3ZXI6IHsgIkB0eXBlIjogIkFuc3dlciIsIHRleHQ6ICJZZXMuIEZ1bGwgQXJhYmljIChSVEwpIGludGVyZmFjZSwgU2F1ZGkvR3VsZiByZXN1bWUgZmllbGRzLCBhbmQgeW91IGNhbiBldmVuIHdyaXRlIGluIEFyYWJpYyBhbmQgZ2V0IGEgcG9saXNoZWQgRW5nbGlzaCByZXN1bWUgYmFjay4iIH0gfSwKICAgICAgXSwKICAgIH0sCiAgXSwKfTsKCi8vIE1ldGEgKEZhY2Vib29rL0luc3RhZ3JhbSkgUGl4ZWwg4oCUIG1lYXN1cmVzIGFkLWRyaXZlbiB2aXNpdHMgYW5kLCB2aWEgdGhlCi8vIFB1cmNoYXNlIGV2ZW50IG9uIHRoZSBwYXkgY2FsbGJhY2ssIHJlYWwgcmV2ZW51ZSBmcm9tIHBhaWQgY2FtcGFpZ25zLiBGdWxseQovLyBkb3JtYW50IHVudGlsIE5FWFRfUFVCTElDX01FVEFfUElYRUxfSUQgaXMgc2V0IChubyBJRCDihpIgbm8gc2NyaXB0KSwgc28gaXQgY2FuCi8vIHNoaXAgbm93IGFuZCBhY3RpdmF0ZSB0aGUgbW9tZW50IHRoZSBhZCBhY2NvdW50IGlzIGNvbm5lY3RlZC4KY29uc3QgTUVUQV9QSVhFTF9JRCA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX01FVEFfUElYRUxfSUQ7CgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBSb290TGF5b3V0KHsgY2hpbGRyZW4gfTogeyBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlIH0pIHsKICAvLyBUaGUgQXJhYmljIFVJIGxpdmVzIHVuZGVyIC9hciDigJQgc2VydmUgaXQgd2l0aCB0aGUgY29ycmVjdCBsYW5nL2RpciBvbiB0aGUKICAvLyA8aHRtbD4gcm9vdCAocHJveHkudHMgZm9yd2FyZHMgdGhlIHBhdGhuYW1lKS4gRml4ZXMgbGFuZz0iZW4iIG9uIC9hciAoYTExeS9TRU8pLgogIGNvbnN0IHBhdGhuYW1lID0gKGF3YWl0IGhlYWRlcnMoKSkuZ2V0KCJ4LXBhdGhuYW1lIikgfHwgIiI7CiAgY29uc3QgaXNBcmFiaWMgPSBwYXRobmFtZSA9PT0gIi9hciIgfHwgcGF0aG5hbWUuc3RhcnRzV2l0aCgiL2FyLyIpOwoKICByZXR1cm4gKAogICAgPGh0bWwgbGFuZz17aXNBcmFiaWMgPyAiYXIiIDogImVuIn0gZGlyPXtpc0FyYWJpYyA/ICJydGwiIDogImx0ciJ9PgogICAgICA8Ym9keSBzdHlsZT17eyBtYXJnaW46IDAsIHBhZGRpbmc6IDAgfX0+CiAgICAgICAgey8qIFRIRSBWT0lDRSDigJQgSUJNIFBsZXggU2FucyBBcmFiaWM6IGVuZ2luZWVyZWQsIGJpbGluZ3VhbCwgcHJlbWl1bS4KICAgICAgICAgICAgKFRoZSAnY2hlYXAgQW5kcm9pZCcgZmVlbCB3YXMgdGhlIHVuc3R5bGVkIHN5c3RlbSBmYWxsYmFjay4pICovfQogICAgICAgIHsvKiBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmUgQG5leHQvbmV4dC9uby1wYWdlLWN1c3RvbS1mb250ICovfQogICAgICAgIDxsaW5rIHJlbD0icHJlY29ubmVjdCIgaHJlZj0iaHR0cHM6Ly9mb250cy5nb29nbGVhcGlzLmNvbSIgLz4KICAgICAgICB7LyogZXNsaW50LWRpc2FibGUtbmV4dC1saW5lIEBuZXh0L25leHQvbm8tcGFnZS1jdXN0b20tZm9udCAqL30KICAgICAgICA8bGluayByZWw9InByZWNvbm5lY3QiIGhyZWY9Imh0dHBzOi8vZm9udHMuZ3N0YXRpYy5jb20iIGNyb3NzT3JpZ2luPSJhbm9ueW1vdXMiIC8+CiAgICAgICAgey8qIGVzbGludC1kaXNhYmxlLW5leHQtbGluZSBAbmV4dC9uZXh0L25vLXBhZ2UtY3VzdG9tLWZvbnQgKi99CiAgICAgICAgPGxpbmsKICAgICAgICAgIHJlbD0ic3R5bGVzaGVldCIKICAgICAgICAgIGhyZWY9Imh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9SUJNK1BsZXgrU2FucytBcmFiaWM6d2dodEAzMDA7NDAwOzUwMDs2MDA7NzAwJmZhbWlseT1JbnRlcjp3Z2h0QDQwMDs1MDA7NjAwOzcwMDs4MDAmZGlzcGxheT1zd2FwIgogICAgICAgIC8+CiAgICAgICAgPE9yYlByb3ZpZGVyPntjaGlsZHJlbn08L09yYlByb3ZpZGVyPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJncmFpbi1vdmVybGF5IiBhcmlhLWhpZGRlbj0idHJ1ZSIgLz4KICAgICAgICA8QW5hbHl0aWNzIC8+CiAgICAgICAgPHNjcmlwdCB0eXBlPSJhcHBsaWNhdGlvbi9sZCtqc29uIiBkYW5nZXJvdXNseVNldElubmVySFRNTD17eyBfX2h0bWw6IEpTT04uc3RyaW5naWZ5KHN0cnVjdHVyZWREYXRhKSB9fSAvPgogICAgICAgIHtNRVRBX1BJWEVMX0lEICYmICgKICAgICAgICAgIDxzY3JpcHQKICAgICAgICAgICAgZGFuZ2Vyb3VzbHlTZXRJbm5lckhUTUw9e3sKICAgICAgICAgICAgICBfX2h0bWw6IGAhZnVuY3Rpb24oZixiLGUsdixuLHQscyl7aWYoZi5mYnEpcmV0dXJuO249Zi5mYnE9ZnVuY3Rpb24oKXtuLmNhbGxNZXRob2Q/bi5jYWxsTWV0aG9kLmFwcGx5KG4sYXJndW1lbnRzKTpuLnF1ZXVlLnB1c2goYXJndW1lbnRzKX07aWYoIWYuX2ZicSlmLl9mYnE9bjtuLnB1c2g9bjtuLmxvYWRlZD0hMDtuLnZlcnNpb249JzIuMCc7bi5xdWV1ZT1bXTt0PWIuY3JlYXRlRWxlbWVudChlKTt0LmFzeW5jPSEwO3Quc3JjPXY7cz1iLmdldEVsZW1lbnRzQnlUYWdOYW1lKGUpWzBdO3MucGFyZW50Tm9kZS5pbnNlcnRCZWZvcmUodCxzKX0od2luZG93LGRvY3VtZW50LCdzY3JpcHQnLCdodHRwczovL2Nvbm5lY3QuZmFjZWJvb2submV0L2VuX1VTL2ZiZXZlbnRzLmpzJyk7ZmJxKCdpbml0JywnJHtNRVRBX1BJWEVMX0lEfScpO2ZicSgndHJhY2snLCdQYWdlVmlldycpO2AsCiAgICAgICAgICAgIH19CiAgICAgICAgICAvPgogICAgICAgICl9CiAgICAgIDwvYm9keT4KICAgIDwvaHRtbD4KICApOwp9Cg=="}
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { Analytics } from "@vercel/analytics/next";
+import OrbProvider from "./components/orb/OrbProvider";
+import "./globals.css";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE),
+  title: "Sira — Honest AI Resume Optimizer (No-Fabrication Engine)",
+  description:
+    "Optimize your resume with AI in 10 seconds. Free ATS match score, missing keywords, and a rewritten resume aligned to any job description — without inventing a single fact you didn't provide.",
+  keywords: "resume optimizer, ATS resume, AI resume writer, resume checker, ATS resume checker, job application, cover letter generator",
+  openGraph: {
+    title: "Sira — Honest AI Resume Optimization in 10 Seconds",
+    description: "Free ATS score + analysis, and a rewritten resume that never invents facts you didn't provide.",
+    type: "website",
+    url: BASE,
+    siteName: "Sira",
+  },
+  twitter: { card: "summary_large_image", title: "Sira — Honest AI Resume Optimization", description: "Free ATS score + a no-fabrication rewrite in 10 seconds." },
+};
+
+// Rich structured data — Organization + SoftwareApplication (with real SAR
+// offers) + FAQPage. No aggregateRating/review is emitted because we have no
+// verified ratings yet, and the brand promise is zero fabrication.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${BASE}/#org`,
+      name: "Sira",
+      url: BASE,
+      description: "Honest AI resume optimizer for the Saudi, Gulf, and global job markets.",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Sira",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      publisher: { "@id": `${BASE}/#org` },
+      description: "AI resume optimizer that scores your resume against a job description, finds missing ATS keywords, and rewrites it to pass applicant tracking systems — without inventing facts you didn't provide.",
+      offers: [
+        { "@type": "Offer", price: "35", priceCurrency: "SAR", name: "One-time optimization — 24-hour full access" },
+        { "@type": "Offer", price: "99", priceCurrency: "SAR", name: "Complete Pack — 90-day full access (one-time)" },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        { "@type": "Question", name: "Is the resume scan free?", acceptedAnswer: { "@type": "Answer", text: "Yes. The ATS match score, missing keywords, skills-gap analysis, and a preview of improvements are free. The full rewritten resume and downloads unlock with a one-time payment." } },
+        { "@type": "Question", name: "Does it invent experience or skills?", acceptedAnswer: { "@type": "Answer", text: "No. The engine can only reorganize and reword your own facts. It never adds a number, employer, degree, or skill you didn't provide — it marks missing metrics with a placeholder instead." } },
+        { "@type": "Question", name: "Is it a subscription?", acceptedAnswer: { "@type": "Answer", text: "No subscription. Pay once — SAR 35 for 24-hour full access or SAR 99 for 90 days. There is a 7-day money-back guarantee." } },
+        { "@type": "Question", name: "Does it support Arabic?", acceptedAnswer: { "@type": "Answer", text: "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back." } },
+      ],
+    },
+  ],
+};
+
+// Meta (Facebook/Instagram) Pixel — measures ad-driven visits and, via the
+// Purchase event on the pay callback, real revenue from paid campaigns. Fully
+// dormant until NEXT_PUBLIC_META_PIXEL_ID is set (no ID → no script), so it can
+// ship now and activate the moment the ad account is connected.
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // The Arabic UI lives under /ar — serve it with the correct lang/dir on the
+  // <html> root (proxy.ts forwards the pathname). Fixes lang="en" on /ar (a11y/SEO).
+  const pathname = (await headers()).get("x-pathname") || "";
+  const isArabic = pathname === "/ar" || pathname.startsWith("/ar/");
+
+  return (
+    <html lang={isArabic ? "ar" : "en"} dir={isArabic ? "rtl" : "ltr"}>
+      <body style={{ margin: 0, padding: 0 }}>
+        {/* THE VOICE — IBM Plex Sans Arabic: engineered, bilingual, premium.
+            (The 'cheap Android' feel was the unstyled system fallback.) */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        />
+        <OrbProvider>{children}</OrbProvider>
+        <div className="grain-overlay" aria-hidden="true" />
+        <Analytics />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        {META_PIXEL_ID && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${META_PIXEL_ID}');fbq('track','PageView');`,
+            }}
+          />
+        )}
+      </body>
+    </html>
+  );
+}

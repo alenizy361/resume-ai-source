@@ -1,1 +1,69 @@
-{"data":"InVzZSBjbGllbnQiOwoKLyoqCiAqINix2KfYqNi3IOKAlCBFQ0xJUFNFICh2NCkuIEEgbW9ub2Nocm9tZSBsaWdodCBwaGVub21lbm9uLCBub3QgYSBjb2xvcmVkIG1hcmJsZToKICogYSBibGFjayBtb29uIGNvcmUgwrcgYSByb3RhdGluZyBzaWx2ZXIgY29yb25hIGNyZXNjZW50IMK3IGEgZmllbGQgb2YKICogcGFydGljbGVzIMK3IHR3byB0aWx0ZWQgbWV0YWxsaWMgaGFsbyByaW5ncyDCtyBhIHNvZnQgYmxvb20gc3BpbGxpbmcgaW50bwogKiB0aGUgcm9vbS4gRGVmYXVsdCBpZGVudGl0eSA9IHNpbHZlci93aGl0ZSBvbiBibGFjayAoaGFybW9ueSB0aHJvdWdoCiAqIHJlc3RyYWludCkuIE1vb2RzIHRpbnQgdGhlIExJR0hUIG9ubHkgYXQgY2hhcmdlZCBtb21lbnRzIOKAlCB0aGlua2luZwogKiBidXJucyB2aW9sZXQsIHBheW1lbnQgdHVybnMgZ29sZCwgc3VjY2VzcyBmbGFzaGVzIGdyZWVuLiBTYW1lIGJvZHksCiAqIGRpZmZlcmVudCBsaWdodC4gUHVyZSBDU1MgKyBvbmUgaW5saW5lIFNWRyDigJQgbm8gV2ViR0wsIG5vIGRlcHMuCiAqLwppbXBvcnQgdHlwZSB7IENTU1Byb3BlcnRpZXMgfSBmcm9tICJyZWFjdCI7CgpleHBvcnQgdHlwZSBPcmJTdGF0ZSA9ICJpZGxlIiB8ICJsaXN0ZW5pbmciIHwgInRoaW5raW5nIiB8ICJ0YWxraW5nIiB8ICJnb2xkZW4iIHwgImxvY2tlZCIgfCAiZG9uZSIgfCAibG9zdCI7CgovKiBEZXRlcm1pbmlzdGljIHBhcnRpY2xlIGZpZWxkIOKAlCBnb2xkZW4tYW5nbGUgc2NhdHRlciBpbiBhIGRpc2MgYmFuZCBhcm91bmQKICAgdGhlIGNvcmUgKGJldHdlZW4gdGhlIGhhbG8gcmluZ3MpLiBHZW5lcmF0ZWQgb25jZSwgc2NhbGVkIGJ5IHRoZSBvcmIgYm94LiAqLwpjb25zdCBET1RTID0gQXJyYXkuZnJvbSh7IGxlbmd0aDogMTIwIH0sIChfLCBpKSA9PiB7CiAgY29uc3QgYW5nbGUgPSBpICogMi4zOTk5NjsgLy8gZ29sZGVuIGFuZ2xlCiAgY29uc3QgYmFuZCA9IDAuNjIgKyAwLjM2ICogKChpICogMC43MzAxKSAlIDEpOyAvLyByYWRpdXMgMC42MuKAkzAuOTggb2YgaGFsZi1ib3gKICBjb25zdCByID0gYmFuZCAqIDEwMDsKICByZXR1cm4gewogICAgeDogMTAwICsgTWF0aC5jb3MoYW5nbGUpICogciwKICAgIHk6IDEwMCArIE1hdGguc2luKGFuZ2xlKSAqIHIgKiAwLjkyLCAvLyBzbGlnaHQgdmVydGljYWwgc3F1YXNoIOKGkiBkZXB0aAogICAgZDogMC40NSArICgoaSAqIDAuMzcpICUgMSkgKiAwLjU1LAogICAgbzogMC4xMCArICgoaSAqIDAuNTE3KSAlIDEpICogMC40NSwKICB9Owp9KTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEFpT3JiKHsKICBzaXplID0gNDAsCiAgdGhpbmtpbmcgPSBmYWxzZSwKICBzdGF0ZSwKICBjbGFzc05hbWUgPSAiIiwKICBzdHlsZSwKICBsaWdodCA9IGZhbHNlLAp9OiB7CiAgc2l6ZT86IG51bWJlcjsKICB0aGlua2luZz86IGJvb2xlYW47CiAgc3RhdGU/OiBPcmJTdGF0ZTsKICBjbGFzc05hbWU/OiBzdHJpbmc7CiAgc3R5bGU/OiBDU1NQcm9wZXJ0aWVzOwogIC8qKiBSZW5kZXIgb24gYSBMSUdIVCBzdXJmYWNlICh0aGUgZ2xhc3MvZG9jdW1lbnQgd29ybGQpOiBhIGx1bWlub3VzIHZpb2xldAogICAqICBtYXJibGUgaW5zdGVhZCBvZiB0aGUgYmxhY2sgZWNsaXBzZSwgd2hpY2ggd291bGQgcmVhZCBhcyBhIGJsYWNrIGhvbGUuICovCiAgbGlnaHQ/OiBib29sZWFuOwp9KSB7CiAgY29uc3QgbW9kZSA9IHN0YXRlID8/ICh0aGlua2luZyA/ICJ0aGlua2luZyIgOiAiaWRsZSIpOwogIHJldHVybiAoCiAgICA8c3BhbgogICAgICBhcmlhLWhpZGRlbgogICAgICBjbGFzc05hbWU9e2BhaS1vcmIgJHttb2RlICE9PSAiaWRsZSIgPyBtb2RlIDogIiJ9ICR7c2l6ZSA8IDEwMCA/ICJtaW5pIiA6ICIifSAke2xpZ2h0ID8gIm9uLWxpZ2h0IiA6ICIifSAke2NsYXNzTmFtZX1gfQogICAgICBzdHlsZT17eyBbIi0tb3JiLXNpemUiIGFzIHN0cmluZ106IGAke3NpemV9cHhgLCAuLi5zdHlsZSB9fQogICAgPgogICAgICA8c3BhbiBjbGFzc05hbWU9Im9yYi1ibG9vbSIgLz4KICAgICAgPHN2ZyBjbGFzc05hbWU9Im9yYi1maWVsZCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGFyaWEtaGlkZGVuPgogICAgICAgIHtET1RTLm1hcCgocCwgaSkgPT4gKAogICAgICAgICAgPGNpcmNsZSBrZXk9e2l9IGN4PXtwLngudG9GaXhlZCgxKX0gY3k9e3AueS50b0ZpeGVkKDEpfSByPXtwLmQudG9GaXhlZCgyKX0gZmlsbD0iY3VycmVudENvbG9yIiBvcGFjaXR5PXtwLm8udG9GaXhlZCgyKX0gLz4KICAgICAgICApKX0KICAgICAgPC9zdmc+CiAgICAgIDxzcGFuIGNsYXNzTmFtZT0ib3JiLWhhbG8gcjEiIC8+CiAgICAgIDxzcGFuIGNsYXNzTmFtZT0ib3JiLWhhbG8gcjIiIC8+CiAgICAgIDxzcGFuIGNsYXNzTmFtZT0ib3JiLXNwaGVyZSI+CiAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJvcmItY29yZSIgLz4KICAgICAgICA8c3BhbiBjbGFzc05hbWU9Im9yYi1jb3JvbmEiIC8+CiAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJvcmItZmxvb3JsaWdodCIgLz4KICAgICAgPC9zcGFuPgogICAgPC9zcGFuPgogICk7Cn0K"}
+"use client";
+
+/**
+ * رابط — ECLIPSE (v4). A monochrome light phenomenon, not a colored marble:
+ * a black moon core · a rotating silver corona crescent · a field of
+ * particles · two tilted metallic halo rings · a soft bloom spilling into
+ * the room. Default identity = silver/white on black (harmony through
+ * restraint). Moods tint the LIGHT only at charged moments — thinking
+ * burns violet, payment turns gold, success flashes green. Same body,
+ * different light. Pure CSS + one inline SVG — no WebGL, no deps.
+ */
+import type { CSSProperties } from "react";
+
+export type OrbState = "idle" | "listening" | "thinking" | "talking" | "golden" | "locked" | "done" | "lost";
+
+/* Deterministic particle field — golden-angle scatter in a disc band around
+   the core (between the halo rings). Generated once, scaled by the orb box. */
+const DOTS = Array.from({ length: 120 }, (_, i) => {
+  const angle = i * 2.39996; // golden angle
+  const band = 0.62 + 0.36 * ((i * 0.7301) % 1); // radius 0.62–0.98 of half-box
+  const r = band * 100;
+  return {
+    x: 100 + Math.cos(angle) * r,
+    y: 100 + Math.sin(angle) * r * 0.92, // slight vertical squash → depth
+    d: 0.45 + ((i * 0.37) % 1) * 0.55,
+    o: 0.10 + ((i * 0.517) % 1) * 0.45,
+  };
+});
+
+export default function AiOrb({
+  size = 40,
+  thinking = false,
+  state,
+  className = "",
+  style,
+  light = false,
+}: {
+  size?: number;
+  thinking?: boolean;
+  state?: OrbState;
+  className?: string;
+  style?: CSSProperties;
+  /** Render on a LIGHT surface (the glass/document world): a luminous violet
+   *  marble instead of the black eclipse, which would read as a black hole. */
+  light?: boolean;
+}) {
+  const mode = state ?? (thinking ? "thinking" : "idle");
+  return (
+    <span
+      aria-hidden
+      className={`ai-orb ${mode !== "idle" ? mode : ""} ${size < 100 ? "mini" : ""} ${light ? "on-light" : ""} ${className}`}
+      style={{ ["--orb-size" as string]: `${size}px`, ...style }}
+    >
+      <span className="orb-bloom" />
+      <svg className="orb-field" viewBox="0 0 200 200" aria-hidden>
+        {DOTS.map((p, i) => (
+          <circle key={i} cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={p.d.toFixed(2)} fill="currentColor" opacity={p.o.toFixed(2)} />
+        ))}
+      </svg>
+      <span className="orb-halo r1" />
+      <span className="orb-halo r2" />
+      <span className="orb-sphere">
+        <span className="orb-core" />
+        <span className="orb-corona" />
+        <span className="orb-floorlight" />
+      </span>
+    </span>
+  );
+}

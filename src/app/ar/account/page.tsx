@@ -1,1 +1,11 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgQWNjb3VudENsaWVudCBmcm9tICIuLi8uLi9jb21wb25lbnRzL0FjY291bnRDbGllbnQiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogItit2LPYp9io2Yog4oCUINiz2YrYsdmDINmI2YXYs9mI2K3ZgyB8INiz2YrYsdipIiwKICByb2JvdHM6IHsgaW5kZXg6IGZhbHNlLCBmb2xsb3c6IGZhbHNlIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBcmFiaWNBY2NvdW50UGFnZSgpIHsKICByZXR1cm4gPEFjY291bnRDbGllbnQgaW5pdGlhbExhbmc9ImFyIiAvPjsKfQo="}
+import type { Metadata } from "next";
+import AccountClient from "../../components/AccountClient";
+
+export const metadata: Metadata = {
+  title: "حسابي — سيرك ومسوحك | سيرة",
+  robots: { index: false, follow: false },
+};
+
+export default function ArabicAccountPage() {
+  return <AccountClient initialLang="ar" />;
+}

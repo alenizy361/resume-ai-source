@@ -1,1 +1,79 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSA2MDsKCi8qKgogKiBDb252ZXJzYXRpb25hbC1idWlsZGVyIGhlbHBlcjogcG9saXNoZXMgT05FIGZpZWxkIG9mIHRoZSBDViBhdCBhIHRpbWUuCiAqIFRha2VzIHRoZSB1c2VyJ3MgY2FzdWFsIChvZnRlbiBBcmFiaWMpIGFuc3dlciBhbmQgcmV0dXJucyB0aGUgcHJvZmVzc2lvbmFsCiAqIEVuZ2xpc2ggdmVyc2lvbiArIGEgc2hvcnQgQXJhYmljIG5vdGUgZXhwbGFpbmluZyB3aGF0IGNoYW5nZWQuIFBvd2VycyB0aGUKICogc3RlcC1ieS1zdGVwICJhcHByb3ZlIGVhY2ggYW5zd2VyIiBmbG93IGluIC9hci9idWlsZGVyLgogKi8KCmNvbnN0IEZJRUxEX1JVTEVTOiBSZWNvcmQ8c3RyaW5nLCBzdHJpbmc+ID0gewogIG5hbWU6ICJUcmFuc2xpdGVyYXRlIHRoaXMgcGVyc29uJ3MgbmFtZSBpbnRvIGl0cyBzdGFuZGFyZCBFbmdsaXNoIHNwZWxsaW5nIChlLmcuINi52KjYr9in2YTYudiy2YrYsiDYrtmE2YEg2KfZhNi52YbYstmKIC0+IEFiZHVsYXppeiBLaGFsYWYgQWxlbmV6aSkuIE5vdGhpbmcgZWxzZS4iLAogIHJvbGU6ICJUcmFuc2xhdGUgdGhpcyBqb2IgdGl0bGUgaW50byBpdHMgc3RhbmRhcmQgcHJvZmVzc2lvbmFsIEVuZ2xpc2ggZm9ybSAoZS5nLiDYo9iu2LXYp9im2Yog2KPYtNi52KkgLT4gUmFkaW9sb2d5IFNwZWNpYWxpc3QpLiBVc2UgdGhlIGluZHVzdHJ5LXN0YW5kYXJkIHRpdGxlLiIsCiAgY29tcGFueTogIkdpdmUgdGhpcyBlbXBsb3llcidzIGNvbW1vbiBFbmdsaXNoIG5hbWUuIFdlbGwta25vd24gU2F1ZGkgb3JnYW5pemF0aW9ucyBoYXZlIG9mZmljaWFsIEVuZ2xpc2ggbmFtZXMgKNmF2LPYqti02YHZiSDYr9mE2KkgLT4gRGFsbGFoIEhvc3BpdGFsLCDYo9ix2KfZhdmD2YggLT4gU2F1ZGkgQXJhbWNvKS4gSWYgdW5rbm93biwgdHJhbnNsaXRlcmF0ZSBzZW5zaWJseS4iLAogIGFjaGlldmVtZW50czogIlR1cm4gdGhpcyBjYXN1YWwgZGVzY3JpcHRpb24gb2Ygd29yayBpbnRvIDItNCBzdHJvbmcgQ1YgYnVsbGV0cyBpbiBFbmdsaXNoOiBhY3Rpb24gdmVyYnMgZmlyc3QsIGNvbmNyZXRlIG91dGNvbWVzLiBORVZFUiBpbnZlbnQgbnVtYmVycyDigJQgd2hlcmUgYSBtZXRyaWMgd291bGQgaGVscCBidXQgd2Fzbid0IGdpdmVuLCB3cml0ZSBbYWRkIHlvdXIgcmVhbCBudW1iZXJdLiBLZWVwIGV2ZXJ5IGZhY3QgdGhlIHVzZXIgc3RhdGVkLCBhZGQgbm9uZS4iLAogIGVkdWNhdGlvbjogIlRyYW5zbGF0ZSB0aGlzIGVkdWNhdGlvbiBpbnRvIHN0YW5kYXJkIEVuZ2xpc2ggQ1YgZm9ybSAoZGVncmVlLCBmaWVsZCwgaW5zdGl0dXRpb24sIHllYXIgaWYgZ2l2ZW4pLiIsCiAgc2tpbGxzOiAiVHJhbnNsYXRlIHRoZXNlIHNraWxscyBpbnRvIHRoZWlyIHN0YW5kYXJkIEVuZ2xpc2ggcmVzdW1lIHRlcm1zLCBjb21tYS1zZXBhcmF0ZWQsIGRlZHVwbGljYXRlZC4iLAogIGV4dHJhczogIlRyYW5zbGF0ZSB0aGVzZSBjZXJ0aWZpY2F0aW9ucy9sYW5ndWFnZXMvY291cnNlcyBpbnRvIHN0YW5kYXJkIEVuZ2xpc2ggbmFtZXMgKGtlZXAgb2ZmaWNpYWwgYWNyb255bXMgYXMtaXMpLiIsCiAgY29udGFjdDogIkZvcm1hdCB0aGlzIGNvbnRhY3QgaW5mbyBjbGVhbmx5IG9uIG9uZSBsaW5lIChwaG9uZSDCtyBlbWFpbCDCtyBjaXR5KS4gVHJhbnNsaXRlcmF0ZSB0aGUgY2l0eSB0byBFbmdsaXNoLiBLZWVwIG51bWJlcnMgZXhhY3RseSBhcyBnaXZlbi4iLAp9OwoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIFBPU1QocmVxOiBOZXh0UmVxdWVzdCkgewogIHRyeSB7CiAgICBjb25zdCB7IGZpZWxkLCB0ZXh0LCB0YXJnZXRSb2xlIH0gPSBhd2FpdCByZXEuanNvbigpOwogICAgY29uc3QgcnVsZSA9IEZJRUxEX1JVTEVTW1N0cmluZyhmaWVsZCldOwogICAgaWYgKCFydWxlKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlVua25vd24gZmllbGQuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgY29uc3QgaW5wdXQgPSBTdHJpbmcodGV4dCA/PyAiIikudHJpbSgpOwogICAgaWYgKCFpbnB1dCB8fCBpbnB1dC5sZW5ndGggPCAyKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkVtcHR5IGlucHV0LiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIGlmIChpbnB1dC5sZW5ndGggPiAxMjAwKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlRvbyBsb25nLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKCiAgICBpZiAoIShhd2FpdCBhbGxvd1NoYXJlZChgcmVmaW5lOiR7Y2xpZW50SXAocmVxKX1gLCA0MCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogItio2LfZkdimINi02YjZiiDwn5mCIOKAlCDYrdin2YjZhCDYqNi52K8g2K/ZgtmK2YLYqS4iIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CgogICAgY29uc3Qga2V5ID0gcHJvY2Vzcy5lbnYuTlZJRElBX0FQSV9LRVk7CiAgICBpZiAoIWtleSkgdGhyb3cgbmV3IEVycm9yKCJOVklESUFfQVBJX0tFWSBpcyBub3Qgc2V0Iik7CiAgICBjb25zdCBtb2RlbCA9IHByb2Nlc3MuZW52LkFJX01PREVMIHx8ICJtZXRhL2xsYW1hLTQtbWF2ZXJpY2stMTdiLTEyOGUtaW5zdHJ1Y3QiOwoKICAgIGNvbnN0IHByb21wdCA9IGBZb3UgYXJlIGhlbHBpbmcgYnVpbGQgYSBDViBmaWVsZC1ieS1maWVsZC4gJHtydWxlfQoke3RhcmdldFJvbGUgPyBgVGhlIHBlcnNvbidzIHRhcmdldCByb2xlIGlzOiAke3RhcmdldFJvbGV9LmAgOiAiIn0KVVNFUidTIEFOU1dFUiAobWF5IGJlIEFyYWJpYywgY2FzdWFsKTogJHtpbnB1dH0KClJlcGx5IGluIEVYQUNUTFkgdGhpcyBmb3JtYXQsIG5vdGhpbmcgZWxzZToKRU46IDx0aGUgcG9saXNoZWQgRW5nbGlzaCB2ZXJzaW9uIOKAlCBwbGFpbiB0ZXh0LCBubyBtYXJrZG93bj4KTk9URTogPNmF2YTYp9it2LjYqSDZgti12YrYsdipINis2K/Yp9mLINio2KfZhNi52LHYqNmK2Kkg2KfZhNmB2LXYrdmJINi52YXYpyDZgdi52YTYqtmHICjZhdir2KfZhDogItiq2LHYrNmF2Kog2KfZhNmF2LPZhdmJINmE2YTYtdmK2LrYqSDYp9mE2YXYudiq2YXYr9ipIikg4oCUINij2YggItis2KfZh9iyIiDYpdmGINmE2YUg2YrYrdiq2Kwg2KrYutmK2YrYsdin2Ys+YDsKCiAgICBsZXQgb3V0ID0gIiI7CiAgICBmb3IgKGxldCBhdHRlbXB0ID0gMDsgYXR0ZW1wdCA8IDIgJiYgIW91dDsgYXR0ZW1wdCsrKSB7CiAgICAgIHRyeSB7CiAgICAgICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goImh0dHBzOi8vaW50ZWdyYXRlLmFwaS5udmlkaWEuY29tL3YxL2NoYXQvY29tcGxldGlvbnMiLCB7CiAgICAgICAgICBtZXRob2Q6ICJQT1NUIiwKICAgICAgICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2tleX1gLCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7CiAgICAgICAgICAgIG1vZGVsLAogICAgICAgICAgICB0ZW1wZXJhdHVyZTogMC4zLAogICAgICAgICAgICBtYXhfdG9rZW5zOiA0MDAsCiAgICAgICAgICAgIG1lc3NhZ2VzOiBbeyByb2xlOiAidXNlciIsIGNvbnRlbnQ6IHByb21wdCB9XSwKICAgICAgICAgIH0pLAogICAgICAgIH0pOwogICAgICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYE5WSURJQSAke3Jlcy5zdGF0dXN9YCk7CiAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICAgICAgb3V0ID0gKGRhdGE/LmNob2ljZXM/LlswXT8ubWVzc2FnZT8uY29udGVudCA/PyAiIikudHJpbSgpOwogICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgaWYgKGF0dGVtcHQgPT09IDEpIHRocm93IGU7CiAgICAgIH0KICAgIH0KCiAgICBjb25zdCBlbiA9IChvdXQubWF0Y2goL0VOOlxzKihbXHNcU10qPykoPzpcbk5PVEU6fCQpL2kpPy5bMV0gPz8gIiIpLnRyaW0oKS5yZXBsYWNlKC9cKlwqL2csICIiKTsKICAgIGNvbnN0IG5vdGUgPSAob3V0Lm1hdGNoKC9OT1RFOlxzKihbXHNcU10qKSQvaSk/LlsxXSA/PyAiIikudHJpbSgpLnJlcGxhY2UoL1wqXCovZywgIiIpOwogICAgaWYgKCFlbikgdGhyb3cgbmV3IEVycm9yKCJlbXB0eSByZWZpbmUiKTsKCiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlbiwgbm90ZTogbm90ZSB8fCAi2KzYp9mH2LIg4pyTIiB9KTsKICB9IGNhdGNoIChlcnIpIHsKICAgIGNvbnNvbGUuZXJyb3IoIlJlZmluZSBlcnJvcjoiLCBlcnIpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICLYqti52LDZkdixINin2YTYqtit2LPZitmGIOKAlCDYrdin2YjZhCDZhdix2Kkg2KPYrtix2YkuIiB9LCB7IHN0YXR1czogNTAwIH0pOwogIH0KfQo="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 60;
+
+/**
+ * Conversational-builder helper: polishes ONE field of the CV at a time.
+ * Takes the user's casual (often Arabic) answer and returns the professional
+ * English version + a short Arabic note explaining what changed. Powers the
+ * step-by-step "approve each answer" flow in /ar/builder.
+ */
+
+const FIELD_RULES: Record<string, string> = {
+  name: "Transliterate this person's name into its standard English spelling (e.g. عبدالعزيز خلف العنزي -> Abdulaziz Khalaf Alenezi). Nothing else.",
+  role: "Translate this job title into its standard professional English form (e.g. أخصائي أشعة -> Radiology Specialist). Use the industry-standard title.",
+  company: "Give this employer's common English name. Well-known Saudi organizations have official English names (مستشفى دلة -> Dallah Hospital, أرامكو -> Saudi Aramco). If unknown, transliterate sensibly.",
+  achievements: "Turn this casual description of work into 2-4 strong CV bullets in English: action verbs first, concrete outcomes. NEVER invent numbers — where a metric would help but wasn't given, write [add your real number]. Keep every fact the user stated, add none.",
+  education: "Translate this education into standard English CV form (degree, field, institution, year if given).",
+  skills: "Translate these skills into their standard English resume terms, comma-separated, deduplicated.",
+  extras: "Translate these certifications/languages/courses into standard English names (keep official acronyms as-is).",
+  contact: "Format this contact info cleanly on one line (phone · email · city). Transliterate the city to English. Keep numbers exactly as given.",
+};
+
+export async function POST(req: NextRequest) {
+  try {
+    const { field, text, targetRole } = await req.json();
+    const rule = FIELD_RULES[String(field)];
+    if (!rule) return NextResponse.json({ error: "Unknown field." }, { status: 400 });
+    const input = String(text ?? "").trim();
+    if (!input || input.length < 2) return NextResponse.json({ error: "Empty input." }, { status: 400 });
+    if (input.length > 1200) return NextResponse.json({ error: "Too long." }, { status: 400 });
+
+    if (!(await allowShared(`refine:${clientIp(req)}`, 40, 10 * 60 * 1000))) {
+      return NextResponse.json({ error: "بطّئ شوي 🙂 — حاول بعد دقيقة." }, { status: 429 });
+    }
+
+    const key = process.env.NVIDIA_API_KEY;
+    if (!key) throw new Error("NVIDIA_API_KEY is not set");
+    const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+
+    const prompt = `You are helping build a CV field-by-field. ${rule}
+${targetRole ? `The person's target role is: ${targetRole}.` : ""}
+USER'S ANSWER (may be Arabic, casual): ${input}
+
+Reply in EXACTLY this format, nothing else:
+EN: <the polished English version — plain text, no markdown>
+NOTE: <ملاحظة قصيرة جداً بالعربية الفصحى عما فعلته (مثال: "ترجمت المسمى للصيغة المعتمدة") — أو "جاهز" إن لم يحتج تغييراً>`;
+
+    let out = "";
+    for (let attempt = 0; attempt < 2 && !out; attempt++) {
+      try {
+        const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model,
+            temperature: 0.3,
+            max_tokens: 400,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+        if (!res.ok) throw new Error(`NVIDIA ${res.status}`);
+        const data = await res.json();
+        out = (data?.choices?.[0]?.message?.content ?? "").trim();
+      } catch (e) {
+        if (attempt === 1) throw e;
+      }
+    }
+
+    const en = (out.match(/EN:\s*([\s\S]*?)(?:\nNOTE:|$)/i)?.[1] ?? "").trim().replace(/\*\*/g, "");
+    const note = (out.match(/NOTE:\s*([\s\S]*)$/i)?.[1] ?? "").trim().replace(/\*\*/g, "");
+    if (!en) throw new Error("empty refine");
+
+    return NextResponse.json({ en, note: note || "جاهز ✓" });
+  } catch (err) {
+    console.error("Refine error:", err);
+    return NextResponse.json({ error: "تعذّر التحسين — حاول مرة أخرى." }, { status: 500 });
+  }
+}

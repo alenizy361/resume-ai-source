@@ -1,1 +1,77 @@
-{"data":"IyDYrti32Kkg2KfZhNiq2YjYstmK2Lkg4oCUINmp2aAg2YrZiNmF2KfZiyAo2YbZgdmR2LAg2KjYp9mE2KrYsdiq2YrYqCkKCioq2KfZhNit2YLZitmC2Kk6Kiog2KfZhNmF2YbYqtisINmF2YXYqtin2LIg2YjYrNin2YfYsi4g2KfZhNmF2LnYsdmD2Kkg2KfZhNii2YYgKirYqtmI2LLZiti5INmF2Ygg2KjYsdmF2KzYqSoqLiDYp9mE2YfYr9mBOiDYo9mI2YQg2aHZoCDZhdio2YrYudin2KogPSDYt9mE2Kgg2YXZj9ir2KjYqi4K2YbZgti32Kkg2KfZhNiq2LnYp9iv2YQ6ICoq2aMg2YXYqNmK2LnYp9iqINi02YfYsdmK2KfZiyoqLiDYo9mC2LXZiSDYrtiz2KfYsdipID0g2YjZgtiq2YMuINin2YTYsdin2KjYtyDZgdmKINmD2YQg2YXZg9in2YY6ICoqY3YucmFiaXQuc2EqKgoKLS0tCgojIyDwn46vINij2LPZhNit2KrZgyDYp9mE2KzYr9mK2K/YqSAo2KfYsNmD2LHZh9inINmB2Yog2YPZhCDYqNmI2LPYqiDigJQg2YfZiiDYp9mE2YTZiiDYqtmF2YrZkdiy2YMpCjEuICoq2YXZgtin2KjZhNipINmB2YrYr9mK2Ygg2KrZgdin2LnZhNmK2Kkg2KjYp9mE2YAgQUkqKiDigJQg2YXZj9mC2KfYqNmQ2YQg2YrYs9ij2YTZgyDYudmE2Ykg2KfZhNmD2KfZhdmK2LHYpyDZiNmK2YLZitmR2YXZgyAo2YjZhNinINmF2YbYp9mB2LMg2LnYsdio2Yog2LnZhtiv2YcpCjIuICoq2KrYrdmF2YrZhCDZhdis2KfZhtmKKiog2YTYs9mK2LHYqtmDINin2YTZhdit2LPZkdmG2KkgKNio2LnZhNin2YXYqSDYtdi62YrYsdipKSDigJQg2YrYsNmI2YIg2YLYqNmEINmF2Kcg2YrYr9mB2LkKMy4gKirYqti12K/ZitixIFdvcmQgKyDZgtin2YTYqCDZhdi12YXZkdmFKiog4oCUINin2YTYrtmE2YrYrNmKINmK2K3YqCDYp9mE2LTZg9mEINmI2KfZhNmAIFdvcmQKNC4gKirYrdmC2YjZhCDYrNiv2KfYsdin2Kov2K7ZhNmK2KzZitipKiogKNis2YbYs9mK2KnYjCDYpdmC2KfZhdipKSDigJQg2YXYrti12ZHYtSDZhNmE2LPZiNmCINin2YTYs9i52YjYr9mKCjUuICoq2K/Zgdi52Kkg2YjYp9it2K/YqSDZo9mlIC8g2anZqSDigJQg2KjYr9mI2YYg2KfYtNiq2LHYp9mDKiogKNin2YTZhdmG2KfZgdiz2YjZhiDZg9mE2YfZhSDYp9i02KrYsdin2YPYp9iqKQo2LiAqKti12K/Zgjog2KjYr9mI2YYg2KfYrtiq2YTYp9mCINij2LHZgtin2YUqKgoKLS0tCgojIyDYp9mE2KPYs9io2YjYudin2YYg2aHigJPZojog2KfZhNiq2KPYs9mK2LMgKNio2K/ZiNmG2YfYpyDZg9mEINi02Yog2YfYr9ixKQotIFsgXSDZgdi52ZHZhCDYqtiq2KjZkdi5INin2YTYqtit2YjZitmEICjZgtmI2YLZhCBBZHMgSUQgKyBNZXRhIFBpeGVsKSDigJQg2YTYqti52LHZgSDYo9mKINio2YjYs9iqINmK2KzZitioINmB2YTZiNizCi0gWyBdINis2YfZkdiyICoq2aMg2YHZitiv2YrZiNmH2KfYqiDZgti12YrYsdipKiogKNi52YbYr9mDINmF2YjZhNmR2K8g2YHZitiv2YrZiCDZhdis2KfZhtmKINis2KfZh9iyIOKAlCBoeXBlcmZyYW1lcyk6INiu2LfZkdin2YEg2YXYrtiq2YTZgSDZhNmD2YQg2YjYp9it2K8KLSBbIF0g2KfZg9iq2Kgg2KjYp9mK2Ygg2YXZiNit2ZHYryDZhNmD2YQg2K3Ys9in2KjYp9iq2YM6ICLYs9mK2LHYqtmDINiq2LnYqNixINij2YbYuNmF2Kkg2KfZhNiq2YjYuNmK2YEg4oCUINin2YHYrdi1INmF2KzYp9mG2KfZiyBjdi5yYWJpdC5zYSIKLSBbIF0gKirYqtmD2KrZitmDINij2YjZhCDZodmgINi52YXZhNin2KE6Kiog2KfYudix2LYg2LnZhNmJINmh2aAg2KPYtNiu2KfYtSAo2KPYtdiv2YLYp9ihL9is2LHZiNio2KfYqikgKirZgdiq2K0g2KfZhNit2LLZhdipINin2YTZg9in2YXZhNipINmF2KzYp9mG2KfZiyoqINmF2YLYp9io2YQg2LHYo9mKINi12KfYr9mCICsg2LTZh9in2K/YqSDYrdmC2YrZgtmK2Kkg2KjYp9iz2YXZh9mFINin2YTYo9mI2YQKCiMjINin2YTYo9mK2KfZhSDZo+KAk9mp2aA6INmF2K3YsdmR2YPYp9mGINmK2YjZhdmK2KfZhgoKIyMjIPCflLQg2YXYrdix2ZHZgyDZoSDigJQg2YXYrdiq2YjZiSDZitmI2YXZiiAo2KPZhtiq2Iwg2aPZoCDYr9mC2YrZgtipKQrYp9mG2LTYsSAqKtio2YjYs9iqL9mB2YrYr9mK2Ygg2YjYp9it2K8g2YrZiNmF2YrYp9mLKiog2KjYp9mE2KrZhtin2YjYqCDYudmE2Yk6Ci0gKirYqtmI2YrYqtixL1g6Kiog2YbYtdmK2K3YqSBBVFMgKyDYp9mE2LHYp9io2LcgKNmH2KfYtNiq2KfZgtin2Ko6ICPZiNi42KfYptmBICPYqtmI2LjZitmBICPYrNiv2KfYsdin2KogI9in2YTYs9mK2LHYqV/Yp9mE2LDYp9iq2YrYqSkKLSAqKtiq2YrZgyDYqtmI2YMv2LHZitmE2LI6Kiog2YHZitiv2YrZiCAi2YLYqNmEL9io2LnYryDYp9mE2LPZg9mI2LEiICjZhdmGINmF2YjZhNmR2K8g2KfZhNmB2YrYr9mK2YgpCi0gKirZhNmK2YbZg9iv2KXZhjoqKiDYqNmI2LPYqiDZhdmH2YbZiiArINix2KfYqNi3Ci0gKirYrNix2YjYqNin2Kog2YjYp9iq2LPYp9ioL9iq2YrZhNmK2KzYsdin2YUg2YTZhNmI2LjYp9im2YE6Kiog2KfZhti22YUg2YTZgNmjINis2LHZiNio2KfYqtiMINin2YbYtNixINin2YTZhti12YrYrdipICsg2KfZhNix2KfYqNi3ICjYqNij2K/YqNiMINmF2LHYqSkKCioq2YLYp9i52K/YqToqKiDZgtiv2ZHZhSDZgtmK2YXYqSDYo9mI2YTYp9mL2Iwg2KfZhNix2KfYqNi3INir2KfZhtmK2KfZiy4g2KfZhNin2KrYs9in2YIgPiDYp9mE2YPZhdin2YQuCgojIyMg8J+foiDZhdit2LHZkdmDINmiIOKAlCBTRU8gKNiq2YTZgtin2KbZitiMINio2YbZitmG2KfZhykKLSDZodmo2aMg2LXZgdit2Kkg2LnYsdio2YrYqSArINmh2afZpiDYpdmG2KzZhNmK2LLZitipINi02LrZkdin2YTYqSDihpIg2KrYrNmK2Kgg2LLZiNmR2KfYsSDZhdmGINmC2YjZgtmEINiq2K/YsdmK2KzZitin2YsgKNmj4oCT2aYg2KPYs9in2KjZiti5KQotINiq2KPZg9ivINmF2YYg2YHZh9ix2LPYqSDYp9mE2YAgc2l0ZW1hcCDZgdmKIEdvb2dsZSBTZWFyY2ggQ29uc29sZQoKLS0tCgojIyDwn5qqINio2YjYp9io2KfYqiDYp9mE2YLYsdin2LEgKNmD2YYg2LXYsdmK2K3Yp9mLINmF2Lkg2YbZgdiz2YMpCnwg2KjYudivIHwg2KfZhNmG2KrZitis2KkgfCDYp9mE2YLYsdin2LEgfAp8LS0tLS18LS0tLS0tLS0tfC0tLS0tLS0tfAp8INmj2aAg2YrZiNmFIHwg2LLZiNmR2KfYsSDYqNmE2Kcg2YXYqNmK2LnYp9iqIHwg2KfZhNmF2LTZg9mE2Kkg2YHZiiAqKtin2YTYudix2LYv2KfZhNi12YHYrdipKiog4oCUINi52K/ZkdmEINin2YTZhti1INmI2KfZhNiz2LnYsSB8Cnwg2aTZpSDZitmI2YUgfCAqKtmh2aAg2YXYqNmK2LnYp9iqKiogfCDinIUgKirYp9mE2LfZhNioINmF2Y/Yq9io2KoqKiDigJQg2YPYqNmR2LEg2KfZhNil2LnZhNin2YbYp9iqIHwKfCDZqdmgINmK2YjZhSB8ICoq2KPZgtmEINmF2YYg2aLZoCDZhdio2YrYudipKiog2LHYutmFINin2YTYp9mE2KrYstin2YUgfCDwn5uRICoq2KPZiNmC2YEg2KPZiCDYrdmI2ZHZhCoqIOKAlCDYp9mE2KfYs9iq2YXYsdin2LEg2KfZhNij2LnZhdmJINij2LrZhNmJIHwKCi0tLQoKIyMg8J+TnSDYqNmI2LPYqtin2Kog2KzYp9mH2LLYqSAo2KfZhtiz2K4v2KfZhNi12YIpCgoqKtiq2YjZitiq2LEg2aEgKNin2YTZgdmK2K/ZitmIKToqKgo+INmn2aXZqiDZhdmGINin2YTYs9mK2LEg2KfZhNiw2KfYqtmK2Kkg2YrYsdmB2LbZh9inINin2YTZhti42KfZhSDZgtio2YQg2YXYpyDZiti02YjZgdmH2Kcg2KjYtNixIPCfmLMKPiDYs9mI2ZHZitiqINij2K/Yp9ipINiq2YHYrdi1INiz2YrYsdiq2YMg2YXYrNin2YbYp9mLINmI2KrYudi32YrZgyDZhtiz2KjYqSDYqtmI2KfZgdmC2YfYpyDZhdi5INin2YTZiNi42YrZgdipICsg2KfZhNmG2KfZgti1Lgo+INis2LHYqNmH2Kc6IGN2LnJhYml0LnNhCj4gI9mI2LjYp9im2YEgI9is2K/Yp9ix2KfYqiAj2KrZiNi42YrZgQoKKirYqtmI2YrYqtixINmiICjYp9mE2YXZgtin2KjZhNipIOKAlCDYp9mE2YXZitiy2Kkg2KfZhNmC2KfYqtmE2KkpOioqCj4g2KzYr9mK2K86ICoq2KrYr9ix2ZHYqCDYudmE2Ykg2KfZhNmF2YLYp9io2YTYqSDYo9mF2KfZhSDYp9mE2YPYp9mF2YrYsdinKiog4oCUINiw2YPYp9ihINin2LXYt9mG2KfYudmKINmK2LPYo9mE2YPYjCDYqtis2KfZiNio2Iwg2YjZitmC2YrZkdmFINil2KzYp9io2KrZgyDZgdmI2LHYp9mLIPCfjqUKPiDZiNmE2Kcg2KPYr9in2Kkg2LnYsdio2YrYqSDYq9in2YbZitipINiq2LPZiNmK2YfYpy4KPiBjdi5yYWJpdC5zYS9pbnRlcnZpZXctbGl2ZQoKKirZhNmK2YbZg9iv2KXZhjoqKgo+INio2LnYryDZhdix2KfYrNi52Kkg2LnYtNix2KfYqiDYp9mE2LPZitix2Iwg2KPYutmE2Kgg2KfZhNmF2LHYtNit2YrZhiDYp9mE2KPZg9mB2KfYoSDZitmP2LHZgdi22YjZhiDYqNiz2KjYqCDZhti42KfZhSBBVFMuCj4g2KPYt9mE2YLYqiBSZXN1bWVBSTog2KfZgdit2LUg2LPZitix2KrZg9iMINin2YPYqti02YEg2KfZhNmD2YTZhdin2Kog2KfZhNmG2KfZgti12KnYjCDYo9i52K8g2YPYqtin2KjYqtmH2KfYjCDZiNi12K/Zkdix2YfYpyBXb3JkIOKAlCDZiNiv2LHZkdioINi52YTZiSDYp9mE2YXZgtin2KjZhNipINio2KfZhNmB2YrYr9mK2YguCj4g2K/Zgdi52Kkg2YjYp9it2K/YqdiMINio2K/ZiNmGINin2LTYqtix2KfZgy4g2KfZhNmB2K3YtSDZhdis2KfZhtmKOiBjdi5yYWJpdC5zYQoKKirYrNix2YjYqNin2Kog2KfZhNmI2LjYp9im2YE6KioKPiDwn5OEINmG2LXZitit2Kkg2LPYsdmK2LnYqTog2YLYqNmEINmF2Kcg2KrYsdiz2YQg2LPZitix2KrZg9iMINiq2KPZg9ivINil2YbZh9inINiq2LnYqNixINmG2LjYp9mFIEFUUy4KPiDZgdmKINij2K/Yp9ipINmF2KzYp9mG2YrYqSDYqtmB2K3YtdmH2Kcg2YjYqti52LfZitmDINin2YTZhtiz2KjYqSArINin2YTZhtin2YLYtTogY3YucmFiaXQuc2EKPiAo2YHZitmH2Kcg2YPZhdin2YYg2KrYr9ix2YrYqCDZhdmC2KfYqNmE2Kkg2KjYp9mE2YHZitiv2YrZiCDwn46lKQoKLS0tCgojIyDYp9mE2KzZhdmE2Kkg2KfZhNmE2Yog2KrYrdmD2YUg2YPZhCDYtNmKCioqItij2YPYqNixINiu2LfYsSDYudmE2YrZgyDZhdmIINin2YTZhdmG2KfZgdizIOKAlCDYqNmEINiq2LjZhCDYqti12YTYrSDYp9mE2YXZhtiq2Kwg2YjYqtik2KzZhCDYp9mE2KrYs9mI2YrZgi4g2KjZkNi5INmF2Kcg2LnZhtiv2YMg2KPZiNmE2KfZiy4iKioK2KfZhNmF2YbYqtisINmK2YPZgdmKLiDYp9io2K/YoyDYqtmG2LTYsSDYp9mE2YrZiNmFLgo="}
+# خطة التوزيع — ٩٠ يوماً (نفّذ بالترتيب)
+
+**الحقيقة:** المنتج ممتاز وجاهز. المعركة الآن **توزيع مو برمجة**. الهدف: أول ١٠ مبيعات = طلب مُثبت.
+نقطة التعادل: **٣ مبيعات شهرياً**. أقصى خسارة = وقتك. الرابط في كل مكان: **cv.rabit.sa**
+
+---
+
+## 🎯 أسلحتك الجديدة (اذكرها في كل بوست — هي اللي تميّزك)
+1. **مقابلة فيديو تفاعلية بالـ AI** — مُقابِل يسألك على الكاميرا ويقيّمك (ولا منافس عربي عنده)
+2. **تحميل مجاني** لسيرتك المحسّنة (بعلامة صغيرة) — يذوق قبل ما يدفع
+3. **تصدير Word + قالب مصمّم** — الخليجي يحب الشكل والـ Word
+4. **حقول جدارات/خليجية** (جنسية، إقامة) — مخصّص للسوق السعودي
+5. **دفعة واحدة ٣٥ / ٩٩ — بدون اشتراك** (المنافسون كلهم اشتراكات)
+6. **صدق: بدون اختلاق أرقام**
+
+---
+
+## الأسبوعان ١–٢: التأسيس (بدونها كل شي هدر)
+- [ ] فعّل تتبّع التحويل (قوقل Ads ID + Meta Pixel) — لتعرف أي بوست يجيب فلوس
+- [ ] جهّز **٣ فيديوهات قصيرة** (عندك مولّد فيديو مجاني جاهز — hyperframes): خطّاف مختلف لكل واحد
+- [ ] اكتب بايو موحّد لكل حساباتك: "سيرتك تعبر أنظمة التوظيف — افحص مجاناً cv.rabit.sa"
+- [ ] **تكتيك أول ١٠ عملاء:** اعرض على ١٠ أشخاص (أصدقاء/جروبات) **فتح الحزمة الكاملة مجاناً** مقابل رأي صادق + شهادة حقيقية باسمهم الأول
+
+## الأيام ٣–٩٠: محرّكان يوميان
+
+### 🔴 محرّك ١ — محتوى يومي (أنت، ٣٠ دقيقة)
+انشر **بوست/فيديو واحد يومياً** بالتناوب على:
+- **تويتر/X:** نصيحة ATS + الرابط (هاشتاقات: #وظائف #توظيف #جدارات #السيرة_الذاتية)
+- **تيك توك/ريلز:** فيديو "قبل/بعد السكور" (من مولّد الفيديو)
+- **لينكدإن:** بوست مهني + رابط
+- **جروبات واتساب/تيليجرام للوظائف:** انضم لـ٣ جروبات، انشر النصيحة + الرابط (بأدب، مرة)
+
+**قاعدة:** قدّم قيمة أولاً، الرابط ثانياً. الاتساق > الكمال.
+
+### 🟢 محرّك ٢ — SEO (تلقائي، بنيناه)
+- ١٨٣ صفحة عربية + ١٧٦ إنجليزية شغّالة → تجيب زوّار من قوقل تدريجياً (٣–٦ أسابيع)
+- تأكد من فهرسة الـ sitemap في Google Search Console
+
+---
+
+## 🚪 بوابات القرار (كن صريحاً مع نفسك)
+| بعد | النتيجة | القرار |
+|-----|---------|--------|
+| ٣٠ يوم | زوّار بلا مبيعات | المشكلة في **العرض/الصفحة** — عدّل النص والسعر |
+| ٤٥ يوم | **١٠ مبيعات** | ✅ **الطلب مُثبت** — كبّر الإعلانات |
+| ٩٠ يوم | **أقل من ٢٠ مبيعة** رغم الالتزام | 🛑 **أوقف أو حوّل** — الاستمرار الأعمى أغلى |
+
+---
+
+## 📝 بوستات جاهزة (انسخ/الصق)
+
+**تويتر ١ (الفيديو):**
+> ٧٥٪ من السير الذاتية يرفضها النظام قبل ما يشوفها بشر 😳
+> سوّيت أداة تفحص سيرتك مجاناً وتعطيك نسبة توافقها مع الوظيفة + الناقص.
+> جربها: cv.rabit.sa
+> #وظائف #جدارات #توظيف
+
+**تويتر ٢ (المقابلة — الميزة القاتلة):**
+> جديد: **تدرّب على المقابلة أمام الكاميرا** — ذكاء اصطناعي يسألك، تجاوب، ويقيّم إجابتك فوراً 🎥
+> ولا أداة عربية ثانية تسويها.
+> cv.rabit.sa/interview-live
+
+**لينكدإن:**
+> بعد مراجعة عشرات السير، أغلب المرشحين الأكفاء يُرفضون بسبب نظام ATS.
+> أطلقت ResumeAI: افحص سيرتك، اكتشف الكلمات الناقصة، أعد كتابتها، وصدّرها Word — ودرّب على المقابلة بالفيديو.
+> دفعة واحدة، بدون اشتراك. الفحص مجاني: cv.rabit.sa
+
+**جروبات الوظائف:**
+> 📄 نصيحة سريعة: قبل ما ترسل سيرتك، تأكد إنها تعبر نظام ATS.
+> في أداة مجانية تفحصها وتعطيك النسبة + الناقص: cv.rabit.sa
+> (فيها كمان تدريب مقابلة بالفيديو 🎥)
+
+---
+
+## الجملة اللي تحكم كل شي
+**"أكبر خطر عليك مو المنافس — بل تظل تصلح المنتج وتؤجل التسويق. بِع ما عندك أولاً."**
+المنتج يكفي. ابدأ تنشر اليوم.

@@ -1,1 +1,30 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSm91cm5leSBmcm9tICIuLi9jb21wb25lbnRzL0pvdXJuZXkiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogItiz2YrYsdiq2YMg2KjZhdmC2KfYqNmE2Kkg4oCUINin2YTYsNmD2KfYoSDYp9mE2KfYtdi32YbYp9i52Yog2YrYqNmG2YrZh9inINmF2LnZgyB8IGN2LnJhYml0LnNhIiwKICBkZXNjcmlwdGlvbjoKICAgICLZg9mE2YUg2KfZhNmF2LPYqti02KfYsSDYr9mC2YrZgtiq2YrZhjog2YrYs9ij2YTZg9iMINmK2LnZitivINi12YrYp9i62Kkg2YPZhNin2YXZgyDYp9mE2LnYp9iv2Yog2YTYtdmK2KfYutipINin2K3Yqtix2KfZgdmK2Kkg2KrYudio2LEg2KPZhti42YXYqSDYp9mE2KrZiNi42YrZgSAoQVRTKdiMINmI2YrYs9mE2YXZgyDYs9mK2LHYqSDYrNin2YfYstipINmE2YTYqtmG2LLZitmEIOKAlCDZhdis2KfZhtin2Ysg2YjYqNiv2YjZhiDYqtiz2KzZitmELiDYudix2KjZiiDZiNil2YbYrNmE2YrYstmKLiIsCiAgYWx0ZXJuYXRlczogewogICAgY2Fub25pY2FsOiBgJHtCQVNFfS9hcmAsCiAgICBsYW5ndWFnZXM6IHsgZW46IGAke0JBU0V9L2AsIGFyOiBgJHtCQVNFfS9hcmAsICJ4LWRlZmF1bHQiOiBgJHtCQVNFfS9gIH0sCiAgfSwKICBvcGVuR3JhcGg6IHsKICAgIHRpdGxlOiAi2LPZitix2KrZgyDYqNin2YTZhdmC2KfYqNmE2Kkg4oCUINin2YTYsNmD2KfYoSDZitio2YbZitmH2Kcg2YXYudmDIHwg2LPZitix2KkiLAogICAgZGVzY3JpcHRpb246CiAgICAgICLYqtit2K/ZkdirINmF2Lkg2KfZhNmF2LPYqti02KfYsSDYr9mC2YrZgtiq2YrZhjog2YrZgtin2KjZhNmD2Iwg2YrYudmK2K8g2LXZitin2LrYqSDZg9mE2KfZhdmDINin2YTYudmB2YjZiiDYpdmE2Ykg2KPYs9i32LEg2KfYrdiq2LHYp9mB2YrYqSDZhdiq2YjYp9mB2YLYqSDZhdi5INij2YbYuNmF2Kkg2KfZhNmB2LHYsiBBVFPYjCDZiNmK2LPZhNmR2YXZgyDYs9mK2LHYqSDYrNin2YfYstipINmE2YTYqtit2YXZitmEIOKAlCDZhdis2KfZhtin2Ysg2YjYqNiv2YjZhiDYqtiz2KzZitmELiIsCiAgICB1cmw6IGAke0JBU0V9L2FyYCwKICAgIHR5cGU6ICJ3ZWJzaXRlIiwKICB9LAogIHR3aXR0ZXI6IHsKICAgIGNhcmQ6ICJzdW1tYXJ5X2xhcmdlX2ltYWdlIiwKICAgIHRpdGxlOiAi2LPZitix2KrZgyDYqNin2YTZhdmC2KfYqNmE2Kkg4oCUINin2YTYsNmD2KfYoSDZitio2YbZitmH2Kcg2YXYudmDIHwg2LPZitix2KkiLAogICAgZGVzY3JpcHRpb246ICLZhdmC2KfYqNmE2Kkg2K/ZgtmK2YLYqtmK2YYg4oaQINiz2YrYsdipINin2K3Yqtix2KfZgdmK2Kkg2KjYr9ix2KzYqSDYqtmI2KfZgdmCIEFUUy4g2YXYrNin2YbYp9mLINmI2KjYr9mI2YYg2KrYs9is2YrZhC4iLAogIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBcmFiaWNIb21lKCkgewogIHJldHVybiA8Sm91cm5leSBsYW5nPSJhciIgLz47Cn0K"}
+import type { Metadata } from "next";
+import Journey from "../components/Journey";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "سيرتك بمقابلة — الذكاء الاصطناعي يبنيها معك | cv.rabit.sa",
+  description:
+    "كلم المستشار دقيقتين: يسألك، يعيد صياغة كلامك العادي لصياغة احترافية تعبر أنظمة التوظيف (ATS)، ويسلمك سيرة جاهزة للتنزيل — مجاناً وبدون تسجيل. عربي وإنجليزي.",
+  alternates: {
+    canonical: `${BASE}/ar`,
+    languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
+  },
+  openGraph: {
+    title: "سيرتك بالمقابلة — الذكاء يبنيها معك | سيرة",
+    description:
+      "تحدّث مع المستشار دقيقتين: يقابلك، يعيد صياغة كلامك العفوي إلى أسطر احترافية متوافقة مع أنظمة الفرز ATS، ويسلّمك سيرة جاهزة للتحميل — مجاناً وبدون تسجيل.",
+    url: `${BASE}/ar`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "سيرتك بالمقابلة — الذكاء يبنيها معك | سيرة",
+    description: "مقابلة دقيقتين ← سيرة احترافية بدرجة توافق ATS. مجاناً وبدون تسجيل.",
+  },
+};
+
+export default function ArabicHome() {
+  return <Journey lang="ar" />;
+}

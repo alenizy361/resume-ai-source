@@ -1,1 +1,7 @@
-{"data":"aW1wb3J0IHsgcmVkaXJlY3QgfSBmcm9tICJuZXh0L25hdmlnYXRpb24iOwoKLy8gVGhlIGludGVydmlldyBmZWF0dXJlIGN1cnJlbnRseSBsaXZlcyBvbiB0aGUgc2hhcmVkIChFbmdsaXNoIFVJKSByb3V0ZTsgQXJhYmljCi8vIHZpc2l0b3JzIHdobyBoaXQgL2FyL2ludGVydmlldyBkaXJlY3RseSBhcmUgc2VudCB0aGVyZSBpbnN0ZWFkIG9mIGEgNDA0LgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBclJlZGlyZWN0KCkgewogIHJlZGlyZWN0KCIvaW50ZXJ2aWV3P2xhbmc9YXIiKTsKfQo="}
+import { redirect } from "next/navigation";
+
+// The interview feature currently lives on the shared (English UI) route; Arabic
+// visitors who hit /ar/interview directly are sent there instead of a 404.
+export default function ArRedirect() {
+  redirect("/interview?lang=ar");
+}

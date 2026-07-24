@@ -1,1 +1,16 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkFJIFZpZGVvIE1vY2sgSW50ZXJ2aWV3IOKAlCBQcmFjdGljZSBvbiBDYW1lcmEgfCBTaXJhIiwKICBkZXNjcmlwdGlvbjogIlByYWN0aWNlIHRoZSBpbnRlcnZpZXcgb24gY2FtZXJhOiB0aGUgQUkgYXNrcyByZWFsIHF1ZXN0aW9ucywgeW91IGFuc3dlciBvbiB2aWRlbywgYW5kIGdldCBhbiBpbnN0YW50IHNjb3JlIGFuZCBjb2FjaGluZy4gQmlsaW5ndWFsIChFbmdsaXNoICYgQXJhYmljKS4gWW91ciB2aWRlbyBzdGF5cyBvbiB5b3VyIGRldmljZS4iLAogIGFsdGVybmF0ZXM6IHsKICAgIGNhbm9uaWNhbDogYCR7QkFTRX0vaW50ZXJ2aWV3LWxpdmVgLAogICAgbGFuZ3VhZ2VzOiB7IGVuOiBgJHtCQVNFfS9pbnRlcnZpZXctbGl2ZWAsIGFyOiBgJHtCQVNFfS9pbnRlcnZpZXctbGl2ZT9sYW5nPWFyYCwgIngtZGVmYXVsdCI6IGAke0JBU0V9L2ludGVydmlldy1saXZlYCB9LAogIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBJbnRlcnZpZXdMaXZlTGF5b3V0KHsgY2hpbGRyZW4gfTogeyBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlIH0pIHsKICByZXR1cm4gY2hpbGRyZW47Cn0K"}
+import type { Metadata } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "AI Video Mock Interview — Practice on Camera | Sira",
+  description: "Practice the interview on camera: the AI asks real questions, you answer on video, and get an instant score and coaching. Bilingual (English & Arabic). Your video stays on your device.",
+  alternates: {
+    canonical: `${BASE}/interview-live`,
+    languages: { en: `${BASE}/interview-live`, ar: `${BASE}/interview-live?lang=ar`, "x-default": `${BASE}/interview-live` },
+  },
+};
+
+export default function InterviewLiveLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

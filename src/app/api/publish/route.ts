@@ -1,1 +1,81 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IGNyeXB0byBmcm9tICJjcnlwdG8iOwppbXBvcnQgeyBzYXZlUHVibGljUmVzdW1lLCBkZWxldGVQdWJsaWNSZXN1bWUsIG1ha2VTbHVnLCBwdWJsaWNSZXN1bWVDb25maWd1cmVkIH0gZnJvbSAiQC9hcHAvbGliL3B1YmxpY3Jlc3VtZSI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAyMDsKCmNvbnN0IFNFQ1JFVCA9IHByb2Nlc3MuZW52LkFDQ0VTU19TRUNSRVQgfHwgImRldi1pbnNlY3VyZS1zZWNyZXQtY2hhbmdlLW1lIjsKCi8qKiBBIHNpZ25lZCB0b2tlbiB0aGF0IHByb3ZlcyB0aGUgY2FsbGVyIHB1Ymxpc2hlZCB0aGlzIHNsdWcsIHNvIG9ubHkgdGhleSBjYW4gdW5wdWJsaXNoIGl0LiAqLwpmdW5jdGlvbiB1bnB1Ymxpc2hUb2tlbihzbHVnOiBzdHJpbmcpOiBzdHJpbmcgewogIHJldHVybiBjcnlwdG8uY3JlYXRlSG1hYygic2hhMjU2IiwgU0VDUkVUKS51cGRhdGUoInVucHVibGlzaDoiICsgc2x1ZykuZGlnZXN0KCJiYXNlNjR1cmwiKTsKfQoKLyoqIFJlamVjdCBvYnZpb3VzIHNwYW06IHRvbyBtYW55IGxpbmtzIGlzIHRoZSAjMSBhYnVzZSBzaWduYWwgZm9yIGFuIG9wZW4gcHVibGlzaCBlbmRwb2ludC4gKi8KZnVuY3Rpb24gbG9va3NMaWtlU3BhbSh0ZXh0OiBzdHJpbmcpOiBib29sZWFuIHsKICBjb25zdCBsaW5rcyA9ICh0ZXh0Lm1hdGNoKC9odHRwcz86XC9cL3x3d3dcLi9naSkgfHwgW10pLmxlbmd0aDsKICByZXR1cm4gbGlua3MgPiA2Owp9CgovKiogUHVibGlzaGVzIGEgcmVzdW1lIHRvIGEgcHVibGljIHNoYXJlYWJsZSBVUkwgL3Ive3NsdWd9LiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIGlmICghcHVibGljUmVzdW1lQ29uZmlndXJlZCgpKSB7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiUHVibGljIGxpbmtzIGFyZW4ndCBhdmFpbGFibGUgcmlnaHQgbm93LiIgfSwgeyBzdGF0dXM6IDUwMyB9KTsKICAgIH0KICAgIGxldCBwYXJzZWQ7CiAgICB0cnkgeyBwYXJzZWQgPSBhd2FpdCByZXEuanNvbigpOyB9IGNhdGNoIHsgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJJbnZhbGlkIEpTT04gYm9keS4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7IH0KICAgIGlmICghcGFyc2VkIHx8IHR5cGVvZiBwYXJzZWQgIT09ICJvYmplY3QiKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkludmFsaWQgcmVxdWVzdCBib2R5LiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIGNvbnN0IHsgbmFtZSwgcm9sZSwgdGV4dCB9ID0gcGFyc2VkOwogICAgY29uc3QgYm9keSA9IFN0cmluZyh0ZXh0ID8/ICIiKTsKICAgIGlmICghYm9keSB8fCBib2R5LnRyaW0oKS5sZW5ndGggPCA1MCkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIk5vdGhpbmcgdG8gcHVibGlzaCB5ZXQuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgfQogICAgaWYgKGJvZHkubGVuZ3RoID4gMTIwMDApIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJUaGF0J3MgdG9vIGxvbmcgdG8gcHVibGlzaC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgICB9CiAgICBpZiAobG9va3NMaWtlU3BhbShib2R5KSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlRoaXMgY29udGVudCBjYW4ndCBiZSBwdWJsaXNoZWQuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgfQogICAgLy8gMTAgcmFuZG9tIGNoYXJzICh3YXMgNSkg4oCUIG1ha2VzIHB1Ymxpc2hlZCBVUkxzIHByYWN0aWNhbGx5IG5vbi1lbnVtZXJhYmxlLgogICAgY29uc3QgcmFuZCA9IGNyeXB0by5yYW5kb21CeXRlcyg4KS50b1N0cmluZygiYmFzZTY0dXJsIikuc2xpY2UoMCwgMTApLnRvTG93ZXJDYXNlKCk7CiAgICBjb25zdCBzbHVnID0gbWFrZVNsdWcoU3RyaW5nKG5hbWUgfHwgInJlc3VtZSIpLCByYW5kKTsKICAgIGF3YWl0IHNhdmVQdWJsaWNSZXN1bWUoc2x1ZywgewogICAgICBuYW1lOiBTdHJpbmcobmFtZSB8fCAiIikuc2xpY2UoMCwgMTAwKSwKICAgICAgcm9sZTogU3RyaW5nKHJvbGUgfHwgIiIpLnNsaWNlKDAsIDEyMCksCiAgICAgIHRleHQ6IGJvZHkuc2xpY2UoMCwgMTIwMDApLAogICAgICBjcmVhdGVkOiBEYXRlLm5vdygpLAogICAgfSk7CiAgICAvLyBSZXR1cm4gYW4gdW5wdWJsaXNoIHRva2VuIHNvIHRoZSBjcmVhdG9yIChhbmQgb25seSB0aGUgY3JlYXRvcikgY2FuIHJlbW92ZSBpdCBsYXRlci4KICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IHNsdWcsIHVybDogYC9yLyR7c2x1Z31gLCB1bnB1Ymxpc2hUb2tlbjogdW5wdWJsaXNoVG9rZW4oc2x1ZykgfSk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJQdWJsaXNoIGVycm9yOiIsIGVycik7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkNvdWxkIG5vdCBwdWJsaXNoLiBQbGVhc2UgdHJ5IGFnYWluLiIgfSwgeyBzdGF0dXM6IDUwMCB9KTsKICB9Cn0KCi8qKiBVbnB1Ymxpc2ggYSByZXN1bWU6IHJlcXVpcmVzIHRoZSBzaWduZWQgdG9rZW4gcmV0dXJuZWQgYXQgcHVibGlzaCB0aW1lLiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gREVMRVRFKHJlcTogTmV4dFJlcXVlc3QpIHsKICB0cnkgewogICAgaWYgKCFwdWJsaWNSZXN1bWVDb25maWd1cmVkKCkpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJOb3QgYXZhaWxhYmxlLiIgfSwgeyBzdGF0dXM6IDUwMyB9KTsKICAgIH0KICAgIGNvbnN0IHNsdWcgPSByZXEubmV4dFVybC5zZWFyY2hQYXJhbXMuZ2V0KCJzbHVnIikgfHwgIiI7CiAgICBjb25zdCB0b2tlbiA9IHJlcS5uZXh0VXJsLnNlYXJjaFBhcmFtcy5nZXQoInRva2VuIikgfHwgIiI7CiAgICBpZiAoIXNsdWcgfHwgIXRva2VuKSB7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiTWlzc2luZyBzbHVnIG9yIHRva2VuLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KICAgIGNvbnN0IGV4cGVjdGVkID0gdW5wdWJsaXNoVG9rZW4oc2x1Zyk7CiAgICAvLyBDb25zdGFudC10aW1lIGNvbXBhcmUgdG8gYXZvaWQgbGVha2luZyB0aGUgdG9rZW4gdmlhIHRpbWluZy4KICAgIGNvbnN0IG9rID0gdG9rZW4ubGVuZ3RoID09PSBleHBlY3RlZC5sZW5ndGggJiYKICAgICAgY3J5cHRvLnRpbWluZ1NhZmVFcXVhbChCdWZmZXIuZnJvbSh0b2tlbiksIEJ1ZmZlci5mcm9tKGV4cGVjdGVkKSk7CiAgICBpZiAoIW9rKSB7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiSW52YWxpZCB1bnB1Ymxpc2ggdG9rZW4uIiB9LCB7IHN0YXR1czogNDAzIH0pOwogICAgfQogICAgYXdhaXQgZGVsZXRlUHVibGljUmVzdW1lKHNsdWcpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IHRydWUgfSk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJVbnB1Ymxpc2ggZXJyb3I6IiwgZXJyKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiQ291bGQgbm90IHVucHVibGlzaC4iIH0sIHsgc3RhdHVzOiA1MDAgfSk7CiAgfQp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
+import { savePublicResume, deletePublicResume, makeSlug, publicResumeConfigured } from "@/app/lib/publicresume";
+
+export const maxDuration = 20;
+
+const SECRET = process.env.ACCESS_SECRET || "dev-insecure-secret-change-me";
+
+/** A signed token that proves the caller published this slug, so only they can unpublish it. */
+function unpublishToken(slug: string): string {
+  return crypto.createHmac("sha256", SECRET).update("unpublish:" + slug).digest("base64url");
+}
+
+/** Reject obvious spam: too many links is the #1 abuse signal for an open publish endpoint. */
+function looksLikeSpam(text: string): boolean {
+  const links = (text.match(/https?:\/\/|www\./gi) || []).length;
+  return links > 6;
+}
+
+/** Publishes a resume to a public shareable URL /r/{slug}. */
+export async function POST(req: NextRequest) {
+  try {
+    if (!publicResumeConfigured()) {
+      return NextResponse.json({ error: "Public links aren't available right now." }, { status: 503 });
+    }
+    let parsed;
+    try { parsed = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+    if (!parsed || typeof parsed !== "object") return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+    const { name, role, text } = parsed;
+    const body = String(text ?? "");
+    if (!body || body.trim().length < 50) {
+      return NextResponse.json({ error: "Nothing to publish yet." }, { status: 400 });
+    }
+    if (body.length > 12000) {
+      return NextResponse.json({ error: "That's too long to publish." }, { status: 400 });
+    }
+    if (looksLikeSpam(body)) {
+      return NextResponse.json({ error: "This content can't be published." }, { status: 400 });
+    }
+    // 10 random chars (was 5) — makes published URLs practically non-enumerable.
+    const rand = crypto.randomBytes(8).toString("base64url").slice(0, 10).toLowerCase();
+    const slug = makeSlug(String(name || "resume"), rand);
+    await savePublicResume(slug, {
+      name: String(name || "").slice(0, 100),
+      role: String(role || "").slice(0, 120),
+      text: body.slice(0, 12000),
+      created: Date.now(),
+    });
+    // Return an unpublish token so the creator (and only the creator) can remove it later.
+    return NextResponse.json({ slug, url: `/r/${slug}`, unpublishToken: unpublishToken(slug) });
+  } catch (err) {
+    console.error("Publish error:", err);
+    return NextResponse.json({ error: "Could not publish. Please try again." }, { status: 500 });
+  }
+}
+
+/** Unpublish a resume: requires the signed token returned at publish time. */
+export async function DELETE(req: NextRequest) {
+  try {
+    if (!publicResumeConfigured()) {
+      return NextResponse.json({ error: "Not available." }, { status: 503 });
+    }
+    const slug = req.nextUrl.searchParams.get("slug") || "";
+    const token = req.nextUrl.searchParams.get("token") || "";
+    if (!slug || !token) {
+      return NextResponse.json({ error: "Missing slug or token." }, { status: 400 });
+    }
+    const expected = unpublishToken(slug);
+    // Constant-time compare to avoid leaking the token via timing.
+    const ok = token.length === expected.length &&
+      crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
+    if (!ok) {
+      return NextResponse.json({ error: "Invalid unpublish token." }, { status: 403 });
+    }
+    await deletePublicResume(slug);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Unpublish error:", err);
+    return NextResponse.json({ error: "Could not unpublish." }, { status: 500 });
+  }
+}

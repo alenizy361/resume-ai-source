@@ -1,1 +1,18 @@
-{"data":"aW1wb3J0IHsgZGVmaW5lQ29uZmlnLCBnbG9iYWxJZ25vcmVzIH0gZnJvbSAiZXNsaW50L2NvbmZpZyI7CmltcG9ydCBuZXh0Vml0YWxzIGZyb20gImVzbGludC1jb25maWctbmV4dC9jb3JlLXdlYi12aXRhbHMiOwppbXBvcnQgbmV4dFRzIGZyb20gImVzbGludC1jb25maWctbmV4dC90eXBlc2NyaXB0IjsKCmNvbnN0IGVzbGludENvbmZpZyA9IGRlZmluZUNvbmZpZyhbCiAgLi4ubmV4dFZpdGFscywKICAuLi5uZXh0VHMsCiAgLy8gT3ZlcnJpZGUgZGVmYXVsdCBpZ25vcmVzIG9mIGVzbGludC1jb25maWctbmV4dC4KICBnbG9iYWxJZ25vcmVzKFsKICAgIC8vIERlZmF1bHQgaWdub3JlcyBvZiBlc2xpbnQtY29uZmlnLW5leHQ6CiAgICAiLm5leHQvKioiLAogICAgIm91dC8qKiIsCiAgICAiYnVpbGQvKioiLAogICAgIm5leHQtZW52LmQudHMiLAogIF0pLApdKTsKCmV4cG9ydCBkZWZhdWx0IGVzbGludENvbmZpZzsK"}
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;

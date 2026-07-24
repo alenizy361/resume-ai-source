@@ -1,1 +1,25 @@
-{"data":"aW1wb3J0IHR5cGUgeyBUZW1wbGF0ZVZhcmlhbnQgfSBmcm9tICIuLi9jb21wb25lbnRzL1Jlc3VtZVRlbXBsYXRlIjsKCi8vIFNpbmdsZSBzb3VyY2UgZm9yIHRoZSBkZXNpZ25lZC1yZXN1bWUgdGVtcGxhdGUgY2F0YWxvZ3VlIOKAlCB1c2VkIGJ5IHRoZQovLyAvdGVtcGxhdGVzIGdhbGxlcnkgQU5EIHRoZSBwaWNrZXIgb24gdGhlIG9wdGltaXplIHJlc3VsdCwgc28gdGhleSBuZXZlciBkcmlmdC4KZXhwb3J0IGludGVyZmFjZSBUZW1wbGF0ZURlZiB7CiAgc2x1Zzogc3RyaW5nOwogIG5hbWU6IHN0cmluZzsKICBuYW1lQXI6IHN0cmluZzsKICB2YXJpYW50OiBUZW1wbGF0ZVZhcmlhbnQ7CiAgYWNjZW50OiBzdHJpbmc7CiAgYmVzdD86IGJvb2xlYW47Cn0KCmV4cG9ydCBjb25zdCBURU1QTEFURV9DQVRBTE9HOiBUZW1wbGF0ZURlZltdID0gWwogIHsgc2x1ZzogImF0cy1wcm8iLCBuYW1lOiAiQVRTIFBybyIsIG5hbWVBcjogItil2YrZhyDYqtmKINil2LMg2KjYsdmIIiwgdmFyaWFudDogImNvbHVtbiIsIGFjY2VudDogIiMwZjc2NmUiLCBiZXN0OiB0cnVlIH0sCiAgeyBzbHVnOiAib255eCIsIG5hbWU6ICJPbnl4IiwgbmFtZUFyOiAi2KPZiNmG2YrZg9izIiwgdmFyaWFudDogImNsYXNzaWMiLCBhY2NlbnQ6ICIjMGY3NjZlIiB9LAogIHsgc2x1ZzogInJpeWFkaCIsIG5hbWU6ICJSaXlhZGgiLCBuYW1lQXI6ICLYp9mE2LHZitin2LYiLCB2YXJpYW50OiAiY2xhc3NpYyIsIGFjY2VudDogIiNiNDUzMDkiIH0sCiAgeyBzbHVnOiAiYXp1cmUiLCBuYW1lOiAiQXp1cmUiLCBuYW1lQXI6ICLYo9iy2YjYsSIsIHZhcmlhbnQ6ICJtb2Rlcm4iLCBhY2NlbnQ6ICIjMWQ0ZWQ4IiB9LAogIHsgc2x1ZzogImV4ZWN1dGl2ZSIsIG5hbWU6ICJFeGVjdXRpdmUiLCBuYW1lQXI6ICLYqtmG2YHZitiw2YoiLCB2YXJpYW50OiAiZWxlZ2FudCIsIGFjY2VudDogIiMxMTE4MjciIH0sCiAgeyBzbHVnOiAibWluaW1hbCIsIG5hbWU6ICJNaW5pbWFsaXN0IiwgbmFtZUFyOiAi2KjYs9mK2LciLCB2YXJpYW50OiAibWluaW1hbCIsIGFjY2VudDogIiMwZjc2NmUiIH0sCiAgeyBzbHVnOiAiZW1lcmFsZCIsIG5hbWU6ICJFbWVyYWxkIiwgbmFtZUFyOiAi2LLZhdix2ZHYryIsIHZhcmlhbnQ6ICJjbGFzc2ljIiwgYWNjZW50OiAiIzA0Nzg1NyIgfSwKICB7IHNsdWc6ICJjcmltc29uIiwgbmFtZTogIkNyaW1zb24iLCBuYW1lQXI6ICLZgtix2YXYstmKIiwgdmFyaWFudDogIm1vZGVybiIsIGFjY2VudDogIiNiOTFjMWMiIH0sCiAgeyBzbHVnOiAic2xhdGUiLCBuYW1lOiAiU2xhdGUiLCBuYW1lQXI6ICLYs9mE2YrYqiIsIHZhcmlhbnQ6ICJtaW5pbWFsIiwgYWNjZW50OiAiIzMzNDE1NSIgfSwKICB7IHNsdWc6ICJyb3lhbCIsIG5hbWU6ICJSb3lhbCIsIG5hbWVBcjogItmF2YTZg9mKIiwgdmFyaWFudDogImVsZWdhbnQiLCBhY2NlbnQ6ICIjNmQyOGQ5IiB9LApdOwo="}
+import type { TemplateVariant } from "../components/ResumeTemplate";
+
+// Single source for the designed-resume template catalogue — used by the
+// /templates gallery AND the picker on the optimize result, so they never drift.
+export interface TemplateDef {
+  slug: string;
+  name: string;
+  nameAr: string;
+  variant: TemplateVariant;
+  accent: string;
+  best?: boolean;
+}
+
+export const TEMPLATE_CATALOG: TemplateDef[] = [
+  { slug: "ats-pro", name: "ATS Pro", nameAr: "إيه تي إس برو", variant: "column", accent: "#0f766e", best: true },
+  { slug: "onyx", name: "Onyx", nameAr: "أونيكس", variant: "classic", accent: "#0f766e" },
+  { slug: "riyadh", name: "Riyadh", nameAr: "الرياض", variant: "classic", accent: "#b45309" },
+  { slug: "azure", name: "Azure", nameAr: "أزور", variant: "modern", accent: "#1d4ed8" },
+  { slug: "executive", name: "Executive", nameAr: "تنفيذي", variant: "elegant", accent: "#111827" },
+  { slug: "minimal", name: "Minimalist", nameAr: "بسيط", variant: "minimal", accent: "#0f766e" },
+  { slug: "emerald", name: "Emerald", nameAr: "زمرّد", variant: "classic", accent: "#047857" },
+  { slug: "crimson", name: "Crimson", nameAr: "قرمزي", variant: "modern", accent: "#b91c1c" },
+  { slug: "slate", name: "Slate", nameAr: "سليت", variant: "minimal", accent: "#334155" },
+  { slug: "royal", name: "Royal", nameAr: "ملكي", variant: "elegant", accent: "#6d28d9" },
+];

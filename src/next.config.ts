@@ -1,1 +1,18 @@
-{"data":"aW1wb3J0IHR5cGUgeyBOZXh0Q29uZmlnIH0gZnJvbSAibmV4dCI7Cgpjb25zdCBzZWN1cml0eUhlYWRlcnMgPSBbCiAgLy8gQ2xpY2tqYWNraW5nIHByb3RlY3Rpb24g4oCUIG5vdGhpbmcgb24gdGhpcyBzaXRlIG5lZWRzIHRvIGJlIGZyYW1lZC4KICB7IGtleTogIlgtRnJhbWUtT3B0aW9ucyIsIHZhbHVlOiAiREVOWSIgfSwKICB7IGtleTogIkNvbnRlbnQtU2VjdXJpdHktUG9saWN5IiwgdmFsdWU6ICJmcmFtZS1hbmNlc3RvcnMgJ25vbmUnIiB9LAogIHsga2V5OiAiWC1Db250ZW50LVR5cGUtT3B0aW9ucyIsIHZhbHVlOiAibm9zbmlmZiIgfSwKICB7IGtleTogIlJlZmVycmVyLVBvbGljeSIsIHZhbHVlOiAic3RyaWN0LW9yaWdpbi13aGVuLWNyb3NzLW9yaWdpbiIgfSwKICB7IGtleTogIlBlcm1pc3Npb25zLVBvbGljeSIsIHZhbHVlOiAiY2FtZXJhPSgpLCBtaWNyb3Bob25lPShzZWxmKSwgZ2VvbG9jYXRpb249KCkiIH0sCl07Cgpjb25zdCBuZXh0Q29uZmlnOiBOZXh0Q29uZmlnID0gewogIGFzeW5jIGhlYWRlcnMoKSB7CiAgICByZXR1cm4gW3sgc291cmNlOiAiLyguKikiLCBoZWFkZXJzOiBzZWN1cml0eUhlYWRlcnMgfV07CiAgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IG5leHRDb25maWc7Cg=="}
+import type { NextConfig } from "next";
+
+const securityHeaders = [
+  // Clickjacking protection — nothing on this site needs to be framed.
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=()" },
+];
+
+const nextConfig: NextConfig = {
+  async headers() {
+    return [{ source: "/(.*)", headers: securityHeaders }];
+  },
+};
+
+export default nextConfig;

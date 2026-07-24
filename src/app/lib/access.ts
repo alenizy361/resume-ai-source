@@ -1,1 +1,93 @@
-{"data":"aW1wb3J0IGNyeXB0byBmcm9tICJjcnlwdG8iOwoKLyoqCiAqIExpZ2h0d2VpZ2h0IHNpZ25lZCBhY2Nlc3MgcGFzc2VzIOKAlCBubyBkYXRhYmFzZSByZXF1aXJlZC4KICogQSBwYXNzIGlzIGBiYXNlNjQocGF5bG9hZCkuc2lnbmF0dXJlYCwgc2lnbmVkIHdpdGggQUNDRVNTX1NFQ1JFVCAoSE1BQy1TSEEyNTYpLgogKiBQYXltZW50IGdyYW50cyBhIHBhc3M7IHRoZSBvcHRpbWl6ZXIgY2hlY2tzIGl0LiBUYW1wZXItcmVzaXN0YW50IChjYW4ndCBmb3JnZQogKiB3aXRob3V0IHRoZSBzZWNyZXQpLCB0aG91Z2ggY2xlYXJpbmcgY29va2llcyByZXNldHMgdGhlIGZyZWUtc2NhbiBjb3VudGVyIOKAlAogKiBhY2NlcHRhYmxlIGZvciBhbiBNVlAsIHRpZ2h0ZW4gd2l0aCByZWFsIGFjY291bnRzIGxhdGVyLgogKi8KCmNvbnN0IFNFQ1JFVCA9IHByb2Nlc3MuZW52LkFDQ0VTU19TRUNSRVQgfHwgImRldi1pbnNlY3VyZS1zZWNyZXQtY2hhbmdlLW1lIjsKCi8vIEluIHByb2R1Y3Rpb24gdGhlIHNlY3JldCBNVVNUIGJlIHNldCDigJQgdGhlIGZhbGxiYWNrIGlzIHB1YmxpY2x5IGtub3duIGFuZAovLyB3b3VsZCBsZXQgYW55b25lIGZvcmdlIGFjY2VzcyBwYXNzZXMgLyBzZXNzaW9ucy4gQ2hlY2tlZCBhdCByZXF1ZXN0IHRpbWUKLy8gKG5vdCBtb2R1bGUgbG9hZCkgc28gYG5leHQgYnVpbGRgIGRvZXNuJ3QgZmFpbCBiZWZvcmUgZW52IHZhcnMgYXJlIGluamVjdGVkLgpmdW5jdGlvbiBhc3NlcnRTZWNyZXQoKSB7CiAgaWYgKHByb2Nlc3MuZW52Lk5PREVfRU5WID09PSAicHJvZHVjdGlvbiIgJiYgIXByb2Nlc3MuZW52LkFDQ0VTU19TRUNSRVQpIHsKICAgIHRocm93IG5ldyBFcnJvcigiQUNDRVNTX1NFQ1JFVCBtdXN0IGJlIHNldCBpbiBwcm9kdWN0aW9uIik7CiAgfQp9CgpleHBvcnQgY29uc3QgQUNDRVNTX0NPT0tJRSA9ICJyYV9hY2Nlc3MiOwovLyBTaWduZWQsIGh0dHBPbmx5IGZhbGxiYWNrIHJlY29yZCBvZiBhbiBBQ0NPVU5UIGVudGl0bGVtZW50IChlbWFpbCArIGV4cGlyeSksCi8vIHdyaXR0ZW4gb24gcHVyY2hhc2UgYWxvbmdzaWRlIHRoZSBzZXJ2ZXIgc3RvcmUuIElmIHRoZSBzdG9yZSB3cml0ZSBtaXNzZXMKLy8gKG5vdCBjb25maWd1cmVkLCBvciB0aGUgQVBJIGNhbGwgZmFpbHMpIGEgcGFpZCwgc2lnbmVkLWluIGJ1eWVyIHN0aWxsIGtlZXBzCi8vIHVubGltaXRlZCBhY2Nlc3Mgb24gdGhpcyBicm93c2VyIGJlY2F1c2UgdGhlIGVudGl0bGVtZW50IGNoZWNrIHJlYWRzIHRoaXMKLy8gY29va2llIGFzIGEgZmFsbGJhY2suIE1pcnJvcnMgdGhlIHBhaWQtcGFzcyBwYXR0ZXJuIGJlbG93LgpleHBvcnQgY29uc3QgRU5UX0NPT0tJRSA9ICJyYV9lbnQiOwoKY29uc3QgV0lORE9XX01TOiBSZWNvcmQ8c3RyaW5nLCBudW1iZXI+ID0gewogIHNpbmdsZTogMjQgKiA2MCAqIDYwICogMTAwMCwgLy8gZGF5IHBhc3MKICBjb21wbGV0ZTogOTAgKiAyNCAqIDYwICogNjAgKiAxMDAwLCAvLyBvbmUtdGltZSBjb21wbGV0ZSBwYWNrIOKAlCA5MCBkYXlzIGZ1bGwgYWNjZXNzCiAgbW9udGhseTogMzAgKiAyNCAqIDYwICogNjAgKiAxMDAwLCAvLyBsZWdhY3kgMzAtZGF5IHBsYW4gKGJhY2t3YXJkLWNvbXBhdCkKfTsKCmV4cG9ydCBpbnRlcmZhY2UgUGFzcyB7CiAgcGxhbjogc3RyaW5nOwogIGV4cDogbnVtYmVyOyAvLyBlcG9jaCBtcwp9CgpmdW5jdGlvbiBzaWduKGRhdGE6IHN0cmluZyk6IHN0cmluZyB7CiAgYXNzZXJ0U2VjcmV0KCk7CiAgcmV0dXJuIGNyeXB0by5jcmVhdGVIbWFjKCJzaGEyNTYiLCBTRUNSRVQpLnVwZGF0ZShkYXRhKS5kaWdlc3QoImJhc2U2NHVybCIpOwp9CgpleHBvcnQgZnVuY3Rpb24gZ3JhbnRQYXNzKHBsYW46IHN0cmluZywgbm93OiBudW1iZXIpOiBzdHJpbmcgewogIGNvbnN0IHdpbmRvdyA9IFdJTkRPV19NU1twbGFuXSA/PyBXSU5ET1dfTVMuc2luZ2xlOwogIGNvbnN0IHBheWxvYWQ6IFBhc3MgPSB7IHBsYW4sIGV4cDogbm93ICsgd2luZG93IH07CiAgY29uc3QgYm9keSA9IEJ1ZmZlci5mcm9tKEpTT04uc3RyaW5naWZ5KHBheWxvYWQpKS50b1N0cmluZygiYmFzZTY0dXJsIik7CiAgcmV0dXJuIGAke2JvZHl9LiR7c2lnbihib2R5KX1gOwp9CgpleHBvcnQgZnVuY3Rpb24gdmVyaWZ5UGFzcyh0b2tlbjogc3RyaW5nIHwgdW5kZWZpbmVkLCBub3c6IG51bWJlcik6IFBhc3MgfCBudWxsIHsKICBpZiAoIXRva2VuIHx8ICF0b2tlbi5pbmNsdWRlcygiLiIpKSByZXR1cm4gbnVsbDsKICBjb25zdCBbYm9keSwgc2lnXSA9IHRva2VuLnNwbGl0KCIuIik7CiAgaWYgKHNpZ24oYm9keSkgIT09IHNpZykgcmV0dXJuIG51bGw7IC8vIGJhZCBzaWduYXR1cmUKICB0cnkgewogICAgY29uc3QgcGF5bG9hZCA9IEpTT04ucGFyc2UoQnVmZmVyLmZyb20oYm9keSwgImJhc2U2NHVybCIpLnRvU3RyaW5nKCJ1dGYtOCIpKSBhcyBQYXNzOwogICAgaWYgKHR5cGVvZiBwYXlsb2FkLmV4cCAhPT0gIm51bWJlciIgfHwgcGF5bG9hZC5leHAgPCBub3cpIHJldHVybiBudWxsOyAvLyBleHBpcmVkCiAgICByZXR1cm4gcGF5bG9hZDsKICB9IGNhdGNoIHsKICAgIHJldHVybiBudWxsOwogIH0KfQoKZXhwb3J0IGludGVyZmFjZSBFbnRQYXNzIHsKICBlbWFpbDogc3RyaW5nOwogIGV4cDogbnVtYmVyOyAvLyBlcG9jaCBtcwp9CgovKiogU2lnbmVkIGNvb2tpZSB2YWx1ZSByZWNvcmRpbmcgYW4gYWNjb3VudCBlbnRpdGxlbWVudCDigJQgZmFsbGJhY2sgZm9yIHdoZW4gdGhlCiAqIHNlcnZlci1zaWRlIGVudGl0bGVtZW50IHN0b3JlIChFZGdlIENvbmZpZyAvIFVwc3Rhc2gpIGNhbid0IGJlIHJlYWQvd3JpdHRlbi4gKi8KZXhwb3J0IGZ1bmN0aW9uIGdyYW50RW50UGFzcyhlbWFpbDogc3RyaW5nLCBleHA6IG51bWJlcik6IHN0cmluZyB7CiAgY29uc3QgcGF5bG9hZDogRW50UGFzcyA9IHsgZW1haWw6IGVtYWlsLnRvTG93ZXJDYXNlKCkudHJpbSgpLCBleHAgfTsKICBjb25zdCBib2R5ID0gQnVmZmVyLmZyb20oSlNPTi5zdHJpbmdpZnkocGF5bG9hZCkpLnRvU3RyaW5nKCJiYXNlNjR1cmwiKTsKICByZXR1cm4gYCR7Ym9keX0uJHtzaWduKGJvZHkpfWA7Cn0KCi8qKiBSZXR1cm5zIHRoZSBlbnRpdGxlbWVudCAoZW1haWwgKyBleHBpcnkpIGlmIHRoZSBjb29raWUgaXMgdmFsaWRseSBzaWduZWQgYW5kCiAqIHVuZXhwaXJlZCwgZWxzZSBudWxsLiBDYWxsZXJzIG11c3Qgc3RpbGwgY29uZmlybSB0aGUgZW1haWwgbWF0Y2hlcyB0aGUgY2FsbGVyLiAqLwpleHBvcnQgZnVuY3Rpb24gdmVyaWZ5RW50UGFzcyh0b2tlbjogc3RyaW5nIHwgdW5kZWZpbmVkLCBub3c6IG51bWJlcik6IEVudFBhc3MgfCBudWxsIHsKICBpZiAoIXRva2VuIHx8ICF0b2tlbi5pbmNsdWRlcygiLiIpKSByZXR1cm4gbnVsbDsKICBjb25zdCBbYm9keSwgc2lnXSA9IHRva2VuLnNwbGl0KCIuIik7CiAgaWYgKHNpZ24oYm9keSkgIT09IHNpZykgcmV0dXJuIG51bGw7IC8vIGJhZCBzaWduYXR1cmUKICB0cnkgewogICAgY29uc3QgcGF5bG9hZCA9IEpTT04ucGFyc2UoQnVmZmVyLmZyb20oYm9keSwgImJhc2U2NHVybCIpLnRvU3RyaW5nKCJ1dGYtOCIpKSBhcyBFbnRQYXNzOwogICAgaWYgKHR5cGVvZiBwYXlsb2FkLmV4cCAhPT0gIm51bWJlciIgfHwgcGF5bG9hZC5leHAgPCBub3cpIHJldHVybiBudWxsOyAvLyBleHBpcmVkCiAgICBpZiAodHlwZW9mIHBheWxvYWQuZW1haWwgIT09ICJzdHJpbmciIHx8ICFwYXlsb2FkLmVtYWlsKSByZXR1cm4gbnVsbDsKICAgIHJldHVybiBwYXlsb2FkOwogIH0gY2F0Y2ggewogICAgcmV0dXJuIG51bGw7CiAgfQp9Cg=="}
+import crypto from "crypto";
+
+/**
+ * Lightweight signed access passes — no database required.
+ * A pass is `base64(payload).signature`, signed with ACCESS_SECRET (HMAC-SHA256).
+ * Payment grants a pass; the optimizer checks it. Tamper-resistant (can't forge
+ * without the secret), though clearing cookies resets the free-scan counter —
+ * acceptable for an MVP, tighten with real accounts later.
+ */
+
+const SECRET = process.env.ACCESS_SECRET || "dev-insecure-secret-change-me";
+
+// In production the secret MUST be set — the fallback is publicly known and
+// would let anyone forge access passes / sessions. Checked at request time
+// (not module load) so `next build` doesn't fail before env vars are injected.
+function assertSecret() {
+  if (process.env.NODE_ENV === "production" && !process.env.ACCESS_SECRET) {
+    throw new Error("ACCESS_SECRET must be set in production");
+  }
+}
+
+export const ACCESS_COOKIE = "ra_access";
+// Signed, httpOnly fallback record of an ACCOUNT entitlement (email + expiry),
+// written on purchase alongside the server store. If the store write misses
+// (not configured, or the API call fails) a paid, signed-in buyer still keeps
+// unlimited access on this browser because the entitlement check reads this
+// cookie as a fallback. Mirrors the paid-pass pattern below.
+export const ENT_COOKIE = "ra_ent";
+
+const WINDOW_MS: Record<string, number> = {
+  single: 24 * 60 * 60 * 1000, // day pass
+  complete: 90 * 24 * 60 * 60 * 1000, // one-time complete pack — 90 days full access
+  monthly: 30 * 24 * 60 * 60 * 1000, // legacy 30-day plan (backward-compat)
+};
+
+export interface Pass {
+  plan: string;
+  exp: number; // epoch ms
+}
+
+function sign(data: string): string {
+  assertSecret();
+  return crypto.createHmac("sha256", SECRET).update(data).digest("base64url");
+}
+
+export function grantPass(plan: string, now: number): string {
+  const window = WINDOW_MS[plan] ?? WINDOW_MS.single;
+  const payload: Pass = { plan, exp: now + window };
+  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  return `${body}.${sign(body)}`;
+}
+
+export function verifyPass(token: string | undefined, now: number): Pass | null {
+  if (!token || !token.includes(".")) return null;
+  const [body, sig] = token.split(".");
+  if (sign(body) !== sig) return null; // bad signature
+  try {
+    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf-8")) as Pass;
+    if (typeof payload.exp !== "number" || payload.exp < now) return null; // expired
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+export interface EntPass {
+  email: string;
+  exp: number; // epoch ms
+}
+
+/** Signed cookie value recording an account entitlement — fallback for when the
+ * server-side entitlement store (Edge Config / Upstash) can't be read/written. */
+export function grantEntPass(email: string, exp: number): string {
+  const payload: EntPass = { email: email.toLowerCase().trim(), exp };
+  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  return `${body}.${sign(body)}`;
+}
+
+/** Returns the entitlement (email + expiry) if the cookie is validly signed and
+ * unexpired, else null. Callers must still confirm the email matches the caller. */
+export function verifyEntPass(token: string | undefined, now: number): EntPass | null {
+  if (!token || !token.includes(".")) return null;
+  const [body, sig] = token.split(".");
+  if (sign(body) !== sig) return null; // bad signature
+  try {
+    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf-8")) as EntPass;
+    if (typeof payload.exp !== "number" || payload.exp < now) return null; // expired
+    if (typeof payload.email !== "string" || !payload.email) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}

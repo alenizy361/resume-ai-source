@@ -1,1 +1,13 @@
-{"data":"aW1wb3J0IGNyeXB0byBmcm9tICJjcnlwdG8iOwoKLy8gQmluZHMgYSBjaGVja291dCB0byB0aGUgYnJvd3NlciB0aGF0IHN0YXJ0ZWQgaXQuIC9hcGkvcGF5IHNldHMgYSBzaWduZWQKLy8gY29va2llIHdpdGggdGhlIHRyYW5zYWN0aW9uTm87IC9hcGkvcGF5L3ZlcmlmeSBvbmx5IGF1dG8tc2lnbnMtaW4gYW5kIHdyaXRlcwovLyB0aGUgYWNjb3VudCBlbnRpdGxlbWVudCB3aGVuIHRoYXQgY29va2llIG1hdGNoZXMg4oCUIHNvIGEgbGVha2VkIG9yIGd1ZXNzZWQKLy8gdHJhbnNhY3Rpb25ObyBjYW4ndCBiZSByZXBsYXllZCB0byBzaWduIGluIGFzIHRoZSBidXllci4KCmNvbnN0IFNFQ1JFVCA9IHByb2Nlc3MuZW52LkFDQ0VTU19TRUNSRVQgfHwgImRldi1pbnNlY3VyZS1zZWNyZXQtY2hhbmdlLW1lIjsKZXhwb3J0IGNvbnN0IFBBWV9CSU5EX0NPT0tJRSA9ICJyYV9wYXkiOwoKZXhwb3J0IGZ1bmN0aW9uIHNpZ25UeCh0eDogc3RyaW5nKTogc3RyaW5nIHsKICByZXR1cm4gY3J5cHRvLmNyZWF0ZUhtYWMoInNoYTI1NiIsIFNFQ1JFVCkudXBkYXRlKCJwYXk6IiArIHR4KS5kaWdlc3QoImJhc2U2NHVybCIpOwp9Cg=="}
+import crypto from "crypto";
+
+// Binds a checkout to the browser that started it. /api/pay sets a signed
+// cookie with the transactionNo; /api/pay/verify only auto-signs-in and writes
+// the account entitlement when that cookie matches — so a leaked or guessed
+// transactionNo can't be replayed to sign in as the buyer.
+
+const SECRET = process.env.ACCESS_SECRET || "dev-insecure-secret-change-me";
+export const PAY_BIND_COOKIE = "ra_pay";
+
+export function signTx(tx: string): string {
+  return crypto.createHmac("sha256", SECRET).update("pay:" + tx).digest("base64url");
+}

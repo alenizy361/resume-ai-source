@@ -1,1 +1,64 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgSk9CUywgQ0FURUdPUklFUyB9IGZyb20gIi4uL2xpYi9qb2JzIjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICJSZXN1bWUgRXhhbXBsZXMgJiBBVFMgS2V5d29yZHMgYnkgSm9iIFRpdGxlICgyMDI2KSDigJQgRnJlZSIsCiAgZGVzY3JpcHRpb246ICJGcmVlIHJlc3VtZSBleGFtcGxlcyBmb3IgNTArIGpvYiB0aXRsZXMsIGVhY2ggd2l0aCB0aGUgZXhhY3QgQVRTIGtleXdvcmRzLCBza2lsbHMsIGFuZCBidWxsZXQgZXhhbXBsZXMgcmVjcnVpdGVycyBzY2FuIGZvci4gQnVpbGQgb3Igb3B0aW1pemUgeW91cnMgaW4gNjAgc2Vjb25kcy4iLAogIGtleXdvcmRzOiAicmVzdW1lIGV4YW1wbGVzLCByZXN1bWUgZXhhbXBsZSBieSBqb2IsIEFUUyByZXN1bWUgZXhhbXBsZXMsIHJlc3VtZSBzYW1wbGVzLCBjdiBleGFtcGxlcyIsCiAgYWx0ZXJuYXRlczogeyBjYW5vbmljYWw6IGAke0JBU0V9L3Jlc3VtZS1leGFtcGxlc2AgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEh1YigpIHsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNXhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICAgIDxPcmJCcmFuZCBzaXplPXsyNn0gLz4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LVsxNXB4XSBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPlNpcmE8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPSIvb3B0aW1pemUiIGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC00IHB5LTIgdGV4dC1zbSI+U2NhbiBteSByZXN1bWU8L0xpbms+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvbmF2PgoKICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPSJyZWxhdGl2ZSBvdmVyZmxvdy1oaWRkZW4gcHgtNiBweS0xNiB0ZXh0LWNlbnRlciI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Imhlcm8tYW1iaWVudCI+PGRpdiBjbGFzc05hbWU9ImdyaWQtbGluZXMiIC8+PC9kaXY+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIHotMTAgbXgtYXV0byBtYXgtdy0zeGwiPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNoaXAgbWItNCI+RnJlZSDCtyBBVFMtb3B0aW1pemVkPC9kaXY+CiAgICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCB0cmFja2luZy10aWdodCBtZDp0ZXh0LTV4bCI+UmVzdW1lIGV4YW1wbGVzICZhbXA7IEFUUyBrZXl3b3JkcyBieSBqb2I8L2gxPgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJteC1hdXRvIG10LTQgbWF4LXctMnhsIHRleHQtbGciIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgICAgUGljayB5b3VyIHJvbGUgZm9yIGEgY29tcGxldGUgcmVzdW1lIGV4YW1wbGUgcGx1cyB0aGUgZXhhY3Qga2V5d29yZHMgYXBwbGljYW50IHRyYWNraW5nIHN5c3RlbXMgc2NhbiBmb3Ig4oCUIHRoZW4gYnVpbGQgb3IgY2hlY2sgeW91cnMgZnJlZS4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgPC9zZWN0aW9uPgoKICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gbWF4LXctNHhsIHB4LTYgcGItMTYiPgogICAgICAgIHtDQVRFR09SSUVTLm1hcCgoY2F0KSA9PiAoCiAgICAgICAgICA8ZGl2IGtleT17Y2F0fSBjbGFzc05hbWU9Im1iLTEwIj4KICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LXhsIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+e2NhdH08L2gyPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtMyBzbTpncmlkLWNvbHMtMiI+CiAgICAgICAgICAgICAge0pPQlMuZmlsdGVyKChqKSA9PiBqLmNhdGVnb3J5ID09PSBjYXQpLm1hcCgoaikgPT4gKAogICAgICAgICAgICAgICAgPExpbmsga2V5PXtqLnNsdWd9IGhyZWY9e2AvcmVzdW1lLWV4YW1wbGVzLyR7ai5zbHVnfWB9IGNsYXNzTmFtZT0iY2FyZCBjYXJkLWhvdmVyIHAtNCI+CiAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmb250LWJvbGQiPntqLnRpdGxlfSBSZXN1bWUgRXhhbXBsZTwvZGl2PgogICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMSB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+QVRTIGtleXdvcmRzIMK3IHNraWxscyDCtyBidWxsZXQgZXhhbXBsZXM8L2Rpdj4KICAgICAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAgICApKX0KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICApKX0KICAgICAgPC9kaXY+CgogICAgICA8Zm9vdGVyIGNsYXNzTmFtZT0icHgtNiBweS0xMCIgc3R5bGU9e3sgYm9yZGVyVG9wOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtY2VudGVyIGZvbnQtbW9ubyB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+wqkgMjAyNiBTaXJhIMK3IGEgcmVzdW1lIHNlcnZpY2UgYnkgUmFiaXQ8L3A+CiAgICAgIDwvZm9vdGVyPgogICAgICAgICAgPEh1YkxpbmtzIGN1cnJlbnQ9Ii9yZXN1bWUtZXhhbXBsZXMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../components/HubLinks";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { JOBS, CATEGORIES } from "../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Resume Examples & ATS Keywords by Job Title (2026) — Free",
+  description: "Free resume examples for 50+ job titles, each with the exact ATS keywords, skills, and bullet examples recruiters scan for. Build or optimize yours in 60 seconds.",
+  keywords: "resume examples, resume example by job, ATS resume examples, resume samples, cv examples",
+  alternates: { canonical: `${BASE}/resume-examples` },
+};
+
+export default function Hub() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
+        </div>
+      </nav>
+
+      <section className="relative overflow-hidden px-6 py-16 text-center">
+        <div className="hero-ambient"><div className="grid-lines" /></div>
+        <div className="relative z-10 mx-auto max-w-3xl">
+          <div className="chip mb-4">Free · ATS-optimized</div>
+          <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Resume examples &amp; ATS keywords by job</h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg" style={{ color: "var(--muted)" }}>
+            Pick your role for a complete resume example plus the exact keywords applicant tracking systems scan for — then build or check yours free.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-4xl px-6 pb-16">
+        {CATEGORIES.map((cat) => (
+          <div key={cat} className="mb-10">
+            <h2 className="mb-4 text-xl font-bold tracking-tight">{cat}</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {JOBS.filter((j) => j.category === cat).map((j) => (
+                <Link key={j.slug} href={`/resume-examples/${j.slug}`} className="card card-hover p-4">
+                  <div className="font-bold">{j.title} Resume Example</div>
+                  <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>ATS keywords · skills · bullet examples</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+          <HubLinks current="/resume-examples" />
+    </main>
+  );
+}

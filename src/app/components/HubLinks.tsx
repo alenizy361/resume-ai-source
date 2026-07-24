@@ -1,1 +1,40 @@
-{"data":"aW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKCi8qKgogKiBDcm9zcy1saW5rcyBldmVyeSByZXNvdXJjZSBodWIgc28gbm8gcGFnZSBzdGFuZHMgYWxvbmUg4oCUIGludGVybmFsIGxpbmtpbmcKICogZm9yIHZpc2l0b3JzIEFORCBmb3Igc2VhcmNoIGNyYXdsZXJzLiBTZXJ2ZXItc2FmZSAobm8gaG9va3MpLgogKi8KY29uc3QgRU46IFtzdHJpbmcsIHN0cmluZ11bXSA9IFsKICBbIlJlc3VtZSBleGFtcGxlcyIsICIvcmVzdW1lLWV4YW1wbGVzIl0sCiAgWyJTa2lsbHMgYnkgam9iIiwgIi9yZXN1bWUtc2tpbGxzIl0sCiAgWyJUZW1wbGF0ZXMiLCAiL3Jlc3VtZS10ZW1wbGF0ZXMiXSwKICBbIlRlbXBsYXRlIGdhbGxlcnkiLCAiL3RlbXBsYXRlcyJdLAogIFsiQ292ZXIgbGV0dGVycyIsICIvY292ZXItbGV0dGVyLWV4YW1wbGVzIl0sCiAgWyJBVFMgY2hlY2tlciIsICIvYXRzLXJlc3VtZS1jaGVja2VyIl0sCiAgWyJGcmVlIGNoZWNrZXIiLCAiL2ZyZWUtcmVzdW1lLWNoZWNrZXIiXSwKICBbIkpvYnNjYW4gYWx0ZXJuYXRpdmUiLCAiL2pvYnNjYW4tYWx0ZXJuYXRpdmUiXSwKICBbIkludGVydmlldyBwcmVwIiwgIi9pbnRlcnZpZXciXSwKICBbIkxpbmtlZEluIG9wdGltaXplciIsICIvbGlua2VkaW4iXSwKICBbIlByaWNpbmciLCAiL3ByaWNpbmciXSwKXTsKY29uc3QgQVI6IFtzdHJpbmcsIHN0cmluZ11bXSA9IFsKICBbItin2YTYsdim2YrYs9mK2KkiLCAiL2FyIl0sCiAgWyLYp9mB2K3YtSDYs9mK2LHYqtmDIiwgIi9hci9vcHRpbWl6ZSJdLAogIFsi2KPZhdir2YTYqSDYp9mE2LPZitixIiwgIi9hci9yZXN1bWUtZXhhbXBsZXMiXSwKICBbItin2YTZgtmI2KfZhNioIiwgIi90ZW1wbGF0ZXMiXSwKICBbItiq2K3YttmK2LEg2KfZhNmF2YLYp9io2YTYqSIsICIvYXIvaW50ZXJ2aWV3Il0sCiAgWyLYp9mE2KPYs9i52KfYsSIsICIvcHJpY2luZyJdLAogIFsi2K3Ys9in2KjZiiIsICIvYXIvYWNjb3VudCJdLApdOwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSHViTGlua3MoeyBjdXJyZW50LCBhciA9IGZhbHNlIH06IHsgY3VycmVudD86IHN0cmluZzsgYXI/OiBib29sZWFuIH0pIHsKICBjb25zdCBsaW5rcyA9IChhciA/IEFSIDogRU4pLmZpbHRlcigoWywgaHJlZl0pID0+IGhyZWYgIT09IGN1cnJlbnQpOwogIHJldHVybiAoCiAgICA8bmF2IGNsYXNzTmFtZT0ibXgtYXV0byBmbGV4IG1heC13LTR4bCBmbGV4LXdyYXAgaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIGdhcC0yIHB4LTYgcGItMTIiIGFyaWEtbGFiZWw9IkV4cGxvcmUgbW9yZSI+CiAgICAgIHtsaW5rcy5tYXAoKFtsYWJlbCwgaHJlZl0pID0+ICgKICAgICAgICA8TGluayBrZXk9e2hyZWZ9IGhyZWY9e2hyZWZ9IGNsYXNzTmFtZT0icm91bmRlZC1mdWxsIHB4LTMuNSBweS0xLjUgdGV4dC14cyBmb250LXNlbWlib2xkIHRyYW5zaXRpb24tY29sb3JzIgogICAgICAgICAgc3R5bGU9e3sgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntsYWJlbH08L0xpbms+CiAgICAgICkpfQogICAgPC9uYXY+CiAgKTsKfQo="}
+import Link from "next/link";
+
+/**
+ * Cross-links every resource hub so no page stands alone — internal linking
+ * for visitors AND for search crawlers. Server-safe (no hooks).
+ */
+const EN: [string, string][] = [
+  ["Resume examples", "/resume-examples"],
+  ["Skills by job", "/resume-skills"],
+  ["Templates", "/resume-templates"],
+  ["Template gallery", "/templates"],
+  ["Cover letters", "/cover-letter-examples"],
+  ["ATS checker", "/ats-resume-checker"],
+  ["Free checker", "/free-resume-checker"],
+  ["Jobscan alternative", "/jobscan-alternative"],
+  ["Interview prep", "/interview"],
+  ["LinkedIn optimizer", "/linkedin"],
+  ["Pricing", "/pricing"],
+];
+const AR: [string, string][] = [
+  ["الرئيسية", "/ar"],
+  ["افحص سيرتك", "/ar/optimize"],
+  ["أمثلة السير", "/ar/resume-examples"],
+  ["القوالب", "/templates"],
+  ["تحضير المقابلة", "/ar/interview"],
+  ["الأسعار", "/pricing"],
+  ["حسابي", "/ar/account"],
+];
+
+export default function HubLinks({ current, ar = false }: { current?: string; ar?: boolean }) {
+  const links = (ar ? AR : EN).filter(([, href]) => href !== current);
+  return (
+    <nav className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-2 px-6 pb-12" aria-label="Explore more">
+      {links.map(([label, href]) => (
+        <Link key={href} href={href} className="rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors"
+          style={{ border: "1px solid var(--line)", color: "var(--muted)" }}>{label}</Link>
+      ))}
+    </nav>
+  );
+}

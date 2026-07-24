@@ -1,1 +1,42 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CmltcG9ydCB7IHNlbmRFbWFpbCwgZW1haWxTaGVsbCB9IGZyb20gIkAvYXBwL2xpYi9lbWFpbCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAyMDsKCmNvbnN0IEFQUF9VUkwgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmZ1bmN0aW9uIGVzY2FwZUh0bWwoczogc3RyaW5nKTogc3RyaW5nIHsKICByZXR1cm4gcy5yZXBsYWNlKC8mL2csICImYW1wOyIpLnJlcGxhY2UoLzwvZywgIiZsdDsiKS5yZXBsYWNlKC8+L2csICImZ3Q7Iik7Cn0KCi8qKgogKiAiU2VuZCBteSByZXN1bHRzIHRvIG15IGVtYWlsIiDigJQgc2VsZi1zZXJ2aWNlIGRlbGl2ZXJ5IG9mIHRoZSB1c2VyJ3Mgb3duCiAqIG9wdGltaXplZCByZXN1bWUsIHdoaWNoIGRvdWJsZXMgYXMgb3B0LWluIGVtYWlsIGNhcHR1cmUuIFJhdGUtbGltaXRlZCBhbmQKICogc2l6ZS1jYXBwZWQgc28gaXQgY2FuJ3QgYmUgdXNlZCBhcyBhbiBvcGVuIHJlbGF5LgogKi8KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIFBPU1QocmVxOiBOZXh0UmVxdWVzdCkgewogIGlmICghKGF3YWl0IGFsbG93U2hhcmVkKGBlbWFpbHJlczoke2NsaWVudElwKHJlcSl9YCwgOCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJUb28gbWFueSByZXF1ZXN0cy4gUGxlYXNlIHdhaXQgYSBtaW51dGUuIiB9LCB7IHN0YXR1czogNDI5IH0pOwogIH0KICBsZXQgYm9keTogeyBlbWFpbD86IHN0cmluZzsgcmVzdW1lPzogc3RyaW5nOyBzY29yZT86IG51bWJlciB9OwogIHRyeSB7IGJvZHkgPSBhd2FpdCByZXEuanNvbigpOyB9IGNhdGNoIHsgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJJbnZhbGlkIEpTT04iIH0sIHsgc3RhdHVzOiA0MDAgfSk7IH0KICBjb25zdCBlbWFpbCA9IFN0cmluZyhib2R5Py5lbWFpbCB8fCAiIikudHJpbSgpLnRvTG93ZXJDYXNlKCk7CiAgY29uc3QgcmVzdW1lID0gU3RyaW5nKGJvZHk/LnJlc3VtZSB8fCAiIikuc2xpY2UoMCwgMTIwMDApOwogIGNvbnN0IHNjb3JlID0gTnVtYmVyKGJvZHk/LnNjb3JlKTsKICBpZiAoIS9eW15AXHNdK0BbXkBcc10rXC5bXkBcc10rJC8udGVzdChlbWFpbCkpIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiRW50ZXIgYSB2YWxpZCBlbWFpbC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgaWYgKHJlc3VtZS50cmltKCkubGVuZ3RoIDwgNDApIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiTm90aGluZyB0byBzZW5kIHlldC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CgogIGNvbnN0IHNjb3JlTGluZSA9IE51bWJlci5pc0Zpbml0ZShzY29yZSkgPyBgPHA+WW91ciBqb2ItbWF0Y2ggc2NvcmU6IDxzdHJvbmc+JHtNYXRoLnJvdW5kKHNjb3JlKX0lPC9zdHJvbmc+PC9wPmAgOiAiIjsKICBjb25zdCBvayA9IGF3YWl0IHNlbmRFbWFpbCh7CiAgICB0bzogZW1haWwsCiAgICBzdWJqZWN0OiAiWW91ciBvcHRpbWl6ZWQgcmVzdW1lIOKAlCBTaXJhIiwKICAgIGh0bWw6IGVtYWlsU2hlbGwoYAogICAgICA8aDIgc3R5bGU9Im1hcmdpbjowIDAgOHB4Ij5IZXJlJ3MgeW91ciBvcHRpbWl6ZWQgcmVzdW1lPC9oMj4KICAgICAgJHtzY29yZUxpbmV9CiAgICAgIDxwcmUgc3R5bGU9IndoaXRlLXNwYWNlOnByZS13cmFwO2ZvbnQtZmFtaWx5OmluaGVyaXQ7YmFja2dyb3VuZDojZjdmN2Y3O2JvcmRlcjoxcHggc29saWQgI2VlZTtib3JkZXItcmFkaXVzOjhweDtwYWRkaW5nOjE2cHg7Zm9udC1zaXplOjEzcHgiPiR7ZXNjYXBlSHRtbChyZXN1bWUpfTwvcHJlPgogICAgICA8cD48YSBocmVmPSIke0FQUF9VUkx9L29wdGltaXplIiBzdHlsZT0iY29sb3I6IzBmNzY2ZTtmb250LXdlaWdodDpib2xkIj5SZWZpbmUgaXQgYWdhaW4g4oaSPC9hPjwvcD5gKSwKICB9KTsKICBpZiAoIW9rKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkVtYWlsIGlzbid0IGF2YWlsYWJsZSByaWdodCBub3cuIiB9LCB7IHN0YXR1czogNTAzIH0pOwogIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiB0cnVlIH0pOwp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { sendEmail, emailShell } from "@/app/lib/email";
+
+export const maxDuration = 20;
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * "Send my results to my email" — self-service delivery of the user's own
+ * optimized resume, which doubles as opt-in email capture. Rate-limited and
+ * size-capped so it can't be used as an open relay.
+ */
+export async function POST(req: NextRequest) {
+  if (!(await allowShared(`emailres:${clientIp(req)}`, 8, 10 * 60 * 1000))) {
+    return NextResponse.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
+  }
+  let body: { email?: string; resume?: string; score?: number };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const email = String(body?.email || "").trim().toLowerCase();
+  const resume = String(body?.resume || "").slice(0, 12000);
+  const score = Number(body?.score);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
+  if (resume.trim().length < 40) return NextResponse.json({ error: "Nothing to send yet." }, { status: 400 });
+
+  const scoreLine = Number.isFinite(score) ? `<p>Your job-match score: <strong>${Math.round(score)}%</strong></p>` : "";
+  const ok = await sendEmail({
+    to: email,
+    subject: "Your optimized resume — Sira",
+    html: emailShell(`
+      <h2 style="margin:0 0 8px">Here's your optimized resume</h2>
+      ${scoreLine}
+      <pre style="white-space:pre-wrap;font-family:inherit;background:#f7f7f7;border:1px solid #eee;border-radius:8px;padding:16px;font-size:13px">${escapeHtml(resume)}</pre>
+      <p><a href="${APP_URL}/optimize" style="color:#0f766e;font-weight:bold">Refine it again →</a></p>`),
+  });
+  if (!ok) return NextResponse.json({ error: "Email isn't available right now." }, { status: 503 });
+  return NextResponse.json({ ok: true });
+}

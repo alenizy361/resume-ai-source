@@ -1,1 +1,186 @@
-{"data":"InVzZSBjbGllbnQiOwoKaW1wb3J0IHsgdXNlRWZmZWN0LCB1c2VJZCwgdXNlUmVmLCB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKaW1wb3J0IEFpT3JiIGZyb20gIi4vQWlPcmIiOwppbXBvcnQgR29sZEZpZWxkIGZyb20gIi4vb3JiL0dvbGRGaWVsZCI7CgovKioKICogVHdvLXBoYXNlIGNoZWNrb3V0OgogKiAgIDEuIENvbGxlY3QgbmFtZS9lbWFpbC9tb2JpbGUgYW5kIGNyZWF0ZSB0aGUgUGF5bGluayBpbnZvaWNlICjihpIgdHJhbnNhY3Rpb25ObykuCiAqICAgMi4gQ2FyZCBpcyBwYWlkIElOTElORSBvbiBvdXIgb3duIGRhcmstdGhlbWVkIGZvcm0gdmlhIHRoZSBQYXlsaW5rIEpTIFNESwogKiAgICAgIChpbml0UGF5bWVudCArIHN1Ym1pdEludm9pY2UpIOKAlCBubyByZWRpcmVjdCBmb3IgdGhlIGNvbW1vbiBjYXJkIHBhdGguCiAqICAgICAgVGFtYXJhIC8gVGFiYnkgLyBBcHBsZSBQYXkgLyBTVEMgKHdoaWNoIGhhdmUgbm8gZW1iZWRkZWQgU0RLKSBzdGF5IG9uZSB0YXAKICogICAgICBhd2F5IHZpYSB0aGUgaG9zdGVkIGludm9pY2UgVVJMLgogKiBDcmVkZW50aWFscyBuZXZlciB0b3VjaCB0aGUgY2xpZW50OyBvbmx5IHRoZSB0cmFuc2FjdGlvbk5vICsgaG9zdGVkIHVybCBkby4KICovCgpjb25zdCBTREtfU1JDID0gImh0dHBzOi8vcGF5bGluay5zYS9hc3NldHMvanMvcGF5bGluay5qcyI7CmNvbnN0IFBBWV9NT0RFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfUEFZX01PREUgPT09ICJ0ZXN0IiA/ICJ0ZXN0IiA6ICJwcm9kdWN0aW9uIjsKCi8vIGVzbGludC1kaXNhYmxlLW5leHQtbGluZSBAdHlwZXNjcmlwdC1lc2xpbnQvbm8tZXhwbGljaXQtYW55CmRlY2xhcmUgZ2xvYmFsIHsgaW50ZXJmYWNlIFdpbmRvdyB7IFBheWxpbmtQYXltZW50cz86IGFueSB9IH0KCmxldCBzZGtQcm9taXNlOiBQcm9taXNlPHZvaWQ+IHwgbnVsbCA9IG51bGw7CmZ1bmN0aW9uIGxvYWRTZGsoKTogUHJvbWlzZTx2b2lkPiB7CiAgaWYgKHR5cGVvZiB3aW5kb3cgPT09ICJ1bmRlZmluZWQiKSByZXR1cm4gUHJvbWlzZS5yZXNvbHZlKCk7CiAgaWYgKHdpbmRvdy5QYXlsaW5rUGF5bWVudHMpIHJldHVybiBQcm9taXNlLnJlc29sdmUoKTsKICBpZiAoc2RrUHJvbWlzZSkgcmV0dXJuIHNka1Byb21pc2U7CiAgc2RrUHJvbWlzZSA9IG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHsKICAgIGNvbnN0IHMgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCJzY3JpcHQiKTsKICAgIHMuc3JjID0gU0RLX1NSQzsgcy5hc3luYyA9IHRydWU7CiAgICBzLm9ubG9hZCA9ICgpID0+IHJlc29sdmUoKTsKICAgIHMub25lcnJvciA9ICgpID0+IHsgc2RrUHJvbWlzZSA9IG51bGw7IHJlamVjdChuZXcgRXJyb3IoInNkayIpKTsgfTsKICAgIGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQocyk7CiAgfSk7CiAgcmV0dXJuIHNka1Byb21pc2U7Cn0KCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIENoZWNrb3V0QnV0dG9uKHsKICBwbGFuLCBsYWJlbCwgdmFyaWFudCA9ICJhY2NlbnQiLCBhciA9IGZhbHNlLAp9OiB7IHBsYW46ICJzaW5nbGUiIHwgImNvbXBsZXRlIjsgbGFiZWw6IHN0cmluZzsgdmFyaWFudD86ICJhY2NlbnQiIHwgImdob3N0IjsgYXI/OiBib29sZWFuIH0pIHsKICBjb25zdCB1aWQgPSB1c2VJZCgpLnJlcGxhY2UoL1s6XS9nLCAiIik7CiAgY29uc3QgW29wZW4sIHNldE9wZW5dID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFtwaGFzZSwgc2V0UGhhc2VdID0gdXNlU3RhdGU8ImRldGFpbHMiIHwgImNhcmQiPigiZGV0YWlscyIpOwogIGNvbnN0IFtuYW1lLCBzZXROYW1lXSA9IHVzZVN0YXRlKCIiKTsKICBjb25zdCBbZW1haWwsIHNldEVtYWlsXSA9IHVzZVN0YXRlKCIiKTsKICBjb25zdCBbbW9iaWxlLCBzZXRNb2JpbGVdID0gdXNlU3RhdGUoIiIpOwogIGNvbnN0IFtsb2FkaW5nLCBzZXRMb2FkaW5nXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCBbcGF5aW5nLCBzZXRQYXlpbmddID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGUoIiIpOwogIGNvbnN0IHR4UmVmID0gdXNlUmVmPHN0cmluZz4oIiIpOwogIGNvbnN0IHVybFJlZiA9IHVzZVJlZjxzdHJpbmc+KCIiKTsKICAvLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmUgQHR5cGVzY3JpcHQtZXNsaW50L25vLWV4cGxpY2l0LWFueQogIGNvbnN0IHBheVJlZiA9IHVzZVJlZjxhbnk+KG51bGwpOwoKICAvLyBCaW5kIHRoZSBQYXlsaW5rIFNESyB0byB0aGUgY2FyZCBmaWVsZHMgT05MWSBBRlRFUiB0aGV5J3ZlIHJlbmRlcmVkIChwaGFzZQogIC8vICJjYXJkIikuIEluaXRpYWxpemluZyBlYXJsaWVyIGJvdW5kIHRvIGVsZW1lbnRzIHRoYXQgd2VyZW4ndCBpbiB0aGUgRE9NIHlldCwKICAvLyBzbyB0aGUgZmllbGRzIG5ldmVyIGFwcGVhcmVkLgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBpZiAocGhhc2UgIT09ICJjYXJkIikgcmV0dXJuOwogICAgbGV0IGNhbmNlbGxlZCA9IGZhbHNlOwogICAgKGFzeW5jICgpID0+IHsKICAgICAgdHJ5IHsKICAgICAgICBhd2FpdCBsb2FkU2RrKCk7CiAgICAgICAgaWYgKGNhbmNlbGxlZCkgcmV0dXJuOwogICAgICAgIGNvbnN0IHBheW1lbnQgPSBuZXcgd2luZG93LlBheWxpbmtQYXltZW50cyh7IG1vZGU6IFBBWV9NT0RFLCBkZWZhdWx0TGFuZzogYXIgPyAiYXIiIDogImVuIiwgYmFja2dyb3VuZENvbG9yOiAiIzEwMTMxNiIgfSk7CiAgICAgICAgYXdhaXQgcGF5bWVudC5pbml0UGF5bWVudChgI2NuLSR7dWlkfWAsIGAjbm0tJHt1aWR9YCwgYCN5eS0ke3VpZH1gLCBgI21tLSR7dWlkfWAsIGAjY3YtJHt1aWR9YCk7CiAgICAgICAgaWYgKGNhbmNlbGxlZCkgcmV0dXJuOwogICAgICAgIHBheVJlZi5jdXJyZW50ID0gcGF5bWVudDsKICAgICAgfSBjYXRjaCB7CiAgICAgICAgLy8gU0RLL2luaXQgZmFpbGVkIOKAlCBzdXJmYWNlIGl0IGFuZCBsZXQgdGhlIGJ1eWVyIHVzZSB0aGUgaG9zdGVkIGxpbmsKICAgICAgICAvLyB0aGF0J3MgYWxyZWFkeSBzaG93biBiZWxvdywgaW5zdGVhZCBvZiB5YW5raW5nIHRoZW0gYXdheS4KICAgICAgICBpZiAoIWNhbmNlbGxlZCkgc2V0RXJyb3IoYXIgPyAi2KrYudiw2ZHYsSDYqtit2YXZitmEINmG2YXZiNiw2Kwg2KfZhNio2LfYp9mC2Kkg4oCUINin2LPYqtiu2K/ZhSBcIti32LHZgiDYo9iu2LHZiVwiINio2KfZhNij2LPZgdmELiIgOiAiQ291bGRuJ3QgbG9hZCB0aGUgY2FyZCBmb3JtIOKAlCB1c2UgXCJPdGhlciB3YXlzXCIgYmVsb3cuIik7CiAgICAgIH0KICAgIH0pKCk7CiAgICByZXR1cm4gKCkgPT4geyBjYW5jZWxsZWQgPSB0cnVlOyB9OwogICAgLy8gZXNsaW50LWRpc2FibGUtbmV4dC1saW5lIHJlYWN0LWhvb2tzL2V4aGF1c3RpdmUtZGVwcwogIH0sIFtwaGFzZV0pOwoKICBjb25zdCB0ID0gYXIKICAgID8geyBwbGFuTGluZTogcGxhbiA9PT0gInNpbmdsZSIgPyAi2YXYsdipINmI2KfYrdiv2Kkgwrcg2aPZpSDYsdmK2KfZhNin2YsiIDogItin2YTYrdiy2YXYqSDYp9mE2YPYp9mF2YTYqSDCtyDZqdmpINix2YrYp9mE2KfZiyDCtyDYr9mB2LnYqSDZiNin2K3Yr9ipIiwKICAgICAgICB0aXRsZTogItil2KrZhdin2YUg2KfZhNi02LHYp9ihIiwgc3ViOiAi2K/Zgdi5INii2YXZhi4g2KPYr9iu2YQg2KjZitin2YbYp9iq2YMg2YTZhNmF2KrYp9io2LnYqS4iLCBuYW1lOiAi2KfZhNin2LPZhSDYp9mE2YPYp9mF2YQiLAogICAgICAgIGVtYWlsOiAi2KfZhNio2LHZitivINin2YTYpdmE2YPYqtix2YjZhtmKICjZitmP2YHYudmO2ZHZhCDYudmE2YrZhyDZiNi12YjZhNmDKSIsIG1vYmlsZTogItix2YLZhSDYp9mE2KzZiNin2YQiLCBwYXk6ICLYp9mE2YXYqtin2KjYudipIOKGkCIsCiAgICAgICAgc3RhcnRpbmc6ICLYrNin2LHZjSDYp9mE2KrYrdi22YrYseKApiIsIGNhbmNlbDogItil2YTYutin2KEiLCBmYWlsZWQ6ICLYqti52LDZkdixINio2K/YoSDYp9mE2K/Zgdi52Iwg2K3Yp9mI2YQg2YXYsdipINij2K7YsdmJLiIsCiAgICAgICAgY2FyZFRpdGxlOiAi2KjZitin2YbYp9iqINin2YTYqNi32KfZgtipIiwgY2FyZE5hbWU6ICLYp9mE2KfYs9mFINi52YTZiSDYp9mE2KjYt9in2YLYqSIsIGNhcmRObzogItix2YLZhSDYp9mE2KjYt9in2YLYqSIsCiAgICAgICAgbW06ICLYtNmH2LEiLCB5eTogItiz2YbYqSIsIGN2djogIkNWViIsIHBheU5vdzogItin2K/Zgdi5INin2YTYotmGIiwgcHJvY2Vzc2luZzogItis2KfYsdmNINin2YTYr9mB2LnigKYiLAogICAgICAgIG90aGVyOiAi2LfYsdmCINij2K7YsdmJOiDYqtmF2KfYsdinIMK3INiq2KfYqNmKIMK3IEFwcGxlIFBheSDCtyBTVEMg4oaQIiwgc2VjdXJlOiAi8J+UkiDYr9mB2Lkg2KLZhdmGINi52KjYsSBQYXlsaW5rIMK3INi22YXYp9mGINin2LPYqtix2KzYp9i5INmnINij2YrYp9mFIiwKICAgICAgICBjYXJkRXJyOiAi2KrYrdmC2ZHZgiDZhdmGINio2YrYp9mG2KfYqiDYp9mE2KjYt9in2YLYqSDZiNit2KfZiNmEINmF2LHYqSDYo9iu2LHZiS4iIH0KICAgIDogeyBwbGFuTGluZTogcGxhbiA9PT0gInNpbmdsZSIgPyAiT25lLXRpbWUgwrcgU0FSIDM1ICh+JDkpIiA6ICJDb21wbGV0ZSBQYWNrIMK3IFNBUiA5OSDCtyBvbmUtdGltZSAofiQyNikiLAogICAgICAgIHRpdGxlOiAiQ2hlY2tvdXQiLCBzdWI6ICJTZWN1cmUgcGF5bWVudC4gRW50ZXIgeW91ciBkZXRhaWxzIHRvIGNvbnRpbnVlLiIsIG5hbWU6ICJGdWxsIG5hbWUiLAogICAgICAgIGVtYWlsOiAiRW1haWwgKHVubG9ja3MgeW91ciBhY2Nlc3MpIiwgbW9iaWxlOiAiTW9iaWxlIG51bWJlciIsIHBheTogIkNvbnRpbnVlIOKGkiIsCiAgICAgICAgc3RhcnRpbmc6ICJQcmVwYXJpbmfigKYiLCBjYW5jZWw6ICJDYW5jZWwiLCBmYWlsZWQ6ICJDaGVja291dCBmYWlsZWQuIFBsZWFzZSB0cnkgYWdhaW4uIiwKICAgICAgICBjYXJkVGl0bGU6ICJDYXJkIGRldGFpbHMiLCBjYXJkTmFtZTogIk5hbWUgb24gY2FyZCIsIGNhcmRObzogIkNhcmQgbnVtYmVyIiwKICAgICAgICBtbTogIk1NIiwgeXk6ICJZWSIsIGN2djogIkNWViIsIHBheU5vdzogIlBheSBub3ciLCBwcm9jZXNzaW5nOiAiUHJvY2Vzc2luZ+KApiIsCiAgICAgICAgb3RoZXI6ICJPdGhlciB3YXlzOiBUYW1hcmEgwrcgVGFiYnkgwrcgQXBwbGUgUGF5IMK3IFNUQyDihpIiLCBzZWN1cmU6ICLwn5SSIFNlY3VyZSB2aWEgUGF5bGluayDCtyA3LWRheSBtb25leS1iYWNrIiwKICAgICAgICBjYXJkRXJyOiAiUGxlYXNlIGNoZWNrIHlvdXIgY2FyZCBkZXRhaWxzIGFuZCB0cnkgYWdhaW4uIiB9OwoKICBjb25zdCBpbnAgPSB7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBib3JkZXI6ICIxcHggc29saWQgdmFyKC0tbGluZSkiLCBjb2xvcjogInZhcigtLWZnKSIgfSBhcyBjb25zdDsKCiAgYXN5bmMgZnVuY3Rpb24gY3JlYXRlSW52b2ljZShlOiBSZWFjdC5Gb3JtRXZlbnQpIHsKICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIGlmICghbmFtZS50cmltKCkgfHwgIWVtYWlsLnRyaW0oKSB8fCAhbW9iaWxlLnRyaW0oKSkgeyBzZXRFcnJvcihhciA/ICLZgdi22YTYp9mLINi52KjZkSDZg9mEINin2YTYrdmC2YjZhC4iIDogIlBsZWFzZSBmaWxsIGluIGFsbCBmaWVsZHMuIik7IHJldHVybjsgfQogICAgc2V0RXJyb3IoIiIpOyBzZXRMb2FkaW5nKHRydWUpOwogICAgdHJ5IHsKICAgICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goIi9hcGkvcGF5IiwgeyBtZXRob2Q6ICJQT1NUIiwgaGVhZGVyczogeyAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoeyBwbGFuLCBuYW1lLCBlbWFpbCwgbW9iaWxlLCBsb2NhbGU6IGFyID8gImFyIiA6ICJlbiIgfSkgfSk7CiAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXMuanNvbigpOwogICAgICBpZiAoIXJlcy5vayB8fCAhZGF0YS51cmwgfHwgIWRhdGEudHJhbnNhY3Rpb25ObykgdGhyb3cgbmV3IEVycm9yKGRhdGEuZXJyb3IgfHwgdC5mYWlsZWQpOwogICAgICB0eFJlZi5jdXJyZW50ID0gU3RyaW5nKGRhdGEudHJhbnNhY3Rpb25Obyk7CiAgICAgIHVybFJlZi5jdXJyZW50ID0gU3RyaW5nKGRhdGEudXJsKTsKICAgICAgLy8gU3dpdGNoIHRvIHRoZSBjYXJkIHBoYXNlIOKAlCB0aGUgZWZmZWN0IGJpbmRzIHRoZSBTREsgb25jZSB0aGUgZmllbGRzIG1vdW50LgogICAgICBzZXRQaGFzZSgiY2FyZCIpOyBzZXRMb2FkaW5nKGZhbHNlKTsKICAgIH0gY2F0Y2ggKGVycikgewogICAgICAvLyBJZiB0aGUgU0RLIGZhaWxzIHRvIGxvYWQsIGZhbGwgYmFjayB0byB0aGUgaG9zdGVkIHBhZ2Ugc28gY2hlY2tvdXQgbmV2ZXIgZGVhZC1lbmRzLgogICAgICBpZiAodXJsUmVmLmN1cnJlbnQpIHsgd2luZG93LmxvY2F0aW9uLmhyZWYgPSB1cmxSZWYuY3VycmVudDsgcmV0dXJuOyB9CiAgICAgIHNldEVycm9yKGVyciBpbnN0YW5jZW9mIEVycm9yID8gZXJyLm1lc3NhZ2UgOiB0LmZhaWxlZCk7IHNldExvYWRpbmcoZmFsc2UpOwogICAgfQogIH0KCiAgYXN5bmMgZnVuY3Rpb24gcGF5Q2FyZCgpIHsKICAgIHNldEVycm9yKCIiKTsgc2V0UGF5aW5nKHRydWUpOwogICAgdHJ5IHsKICAgICAgaWYgKCFwYXlSZWYuY3VycmVudCkgdGhyb3cgbmV3IEVycm9yKCJub3QgcmVhZHkiKTsKICAgICAgLy8gT24gc3VjY2VzcyB0aGUgU0RLIG9wZW5zIHRoZSBiYW5rIDNEUyBwYWdlLCB3aGljaCByZXR1cm5zIHRvIG91ciBjYWxsQmFja1VybC4KICAgICAgYXdhaXQgcGF5UmVmLmN1cnJlbnQuc3VibWl0SW52b2ljZSh0eFJlZi5jdXJyZW50KTsKICAgIH0gY2F0Y2ggewogICAgICBzZXRFcnJvcih0LmNhcmRFcnIpOyBzZXRQYXlpbmcoZmFsc2UpOwogICAgfQogIH0KCiAgZnVuY3Rpb24gcmVzZXQoKSB7IHNldE9wZW4oZmFsc2UpOyBzZXRQaGFzZSgiZGV0YWlscyIpOyBzZXRFcnJvcigiIik7IHNldFBheWluZyhmYWxzZSk7IHNldExvYWRpbmcoZmFsc2UpOyB9CgogIHJldHVybiAoCiAgICA8PgogICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IHNldE9wZW4odHJ1ZSl9CiAgICAgICAgY2xhc3NOYW1lPXt2YXJpYW50ID09PSAiYWNjZW50IiA/ICJidG4tYWNjZW50IGJsb2NrIHctZnVsbCBweS0zIHRleHQtY2VudGVyIiA6ICJidG4tZ2hvc3QgYmxvY2sgdy1mdWxsIHB5LTMgdGV4dC1jZW50ZXIgZm9udC1zZW1pYm9sZCJ9CiAgICAgICAgc3R5bGU9e3ZhcmlhbnQgPT09ICJnaG9zdCIgPyB7IGNvbG9yOiAidmFyKC0tZmcpIiB9IDogdW5kZWZpbmVkfT57bGFiZWx9PC9idXR0b24+CgogICAgICB7b3BlbiAmJiAoCiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZpeGVkIGluc2V0LTAgei1bMTAwXSBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBwLTQiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDAsMCwwLDAuNykiLCBiYWNrZHJvcEZpbHRlcjogImJsdXIoNHB4KSIgfX0KICAgICAgICAgIG9uQ2xpY2s9eygpID0+ICFsb2FkaW5nICYmICFwYXlpbmcgJiYgcmVzZXQoKX0+CiAgICAgICAgICA8ZGl2IGRpcj17YXIgPyAicnRsIiA6ICJsdHIifSBjbGFzc05hbWU9e2ByZWxhdGl2ZSB3LWZ1bGwgbWF4LXctc20gb3ZlcmZsb3ctaGlkZGVuIHJvdW5kZWQtM3hsIHAtNyAke2FyID8gInRleHQtcmlnaHQiIDogInRleHQtbGVmdCJ9YH0gc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMTAsMTQsMjYsMC45NikiLCBib3JkZXI6ICIxcHggc29saWQgcmdiYSgyNDUsMTg0LDY0LDAuMzUpIiwgYm94U2hhZG93OiAiMCAyMHB4IDYwcHggcmdiYSgwLDAsMCwwLjUpIiB9fSBvbkNsaWNrPXsoZSkgPT4gZS5zdG9wUHJvcGFnYXRpb24oKX0+CiAgICAgICAgICAgIDxHb2xkRmllbGQgLz4KICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIG1iLTMgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICAgICAgPEFpT3JiIHNpemU9ezMwfSBzdGF0ZT0iZ29sZGVuIiAvPgogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmb250LW1vbm8gdGV4dC14cyB0cmFja2luZy13aWRlc3QiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZ29sZCkiLCB0ZXh0VHJhbnNmb3JtOiBhciA/ICJub25lIiA6ICJ1cHBlcmNhc2UiIH19Pnt0LnBsYW5MaW5lfTwvZGl2PgogICAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICAgIHtwaGFzZSA9PT0gImRldGFpbHMiID8gKAogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZWxhdGl2ZSI+CiAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPSJ0ZXh0LXhsIGZvbnQtYm9sZCI+e3QudGl0bGV9PC9oMz4KICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMSB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e3Quc3VifTwvcD4KICAgICAgICAgICAgICAgIDxmb3JtIG9uU3VibWl0PXtjcmVhdGVJbnZvaWNlfSBjbGFzc05hbWU9Im10LTUgc3BhY2UteS0zIj4KICAgICAgICAgICAgICAgICAgPGlucHV0IHZhbHVlPXtuYW1lfSBvbkNoYW5nZT17KGUpID0+IHNldE5hbWUoZS50YXJnZXQudmFsdWUpfSBwbGFjZWhvbGRlcj17dC5uYW1lfSByZXF1aXJlZCBjbGFzc05hbWU9InctZnVsbCByb3VuZGVkLWxnIHB4LTQgcHktMi41IHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgICAgICAgICAgICA8aW5wdXQgdHlwZT0iZW1haWwiIHZhbHVlPXtlbWFpbH0gb25DaGFuZ2U9eyhlKSA9PiBzZXRFbWFpbChlLnRhcmdldC52YWx1ZSl9IHBsYWNlaG9sZGVyPXt0LmVtYWlsfSByZXF1aXJlZCBkaXI9Imx0ciIgY2xhc3NOYW1lPXtgdy1mdWxsIHJvdW5kZWQtbGcgcHgtNCBweS0yLjUgdGV4dC1zbSBmb2N1czpvdXRsaW5lLW5vbmUgJHthciA/ICJ0ZXh0LXJpZ2h0IiA6ICIifWB9IHN0eWxlPXtpbnB9IC8+CiAgICAgICAgICAgICAgICAgIDxpbnB1dCB2YWx1ZT17bW9iaWxlfSBvbkNoYW5nZT17KGUpID0+IHNldE1vYmlsZShlLnRhcmdldC52YWx1ZSl9IHBsYWNlaG9sZGVyPXt0Lm1vYmlsZX0gaW5wdXRNb2RlPSJ0ZWwiIHJlcXVpcmVkIGRpcj0ibHRyIiBjbGFzc05hbWU9e2B3LWZ1bGwgcm91bmRlZC1sZyBweC00IHB5LTIuNSB0ZXh0LXNtIGZvY3VzOm91dGxpbmUtbm9uZSAke2FyID8gInRleHQtcmlnaHQiIDogIiJ9YH0gc3R5bGU9e2lucH0gLz4KICAgICAgICAgICAgICAgICAge2Vycm9yICYmIDxkaXYgY2xhc3NOYW1lPSJyb3VuZGVkLWxnIHB4LTMgcHktMiB0ZXh0LXhzIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAicmdiYSgyNDgsMTEzLDExMywwLjEpIiwgY29sb3I6ICIjZjg3MTcxIiB9fT57ZXJyb3J9PC9kaXY+fQogICAgICAgICAgICAgICAgICA8YnV0dG9uIHR5cGU9InN1Ym1pdCIgZGlzYWJsZWQ9e2xvYWRpbmd9IGNsYXNzTmFtZT0iYnRuLWFjY2VudCB3LWZ1bGwgcHktMyBkaXNhYmxlZDpvcGFjaXR5LTUwIj57bG9hZGluZyA/IHQuc3RhcnRpbmcgOiB0LnBheX08L2J1dHRvbj4KICAgICAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIG9uQ2xpY2s9e3Jlc2V0fSBkaXNhYmxlZD17bG9hZGluZ30gY2xhc3NOYW1lPSJ3LWZ1bGwgcHktMSB0ZXh0LWNlbnRlciB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+e3QuY2FuY2VsfTwvYnV0dG9uPgogICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InB0LTEgdGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQtWzExcHhdIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+e3Quc2VjdXJlfTwvcD4KICAgICAgICAgICAgICAgIDwvZm9ybT4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgKSA6ICgKICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUiPgogICAgICAgICAgICAgICAgPGgzIGNsYXNzTmFtZT0idGV4dC14bCBmb250LWJvbGQiPnt0LmNhcmRUaXRsZX08L2gzPgogICAgICAgICAgICAgICAgey8qIElubGluZSBjYXJkIGZvcm0g4oCUIFBheWxpbmsgU0RLIGJpbmRzIHRvIHRoZXNlIChyZWFkb25seSkgZmllbGRzLiAqL30KICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC01IHNwYWNlLXktMyI+CiAgICAgICAgICAgICAgICAgIDxpbnB1dCBpZD17YG5tLSR7dWlkfWB9IHJlYWRPbmx5IHBsYWNlaG9sZGVyPXt0LmNhcmROYW1lfSBkaXI9Imx0ciIgY2xhc3NOYW1lPSJ3LWZ1bGwgcm91bmRlZC1sZyBweC00IHB5LTIuNSB0ZXh0LXNtIGZvY3VzOm91dGxpbmUtbm9uZSIgc3R5bGU9e2lucH0gLz4KICAgICAgICAgICAgICAgICAgPGlucHV0IGlkPXtgY24tJHt1aWR9YH0gcmVhZE9ubHkgcGxhY2Vob2xkZXI9e3QuY2FyZE5vfSBpbnB1dE1vZGU9Im51bWVyaWMiIGRpcj0ibHRyIiBjbGFzc05hbWU9InctZnVsbCByb3VuZGVkLWxnIHB4LTQgcHktMi41IHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBnYXAtMiIgZGlyPSJsdHIiPgogICAgICAgICAgICAgICAgICAgIDxpbnB1dCBpZD17YG1tLSR7dWlkfWB9IHJlYWRPbmx5IHBsYWNlaG9sZGVyPXt0Lm1tfSBjbGFzc05hbWU9InctZnVsbCByb3VuZGVkLWxnIHB4LTMgcHktMi41IHRleHQtY2VudGVyIHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgICAgICAgICAgICAgIDxpbnB1dCBpZD17YHl5LSR7dWlkfWB9IHJlYWRPbmx5IHBsYWNlaG9sZGVyPXt0Lnl5fSBjbGFzc05hbWU9InctZnVsbCByb3VuZGVkLWxnIHB4LTMgcHktMi41IHRleHQtY2VudGVyIHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgICAgICAgICAgICAgIDxpbnB1dCBpZD17YGN2LSR7dWlkfWB9IHJlYWRPbmx5IHBsYWNlaG9sZGVyPXt0LmN2dn0gY2xhc3NOYW1lPSJ3LWZ1bGwgcm91bmRlZC1sZyBweC0zIHB5LTIuNSB0ZXh0LWNlbnRlciB0ZXh0LXNtIGZvY3VzOm91dGxpbmUtbm9uZSIgc3R5bGU9e2lucH0gLz4KICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICAgIHtlcnJvciAmJiA8ZGl2IGNsYXNzTmFtZT0icm91bmRlZC1sZyBweC0zIHB5LTIgdGV4dC14cyIgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMjQ4LDExMywxMTMsMC4xKSIsIGNvbG9yOiAiI2Y4NzE3MSIgfX0+e2Vycm9yfTwvZGl2Pn0KICAgICAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIG9uQ2xpY2s9e3BheUNhcmR9IGRpc2FibGVkPXtwYXlpbmd9IGNsYXNzTmFtZT0iYnRuLWFjY2VudCB3LWZ1bGwgcHktMyBkaXNhYmxlZDpvcGFjaXR5LTUwIj57cGF5aW5nID8gdC5wcm9jZXNzaW5nIDogdC5wYXlOb3d9PC9idXR0b24+CiAgICAgICAgICAgICAgICAgIDxhIGhyZWY9e3VybFJlZi5jdXJyZW50IHx8ICIjIn0gY2xhc3NOYW1lPSJibG9jayB3LWZ1bGwgcHktMiB0ZXh0LWNlbnRlciB0ZXh0LXhzIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+e3Qub3RoZXJ9PC9hPgogICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtY2VudGVyIGZvbnQtbW9ubyB0ZXh0LVsxMXB4XSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19Pnt0LnNlY3VyZX08L3A+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PgogICAgICApfQogICAgPC8+CiAgKTsKfQo="}
+"use client";
+
+import { useEffect, useId, useRef, useState } from "react";
+import AiOrb from "./AiOrb";
+import GoldField from "./orb/GoldField";
+
+/**
+ * Two-phase checkout:
+ *   1. Collect name/email/mobile and create the Paylink invoice (→ transactionNo).
+ *   2. Card is paid INLINE on our own dark-themed form via the Paylink JS SDK
+ *      (initPayment + submitInvoice) — no redirect for the common card path.
+ *      Tamara / Tabby / Apple Pay / STC (which have no embedded SDK) stay one tap
+ *      away via the hosted invoice URL.
+ * Credentials never touch the client; only the transactionNo + hosted url do.
+ */
+
+const SDK_SRC = "https://paylink.sa/assets/js/paylink.js";
+const PAY_MODE = process.env.NEXT_PUBLIC_PAY_MODE === "test" ? "test" : "production";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare global { interface Window { PaylinkPayments?: any } }
+
+let sdkPromise: Promise<void> | null = null;
+function loadSdk(): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+  if (window.PaylinkPayments) return Promise.resolve();
+  if (sdkPromise) return sdkPromise;
+  sdkPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = SDK_SRC; s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => { sdkPromise = null; reject(new Error("sdk")); };
+    document.head.appendChild(s);
+  });
+  return sdkPromise;
+}
+
+export default function CheckoutButton({
+  plan, label, variant = "accent", ar = false,
+}: { plan: "single" | "complete"; label: string; variant?: "accent" | "ghost"; ar?: boolean }) {
+  const uid = useId().replace(/[:]/g, "");
+  const [open, setOpen] = useState(false);
+  const [phase, setPhase] = useState<"details" | "card">("details");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [error, setError] = useState("");
+  const txRef = useRef<string>("");
+  const urlRef = useRef<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const payRef = useRef<any>(null);
+
+  // Bind the Paylink SDK to the card fields ONLY AFTER they've rendered (phase
+  // "card"). Initializing earlier bound to elements that weren't in the DOM yet,
+  // so the fields never appeared.
+  useEffect(() => {
+    if (phase !== "card") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        await loadSdk();
+        if (cancelled) return;
+        const payment = new window.PaylinkPayments({ mode: PAY_MODE, defaultLang: ar ? "ar" : "en", backgroundColor: "#101316" });
+        await payment.initPayment(`#cn-${uid}`, `#nm-${uid}`, `#yy-${uid}`, `#mm-${uid}`, `#cv-${uid}`);
+        if (cancelled) return;
+        payRef.current = payment;
+      } catch {
+        // SDK/init failed — surface it and let the buyer use the hosted link
+        // that's already shown below, instead of yanking them away.
+        if (!cancelled) setError(ar ? "تعذّر تحميل نموذج البطاقة — استخدم \"طرق أخرى\" بالأسفل." : "Couldn't load the card form — use \"Other ways\" below.");
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  const t = ar
+    ? { planLine: plan === "single" ? "مرة واحدة · ٣٥ ريالاً" : "الحزمة الكاملة · ٩٩ ريالاً · دفعة واحدة",
+        title: "إتمام الشراء", sub: "دفع آمن. أدخل بياناتك للمتابعة.", name: "الاسم الكامل",
+        email: "البريد الإلكتروني (يُفعَّل عليه وصولك)", mobile: "رقم الجوال", pay: "المتابعة ←",
+        starting: "جارٍ التحضير…", cancel: "إلغاء", failed: "تعذّر بدء الدفع، حاول مرة أخرى.",
+        cardTitle: "بيانات البطاقة", cardName: "الاسم على البطاقة", cardNo: "رقم البطاقة",
+        mm: "شهر", yy: "سنة", cvv: "CVV", payNow: "ادفع الآن", processing: "جارٍ الدفع…",
+        other: "طرق أخرى: تمارا · تابي · Apple Pay · STC ←", secure: "🔒 دفع آمن عبر Paylink · ضمان استرجاع ٧ أيام",
+        cardErr: "تحقّق من بيانات البطاقة وحاول مرة أخرى." }
+    : { planLine: plan === "single" ? "One-time · SAR 35 (~$9)" : "Complete Pack · SAR 99 · one-time (~$26)",
+        title: "Checkout", sub: "Secure payment. Enter your details to continue.", name: "Full name",
+        email: "Email (unlocks your access)", mobile: "Mobile number", pay: "Continue →",
+        starting: "Preparing…", cancel: "Cancel", failed: "Checkout failed. Please try again.",
+        cardTitle: "Card details", cardName: "Name on card", cardNo: "Card number",
+        mm: "MM", yy: "YY", cvv: "CVV", payNow: "Pay now", processing: "Processing…",
+        other: "Other ways: Tamara · Tabby · Apple Pay · STC →", secure: "🔒 Secure via Paylink · 7-day money-back",
+        cardErr: "Please check your card details and try again." };
+
+  const inp = { background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" } as const;
+
+  async function createInvoice(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !mobile.trim()) { setError(ar ? "فضلاً عبّ كل الحقول." : "Please fill in all fields."); return; }
+    setError(""); setLoading(true);
+    try {
+      const res = await fetch("/api/pay", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan, name, email, mobile, locale: ar ? "ar" : "en" }) });
+      const data = await res.json();
+      if (!res.ok || !data.url || !data.transactionNo) throw new Error(data.error || t.failed);
+      txRef.current = String(data.transactionNo);
+      urlRef.current = String(data.url);
+      // Switch to the card phase — the effect binds the SDK once the fields mount.
+      setPhase("card"); setLoading(false);
+    } catch (err) {
+      // If the SDK fails to load, fall back to the hosted page so checkout never dead-ends.
+      if (urlRef.current) { window.location.href = urlRef.current; return; }
+      setError(err instanceof Error ? err.message : t.failed); setLoading(false);
+    }
+  }
+
+  async function payCard() {
+    setError(""); setPaying(true);
+    try {
+      if (!payRef.current) throw new Error("not ready");
+      // On success the SDK opens the bank 3DS page, which returns to our callBackUrl.
+      await payRef.current.submitInvoice(txRef.current);
+    } catch {
+      setError(t.cardErr); setPaying(false);
+    }
+  }
+
+  function reset() { setOpen(false); setPhase("details"); setError(""); setPaying(false); setLoading(false); }
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}
+        className={variant === "accent" ? "btn-accent block w-full py-3 text-center" : "btn-ghost block w-full py-3 text-center font-semibold"}
+        style={variant === "ghost" ? { color: "var(--fg)" } : undefined}>{label}</button>
+
+      {open && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
+          onClick={() => !loading && !paying && reset()}>
+          <div dir={ar ? "rtl" : "ltr"} className={`relative w-full max-w-sm overflow-hidden rounded-3xl p-7 ${ar ? "text-right" : "text-left"}`} style={{ background: "rgba(10,14,26,0.96)", border: "1px solid rgba(245,184,64,0.35)", boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }} onClick={(e) => e.stopPropagation()}>
+            <GoldField />
+            <div className="relative mb-3 flex items-center gap-2.5">
+              <AiOrb size={30} state="golden" />
+              <div className="font-mono text-xs tracking-widest" style={{ color: "var(--gold)", textTransform: ar ? "none" : "uppercase" }}>{t.planLine}</div>
+            </div>
+
+            {phase === "details" ? (
+              <div className="relative">
+                <h3 className="text-xl font-bold">{t.title}</h3>
+                <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
+                <form onSubmit={createInvoice} className="mt-5 space-y-3">
+                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t.name} required className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.email} required dir="ltr" className={`w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none ${ar ? "text-right" : ""}`} style={inp} />
+                  <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder={t.mobile} inputMode="tel" required dir="ltr" className={`w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none ${ar ? "text-right" : ""}`} style={inp} />
+                  {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+                  <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">{loading ? t.starting : t.pay}</button>
+                  <button type="button" onClick={reset} disabled={loading} className="w-full py-1 text-center text-xs" style={{ color: "var(--faint)" }}>{t.cancel}</button>
+                  <p className="pt-1 text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>{t.secure}</p>
+                </form>
+              </div>
+            ) : (
+              <div className="relative">
+                <h3 className="text-xl font-bold">{t.cardTitle}</h3>
+                {/* Inline card form — Paylink SDK binds to these (readonly) fields. */}
+                <div className="mt-5 space-y-3">
+                  <input id={`nm-${uid}`} readOnly placeholder={t.cardName} dir="ltr" className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
+                  <input id={`cn-${uid}`} readOnly placeholder={t.cardNo} inputMode="numeric" dir="ltr" className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
+                  <div className="flex gap-2" dir="ltr">
+                    <input id={`mm-${uid}`} readOnly placeholder={t.mm} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
+                    <input id={`yy-${uid}`} readOnly placeholder={t.yy} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
+                    <input id={`cv-${uid}`} readOnly placeholder={t.cvv} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
+                  </div>
+                  {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+                  <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full py-3 disabled:opacity-50">{paying ? t.processing : t.payNow}</button>
+                  <a href={urlRef.current || "#"} className="block w-full py-2 text-center text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
+                  <p className="text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>{t.secure}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

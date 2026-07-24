@@ -1,1 +1,59 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgSk9CUywgQ0FURUdPUklFUyB9IGZyb20gIi4uL2xpYi9qb2JzIjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICJDb3ZlciBMZXR0ZXIgRXhhbXBsZXMgJiBUZW1wbGF0ZXMgYnkgSm9iICgyMDI2KSB8IFNpcmEiLAogIGRlc2NyaXB0aW9uOiAiRnJlZSBjb3ZlciBsZXR0ZXIgZXhhbXBsZXMgYW5kIGZpbGwtaW4gdGVtcGxhdGVzIGZvciA1MCBqb2JzIOKAlCB0aGUgc3RydWN0dXJlLCBrZXl3b3JkcywgYW5kIG1pc3Rha2VzIHRvIGF2b2lkLCBwbHVzIGFuIEFJIGdlbmVyYXRvciB0YWlsb3JlZCB0byBhbnkgcG9zdGluZy4iLAogIGFsdGVybmF0ZXM6IHsgY2Fub25pY2FsOiBgJHtCQVNFfS9jb3Zlci1sZXR0ZXItZXhhbXBsZXNgIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBDb3ZlckxldHRlckh1YigpIHsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNXhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICAgIDxPcmJCcmFuZCBzaXplPXsyNn0gLz4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LVsxNXB4XSBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPlNpcmE8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPSIvb3B0aW1pemUiIGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC00IHB5LTIgdGV4dC1zbSI+U2NhbiBteSByZXN1bWU8L0xpbms+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvbmF2PgoKICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gbWF4LXctNXhsIHB4LTYgcHktMTQiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJ0ZXh0LWNlbnRlciI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2hpcCBtYi00Ij5Db3ZlciBsZXR0ZXIgZXhhbXBsZXM8L2Rpdj4KICAgICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtNHhsIGZvbnQtZXh0cmFib2xkIHRyYWNraW5nLXRpZ2h0Ij5Db3ZlciBsZXR0ZXIgZXhhbXBsZXMgPHNwYW4gY2xhc3NOYW1lPSJhY2NlbnQtdW5kZXJsaW5lIHRleHQtYWNjZW50Ij5ieSBqb2I8L3NwYW4+PC9oMT4KICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC00IG1heC13LTJ4bCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICBBIHByb3ZlbiA0LXBhcmFncmFwaCBzdHJ1Y3R1cmUsIGEgZmlsbC1pbiB0ZW1wbGF0ZSwgYW5kIHRoZSByb2xlLXNwZWNpZmljIGtleXdvcmRzIOKAlCBmb3IgNTAgam9icy4gRXZlcnkgdGVtcGxhdGUgdXNlcyB5b3VyIHJlYWwgZmFjdHMgb25seS4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KCiAgICAgICAge0NBVEVHT1JJRVMubWFwKChjYXQpID0+ICgKICAgICAgICAgIDxzZWN0aW9uIGtleT17Y2F0fSBjbGFzc05hbWU9Im10LTEyIj4KICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LXhsIGZvbnQtYm9sZCI+e2NhdH08L2gyPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtMyBzbTpncmlkLWNvbHMtMiBsZzpncmlkLWNvbHMtMyI+CiAgICAgICAgICAgICAge0pPQlMuZmlsdGVyKChqKSA9PiBqLmNhdGVnb3J5ID09PSBjYXQpLm1hcCgoaikgPT4gKAogICAgICAgICAgICAgICAgPExpbmsga2V5PXtqLnNsdWd9IGhyZWY9e2AvY292ZXItbGV0dGVyLWV4YW1wbGVzLyR7ai5zbHVnfWB9IGNsYXNzTmFtZT0iY2FyZCBjYXJkLWhvdmVyIHAtNCB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiPgogICAgICAgICAgICAgICAgICB7ai50aXRsZX0gY292ZXIgbGV0dGVyIOKGkgogICAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICAgICkpfQogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwvc2VjdGlvbj4KICAgICAgICApKX0KICAgICAgPC9kaXY+CgogICAgICA8Zm9vdGVyIGNsYXNzTmFtZT0icHgtNiBweS0xMCIgc3R5bGU9e3sgYm9yZGVyVG9wOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtY2VudGVyIGZvbnQtbW9ubyB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+wqkgMjAyNiBTaXJhIMK3IGEgcmVzdW1lIHNlcnZpY2UgYnkgUmFiaXQ8L3A+CiAgICAgIDwvZm9vdGVyPgogICAgICAgICAgPEh1YkxpbmtzIGN1cnJlbnQ9Ii9jb3Zlci1sZXR0ZXItZXhhbXBsZXMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../components/HubLinks";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { JOBS, CATEGORIES } from "../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Cover Letter Examples & Templates by Job (2026) | Sira",
+  description: "Free cover letter examples and fill-in templates for 50 jobs — the structure, keywords, and mistakes to avoid, plus an AI generator tailored to any posting.",
+  alternates: { canonical: `${BASE}/cover-letter-examples` },
+};
+
+export default function CoverLetterHub() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-5xl px-6 py-14">
+        <div className="text-center">
+          <div className="chip mb-4">Cover letter examples</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">Cover letter examples <span className="accent-underline text-accent">by job</span></h1>
+          <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--muted)" }}>
+            A proven 4-paragraph structure, a fill-in template, and the role-specific keywords — for 50 jobs. Every template uses your real facts only.
+          </p>
+        </div>
+
+        {CATEGORIES.map((cat) => (
+          <section key={cat} className="mt-12">
+            <h2 className="mb-4 text-xl font-bold">{cat}</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {JOBS.filter((j) => j.category === cat).map((j) => (
+                <Link key={j.slug} href={`/cover-letter-examples/${j.slug}`} className="card card-hover p-4 text-sm font-semibold">
+                  {j.title} cover letter →
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+          <HubLinks current="/cover-letter-examples" />
+    </main>
+  );
+}

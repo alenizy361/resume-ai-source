@@ -1,1 +1,141 @@
-{"data":"InVzZSBjbGllbnQiOwovKioKICogQ09TTU9TIOKAlCB0aGUgbGl2aW5nIHB1cnBsZSBza3ksIHBhaW50ZWQgb24gYSBzaW5nbGUgY2FudmFzIGFzIHRoZSBkZWVwZXN0CiAqIGxheWVyIG9mIEFtYmllbnRGaWVsZCAoc28gaXQgc2hvd3Mgb24gZXZlcnkgcm91dGUpOgogKiAgIGdyYWRpZW50IHNreSAg4oaSIGRlZXAgdmlvbGV0IHRoYXQgZGFya2VucyB0b3dhcmQgdGhlIGJvdHRvbQogKiAgIHN0YXJzICAgICAgICAg4oaSIHRocmVlIGRlcHRoIGxheWVycywgdHdpbmtsaW5nLCB3aXRoIHBvaW50ZXIvc2Nyb2xsIHBhcmFsbGF4CiAqICAgbmVidWxhZSAgICAgICDihpIgZm91ciBodWdlIHNvZnQgc3ByaXRlcyBkcmlmdGluZyBvbiBzbG93IG9yYml0cwogKiBPbmUgbGVycGVkIHJBRiBsb29wICgxNDRIei1zbW9vdGgpLCBEUFItY2FwcGVkLCBmdWxseSBzdGF0aWMgdW5kZXIKICogcHJlZmVycy1yZWR1Y2VkLW1vdGlvbi4KICovCmltcG9ydCB7IHVzZUVmZmVjdCwgdXNlUmVmIH0gZnJvbSAicmVhY3QiOwoKaW50ZXJmYWNlIFN0YXIgeyB4OiBudW1iZXI7IHk6IG51bWJlcjsgcjogbnVtYmVyOyBwOiBudW1iZXI7IHBoOiBudW1iZXI7IHNwOiBudW1iZXIgfQppbnRlcmZhY2UgTmViIHsgc3ByOiBIVE1MQ2FudmFzRWxlbWVudDsgeDogbnVtYmVyOyB5OiBudW1iZXI7IHNjOiBudW1iZXI7IGR4OiBudW1iZXI7IGR5OiBudW1iZXI7IHBoOiBudW1iZXIgfQoKZnVuY3Rpb24gbWFrZVNwcml0ZShjb2xvcjogc3RyaW5nKTogSFRNTENhbnZhc0VsZW1lbnQgewogIGNvbnN0IGMgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCJjYW52YXMiKTsKICBjLndpZHRoID0gYy5oZWlnaHQgPSAzMDA7CiAgY29uc3QgZyA9IGMuZ2V0Q29udGV4dCgiMmQiKTsKICBpZiAoZykgewogICAgY29uc3QgcmcgPSBnLmNyZWF0ZVJhZGlhbEdyYWRpZW50KDE1MCwgMTUwLCAwLCAxNTAsIDE1MCwgMTUwKTsKICAgIHJnLmFkZENvbG9yU3RvcCgwLCBjb2xvcik7CiAgICByZy5hZGRDb2xvclN0b3AoMSwgInJnYmEoMCwwLDAsMCkiKTsKICAgIGcuZmlsbFN0eWxlID0gcmc7CiAgICBnLmZpbGxSZWN0KDAsIDAsIDMwMCwgMzAwKTsKICB9CiAgcmV0dXJuIGM7Cn0KCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIENvc21vc0ZpZWxkKCkgewogIGNvbnN0IGN2c1JlZiA9IHVzZVJlZjxIVE1MQ2FudmFzRWxlbWVudD4obnVsbCk7CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBjb25zdCBjdiA9IGN2c1JlZi5jdXJyZW50OwogICAgaWYgKCFjdikgcmV0dXJuOwogICAgY29uc3QgY3R4ID0gY3YuZ2V0Q29udGV4dCgiMmQiKTsKICAgIGlmICghY3R4KSByZXR1cm47CiAgICBjb25zdCByZWR1Y2UgPSB3aW5kb3cubWF0Y2hNZWRpYSgiKHByZWZlcnMtcmVkdWNlZC1tb3Rpb246IHJlZHVjZSkiKS5tYXRjaGVzOwoKICAgIGxldCBXID0gMCwgSCA9IDAsIHJhZiA9IDAsIHJ1bm5pbmcgPSB0cnVlOwogICAgbGV0IHN0YXJzOiBTdGFyW10gPSBbXSwgbmViczogTmViW10gPSBbXSwgYmc6IENhbnZhc0dyYWRpZW50IHwgbnVsbCA9IG51bGw7CiAgICBjb25zdCBwdHIgPSB7IHg6IDAuNSwgeTogMC4zNSwgdHg6IDAuNSwgdHk6IDAuMzUsIHN5OiAwLCB0c3k6IDAgfTsKICAgIGNvbnN0IHQwID0gcGVyZm9ybWFuY2Uubm93KCk7CgogICAgY29uc3Qgc3ByVmlvbGV0ID0gbWFrZVNwcml0ZSgicmdiYSgxMjQsNTgsMjM3LC4zNCkiKTsKICAgIGNvbnN0IHNwck1hZ2VudGEgPSBtYWtlU3ByaXRlKCJyZ2JhKDE5MiwzOCwyMTEsLjIyKSIpOwogICAgY29uc3Qgc3ByRGVlcCA9IG1ha2VTcHJpdGUoInJnYmEoNzYsMjksMTQ5LC40KSIpOwoKICAgIGZ1bmN0aW9uIHJlc2l6ZSgpIHsKICAgICAgLy8gMS41IGlzIHZpc3VhbGx5IGlkZW50aWNhbCBmb3Igc29mdCBuZWJ1bGFlIGFuZCBoYWx2ZXMgdGhlIEdQVSBmaWxsIGNvc3Qgb24gaGktZHBpIHBob25lcwogICAgICBjb25zdCBEUFIgPSBNYXRoLm1pbih3aW5kb3cuZGV2aWNlUGl4ZWxSYXRpbyB8fCAxLCAxLjUpOwogICAgICBXID0gd2luZG93LmlubmVyV2lkdGg7IEggPSB3aW5kb3cuaW5uZXJIZWlnaHQ7CiAgICAgIGN2IS53aWR0aCA9IFcgKiBEUFI7IGN2IS5oZWlnaHQgPSBIICogRFBSOwogICAgICBjdiEuc3R5bGUud2lkdGggPSBgJHtXfXB4YDsgY3YhLnN0eWxlLmhlaWdodCA9IGAke0h9cHhgOwogICAgICBjdHghLnNldFRyYW5zZm9ybShEUFIsIDAsIDAsIERQUiwgMCwgMCk7CiAgICAgIHN0YXJzID0gW107CiAgICAgIGNvbnN0IGxheWVycyA9IFsKICAgICAgICB7IG46IDQ2LCBwOiAwLjEyLCBzOiAxIH0sCiAgICAgICAgeyBuOiAzNCwgcDogMC4yOCwgczogMS42IH0sCiAgICAgICAgeyBuOiAyMCwgcDogMC41LCBzOiAyLjMgfSwKICAgICAgXTsKICAgICAgZm9yIChjb25zdCBMIG9mIGxheWVycykgewogICAgICAgIGZvciAobGV0IGkgPSAwOyBpIDwgTC5uOyBpKyspIHsKICAgICAgICAgIHN0YXJzLnB1c2goewogICAgICAgICAgICB4OiBNYXRoLnJhbmRvbSgpICogVywgeTogTWF0aC5yYW5kb20oKSAqIEgsCiAgICAgICAgICAgIHI6IEwucyAqICgwLjUgKyBNYXRoLnJhbmRvbSgpICogMC45KSwKICAgICAgICAgICAgcDogTC5wLCBwaDogTWF0aC5yYW5kb20oKSAqIDYuMjgsIHNwOiAwLjQgKyBNYXRoLnJhbmRvbSgpICogMC44LAogICAgICAgICAgfSk7CiAgICAgICAgfQogICAgICB9CiAgICAgIG5lYnMgPSBbCiAgICAgICAgeyBzcHI6IHNwclZpb2xldCwgeDogVyAqIDAuODIsIHk6IEggKiAwLjEyLCBzYzogMi42LCBkeDogMC4wMTIsIGR5OiAwLjAwOCwgcGg6IDAgfSwKICAgICAgICB7IHNwcjogc3ByTWFnZW50YSwgeDogVyAqIDAuMSwgeTogSCAqIDAuMywgc2M6IDIuMiwgZHg6IDAuMDEsIGR5OiAwLjAxMiwgcGg6IDIgfSwKICAgICAgICB7IHNwcjogc3ByRGVlcCwgeDogVyAqIDAuNSwgeTogSCAqIDAuODUsIHNjOiAzLjIsIGR4OiAwLjAwOCwgZHk6IDAuMDEsIHBoOiA0IH0sCiAgICAgICAgeyBzcHI6IHNwck1hZ2VudGEsIHg6IFcgKiAwLjksIHk6IEggKiAwLjcsIHNjOiAxLjksIGR4OiAwLjAxMSwgZHk6IDAuMDA3LCBwaDogMSB9LAogICAgICBdOwogICAgICBiZyA9IGN0eCEuY3JlYXRlTGluZWFyR3JhZGllbnQoMCwgMCwgMCwgSCk7CiAgICAgIGJnLmFkZENvbG9yU3RvcCgwLCAiIzNkMjM4OCIpOwogICAgICBiZy5hZGRDb2xvclN0b3AoMC4zLCAiIzJjMTY3MiIpOwogICAgICBiZy5hZGRDb2xvclN0b3AoMC42LCAiIzFiMGY1MiIpOwogICAgICBiZy5hZGRDb2xvclN0b3AoMSwgIiMwYjA2MjYiKTsKICAgIH0KCiAgICBmdW5jdGlvbiBwYWludCh0OiBudW1iZXIpIHsKICAgICAgaWYgKCFjdHggfHwgIWJnKSByZXR1cm47CiAgICAgIGN0eC5maWxsU3R5bGUgPSBiZzsKICAgICAgY3R4LmZpbGxSZWN0KDAsIDAsIFcsIEgpOwogICAgICBmb3IgKGNvbnN0IG4gb2YgbmVicykgewogICAgICAgIGNvbnN0IG54ID0gbi54ICsgTWF0aC5zaW4odCAqIG4uZHggKiAxMCArIG4ucGgpICogNDYgLSAocHRyLnggLSBXIC8gMikgKiAwLjAzOwogICAgICAgIGNvbnN0IG55ID0gbi55ICsgTWF0aC5jb3ModCAqIG4uZHkgKiAxMCArIG4ucGgpICogMzYgLSAocHRyLnkgLSBIIC8gMikgKiAwLjAyIC0gcHRyLnN5ICogMC4wNjsKICAgICAgICBjb25zdCBzID0gMzAwICogbi5zYzsKICAgICAgICBjdHguZHJhd0ltYWdlKG4uc3ByLCBueCAtIHMgLyAyLCBueSAtIHMgLyAyLCBzLCBzKTsKICAgICAgfQogICAgICBmb3IgKGNvbnN0IHMgb2Ygc3RhcnMpIHsKICAgICAgICBjb25zdCBweCA9IHMueCAtIChwdHIueCAtIFcgLyAyKSAqIHMucCAqIDAuMDg7CiAgICAgICAgbGV0IHB5ID0gKHMueSAtIChwdHIueSAtIEggLyAyKSAqIHMucCAqIDAuMDYgLSBwdHIuc3kgKiBzLnApICUgSDsKICAgICAgICBpZiAocHkgPCAwKSBweSArPSBIOwogICAgICAgIGN0eC5nbG9iYWxBbHBoYSA9IDAuMjUgKyAwLjU1ICogTWF0aC5hYnMoTWF0aC5zaW4odCAqIHMuc3AgKyBzLnBoKSk7CiAgICAgICAgY3R4LmZpbGxTdHlsZSA9ICIjZTlkNWZmIjsKICAgICAgICBjdHguYmVnaW5QYXRoKCk7IGN0eC5hcmMocHgsIHB5LCBzLnIsIDAsIDYuMjgzKTsgY3R4LmZpbGwoKTsKICAgICAgfQogICAgICBjdHguZ2xvYmFsQWxwaGEgPSAxOwogICAgfQoKICAgIGNvbnN0IG9uTW92ZSA9IChlOiBQb2ludGVyRXZlbnQpID0+IHsgcHRyLnR4ID0gZS5jbGllbnRYOyBwdHIudHkgPSBlLmNsaWVudFk7IH07CiAgICBjb25zdCBvblNjcm9sbCA9ICgpID0+IHsgcHRyLnRzeSA9IHdpbmRvdy5zY3JvbGxZIHx8IDA7IH07CgogICAgcmVzaXplKCk7CiAgICBpZiAocmVkdWNlKSB7CiAgICAgIHBhaW50KDEuNSk7IC8vIG9uZSBzdGF0aWMgZnJhbWUsIG5vIGxvb3AKICAgIH0gZWxzZSB7CiAgICAgIGNvbnN0IGxvb3AgPSAobm93OiBudW1iZXIpID0+IHsKICAgICAgICBpZiAoIXJ1bm5pbmcpIHJldHVybjsKICAgICAgICAvLyB0aGUgaW50ZXJ2aWV3IHRoZWF0ZXIgY292ZXJzIHRoZSBza3kgYWxtb3N0IGZ1bGx5IOKAlCByZXN0IHRoZSBHUFUKICAgICAgICBpZiAoZG9jdW1lbnQuYm9keS5jbGFzc0xpc3QuY29udGFpbnMoImpuLXRha2VvdmVyLW9uIikpIHsKICAgICAgICAgIHJhZiA9IHJlcXVlc3RBbmltYXRpb25GcmFtZShsb29wKTsKICAgICAgICAgIHJldHVybjsKICAgICAgICB9CiAgICAgICAgY29uc3QgdCA9IChub3cgLSB0MCkgLyAxMDAwOwogICAgICAgIHB0ci54ICs9IChwdHIudHggLSBwdHIueCkgKiAwLjA0NTsKICAgICAgICBwdHIueSArPSAocHRyLnR5IC0gcHRyLnkpICogMC4wNDU7CiAgICAgICAgcHRyLnN5ICs9IChwdHIudHN5IC0gcHRyLnN5KSAqIDAuMDk7CiAgICAgICAgcGFpbnQodCk7CiAgICAgICAgcmFmID0gcmVxdWVzdEFuaW1hdGlvbkZyYW1lKGxvb3ApOwogICAgICB9OwogICAgICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigicG9pbnRlcm1vdmUiLCBvbk1vdmUsIHsgcGFzc2l2ZTogdHJ1ZSB9KTsKICAgICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoInNjcm9sbCIsIG9uU2Nyb2xsLCB7IHBhc3NpdmU6IHRydWUgfSk7CiAgICAgIHJhZiA9IHJlcXVlc3RBbmltYXRpb25GcmFtZShsb29wKTsKICAgIH0KICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJyZXNpemUiLCByZXNpemUpOwogICAgcmV0dXJuICgpID0+IHsKICAgICAgcnVubmluZyA9IGZhbHNlOwogICAgICBjYW5jZWxBbmltYXRpb25GcmFtZShyYWYpOwogICAgICB3aW5kb3cucmVtb3ZlRXZlbnRMaXN0ZW5lcigicmVzaXplIiwgcmVzaXplKTsKICAgICAgd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoInBvaW50ZXJtb3ZlIiwgb25Nb3ZlKTsKICAgICAgd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoInNjcm9sbCIsIG9uU2Nyb2xsKTsKICAgIH07CiAgfSwgW10pOwoKICByZXR1cm4gPGNhbnZhcyByZWY9e2N2c1JlZn0gY2xhc3NOYW1lPSJjb3Ntb3MtZmllbGQiIGFyaWEtaGlkZGVuIC8+Owp9Cg=="}
+"use client";
+/**
+ * COSMOS — the living purple sky, painted on a single canvas as the deepest
+ * layer of AmbientField (so it shows on every route):
+ *   gradient sky  → deep violet that darkens toward the bottom
+ *   stars         → three depth layers, twinkling, with pointer/scroll parallax
+ *   nebulae       → four huge soft sprites drifting on slow orbits
+ * One lerped rAF loop (144Hz-smooth), DPR-capped, fully static under
+ * prefers-reduced-motion.
+ */
+import { useEffect, useRef } from "react";
+
+interface Star { x: number; y: number; r: number; p: number; ph: number; sp: number }
+interface Neb { spr: HTMLCanvasElement; x: number; y: number; sc: number; dx: number; dy: number; ph: number }
+
+function makeSprite(color: string): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = c.height = 300;
+  const g = c.getContext("2d");
+  if (g) {
+    const rg = g.createRadialGradient(150, 150, 0, 150, 150, 150);
+    rg.addColorStop(0, color);
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = rg;
+    g.fillRect(0, 0, 300, 300);
+  }
+  return c;
+}
+
+export default function CosmosField() {
+  const cvsRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const cv = cvsRef.current;
+    if (!cv) return;
+    const ctx = cv.getContext("2d");
+    if (!ctx) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let W = 0, H = 0, raf = 0, running = true;
+    let stars: Star[] = [], nebs: Neb[] = [], bg: CanvasGradient | null = null;
+    const ptr = { x: 0.5, y: 0.35, tx: 0.5, ty: 0.35, sy: 0, tsy: 0 };
+    const t0 = performance.now();
+
+    const sprViolet = makeSprite("rgba(124,58,237,.34)");
+    const sprMagenta = makeSprite("rgba(192,38,211,.22)");
+    const sprDeep = makeSprite("rgba(76,29,149,.4)");
+
+    function resize() {
+      // 1.5 is visually identical for soft nebulae and halves the GPU fill cost on hi-dpi phones
+      const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = window.innerWidth; H = window.innerHeight;
+      cv!.width = W * DPR; cv!.height = H * DPR;
+      cv!.style.width = `${W}px`; cv!.style.height = `${H}px`;
+      ctx!.setTransform(DPR, 0, 0, DPR, 0, 0);
+      stars = [];
+      const layers = [
+        { n: 46, p: 0.12, s: 1 },
+        { n: 34, p: 0.28, s: 1.6 },
+        { n: 20, p: 0.5, s: 2.3 },
+      ];
+      for (const L of layers) {
+        for (let i = 0; i < L.n; i++) {
+          stars.push({
+            x: Math.random() * W, y: Math.random() * H,
+            r: L.s * (0.5 + Math.random() * 0.9),
+            p: L.p, ph: Math.random() * 6.28, sp: 0.4 + Math.random() * 0.8,
+          });
+        }
+      }
+      nebs = [
+        { spr: sprViolet, x: W * 0.82, y: H * 0.12, sc: 2.6, dx: 0.012, dy: 0.008, ph: 0 },
+        { spr: sprMagenta, x: W * 0.1, y: H * 0.3, sc: 2.2, dx: 0.01, dy: 0.012, ph: 2 },
+        { spr: sprDeep, x: W * 0.5, y: H * 0.85, sc: 3.2, dx: 0.008, dy: 0.01, ph: 4 },
+        { spr: sprMagenta, x: W * 0.9, y: H * 0.7, sc: 1.9, dx: 0.011, dy: 0.007, ph: 1 },
+      ];
+      bg = ctx!.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, "#3d2388");
+      bg.addColorStop(0.3, "#2c1672");
+      bg.addColorStop(0.6, "#1b0f52");
+      bg.addColorStop(1, "#0b0626");
+    }
+
+    function paint(t: number) {
+      if (!ctx || !bg) return;
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      for (const n of nebs) {
+        const nx = n.x + Math.sin(t * n.dx * 10 + n.ph) * 46 - (ptr.x - W / 2) * 0.03;
+        const ny = n.y + Math.cos(t * n.dy * 10 + n.ph) * 36 - (ptr.y - H / 2) * 0.02 - ptr.sy * 0.06;
+        const s = 300 * n.sc;
+        ctx.drawImage(n.spr, nx - s / 2, ny - s / 2, s, s);
+      }
+      for (const s of stars) {
+        const px = s.x - (ptr.x - W / 2) * s.p * 0.08;
+        let py = (s.y - (ptr.y - H / 2) * s.p * 0.06 - ptr.sy * s.p) % H;
+        if (py < 0) py += H;
+        ctx.globalAlpha = 0.25 + 0.55 * Math.abs(Math.sin(t * s.sp + s.ph));
+        ctx.fillStyle = "#e9d5ff";
+        ctx.beginPath(); ctx.arc(px, py, s.r, 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    const onMove = (e: PointerEvent) => { ptr.tx = e.clientX; ptr.ty = e.clientY; };
+    const onScroll = () => { ptr.tsy = window.scrollY || 0; };
+
+    resize();
+    if (reduce) {
+      paint(1.5); // one static frame, no loop
+    } else {
+      const loop = (now: number) => {
+        if (!running) return;
+        // the interview theater covers the sky almost fully — rest the GPU
+        if (document.body.classList.contains("jn-takeover-on")) {
+          raf = requestAnimationFrame(loop);
+          return;
+        }
+        const t = (now - t0) / 1000;
+        ptr.x += (ptr.tx - ptr.x) * 0.045;
+        ptr.y += (ptr.ty - ptr.y) * 0.045;
+        ptr.sy += (ptr.tsy - ptr.sy) * 0.09;
+        paint(t);
+        raf = requestAnimationFrame(loop);
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+      window.addEventListener("scroll", onScroll, { passive: true });
+      raf = requestAnimationFrame(loop);
+    }
+    window.addEventListener("resize", resize);
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return <canvas ref={cvsRef} className="cosmos-field" aria-hidden />;
+}

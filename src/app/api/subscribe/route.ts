@@ -1,1 +1,54 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAyMDsKCi8qKgogKiBOZXdzbGV0dGVyIHNpZ251cCDihpIgUmVzZW5kIEF1ZGllbmNlcy4gVGhlIGF1ZGllbmNlIGlzIGNyZWF0ZWQgbGF6aWx5IG9uCiAqIGZpcnN0IHVzZSBhbmQgaXRzIGlkIGNhY2hlZCAoYWxzbyBzZXR0YWJsZSB2aWEgUkVTRU5EX0FVRElFTkNFX0lEKS4KICovCmxldCBjYWNoZWRBdWRpZW5jZUlkOiBzdHJpbmcgfCBudWxsID0gcHJvY2Vzcy5lbnYuUkVTRU5EX0FVRElFTkNFX0lEIHx8IG51bGw7Cgphc3luYyBmdW5jdGlvbiBnZXRBdWRpZW5jZUlkKGtleTogc3RyaW5nKTogUHJvbWlzZTxzdHJpbmc+IHsKICBpZiAoY2FjaGVkQXVkaWVuY2VJZCkgcmV0dXJuIGNhY2hlZEF1ZGllbmNlSWQ7CiAgY29uc3QgaGVhZGVycyA9IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2tleX1gLCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH07CiAgY29uc3QgbGlzdCA9IGF3YWl0IGZldGNoKCJodHRwczovL2FwaS5yZXNlbmQuY29tL2F1ZGllbmNlcyIsIHsgaGVhZGVycyB9KTsKICBpZiAobGlzdC5vaykgewogICAgY29uc3QgZCA9IGF3YWl0IGxpc3QuanNvbigpOwogICAgY29uc3QgZmlyc3QgPSBkPy5kYXRhPy5bMF0/LmlkOwogICAgaWYgKGZpcnN0KSB7IGNhY2hlZEF1ZGllbmNlSWQgPSBmaXJzdDsgcmV0dXJuIGZpcnN0OyB9CiAgfQogIGNvbnN0IGNyZWF0ZWQgPSBhd2FpdCBmZXRjaCgiaHR0cHM6Ly9hcGkucmVzZW5kLmNvbS9hdWRpZW5jZXMiLCB7CiAgICBtZXRob2Q6ICJQT1NUIiwgaGVhZGVycywgYm9keTogSlNPTi5zdHJpbmdpZnkoeyBuYW1lOiAiU2lyYSBOZXdzbGV0dGVyIiB9KSwKICB9KTsKICBpZiAoIWNyZWF0ZWQub2spIHRocm93IG5ldyBFcnJvcihgYXVkaWVuY2UgY3JlYXRlICR7Y3JlYXRlZC5zdGF0dXN9YCk7CiAgY29uc3QgZCA9IGF3YWl0IGNyZWF0ZWQuanNvbigpOwogIGNhY2hlZEF1ZGllbmNlSWQgPSBkLmlkOwogIHJldHVybiBkLmlkOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIGNvbnN0IHsgZW1haWwgfSA9IGF3YWl0IHJlcS5qc29uKCk7CiAgICBpZiAoIWVtYWlsIHx8ICEvXlteQFxzXStAW15AXHNdK1wuW15AXHNdKyQvLnRlc3QoU3RyaW5nKGVtYWlsKSkpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJpbnZhbGlkIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgfQogICAgaWYgKCEoYXdhaXQgYWxsb3dTaGFyZWQoYHN1Yjoke2NsaWVudElwKHJlcSl9YCwgNSwgNjAgKiA2MCAqIDEwMDApKSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogInJhdGUiIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CiAgICBjb25zdCBrZXkgPSBwcm9jZXNzLmVudi5SRVNFTkRfQVBJX0tFWTsKICAgIGlmICgha2V5KSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogInVuYXZhaWxhYmxlIiB9LCB7IHN0YXR1czogNTAzIH0pOwoKICAgIGNvbnN0IGF1ZGllbmNlSWQgPSBhd2FpdCBnZXRBdWRpZW5jZUlkKGtleSk7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChgaHR0cHM6Ly9hcGkucmVzZW5kLmNvbS9hdWRpZW5jZXMvJHthdWRpZW5jZUlkfS9jb250YWN0c2AsIHsKICAgICAgbWV0aG9kOiAiUE9TVCIsCiAgICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2tleX1gLCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgZW1haWw6IFN0cmluZyhlbWFpbCkudG9Mb3dlckNhc2UoKSwgdW5zdWJzY3JpYmVkOiBmYWxzZSB9KSwKICAgIH0pOwogICAgaWYgKCFyZXMub2sgJiYgcmVzLnN0YXR1cyAhPT0gNDA5KSB0aHJvdyBuZXcgRXJyb3IoYGNvbnRhY3QgJHtyZXMuc3RhdHVzfWApOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IHRydWUgfSk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJTdWJzY3JpYmUgZXJyb3I6IiwgZXJyKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiZmFpbGVkIiB9LCB7IHN0YXR1czogNTAwIH0pOwogIH0KfQo="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 20;
+
+/**
+ * Newsletter signup → Resend Audiences. The audience is created lazily on
+ * first use and its id cached (also settable via RESEND_AUDIENCE_ID).
+ */
+let cachedAudienceId: string | null = process.env.RESEND_AUDIENCE_ID || null;
+
+async function getAudienceId(key: string): Promise<string> {
+  if (cachedAudienceId) return cachedAudienceId;
+  const headers = { Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
+  const list = await fetch("https://api.resend.com/audiences", { headers });
+  if (list.ok) {
+    const d = await list.json();
+    const first = d?.data?.[0]?.id;
+    if (first) { cachedAudienceId = first; return first; }
+  }
+  const created = await fetch("https://api.resend.com/audiences", {
+    method: "POST", headers, body: JSON.stringify({ name: "Sira Newsletter" }),
+  });
+  if (!created.ok) throw new Error(`audience create ${created.status}`);
+  const d = await created.json();
+  cachedAudienceId = d.id;
+  return d.id;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { email } = await req.json();
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) {
+      return NextResponse.json({ error: "invalid" }, { status: 400 });
+    }
+    if (!(await allowShared(`sub:${clientIp(req)}`, 5, 60 * 60 * 1000))) {
+      return NextResponse.json({ error: "rate" }, { status: 429 });
+    }
+    const key = process.env.RESEND_API_KEY;
+    if (!key) return NextResponse.json({ error: "unavailable" }, { status: 503 });
+
+    const audienceId = await getAudienceId(key);
+    const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ email: String(email).toLowerCase(), unsubscribed: false }),
+    });
+    if (!res.ok && res.status !== 409) throw new Error(`contact ${res.status}`);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Subscribe error:", err);
+    return NextResponse.json({ error: "failed" }, { status: 500 });
+  }
+}

@@ -1,1 +1,178 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAzMDsKCi8qKgogKiBOYXR1cmFsIEFyYWJpYyB0ZXh0LXRvLXNwZWVjaC4gVHJpZXMgcHJvdmlkZXJzIGluIHF1YWxpdHkgb3JkZXIgYW5kIHJldHVybnMKICogYW4gTVAzL1dBViBzbyB0aGUgc2FtZSBodW1hbi1saWtlIHZvaWNlIHBsYXlzIG9uIGV2ZXJ5IGRldmljZSAocmVwbGFjaW5nIHRoZQogKiByb2JvdGljIGJyb3dzZXIgc3BlZWNoU3ludGhlc2lzKS4gQWxsIGtleXMgbGl2ZSBvbmx5IGluIGVudiB2YXJzLgogKgogKiAgIDEuIEdlbWluaSBUVFMgICAoR0VNSU5JX1RUU19LRVkpICDigJQgbW9zdCBodW1hbi1saWtlLCBmcmVlIHRpZXIgdmlhIEFJIFN0dWRpbwogKiAgIDIuIEVsZXZlbkxhYnMgICAoRUxFVkVOTEFCU19LRVkpICDigJQgcmVmZXJlbmNlLWdyYWRlIEFyYWJpYywgc21hbGwgZnJlZSB0aWVyCiAqICAgMy4gQXp1cmUgU3BlZWNoIChBWlVSRV9TUEVFQ0hfS0VZICsgQVpVUkVfU1BFRUNIX1JFR0lPTikg4oCUIHNvbGlkIGZhbGxiYWNrCiAqLwoKZnVuY3Rpb24gZXNjYXBlWG1sKHM6IHN0cmluZyk6IHN0cmluZyB7CiAgcmV0dXJuIHMucmVwbGFjZSgvJi9nLCAiJmFtcDsiKS5yZXBsYWNlKC88L2csICImbHQ7IikucmVwbGFjZSgvPi9nLCAiJmd0OyIpLnJlcGxhY2UoLyIvZywgIiZxdW90OyIpLnJlcGxhY2UoLycvZywgIiZhcG9zOyIpOwp9CgovLyDilIDilIAgMS4gR2VtaW5pIFRUUyAoZ2VuZXJhdGVDb250ZW50LCBBVURJTyBtb2RhbGl0eSDihpIgYmFzZTY0IFBDTSAyNGtIeikg4pSA4pSACmFzeW5jIGZ1bmN0aW9uIGdlbWluaVR0cyh0ZXh0OiBzdHJpbmcsIGZlbWFsZTogYm9vbGVhbiwgX2xhbmc/OiBzdHJpbmcpOiBQcm9taXNlPFJlc3BvbnNlIHwgbnVsbD4gewogIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52LkdFTUlOSV9UVFNfS0VZOwogIGlmICgha2V5KSByZXR1cm4gbnVsbDsKICBjb25zdCBtb2RlbCA9IHByb2Nlc3MuZW52LkdFTUlOSV9UVFNfTU9ERUwgfHwgImdlbWluaS0yLjUtZmxhc2gtcHJldmlldy10dHMiOwogIC8vIFdhcm0sIG5hdHVyYWwgbWFsZS9mZW1hbGUgcHJlYnVpbHQgdm9pY2VzOyBhIHNob3J0IHN0eWxlIGluc3RydWN0aW9uIG1ha2VzCiAgLy8gaXQgc3BlYWsgbGlrZSBhIHJlYWwgaW50ZXJ2aWV3ZXIgcmF0aGVyIHRoYW4gYSBuYXJyYXRvci4KICBjb25zdCB2b2ljZSA9IGZlbWFsZSA/ICJLb3JlIiA6ICJDaGFyb24iOwogIC8vIExhbmd1YWdlLW5ldXRyYWwgc3R5bGUgY3VlIOKAlCBHZW1pbmkgYXV0by1kZXRlY3RzIGFuZCBtYXRjaGVzIHRoZSB0ZXh0J3MKICAvLyBsYW5ndWFnZSAoQXJhYmljINmB2LXYrdmJIG9yIEVuZ2xpc2gpLCBzbyB0aGUgc2FtZSB2b2ljZSBoYW5kbGVzIGJvdGguCiAgY29uc3QgcHJvbXB0ID0gYFNwZWFrIGluIGEgd2FybSwgY29uZmlkZW50LCBuYXR1cmFsIGh1bWFuIHZvaWNlLCBsaWtlIGEgcmVhbCBqb2IgaW50ZXJ2aWV3ZXIgdGFsa2luZyB0byBhIGNhbmRpZGF0ZTpcbiR7dGV4dH1gOwogIHRyeSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaCgKICAgICAgYGh0dHBzOi8vZ2VuZXJhdGl2ZWxhbmd1YWdlLmdvb2dsZWFwaXMuY29tL3YxYmV0YS9tb2RlbHMvJHttb2RlbH06Z2VuZXJhdGVDb250ZW50YCwKICAgICAgewogICAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICAgIGhlYWRlcnM6IHsgIngtZ29vZy1hcGkta2V5Ijoga2V5LCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgICAgY29udGVudHM6IFt7IHBhcnRzOiBbeyB0ZXh0OiBwcm9tcHQgfV0gfV0sCiAgICAgICAgICBnZW5lcmF0aW9uQ29uZmlnOiB7CiAgICAgICAgICAgIHJlc3BvbnNlTW9kYWxpdGllczogWyJBVURJTyJdLAogICAgICAgICAgICBzcGVlY2hDb25maWc6IHsgdm9pY2VDb25maWc6IHsgcHJlYnVpbHRWb2ljZUNvbmZpZzogeyB2b2ljZU5hbWU6IHZvaWNlIH0gfSB9LAogICAgICAgICAgfSwKICAgICAgICB9KSwKICAgICAgfQogICAgKTsKICAgIGlmICghcmVzLm9rKSB7CiAgICAgIGNvbnNvbGUuZXJyb3IoIkdlbWluaSBUVFMiLCByZXMuc3RhdHVzLCAoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKSk7CiAgICAgIHJldHVybiBudWxsOwogICAgfQogICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICBjb25zdCBiNjQgPSBkYXRhPy5jYW5kaWRhdGVzPy5bMF0/LmNvbnRlbnQ/LnBhcnRzPy5maW5kKChwOiB7IGlubGluZURhdGE/OiB1bmtub3duIH0pID0+IHAuaW5saW5lRGF0YSk/LmlubGluZURhdGE/LmRhdGE7CiAgICBpZiAoIWI2NCkgcmV0dXJuIG51bGw7CiAgICAvLyBHZW1pbmkgcmV0dXJucyByYXcgUENNIChzMTZsZSwgMjRrSHosIG1vbm8pIOKAlCB3cmFwIGl0IGluIGEgV0FWIGhlYWRlci4KICAgIGNvbnN0IHBjbSA9IEJ1ZmZlci5mcm9tKGI2NCwgImJhc2U2NCIpOwogICAgY29uc3Qgd2F2ID0gcGNtVG9XYXYocGNtLCAyNDAwMCk7CiAgICByZXR1cm4gbmV3IE5leHRSZXNwb25zZShuZXcgVWludDhBcnJheSh3YXYpLCB7CiAgICAgIGhlYWRlcnM6IHsgIkNvbnRlbnQtVHlwZSI6ICJhdWRpby93YXYiLCAiQ2FjaGUtQ29udHJvbCI6ICJwdWJsaWMsIG1heC1hZ2U9ODY0MDAiIH0sCiAgICB9KTsKICB9IGNhdGNoIChlKSB7CiAgICBjb25zb2xlLmVycm9yKCJHZW1pbmkgVFRTIGVycm9yIiwgZSk7CiAgICByZXR1cm4gbnVsbDsKICB9Cn0KCmZ1bmN0aW9uIHBjbVRvV2F2KHBjbTogQnVmZmVyLCBzYW1wbGVSYXRlOiBudW1iZXIpOiBCdWZmZXIgewogIGNvbnN0IG51bUNoYW5uZWxzID0gMSwgYml0c1BlclNhbXBsZSA9IDE2OwogIGNvbnN0IGJ5dGVSYXRlID0gKHNhbXBsZVJhdGUgKiBudW1DaGFubmVscyAqIGJpdHNQZXJTYW1wbGUpIC8gODsKICBjb25zdCBibG9ja0FsaWduID0gKG51bUNoYW5uZWxzICogYml0c1BlclNhbXBsZSkgLyA4OwogIGNvbnN0IGhlYWRlciA9IEJ1ZmZlci5hbGxvYyg0NCk7CiAgaGVhZGVyLndyaXRlKCJSSUZGIiwgMCk7CiAgaGVhZGVyLndyaXRlVUludDMyTEUoMzYgKyBwY20ubGVuZ3RoLCA0KTsKICBoZWFkZXIud3JpdGUoIldBVkUiLCA4KTsKICBoZWFkZXIud3JpdGUoImZtdCAiLCAxMik7CiAgaGVhZGVyLndyaXRlVUludDMyTEUoMTYsIDE2KTsKICBoZWFkZXIud3JpdGVVSW50MTZMRSgxLCAyMCk7CiAgaGVhZGVyLndyaXRlVUludDE2TEUobnVtQ2hhbm5lbHMsIDIyKTsKICBoZWFkZXIud3JpdGVVSW50MzJMRShzYW1wbGVSYXRlLCAyNCk7CiAgaGVhZGVyLndyaXRlVUludDMyTEUoYnl0ZVJhdGUsIDI4KTsKICBoZWFkZXIud3JpdGVVSW50MTZMRShibG9ja0FsaWduLCAzMik7CiAgaGVhZGVyLndyaXRlVUludDE2TEUoYml0c1BlclNhbXBsZSwgMzQpOwogIGhlYWRlci53cml0ZSgiZGF0YSIsIDM2KTsKICBoZWFkZXIud3JpdGVVSW50MzJMRShwY20ubGVuZ3RoLCA0MCk7CiAgcmV0dXJuIEJ1ZmZlci5jb25jYXQoW2hlYWRlciwgcGNtXSk7Cn0KCi8vIOKUgOKUgCAyLiBFbGV2ZW5MYWJzIChtdWx0aWxpbmd1YWwgdjIg4oaSIE1QMykg4pSA4pSACmFzeW5jIGZ1bmN0aW9uIGVsZXZlblR0cyh0ZXh0OiBzdHJpbmcsIGZlbWFsZTogYm9vbGVhbiwgX2xhbmc/OiBzdHJpbmcpOiBQcm9taXNlPFJlc3BvbnNlIHwgbnVsbD4gewogIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52LkVMRVZFTkxBQlNfS0VZOwogIGlmICgha2V5KSByZXR1cm4gbnVsbDsKICAvLyBEZWZhdWx0IG11bHRpbGluZ3VhbCB2b2ljZXM7IG92ZXJyaWRlIHBlci1nZW5kZXIgdmlhIGVudiBpZiBkZXNpcmVkLgogIGNvbnN0IHZvaWNlSWQgPSBmZW1hbGUKICAgID8gcHJvY2Vzcy5lbnYuRUxFVkVOTEFCU19WT0lDRV9GIHx8ICJFWEFWSVRRdTR2cjR4blNEeE1hTCIKICAgIDogcHJvY2Vzcy5lbnYuRUxFVkVOTEFCU19WT0lDRV9NIHx8ICJvbndLNGU5Wkx1VEFLcVdXMDNGOSI7CiAgdHJ5IHsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL2FwaS5lbGV2ZW5sYWJzLmlvL3YxL3RleHQtdG8tc3BlZWNoLyR7dm9pY2VJZH1gLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7ICJ4aS1hcGkta2V5Ijoga2V5LCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iLCBBY2NlcHQ6ICJhdWRpby9tcGVnIiB9LAogICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7CiAgICAgICAgdGV4dCwKICAgICAgICBtb2RlbF9pZDogImVsZXZlbl9tdWx0aWxpbmd1YWxfdjIiLAogICAgICAgIHZvaWNlX3NldHRpbmdzOiB7IHN0YWJpbGl0eTogMC40LCBzaW1pbGFyaXR5X2Jvb3N0OiAwLjgsIHN0eWxlOiAwLjE1IH0sCiAgICAgIH0pLAogICAgfSk7CiAgICBpZiAoIXJlcy5vaykgewogICAgICBjb25zb2xlLmVycm9yKCJFbGV2ZW5MYWJzIiwgcmVzLnN0YXR1cywgKGF3YWl0IHJlcy50ZXh0KCkpLnNsaWNlKDAsIDIwMCkpOwogICAgICByZXR1cm4gbnVsbDsKICAgIH0KICAgIGNvbnN0IGF1ZGlvID0gYXdhaXQgcmVzLmFycmF5QnVmZmVyKCk7CiAgICByZXR1cm4gbmV3IE5leHRSZXNwb25zZShhdWRpbywgewogICAgICBoZWFkZXJzOiB7ICJDb250ZW50LVR5cGUiOiAiYXVkaW8vbXBlZyIsICJDYWNoZS1Db250cm9sIjogInB1YmxpYywgbWF4LWFnZT04NjQwMCIgfSwKICAgIH0pOwogIH0gY2F0Y2ggKGUpIHsKICAgIGNvbnNvbGUuZXJyb3IoIkVsZXZlbkxhYnMgZXJyb3IiLCBlKTsKICAgIHJldHVybiBudWxsOwogIH0KfQoKLy8g4pSA4pSAIDMuIEF6dXJlIFNwZWVjaCAobmV1cmFsIOKGkiBoaWdoLWJpdHJhdGUgTVAzKSDilIDilIAKY29uc3QgQVpVUkVfVk9JQ0VTOiBSZWNvcmQ8c3RyaW5nLCBzdHJpbmc+ID0gewogIGhhbWVkOiAiYXItU0EtSGFtZWROZXVyYWwiLCB6YXJpeWFoOiAiYXItU0EtWmFyaXlhaE5ldXJhbCIsCiAgZ3V5OiAiZW4tVVMtR3V5TmV1cmFsIiwgamVubnk6ICJlbi1VUy1KZW5ueU5ldXJhbCIsCn07CmFzeW5jIGZ1bmN0aW9uIGF6dXJlVHRzKHRleHQ6IHN0cmluZywgZmVtYWxlOiBib29sZWFuLCBsYW5nOiBzdHJpbmcpOiBQcm9taXNlPFJlc3BvbnNlIHwgbnVsbD4gewogIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52LkFaVVJFX1NQRUVDSF9LRVk7CiAgY29uc3QgcmVnaW9uID0gcHJvY2Vzcy5lbnYuQVpVUkVfU1BFRUNIX1JFR0lPTjsKICBpZiAoIWtleSB8fCAhcmVnaW9uKSByZXR1cm4gbnVsbDsKICBjb25zdCBlbiA9IGxhbmcgPT09ICJlbiI7CiAgY29uc3QgeG1sTGFuZyA9IGVuID8gImVuLVVTIiA6ICJhci1TQSI7CiAgY29uc3Qgdm9pY2UgPSBlbiA/IChmZW1hbGUgPyBBWlVSRV9WT0lDRVMuamVubnkgOiBBWlVSRV9WT0lDRVMuZ3V5KSA6IChmZW1hbGUgPyBBWlVSRV9WT0lDRVMuemFyaXlhaCA6IEFaVVJFX1ZPSUNFUy5oYW1lZCk7CiAgY29uc3Qgc3NtbCA9IGA8c3BlYWsgdmVyc2lvbj0iMS4wIiB4bWxuczptc3R0cz0iaHR0cHM6Ly93d3cudzMub3JnLzIwMDEvbXN0dHMiIHhtbDpsYW5nPSIke3htbExhbmd9Ij48dm9pY2UgbmFtZT0iJHt2b2ljZX0iPjxtc3R0czpleHByZXNzLWFzIHN0eWxlPSJjaGF0Ij48cHJvc29keSByYXRlPSItMiUiIHBpdGNoPSItMiUiPiR7ZXNjYXBlWG1sKHRleHQpfTwvcHJvc29keT48L21zdHRzOmV4cHJlc3MtYXM+PC92b2ljZT48L3NwZWFrPmA7CiAgdHJ5IHsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovLyR7cmVnaW9ufS50dHMuc3BlZWNoLm1pY3Jvc29mdC5jb20vY29nbml0aXZlc2VydmljZXMvdjFgLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7CiAgICAgICAgIk9jcC1BcGltLVN1YnNjcmlwdGlvbi1LZXkiOiBrZXksCiAgICAgICAgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9zc21sK3htbCIsCiAgICAgICAgIlgtTWljcm9zb2Z0LU91dHB1dEZvcm1hdCI6ICJhdWRpby00OGtoei0xOTJrYml0cmF0ZS1tb25vLW1wMyIsCiAgICAgICAgIlVzZXItQWdlbnQiOiAicmVzdW1lYWkiLAogICAgICB9LAogICAgICBib2R5OiBzc21sLAogICAgfSk7CiAgICBpZiAoIXJlcy5vaykgewogICAgICBjb25zb2xlLmVycm9yKCJBenVyZSBUVFMiLCByZXMuc3RhdHVzLCAoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKSk7CiAgICAgIHJldHVybiBudWxsOwogICAgfQogICAgY29uc3QgYXVkaW8gPSBhd2FpdCByZXMuYXJyYXlCdWZmZXIoKTsKICAgIHJldHVybiBuZXcgTmV4dFJlc3BvbnNlKGF1ZGlvLCB7CiAgICAgIGhlYWRlcnM6IHsgIkNvbnRlbnQtVHlwZSI6ICJhdWRpby9tcGVnIiwgIkNhY2hlLUNvbnRyb2wiOiAicHVibGljLCBtYXgtYWdlPTg2NDAwIiB9LAogICAgfSk7CiAgfSBjYXRjaCAoZSkgewogICAgY29uc29sZS5lcnJvcigiQXp1cmUgVFRTIGVycm9yIiwgZSk7CiAgICByZXR1cm4gbnVsbDsKICB9Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBQT1NUKHJlcTogTmV4dFJlcXVlc3QpIHsKICBpZiAoIShhd2FpdCBhbGxvd1NoYXJlZChgdHRzOiR7Y2xpZW50SXAocmVxKX1gLCA2MCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJUb28gbWFueSByZXF1ZXN0cyIgfSwgeyBzdGF0dXM6IDQyOSB9KTsKICB9CgogIGxldCBib2R5OiB7IHRleHQ/OiBzdHJpbmc7IHZvaWNlPzogc3RyaW5nOyBsYW5nPzogc3RyaW5nIH07CiAgdHJ5IHsgYm9keSA9IGF3YWl0IHJlcS5qc29uKCk7IH0gY2F0Y2ggeyByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkludmFsaWQgSlNPTiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsgfQogIGNvbnN0IHRleHQgPSBTdHJpbmcoYm9keS50ZXh0IHx8ICIiKS5zbGljZSgwLCA4MDApLnRyaW0oKTsKICBpZiAoIXRleHQpIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAidGV4dCByZXF1aXJlZCIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAvLyBEZWZhdWx0IHZvaWNlIGlzIEtvcmUgKGZlbWFsZSkgZm9yIGJvdGggQXJhYmljIGFuZCBFbmdsaXNoOyBwYXNzIGEgbWFsZQogIC8vIGhpbnQgKGhhbWVkL2NoYXJvbi9tYWxlKSB0byBzd2l0Y2guCiAgY29uc3QgdiA9IFN0cmluZyhib2R5LnZvaWNlIHx8ICIiKS50b0xvd2VyQ2FzZSgpOwogIGNvbnN0IGZlbWFsZSA9ICEodi5pbmNsdWRlcygiaGFtZWQiKSB8fCB2LmluY2x1ZGVzKCJjaGFyb24iKSB8fCB2LmluY2x1ZGVzKCJtYWxlIikpOwogIGNvbnN0IGxhbmcgPSBib2R5LmxhbmcgPT09ICJlbiIgPyAiZW4iIDogImFyIjsKCiAgLy8gUXVhbGl0eSBvcmRlciDigJQgZmlyc3QgY29uZmlndXJlZCBwcm92aWRlciB0aGF0IHJldHVybnMgYXVkaW8gd2lucy4gR2VtaW5pICYKICAvLyBFbGV2ZW5MYWJzIGF1dG8tZGV0ZWN0IGxhbmd1YWdlIGZyb20gdGhlIHRleHQ7IEF6dXJlIG5lZWRzIGl0IGV4cGxpY2l0bHkuCiAgZm9yIChjb25zdCBwcm92aWRlciBvZiBbZ2VtaW5pVHRzLCBlbGV2ZW5UdHMsIGF6dXJlVHRzXSkgewogICAgY29uc3Qgb3V0ID0gYXdhaXQgcHJvdmlkZXIodGV4dCwgZmVtYWxlLCBsYW5nKTsKICAgIGlmIChvdXQpIHJldHVybiBvdXQ7CiAgfQogIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiVFRTIG5vdCBjb25maWd1cmVkIiB9LCB7IHN0YXR1czogNTAxIH0pOwp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 30;
+
+/**
+ * Natural Arabic text-to-speech. Tries providers in quality order and returns
+ * an MP3/WAV so the same human-like voice plays on every device (replacing the
+ * robotic browser speechSynthesis). All keys live only in env vars.
+ *
+ *   1. Gemini TTS   (GEMINI_TTS_KEY)  — most human-like, free tier via AI Studio
+ *   2. ElevenLabs   (ELEVENLABS_KEY)  — reference-grade Arabic, small free tier
+ *   3. Azure Speech (AZURE_SPEECH_KEY + AZURE_SPEECH_REGION) — solid fallback
+ */
+
+function escapeXml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
+// ── 1. Gemini TTS (generateContent, AUDIO modality → base64 PCM 24kHz) ──
+async function geminiTts(text: string, female: boolean, _lang?: string): Promise<Response | null> {
+  const key = process.env.GEMINI_TTS_KEY;
+  if (!key) return null;
+  const model = process.env.GEMINI_TTS_MODEL || "gemini-2.5-flash-preview-tts";
+  // Warm, natural male/female prebuilt voices; a short style instruction makes
+  // it speak like a real interviewer rather than a narrator.
+  const voice = female ? "Kore" : "Charon";
+  // Language-neutral style cue — Gemini auto-detects and matches the text's
+  // language (Arabic فصحى or English), so the same voice handles both.
+  const prompt = `Speak in a warm, confident, natural human voice, like a real job interviewer talking to a candidate:\n${text}`;
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } },
+          },
+        }),
+      }
+    );
+    if (!res.ok) {
+      console.error("Gemini TTS", res.status, (await res.text()).slice(0, 200));
+      return null;
+    }
+    const data = await res.json();
+    const b64 = data?.candidates?.[0]?.content?.parts?.find((p: { inlineData?: unknown }) => p.inlineData)?.inlineData?.data;
+    if (!b64) return null;
+    // Gemini returns raw PCM (s16le, 24kHz, mono) — wrap it in a WAV header.
+    const pcm = Buffer.from(b64, "base64");
+    const wav = pcmToWav(pcm, 24000);
+    return new NextResponse(new Uint8Array(wav), {
+      headers: { "Content-Type": "audio/wav", "Cache-Control": "public, max-age=86400" },
+    });
+  } catch (e) {
+    console.error("Gemini TTS error", e);
+    return null;
+  }
+}
+
+function pcmToWav(pcm: Buffer, sampleRate: number): Buffer {
+  const numChannels = 1, bitsPerSample = 16;
+  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
+  const header = Buffer.alloc(44);
+  header.write("RIFF", 0);
+  header.writeUInt32LE(36 + pcm.length, 4);
+  header.write("WAVE", 8);
+  header.write("fmt ", 12);
+  header.writeUInt32LE(16, 16);
+  header.writeUInt16LE(1, 20);
+  header.writeUInt16LE(numChannels, 22);
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(byteRate, 28);
+  header.writeUInt16LE(blockAlign, 32);
+  header.writeUInt16LE(bitsPerSample, 34);
+  header.write("data", 36);
+  header.writeUInt32LE(pcm.length, 40);
+  return Buffer.concat([header, pcm]);
+}
+
+// ── 2. ElevenLabs (multilingual v2 → MP3) ──
+async function elevenTts(text: string, female: boolean, _lang?: string): Promise<Response | null> {
+  const key = process.env.ELEVENLABS_KEY;
+  if (!key) return null;
+  // Default multilingual voices; override per-gender via env if desired.
+  const voiceId = female
+    ? process.env.ELEVENLABS_VOICE_F || "EXAVITQu4vr4xnSDxMaL"
+    : process.env.ELEVENLABS_VOICE_M || "onwK4e9ZLuTAKqWW03F9";
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: { "xi-api-key": key, "Content-Type": "application/json", Accept: "audio/mpeg" },
+      body: JSON.stringify({
+        text,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.4, similarity_boost: 0.8, style: 0.15 },
+      }),
+    });
+    if (!res.ok) {
+      console.error("ElevenLabs", res.status, (await res.text()).slice(0, 200));
+      return null;
+    }
+    const audio = await res.arrayBuffer();
+    return new NextResponse(audio, {
+      headers: { "Content-Type": "audio/mpeg", "Cache-Control": "public, max-age=86400" },
+    });
+  } catch (e) {
+    console.error("ElevenLabs error", e);
+    return null;
+  }
+}
+
+// ── 3. Azure Speech (neural → high-bitrate MP3) ──
+const AZURE_VOICES: Record<string, string> = {
+  hamed: "ar-SA-HamedNeural", zariyah: "ar-SA-ZariyahNeural",
+  guy: "en-US-GuyNeural", jenny: "en-US-JennyNeural",
+};
+async function azureTts(text: string, female: boolean, lang: string): Promise<Response | null> {
+  const key = process.env.AZURE_SPEECH_KEY;
+  const region = process.env.AZURE_SPEECH_REGION;
+  if (!key || !region) return null;
+  const en = lang === "en";
+  const xmlLang = en ? "en-US" : "ar-SA";
+  const voice = en ? (female ? AZURE_VOICES.jenny : AZURE_VOICES.guy) : (female ? AZURE_VOICES.zariyah : AZURE_VOICES.hamed);
+  const ssml = `<speak version="1.0" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="${xmlLang}"><voice name="${voice}"><mstts:express-as style="chat"><prosody rate="-2%" pitch="-2%">${escapeXml(text)}</prosody></mstts:express-as></voice></speak>`;
+  try {
+    const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: "POST",
+      headers: {
+        "Ocp-Apim-Subscription-Key": key,
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-48khz-192kbitrate-mono-mp3",
+        "User-Agent": "resumeai",
+      },
+      body: ssml,
+    });
+    if (!res.ok) {
+      console.error("Azure TTS", res.status, (await res.text()).slice(0, 200));
+      return null;
+    }
+    const audio = await res.arrayBuffer();
+    return new NextResponse(audio, {
+      headers: { "Content-Type": "audio/mpeg", "Cache-Control": "public, max-age=86400" },
+    });
+  } catch (e) {
+    console.error("Azure TTS error", e);
+    return null;
+  }
+}
+
+export async function POST(req: NextRequest) {
+  if (!(await allowShared(`tts:${clientIp(req)}`, 60, 10 * 60 * 1000))) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
+  let body: { text?: string; voice?: string; lang?: string };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const text = String(body.text || "").slice(0, 800).trim();
+  if (!text) return NextResponse.json({ error: "text required" }, { status: 400 });
+  // Default voice is Kore (female) for both Arabic and English; pass a male
+  // hint (hamed/charon/male) to switch.
+  const v = String(body.voice || "").toLowerCase();
+  const female = !(v.includes("hamed") || v.includes("charon") || v.includes("male"));
+  const lang = body.lang === "en" ? "en" : "ar";
+
+  // Quality order — first configured provider that returns audio wins. Gemini &
+  // ElevenLabs auto-detect language from the text; Azure needs it explicitly.
+  for (const provider of [geminiTts, elevenTts, azureTts]) {
+    const out = await provider(text, female, lang);
+    if (out) return out;
+  }
+  return NextResponse.json({ error: "TTS not configured" }, { status: 501 });
+}

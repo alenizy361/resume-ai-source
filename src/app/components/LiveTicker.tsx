@@ -1,1 +1,68 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwoKLyoqCiAqIEEgcm90YXRpbmcgaWxsdXN0cmF0aXZlIHNhbXBsZSBjaGlwIGluIHRoZSBoZXJvOiBzaG93cyB0aGUga2luZCBvZiBBVFMKICogc2NvcmUganVtcCB0aGUgb3B0aW1pemVyIHByb2R1Y2VzIGZvciBhIGdpdmVuIHJvbGUuIFRoZXNlIGFyZSBnZW5lcmljLAogKiByb2xlLW9ubHkgZXhhbXBsZXMgb2YgdGhlIHNjb3JlIHJhbmdlIOKAlCBubyBuYW1lZCBpbmRpdmlkdWFscywgbm8gY2xhaW1lZAogKiByZWFsIHVzZXJzIChob3VzZSBydWxlOiBuZXZlciBpbnZlbnQgdGVzdGltb25pYWxzL3N0YXRzKS4KICovCmNvbnN0IEVWRU5UU19FTiA9IFsKICB7IGQ6ICJTb2Z0d2FyZSBFbmdpbmVlciIsIGZyb206IDQ0LCB0bzogOTEgfSwKICB7IGQ6ICJQcm9qZWN0IE1hbmFnZXIiLCBmcm9tOiA1MiwgdG86IDg4IH0sCiAgeyBkOiAiQWNjb3VudGFudCIsIGZyb206IDM5LCB0bzogODYgfSwKICB7IGQ6ICJTYWxlcyBNYW5hZ2VyIiwgZnJvbTogNDcsIHRvOiA5MCB9LAogIHsgZDogIkhSIFNwZWNpYWxpc3QiLCBmcm9tOiA1NSwgdG86IDkzIH0sCiAgeyBkOiAiRGF0YSBBbmFseXN0IiwgZnJvbTogNDEsIHRvOiA4OSB9LApdOwpjb25zdCBFVkVOVFNfQVIgPSBbCiAgeyBkOiAi2YXZh9mG2K/YsyDYqNix2YXYrNmK2KfYqiIsIGZyb206IDQ0LCB0bzogOTEgfSwKICB7IGQ6ICLZhdiv2YrYsSDZhdi02KfYsdmK2LkiLCBmcm9tOiA1MiwgdG86IDg4IH0sCiAgeyBkOiAi2YXYrdin2LPYqCIsIGZyb206IDM5LCB0bzogODYgfSwKICB7IGQ6ICLZhdiv2YrYsSDZhdio2YrYudin2KoiLCBmcm9tOiA0NywgdG86IDkwIH0sCiAgeyBkOiAi2KPYrti12KfYptmKINmF2YjYp9ix2K8g2KjYtNix2YrYqSIsIGZyb206IDU1LCB0bzogOTMgfSwKICB7IGQ6ICLZhdit2YTZhCDYqNmK2KfZhtin2KoiLCBmcm9tOiA0MSwgdG86IDg5IH0sCl07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBMaXZlVGlja2VyKHsgYXIgPSBmYWxzZSB9OiB7IGFyPzogYm9vbGVhbiB9KSB7CiAgY29uc3QgZXZlbnRzID0gYXIgPyBFVkVOVFNfQVIgOiBFVkVOVFNfRU47CiAgY29uc3QgW2ksIHNldEldID0gdXNlU3RhdGUoMCk7CiAgY29uc3QgW3Zpc2libGUsIHNldFZpc2libGVdID0gdXNlU3RhdGUodHJ1ZSk7CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBpZiAod2luZG93Lm1hdGNoTWVkaWE/LigiKHByZWZlcnMtcmVkdWNlZC1tb3Rpb246IHJlZHVjZSkiKS5tYXRjaGVzKSByZXR1cm47CiAgICBjb25zdCB0ID0gc2V0SW50ZXJ2YWwoKCkgPT4gewogICAgICBzZXRWaXNpYmxlKGZhbHNlKTsKICAgICAgc2V0VGltZW91dCgoKSA9PiB7CiAgICAgICAgc2V0SSgocCkgPT4gKHAgKyAxKSAlIGV2ZW50cy5sZW5ndGgpOwogICAgICAgIHNldFZpc2libGUodHJ1ZSk7CiAgICAgIH0sIDM1MCk7CiAgICB9LCAzODAwKTsKICAgIHJldHVybiAoKSA9PiBjbGVhckludGVydmFsKHQpOwogIH0sIFtldmVudHMubGVuZ3RoXSk7CgogIGNvbnN0IGUgPSBldmVudHNbaV07CiAgcmV0dXJuICgKICAgIDxkaXYKICAgICAgY2xhc3NOYW1lPSJpbmxpbmUtZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSByb3VuZGVkLWZ1bGwgcHgtNCBweS0yIGZvbnQtbW9ubyB0ZXh0LXhzIgogICAgICBzdHlsZT17ewogICAgICAgIGJhY2tncm91bmQ6ICJyZ2JhKDE2LDE5LDIyLDAuOCkiLAogICAgICAgIGJvcmRlcjogIjFweCBzb2xpZCB2YXIoLS1saW5lKSIsCiAgICAgICAgYmFja2Ryb3BGaWx0ZXI6ICJibHVyKDhweCkiLAogICAgICAgIG9wYWNpdHk6IHZpc2libGUgPyAxIDogMCwKICAgICAgICB0cmFuc2Zvcm06IHZpc2libGUgPyAidHJhbnNsYXRlWSgwKSIgOiAidHJhbnNsYXRlWSg0cHgpIiwKICAgICAgICB0cmFuc2l0aW9uOiAib3BhY2l0eSAwLjM1cyBlYXNlLCB0cmFuc2Zvcm0gMC4zNXMgZWFzZSIsCiAgICAgIH19CiAgICA+CiAgICAgIDxzcGFuIGNsYXNzTmFtZT0iZm9udC1ib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+e2FyID8gItmF2KvYp9mEOiIgOiAiU2FtcGxlOiJ9PC9zcGFuPgogICAgICA8c3BhbiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAge2UuZH0KICAgICAgPC9zcGFuPgogICAgICA8c3BhbiBkaXI9Imx0ciIgY2xhc3NOYW1lPSJmb250LWJvbGQgdGFidWxhci1udW1zIj4KICAgICAgICA8c3BhbiBzdHlsZT17eyBjb2xvcjogIiNmODcxNzEiIH19PntlLmZyb219JTwvc3Bhbj4KICAgICAgICA8c3BhbiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+IOKGkiA8L3NwYW4+CiAgICAgICAgPHNwYW4gc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1hY2NlbnQpIiB9fT57ZS50b30lPC9zcGFuPgogICAgICA8L3NwYW4+CiAgICA8L2Rpdj4KICApOwp9Cg=="}
+"use client";
+import { useEffect, useState } from "react";
+
+/**
+ * A rotating illustrative sample chip in the hero: shows the kind of ATS
+ * score jump the optimizer produces for a given role. These are generic,
+ * role-only examples of the score range — no named individuals, no claimed
+ * real users (house rule: never invent testimonials/stats).
+ */
+const EVENTS_EN = [
+  { d: "Software Engineer", from: 44, to: 91 },
+  { d: "Project Manager", from: 52, to: 88 },
+  { d: "Accountant", from: 39, to: 86 },
+  { d: "Sales Manager", from: 47, to: 90 },
+  { d: "HR Specialist", from: 55, to: 93 },
+  { d: "Data Analyst", from: 41, to: 89 },
+];
+const EVENTS_AR = [
+  { d: "مهندس برمجيات", from: 44, to: 91 },
+  { d: "مدير مشاريع", from: 52, to: 88 },
+  { d: "محاسب", from: 39, to: 86 },
+  { d: "مدير مبيعات", from: 47, to: 90 },
+  { d: "أخصائي موارد بشرية", from: 55, to: 93 },
+  { d: "محلل بيانات", from: 41, to: 89 },
+];
+
+export default function LiveTicker({ ar = false }: { ar?: boolean }) {
+  const events = ar ? EVENTS_AR : EVENTS_EN;
+  const [i, setI] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setI((p) => (p + 1) % events.length);
+        setVisible(true);
+      }, 350);
+    }, 3800);
+    return () => clearInterval(t);
+  }, [events.length]);
+
+  const e = events[i];
+  return (
+    <div
+      className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 font-mono text-xs"
+      style={{
+        background: "rgba(16,19,22,0.8)",
+        border: "1px solid var(--line)",
+        backdropFilter: "blur(8px)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(4px)",
+        transition: "opacity 0.35s ease, transform 0.35s ease",
+      }}
+    >
+      <span className="font-bold" style={{ color: "var(--faint)" }}>{ar ? "مثال:" : "Sample:"}</span>
+      <span style={{ color: "var(--muted)" }}>
+        {e.d}
+      </span>
+      <span dir="ltr" className="font-bold tabular-nums">
+        <span style={{ color: "#f87171" }}>{e.from}%</span>
+        <span style={{ color: "var(--faint)" }}> → </span>
+        <span style={{ color: "var(--accent)" }}>{e.to}%</span>
+      </span>
+    </div>
+  );
+}

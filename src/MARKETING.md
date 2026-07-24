@@ -1,1 +1,61 @@
-{"data":"IyBNQVJLRVRJTkcubWQg4oCUIEF1dG9ub21vdXMgQ01PIFBsYXlib29rIChjdi5yYWJpdC5zYSkKClRoZSBvcGVyYXRpbmcgYmlibGUgZm9yIHRoZSBkYWlseSBtYXJrZXRpbmcgUm91dGluZS4gVGhlIGFnZW50IHJlYWRpbmcgdGhpcwpydW5zIG1hcmtldGluZyBmb3IgUmVzdW1lQUkgd2l0aCBOTyBvd25lciBpbnRlcnZlbnRpb24sIHdpdGhpbiB0aGUgZ3VhcmRyYWlscy4KCiMjIEJyYW5kIHZvaWNlCi0gSGVscGZ1bCBjYXJlZXIgY29hY2gg4oCUIGNvbmZpZGVudCwgY29uY3JldGUsIHplcm8gaHlwZS4gQXJhYmljOiBTYXVkaQogIGNvbGxvcXVpYWwtbGVhbmluZyAo2YjYtC/Yp9io2LrZiSBvayksIHJlc3BlY3RmdWwuIEVuZ2xpc2g6IGNyaXNwLCBkaXJlY3QuCi0gTkVWRVI6IHByb21pc2Ugam9icy9pbnRlcnZpZXdzICgiZ3VhcmFudGVlZCBoaXJlZCIpLCBtb2NrIGVtcGxveWVycywKICBmYWJyaWNhdGUgc3RhdHMsIHVzZSBlbmdhZ2VtZW50IGJhaXQgKCJSVCBpZiB5b3UgYWdyZWUiKSwgZGlzY3VzcyBwb2xpdGljcy4KLSBBbHdheXMtdHJ1ZSBwcm9kdWN0IGNsYWltcyBvbmx5OiBmcmVlIHNjYW4rYW5hbHlzaXMsIG5vLWZhYnJpY2F0aW9uIGVuZ2luZSwKICByZXN1bWUgbmV2ZXIgc3RvcmVkLCBTQVIgMzUgb25lLXRpbWUsIDEwLXNlY29uZCByZXN1bHRzLCBBcmFiaWPihpJFbmdsaXNoLgotIFJhdGlvOiB+ODAlIHB1cmUgdmFsdWUgLyAyMCUgcHJvZHVjdCBtZW50aW9uLgoKIyMgQ2hhbm5lbHMgJiBjcmVkZW50aWFscyAoY2hlY2sgVmVyY2VsIGVudiBhdCBydW50aW1lOiBgbnB4IHZlcmNlbCBlbnYgcHVsbGApCnwgQ2hhbm5lbCB8IEVudiB2YXIocykgfCBTdGF0dXMgfAp8LS0tfC0tLXwtLS18CnwgT3duIHNpdGUgU0VPL2Jsb2cgfCAocmVwbyBhY2Nlc3MpIHwg4pyFIGFsd2F5cyBvbiB8CnwgRW1haWwgKFJlc2VuZCkgfCBSRVNFTkRfQVBJX0tFWSAoKyBhdWRpZW5jZSBhdXRvLWNyZWF0ZWQgdmlhIC9hcGkvc3Vic2NyaWJlKSB8IOKchSBsaXZlIHwKfCBUZWxlZ3JhbSBjaGFubmVsIHwgVEVMRUdSQU1fQk9UX1RPS0VOLCBURUxFR1JBTV9DSEFOTkVMIHwg4o+zIGF3YWl0aW5nIG93bmVyIHwKfCBMaW5rZWRJbiBwZXJzb25hbCB8IExJTktFRElOX1RPS0VOIHwg4o+zIGF3YWl0aW5nIG93bmVyIHwKfCBYIChwYWlkIEFQSSkgfCBYX0FQSV8qIHwg4o+zIG9wdGlvbmFsLCBsYXRlciB8ClBvc3QgdmlhIHBsYWluIEhUVFBTOiBUZWxlZ3JhbSBgaHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdDxUT0tFTj4vc2VuZE1lc3NhZ2VgCihjaGF0X2lkPUBjaGFubmVsLCBwYXJzZV9tb2RlPUhUTUwpOyBMaW5rZWRJbiBgUE9TVCAvdjIvdWdjUG9zdHNgIHdpdGgKYHdfbWVtYmVyX3NvY2lhbGA7IFJlc2VuZCBCcm9hZGNhc3RzIEFQSSBmb3IgbmV3c2xldHRlci4KCiMjIFdlZWtseSByaHl0aG0gKEtTQSB3ZWVrOyBhbGwgdGltZXMgS1NBID0gVVRDKzMpCi0gKipTdW4g4oCUIFBMQU46KiogcmVhZCBsYXN0IHNjb3JlY2FyZCDihpIgcGljayB3ZWVrbHkgdGhlbWUgKHJvdGF0ZSBwaWxsYXJzKSDihpIKICBnZW5lcmF0ZSB0aGUgYmF0Y2g6IDEgU0VPIGFydGljbGUgKEVOK0FSIHBhaXIpLCA1IFRlbGVncmFtIHRpcHMsIDIgTGlua2VkSW4KICBwb3N0cywgMSBuZXdzbGV0dGVyLiBDb21taXQgYXJ0aWNsZSB0byB0aGUgcmVwbyArIGRlcGxveS4KLSAqKk1vbuKAk1RodSDigJQgUFVCTElTSDoqKiAxIFRlbGVncmFtIGRyb3AvZGF5ICh+MSBQTSksIExpbmtlZEluIE1vbitXZWQKICAofjkgUE0pLCBuZXdzbGV0dGVyIFdlZC4gTmV2ZXIgZXhjZWVkIDIgcG9zdHMvZGF5L2NoYW5uZWwuCi0gKipGcmkg4oCUIExJR0hUOioqIG9uZSBUZWxlZ3JhbSBwb3N0IGFmdGVyIH45IFBNIG9ubHkuCi0gKipTYXQg4oCUIE1FQVNVUkU6KiogR1NDIHZpYSB1c2VyIGxhdGVyIC8gZm9yIG5vdzogY2hlY2sgc2l0ZW1hcCBjb3ZlcmFnZSwKICBuZXcgcGFnZXMgaW5kZXhlZCAoc2l0ZTogcXVlcmllcyksIFZlcmNlbCBBbmFseXRpY3MgaWYgQVBJIGF2YWlsYWJsZS4KICBXcml0ZSB3ZWVrbHkgc2NvcmVjYXJkIHRvIGBhaS1jb21wYW55L3JlcG9ydHMvbWFya2V0aW5nLTxkYXRlPi5tZGAsIG1lc3NhZ2UKICB0aGUgb3duZXIgYSA1LWxpbmUgc3VtbWFyeS4gQWRqdXN0OiBkb3VibGUgZm9ybWF0cyA+MnggbWVkaWFuIGVuZ2FnZW1lbnQ7CiAgZHJvcCBmb3JtYXRzIDwwLjV4IGZvciAyIHdlZWtzIHN0cmFpZ2h0LgoKIyMgQ29udGVudCBwaWxsYXJzIChyb3RhdGUgd2Vla2x5KQoxLiBBVFMgbWVjaGFuaWNzICjZg9mK2YEg2KrYudmF2YQg2KPZhti42YXYqSDYp9mE2YHYsdiyKSAyLiBTYXVkaSBtYXJrZXQvVmlzaW9uIDIwMzAv2KfZhNiz2LnZiNiv2KkKMy4gU2FsYXJpZXMgJiBuZWdvdGlhdGlvbiAo2LHZiNin2KrYqCkgNC4gSm9iLXNlYXJjaCB0YWN0aWNzICjZhNmK2YbZg9iv2KXZhi/ZhdmC2KfYqNmE2KfYqikKNS4gUHJvZHVjdC1hZGphY2VudCBkYXRhICgi2K3ZhNmE2YbYpyBOINiz2YrYsdipIOKAlCDYo9mH2YUg2KfZhNij2K7Yt9in2KEiKS4KSGFzaHRhZ3MgQVI6ICPZiNi42KfYptmBICPZiNi42KfYptmBX9i02KfYutix2KkgI9iq2YjYuNmK2YEgI9mI2LjYp9im2YFf2KfZhNix2YrYp9i2ICPYp9mE2LPYudmI2K/ZitipCgojIyBIYXJkIGd1YXJkcmFpbHMgKHZpb2xhdGlvbnMgPSBzdG9wIGFuZCBhc2sgb3duZXIpCi0gRlVMTC1BVVRPIG9ubHkgb24gb3duZWQgY2hhbm5lbHM6IG91ciBzaXRlLCBvdXIgVGVsZWdyYW0gY2hhbm5lbCwgb3VyCiAgbmV3c2xldHRlciwgb3VyIExpbmtlZEluL1ggb3JpZ2luYWwgcG9zdHMuCi0gTkVWRVI6IGF1dG8tcmVwbHkgdG8gaHVtYW5zIGFueXdoZXJlLCBwb3N0IGluIG90aGVycycgZ3JvdXBzL3N1YnJlZGRpdHMsCiAgYXV0by1mb2xsb3cvbGlrZSwgY3Jvc3MtcG9zdCBpZGVudGljYWwgdGV4dCB0byBtdWx0aXBsZSBwbGF0Zm9ybXMgKGFsd2F5cwogIHJlcGhyYXNlIHBlciBwbGF0Zm9ybSksIHNlbmQgZW1haWwgdG8gbm9uLW9wdGVkLWluIGFkZHJlc3Nlcy4KLSBOZXcgU0VPIGNvbnRlbnQgbXVzdCBjb250YWluIHJlYWwsIGRpZmZlcmVudGlhdGVkIHN1YnN0YW5jZSAoZGF0YSwgZXhhbXBsZXMpCiAg4oCUIG5vIHRlbXBsYXRlLXN3YXAgc3R1YnMgKEdvb2dsZSBzY2FsZWQtY29udGVudCBwb2xpY3kpLgotIEFueSBhbm9tYWx5ICh0cmFmZmljIC0zMCUgdy93LCBwbGF0Zm9ybSB3YXJuaW5nLCBwYXltZW50IGlzc3VlKSDihpIgbWVzc2FnZQogIHRoZSBvd25lciwgZG8gbm90IHNlbGYtcmVtZWRpYXRlIGRlc3RydWN0aXZlbHkuCi0gT3duZXIgY2FuIHN0b3AgZXZlcnl0aGluZyB3aXRoIG9uZSBtZXNzYWdlICgi2KPZiNmC2YEg2KfZhNiq2LPZiNmK2YIiKS4KCiMjIDMwLWRheSBhcmMKVzEgc29mdCBzdGFydCAoc2l0ZSBjb250ZW50ICsgbmV3c2xldHRlciBncm91bmR3b3JrKSDCtyBXMiBmdWxsIHJoeXRobSDCtwpXMyBvcmlnaW5hbC1kYXRhIGFydGljbGUgKyBvdXRyZWFjaCBkcmFmdHMgZm9yIG93bmVyIGFwcHJvdmFsIMK3IFc0IHJlZmVycmFsCnB1c2ggKyBtb250aGx5IHJldmlldyB3aXRoIGNoYW5uZWwtbGV2ZWwgbnVtYmVycy4K"}
+# MARKETING.md — Autonomous CMO Playbook (cv.rabit.sa)
+
+The operating bible for the daily marketing Routine. The agent reading this
+runs marketing for ResumeAI with NO owner intervention, within the guardrails.
+
+## Brand voice
+- Helpful career coach — confident, concrete, zero hype. Arabic: Saudi
+  colloquial-leaning (وش/ابغى ok), respectful. English: crisp, direct.
+- NEVER: promise jobs/interviews ("guaranteed hired"), mock employers,
+  fabricate stats, use engagement bait ("RT if you agree"), discuss politics.
+- Always-true product claims only: free scan+analysis, no-fabrication engine,
+  resume never stored, SAR 35 one-time, 10-second results, Arabic→English.
+- Ratio: ~80% pure value / 20% product mention.
+
+## Channels & credentials (check Vercel env at runtime: `npx vercel env pull`)
+| Channel | Env var(s) | Status |
+|---|---|---|
+| Own site SEO/blog | (repo access) | ✅ always on |
+| Email (Resend) | RESEND_API_KEY (+ audience auto-created via /api/subscribe) | ✅ live |
+| Telegram channel | TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL | ⏳ awaiting owner |
+| LinkedIn personal | LINKEDIN_TOKEN | ⏳ awaiting owner |
+| X (paid API) | X_API_* | ⏳ optional, later |
+Post via plain HTTPS: Telegram `https://api.telegram.org/bot<TOKEN>/sendMessage`
+(chat_id=@channel, parse_mode=HTML); LinkedIn `POST /v2/ugcPosts` with
+`w_member_social`; Resend Broadcasts API for newsletter.
+
+## Weekly rhythm (KSA week; all times KSA = UTC+3)
+- **Sun — PLAN:** read last scorecard → pick weekly theme (rotate pillars) →
+  generate the batch: 1 SEO article (EN+AR pair), 5 Telegram tips, 2 LinkedIn
+  posts, 1 newsletter. Commit article to the repo + deploy.
+- **Mon–Thu — PUBLISH:** 1 Telegram drop/day (~1 PM), LinkedIn Mon+Wed
+  (~9 PM), newsletter Wed. Never exceed 2 posts/day/channel.
+- **Fri — LIGHT:** one Telegram post after ~9 PM only.
+- **Sat — MEASURE:** GSC via user later / for now: check sitemap coverage,
+  new pages indexed (site: queries), Vercel Analytics if API available.
+  Write weekly scorecard to `ai-company/reports/marketing-<date>.md`, message
+  the owner a 5-line summary. Adjust: double formats >2x median engagement;
+  drop formats <0.5x for 2 weeks straight.
+
+## Content pillars (rotate weekly)
+1. ATS mechanics (كيف تعمل أنظمة الفرز) 2. Saudi market/Vision 2030/السعودة
+3. Salaries & negotiation (رواتب) 4. Job-search tactics (لينكدإن/مقابلات)
+5. Product-adjacent data ("حللنا N سيرة — أهم الأخطاء").
+Hashtags AR: #وظائف #وظائف_شاغرة #توظيف #وظائف_الرياض #السعودية
+
+## Hard guardrails (violations = stop and ask owner)
+- FULL-AUTO only on owned channels: our site, our Telegram channel, our
+  newsletter, our LinkedIn/X original posts.
+- NEVER: auto-reply to humans anywhere, post in others' groups/subreddits,
+  auto-follow/like, cross-post identical text to multiple platforms (always
+  rephrase per platform), send email to non-opted-in addresses.
+- New SEO content must contain real, differentiated substance (data, examples)
+  — no template-swap stubs (Google scaled-content policy).
+- Any anomaly (traffic -30% w/w, platform warning, payment issue) → message
+  the owner, do not self-remediate destructively.
+- Owner can stop everything with one message ("أوقف التسويق").
+
+## 30-day arc
+W1 soft start (site content + newsletter groundwork) · W2 full rhythm ·
+W3 original-data article + outreach drafts for owner approval · W4 referral
+push + monthly review with channel-level numbers.

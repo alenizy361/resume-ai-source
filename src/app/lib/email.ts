@@ -1,1 +1,35 @@
-{"data":"LyoqCiAqIFRoaW4gUmVzZW5kIHdyYXBwZXIgc2hhcmVkIGJ5IHNpZ24taW4sIHBheW1lbnQgcmVjZWlwdHMsIGFuZCAiZW1haWwgbXkKICogcmVzdWx0cyIuIFJldHVybnMgZmFsc2UgKG5ldmVyIHRocm93cykgd2hlbiBlbWFpbCBpc24ndCBjb25maWd1cmVkIHNvIGNhbGxlcnMKICogY2FuIHRyZWF0IGVtYWlsIGFzIGJlc3QtZWZmb3J0IGFuZCBuZXZlciBicmVhayB0aGUgbWFpbiBmbG93LgogKi8KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIHNlbmRFbWFpbChvcHRzOiB7IHRvOiBzdHJpbmc7IHN1YmplY3Q6IHN0cmluZzsgaHRtbDogc3RyaW5nIH0pOiBQcm9taXNlPGJvb2xlYW4+IHsKICBjb25zdCBrZXkgPSBwcm9jZXNzLmVudi5SRVNFTkRfQVBJX0tFWTsKICBjb25zdCBmcm9tID0gcHJvY2Vzcy5lbnYuRU1BSUxfRlJPTTsKICBpZiAoIWtleSB8fCAhZnJvbSkgcmV0dXJuIGZhbHNlOwogIHRyeSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaCgiaHR0cHM6Ly9hcGkucmVzZW5kLmNvbS9lbWFpbHMiLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7IEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHtrZXl9YCwgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiB9LAogICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IGZyb20sIHRvOiBbb3B0cy50b10sIHN1YmplY3Q6IG9wdHMuc3ViamVjdCwgaHRtbDogb3B0cy5odG1sIH0pLAogICAgfSk7CiAgICBpZiAoIXJlcy5vaykgewogICAgICBjb25zb2xlLmVycm9yKCJzZW5kRW1haWwgUmVzZW5kIiwgcmVzLnN0YXR1cywgKGF3YWl0IHJlcy50ZXh0KCkpLnNsaWNlKDAsIDIwMCkpOwogICAgICByZXR1cm4gZmFsc2U7CiAgICB9CiAgICByZXR1cm4gdHJ1ZTsKICB9IGNhdGNoIChlKSB7CiAgICBjb25zb2xlLmVycm9yKCJzZW5kRW1haWwgZXJyb3IiLCBlKTsKICAgIHJldHVybiBmYWxzZTsKICB9Cn0KCi8qKiBCcmFuZGVkIHdyYXBwZXIgc28gZXZlcnkgZW1haWwgbG9va3MgY29uc2lzdGVudC4gKi8KZXhwb3J0IGZ1bmN0aW9uIGVtYWlsU2hlbGwoYm9keUh0bWw6IHN0cmluZyk6IHN0cmluZyB7CiAgcmV0dXJuIGA8ZGl2IHN0eWxlPSJmb250LWZhbWlseTotYXBwbGUtc3lzdGVtLFNlZ29lIFVJLHNhbnMtc2VyaWY7bWF4LXdpZHRoOjUyMHB4O21hcmdpbjphdXRvO2NvbG9yOiMxMTEiPgogICAgPGRpdiBzdHlsZT0iZm9udC1zaXplOjIwcHg7Zm9udC13ZWlnaHQ6ODAwO2NvbG9yOiM3YzNhZWQ7bWFyZ2luLWJvdHRvbToxNnB4Ij5TaXJhIMK3IGN2LnJhYml0LnNhPC9kaXY+CiAgICAke2JvZHlIdG1sfQogICAgPGhyIHN0eWxlPSJib3JkZXI6bm9uZTtib3JkZXItdG9wOjFweCBzb2xpZCAjZWVlO21hcmdpbjoyNHB4IDAiIC8+CiAgICA8cCBzdHlsZT0iY29sb3I6Izk5OTtmb250LXNpemU6MTJweCI+U2lyYSDigJQgaG9uZXN0IEFJIHJlc3VtZSBvcHRpbWl6YXRpb24uIE5vIHN1YnNjcmlwdGlvbi48L3A+CiAgPC9kaXY+YDsKfQo="}
+/**
+ * Thin Resend wrapper shared by sign-in, payment receipts, and "email my
+ * results". Returns false (never throws) when email isn't configured so callers
+ * can treat email as best-effort and never break the main flow.
+ */
+export async function sendEmail(opts: { to: string; subject: string; html: string }): Promise<boolean> {
+  const key = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  if (!key || !from) return false;
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from, to: [opts.to], subject: opts.subject, html: opts.html }),
+    });
+    if (!res.ok) {
+      console.error("sendEmail Resend", res.status, (await res.text()).slice(0, 200));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("sendEmail error", e);
+    return false;
+  }
+}
+
+/** Branded wrapper so every email looks consistent. */
+export function emailShell(bodyHtml: string): string {
+  return `<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:520px;margin:auto;color:#111">
+    <div style="font-size:20px;font-weight:800;color:#7c3aed;margin-bottom:16px">Sira · cv.rabit.sa</div>
+    ${bodyHtml}
+    <hr style="border:none;border-top:1px solid #eee;margin:24px 0" />
+    <p style="color:#999;font-size:12px">Sira — honest AI resume optimization. No subscription.</p>
+  </div>`;
+}

@@ -1,1 +1,30 @@
-{"data":"InVzZSBjbGllbnQiOwoKLyoqCiAqIENpcmN1bGFyIHNjb3JlIGdhdWdlIOKAlCB0aGUgc2luZ2xlICJub3J0aC1zdGFyIiBudW1iZXIgb24gdGhlIHJlc3VsdCBzY3JlZW4sCiAqIGZhciBtb3JlIGxlZ2libGUgdGhhbiBhIGZsYXQgcGVyY2VudGFnZSAocmVzZWFyY2g6IEpvYnNjYW4vVGVhbCB1c2UgYSByaW5nKS4KICogYHZhbHVlYCBpcyB0aGUgYW5pbWF0ZWQgZGlzcGxheSB2YWx1ZTsgYGNvbG9yYCBpcyB0aGUgYmFuZCBjb2xvci4KICovCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFNjb3JlUmluZyh7IHZhbHVlLCBjb2xvciwgbGFiZWwsIHN1YiB9OiB7IHZhbHVlOiBudW1iZXI7IGNvbG9yOiBzdHJpbmc7IGxhYmVsPzogc3RyaW5nOyBzdWI/OiBzdHJpbmcgfSkgewogIGNvbnN0IHIgPSA1NDsKICBjb25zdCBjID0gMiAqIE1hdGguUEkgKiByOwogIGNvbnN0IHBjdCA9IE1hdGgubWF4KDAsIE1hdGgubWluKDEwMCwgdmFsdWUpKTsKICBjb25zdCBkYXNoID0gKHBjdCAvIDEwMCkgKiBjOwogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LWNvbCBpdGVtcy1jZW50ZXIiPgogICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUiIHN0eWxlPXt7IHdpZHRoOiAxNDAsIGhlaWdodDogMTQwIH19PgogICAgICAgIDxzdmcgd2lkdGg9IjE0MCIgaGVpZ2h0PSIxNDAiIHZpZXdCb3g9IjAgMCAxNDAgMTQwIj4KICAgICAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzAiIHI9e3J9IGZpbGw9Im5vbmUiIHN0cm9rZT0idmFyKC0tbGluZSkiIHN0cm9rZVdpZHRoPSIxMCIgLz4KICAgICAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzAiIHI9e3J9IGZpbGw9Im5vbmUiIHN0cm9rZT17Y29sb3J9IHN0cm9rZVdpZHRoPSIxMCIgc3Ryb2tlTGluZWNhcD0icm91bmQiCiAgICAgICAgICAgIHN0cm9rZURhc2hhcnJheT17YCR7ZGFzaH0gJHtjfWB9IHRyYW5zZm9ybT0icm90YXRlKC05MCA3MCA3MCkiIHN0eWxlPXt7IHRyYW5zaXRpb246ICJzdHJva2UtZGFzaGFycmF5IDAuM3MgZWFzZSIgfX0gLz4KICAgICAgICA8L3N2Zz4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iYWJzb2x1dGUgaW5zZXQtMCBmbGV4IGZsZXgtY29sIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciI+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImZvbnQtbW9ubyB0ZXh0LTR4bCBmb250LWJvbGQgdGFidWxhci1udW1zIiBzdHlsZT17eyBjb2xvciB9fT57TWF0aC5yb3VuZCh2YWx1ZSl9PC9zcGFuPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJmb250LW1vbm8gdGV4dC1bMTFweF0iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT4vIDEwMDwvc3Bhbj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICAgIHtsYWJlbCAmJiA8ZGl2IGNsYXNzTmFtZT0ibXQtMiBmb250LW1vbm8gdGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTVlbV0iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT57bGFiZWx9PC9kaXY+fQogICAgICB7c3ViICYmIDxkaXYgY2xhc3NOYW1lPSJtdC0xIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT57c3VifTwvZGl2Pn0KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+
+/**
+ * Circular score gauge — the single "north-star" number on the result screen,
+ * far more legible than a flat percentage (research: Jobscan/Teal use a ring).
+ * `value` is the animated display value; `color` is the band color.
+ */
+export default function ScoreRing({ value, color, label, sub }: { value: number; color: string; label?: string; sub?: string }) {
+  const r = 54;
+  const c = 2 * Math.PI * r;
+  const pct = Math.max(0, Math.min(100, value));
+  const dash = (pct / 100) * c;
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative" style={{ width: 140, height: 140 }}>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r={r} fill="none" stroke="var(--line)" strokeWidth="10" />
+          <circle cx="70" cy="70" r={r} fill="none" stroke={color} strokeWidth="10" strokeLinecap="round"
+            strokeDasharray={`${dash} ${c}`} transform="rotate(-90 70 70)" style={{ transition: "stroke-dasharray 0.3s ease" }} />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="font-mono text-4xl font-bold tabular-nums" style={{ color }}>{Math.round(value)}</span>
+          <span className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>/ 100</span>
+        </div>
+      </div>
+      {label && <div className="mt-2 font-mono text-xs uppercase tracking-[0.15em]" style={{ color: "var(--faint)" }}>{label}</div>}
+      {sub && <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{sub}</div>}
+    </div>
+  );
+}

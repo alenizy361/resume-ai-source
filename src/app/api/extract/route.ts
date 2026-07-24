@@ -1,1 +1,83 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKCmV4cG9ydCBjb25zdCBtYXhEdXJhdGlvbiA9IDMwOwoKLyoqCiAqIEFjY2VwdHMgYSBQREYsIERPQ1gsIG9yIFRYVCB1cGxvYWQgYW5kIHJldHVybnMgaXRzIHBsYWluIHRleHQgc28gdGhlCiAqIG9wdGltaXplciB0ZXh0YXJlYSBjYW4gYmUgYXV0by1maWxsZWQuIE1vc3QgcGVvcGxlIGhhdmUgdGhlaXIgcmVzdW1lIGFzIGEKICogZmlsZSwgbm90IGFzIGNvcHktcGFzdGUtYWJsZSB0ZXh0IOKAlCB0aGlzIHJlbW92ZXMgdGhlIGJpZ2dlc3QgZnJpY3Rpb24gcG9pbnQuCiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIGNvbnN0IGZvcm0gPSBhd2FpdCByZXEuZm9ybURhdGEoKTsKICAgIGNvbnN0IGZpbGUgPSBmb3JtLmdldCgiZmlsZSIpOwoKICAgIGlmICghZmlsZSB8fCB0eXBlb2YgZmlsZSA9PT0gInN0cmluZyIpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJObyBmaWxlIHVwbG9hZGVkLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KCiAgICBjb25zdCBuYW1lID0gKGZpbGUubmFtZSB8fCAiIikudG9Mb3dlckNhc2UoKTsKICAgIGNvbnN0IGJ1ZiA9IEJ1ZmZlci5mcm9tKGF3YWl0IGZpbGUuYXJyYXlCdWZmZXIoKSk7CgogICAgaWYgKGJ1Zi5sZW5ndGggPiA1ICogMTAyNCAqIDEwMjQpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJGaWxlIHRvbyBsYXJnZSAobWF4IDUgTUIpLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KCiAgICBpZiAoIW5hbWUuZW5kc1dpdGgoIi5wZGYiKSAmJiAhbmFtZS5lbmRzV2l0aCgiLmRvY3giKSAmJiAhbmFtZS5lbmRzV2l0aCgiLnR4dCIpICYmICFuYW1lLmVuZHNXaXRoKCIubWQiKSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgICAgeyBlcnJvcjogIlVuc3VwcG9ydGVkIGZpbGUgdHlwZS4gVXBsb2FkIGEgUERGLCBET0NYLCBvciBUWFQuIiB9LAogICAgICAgIHsgc3RhdHVzOiA0MDAgfQogICAgICApOwogICAgfQoKICAgIGxldCB0ZXh0ID0gIiI7CiAgICB0cnkgewogICAgICBpZiAobmFtZS5lbmRzV2l0aCgiLnBkZiIpKSB7CiAgICAgICAgY29uc3QgeyBleHRyYWN0VGV4dCwgZ2V0RG9jdW1lbnRQcm94eSB9ID0gYXdhaXQgaW1wb3J0KCJ1bnBkZiIpOwogICAgICAgIGNvbnN0IHBkZiA9IGF3YWl0IGdldERvY3VtZW50UHJveHkobmV3IFVpbnQ4QXJyYXkoYnVmKSk7CiAgICAgICAgY29uc3QgeyB0ZXh0OiB0IH0gPSBhd2FpdCBleHRyYWN0VGV4dChwZGYsIHsgbWVyZ2VQYWdlczogdHJ1ZSB9KTsKICAgICAgICB0ZXh0ID0gQXJyYXkuaXNBcnJheSh0KSA/IHQuam9pbigiXG4iKSA6IHQ7CiAgICAgIH0gZWxzZSBpZiAobmFtZS5lbmRzV2l0aCgiLmRvY3giKSkgewogICAgICAgIGNvbnN0IG1hbW1vdGggPSAoYXdhaXQgaW1wb3J0KCJtYW1tb3RoIikpLmRlZmF1bHQ7CiAgICAgICAgY29uc3QgeyB2YWx1ZSB9ID0gYXdhaXQgbWFtbW90aC5leHRyYWN0UmF3VGV4dCh7IGJ1ZmZlcjogYnVmIH0pOwogICAgICAgIHRleHQgPSB2YWx1ZTsKICAgICAgfSBlbHNlIHsKICAgICAgICAvLyBBcmFiaWMgLnR4dCBmaWxlcyBzYXZlZCBieSBXaW5kb3dzIE5vdGVwYWQgYXJlIG9mdGVuIFdpbmRvd3MtMTI1NiwKICAgICAgICAvLyB3aGljaCBkZWNvZGVkIGFzIFVURi04IHR1cm5zIGludG8gcmVwbGFjZW1lbnQgY2hhcnMgLyBtb2ppYmFrZS4gSWYKICAgICAgICAvLyB0aGUgVVRGLTggcmVhZCBsb29rcyBicm9rZW4sIGZhbGwgYmFjayB0byBjcDEyNTYuCiAgICAgICAgdGV4dCA9IGJ1Zi50b1N0cmluZygidXRmLTgiKTsKICAgICAgICBjb25zdCBiYWQgPSAodGV4dC5tYXRjaCgv77+9L2cpIHx8IFtdKS5sZW5ndGg7CiAgICAgICAgaWYgKGJhZCA+IDAgJiYgYmFkID4gdGV4dC5sZW5ndGggKiAwLjAyKSB7CiAgICAgICAgICB0cnkgeyB0ZXh0ID0gbmV3IFRleHREZWNvZGVyKCJ3aW5kb3dzLTEyNTYiKS5kZWNvZGUoYnVmKTsgfSBjYXRjaCB7IC8qIGtlZXAgdXRmLTggKi8gfQogICAgICAgIH0KICAgICAgfQogICAgfSBjYXRjaCAocGFyc2VFcnIpIHsKICAgICAgLy8gQSBjb3JydXB0IG9yIHBhc3N3b3JkLXByb3RlY3RlZCBmaWxlIHRoYXQgcGFzc2VzIHRoZSBleHRlbnNpb24gY2hlY2sKICAgICAgLy8gYnV0IGZhaWxzIHRvIHBhcnNlIGlzIGEgY2xpZW50LWlucHV0IHByb2JsZW0sIG5vdCBhIHNlcnZlciBmYXVsdCDigJQgNDIyLAogICAgICAvLyBub3QgNTAwLCBzbyB0aGUgVUkgY2FuIHNob3cgYSAicGFzdGUgdGhlIHRleHQgaW5zdGVhZCIgaGludC4KICAgICAgY29uc29sZS5lcnJvcigiRXh0cmFjdCBwYXJzZSBlcnJvcjoiLCBwYXJzZUVycik7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbigKICAgICAgICB7IGVycm9yOiAiQ291bGRuJ3QgcmVhZCB0aGF0IGZpbGUg4oCUIGl0IG1heSBiZSBjb3JydXB0ZWQgb3IgcGFzc3dvcmQtcHJvdGVjdGVkLiBUcnkgcGFzdGluZyB0aGUgdGV4dCBpbnN0ZWFkLiIgfSwKICAgICAgICB7IHN0YXR1czogNDIyIH0KICAgICAgKTsKICAgIH0KCiAgICAvLyBDb2xsYXBzZSBleGNlc3NpdmUgd2hpdGVzcGFjZSB0aGUgcGFyc2VycyBzb21ldGltZXMgZW1pdC4KICAgIHRleHQgPSB0ZXh0LnJlcGxhY2UoL1xyL2csICIiKS5yZXBsYWNlKC9cbnszLH0vZywgIlxuXG4iKS5yZXBsYWNlKC9bIFx0XXsyLH0vZywgIiAiKS50cmltKCk7CgogICAgaWYgKCF0ZXh0IHx8IHRleHQubGVuZ3RoIDwgMjApIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKAogICAgICAgIHsgZXJyb3I6ICJDb3VsZG4ndCByZWFkIGFueSB0ZXh0IGZyb20gdGhhdCBmaWxlLiBJZiBpdCdzIGEgc2Nhbm5lZCBpbWFnZSwgcGFzdGUgdGhlIHRleHQgbWFudWFsbHkuIiB9LAogICAgICAgIHsgc3RhdHVzOiA0MjIgfQogICAgICApOwogICAgfQoKICAgIC8vIEtlZXAgd2l0aGluIHRoZSBvcHRpbWl6ZXIncyBpbnB1dCBidWRnZXQuCiAgICBpZiAodGV4dC5sZW5ndGggPiA4MDAwKSB0ZXh0ID0gdGV4dC5zbGljZSgwLCA4MDAwKTsKCiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyB0ZXh0IH0pOwogIH0gY2F0Y2ggKGVycikgewogICAgY29uc29sZS5lcnJvcigiRXh0cmFjdCBlcnJvcjoiLCBlcnIpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJGYWlsZWQgdG8gcmVhZCB0aGUgZmlsZS4gVHJ5IHBhc3RpbmcgdGhlIHRleHQgaW5zdGVhZC4iIH0sIHsgc3RhdHVzOiA1MDAgfSk7CiAgfQp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+
+export const maxDuration = 30;
+
+/**
+ * Accepts a PDF, DOCX, or TXT upload and returns its plain text so the
+ * optimizer textarea can be auto-filled. Most people have their resume as a
+ * file, not as copy-paste-able text — this removes the biggest friction point.
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const form = await req.formData();
+    const file = form.get("file");
+
+    if (!file || typeof file === "string") {
+      return NextResponse.json({ error: "No file uploaded." }, { status: 400 });
+    }
+
+    const name = (file.name || "").toLowerCase();
+    const buf = Buffer.from(await file.arrayBuffer());
+
+    if (buf.length > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "File too large (max 5 MB)." }, { status: 400 });
+    }
+
+    if (!name.endsWith(".pdf") && !name.endsWith(".docx") && !name.endsWith(".txt") && !name.endsWith(".md")) {
+      return NextResponse.json(
+        { error: "Unsupported file type. Upload a PDF, DOCX, or TXT." },
+        { status: 400 }
+      );
+    }
+
+    let text = "";
+    try {
+      if (name.endsWith(".pdf")) {
+        const { extractText, getDocumentProxy } = await import("unpdf");
+        const pdf = await getDocumentProxy(new Uint8Array(buf));
+        const { text: t } = await extractText(pdf, { mergePages: true });
+        text = Array.isArray(t) ? t.join("\n") : t;
+      } else if (name.endsWith(".docx")) {
+        const mammoth = (await import("mammoth")).default;
+        const { value } = await mammoth.extractRawText({ buffer: buf });
+        text = value;
+      } else {
+        // Arabic .txt files saved by Windows Notepad are often Windows-1256,
+        // which decoded as UTF-8 turns into replacement chars / mojibake. If
+        // the UTF-8 read looks broken, fall back to cp1256.
+        text = buf.toString("utf-8");
+        const bad = (text.match(/�/g) || []).length;
+        if (bad > 0 && bad > text.length * 0.02) {
+          try { text = new TextDecoder("windows-1256").decode(buf); } catch { /* keep utf-8 */ }
+        }
+      }
+    } catch (parseErr) {
+      // A corrupt or password-protected file that passes the extension check
+      // but fails to parse is a client-input problem, not a server fault — 422,
+      // not 500, so the UI can show a "paste the text instead" hint.
+      console.error("Extract parse error:", parseErr);
+      return NextResponse.json(
+        { error: "Couldn't read that file — it may be corrupted or password-protected. Try pasting the text instead." },
+        { status: 422 }
+      );
+    }
+
+    // Collapse excessive whitespace the parsers sometimes emit.
+    text = text.replace(/\r/g, "").replace(/\n{3,}/g, "\n\n").replace(/[ \t]{2,}/g, " ").trim();
+
+    if (!text || text.length < 20) {
+      return NextResponse.json(
+        { error: "Couldn't read any text from that file. If it's a scanned image, paste the text manually." },
+        { status: 422 }
+      );
+    }
+
+    // Keep within the optimizer's input budget.
+    if (text.length > 8000) text = text.slice(0, 8000);
+
+    return NextResponse.json({ text });
+  } catch (err) {
+    console.error("Extract error:", err);
+    return NextResponse.json({ error: "Failed to read the file. Try pasting the text instead." }, { status: 500 });
+  }
+}

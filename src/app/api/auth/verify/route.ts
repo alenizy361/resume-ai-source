@@ -1,1 +1,25 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgdmVyaWZ5TWFnaWNUb2tlbiwgY3JlYXRlU2Vzc2lvbiwgU0VTU0lPTl9DT09LSUUgfSBmcm9tICJAL2FwcC9saWIvc2Vzc2lvbiI7CgovKiogVmFsaWRhdGVzIGEgbWFnaWMtbGluayB0b2tlbiwgc2V0cyBhIDMwLWRheSBzZXNzaW9uIGNvb2tpZSwgcmVkaXJlY3RzIHRvIHRoZSBhcHAuICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBHRVQocmVxOiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IHRva2VuID0gcmVxLm5leHRVcmwuc2VhcmNoUGFyYW1zLmdldCgidG9rZW4iKSB8fCB1bmRlZmluZWQ7CiAgY29uc3QgZW1haWwgPSB2ZXJpZnlNYWdpY1Rva2VuKHRva2VuLCBEYXRlLm5vdygpKTsKICBjb25zdCBiYXNlID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCByZXEubmV4dFVybC5vcmlnaW47CgogIGlmICghZW1haWwpIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UucmVkaXJlY3QoYCR7YmFzZX0vbG9naW4/ZXJyb3I9ZXhwaXJlZGApOwogIH0KCiAgLy8gTGFuZCBvbiB0aGUgYWNjb3VudCBwYWdlIHdpdGggYSB3ZWxjb21lIGZsYWcg4oCUIHRoZSB1c2VyIG11c3QgU0VFIHRoYXQKICAvLyBzaWduLWluIHdvcmtlZCAocmVkaXJlY3RpbmcgaW50byBhIHRvb2wgd2l0aCBhbiB1bmNoYW5nZWQgbmF2IGxvb2tlZCBicm9rZW4pLgogIGNvbnN0IHJlcyA9IE5leHRSZXNwb25zZS5yZWRpcmVjdChgJHtiYXNlfS9hY2NvdW50P3dlbGNvbWU9MWApOwogIHJlcy5jb29raWVzLnNldChTRVNTSU9OX0NPT0tJRSwgY3JlYXRlU2Vzc2lvbihlbWFpbCwgRGF0ZS5ub3coKSksIHsKICAgIGh0dHBPbmx5OiB0cnVlLAogICAgc2VjdXJlOiB0cnVlLAogICAgc2FtZVNpdGU6ICJsYXgiLAogICAgcGF0aDogIi8iLAogICAgbWF4QWdlOiAzMCAqIDI0ICogNjAgKiA2MCwKICB9KTsKICByZXR1cm4gcmVzOwp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { verifyMagicToken, createSession, SESSION_COOKIE } from "@/app/lib/session";
+
+/** Validates a magic-link token, sets a 30-day session cookie, redirects to the app. */
+export async function GET(req: NextRequest) {
+  const token = req.nextUrl.searchParams.get("token") || undefined;
+  const email = verifyMagicToken(token, Date.now());
+  const base = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
+
+  if (!email) {
+    return NextResponse.redirect(`${base}/login?error=expired`);
+  }
+
+  // Land on the account page with a welcome flag — the user must SEE that
+  // sign-in worked (redirecting into a tool with an unchanged nav looked broken).
+  const res = NextResponse.redirect(`${base}/account?welcome=1`);
+  res.cookies.set(SESSION_COOKIE, createSession(email, Date.now()), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60,
+  });
+  return res;
+}

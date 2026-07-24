@@ -1,1 +1,25 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSm91cm5leSBmcm9tICIuL2NvbXBvbmVudHMvSm91cm5leSI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgY29uc3QgbWV0YWRhdGE6IE1ldGFkYXRhID0gewogIHRpdGxlOiAiWW91ciBSZXN1bWUsIEJ5IEludGVydmlldyDigJQgQUkgQnVpbGRzIEl0IFdpdGggWW91IHwgY3YucmFiaXQuc2EiLAogIGRlc2NyaXB0aW9uOgogICAgIlRhbGsgdG8gdGhlIEFJIEFkdmlzb3IgZm9yIHR3byBtaW51dGVzOiBpdCBpbnRlcnZpZXdzIHlvdSwgcmVwaHJhc2VzIHlvdXIgY2FzdWFsIHdvcmRzIGludG8gcHJvZmVzc2lvbmFsIEFUUy1yZWFkeSBsaW5lcywgYW5kIGhhbmRzIHlvdSBhIGRvd25sb2FkYWJsZSByZXN1bWUg4oCUIGZyZWUsIG5vIHNpZ251cC4gQXJhYmljICYgRW5nbGlzaC4iLAogIGFsdGVybmF0ZXM6IHsKICAgIGNhbm9uaWNhbDogYCR7QkFTRX0vYCwKICAgIGxhbmd1YWdlczogeyBlbjogYCR7QkFTRX0vYCwgYXI6IGAke0JBU0V9L2FyYCwgIngtZGVmYXVsdCI6IGAke0JBU0V9L2AgfSwKICB9LAogIG9wZW5HcmFwaDogewogICAgdGl0bGU6ICJZb3VyIFJlc3VtZSwgQnkgSW50ZXJ2aWV3IOKAlCBBSSBCdWlsZHMgSXQgV2l0aCBZb3UiLAogICAgZGVzY3JpcHRpb246CiAgICAgICJUYWxrIHRvIHRoZSBBSSBBZHZpc29yIGZvciB0d28gbWludXRlczogaXQgaW50ZXJ2aWV3cyB5b3UsIHJlcGhyYXNlcyB5b3VyIHdvcmRzIGludG8gcHJvZmVzc2lvbmFsIEFUUy1yZWFkeSBsaW5lcywgYW5kIGhhbmRzIHlvdSBhIGRvd25sb2FkYWJsZSByZXN1bWUg4oCUIGZyZWUsIG5vIHNpZ251cC4iLAogICAgdXJsOiBgJHtCQVNFfS9gLAogICAgdHlwZTogIndlYnNpdGUiLAogIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBIb21lKCkgewogIHJldHVybiA8Sm91cm5leSBsYW5nPSJlbiIgLz47Cn0K"}
+import type { Metadata } from "next";
+import Journey from "./components/Journey";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Your Resume, By Interview — AI Builds It With You | cv.rabit.sa",
+  description:
+    "Talk to the AI Advisor for two minutes: it interviews you, rephrases your casual words into professional ATS-ready lines, and hands you a downloadable resume — free, no signup. Arabic & English.",
+  alternates: {
+    canonical: `${BASE}/`,
+    languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
+  },
+  openGraph: {
+    title: "Your Resume, By Interview — AI Builds It With You",
+    description:
+      "Talk to the AI Advisor for two minutes: it interviews you, rephrases your words into professional ATS-ready lines, and hands you a downloadable resume — free, no signup.",
+    url: `${BASE}/`,
+    type: "website",
+  },
+};
+
+export default function Home() {
+  return <Journey lang="en" />;
+}

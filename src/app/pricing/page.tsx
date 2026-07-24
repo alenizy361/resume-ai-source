@@ -1,1 +1,107 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCBDaGVja291dEJ1dHRvbiBmcm9tICIuLi9jb21wb25lbnRzL0NoZWNrb3V0QnV0dG9uIjsKaW1wb3J0IHsgUExBTlMgfSBmcm9tICIuLi9saWIvcGxhbnMiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIlByaWNpbmcg4oCUIE9uZS10aW1lLCBObyBTdWJzY3JpcHRpb24gfCBTaXJhIiwKICBkZXNjcmlwdGlvbjoKICAgICJTaW1wbGUgb25lLXRpbWUgcHJpY2luZzogU0FSIDM1IGZvciAyNC1ob3VyIGZ1bGwgYWNjZXNzIG9yIFNBUiA5OSBmb3IgOTAgZGF5cy4gRXZlcnkgZmVhdHVyZSBpcyBpbmNsdWRlZCBpbiBib3RoIOKAlCB0aGUgb25seSBkaWZmZXJlbmNlIGlzIGhvdyBsb25nIGFjY2VzcyBsYXN0cy4gTm8gc3Vic2NyaXB0aW9uOyA3LWRheSBtb25leS1iYWNrIGd1YXJhbnRlZSBvbiB0aGUgOTAtZGF5IHBhY2suIiwKICBhbHRlcm5hdGVzOiB7CiAgICBjYW5vbmljYWw6IGAke0JBU0V9L3ByaWNpbmdgLAogICAgbGFuZ3VhZ2VzOiB7IGVuOiBgJHtCQVNFfS9wcmljaW5nYCwgYXI6IGAke0JBU0V9L2FyL3ByaWNpbmdgLCAieC1kZWZhdWx0IjogYCR7QkFTRX0vcHJpY2luZ2AgfSwKICB9LAogIG9wZW5HcmFwaDogeyB0aXRsZTogIlNpcmEgUHJpY2luZyDigJQgUGF5IG9uY2UsIG5vIHN1YnNjcmlwdGlvbiIsIGRlc2NyaXB0aW9uOiAiU0FSIDM1ICgyNGgpIG9yIFNBUiA5OSAoOTAgZGF5cykuIEV2ZXJ5IGZlYXR1cmUgaW4gYm90aC4iLCB1cmw6IGAke0JBU0V9L3ByaWNpbmdgIH0sCn07CgpmdW5jdGlvbiBQbGFuQ2FyZCh7IGlkLCBoaWdobGlnaHQgfTogeyBpZDogInNpbmdsZSIgfCAiY29tcGxldGUiOyBoaWdobGlnaHQ/OiBib29sZWFuIH0pIHsKICBjb25zdCBwID0gUExBTlNbaWRdOwogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0iY2FyZCBwLTgiIHN0eWxlPXtoaWdobGlnaHQgPyB7IGJvcmRlckNvbG9yOiAicmdiYSgxMzksOTIsMjQ2LDAuNSkiLCBiYWNrZ3JvdW5kOiAicmdiYSgxMzksOTIsMjQ2LDAuMDYpIiwgcG9zaXRpb246ICJyZWxhdGl2ZSIsIGJveFNoYWRvdzogIjAgMzBweCA4MHB4IC0zMHB4IHJnYmEoMTM5LDkyLDI0NiwwLjU1KSIgfSA6IHVuZGVmaW5lZH0+CiAgICAgIHtoaWdobGlnaHQgJiYgKAogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhYnNvbHV0ZSByaWdodC01IHRvcC01IHJvdW5kZWQtZnVsbCBweC0yLjUgcHktMSBmb250LW1vbm8gdGV4dC1bMTBweF0gZm9udC1ib2xkIHRyYWNraW5nLXdpZGVyIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYWNjZW50KSIsIGNvbG9yOiAiI2ZmZmZmZiIgfX0+QkVTVCBWQUxVRTwvZGl2PgogICAgICApfQogICAgICA8ZGl2IGNsYXNzTmFtZT0iZm9udC1tb25vIHRleHQteHMgdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVzdCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PntwLm5hbWV9IMK3IG9uZS10aW1lPC9kaXY+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC00IGZsZXggaXRlbXMtYmFzZWxpbmUgZ2FwLTEiPgogICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC01eGwgZm9udC1leHRyYWJvbGQiPlNBUiB7cC5wcmljZVNhcn08L3NwYW4+CiAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+b25jZSAoe3AucHJpY2VVc2R9KTwvc3Bhbj4KICAgICAgPC9kaXY+CiAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMiB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+e3AuYWNjZXNzTGFiZWx9PC9wPgogICAgICA8cCBjbGFzc05hbWU9Im10LTEgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntwLnRhZ2xpbmV9PC9wPgogICAgICA8dWwgY2xhc3NOYW1lPSJtdC02IHNwYWNlLXktMyB0ZXh0LXNtIj4KICAgICAgICB7cC5mZWF0dXJlcy5tYXAoKGYpID0+ICgKICAgICAgICAgIDxsaSBrZXk9e2Z9IGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTMiIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNDQsMjQ1LDI0MywwLjg1KSIgfX0+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1hY2NlbnQiPuKckzwvc3Bhbj4ge2Z9CiAgICAgICAgICA8L2xpPgogICAgICAgICkpfQogICAgICAgIHtpZCA9PT0gImNvbXBsZXRlIiAmJiAoCiAgICAgICAgICA8bGkgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMyIgc3R5bGU9e3sgY29sb3I6ICJyZ2JhKDI0NCwyNDUsMjQzLDAuODUpIiB9fT4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LWFjY2VudCI+4pyTPC9zcGFuPiA3LWRheSBtb25leS1iYWNrIGd1YXJhbnRlZQogICAgICAgICAgPC9saT4KICAgICAgICApfQogICAgICA8L3VsPgogICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtOCI+CiAgICAgICAgPENoZWNrb3V0QnV0dG9uIHBsYW49e2lkfSBsYWJlbD17aWQgPT09ICJzaW5nbGUiID8gIkdldCAyNC1ob3VyIGFjY2VzcyIgOiAiR2V0IHRoZSBDb21wbGV0ZSBQYWNrIOKGkiJ9IHZhcmlhbnQ9e2hpZ2hsaWdodCA/ICJhY2NlbnQiIDogImdob3N0In0gLz4KICAgICAgPC9kaXY+CiAgICA8L2Rpdj4KICApOwp9CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcmljaW5nUGFnZSgpIHsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNnhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICAgIDxPcmJCcmFuZCBzaXplPXsyNn0gLz4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LVsxNXB4XSBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPlNpcmE8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTQiPgogICAgICAgICAgICA8TGluayBocmVmPSIvYXIvcHJpY2luZyIgY2xhc3NOYW1lPSJ0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT7YuTwvTGluaz4KICAgICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPkZyZWUgc2NhbiDihpI8L0xpbms+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9uYXY+CgogICAgICA8c2VjdGlvbiBjbGFzc05hbWU9InJlbGF0aXZlIG14LWF1dG8gbWF4LXctM3hsIHB4LTYgcHktMTYiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJoZXJvLWFtYmllbnQiIGFyaWEtaGlkZGVuIC8+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIG1iLTEyIHRleHQtY2VudGVyIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPlByaWNpbmc8L2Rpdj4KICAgICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtNHhsIGZvbnQtZXh0cmFib2xkIHRyYWNraW5nLXRpZ2h0Ij5QYXkgb25jZS4gTm8gc3Vic2NyaXB0aW9uLjwvaDE+CiAgICAgICAgICA8cCBjbGFzc05hbWU9Im14LWF1dG8gbXQtMyBtYXgtdy14bCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICBCb3RoIHBsYW5zIGluY2x1ZGUgPHN0cm9uZz5ldmVyeSBmZWF0dXJlPC9zdHJvbmc+IOKAlCBmdWxsIHJlc3VtZSByZXdyaXRlLCBjb3ZlciBsZXR0ZXIsIExpbmtlZEluLCBpbnRlcnZpZXcgcHJlcCwgYW5kIHdhdGVybWFyay1mcmVlIGRvd25sb2Fkcy4gVGhlIG9ubHkgZGlmZmVyZW5jZSBpcyBob3cgbG9uZyB5b3VyIGFjY2VzcyBsYXN0cy4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtNSBtZDpncmlkLWNvbHMtMiI+CiAgICAgICAgICA8UGxhbkNhcmQgaWQ9InNpbmdsZSIgLz4KICAgICAgICAgIDxQbGFuQ2FyZCBpZD0iY29tcGxldGUiIGhpZ2hsaWdodCAvPgogICAgICAgIDwvZGl2PgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtOCB0ZXh0LWNlbnRlciBmb250LW1vbm8gdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PgogICAgICAgICAgU2VjdXJlIFBheWxpbmsgY2hlY2tvdXQgwrcgSW5zdGFudCBhY2Nlc3MgwrcgNy1kYXkgbW9uZXktYmFjayBndWFyYW50ZWUgb24gdGhlIENvbXBsZXRlIFBhY2sgwrcgTm8gc3Vic2NyaXB0aW9uLCBldmVyCiAgICAgICAgPC9wPgoKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMTYiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNiB0ZXh0LTJ4bCBmb250LWJvbGQiPkZyZXF1ZW50bHkgYXNrZWQ8L2gyPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktNCI+CiAgICAgICAgICAgIHtbCiAgICAgICAgICAgICAgWyJJcyB0aGUgc2NhbiBmcmVlPyIsICJZZXMg4oCUIHRoZSBBVFMgc2NvcmUsIG1pc3Npbmcga2V5d29yZHMsIHNraWxscy1nYXAsIGFuZCBhIHByZXZpZXcgb2YgaW1wcm92ZW1lbnRzIGFyZSBmcmVlLiBUaGUgZnVsbCByZXdyaXRlIGFuZCBkb3dubG9hZHMgdW5sb2NrIHdpdGggYSBvbmUtdGltZSBwYXltZW50LiJdLAogICAgICAgICAgICAgIFsiSXMgdGhpcyBhIHN1YnNjcmlwdGlvbj8iLCAiTm8uIFBheSBvbmNlLiBTQVIgMzUgZ2l2ZXMgMjQtaG91ciBmdWxsIGFjY2VzczsgU0FSIDk5IGdpdmVzIDkwIGRheXMuIE5vdGhpbmcgcmVjdXJzLiJdLAogICAgICAgICAgICAgIFsiV2hhdCdzIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gdGhlIHR3byBwbGFucz8iLCAiTm90aGluZyBpbiBmZWF0dXJlcyDigJQgYm90aCB1bmxvY2sgZXZlcnl0aGluZy4gU0FSIDk5IHNpbXBseSBrZWVwcyB5b3VyIGFjY2VzcyBvcGVuIGZvciA5MCBkYXlzLCBpZGVhbCBmb3IgYW4gYWN0aXZlIGpvYiBodW50LiJdLAogICAgICAgICAgICAgIFsiQ2FuIEkgZ2V0IGEgcmVmdW5kPyIsICJZZXMg4oCUIHRoZSBDb21wbGV0ZSBQYWNrICg5MCBkYXlzKSBjYXJyaWVzIGEgNy1kYXkgbW9uZXktYmFjayBndWFyYW50ZWUuIl0sCiAgICAgICAgICAgIF0ubWFwKChbcSwgYV0pID0+ICgKICAgICAgICAgICAgICA8ZGl2IGtleT17cX0gY2xhc3NOYW1lPSJjYXJkIHAtNSI+CiAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPSJmb250LWJvbGQiPntxfTwvaDM+CiAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTEgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PnthfTwvcD4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9zZWN0aW9uPgogICAgPC9tYWluPgogICk7Cn0K"}
+import type { Metadata } from "next";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import CheckoutButton from "../components/CheckoutButton";
+import { PLANS } from "../lib/plans";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Pricing — One-time, No Subscription | Sira",
+  description:
+    "Simple one-time pricing: SAR 35 for 24-hour full access or SAR 99 for 90 days. Every feature is included in both — the only difference is how long access lasts. No subscription; 7-day money-back guarantee on the 90-day pack.",
+  alternates: {
+    canonical: `${BASE}/pricing`,
+    languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },
+  },
+  openGraph: { title: "Sira Pricing — Pay once, no subscription", description: "SAR 35 (24h) or SAR 99 (90 days). Every feature in both.", url: `${BASE}/pricing` },
+};
+
+function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: boolean }) {
+  const p = PLANS[id];
+  return (
+    <div className="card p-8" style={highlight ? { borderColor: "rgba(139,92,246,0.5)", background: "rgba(139,92,246,0.06)", position: "relative", boxShadow: "0 30px 80px -30px rgba(139,92,246,0.55)" } : undefined}>
+      {highlight && (
+        <div className="absolute right-5 top-5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent)", color: "#ffffff" }}>BEST VALUE</div>
+      )}
+      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.name} · one-time</div>
+      <div className="mt-4 flex items-baseline gap-1">
+        <span className="text-5xl font-extrabold">SAR {p.priceSar}</span>
+        <span className="text-sm" style={{ color: "var(--muted)" }}>once ({p.priceUsd})</span>
+      </div>
+      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>{p.accessLabel}</p>
+      <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{p.tagline}</p>
+      <ul className="mt-6 space-y-3 text-sm">
+        {p.features.map((f) => (
+          <li key={f} className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+            <span className="text-accent">✓</span> {f}
+          </li>
+        ))}
+        {id === "complete" && (
+          <li className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+            <span className="text-accent">✓</span> 7-day money-back guarantee
+          </li>
+        )}
+      </ul>
+      <div className="mt-8">
+        <CheckoutButton plan={id} label={id === "single" ? "Get 24-hour access" : "Get the Complete Pack →"} variant={highlight ? "accent" : "ghost"} />
+      </div>
+    </div>
+  );
+}
+
+export default function PricingPage() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/ar/pricing" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>ع</Link>
+            <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Free scan →</Link>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative mx-auto max-w-3xl px-6 py-16">
+        <div className="hero-ambient" aria-hidden />
+        <div className="relative mb-12 text-center">
+          <div className="chip mb-4">Pricing</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">Pay once. No subscription.</h1>
+          <p className="mx-auto mt-3 max-w-xl" style={{ color: "var(--muted)" }}>
+            Both plans include <strong>every feature</strong> — full resume rewrite, cover letter, LinkedIn, interview prep, and watermark-free downloads. The only difference is how long your access lasts.
+          </p>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <PlanCard id="single" />
+          <PlanCard id="complete" highlight />
+        </div>
+        <p className="mt-8 text-center font-mono text-xs" style={{ color: "var(--faint)" }}>
+          Secure Paylink checkout · Instant access · 7-day money-back guarantee on the Complete Pack · No subscription, ever
+        </p>
+
+        <div className="mt-16">
+          <h2 className="mb-6 text-2xl font-bold">Frequently asked</h2>
+          <div className="space-y-4">
+            {[
+              ["Is the scan free?", "Yes — the ATS score, missing keywords, skills-gap, and a preview of improvements are free. The full rewrite and downloads unlock with a one-time payment."],
+              ["Is this a subscription?", "No. Pay once. SAR 35 gives 24-hour full access; SAR 99 gives 90 days. Nothing recurs."],
+              ["What's the difference between the two plans?", "Nothing in features — both unlock everything. SAR 99 simply keeps your access open for 90 days, ideal for an active job hunt."],
+              ["Can I get a refund?", "Yes — the Complete Pack (90 days) carries a 7-day money-back guarantee."],
+            ].map(([q, a]) => (
+              <div key={q} className="card p-5">
+                <h3 className="font-bold">{q}</h3>
+                <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

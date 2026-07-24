@@ -1,1 +1,14 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICBhbHRlcm5hdGVzOiB7CiAgICBjYW5vbmljYWw6IGAke0JBU0V9L2FyL2J1aWxkZXJgLAogICAgbGFuZ3VhZ2VzOiB7IGVuOiBgJHtCQVNFfS9idWlsZGAsIGFyOiBgJHtCQVNFfS9hci9idWlsZGVyYCwgIngtZGVmYXVsdCI6IGAke0JBU0V9L2J1aWxkYCB9LAogIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBckJ1aWxkZXJMYXlvdXQoeyBjaGlsZHJlbiB9OiB7IGNoaWxkcmVuOiBSZWFjdC5SZWFjdE5vZGUgfSkgewogIHJldHVybiBjaGlsZHJlbjsKfQo="}
+import type { Metadata } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${BASE}/ar/builder`,
+    languages: { en: `${BASE}/build`, ar: `${BASE}/ar/builder`, "x-default": `${BASE}/build` },
+  },
+};
+
+export default function ArBuilderLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

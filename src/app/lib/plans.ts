@@ -1,1 +1,71 @@
-{"data":"LyoqCiAqIFNpbmdsZSBzb3VyY2Ugb2YgdHJ1dGggZm9yIHdoYXQgZWFjaCBwYWlkIHBsYW4gaW5jbHVkZXMuCiAqCiAqIElNUE9SVEFOVCDigJQgdGhpcyBtaXJyb3JzIHRoZSBBQ1RVQUwgZ2F0aW5nIGluIHRoZSBjb2RlOiBldmVyeSBwYWlkIGZlYXR1cmUKICogKGZ1bGwgcmVzdW1lIHJld3JpdGUsIGNvdmVyIGxldHRlciwgTGlua2VkSW4gb3B0aW1pemVyLCBpbnRlcnZpZXcgcHJlcCwKICogd2F0ZXJtYXJrLWZyZWUgZG93bmxvYWRzKSBpcyB1bmxvY2tlZCBieSBBTlkgdmFsaWQgcGFzcy4gUGxhbnMgZGlmZmVyIE9OTFkgaW4KICogaG93IGxvbmcgYWNjZXNzIGxhc3RzIOKAlCBzZWUgV0lORE9XX01TIGluIGFjY2Vzcy50cyAoc2luZ2xlID0gMjRoLCBjb21wbGV0ZSA9CiAqIDkwIGRheXMpLiBEbyBub3QgZGVzY3JpYmUgZmVhdHVyZXMgYXMgZXhjbHVzaXZlIHRvIHRoZSBDb21wbGV0ZSBQYWNrOyB0aGUKICogaG9uZXN0IGRpZmZlcmVudGlhdG9yIGlzIGR1cmF0aW9uLiBFdmVyeSBwYWdlJ3MgcHJpY2luZyBjb3B5IHNob3VsZCByZWFkIGZyb20KICogaGVyZSBzbyB0aGUgcGxhbnMgbmV2ZXIgY29udHJhZGljdCBlYWNoIG90aGVyIGFnYWluLgogKi8KCmV4cG9ydCBpbnRlcmZhY2UgUGxhbiB7CiAgaWQ6ICJzaW5nbGUiIHwgImNvbXBsZXRlIjsKICBuYW1lOiBzdHJpbmc7CiAgbmFtZUFyOiBzdHJpbmc7CiAgcHJpY2VTYXI6IG51bWJlcjsKICBwcmljZVVzZDogc3RyaW5nOwogIGFjY2Vzc0xhYmVsOiBzdHJpbmc7CiAgYWNjZXNzTGFiZWxBcjogc3RyaW5nOwogIHRhZ2xpbmU6IHN0cmluZzsKICB0YWdsaW5lQXI6IHN0cmluZzsKICAvKiogRnVsbCBmZWF0dXJlIGxpc3Qg4oCUIGlkZW50aWNhbCBmb3IgYm90aCBwbGFuczsgb25seSBhY2Nlc3MgZHVyYXRpb24gZGlmZmVycy4gKi8KICBmZWF0dXJlczogc3RyaW5nW107CiAgZmVhdHVyZXNBcjogc3RyaW5nW107Cn0KCmNvbnN0IEZVTExfRkVBVFVSRVMgPSBbCiAgIkZ1bGwgQVRTLW9wdGltaXplZCByZXN1bWUgcmV3cml0ZSIsCiAgIkNvdmVyIGxldHRlciBnZW5lcmF0b3IiLAogICJMaW5rZWRJbiBoZWFkbGluZSAmIGFib3V0IG9wdGltaXplciIsCiAgIkludGVydmlldyBwcmVwIHF1ZXN0aW9ucyAmIGFuc3dlcnMiLAogICJXYXRlcm1hcmstZnJlZSBQREYgJiBXb3JkIGRvd25sb2FkcyIsCl07Cgpjb25zdCBGVUxMX0ZFQVRVUkVTX0FSID0gWwogICLYpdi52KfYr9ipINmD2KrYp9io2Kkg2KfZhNiz2YrYsdipINmD2KfZhdmE2Kkg2YjZhdmH2YrZkdij2Kkg2YTYo9mG2LjZhdipINin2YTYqtmI2LjZitmBIiwKICAi2YXZiNmE2ZHYryDYrti32KfYqCDYp9mE2KrYudix2YrZgSIsCiAgItiq2K3Ys9mK2YYg2LnZhtmI2KfZhiDZiNmG2KjYsNipINmE2YrZhtmD2K/YpdmGIiwKICAi2KPYs9im2YTYqSDZiNij2KzZiNio2Kkg2KrYrdi22YrYsSDYp9mE2YXZgtin2KjZhNipIiwKICAi2KrZhtiy2YrZhCBQREYg2YggV29yZCDYqNiv2YjZhiDYudmE2KfZhdipINmF2KfYptmK2KkiLApdOwoKZXhwb3J0IGNvbnN0IFBMQU5TOiBSZWNvcmQ8InNpbmdsZSIgfCAiY29tcGxldGUiLCBQbGFuPiA9IHsKICBzaW5nbGU6IHsKICAgIGlkOiAic2luZ2xlIiwKICAgIG5hbWU6ICJPbmUtdGltZSBvcHRpbWl6YXRpb24iLAogICAgbmFtZUFyOiAi2KrYrdiz2YrZhiDZiNin2K3YryIsCiAgICBwcmljZVNhcjogMzUsCiAgICBwcmljZVVzZDogIn4kOSIsCiAgICBhY2Nlc3NMYWJlbDogIkZ1bGwgYWNjZXNzIGZvciAyNCBob3VycyIsCiAgICBhY2Nlc3NMYWJlbEFyOiAi2YjYtdmI2YQg2YPYp9mF2YQg2YTZhdiv2Kkg2aLZpCDYs9in2LnYqSIsCiAgICB0YWdsaW5lOiAiRXZlcnl0aGluZyB1bmxvY2tlZCDigJQgcGVyZmVjdCBmb3Igb25lIGJpZyBhcHBsaWNhdGlvbi4iLAogICAgdGFnbGluZUFyOiAi2YPZhCDYtNmK2KEg2YXZgdiq2YjYrSDigJQg2YXYq9in2YTZiiDZhNiq2YLYr9mK2YUg2YjYp9it2K8g2YXZh9mFLiIsCiAgICBmZWF0dXJlczogRlVMTF9GRUFUVVJFUywKICAgIGZlYXR1cmVzQXI6IEZVTExfRkVBVFVSRVNfQVIsCiAgfSwKICBjb21wbGV0ZTogewogICAgaWQ6ICJjb21wbGV0ZSIsCiAgICBuYW1lOiAiQ29tcGxldGUgUGFjayIsCiAgICBuYW1lQXI6ICLYp9mE2K3YstmF2Kkg2KfZhNmD2KfZhdmE2KkiLAogICAgcHJpY2VTYXI6IDk5LAogICAgcHJpY2VVc2Q6ICJ+JDI2IiwKICAgIGFjY2Vzc0xhYmVsOiAiRnVsbCBhY2Nlc3MgZm9yIDkwIGRheXMiLAogICAgYWNjZXNzTGFiZWxBcjogItmI2LXZiNmEINmD2KfZhdmEINmE2YXYr9ipINmp2aAg2YrZiNmF2KfZiyIsCiAgICB0YWdsaW5lOiAiU2FtZSBmdWxsIGFjY2VzcywgOTAgZGF5cyDigJQgYmVzdCBmb3IgYW4gYWN0aXZlIGpvYiBodW50LiBObyBzdWJzY3JpcHRpb24uIiwKICAgIHRhZ2xpbmVBcjogItmG2YHYsyDYp9mE2YjYtdmI2YQg2KfZhNmD2KfZhdmEINmE2YPZhiDZqdmgINmK2YjZhdin2Ysg4oCUINin2YTYo9mB2LbZhCDZhNmE2KjYrdirINin2YTZhti02LcuINio2K/ZiNmGINin2LTYqtix2KfZgy4iLAogICAgZmVhdHVyZXM6IEZVTExfRkVBVFVSRVMsCiAgICBmZWF0dXJlc0FyOiBGVUxMX0ZFQVRVUkVTX0FSLAogIH0sCn07Cg=="}
+/**
+ * Single source of truth for what each paid plan includes.
+ *
+ * IMPORTANT — this mirrors the ACTUAL gating in the code: every paid feature
+ * (full resume rewrite, cover letter, LinkedIn optimizer, interview prep,
+ * watermark-free downloads) is unlocked by ANY valid pass. Plans differ ONLY in
+ * how long access lasts — see WINDOW_MS in access.ts (single = 24h, complete =
+ * 90 days). Do not describe features as exclusive to the Complete Pack; the
+ * honest differentiator is duration. Every page's pricing copy should read from
+ * here so the plans never contradict each other again.
+ */
+
+export interface Plan {
+  id: "single" | "complete";
+  name: string;
+  nameAr: string;
+  priceSar: number;
+  priceUsd: string;
+  accessLabel: string;
+  accessLabelAr: string;
+  tagline: string;
+  taglineAr: string;
+  /** Full feature list — identical for both plans; only access duration differs. */
+  features: string[];
+  featuresAr: string[];
+}
+
+const FULL_FEATURES = [
+  "Full ATS-optimized resume rewrite",
+  "Cover letter generator",
+  "LinkedIn headline & about optimizer",
+  "Interview prep questions & answers",
+  "Watermark-free PDF & Word downloads",
+];
+
+const FULL_FEATURES_AR = [
+  "إعادة كتابة السيرة كاملة ومهيّأة لأنظمة التوظيف",
+  "مولّد خطاب التعريف",
+  "تحسين عنوان ونبذة لينكدإن",
+  "أسئلة وأجوبة تحضير المقابلة",
+  "تنزيل PDF و Word بدون علامة مائية",
+];
+
+export const PLANS: Record<"single" | "complete", Plan> = {
+  single: {
+    id: "single",
+    name: "One-time optimization",
+    nameAr: "تحسين واحد",
+    priceSar: 35,
+    priceUsd: "~$9",
+    accessLabel: "Full access for 24 hours",
+    accessLabelAr: "وصول كامل لمدة ٢٤ ساعة",
+    tagline: "Everything unlocked — perfect for one big application.",
+    taglineAr: "كل شيء مفتوح — مثالي لتقديم واحد مهم.",
+    features: FULL_FEATURES,
+    featuresAr: FULL_FEATURES_AR,
+  },
+  complete: {
+    id: "complete",
+    name: "Complete Pack",
+    nameAr: "الحزمة الكاملة",
+    priceSar: 99,
+    priceUsd: "~$26",
+    accessLabel: "Full access for 90 days",
+    accessLabelAr: "وصول كامل لمدة ٩٠ يوماً",
+    tagline: "Same full access, 90 days — best for an active job hunt. No subscription.",
+    taglineAr: "نفس الوصول الكامل لكن ٩٠ يوماً — الأفضل للبحث النشط. بدون اشتراك.",
+    features: FULL_FEATURES,
+    featuresAr: FULL_FEATURES_AR,
+  },
+};

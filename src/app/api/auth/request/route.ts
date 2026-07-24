@@ -1,1 +1,63 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgY3JlYXRlTWFnaWNUb2tlbiB9IGZyb20gIkAvYXBwL2xpYi9zZXNzaW9uIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAyMDsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKLy8gTm8gc2FuZGJveCBmYWxsYmFjazogaWYgRU1BSUxfRlJPTSBpcyB1bnNldCB3ZSByZWZ1c2UgdG8gc2VuZCAoYmVsb3cpIHJhdGhlcgovLyB0aGFuIHNpbGVudGx5IG1haWxpbmcgZnJvbSBhbiB1bnZlcmlmaWVkIHNhbmRib3ggYWRkcmVzcy4KY29uc3QgRlJPTSA9IHByb2Nlc3MuZW52LkVNQUlMX0ZST007CgovKiogU2VuZHMgYSBtYWdpYyBzaWduLWluIGxpbmsgdG8gdGhlIGdpdmVuIGVtYWlsIHZpYSBSZXNlbmQuICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBQT1NUKHJlcTogTmV4dFJlcXVlc3QpIHsKICB0cnkgewogICAgY29uc3QgeyBlbWFpbCB9ID0gYXdhaXQgcmVxLmpzb24oKTsKICAgIGlmICghZW1haWwgfHwgIS9eW15AXHNdK0BbXkBcc10rXC5bXkBcc10rJC8udGVzdChlbWFpbCkpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJQbGVhc2UgZW50ZXIgYSB2YWxpZCBlbWFpbCBhZGRyZXNzLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KCiAgICAvLyBUaHJvdHRsZSB0byBzdG9wIGVtYWlsLWJvbWJpbmc6IG1heCA0IGxpbmtzL2hvdXIgcGVyIGFkZHJlc3MsIDggcGVyIElQLgogICAgLy8gQ2hhcmdlZCB1cCBmcm9udCwgYmVmb3JlIHRoZSBzZW5kIOKAlCBhIGZhaWxlZCBzZW5kIChib3VuY2luZyBhZGRyZXNzLAogICAgLy8gcHJvdmlkZXIgaGljY3VwKSBtdXN0IHN0aWxsIGNvdW50LCBvdGhlcndpc2UgYSBiYWQgYWRkcmVzcyBjb3VsZCBkcml2ZQogICAgLy8gdW5ib3VuZGVkIG91dGJvdW5kIGF0dGVtcHRzIGJ5IG5ldmVyIGNvbnN1bWluZyB0aGUgcXVvdGEuCiAgICBjb25zdCBpcEtleSA9IGBhdXRoOmlwOiR7Y2xpZW50SXAocmVxKX1gOwogICAgY29uc3QgZW1LZXkgPSBgYXV0aDplbToke1N0cmluZyhlbWFpbCkudG9Mb3dlckNhc2UoKX1gOwogICAgaWYgKCEoYXdhaXQgYWxsb3dTaGFyZWQoaXBLZXksIDgsIDYwICogNjAgKiAxMDAwKSkgfHwKICAgICAgICAhKGF3YWl0IGFsbG93U2hhcmVkKGVtS2V5LCA0LCA2MCAqIDYwICogMTAwMCkpKSB7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiVG9vIG1hbnkgc2lnbi1pbiByZXF1ZXN0cy4gUGxlYXNlIHdhaXQgYSBiaXQgYW5kIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CgogICAgY29uc3QgdG9rZW4gPSBjcmVhdGVNYWdpY1Rva2VuKGVtYWlsLCBEYXRlLm5vdygpKTsKICAgIGNvbnN0IGxpbmsgPSBgJHtCQVNFfS9hcGkvYXV0aC92ZXJpZnk/dG9rZW49JHtlbmNvZGVVUklDb21wb25lbnQodG9rZW4pfWA7CgogICAgY29uc3Qga2V5ID0gcHJvY2Vzcy5lbnYuUkVTRU5EX0FQSV9LRVk7CiAgICBpZiAoIWtleSB8fCAhRlJPTSkgewogICAgICAvLyBOb3QgY29uZmlndXJlZCAobWlzc2luZyBBUEkga2V5IG9yIHNlbmRlcikg4oCUIHN1cmZhY2UgYSBjbGVhciBtZXNzYWdlCiAgICAgIC8vIHJhdGhlciB0aGFuIHByZXRlbmRpbmcgdG8gc2VuZCBvciBtYWlsaW5nIGZyb20gYSBzYW5kYm94IGFkZHJlc3MuCiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiRW1haWwgc2lnbi1pbiBpc24ndCBjb25maWd1cmVkIHlldC4iIH0sIHsgc3RhdHVzOiA1MDMgfSk7CiAgICB9CgogICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goImh0dHBzOi8vYXBpLnJlc2VuZC5jb20vZW1haWxzIiwgewogICAgICBtZXRob2Q6ICJQT1NUIiwKICAgICAgaGVhZGVyczogeyBBdXRob3JpemF0aW9uOiBgQmVhcmVyICR7a2V5fWAsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgIGZyb206IEZST00sCiAgICAgICAgdG86IFtlbWFpbF0sCiAgICAgICAgc3ViamVjdDogIllvdXIgU2lyYSBzaWduLWluIGxpbmsiLAogICAgICAgIGh0bWw6IGA8ZGl2IHN0eWxlPSJmb250LWZhbWlseTpzYW5zLXNlcmlmO21heC13aWR0aDo0ODBweDttYXJnaW46YXV0byI+CiAgICAgICAgICA8aDI+U2lnbiBpbiB0byBTaXJhPC9oMj4KICAgICAgICAgIDxwPkNsaWNrIHRoZSBidXR0b24gYmVsb3cgdG8gc2lnbiBpbi4gVGhpcyBsaW5rIGV4cGlyZXMgaW4gMTUgbWludXRlcy48L3A+CiAgICAgICAgICA8cD48YSBocmVmPSIke2xpbmt9IiBzdHlsZT0iZGlzcGxheTppbmxpbmUtYmxvY2s7YmFja2dyb3VuZDojN2MzYWVkO2NvbG9yOiNmZmZmZmY7Zm9udC13ZWlnaHQ6Ym9sZDtwYWRkaW5nOjEycHggMjRweDtib3JkZXItcmFkaXVzOjhweDt0ZXh0LWRlY29yYXRpb246bm9uZSI+U2lnbiBpbiDihpI8L2E+PC9wPgogICAgICAgICAgPHAgc3R5bGU9ImNvbG9yOiM4ODg7Zm9udC1zaXplOjEycHgiPklmIHlvdSBkaWRuJ3QgcmVxdWVzdCB0aGlzLCB5b3UgY2FuIGlnbm9yZSBpdC48L3A+CiAgICAgICAgPC9kaXY+YCwKICAgICAgfSksCiAgICB9KTsKICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYFJlc2VuZCAke3Jlcy5zdGF0dXN9OiAkeyhhd2FpdCByZXMudGV4dCgpKS5zbGljZSgwLCAyMDApfWApOwoKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiB0cnVlIH0pOwogIH0gY2F0Y2ggKGVycikgewogICAgY29uc29sZS5lcnJvcigiQXV0aCByZXF1ZXN0IGVycm9yOiIsIGVycik7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkNvdWxkIG5vdCBzZW5kIHRoZSBzaWduLWluIGxpbmsuIFBsZWFzZSB0cnkgYWdhaW4uIiB9LCB7IHN0YXR1czogNTAwIH0pOwogIH0KfQo="}
+import { NextRequest, NextResponse } from "next/server";
+import { createMagicToken } from "@/app/lib/session";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 20;
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+// No sandbox fallback: if EMAIL_FROM is unset we refuse to send (below) rather
+// than silently mailing from an unverified sandbox address.
+const FROM = process.env.EMAIL_FROM;
+
+/** Sends a magic sign-in link to the given email via Resend. */
+export async function POST(req: NextRequest) {
+  try {
+    const { email } = await req.json();
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    }
+
+    // Throttle to stop email-bombing: max 4 links/hour per address, 8 per IP.
+    // Charged up front, before the send — a failed send (bouncing address,
+    // provider hiccup) must still count, otherwise a bad address could drive
+    // unbounded outbound attempts by never consuming the quota.
+    const ipKey = `auth:ip:${clientIp(req)}`;
+    const emKey = `auth:em:${String(email).toLowerCase()}`;
+    if (!(await allowShared(ipKey, 8, 60 * 60 * 1000)) ||
+        !(await allowShared(emKey, 4, 60 * 60 * 1000))) {
+      return NextResponse.json({ error: "Too many sign-in requests. Please wait a bit and try again." }, { status: 429 });
+    }
+
+    const token = createMagicToken(email, Date.now());
+    const link = `${BASE}/api/auth/verify?token=${encodeURIComponent(token)}`;
+
+    const key = process.env.RESEND_API_KEY;
+    if (!key || !FROM) {
+      // Not configured (missing API key or sender) — surface a clear message
+      // rather than pretending to send or mailing from a sandbox address.
+      return NextResponse.json({ error: "Email sign-in isn't configured yet." }, { status: 503 });
+    }
+
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: FROM,
+        to: [email],
+        subject: "Your Sira sign-in link",
+        html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
+          <h2>Sign in to Sira</h2>
+          <p>Click the button below to sign in. This link expires in 15 minutes.</p>
+          <p><a href="${link}" style="display:inline-block;background:#7c3aed;color:#ffffff;font-weight:bold;padding:12px 24px;border-radius:8px;text-decoration:none">Sign in →</a></p>
+          <p style="color:#888;font-size:12px">If you didn't request this, you can ignore it.</p>
+        </div>`,
+      }),
+    });
+    if (!res.ok) throw new Error(`Resend ${res.status}: ${(await res.text()).slice(0, 200)}`);
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("Auth request error:", err);
+    return NextResponse.json({ error: "Could not send the sign-in link. Please try again." }, { status: 500 });
+  }
+}

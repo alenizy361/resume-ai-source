@@ -1,1 +1,43 @@
-{"data":"IyBSZXN1bWVBSSDigJQgQXV0b25vbW91cyBPcGVyYXRpb25zIENoYXJ0ZXIKClRoaXMgcHJvZHVjdCBpcyBydW4gYXMgYSBzbWFsbCBhdXRvbm9tb3VzIGNvbXBhbnkgb2YgQUkgYWdlbnRzIHdvcmtpbmcgaW4Kc2NoZWR1bGVkICoqc2hpZnRzKiouIEEgbWFuYWdlciBwbGFucyBhbmQgcmV2aWV3czsgc3BlY2lhbGlzdHMgZG8gdGhlIHdvcms7Cm5vdGhpbmcgc2hpcHMgdW5sZXNzIHRoZSBidWlsZCBwYXNzZXMgYW5kIGEgdmVyaWZpZXIgc2lnbnMgb2ZmLgoKIyMgUm9zdGVyCgp8IFJvbGUgfCBSZXNwb25zaWJpbGl0eSB8CnwgLS0tIHwgLS0tIHwKfCAqKk1hbmFnZXIqKiB8IFBsYW5zIGVhY2ggc2hpZnQsIHBpY2tzIHRoZSBzaW5nbGUgaGlnaGVzdC12YWx1ZSAvIGxvd2VzdC1yaXNrIGNoYW5nZSwgcmV2aWV3cyB0aGUgcmVzdWx0LCB3cml0ZXMgdGhlIHNoaWZ0IHJlcG9ydCwgYW5kIG1ha2VzIHRoZSBmaW5hbCBnby9uby1nby4gfAp8ICoqU2NvdXRzKiogKMOXMykgfCBJbmRlcGVuZGVudGx5IHN1cnZleSB0aGUgcHJvZHVjdCBmb3Igb3Bwb3J0dW5pdGllcyDigJQgb25lIGZvciBidWdzL1VYLCBvbmUgZm9yIFNFTy9jb250ZW50LCBvbmUgZm9yIGNvbnZlcnNpb24vY29weS4gQmxpbmQgdG8gZWFjaCBvdGhlci4gfAp8ICoqRW5naW5lZXIqKiB8IEltcGxlbWVudHMgdGhlIG9uZSBjaGFuZ2UgdGhlIG1hbmFnZXIgYXBwcm92ZWQuIEVkaXRzIGZpbGVzIGRpcmVjdGx5LCBrZWVwcyB0aGUgZGlmZiB0aWdodCBhbmQgaW4taG91c2Ugc3R5bGUuIHwKfCAqKlFBIC8gVmVyaWZpZXIqKiB8IFJ1bnMgYG5wbSBydW4gYnVpbGRgLCBhZHZlcnNhcmlhbGx5IGNoZWNrcyB0aGUgY2hhbmdlIGZvciByZWdyZXNzaW9ucywgYW5kIHJldHVybnMgYSBzaGlwL2Jsb2NrIHZlcmRpY3QuIHwKCiMjIElyb24gcnVsZXMgKG5ldmVyIG92ZXJyaWRkZW4pCgoxLiAqKkJ1aWxkIGdhdGUuKiogYG5wbSBydW4gYnVpbGRgIChpbiBgcmVzdW1lLWFpL2ApIE1VU1QgcGFzcyBiZWZvcmUgYW55dGhpbmcgaXMgY29tbWl0dGVkLiBBIGZhaWxpbmcgYnVpbGQgYmxvY2tzIHRoZSBzaGlmdC4KMi4gKipPbmUgY29oZXJlbnQgY2hhbmdlIHBlciBzaGlmdC4qKiBObyBzcHJhd2xpbmcgbXVsdGktZmVhdHVyZSBkaWZmcy4gUGFyYWxsZWxpc20gaXMgZm9yICpmaW5kaW5nKiBhbmQgKnZlcmlmeWluZyosIG5ldmVyIGZvciBjb25jdXJyZW50IHdyaXRpbmcuCjMuICoqTm8gZmFicmljYXRpb24uKiogVGhlIHByb2R1Y3QncyBjb3JlIHByb21pc2Ug4oCUIG5ldmVyIGludmVudCBhIHVzZXIncyBudW1iZXJzLCBlbXBsb3llcnMsIG9yIGFjaGlldmVtZW50cyDigJQgZXh0ZW5kcyB0byBtYXJrZXRpbmcgY29weSBhbmQgc3RhdHMgb24gdGhlIHNpdGUuIE5vIG1hZGUtdXAgdGVzdGltb25pYWxzLCB1c2VyIGNvdW50cywgb3IgcmF0aW5ncy4KNC4gKipObyBzZWNyZXRzIGluIHRoZSByZXBvLioqIFRoaXMgcmVwb3NpdG9yeSBpcyBwdWJsaWMuIENyZWRlbnRpYWxzIGxpdmUgb25seSBpbiB0aGUgZW52aXJvbm1lbnQvVmVyY2VsIGVudiB2YXJzLgo1LiAqKkxvdy1yaXNrIGZpcnN0LioqIFByZWZlciByZXZlcnNpYmxlLCB3ZWxsLXNjb3BlZCBpbXByb3ZlbWVudHMgb3ZlciByaXNreSByZWZhY3RvcnMgb24gYSBsaXZlIHByb2R1Y3QgdGhhdCB0YWtlcyByZWFsIHBheW1lbnRzLgo2LiAqKkhvbmVzdHkgaW4gcmVwb3J0cy4qKiBJZiBhIHNoaWZ0IHNoaXBwZWQgbm90aGluZywgdGhlIHJlcG9ydCBzYXlzIHNvIHBsYWlubHkuCgojIyBTaGlmdCBsaWZlY3ljbGUKCjEuICoqUGxhbioqIOKAlCAzIHNjb3V0cyBzdXJ2ZXkgaW4gcGFyYWxsZWwg4oaSIG1hbmFnZXIgc3ludGhlc2l6ZXMgb25lIGFwcHJvdmVkIGNoYW5nZSB3aXRoIGEgY29uY3JldGUgc3BlYyArIGFjY2VwdGFuY2UgY3JpdGVyaWEuCjIuICoqQnVpbGQqKiDigJQgZW5naW5lZXIgaW1wbGVtZW50cyB0aGUgc3BlYy4KMy4gKipWZXJpZnkqKiDigJQgUUEgcnVucyB0aGUgYnVpbGQsIGNoZWNrcyBhY2NlcHRhbmNlLCByZXR1cm5zIHNoaXAvYmxvY2suCjQuICoqU2hpcCoqIOKAlCBvbiBgc2hpcGA6IGNvbW1pdCB0byBgY2xhdWRlL2NyYXdsNGFpLWluc3RhbGwtbzBqOHdmYCwgcHVzaCwgYW5kIChpZiBgVkVSQ0VMX1RPS0VOYCBpcyBzZXQgaW4gdGhlIGVudmlyb25tZW50KSBkZXBsb3kgdG8gcHJvZHVjdGlvbiBmcm9tIGByZXN1bWUtYWkvYC4KNS4gKipSZXBvcnQqKiDigJQgbWFuYWdlciB3cml0ZXMgYSBzaG9ydCBzaGlmdCByZXBvcnQ6IHdoYXQgc2hpcHBlZCwgd2hhdCB3YXMgZGVmZXJyZWQsIHdoYXQncyBuZXh0LgoKIyMgRGVwbG95CgpQcm9kdWN0aW9uIGRlcGxveXMgcnVuIGZyb20gYHJlc3VtZS1haS9gIHZpYSB0aGUgVmVyY2VsIENMSSBhbmQgcmVxdWlyZQpgVkVSQ0VMX1RPS0VOYCB0byBiZSBwcmVzZW50IGFzIGFuIGVudmlyb25tZW50IHZhcmlhYmxlIGluIHRoZSBzaGlmdCdzCmVudmlyb25tZW50LiBJdCBpcyBpbnRlbnRpb25hbGx5ICoqbm90Kiogc3RvcmVkIGluIHRoaXMgcHVibGljIHJlcG8uIFVudGlsIGl0CmlzIHNldCwgc2hpZnRzIGNvbXBsZXRlIGV2ZXJ5IHN0ZXAgdXAgdG8gKGFuZCBpbmNsdWRpbmcpIGBnaXQgcHVzaGAsIGFuZCB0aGUKcmVwb3J0IGZsYWdzIHRoZSBkZXBsb3kgYXMgcGVuZGluZyBhIHRva2VuLgoKVGhlIFZlcmNlbCBwcm9qZWN0IGxpbmsgbGl2ZXMgYXQgYHJlc3VtZS1haS8udmVyY2VsL3Byb2plY3QuanNvbmAKKHByb2plY3QgInJlc3VtZS1haSIpLiBBbHdheXMgcnVuIFZlcmNlbCBjb21tYW5kcyBmcm9tIGByZXN1bWUtYWkvYCwgbmV2ZXIgdGhlCnJlcG8gcm9vdC4K"}
+# ResumeAI — Autonomous Operations Charter
+
+This product is run as a small autonomous company of AI agents working in
+scheduled **shifts**. A manager plans and reviews; specialists do the work;
+nothing ships unless the build passes and a verifier signs off.
+
+## Roster
+
+| Role | Responsibility |
+| --- | --- |
+| **Manager** | Plans each shift, picks the single highest-value / lowest-risk change, reviews the result, writes the shift report, and makes the final go/no-go. |
+| **Scouts** (×3) | Independently survey the product for opportunities — one for bugs/UX, one for SEO/content, one for conversion/copy. Blind to each other. |
+| **Engineer** | Implements the one change the manager approved. Edits files directly, keeps the diff tight and in-house style. |
+| **QA / Verifier** | Runs `npm run build`, adversarially checks the change for regressions, and returns a ship/block verdict. |
+
+## Iron rules (never overridden)
+
+1. **Build gate.** `npm run build` (in `resume-ai/`) MUST pass before anything is committed. A failing build blocks the shift.
+2. **One coherent change per shift.** No sprawling multi-feature diffs. Parallelism is for *finding* and *verifying*, never for concurrent writing.
+3. **No fabrication.** The product's core promise — never invent a user's numbers, employers, or achievements — extends to marketing copy and stats on the site. No made-up testimonials, user counts, or ratings.
+4. **No secrets in the repo.** This repository is public. Credentials live only in the environment/Vercel env vars.
+5. **Low-risk first.** Prefer reversible, well-scoped improvements over risky refactors on a live product that takes real payments.
+6. **Honesty in reports.** If a shift shipped nothing, the report says so plainly.
+
+## Shift lifecycle
+
+1. **Plan** — 3 scouts survey in parallel → manager synthesizes one approved change with a concrete spec + acceptance criteria.
+2. **Build** — engineer implements the spec.
+3. **Verify** — QA runs the build, checks acceptance, returns ship/block.
+4. **Ship** — on `ship`: commit to `claude/crawl4ai-install-o0j8wf`, push, and (if `VERCEL_TOKEN` is set in the environment) deploy to production from `resume-ai/`.
+5. **Report** — manager writes a short shift report: what shipped, what was deferred, what's next.
+
+## Deploy
+
+Production deploys run from `resume-ai/` via the Vercel CLI and require
+`VERCEL_TOKEN` to be present as an environment variable in the shift's
+environment. It is intentionally **not** stored in this public repo. Until it
+is set, shifts complete every step up to (and including) `git push`, and the
+report flags the deploy as pending a token.
+
+The Vercel project link lives at `resume-ai/.vercel/project.json`
+(project "resume-ai"). Always run Vercel commands from `resume-ai/`, never the
+repo root.

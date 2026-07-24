@@ -1,1 +1,53 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCBUZW1wbGF0ZXNHYWxsZXJ5IGZyb20gIi4uLy4uL3RlbXBsYXRlcy9UZW1wbGF0ZXNHYWxsZXJ5IjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICLZgtmI2KfZhNioINin2YTYs9mK2LHYqSDigJQg2YXYqtmI2KfZgdmC2Kkg2YXYuSBBVFPYjCDYudix2KjZitipINmI2KXZhtis2YTZitiy2YrYqSB8INiz2YrYsdipIiwKICBkZXNjcmlwdGlvbjoKICAgICLYqti12YHZkditINmC2YjYp9mE2Kgg2LPZitix2Kkg2KfYrdiq2LHYp9mB2YrYqSDZhdiq2YjYp9mB2YLYqSDZhdi5INij2YbYuNmF2Kkg2KfZhNmB2LHYsiBBVFMg2KjYp9mE2LnYsdio2YrYqSDZiNin2YTYpdmG2KzZhNmK2LLZitipLiDYp9iu2KrYsSDYp9mE2KrYtdmF2YrZhdiMINmI2KfZhNiw2YPYp9ihINmK2LnYqNmR2KbZhyDYqNiu2KjYsdiq2YMg2KfZhNit2YLZitmC2YrYqSDigJQg2KjYr9mI2YYg2KfYrtiq2YTYp9mCLiDYp9io2K/YoyDZhdis2KfZhtin2YsuIiwKICBhbHRlcm5hdGVzOiB7CiAgICBjYW5vbmljYWw6IGAke0JBU0V9L2FyL3RlbXBsYXRlc2AsCiAgICBsYW5ndWFnZXM6IHsgZW46IGAke0JBU0V9L3RlbXBsYXRlc2AsIGFyOiBgJHtCQVNFfS9hci90ZW1wbGF0ZXNgLCAieC1kZWZhdWx0IjogYCR7QkFTRX0vdGVtcGxhdGVzYCB9LAogIH0sCiAgb3BlbkdyYXBoOiB7IHRpdGxlOiAi2YLZiNin2YTYqCDYs9mK2LHYqSDZhdiq2YjYp9mB2YLYqSDZhdi5IEFUUyIsIGRlc2NyaXB0aW9uOiAi2YLZiNin2YTYqCDYp9it2KrYsdin2YHZitipINiq2LnYqNixINij2YbYuNmF2Kkg2KfZhNmB2LHYstiMINio2KfZhNi52LHYqNmK2Kkg2YjYp9mE2KXZhtis2YTZitiy2YrYqS4iLCB1cmw6IGAke0JBU0V9L2FyL3RlbXBsYXRlc2AgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEFyYWJpY1RlbXBsYXRlc1BhZ2UoKSB7CiAgcmV0dXJuICgKICAgIDxtYWluIGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIiBkaXI9InJ0bCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWJnKSIsIGNvbG9yOiAidmFyKC0tZmcpIiB9fT4KICAgICAgPE9yYlNjZW5lU2V0dGVyIHZpc2libGUgbW9vZD0iaWRsZSIgdG9wPSIxNHZoIiBsZWZ0PSI4NiUiIHNpemU9ezEwMH0gLz4KICAgICAgPG5hdiBjbGFzc05hbWU9InN0aWNreSB0b3AtMCB6LTUwIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAibGluZWFyLWdyYWRpZW50KDE4MGRlZywgcmdiYSg1LDcsMTMsMC44NSksIHRyYW5zcGFyZW50KSIgfX0+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gZmxleCBtYXgtdy02eGwgaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBweC02IHB5LTQiPgogICAgICAgICAgPExpbmsgaHJlZj0iL2FyIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij7Ys9mK2LHYqTwvc3Bhbj4KICAgICAgICAgIDwvTGluaz4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtNCI+CiAgICAgICAgICAgIDxMaW5rIGhyZWY9Ii90ZW1wbGF0ZXMiIGNsYXNzTmFtZT0idGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+RU48L0xpbms+CiAgICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hci9vcHRpbWl6ZSIgY2xhc3NOYW1lPSJidG4tYWNjZW50IHB4LTQgcHktMiB0ZXh0LXNtIj7Zgdit2LUg2YXYrNin2YbZiiDihpA8L0xpbms+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9uYXY+CgogICAgICA8c2VjdGlvbiBjbGFzc05hbWU9InJlbGF0aXZlIG14LWF1dG8gbWF4LXctNnhsIHB4LTYgcHktMTQiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJoZXJvLWFtYmllbnQiIGFyaWEtaGlkZGVuIC8+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIG1iLTEwIHRleHQtY2VudGVyIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPtin2YTZgtmI2KfZhNioPC9kaXY+CiAgICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCB0cmFja2luZy10aWdodCI+2YLZiNin2YTYqCDYs9mK2LHYqSDYp9it2KrYsdin2YHZitipPC9oMT4KICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC0zIG1heC13LTJ4bCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICDZg9mEINmC2KfZhNioIDxzdHJvbmc+2YXYqtmI2KfZgdmCINmF2LkgQVRTPC9zdHJvbmc+INmI2YrYudmF2YQg2KjYp9mE2LnYsdio2YrYqSDZiNin2YTYpdmG2KzZhNmK2LLZitipLiDYp9iu2KrYsSDYp9mE2KrYtdmF2YrZhSDigJQg2YjYp9mE2LDZg9in2KEg2YrYudio2ZHYptmHINio2K7YqNix2KrZgyA8ZW0+2KfZhNit2YLZitmC2YrYqTwvZW0+2Iwg2KjYr9mI2YYg2KfYrtiq2YTYp9mCINij2Yog2K3ZgtmK2YLYqS4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgICA8VGVtcGxhdGVzR2FsbGVyeSBhciAvPgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMTAgdGV4dC1jZW50ZXIgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PgogICAgICAgICAg2KfZhNmAIFBERiDYp9mE2YXYtdmF2ZHZhSDZhdmF2KrYp9iyINmE2YTZhdiz2KTZiNmE2YrZhiDZiNmE2YrZhtmD2K/YpdmGLiDZiNmE2YTYqtmC2K/ZitmFINi52KjYsSDYo9mG2LjZhdipINin2YTZgdix2LIg2KfYs9iq2K7Yr9mFIFBERi9Xb3JkINin2YTZhti12Yog4oCUINmD2YTYp9mH2YXYpyDZhdi02YXZiNmELgogICAgICAgIDwvcD4KICAgICAgPC9zZWN0aW9uPgogICAgPC9tYWluPgogICk7Cn0K"}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import TemplatesGallery from "../../templates/TemplatesGallery";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "قوالب السيرة — متوافقة مع ATS، عربية وإنجليزية | سيرة",
+  description:
+    "تصفّح قوالب سيرة احترافية متوافقة مع أنظمة الفرز ATS بالعربية والإنجليزية. اختر التصميم، والذكاء يعبّئه بخبرتك الحقيقية — بدون اختلاق. ابدأ مجاناً.",
+  alternates: {
+    canonical: `${BASE}/ar/templates`,
+    languages: { en: `${BASE}/templates`, ar: `${BASE}/ar/templates`, "x-default": `${BASE}/templates` },
+  },
+  openGraph: { title: "قوالب سيرة متوافقة مع ATS", description: "قوالب احترافية تعبر أنظمة الفرز، بالعربية والإنجليزية.", url: `${BASE}/ar/templates` },
+};
+
+export default function ArabicTemplatesPage() {
+  return (
+    <main className="min-h-screen" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/ar" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/templates" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>EN</Link>
+            <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">فحص مجاني ←</Link>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative mx-auto max-w-6xl px-6 py-14">
+        <div className="hero-ambient" aria-hidden />
+        <div className="relative mb-10 text-center">
+          <div className="chip mb-4">القوالب</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">قوالب سيرة احترافية</h1>
+          <p className="mx-auto mt-3 max-w-2xl" style={{ color: "var(--muted)" }}>
+            كل قالب <strong>متوافق مع ATS</strong> ويعمل بالعربية والإنجليزية. اختر التصميم — والذكاء يعبّئه بخبرتك <em>الحقيقية</em>، بدون اختلاق أي حقيقة.
+          </p>
+        </div>
+        <TemplatesGallery ar />
+        <p className="mt-10 text-center text-sm" style={{ color: "var(--faint)" }}>
+          الـ PDF المصمّم ممتاز للمسؤولين ولينكدإن. وللتقديم عبر أنظمة الفرز استخدم PDF/Word النصي — كلاهما مشمول.
+        </p>
+      </section>
+    </main>
+  );
+}

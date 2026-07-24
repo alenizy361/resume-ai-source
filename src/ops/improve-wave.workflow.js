@@ -1,1 +1,170 @@
-{"data":"ZXhwb3J0IGNvbnN0IG1ldGEgPSB7CiAgbmFtZTogJ3Jlc3VtZWFpLWltcHJvdmUtd2F2ZScsCiAgZGVzY3JpcHRpb246ICdNYXJrZXQtZ3JvdW5kZWQgaW1wcm92ZW1lbnQgd2F2ZTogcmVzZWFyY2ggY29tcGV0aXRvcnMgLT4gcGxhbiAtPiBidWlsZCAtPiB2ZXJpZnknLAogIHBoYXNlczogWwogICAgeyB0aXRsZTogJ1Jlc2VhcmNoJywgZGV0YWlsOiAnYWdlbnRzIHN0dWR5IGNvbXBldGl0b3JzLCBTYXVkaSBtYXJrZXQsIGNvbnZlcnNpb24gJiBncm93dGggYmVzdCBwcmFjdGljZXMnIH0sCiAgICB7IHRpdGxlOiAnUGxhbicsIGRldGFpbDogJ21hbmFnZXIgdHVybnMgcmVzZWFyY2ggaW50byBhIHNhZmUgaGlnaC12YWx1ZSBpbXByb3ZlbWVudCBiYXRjaCcgfSwKICAgIHsgdGl0bGU6ICdCdWlsZCcsIGRldGFpbDogJ29uZSBzZW5pb3IgZW5naW5lZXIgaW1wbGVtZW50cyB0aGUgYmF0Y2gnIH0sCiAgICB7IHRpdGxlOiAnVmVyaWZ5JywgZGV0YWlsOiAnUUEgcnVucyB0aGUgYnVpbGQgYW5kIGNoZWNrcyBmb3IgcmVncmVzc2lvbnMnIH0sCiAgICB7IHRpdGxlOiAnUmVwb3J0JywgZGV0YWlsOiAnd2F2ZSByZXBvcnQnIH0sCiAgXSwKfQoKY29uc3QgQ1RYID0gYFJlc3VtZUFJIGlzIGEgTmV4dC5qcyAxNiBhcHAgaW4gcmVzdW1lLWFpLywgbGl2ZSBhdCBodHRwczovL2N2LnJhYml0LnNhIChBcmFiaWMgL2FyKS4gSXQncyBhbiBBSSByZXN1bWUgb3B0aW1pemVyOiBmcmVlIEFUUyBzY2FuICsgYW5hbHlzaXMsIHBhaWQgdW5sb2NrIChTQVIgMzUgb25jZSAvIDc1IG1vbnRobHkpIGZvciB0aGUgcmV3cml0ZSwgYW4gQXJhYmljIGNvbnZlcnNhdGlvbmFsIENWIGJ1aWxkZXIsIGNvdmVyLWxldHRlci9MaW5rZWRJbi9pbnRlcnZpZXcgdG9vbHMsIG1hZ2ljLWxpbmsgYXV0aCwgUGF5bGluayBwYXltZW50cy4gVGFyZ2V0IG1hcmtldDogU2F1ZGkvR3VsZiBqb2Igc2Vla2VycywgcGx1cyBnbG9iYWwuCkdPQUw6IG1vdmUgdGhlIHByb2R1Y3QgdG93YXJkIGJlc3QtaW4tY2xhc3MgKGJpbGxpb24tZG9sbGFyLWNhbGliZXIpIHF1YWxpdHkgaW4gY29udmVyc2lvbiwgdHJ1c3QsIHJldGVudGlvbiwgYW5kIG9yZ2FuaWMgZ3Jvd3RoIOKAlCBXSVRIT1VUIGV2ZXIgZmFicmljYXRpbmcgc3RhdHMsIHRlc3RpbW9uaWFscywgb3IgcmV2aWV3cywgYW5kIHdpdGhvdXQgc2VjcmV0cyBpbiB0aGlzIFBVQkxJQyByZXBvLiBCdWlsZCBtdXN0IHBhc3MuIE1hdGNoIGhvdXNlIHN0eWxlLiBZb3UgaGF2ZSBCYXNoICsgV2ViU2VhcmNoICsgV2ViRmV0Y2g7IHlvdSBjYW4gY3VybCB0aGUgbGl2ZSBzaXRlLmAKCmNvbnN0IFJFU0VBUkNIX1NDSEVNQSA9IHsKICB0eXBlOiAnb2JqZWN0JywKICBwcm9wZXJ0aWVzOiB7CiAgICBpbnNpZ2h0czogewogICAgICB0eXBlOiAnYXJyYXknLAogICAgICBpdGVtczogewogICAgICAgIHR5cGU6ICdvYmplY3QnLAogICAgICAgIHByb3BlcnRpZXM6IHsKICAgICAgICAgIGluc2lnaHQ6IHsgdHlwZTogJ3N0cmluZycgfSwKICAgICAgICAgIHNvdXJjZTogeyB0eXBlOiAnc3RyaW5nJywgZGVzY3JpcHRpb246ICdjb21wZXRpdG9yL3NpdGUvYXJ0aWNsZSB0aGUgaW5zaWdodCBjYW1lIGZyb20nIH0sCiAgICAgICAgICBhcHBsaWVzVG86IHsgdHlwZTogJ3N0cmluZycsIGRlc2NyaXB0aW9uOiAnd2hlcmUgaW4gUmVzdW1lQUkgdGhpcyBjb3VsZCBhcHBseScgfSwKICAgICAgICAgIHByb3Bvc2VkSW1wcm92ZW1lbnQ6IHsgdHlwZTogJ3N0cmluZycgfSwKICAgICAgICAgIGltcGFjdDogeyB0eXBlOiAnc3RyaW5nJywgZW51bTogWydoaWdoJywgJ21lZGl1bScsICdsb3cnXSB9LAogICAgICAgICAgcmlzazogeyB0eXBlOiAnc3RyaW5nJywgZW51bTogWydoaWdoJywgJ21lZGl1bScsICdsb3cnXSB9LAogICAgICAgIH0sCiAgICAgICAgcmVxdWlyZWQ6IFsnaW5zaWdodCcsICdwcm9wb3NlZEltcHJvdmVtZW50JywgJ2ltcGFjdCcsICdyaXNrJ10sCiAgICAgIH0sCiAgICB9LAogIH0sCiAgcmVxdWlyZWQ6IFsnaW5zaWdodHMnXSwKfQoKY29uc3QgUExBTl9TQ0hFTUEgPSB7CiAgdHlwZTogJ29iamVjdCcsCiAgcHJvcGVydGllczogewogICAgc3VtbWFyeTogeyB0eXBlOiAnc3RyaW5nJyB9LAogICAgZml4ZXM6IHsKICAgICAgdHlwZTogJ2FycmF5JywKICAgICAgaXRlbXM6IHsKICAgICAgICB0eXBlOiAnb2JqZWN0JywKICAgICAgICBwcm9wZXJ0aWVzOiB7CiAgICAgICAgICB0aXRsZTogeyB0eXBlOiAnc3RyaW5nJyB9LAogICAgICAgICAgc3BlYzogeyB0eXBlOiAnc3RyaW5nJyB9LAogICAgICAgICAgZmlsZXM6IHsgdHlwZTogJ2FycmF5JywgaXRlbXM6IHsgdHlwZTogJ3N0cmluZycgfSB9LAogICAgICAgICAgcmF0aW9uYWxlOiB7IHR5cGU6ICdzdHJpbmcnIH0sCiAgICAgICAgfSwKICAgICAgICByZXF1aXJlZDogWyd0aXRsZScsICdzcGVjJ10sCiAgICAgIH0sCiAgICB9LAogICAgZGVmZXJyZWQ6IHsgdHlwZTogJ2FycmF5JywgaXRlbXM6IHsgdHlwZTogJ3N0cmluZycgfSB9LAogIH0sCiAgcmVxdWlyZWQ6IFsnc3VtbWFyeScsICdmaXhlcyddLAp9Cgpjb25zdCBCVUlMRF9TQ0hFTUEgPSB7CiAgdHlwZTogJ29iamVjdCcsCiAgcHJvcGVydGllczogewogICAgZG9uZTogeyB0eXBlOiAnYm9vbGVhbicgfSwKICAgIHN1bW1hcnk6IHsgdHlwZTogJ3N0cmluZycgfSwKICAgIGZpbGVzQ2hhbmdlZDogeyB0eXBlOiAnYXJyYXknLCBpdGVtczogeyB0eXBlOiAnc3RyaW5nJyB9IH0sCiAgICBmaXhlc0FwcGxpZWQ6IHsgdHlwZTogJ2FycmF5JywgaXRlbXM6IHsgdHlwZTogJ3N0cmluZycgfSB9LAogICAgZml4ZXNTa2lwcGVkOiB7IHR5cGU6ICdhcnJheScsIGl0ZW1zOiB7IHR5cGU6ICdzdHJpbmcnIH0gfSwKICB9LAogIHJlcXVpcmVkOiBbJ2RvbmUnLCAnc3VtbWFyeSddLAp9Cgpjb25zdCBWRVJJRllfU0NIRU1BID0gewogIHR5cGU6ICdvYmplY3QnLAogIHByb3BlcnRpZXM6IHsKICAgIGJ1aWxkUGFzc2VkOiB7IHR5cGU6ICdib29sZWFuJyB9LAogICAgdmVyZGljdDogeyB0eXBlOiAnc3RyaW5nJywgZW51bTogWydzaGlwJywgJ2Jsb2NrJ10gfSwKICAgIGlzc3VlczogeyB0eXBlOiAnYXJyYXknLCBpdGVtczogeyB0eXBlOiAnc3RyaW5nJyB9IH0sCiAgICByZWFzb246IHsgdHlwZTogJ3N0cmluZycgfSwKICB9LAogIHJlcXVpcmVkOiBbJ2J1aWxkUGFzc2VkJywgJ3ZlcmRpY3QnLCAncmVhc29uJ10sCn0KCi8vIOKUgOKUgCBQaGFzZSAxOiBSZXNlYXJjaCAobWFya2V0LWdyb3VuZGVkKSDilIDilIAKcGhhc2UoJ1Jlc2VhcmNoJykKY29uc3QgbGVuc2VzID0gWwogIHsga2V5OiAnY29tcGV0aXRvcnMnLCBicmllZjogJ1N0dWR5IGxlYWRpbmcgcmVzdW1lIHRvb2xzIChKb2JzY2FuLCBUZWFsLCBSZXppLCBLaWNrcmVzdW1lLCBFbmhhbmN2LCBaZXR5KS4gV2ViU2VhcmNoIHRoZWlyIGZlYXR1cmUgc2V0cywgb25ib2FyZGluZywgYW5kIHBheXdhbGwvcHJpY2luZyBVWC4gV2hhdCBkbyB0aGUgYmVzdCBkbyB0aGF0IFJlc3VtZUFJIGRvZXMgbm90PyBGb2N1cyBvbiB0aGUgZnJlZS0+cGFpZCBjb252ZXJzaW9uIG1vbWVudC4nIH0sCiAgeyBrZXk6ICdjb252ZXJzaW9uLXRydXN0JywgYnJpZWY6ICdSZXNlYXJjaCBTYWFTIGxhbmRpbmctcGFnZSBjb252ZXJzaW9uIGFuZCB0cnVzdCBiZXN0IHByYWN0aWNlcyAocmVhbCB0cnVzdCBzaWduYWxzLCBub3QgZmFrZSByZXZpZXdzKSwgYW5kIGhvdyB0b3AgdG9vbHMgcmVkdWNlIGZyaWN0aW9uIGZyb20gZmlyc3QgYWN0aW9uIHRvIHBheW1lbnQuIEFwcGx5IHRvIFJlc3VtZUFJXCdzIHNjYW4tPnVubG9jayBmdW5uZWwuJyB9LAogIHsga2V5OiAnc2F1ZGktbWFya2V0JywgYnJpZWY6ICdSZXNlYXJjaCB0aGUgU2F1ZGkvR3VsZiBqb2Itc2Vla2VyIG1hcmtldDogSmFkYXJhdC9UYXFhdCwgY29tbW9uIHJlc3VtZSBleHBlY3RhdGlvbnMsIEFyYWJpYy1maXJzdCBVWCBuZWVkcywgbG9jYWwgcGF5bWVudCB0cnVzdCAoU0FSLCBQYXlsaW5rL01hZGEpLiBXaGF0IHdvdWxkIG1ha2UgYSBTYXVkaSB1c2VyIHRydXN0IGFuZCBwYXk/JyB9LAogIHsga2V5OiAnZ3Jvd3RoLXNlbycsIGJyaWVmOiAnUmVzZWFyY2ggb3JnYW5pYyBncm93dGggZm9yIHJlc3VtZSB0b29sczogd2hpY2ggY29udGVudC9TRU8gcGF0dGVybnMgYW5kIGZyZWUtdG9vbCBsb29wcyBkcml2ZSBzaWdudXBzLCBhbmQgd2hhdCBSZXN1bWVBSSBjYW4gYWRkIHRvIGNvbXBvdW5kIG9yZ2FuaWMgdHJhZmZpYy4gQ29uY3JldGUsIGxvdy1yaXNrLCBpbXBsZW1lbnRhYmxlLicgfSwKXQoKY29uc3QgcmVzZWFyY2hlZCA9IGF3YWl0IHBhcmFsbGVsKAogIGxlbnNlcy5tYXAoKGwpID0+ICgpID0+CiAgICBhZ2VudCgKICAgICAgYCR7Q1RYfVxuXG5Zb3UgYXJlIGEgTUFSS0VUIFJFU0VBUkNIRVIgZm9yIHRoZSAiJHtsLmtleX0iIGxlbnMuICR7bC5icmllZn1cbmAgKwogICAgICAgIGBEbyByZWFsIHJlc2VhcmNoIChXZWJTZWFyY2gvV2ViRmV0Y2gpLCB0aGVuIHJlYWQgdGhlIHJlbGV2YW50IFJlc3VtZUFJIGNvZGUgdG8gZ3JvdW5kIGVhY2ggaWRlYS4gUmV0dXJuIGNvbmNyZXRlLCBpbXBsZW1lbnRhYmxlIGltcHJvdmVtZW50cyAobm90IHZhZ3VlIGFkdmljZSksIGVhY2ggdGllZCB0byBhIHNvdXJjZSBhbmQgYSBwbGFjZSBpbiB0aGUgcHJvZHVjdCwgd2l0aCBob25lc3QgaW1wYWN0L3Jpc2suIE5ldmVyIHByb3Bvc2UgZmFicmljYXRlZCBzdGF0cyBvciBmYWtlIHNvY2lhbCBwcm9vZi5gLAogICAgICB7IGxhYmVsOiBgcmVzZWFyY2g6JHtsLmtleX1gLCBwaGFzZTogJ1Jlc2VhcmNoJywgc2NoZW1hOiBSRVNFQVJDSF9TQ0hFTUEsIGVmZm9ydDogJ2hpZ2gnIH0sCiAgICApLAogICksCikKCmNvbnN0IGluc2lnaHRzID0gcmVzZWFyY2hlZC5maWx0ZXIoQm9vbGVhbikuZmxhdE1hcCgocikgPT4gci5pbnNpZ2h0cyB8fCBbXSkKbG9nKGBSZXNlYXJjaCBwcm9kdWNlZCAke2luc2lnaHRzLmxlbmd0aH0gZ3JvdW5kZWQgaW5zaWdodHNgKQoKLy8g4pSA4pSAIFBoYXNlIDI6IFBsYW4g4pSA4pSACnBoYXNlKCdQbGFuJykKY29uc3QgcGxhbiA9IGF3YWl0IGFnZW50KAogIGAke0NUWH1cblxuWW91IGFyZSB0aGUgUFJPRFVDVCBMRUFELiBIZXJlIGFyZSBtYXJrZXQtZ3JvdW5kZWQgaW5zaWdodHM6XG4ke0pTT04uc3RyaW5naWZ5KGluc2lnaHRzLCBudWxsLCAyKX1cblxuYCArCiAgICBgU2VsZWN0IGEgY29oZXJlbnQgYmF0Y2ggb2YgU0FGRSwgaGlnaC12YWx1ZSBpbXByb3ZlbWVudHMgdG8gaW1wbGVtZW50IG5vdyAocHJlZmVyIGNvbnZlcnNpb24gKyB0cnVzdCArIGdyb3d0aCB3aW5zIHRoYXQgYXJlIGxvdy1yaXNrIG9uIGEgbGl2ZSBwYXltZW50IHByb2R1Y3QpLiBHaXZlIGVhY2ggYSBwcmVjaXNlIHNwZWMgKyBmaWxlcy4gRGVmZXIgcmlza3kvbGFyZ2UgaXRlbXMgd2l0aCBhIG9uZS1saW5lIHJlYXNvbi4gT25lIGVuZ2luZWVyIG11c3QgYmUgYWJsZSB0byBpbXBsZW1lbnQgdGhlIGJhdGNoIGluIG9uZSBjYXJlZnVsIHBhc3MuIE5ldmVyIGluY2x1ZGUgYW55dGhpbmcgdGhhdCBmYWJyaWNhdGVzIGRhdGEuYCwKICB7IGxhYmVsOiAnbGVhZDpwbGFuJywgcGhhc2U6ICdQbGFuJywgc2NoZW1hOiBQTEFOX1NDSEVNQSwgZWZmb3J0OiAnaGlnaCcgfSwKKQoKaWYgKCFwbGFuIHx8ICFwbGFuLmZpeGVzIHx8IHBsYW4uZml4ZXMubGVuZ3RoID09PSAwKSB7CiAgcmV0dXJuIHsgc2hpcHBlZDogZmFsc2UsIGluc2lnaHRzOiBpbnNpZ2h0cy5sZW5ndGgsIG5vdGU6ICdObyBzYWZlIGltcHJvdmVtZW50cyBzZWxlY3RlZCB0aGlzIHdhdmUuJywgcGxhbiB9Cn0KbG9nKGBQbGFubmVkICR7cGxhbi5maXhlcy5sZW5ndGh9IGltcHJvdmVtZW50c2ApCgovLyDilIDilIAgUGhhc2UgMzogQnVpbGQgKHNpbmdsZSBlbmdpbmVlcikg4pSA4pSACnBoYXNlKCdCdWlsZCcpCmNvbnN0IGZpeExpc3QgPSBwbGFuLmZpeGVzLm1hcCgoZiwgaSkgPT4gYCR7aSArIDF9LiAke2YudGl0bGV9XG4gICBzcGVjOiAke2Yuc3BlY31cbiAgIGZpbGVzOiAkeyhmLmZpbGVzIHx8IFtdKS5qb2luKCcsICcpfWApLmpvaW4oJ1xuJykKY29uc3QgYnVpbHQgPSBhd2FpdCBhZ2VudCgKICBgJHtDVFh9XG5cbllvdSBhcmUgdGhlIFNFTklPUiBFTkdJTkVFUi4gSW1wbGVtZW50IHRoaXMgdmV0dGVkIGltcHJvdmVtZW50IGJhdGNoIGluIG9yZGVyLCBlZGl0aW5nIGZpbGVzIGRpcmVjdGx5IGluIHJlc3VtZS1haS8uIFRpZ2h0LCBpbi1ob3VzZS1zdHlsZSBkaWZmcy4gRG8gTk9UIGNvbW1pdC4gU2tpcCAoZG9uJ3QgZm9yY2UpIGFueSBpdGVtIHRoYXQgcHJvdmVzIHJpc2t5IG9uIGluc3BlY3Rpb24g4oCUIGxpc3QgaXQgaW4gZml4ZXNTa2lwcGVkLiBXaGVuIGRvbmUsIHJ1biAibnBtIHJ1biBidWlsZCIgZnJvbSByZXN1bWUtYWkvIGFuZCBmaXggYW55IGNvbXBpbGUgZXJyb3JzLiBSZXBvcnQgZXhhY3RseSB3aGF0IGNoYW5nZWQuXG5cbiR7Zml4TGlzdH1gLAogIHsgbGFiZWw6ICdlbmdpbmVlcicsIHBoYXNlOiAnQnVpbGQnLCBzY2hlbWE6IEJVSUxEX1NDSEVNQSwgZWZmb3J0OiAnaGlnaCcgfSwKKQoKaWYgKCFidWlsdCB8fCAhYnVpbHQuZG9uZSkgewogIHJldHVybiB7IHNoaXBwZWQ6IGZhbHNlLCBpbnNpZ2h0czogaW5zaWdodHMubGVuZ3RoLCBlcnJvcjogYEVuZ2luZWVyIGZhaWxlZDogJHtidWlsdD8uc3VtbWFyeX1gLCBwbGFuIH0KfQoKLy8g4pSA4pSAIFBoYXNlIDQ6IFZlcmlmeSDilIDilIAKcGhhc2UoJ1ZlcmlmeScpCmxldCB2ZXJkaWN0ID0gYXdhaXQgYWdlbnQoCiAgYCR7Q1RYfVxuXG5Zb3UgYXJlIFFBLiBFbmdpbmVlciBhcHBsaWVkOiAkeyhidWlsdC5maXhlc0FwcGxpZWQgfHwgW10pLmpvaW4oJzsgJyl9XG5GaWxlczogJHsoYnVpbHQuZmlsZXNDaGFuZ2VkIHx8IFtdKS5qb2luKCcsICcpfVxuYCArCiAgICBgUnVuICJucG0gcnVuIGJ1aWxkIiBmcm9tIHJlc3VtZS1haS8uIENoZWNrIGdpdCBkaWZmIGZvciByZWdyZXNzaW9ucyBvbiB0aGUgbW9uZXkgcGF0aCBhbmQgY29yZSBmbG93cy4gUmV0dXJuIGJ1aWxkUGFzc2VkICsgc2hpcC9ibG9jay4gQmxvY2sgaWYgYnVpbGQgZmFpbHMgb3IgYSByZWdyZXNzaW9uIGlzIHBsYXVzaWJsZS5gLAogIHsgbGFiZWw6ICdxYTp2ZXJpZnknLCBwaGFzZTogJ1ZlcmlmeScsIHNjaGVtYTogVkVSSUZZX1NDSEVNQSwgZWZmb3J0OiAnaGlnaCcgfSwKKQoKaWYgKHZlcmRpY3QgJiYgdmVyZGljdC52ZXJkaWN0ID09PSAnYmxvY2snKSB7CiAgbG9nKGBWZXJpZnkgYmxvY2tlZDogJHt2ZXJkaWN0LnJlYXNvbn0uIE9uZSByZXBhaXIgYXR0ZW1wdC5gKQogIGNvbnN0IHJlcGFpcmVkID0gYXdhaXQgYWdlbnQoCiAgICBgJHtDVFh9XG5cbllvdSBhcmUgdGhlIFNFTklPUiBFTkdJTkVFUi4gUUEgYmxvY2tlZDogJHsodmVyZGljdC5pc3N1ZXMgfHwgW10pLmpvaW4oJzsgJyl9IOKAlCAke3ZlcmRpY3QucmVhc29ufS4gRml4IG9yIHJldmVydCB0aGUgb2ZmZW5kaW5nIGNoYW5nZSwgcmUtcnVuICJucG0gcnVuIGJ1aWxkIiBmcm9tIHJlc3VtZS1haS8sIHJlcG9ydC5gLAogICAgeyBsYWJlbDogJ2VuZ2luZWVyOnJlcGFpcicsIHBoYXNlOiAnVmVyaWZ5Jywgc2NoZW1hOiBCVUlMRF9TQ0hFTUEsIGVmZm9ydDogJ2hpZ2gnIH0sCiAgKQogIGlmIChyZXBhaXJlZCAmJiByZXBhaXJlZC5kb25lKSB7CiAgICB2ZXJkaWN0ID0gYXdhaXQgYWdlbnQoCiAgICAgIGAke0NUWH1cblxuWW91IGFyZSBRQS4gUmVwYWlyOiAke3JlcGFpcmVkLnN1bW1hcnl9LiBSdW4gIm5wbSBydW4gYnVpbGQiIGZyb20gcmVzdW1lLWFpLyBvbmNlIG1vcmU7IGZpbmFsIHNoaXAvYmxvY2sgdmVyZGljdC5gLAogICAgICB7IGxhYmVsOiAncWE6cmVjaGVjaycsIHBoYXNlOiAnVmVyaWZ5Jywgc2NoZW1hOiBWRVJJRllfU0NIRU1BLCBlZmZvcnQ6ICdoaWdoJyB9LAogICAgKQogIH0KfQoKLy8g4pSA4pSAIFBoYXNlIDU6IFJlcG9ydCDilIDilIAKcGhhc2UoJ1JlcG9ydCcpCmNvbnN0IHNoaXBSZWFkeSA9ICEhdmVyZGljdCAmJiB2ZXJkaWN0LnZlcmRpY3QgPT09ICdzaGlwJyAmJiB2ZXJkaWN0LmJ1aWxkUGFzc2VkCmNvbnN0IHJlcG9ydCA9IGF3YWl0IGFnZW50KAogIGAke0NUWH1cblxuWW91IGFyZSB0aGUgUFJPRFVDVCBMRUFEIHdyaXRpbmcgdGhlIHdhdmUgcmVwb3J0IChmb3VuZGVyIGlzIGFzbGVlcCkuIEZhY3RzOlxuYCArCiAgICBgR3JvdW5kZWQgaW5zaWdodHM6ICR7aW5zaWdodHMubGVuZ3RofVxuU2hpcHBlZDogJHsoYnVpbHQuZml4ZXNBcHBsaWVkIHx8IFtdKS5qb2luKCc7ICcpIHx8ICdub25lJ31cblNraXBwZWQ6ICR7KGJ1aWx0LmZpeGVzU2tpcHBlZCB8fCBbXSkuam9pbignOyAnKSB8fCAnbm9uZSd9XG5EZWZlcnJlZDogJHsocGxhbi5kZWZlcnJlZCB8fCBbXSkuam9pbignOyAnKSB8fCAnbm9uZSd9XG5CdWlsZDogJHt2ZXJkaWN0Py5idWlsZFBhc3NlZH07IHZlcmRpY3Q6ICR7dmVyZGljdD8udmVyZGljdH1cblxuYCArCiAgICBgV3JpdGUgYSBjb25jaXNlIGhvbmVzdCByZXBvcnQgKEFyYWJpYyArIEVuZ2xpc2gsIH4xMiBsaW5lcyk6IHdoYXQgbWFya2V0LWdyb3VuZGVkIGltcHJvdmVtZW50cyBzaGlwcGVkLCB3aHkgdGhleSBtYXR0ZXIgZm9yIHJldmVudWUsIGFuZCB0aGUgc2luZ2xlIG1vc3QgdmFsdWFibGUgbmV4dCBtb3ZlLiBObyBleGFnZ2VyYXRpb24uYCwKICB7IGxhYmVsOiAnbGVhZDpyZXBvcnQnLCBwaGFzZTogJ1JlcG9ydCcgfSwKKQoKcmV0dXJuIHsKICBzaGlwUmVhZHksCiAgaW5zaWdodHM6IGluc2lnaHRzLmxlbmd0aCwKICBmaXhlc0FwcGxpZWQ6IGJ1aWx0LmZpeGVzQXBwbGllZCB8fCBbXSwKICBmaXhlc1NraXBwZWQ6IGJ1aWx0LmZpeGVzU2tpcHBlZCB8fCBbXSwKICBkZWZlcnJlZDogcGxhbi5kZWZlcnJlZCB8fCBbXSwKICBidWlsZFBhc3NlZDogdmVyZGljdD8uYnVpbGRQYXNzZWQgfHwgZmFsc2UsCiAgcmVwb3J0LAp9Cg=="}
+export const meta = {
+  name: 'resumeai-improve-wave',
+  description: 'Market-grounded improvement wave: research competitors -> plan -> build -> verify',
+  phases: [
+    { title: 'Research', detail: 'agents study competitors, Saudi market, conversion & growth best practices' },
+    { title: 'Plan', detail: 'manager turns research into a safe high-value improvement batch' },
+    { title: 'Build', detail: 'one senior engineer implements the batch' },
+    { title: 'Verify', detail: 'QA runs the build and checks for regressions' },
+    { title: 'Report', detail: 'wave report' },
+  ],
+}
+
+const CTX = `ResumeAI is a Next.js 16 app in resume-ai/, live at https://cv.rabit.sa (Arabic /ar). It's an AI resume optimizer: free ATS scan + analysis, paid unlock (SAR 35 once / 75 monthly) for the rewrite, an Arabic conversational CV builder, cover-letter/LinkedIn/interview tools, magic-link auth, Paylink payments. Target market: Saudi/Gulf job seekers, plus global.
+GOAL: move the product toward best-in-class (billion-dollar-caliber) quality in conversion, trust, retention, and organic growth — WITHOUT ever fabricating stats, testimonials, or reviews, and without secrets in this PUBLIC repo. Build must pass. Match house style. You have Bash + WebSearch + WebFetch; you can curl the live site.`
+
+const RESEARCH_SCHEMA = {
+  type: 'object',
+  properties: {
+    insights: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          insight: { type: 'string' },
+          source: { type: 'string', description: 'competitor/site/article the insight came from' },
+          appliesTo: { type: 'string', description: 'where in ResumeAI this could apply' },
+          proposedImprovement: { type: 'string' },
+          impact: { type: 'string', enum: ['high', 'medium', 'low'] },
+          risk: { type: 'string', enum: ['high', 'medium', 'low'] },
+        },
+        required: ['insight', 'proposedImprovement', 'impact', 'risk'],
+      },
+    },
+  },
+  required: ['insights'],
+}
+
+const PLAN_SCHEMA = {
+  type: 'object',
+  properties: {
+    summary: { type: 'string' },
+    fixes: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          spec: { type: 'string' },
+          files: { type: 'array', items: { type: 'string' } },
+          rationale: { type: 'string' },
+        },
+        required: ['title', 'spec'],
+      },
+    },
+    deferred: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['summary', 'fixes'],
+}
+
+const BUILD_SCHEMA = {
+  type: 'object',
+  properties: {
+    done: { type: 'boolean' },
+    summary: { type: 'string' },
+    filesChanged: { type: 'array', items: { type: 'string' } },
+    fixesApplied: { type: 'array', items: { type: 'string' } },
+    fixesSkipped: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['done', 'summary'],
+}
+
+const VERIFY_SCHEMA = {
+  type: 'object',
+  properties: {
+    buildPassed: { type: 'boolean' },
+    verdict: { type: 'string', enum: ['ship', 'block'] },
+    issues: { type: 'array', items: { type: 'string' } },
+    reason: { type: 'string' },
+  },
+  required: ['buildPassed', 'verdict', 'reason'],
+}
+
+// ── Phase 1: Research (market-grounded) ──
+phase('Research')
+const lenses = [
+  { key: 'competitors', brief: 'Study leading resume tools (Jobscan, Teal, Rezi, Kickresume, Enhancv, Zety). WebSearch their feature sets, onboarding, and paywall/pricing UX. What do the best do that ResumeAI does not? Focus on the free->paid conversion moment.' },
+  { key: 'conversion-trust', brief: 'Research SaaS landing-page conversion and trust best practices (real trust signals, not fake reviews), and how top tools reduce friction from first action to payment. Apply to ResumeAI\'s scan->unlock funnel.' },
+  { key: 'saudi-market', brief: 'Research the Saudi/Gulf job-seeker market: Jadarat/Taqat, common resume expectations, Arabic-first UX needs, local payment trust (SAR, Paylink/Mada). What would make a Saudi user trust and pay?' },
+  { key: 'growth-seo', brief: 'Research organic growth for resume tools: which content/SEO patterns and free-tool loops drive signups, and what ResumeAI can add to compound organic traffic. Concrete, low-risk, implementable.' },
+]
+
+const researched = await parallel(
+  lenses.map((l) => () =>
+    agent(
+      `${CTX}\n\nYou are a MARKET RESEARCHER for the "${l.key}" lens. ${l.brief}\n` +
+        `Do real research (WebSearch/WebFetch), then read the relevant ResumeAI code to ground each idea. Return concrete, implementable improvements (not vague advice), each tied to a source and a place in the product, with honest impact/risk. Never propose fabricated stats or fake social proof.`,
+      { label: `research:${l.key}`, phase: 'Research', schema: RESEARCH_SCHEMA, effort: 'high' },
+    ),
+  ),
+)
+
+const insights = researched.filter(Boolean).flatMap((r) => r.insights || [])
+log(`Research produced ${insights.length} grounded insights`)
+
+// ── Phase 2: Plan ──
+phase('Plan')
+const plan = await agent(
+  `${CTX}\n\nYou are the PRODUCT LEAD. Here are market-grounded insights:\n${JSON.stringify(insights, null, 2)}\n\n` +
+    `Select a coherent batch of SAFE, high-value improvements to implement now (prefer conversion + trust + growth wins that are low-risk on a live payment product). Give each a precise spec + files. Defer risky/large items with a one-line reason. One engineer must be able to implement the batch in one careful pass. Never include anything that fabricates data.`,
+  { label: 'lead:plan', phase: 'Plan', schema: PLAN_SCHEMA, effort: 'high' },
+)
+
+if (!plan || !plan.fixes || plan.fixes.length === 0) {
+  return { shipped: false, insights: insights.length, note: 'No safe improvements selected this wave.', plan }
+}
+log(`Planned ${plan.fixes.length} improvements`)
+
+// ── Phase 3: Build (single engineer) ──
+phase('Build')
+const fixList = plan.fixes.map((f, i) => `${i + 1}. ${f.title}\n   spec: ${f.spec}\n   files: ${(f.files || []).join(', ')}`).join('\n')
+const built = await agent(
+  `${CTX}\n\nYou are the SENIOR ENGINEER. Implement this vetted improvement batch in order, editing files directly in resume-ai/. Tight, in-house-style diffs. Do NOT commit. Skip (don't force) any item that proves risky on inspection — list it in fixesSkipped. When done, run "npm run build" from resume-ai/ and fix any compile errors. Report exactly what changed.\n\n${fixList}`,
+  { label: 'engineer', phase: 'Build', schema: BUILD_SCHEMA, effort: 'high' },
+)
+
+if (!built || !built.done) {
+  return { shipped: false, insights: insights.length, error: `Engineer failed: ${built?.summary}`, plan }
+}
+
+// ── Phase 4: Verify ──
+phase('Verify')
+let verdict = await agent(
+  `${CTX}\n\nYou are QA. Engineer applied: ${(built.fixesApplied || []).join('; ')}\nFiles: ${(built.filesChanged || []).join(', ')}\n` +
+    `Run "npm run build" from resume-ai/. Check git diff for regressions on the money path and core flows. Return buildPassed + ship/block. Block if build fails or a regression is plausible.`,
+  { label: 'qa:verify', phase: 'Verify', schema: VERIFY_SCHEMA, effort: 'high' },
+)
+
+if (verdict && verdict.verdict === 'block') {
+  log(`Verify blocked: ${verdict.reason}. One repair attempt.`)
+  const repaired = await agent(
+    `${CTX}\n\nYou are the SENIOR ENGINEER. QA blocked: ${(verdict.issues || []).join('; ')} — ${verdict.reason}. Fix or revert the offending change, re-run "npm run build" from resume-ai/, report.`,
+    { label: 'engineer:repair', phase: 'Verify', schema: BUILD_SCHEMA, effort: 'high' },
+  )
+  if (repaired && repaired.done) {
+    verdict = await agent(
+      `${CTX}\n\nYou are QA. Repair: ${repaired.summary}. Run "npm run build" from resume-ai/ once more; final ship/block verdict.`,
+      { label: 'qa:recheck', phase: 'Verify', schema: VERIFY_SCHEMA, effort: 'high' },
+    )
+  }
+}
+
+// ── Phase 5: Report ──
+phase('Report')
+const shipReady = !!verdict && verdict.verdict === 'ship' && verdict.buildPassed
+const report = await agent(
+  `${CTX}\n\nYou are the PRODUCT LEAD writing the wave report (founder is asleep). Facts:\n` +
+    `Grounded insights: ${insights.length}\nShipped: ${(built.fixesApplied || []).join('; ') || 'none'}\nSkipped: ${(built.fixesSkipped || []).join('; ') || 'none'}\nDeferred: ${(plan.deferred || []).join('; ') || 'none'}\nBuild: ${verdict?.buildPassed}; verdict: ${verdict?.verdict}\n\n` +
+    `Write a concise honest report (Arabic + English, ~12 lines): what market-grounded improvements shipped, why they matter for revenue, and the single most valuable next move. No exaggeration.`,
+  { label: 'lead:report', phase: 'Report' },
+)
+
+return {
+  shipReady,
+  insights: insights.length,
+  fixesApplied: built.fixesApplied || [],
+  fixesSkipped: built.fixesSkipped || [],
+  deferred: plan.deferred || [],
+  buildPassed: verdict?.buildPassed || false,
+  report,
+}

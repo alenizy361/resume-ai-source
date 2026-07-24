@@ -1,1 +1,58 @@
-{"data":"Ly8gUHVibGljIHNoYXJlYWJsZSByZXN1bWVzIHN0b3JlZCBpbiBWZXJjZWwgRWRnZSBDb25maWcgKHNhbWUgc3RvcmUgYXMKLy8gZW50aXRsZW1lbnRzKS4gS2V5OiBgcHViXzxzbHVnPmAgLT4gSlNPTiB7bmFtZSwgcm9sZSwgdGV4dCwgY3JlYXRlZH0uCgpjb25zdCBFQ19JRCA9IHByb2Nlc3MuZW52LkVER0VfQ09ORklHX0lEOwpjb25zdCBFQ19SRUFEID0gcHJvY2Vzcy5lbnYuRURHRV9DT05GSUdfUkVBRF9UT0tFTjsKY29uc3QgRUNfVEVBTSA9IHByb2Nlc3MuZW52LkVER0VfQ09ORklHX1RFQU1fSUQ7CmNvbnN0IEVDX1dSSVRFID0gcHJvY2Vzcy5lbnYuVkVSQ0VMX0FQSV9UT0tFTjsKCmV4cG9ydCBjb25zdCBwdWJsaWNSZXN1bWVDb25maWd1cmVkID0gKCkgPT4gISEoRUNfSUQgJiYgRUNfUkVBRCAmJiBFQ19XUklURSk7CgpleHBvcnQgaW50ZXJmYWNlIFB1YmxpY1Jlc3VtZSB7CiAgbmFtZTogc3RyaW5nOwogIHJvbGU6IHN0cmluZzsKICB0ZXh0OiBzdHJpbmc7CiAgY3JlYXRlZDogbnVtYmVyOwp9Cgpjb25zdCBrZXkgPSAoc2x1Zzogc3RyaW5nKSA9PiAicHViXyIgKyBzbHVnLnJlcGxhY2UoL1teYS16MC05X10vZ2ksICIiKS50b0xvd2VyQ2FzZSgpOwoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIHNhdmVQdWJsaWNSZXN1bWUoc2x1Zzogc3RyaW5nLCBkYXRhOiBQdWJsaWNSZXN1bWUpOiBQcm9taXNlPHZvaWQ+IHsKICBpZiAoIXB1YmxpY1Jlc3VtZUNvbmZpZ3VyZWQoKSkgdGhyb3cgbmV3IEVycm9yKCJzdG9yYWdlIG5vdCBjb25maWd1cmVkIik7CiAgY29uc3QgdGVhbSA9IEVDX1RFQU0gPyBgP3RlYW1JZD0ke0VDX1RFQU19YCA6ICIiOwogIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL2FwaS52ZXJjZWwuY29tL3YxL2VkZ2UtY29uZmlnLyR7RUNfSUR9L2l0ZW1zJHt0ZWFtfWAsIHsKICAgIG1ldGhvZDogIlBBVENIIiwKICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke0VDX1dSSVRFfWAsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgaXRlbXM6IFt7IG9wZXJhdGlvbjogInVwc2VydCIsIGtleToga2V5KHNsdWcpLCB2YWx1ZTogSlNPTi5zdHJpbmdpZnkoZGF0YSkgfV0gfSksCiAgfSk7CiAgaWYgKCFyZXMub2spIHRocm93IG5ldyBFcnJvcihgZWRnZS1jb25maWcgd3JpdGUgJHtyZXMuc3RhdHVzfTogJHsoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKX1gKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldFB1YmxpY1Jlc3VtZShzbHVnOiBzdHJpbmcpOiBQcm9taXNlPFB1YmxpY1Jlc3VtZSB8IG51bGw+IHsKICBpZiAoIXB1YmxpY1Jlc3VtZUNvbmZpZ3VyZWQoKSkgcmV0dXJuIG51bGw7CiAgdHJ5IHsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL2VkZ2UtY29uZmlnLnZlcmNlbC5jb20vJHtFQ19JRH0vaXRlbS8ke2tleShzbHVnKX0/dG9rZW49JHtFQ19SRUFEfWAsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSk7CiAgICBpZiAoIXJlcy5vaykgcmV0dXJuIG51bGw7CiAgICBjb25zdCB2ID0gYXdhaXQgcmVzLmpzb24oKTsKICAgIHJldHVybiB0eXBlb2YgdiA9PT0gInN0cmluZyIgPyAoSlNPTi5wYXJzZSh2KSBhcyBQdWJsaWNSZXN1bWUpIDogKHYgYXMgUHVibGljUmVzdW1lKTsKICB9IGNhdGNoIHsKICAgIHJldHVybiBudWxsOwogIH0KfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGRlbGV0ZVB1YmxpY1Jlc3VtZShzbHVnOiBzdHJpbmcpOiBQcm9taXNlPHZvaWQ+IHsKICBpZiAoIXB1YmxpY1Jlc3VtZUNvbmZpZ3VyZWQoKSkgdGhyb3cgbmV3IEVycm9yKCJzdG9yYWdlIG5vdCBjb25maWd1cmVkIik7CiAgY29uc3QgdGVhbSA9IEVDX1RFQU0gPyBgP3RlYW1JZD0ke0VDX1RFQU19YCA6ICIiOwogIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL2FwaS52ZXJjZWwuY29tL3YxL2VkZ2UtY29uZmlnLyR7RUNfSUR9L2l0ZW1zJHt0ZWFtfWAsIHsKICAgIG1ldGhvZDogIlBBVENIIiwKICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke0VDX1dSSVRFfWAsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgaXRlbXM6IFt7IG9wZXJhdGlvbjogImRlbGV0ZSIsIGtleToga2V5KHNsdWcpIH1dIH0pLAogIH0pOwogIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYGVkZ2UtY29uZmlnIGRlbGV0ZSAke3Jlcy5zdGF0dXN9OiAkeyhhd2FpdCByZXMudGV4dCgpKS5zbGljZSgwLCAyMDApfWApOwp9CgovKiogQnVpbGQgYSBVUkwtc2FmZSwgaHVtYW4tcmVhZGFibGUgc2x1ZyBmcm9tIGEgbmFtZSArIHNob3J0IHJhbmRvbSBzdWZmaXguICovCmV4cG9ydCBmdW5jdGlvbiBtYWtlU2x1ZyhuYW1lOiBzdHJpbmcsIHJhbmQ6IHN0cmluZyk6IHN0cmluZyB7CiAgY29uc3QgYmFzZSA9IG5hbWUudHJpbSgpLnRvTG93ZXJDYXNlKCkucmVwbGFjZSgvW15hLXowLTldKy9nLCAiLSIpLnJlcGxhY2UoL14tfC0kL2csICIiKS5zbGljZSgwLCAyNCkgfHwgInJlc3VtZSI7CiAgcmV0dXJuIGAke2Jhc2V9LSR7cmFuZH1gOwp9Cg=="}
+// Public shareable resumes stored in Vercel Edge Config (same store as
+// entitlements). Key: `pub_<slug>` -> JSON {name, role, text, created}.
+
+const EC_ID = process.env.EDGE_CONFIG_ID;
+const EC_READ = process.env.EDGE_CONFIG_READ_TOKEN;
+const EC_TEAM = process.env.EDGE_CONFIG_TEAM_ID;
+const EC_WRITE = process.env.VERCEL_API_TOKEN;
+
+export const publicResumeConfigured = () => !!(EC_ID && EC_READ && EC_WRITE);
+
+export interface PublicResume {
+  name: string;
+  role: string;
+  text: string;
+  created: number;
+}
+
+const key = (slug: string) => "pub_" + slug.replace(/[^a-z0-9_]/gi, "").toLowerCase();
+
+export async function savePublicResume(slug: string, data: PublicResume): Promise<void> {
+  if (!publicResumeConfigured()) throw new Error("storage not configured");
+  const team = EC_TEAM ? `?teamId=${EC_TEAM}` : "";
+  const res = await fetch(`https://api.vercel.com/v1/edge-config/${EC_ID}/items${team}`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${EC_WRITE}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ items: [{ operation: "upsert", key: key(slug), value: JSON.stringify(data) }] }),
+  });
+  if (!res.ok) throw new Error(`edge-config write ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
+export async function getPublicResume(slug: string): Promise<PublicResume | null> {
+  if (!publicResumeConfigured()) return null;
+  try {
+    const res = await fetch(`https://edge-config.vercel.com/${EC_ID}/item/${key(slug)}?token=${EC_READ}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const v = await res.json();
+    return typeof v === "string" ? (JSON.parse(v) as PublicResume) : (v as PublicResume);
+  } catch {
+    return null;
+  }
+}
+
+export async function deletePublicResume(slug: string): Promise<void> {
+  if (!publicResumeConfigured()) throw new Error("storage not configured");
+  const team = EC_TEAM ? `?teamId=${EC_TEAM}` : "";
+  const res = await fetch(`https://api.vercel.com/v1/edge-config/${EC_ID}/items${team}`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${EC_WRITE}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ items: [{ operation: "delete", key: key(slug) }] }),
+  });
+  if (!res.ok) throw new Error(`edge-config delete ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
+/** Build a URL-safe, human-readable slug from a name + short random suffix. */
+export function makeSlug(name: string, rand: string): string {
+  const base = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 24) || "resume";
+  return `${base}-${rand}`;
+}

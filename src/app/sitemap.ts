@@ -1,1 +1,34 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YVJvdXRlIH0gZnJvbSAibmV4dCI7CmltcG9ydCB7IEpPQl9TTFVHUyB9IGZyb20gIi4vbGliL2pvYnMiOwppbXBvcnQgeyBBUl9TTFVHUyB9IGZyb20gIi4vbGliL2pvYnMtYXIiOwppbXBvcnQgeyBURU1QTEFURV9TTFVHUyB9IGZyb20gIi4vbGliL3RlbXBsYXRlcyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBzaXRlbWFwKCk6IE1ldGFkYXRhUm91dGUuU2l0ZW1hcCB7CiAgY29uc3Qgcm91dGVzID0gWwogICAgIiIsICIvb3B0aW1pemUiLCAiL2J1aWxkIiwgIi9saW5rZWRpbiIsICIvaW50ZXJ2aWV3IiwgIi9wcmljaW5nIiwgIi90ZW1wbGF0ZXMiLAogICAgIi9hdHMtcmVzdW1lLWNoZWNrZXIiLCAiL2pvYnNjYW4tYWx0ZXJuYXRpdmUiLCAiL2ZyZWUtcmVzdW1lLWNoZWNrZXIiLAogICAgIi9yZXN1bWUtZXhhbXBsZXMiLCAiL3Jlc3VtZS10ZW1wbGF0ZXMiLAogICAgIi9jb3Zlci1sZXR0ZXItZXhhbXBsZXMiLCAiL3Jlc3VtZS1za2lsbHMiLAogICAgIi9hciIsICIvYXIvYnVpbGRlciIsICIvYXIvb3B0aW1pemUiLCAiL2FyL3Jlc3VtZS1leGFtcGxlcyIsICIvaW50ZXJ2aWV3LWxpdmUiLAogICAgIi9wcml2YWN5IiwgIi90ZXJtcyIsCiAgXTsKICBjb25zdCBleGFtcGxlUGFnZXMgPSBKT0JfU0xVR1MubWFwKChzbHVnKSA9PiBgL3Jlc3VtZS1leGFtcGxlcy8ke3NsdWd9YCk7CiAgY29uc3QgY292ZXJQYWdlcyA9IEpPQl9TTFVHUy5tYXAoKHNsdWcpID0+IGAvY292ZXItbGV0dGVyLWV4YW1wbGVzLyR7c2x1Z31gKTsKICBjb25zdCBza2lsbFBhZ2VzID0gSk9CX1NMVUdTLm1hcCgoc2x1ZykgPT4gYC9yZXN1bWUtc2tpbGxzLyR7c2x1Z31gKTsKICBjb25zdCB0ZW1wbGF0ZVBhZ2VzID0gVEVNUExBVEVfU0xVR1MubWFwKChzbHVnKSA9PiBgL3Jlc3VtZS10ZW1wbGF0ZXMvJHtzbHVnfWApOwogIC8vIEFyYWJpYyBwcm9ncmFtbWF0aWMgU0VPIOKAlCB0aHJlZSBwYWdlIHR5cGVzIHBlciBBcmFiaWMgcHJvZmVzc2lvbi4KICBjb25zdCBhckV4YW1wbGVQYWdlcyA9IEFSX1NMVUdTLm1hcCgoc2x1ZykgPT4gYC9hci9yZXN1bWUtZXhhbXBsZXMvJHtzbHVnfWApOwogIGNvbnN0IGFyU2tpbGxQYWdlcyA9IEFSX1NMVUdTLm1hcCgoc2x1ZykgPT4gYC9hci9yZXN1bWUtc2tpbGxzLyR7c2x1Z31gKTsKICBjb25zdCBhckNvdmVyUGFnZXMgPSBBUl9TTFVHUy5tYXAoKHNsdWcpID0+IGAvYXIvY292ZXItbGV0dGVyLWV4YW1wbGVzLyR7c2x1Z31gKTsKCiAgcmV0dXJuIFsKICAgIC4uLnJvdXRlcywgLi4uZXhhbXBsZVBhZ2VzLCAuLi5jb3ZlclBhZ2VzLCAuLi5za2lsbFBhZ2VzLCAuLi50ZW1wbGF0ZVBhZ2VzLAogICAgLi4uYXJFeGFtcGxlUGFnZXMsIC4uLmFyU2tpbGxQYWdlcywgLi4uYXJDb3ZlclBhZ2VzLAogIF0ubWFwKChwYXRoKSA9PiAoewogICAgdXJsOiBgJHtCQVNFfSR7cGF0aH1gLAogICAgY2hhbmdlRnJlcXVlbmN5OiAid2Vla2x5IiwKICAgIHByaW9yaXR5OiBwYXRoID09PSAiIiA/IDEgOiAvXC8ocmVzdW1lLWV4YW1wbGVzfGNvdmVyLWxldHRlci1leGFtcGxlc3xyZXN1bWUtc2tpbGxzKVwvLy50ZXN0KHBhdGgpID8gMC43IDogMC44LAogIH0pKTsKfQo="}
+import type { MetadataRoute } from "next";
+import { JOB_SLUGS } from "./lib/jobs";
+import { AR_SLUGS } from "./lib/jobs-ar";
+import { TEMPLATE_SLUGS } from "./lib/templates";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const routes = [
+    "", "/optimize", "/build", "/linkedin", "/interview", "/pricing", "/templates",
+    "/ats-resume-checker", "/jobscan-alternative", "/free-resume-checker",
+    "/resume-examples", "/resume-templates",
+    "/cover-letter-examples", "/resume-skills",
+    "/ar", "/ar/builder", "/ar/optimize", "/ar/resume-examples", "/interview-live",
+    "/privacy", "/terms",
+  ];
+  const examplePages = JOB_SLUGS.map((slug) => `/resume-examples/${slug}`);
+  const coverPages = JOB_SLUGS.map((slug) => `/cover-letter-examples/${slug}`);
+  const skillPages = JOB_SLUGS.map((slug) => `/resume-skills/${slug}`);
+  const templatePages = TEMPLATE_SLUGS.map((slug) => `/resume-templates/${slug}`);
+  // Arabic programmatic SEO — three page types per Arabic profession.
+  const arExamplePages = AR_SLUGS.map((slug) => `/ar/resume-examples/${slug}`);
+  const arSkillPages = AR_SLUGS.map((slug) => `/ar/resume-skills/${slug}`);
+  const arCoverPages = AR_SLUGS.map((slug) => `/ar/cover-letter-examples/${slug}`);
+
+  return [
+    ...routes, ...examplePages, ...coverPages, ...skillPages, ...templatePages,
+    ...arExamplePages, ...arSkillPages, ...arCoverPages,
+  ].map((path) => ({
+    url: `${BASE}${path}`,
+    changeFrequency: "weekly",
+    priority: path === "" ? 1 : /\/(resume-examples|cover-letter-examples|resume-skills)\//.test(path) ? 0.7 : 0.8,
+  }));
+}

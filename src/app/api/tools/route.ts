@@ -1,1 +1,202 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAzMDA7CgovKioKICogU2hhcmVkIGVuZHBvaW50IGZvciB0aGUgc21hbGxlciBBSSB0b29sczoKICogIC0gbW9kZSAibGlua2VkaW4iOiAgcmVzdW1lL3Byb2ZpbGUgdGV4dCArIHRhcmdldCByb2xlIC0+IG9wdGltaXplZCBoZWFkbGluZSwgYWJvdXQsIHNraWxscwogKiAgLSBtb2RlICJpbnRlcnZpZXciOiByZXN1bWUgKyBqb2IgZGVzY3JpcHRpb24gLT4gbGlrZWx5IHF1ZXN0aW9ucyB3aXRoIHN0cm9uZyBhbnN3ZXJzCiAqIE91dHB1dHMgYXJlIHNtYWxsLCBzbyB0aGVzZSBydW4gbm9uLXN0cmVhbWluZyBhbmQgZml0IHdlbGwgaW5zaWRlIHRoZSB0aW1lIGNhcC4KICovCgpjb25zdCBQUk9NUFRTOiBSZWNvcmQ8c3RyaW5nLCAoYTogc3RyaW5nLCBiOiBzdHJpbmcpID0+IHN0cmluZz4gPSB7CiAgbGlua2VkaW46IChwcm9maWxlLCB0YXJnZXRSb2xlKSA9PiBgWW91IGFyZSBhIExpbmtlZEluIG9wdGltaXphdGlvbiBleHBlcnQuIFJld3JpdGUgdGhpcyBwZXJzb24ncyBMaW5rZWRJbiBwcmVzZW5jZSBmb3IgdGhlIHRhcmdldCByb2xlLgoKQ1VSUkVOVCBQUk9GSUxFIC8gUkVTVU1FIFRFWFQ6CiR7cHJvZmlsZX0KClRBUkdFVCBST0xFOiAke3RhcmdldFJvbGV9CgpSZXR1cm4gT05MWSBhIEpTT04gb2JqZWN0Ogp7CiAgImhlYWRsaW5lIjogIjxhIDEyMC0yMjAgY2hhciBrZXl3b3JkLXJpY2ggTGlua2VkSW4gaGVhZGxpbmU6IHJvbGUgfCB2YWx1ZSBwcm9wb3NpdGlvbiB8IGtleSBza2lsbHM+IiwKICAiYWJvdXQiOiAiPGEgZmlyc3QtcGVyc29uIEFib3V0IHNlY3Rpb24sIDMgc2hvcnQgcGFyYWdyYXBoczogaG9vaywgcHJvb2Ygd2l0aCBhY2hpZXZlbWVudHMgZnJvbSB0aGVpciBiYWNrZ3JvdW5kLCBjYWxsIHRvIGFjdGlvbi4gUmVjcnVpdGVyLXNlYXJjaCBrZXl3b3JkcyB3b3ZlbiBpbiBuYXR1cmFsbHkuPiIsCiAgInNraWxscyI6IFsiPHRoZSAxMC0xNSBza2lsbHMgdGhleSBzaG91bGQgbGlzdCwgb3JkZXJlZCBieSByZWxldmFuY2UgdG8gdGhlIHRhcmdldCByb2xlIOKAlCBvbmx5IHNraWxscyB0aGVpciBiYWNrZ3JvdW5kIHN1cHBvcnRzPiJdLAogICJ0aXBzIjogWyI8My00IHNwZWNpZmljIHByb2ZpbGUgdGlwcywgZS5nLiBiYW5uZXIsIGZlYXR1cmVkIHNlY3Rpb24sIGFjdGl2aXR5PiJdCn0KTmV2ZXIgaW52ZW50IGVtcGxveWVycyBvciBhY2hpZXZlbWVudHMuIE5vIHRleHQgb3V0c2lkZSB0aGUgSlNPTi5gLAoKICBpbnRlcnZpZXc6IChyZXN1bWUsIGpvYkRlc2NyaXB0aW9uKSA9PiBgWW91IGFyZSBhbiBpbnRlcnZpZXcgY29hY2guIEJhc2VkIG9uIHRoaXMgcmVzdW1lIGFuZCBqb2IgZGVzY3JpcHRpb24sIHByZXBhcmUgdGhlIGNhbmRpZGF0ZS4KClJFU1VNRToKJHtyZXN1bWV9CgpKT0IgREVTQ1JJUFRJT046CiR7am9iRGVzY3JpcHRpb259CgpSZXR1cm4gT05MWSBhIEpTT04gb2JqZWN0Ogp7CiAgInF1ZXN0aW9ucyI6IFsKICAgIHsicSI6ICI8bGlrZWx5IGludGVydmlldyBxdWVzdGlvbj4iLCAid2h5IjogIjx3aHkgdGhleSdsbCBhc2sgaXQsIG9uZSBsaW5lPiIsICJhbnN3ZXIiOiAiPGEgc3Ryb25nIDMtNSBzZW50ZW5jZSBhbnN3ZXIgdXNpbmcgVEhJUyBjYW5kaWRhdGUncyByZWFsIGJhY2tncm91bmQgKFNUQVIgc3R5bGUgd2hlcmUgcmVsZXZhbnQpLiBXaGVyZSB0aGV5IGxhY2sgdGhlIHNraWxsLCBnaXZlIGFuIGhvbmVzdCBicmlkZ2luZyBhbnN3ZXIuPiJ9CiAgXSwKICAicmVkRmxhZ3MiOiBbIjwyLTMgd2Vha25lc3NlcyBpbiB0aGVpciBwcm9maWxlIHRoZSBpbnRlcnZpZXdlciBtYXkgcHJvYmUsIHdpdGggb25lLWxpbmUgYWR2aWNlIGVhY2g+Il0KfQpQcm92aWRlIDggcXVlc3Rpb25zOiAyIGludHJvL2JlaGF2aW9yYWwsIDQgcm9sZS1zcGVjaWZpYyB0ZWNobmljYWwvc2tpbGxzLCAyIGFib3V0IGdhcHMgaW4gdGhlaXIgYmFja2dyb3VuZC4gTm8gdGV4dCBvdXRzaWRlIHRoZSBKU09OLmAsCn07CgpmdW5jdGlvbiBleHRyYWN0SnNvbih0ZXh0OiBzdHJpbmcpOiBzdHJpbmcgewogIGNvbnN0IGNsZWFuZWQgPSB0ZXh0LnJlcGxhY2UoL2BgYGpzb25cbj8vZywgIiIpLnJlcGxhY2UoL2BgYFxuPy9nLCAiIikudHJpbSgpOwogIGNvbnN0IHN0YXJ0ID0gY2xlYW5lZC5pbmRleE9mKCJ7Iik7CiAgY29uc3QgZW5kID0gY2xlYW5lZC5sYXN0SW5kZXhPZigifSIpOwogIHJldHVybiBzdGFydCAhPT0gLTEgJiYgZW5kID4gc3RhcnQgPyBjbGVhbmVkLnNsaWNlKHN0YXJ0LCBlbmQgKyAxKSA6IGNsZWFuZWQ7Cn0KCi8qKiBSZXBhaXIgbW9kZWwgSlNPTjogZXNjYXBlIHJhdyBjb250cm9sIGNoYXJzIEFORCB1bmVzY2FwZWQgcXVvdGVzIGluc2lkZSBzdHJpbmdzLgogKiBBIHF1b3RlIGluc2lkZSBhIHN0cmluZyBpcyB0cmVhdGVkIGFzIENMT1NJTkcgb25seSBpZiB0aGUgbmV4dCBub24tc3BhY2UgY2hhcgogKiBpcyBhIEpTT04gc3RydWN0dXJhbCBjaGFyICgsIH0gXSA6KSDigJQgb3RoZXJ3aXNlIGl0J3MgZXNjYXBlZCBhcyBjb250ZW50LiAqLwpmdW5jdGlvbiByZXBhaXJKc29uKHM6IHN0cmluZyk6IHN0cmluZyB7CiAgbGV0IG91dCA9ICIiOwogIGxldCBpblN0ciA9IGZhbHNlOwogIGxldCBlc2MgPSBmYWxzZTsKICBmb3IgKGxldCBpID0gMDsgaSA8IHMubGVuZ3RoOyBpKyspIHsKICAgIGNvbnN0IGNoID0gc1tpXTsKICAgIGlmIChpblN0cikgewogICAgICBpZiAoZXNjKSB7IG91dCArPSBjaDsgZXNjID0gZmFsc2U7IGNvbnRpbnVlOyB9CiAgICAgIGlmIChjaCA9PT0gIlxcIikgeyBvdXQgKz0gY2g7IGVzYyA9IHRydWU7IGNvbnRpbnVlOyB9CiAgICAgIGlmIChjaCA9PT0gJyInKSB7CiAgICAgICAgbGV0IGogPSBpICsgMTsKICAgICAgICB3aGlsZSAoaiA8IHMubGVuZ3RoICYmIChzW2pdID09PSAiICIgfHwgc1tqXSA9PT0gIlxuIiB8fCBzW2pdID09PSAiXHIiIHx8IHNbal0gPT09ICJcdCIpKSBqKys7CiAgICAgICAgY29uc3QgbmV4dCA9IHNbal0gPz8gIiI7CiAgICAgICAgaWYgKG5leHQgPT09ICIsIiB8fCBuZXh0ID09PSAifSIgfHwgbmV4dCA9PT0gIl0iIHx8IG5leHQgPT09ICI6IikgewogICAgICAgICAgaW5TdHIgPSBmYWxzZTsKICAgICAgICAgIG91dCArPSBjaDsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgb3V0ICs9ICdcXCInOyAvLyBpbnRlcmlvciBxdW90ZSDigJQgZXNjYXBlIGl0CiAgICAgICAgfQogICAgICAgIGNvbnRpbnVlOwogICAgICB9CiAgICAgIGlmIChjaCA9PT0gIlxuIikgeyBvdXQgKz0gIlxcbiI7IGNvbnRpbnVlOyB9CiAgICAgIGlmIChjaCA9PT0gIlxyIikgY29udGludWU7CiAgICAgIGlmIChjaCA9PT0gIlx0IikgeyBvdXQgKz0gIlxcdCI7IGNvbnRpbnVlOyB9CiAgICAgIG91dCArPSBjaDsKICAgIH0gZWxzZSB7CiAgICAgIGlmIChjaCA9PT0gJyInKSBpblN0ciA9IHRydWU7CiAgICAgIG91dCArPSBjaDsKICAgIH0KICB9CiAgcmV0dXJuIG91dDsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIFBPU1QocmVxOiBOZXh0UmVxdWVzdCkgewogIHRyeSB7CiAgICBjb25zdCB7IG1vZGUsIGlucHV0QSwgaW5wdXRCIH0gPSBhd2FpdCByZXEuanNvbigpOwogICAgY29uc3QgcHJvbXB0Rm4gPSBQUk9NUFRTW21vZGVdOwogICAgaWYgKCFwcm9tcHRGbikgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJVbmtub3duIHRvb2wuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgaWYgKCFpbnB1dEE/LnRyaW0oKSB8fCBpbnB1dEEubGVuZ3RoIDwgNTApIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJQbGVhc2UgcHJvdmlkZSBtb3JlIGRldGFpbCAocGFzdGUgeW91ciByZXN1bWUgb3IgcHJvZmlsZSkuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgfQogICAgaWYgKCFpbnB1dEI/LnRyaW0oKSB8fCBpbnB1dEIubGVuZ3RoIDwgMykgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogbW9kZSA9PT0gImxpbmtlZGluIiA/ICJQbGVhc2UgZW50ZXIgeW91ciB0YXJnZXQgcm9sZS4iIDogIlBsZWFzZSBwYXN0ZSB0aGUgam9iIGRlc2NyaXB0aW9uLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KICAgIGlmIChpbnB1dEEubGVuZ3RoID4gODAwMCB8fCBpbnB1dEIubGVuZ3RoID4gNDAwMCkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIklucHV0IHRvbyBsb25nLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIH0KCiAgICAvLyBGcmVlIExMTSBlbmRwb2ludHMgbmVlZCB0aGUgc2FtZSBhYnVzZSBjYXAgYXMgL2FwaS9vcHRpbWl6ZS4KICAgIGlmICghKGF3YWl0IGFsbG93U2hhcmVkKGB0b29sczoke2NsaWVudElwKHJlcSl9YCwgMTAsIDEwICogNjAgKiAxMDAwKSkpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJZb3UncmUgZ29pbmcgYSBiaXQgZmFzdC4gUGxlYXNlIHdhaXQgYSBtaW51dGUgYW5kIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CgogICAgY29uc3Qga2V5ID0gcHJvY2Vzcy5lbnYuTlZJRElBX0FQSV9LRVk7CiAgICBpZiAoIWtleSkgdGhyb3cgbmV3IEVycm9yKCJOVklESUFfQVBJX0tFWSBpcyBub3Qgc2V0Iik7CiAgICBjb25zdCBtb2RlbCA9IHByb2Nlc3MuZW52LkFJX01PREVMIHx8ICJtZXRhL2xsYW1hLTQtbWF2ZXJpY2stMTdiLTEyOGUtaW5zdHJ1Y3QiOwoKICAgIC8vIFRoZSBmcmVlIG1vZGVsIGludGVybWl0dGVudGx5IHJldHVybnMgYW4gZXJyb3Igb3IgbWFsZm9ybWVkIEpTT04uIFJldHJ5CiAgICAvLyBvbmNlIChub24tc3RyZWFtaW5nLCBzbWFsbCBvdXRwdXQpIHNvIGEgdHJhbnNpZW50IGZhaWx1cmUgaXNuJ3QgdXNlci12aXNpYmxlLgogICAgbGV0IHBhcnNlZDogUmVjb3JkPHN0cmluZywgdW5rbm93bj4gfCBudWxsID0gbnVsbDsKICAgIGxldCBsYXN0RXJyOiB1bmtub3duID0gbnVsbDsKICAgIGNvbnN0IHQwID0gRGF0ZS5ub3coKTsKICAgIC8vIFVwIHRvIDMgYXR0ZW1wdHMg4oCUIHRoZSBmcmVlIG1vZGVsIGZhaWxzIH4xLzMgb2YgdGhlIHRpbWUgd2l0aCBlaXRoZXIKICAgIC8vIG1hbGZvcm1lZCBKU09OIE9SIHZhbGlkLWJ1dC1lbXB0eSBjb250ZW50IChubyBxdWVzdGlvbnMpLiBCT1RIIG11c3QgcmV0cnkuCiAgICBmb3IgKGxldCBhdHRlbXB0ID0gMDsgYXR0ZW1wdCA8IDMgJiYgIXBhcnNlZDsgYXR0ZW1wdCsrKSB7CiAgICAgIGlmIChhdHRlbXB0ID4gMCAmJiBEYXRlLm5vdygpIC0gdDAgPiA0NTAwMCkgYnJlYWs7CiAgICAgIC8vIEFib3J0IGEgc3RhbGxlZCB1cHN0cmVhbSBjYWxsIHNvIGl0IGNhbid0IGhhbmcgdGhlIHdob2xlIHJlcXVlc3QgZm9yCiAgICAgIC8vIDEyMHMrIHVuZGVyIGxvYWQg4oCUIGNhcCBlYWNoIGF0dGVtcHQgYXQgMzVzLCB0aGVuIHJldHJ5IG9yIGZhaWwgY2xlYW5seS4KICAgICAgY29uc3QgY3RybCA9IG5ldyBBYm9ydENvbnRyb2xsZXIoKTsKICAgICAgY29uc3QgdGltZXIgPSBzZXRUaW1lb3V0KCgpID0+IGN0cmwuYWJvcnQoKSwgMzUwMDApOwogICAgICB0cnkgewogICAgICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKCJodHRwczovL2ludGVncmF0ZS5hcGkubnZpZGlhLmNvbS92MS9jaGF0L2NvbXBsZXRpb25zIiwgewogICAgICAgICAgbWV0aG9kOiAiUE9TVCIsCiAgICAgICAgICBoZWFkZXJzOiB7IEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHtrZXl9YCwgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiB9LAogICAgICAgICAgc2lnbmFsOiBjdHJsLnNpZ25hbCwKICAgICAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsKICAgICAgICAgICAgbW9kZWwsCiAgICAgICAgICAgIHRlbXBlcmF0dXJlOiAwLjUsCiAgICAgICAgICAgIHRvcF9wOiAwLjksCiAgICAgICAgICAgIG1heF90b2tlbnM6IDMyMDAsIC8vIGludGVydmlldyByZXR1cm5zIDggUSZBIOKAlCAyMjAwIHRydW5jYXRlZCBpdCwgeWllbGRpbmcgaW52YWxpZC9lbXB0eSBKU09OCiAgICAgICAgICAgIG1lc3NhZ2VzOiBbCiAgICAgICAgICAgICAgeyByb2xlOiAic3lzdGVtIiwgY29udGVudDogIllvdSByZXNwb25kIHdpdGggYSBzaW5nbGUgdmFsaWQgSlNPTiBvYmplY3QgYW5kIG5vdGhpbmcgZWxzZS4gTmV2ZXIgaW5jbHVkZSB1bmVzY2FwZWQgcXVvdGVzIGluc2lkZSBKU09OIHN0cmluZyB2YWx1ZXMuIiB9LAogICAgICAgICAgICAgIHsgcm9sZTogInVzZXIiLCBjb250ZW50OiBwcm9tcHRGbihTdHJpbmcoaW5wdXRBKS5zbGljZSgwLCA4MDAwKSwgU3RyaW5nKGlucHV0Qikuc2xpY2UoMCwgNDAwMCkpIH0sCiAgICAgICAgICAgIF0sCiAgICAgICAgICB9KSwKICAgICAgICB9KTsKICAgICAgICBpZiAoIXJlcy5vaykgdGhyb3cgbmV3IEVycm9yKGBOVklESUEgQVBJICR7cmVzLnN0YXR1c306ICR7KGF3YWl0IHJlcy50ZXh0KCkpLnNsaWNlKDAsIDIwMCl9YCk7CiAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICAgICAgY29uc3QgcmF3ID0gZGF0YT8uY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50ID8/ICIiOwogICAgICAgIGlmICghcmF3LnRyaW0oKSkgdGhyb3cgbmV3IEVycm9yKCJFbXB0eSByZXNwb25zZSIpOwogICAgICAgIGxldCBjYW5kaWRhdGU6IFJlY29yZDxzdHJpbmcsIHVua25vd24+OwogICAgICAgIHRyeSB7CiAgICAgICAgICBjYW5kaWRhdGUgPSBKU09OLnBhcnNlKGV4dHJhY3RKc29uKHJhdykpOwogICAgICAgIH0gY2F0Y2ggewogICAgICAgICAgY2FuZGlkYXRlID0gSlNPTi5wYXJzZShyZXBhaXJKc29uKGV4dHJhY3RKc29uKHJhdykpKTsKICAgICAgICB9CiAgICAgICAgLy8gQ29udGVudC1sZXZlbCB2YWxpZGF0aW9uIOKAlCBhIHN5bnRhY3RpY2FsbHktdmFsaWQgYnV0IGVtcHR5L2dhcmJsZWQKICAgICAgICAvLyByZXNwb25zZSBtdXN0IEFMU08gcmV0cnksIG5vdCBmYWxsIHRocm91Z2ggdG8gYSA1MDAuCiAgICAgICAgaWYgKG1vZGUgPT09ICJpbnRlcnZpZXciKSB7CiAgICAgICAgICBjb25zdCBxcyA9IEFycmF5LmlzQXJyYXkoY2FuZGlkYXRlLnF1ZXN0aW9ucykgPyBjYW5kaWRhdGUucXVlc3Rpb25zIDogQXJyYXkuaXNBcnJheShjYW5kaWRhdGUpID8gKGNhbmRpZGF0ZSBhcyB1bmtub3duW10pIDogW107CiAgICAgICAgICBpZiAoIXFzLnNvbWUoKHgpID0+IHsgY29uc3QgaXQgPSAoeCA/PyB7fSkgYXMgUmVjb3JkPHN0cmluZywgdW5rbm93bj47IHJldHVybiBpdC5xIHx8IGl0LnF1ZXN0aW9uOyB9KSkgewogICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoIk5vIHVzYWJsZSBxdWVzdGlvbnMgaW4gcmVzcG9uc2UiKTsKICAgICAgICAgIH0KICAgICAgICB9IGVsc2UgaWYgKG1vZGUgPT09ICJsaW5rZWRpbiIpIHsKICAgICAgICAgIGlmICghY2FuZGlkYXRlLmhlYWRsaW5lICYmICFjYW5kaWRhdGUuYWJvdXQpIHRocm93IG5ldyBFcnJvcigiTm8gdXNhYmxlIExpbmtlZEluIGNvbnRlbnQiKTsKICAgICAgICB9CiAgICAgICAgcGFyc2VkID0gY2FuZGlkYXRlOwogICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgbGFzdEVyciA9IGU7CiAgICAgICAgY29uc29sZS5lcnJvcihgVG9vbHMgZXJyb3IgKGF0dGVtcHQgJHthdHRlbXB0ICsgMX0pOmAsIGUpOwogICAgICB9IGZpbmFsbHkgewogICAgICAgIGNsZWFyVGltZW91dCh0aW1lcik7CiAgICAgIH0KICAgIH0KICAgIGlmICghcGFyc2VkKSB0aHJvdyBsYXN0RXJyID8/IG5ldyBFcnJvcigiRmFpbGVkIHRvIGdlbmVyYXRlIik7CgogICAgLy8gTm9ybWFsaXplIHRvIHRoZSBleGFjdCBzaGFwZSB0aGUgVUkgZXhwZWN0cyBzbyBhIHNsaWdodGx5LW9mZiBtb2RlbAogICAgLy8gcmVzcG9uc2UgY2FuIG5ldmVyIGNyYXNoIHRoZSBjbGllbnQgKC5tYXAgb24gdW5kZWZpbmVkKS4KICAgIGlmIChtb2RlID09PSAiaW50ZXJ2aWV3IikgewogICAgICBjb25zdCByYXdRID0gQXJyYXkuaXNBcnJheShwYXJzZWQucXVlc3Rpb25zKSA/IHBhcnNlZC5xdWVzdGlvbnMKICAgICAgICA6IEFycmF5LmlzQXJyYXkocGFyc2VkKSA/IChwYXJzZWQgYXMgdW5rbm93bltdKSA6IFtdOwogICAgICBjb25zdCBxdWVzdGlvbnMgPSByYXdRCiAgICAgICAgLm1hcCgoeCkgPT4gewogICAgICAgICAgY29uc3QgaXQgPSAoeCA/PyB7fSkgYXMgUmVjb3JkPHN0cmluZywgdW5rbm93bj47CiAgICAgICAgICByZXR1cm4geyBxOiBTdHJpbmcoaXQucSA/PyBpdC5xdWVzdGlvbiA/PyAiIiksIHdoeTogU3RyaW5nKGl0LndoeSA/PyBpdC5yZWFzb24gPz8gIiIpLCBhbnN3ZXI6IFN0cmluZyhpdC5hbnN3ZXIgPz8gaXQuYSA/PyAiIikgfTsKICAgICAgICB9KQogICAgICAgIC5maWx0ZXIoKGl0KSA9PiBpdC5xKTsKICAgICAgY29uc3QgcmVkRmxhZ3MgPSAoQXJyYXkuaXNBcnJheShwYXJzZWQucmVkRmxhZ3MpID8gcGFyc2VkLnJlZEZsYWdzIDogW10pLm1hcChTdHJpbmcpOwogICAgICBpZiAoIXF1ZXN0aW9ucy5sZW5ndGgpIHRocm93IG5ldyBFcnJvcigiTm8gcXVlc3Rpb25zIGluIHJlc3BvbnNlIik7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IHF1ZXN0aW9ucywgcmVkRmxhZ3MgfSk7CiAgICB9CiAgICBpZiAobW9kZSA9PT0gImxpbmtlZGluIikgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oewogICAgICAgIGhlYWRsaW5lOiBTdHJpbmcocGFyc2VkLmhlYWRsaW5lID8/ICIiKSwKICAgICAgICBhYm91dDogU3RyaW5nKHBhcnNlZC5hYm91dCA/PyAiIiksCiAgICAgICAgc2tpbGxzOiAoQXJyYXkuaXNBcnJheShwYXJzZWQuc2tpbGxzKSA/IHBhcnNlZC5za2lsbHMgOiBbXSkubWFwKFN0cmluZyksCiAgICAgICAgdGlwczogKEFycmF5LmlzQXJyYXkocGFyc2VkLnRpcHMpID8gcGFyc2VkLnRpcHMgOiBbXSkubWFwKFN0cmluZyksCiAgICAgIH0pOwogICAgfQogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHBhcnNlZCk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJUb29scyBlcnJvcjoiLCBlcnIpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJTb21ldGhpbmcgd2VudCB3cm9uZy4gUGxlYXNlIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA1MDAgfSk7CiAgfQp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 300;
+
+/**
+ * Shared endpoint for the smaller AI tools:
+ *  - mode "linkedin":  resume/profile text + target role -> optimized headline, about, skills
+ *  - mode "interview": resume + job description -> likely questions with strong answers
+ * Outputs are small, so these run non-streaming and fit well inside the time cap.
+ */
+
+const PROMPTS: Record<string, (a: string, b: string) => string> = {
+  linkedin: (profile, targetRole) => `You are a LinkedIn optimization expert. Rewrite this person's LinkedIn presence for the target role.
+
+CURRENT PROFILE / RESUME TEXT:
+${profile}
+
+TARGET ROLE: ${targetRole}
+
+Return ONLY a JSON object:
+{
+  "headline": "<a 120-220 char keyword-rich LinkedIn headline: role | value proposition | key skills>",
+  "about": "<a first-person About section, 3 short paragraphs: hook, proof with achievements from their background, call to action. Recruiter-search keywords woven in naturally.>",
+  "skills": ["<the 10-15 skills they should list, ordered by relevance to the target role — only skills their background supports>"],
+  "tips": ["<3-4 specific profile tips, e.g. banner, featured section, activity>"]
+}
+Never invent employers or achievements. No text outside the JSON.`,
+
+  interview: (resume, jobDescription) => `You are an interview coach. Based on this resume and job description, prepare the candidate.
+
+RESUME:
+${resume}
+
+JOB DESCRIPTION:
+${jobDescription}
+
+Return ONLY a JSON object:
+{
+  "questions": [
+    {"q": "<likely interview question>", "why": "<why they'll ask it, one line>", "answer": "<a strong 3-5 sentence answer using THIS candidate's real background (STAR style where relevant). Where they lack the skill, give an honest bridging answer.>"}
+  ],
+  "redFlags": ["<2-3 weaknesses in their profile the interviewer may probe, with one-line advice each>"]
+}
+Provide 8 questions: 2 intro/behavioral, 4 role-specific technical/skills, 2 about gaps in their background. No text outside the JSON.`,
+};
+
+function extractJson(text: string): string {
+  const cleaned = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  return start !== -1 && end > start ? cleaned.slice(start, end + 1) : cleaned;
+}
+
+/** Repair model JSON: escape raw control chars AND unescaped quotes inside strings.
+ * A quote inside a string is treated as CLOSING only if the next non-space char
+ * is a JSON structural char (, } ] :) — otherwise it's escaped as content. */
+function repairJson(s: string): string {
+  let out = "";
+  let inStr = false;
+  let esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) {
+      if (esc) { out += ch; esc = false; continue; }
+      if (ch === "\\") { out += ch; esc = true; continue; }
+      if (ch === '"') {
+        let j = i + 1;
+        while (j < s.length && (s[j] === " " || s[j] === "\n" || s[j] === "\r" || s[j] === "\t")) j++;
+        const next = s[j] ?? "";
+        if (next === "," || next === "}" || next === "]" || next === ":") {
+          inStr = false;
+          out += ch;
+        } else {
+          out += '\\"'; // interior quote — escape it
+        }
+        continue;
+      }
+      if (ch === "\n") { out += "\\n"; continue; }
+      if (ch === "\r") continue;
+      if (ch === "\t") { out += "\\t"; continue; }
+      out += ch;
+    } else {
+      if (ch === '"') inStr = true;
+      out += ch;
+    }
+  }
+  return out;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { mode, inputA, inputB } = await req.json();
+    const promptFn = PROMPTS[mode];
+    if (!promptFn) return NextResponse.json({ error: "Unknown tool." }, { status: 400 });
+    if (!inputA?.trim() || inputA.length < 50) {
+      return NextResponse.json({ error: "Please provide more detail (paste your resume or profile)." }, { status: 400 });
+    }
+    if (!inputB?.trim() || inputB.length < 3) {
+      return NextResponse.json({ error: mode === "linkedin" ? "Please enter your target role." : "Please paste the job description." }, { status: 400 });
+    }
+    if (inputA.length > 8000 || inputB.length > 4000) {
+      return NextResponse.json({ error: "Input too long." }, { status: 400 });
+    }
+
+    // Free LLM endpoints need the same abuse cap as /api/optimize.
+    if (!(await allowShared(`tools:${clientIp(req)}`, 10, 10 * 60 * 1000))) {
+      return NextResponse.json({ error: "You're going a bit fast. Please wait a minute and try again." }, { status: 429 });
+    }
+
+    const key = process.env.NVIDIA_API_KEY;
+    if (!key) throw new Error("NVIDIA_API_KEY is not set");
+    const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+
+    // The free model intermittently returns an error or malformed JSON. Retry
+    // once (non-streaming, small output) so a transient failure isn't user-visible.
+    let parsed: Record<string, unknown> | null = null;
+    let lastErr: unknown = null;
+    const t0 = Date.now();
+    // Up to 3 attempts — the free model fails ~1/3 of the time with either
+    // malformed JSON OR valid-but-empty content (no questions). BOTH must retry.
+    for (let attempt = 0; attempt < 3 && !parsed; attempt++) {
+      if (attempt > 0 && Date.now() - t0 > 45000) break;
+      // Abort a stalled upstream call so it can't hang the whole request for
+      // 120s+ under load — cap each attempt at 35s, then retry or fail cleanly.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 35000);
+      try {
+        const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+          signal: ctrl.signal,
+          body: JSON.stringify({
+            model,
+            temperature: 0.5,
+            top_p: 0.9,
+            max_tokens: 3200, // interview returns 8 Q&A — 2200 truncated it, yielding invalid/empty JSON
+            messages: [
+              { role: "system", content: "You respond with a single valid JSON object and nothing else. Never include unescaped quotes inside JSON string values." },
+              { role: "user", content: promptFn(String(inputA).slice(0, 8000), String(inputB).slice(0, 4000)) },
+            ],
+          }),
+        });
+        if (!res.ok) throw new Error(`NVIDIA API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+        const data = await res.json();
+        const raw = data?.choices?.[0]?.message?.content ?? "";
+        if (!raw.trim()) throw new Error("Empty response");
+        let candidate: Record<string, unknown>;
+        try {
+          candidate = JSON.parse(extractJson(raw));
+        } catch {
+          candidate = JSON.parse(repairJson(extractJson(raw)));
+        }
+        // Content-level validation — a syntactically-valid but empty/garbled
+        // response must ALSO retry, not fall through to a 500.
+        if (mode === "interview") {
+          const qs = Array.isArray(candidate.questions) ? candidate.questions : Array.isArray(candidate) ? (candidate as unknown[]) : [];
+          if (!qs.some((x) => { const it = (x ?? {}) as Record<string, unknown>; return it.q || it.question; })) {
+            throw new Error("No usable questions in response");
+          }
+        } else if (mode === "linkedin") {
+          if (!candidate.headline && !candidate.about) throw new Error("No usable LinkedIn content");
+        }
+        parsed = candidate;
+      } catch (e) {
+        lastErr = e;
+        console.error(`Tools error (attempt ${attempt + 1}):`, e);
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+    if (!parsed) throw lastErr ?? new Error("Failed to generate");
+
+    // Normalize to the exact shape the UI expects so a slightly-off model
+    // response can never crash the client (.map on undefined).
+    if (mode === "interview") {
+      const rawQ = Array.isArray(parsed.questions) ? parsed.questions
+        : Array.isArray(parsed) ? (parsed as unknown[]) : [];
+      const questions = rawQ
+        .map((x) => {
+          const it = (x ?? {}) as Record<string, unknown>;
+          return { q: String(it.q ?? it.question ?? ""), why: String(it.why ?? it.reason ?? ""), answer: String(it.answer ?? it.a ?? "") };
+        })
+        .filter((it) => it.q);
+      const redFlags = (Array.isArray(parsed.redFlags) ? parsed.redFlags : []).map(String);
+      if (!questions.length) throw new Error("No questions in response");
+      return NextResponse.json({ questions, redFlags });
+    }
+    if (mode === "linkedin") {
+      return NextResponse.json({
+        headline: String(parsed.headline ?? ""),
+        about: String(parsed.about ?? ""),
+        skills: (Array.isArray(parsed.skills) ? parsed.skills : []).map(String),
+        tips: (Array.isArray(parsed.tips) ? parsed.tips : []).map(String),
+      });
+    }
+    return NextResponse.json(parsed);
+  } catch (err) {
+    console.error("Tools error:", err);
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+  }
+}

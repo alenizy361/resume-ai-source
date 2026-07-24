@@ -1,1 +1,35 @@
-{"data":"LyoqCiAqIEluZmluaXRlIHNjcm9sbGluZyBzdHJpcCBvZiB0aGUgQVRTIHBsYXRmb3JtcyBvdXIgb3V0cHV0IHN1cnZpdmVzIOKAlAogKiB0aGUgTHVtaW8tc3R5bGUgImludGVncmF0aW9ucyIgdHJ1c3QgYmFuZCwgcmVuZGVyZWQgYXMgc3R5bGVkIHdvcmRtYXJrcwogKiAobm8gbG9nbyBhc3NldHMgbmVlZGVkLCBmdWxseSBzZXJ2ZXItcmVuZGVyZWQpLgogKi8KY29uc3QgU1lTVEVNUyA9IFsKICAiV29ya2RheSIsICJHcmVlbmhvdXNlIiwgIlRhbGVvIiwgIkxldmVyIiwgIlNBUCBTdWNjZXNzRmFjdG9ycyIsCiAgIk9yYWNsZSBIQ00iLCAiaUNJTVMiLCAiQmFtYm9vSFIiLCAiSmFkYXJhdCDYrNiv2KfYsdin2KoiLCAiQmF5dC5jb20iLAogICJMaW5rZWRJbiBKb2JzIiwgIlNtYXJ0UmVjcnVpdGVycyIsICJBc2hieSIsICJKb2J2aXRlIiwKXTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEF0c01hcnF1ZWUoeyBsYWJlbCB9OiB7IGxhYmVsOiBzdHJpbmcgfSkgewogIC8vIFRyYWNrIGR1cGxpY2F0ZWQgb25jZSDihpIgdHJhbnNsYXRlWCgtNTAlKSBsb29wcyBzZWFtbGVzc2x5LgogIGNvbnN0IGl0ZW1zID0gWy4uLlNZU1RFTVMsIC4uLlNZU1RFTVNdOwogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0icHktMTAiIHN0eWxlPXt7IGJvcmRlclRvcDogIjFweCBzb2xpZCB2YXIoLS1saW5lKSIgfX0+CiAgICAgIDxwIGNsYXNzTmFtZT0ibWItNiB0ZXh0LWNlbnRlciBmb250LW1vbm8gdGV4dC1bMTFweF0gdXBwZXJjYXNlIHRyYWNraW5nLVswLjI1ZW1dIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+CiAgICAgICAge2xhYmVsfQogICAgICA8L3A+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYXJxdWVlIj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWFycXVlZS10cmFjayI+CiAgICAgICAgICB7aXRlbXMubWFwKChzLCBpKSA9PiAoCiAgICAgICAgICAgIDxzcGFuCiAgICAgICAgICAgICAga2V5PXtgJHtzfS0ke2l9YH0KICAgICAgICAgICAgICBjbGFzc05hbWU9IndoaXRlc3BhY2Utbm93cmFwIGZvbnQtbW9ubyB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdHJhY2tpbmctd2lkZSIKICAgICAgICAgICAgICBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC4zOCkiIH19CiAgICAgICAgICAgID4KICAgICAgICAgICAgICB7c30KICAgICAgICAgICAgPC9zcGFuPgogICAgICAgICAgKSl9CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgKTsKfQo="}
+/**
+ * Infinite scrolling strip of the ATS platforms our output survives —
+ * the Lumio-style "integrations" trust band, rendered as styled wordmarks
+ * (no logo assets needed, fully server-rendered).
+ */
+const SYSTEMS = [
+  "Workday", "Greenhouse", "Taleo", "Lever", "SAP SuccessFactors",
+  "Oracle HCM", "iCIMS", "BambooHR", "Jadarat جدارات", "Bayt.com",
+  "LinkedIn Jobs", "SmartRecruiters", "Ashby", "Jobvite",
+];
+
+export default function AtsMarquee({ label }: { label: string }) {
+  // Track duplicated once → translateX(-50%) loops seamlessly.
+  const items = [...SYSTEMS, ...SYSTEMS];
+  return (
+    <div className="py-10" style={{ borderTop: "1px solid var(--line)" }}>
+      <p className="mb-6 text-center font-mono text-[11px] uppercase tracking-[0.25em]" style={{ color: "var(--faint)" }}>
+        {label}
+      </p>
+      <div className="marquee">
+        <div className="marquee-track">
+          {items.map((s, i) => (
+            <span
+              key={`${s}-${i}`}
+              className="whitespace-nowrap font-mono text-sm font-semibold tracking-wide"
+              style={{ color: "rgba(244,245,243,0.38)" }}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

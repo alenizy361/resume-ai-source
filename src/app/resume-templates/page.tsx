@@ -1,1 +1,66 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgVEVNUExBVEVTIH0gZnJvbSAiLi4vbGliL3RlbXBsYXRlcyI7CmltcG9ydCBUZW1wbGF0ZVByZXZpZXcgZnJvbSAiLi4vY29tcG9uZW50cy9UZW1wbGF0ZVByZXZpZXciOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkZyZWUgUmVzdW1lIFRlbXBsYXRlcyAoMjAyNikg4oCUIEFUUy1GcmllbmRseSwgRmlsbCAmIERvd25sb2FkIiwKICBkZXNjcmlwdGlvbjogIjggZnJlZSwgQVRTLWZyaWVuZGx5IHJlc3VtZSB0ZW1wbGF0ZXM6IEFUUywgbW9kZXJuLCBtaW5pbWFsLCBwcm9mZXNzaW9uYWwsIGV4ZWN1dGl2ZSwgY3JlYXRpdmUsIHNpbXBsZSwgYW5kIHR3by1jb2x1bW4uIEZpbGwgb25lIGluIGFuZCBkb3dubG9hZCBpbiBtaW51dGVzLiIsCiAga2V5d29yZHM6ICJmcmVlIHJlc3VtZSB0ZW1wbGF0ZXMsIEFUUyByZXN1bWUgdGVtcGxhdGUsIG1vZGVybiByZXN1bWUgdGVtcGxhdGUsIHByb2Zlc3Npb25hbCByZXN1bWUgdGVtcGxhdGUsIGN2IHRlbXBsYXRlcyBmcmVlIiwKICBhbHRlcm5hdGVzOiB7IGNhbm9uaWNhbDogYCR7QkFTRX0vcmVzdW1lLXRlbXBsYXRlc2AgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEh1YigpIHsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNnhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICAgIDxPcmJCcmFuZCBzaXplPXsyNn0gLz4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LVsxNXB4XSBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPlNpcmE8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPSIvYnVpbGQiIGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC00IHB5LTIgdGV4dC1zbSI+QnVpbGQgbXkgcmVzdW1lPC9MaW5rPgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0icmVsYXRpdmUgb3ZlcmZsb3ctaGlkZGVuIHB4LTYgcHktMTYgdGV4dC1jZW50ZXIiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJoZXJvLWFtYmllbnQiPjxkaXYgY2xhc3NOYW1lPSJncmlkLWxpbmVzIiAvPjwvZGl2PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZWxhdGl2ZSB6LTEwIG14LWF1dG8gbWF4LXctM3hsIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPkZyZWUgwrcgQVRTLWZyaWVuZGx5PC9kaXY+CiAgICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCB0cmFja2luZy10aWdodCBtZDp0ZXh0LTV4bCI+RnJlZSByZXN1bWUgdGVtcGxhdGVzPC9oMT4KICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC00IG1heC13LTJ4bCB0ZXh0LWxnIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAgICAgIFBpY2sgYSBzdHlsZSwgZmlsbCBpdCBpbiB3aXRoIG91ciBBSSBidWlsZGVyLCBhbmQgZG93bmxvYWQgYSBwcmludC1yZWFkeSByZXN1bWUg4oCUIGZyZWUuIEV2ZXJ5IHRlbXBsYXRlIGlzIHR1bmVkIHRvIHBhc3MgYXBwbGljYW50IHRyYWNraW5nIHN5c3RlbXMuCiAgICAgICAgICA8L3A+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvc2VjdGlvbj4KCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1heC13LTZ4bCBweC02IHBiLTE2Ij4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtOCBzbTpncmlkLWNvbHMtMiBsZzpncmlkLWNvbHMtMyI+CiAgICAgICAgICB7VEVNUExBVEVTLm1hcCgodCkgPT4gKAogICAgICAgICAgICA8TGluayBrZXk9e3Quc2x1Z30gaHJlZj17YC9yZXN1bWUtdGVtcGxhdGVzLyR7dC5zbHVnfWB9IGNsYXNzTmFtZT0iZ3JvdXAiPgogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJ0cmFuc2l0aW9uLXRyYW5zZm9ybSBncm91cC1ob3ZlcjotdHJhbnNsYXRlLXktMSI+CiAgICAgICAgICAgICAgICA8VGVtcGxhdGVQcmV2aWV3IHQ9e3R9IC8+CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTMgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIj4KICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmb250LWJvbGQiPnt0Lm5hbWV9PC9kaXY+CiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiB0LmF0c1Njb3JlID49IDkwID8gInZhcigtLWFjY2VudCkiIDogIiNmYmJmMjQiIH19PkFUUyB7dC5hdHNTY29yZX08L2Rpdj4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0idGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19Pnt0LmtleXdvcmR9PC9kaXY+CiAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICkpfQogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj4KCiAgICAgIDxmb290ZXIgY2xhc3NOYW1lPSJweC02IHB5LTEwIiBzdHlsZT17eyBib3JkZXJUb3A6ICIxcHggc29saWQgdmFyKC0tbGluZSkiIH19PgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7CqSAyMDI2IFNpcmEgwrcgYSByZXN1bWUgc2VydmljZSBieSBSYWJpdDwvcD4KICAgICAgPC9mb290ZXI+CiAgICAgICAgICA8SHViTGlua3MgY3VycmVudD0iL3Jlc3VtZS10ZW1wbGF0ZXMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../components/HubLinks";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { TEMPLATES } from "../lib/templates";
+import TemplatePreview from "../components/TemplatePreview";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Free Resume Templates (2026) — ATS-Friendly, Fill & Download",
+  description: "8 free, ATS-friendly resume templates: ATS, modern, minimal, professional, executive, creative, simple, and two-column. Fill one in and download in minutes.",
+  keywords: "free resume templates, ATS resume template, modern resume template, professional resume template, cv templates free",
+  alternates: { canonical: `${BASE}/resume-templates` },
+};
+
+export default function Hub() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/build" className="btn-accent px-4 py-2 text-sm">Build my resume</Link>
+        </div>
+      </nav>
+
+      <section className="relative overflow-hidden px-6 py-16 text-center">
+        <div className="hero-ambient"><div className="grid-lines" /></div>
+        <div className="relative z-10 mx-auto max-w-3xl">
+          <div className="chip mb-4">Free · ATS-friendly</div>
+          <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Free resume templates</h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg" style={{ color: "var(--muted)" }}>
+            Pick a style, fill it in with our AI builder, and download a print-ready resume — free. Every template is tuned to pass applicant tracking systems.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {TEMPLATES.map((t) => (
+            <Link key={t.slug} href={`/resume-templates/${t.slug}`} className="group">
+              <div className="transition-transform group-hover:-translate-y-1">
+                <TemplatePreview t={t} />
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <div className="font-bold">{t.name}</div>
+                <div className="font-mono text-xs" style={{ color: t.atsScore >= 90 ? "var(--accent)" : "#fbbf24" }}>ATS {t.atsScore}</div>
+              </div>
+              <div className="text-xs" style={{ color: "var(--faint)" }}>{t.keyword}</div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+          <HubLinks current="/resume-templates" />
+    </main>
+  );
+}

@@ -1,1 +1,182 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgSk9CU19BUiwgQVJfU0xVR1MsIGdldEpvYkFyIH0gZnJvbSAiLi4vLi4vLi4vbGliL2pvYnMtYXIiOwppbXBvcnQgeyBnZXRKb2IgfSBmcm9tICIuLi8uLi8uLi9saWIvam9icyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZnVuY3Rpb24gZ2VuZXJhdGVTdGF0aWNQYXJhbXMoKSB7CiAgcmV0dXJuIEFSX1NMVUdTLm1hcCgoam9iKSA9PiAoeyBqb2IgfSkpOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2VuZXJhdGVNZXRhZGF0YSh7IHBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGpvYjogc3RyaW5nIH0+IH0pOiBQcm9taXNlPE1ldGFkYXRhPiB7CiAgY29uc3QgeyBqb2IgfSA9IGF3YWl0IHBhcmFtczsKICBjb25zdCBqID0gZ2V0Sm9iQXIoam9iKTsKICBpZiAoIWopIHJldHVybiB7fTsKICAvLyDYp9ix2KjYtyBocmVmbGFuZyDYqNin2YTZhtiz2K7YqSDYp9mE2KXZhtis2YTZitiy2YrYqSDYpdmGINmI2Y/YrNiv2Kog2YTZhtmB2LMg2KfZhNmF2YfZhtipLgogIGNvbnN0IGhhc0VuID0gISFnZXRKb2Ioam9iKTsKICByZXR1cm4gewogICAgdGl0bGU6IGDZhdir2KfZhCDYs9mK2LHYqSDYsNin2KrZitipICR7ai50aXRsZX0gKyDZg9mE2YXYp9iqIEFUUyAoMjAyNilgLAogICAgZGVzY3JpcHRpb246IGDZhtmF2YjYsNisINiz2YrYsdipINiw2KfYqtmK2KkgJHtqLnRpdGxlfSDZhdis2KfZhtmKINmF2Lkg2YPZhNmF2KfYqiBBVFMg2YjYp9mE2YXZh9in2LHYp9iqINin2YTYqtmKINiq2KjYrdirINi52YbZh9inINij2YbYuNmF2Kkg2KfZhNiq2YjYuNmK2YEuINit2LPZkdmGINij2Ygg2KfYqNmG2ZAg2LPZitix2KrZgyDYqNin2YTYq9mI2KfZhtmKLmAsCiAgICBrZXl3b3JkczogYNiz2YrYsdipINiw2KfYqtmK2KkgJHtqLnRpdGxlfSwg2YbZhdmI2LDYrCDYs9mK2LHYqSDYsNin2KrZitipICR7ai50aXRsZX0sINmF2YfYp9ix2KfYqiAke2oudGl0bGV9LCDZg9mE2YXYp9iqINmF2YHYqtin2K3ZitipICR7ai50aXRsZX0sICR7ai50aXRsZUVufSByZXN1bWVgLAogICAgYWx0ZXJuYXRlczogewogICAgICBjYW5vbmljYWw6IGAke0JBU0V9L2FyL3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gLAogICAgICBsYW5ndWFnZXM6IGhhc0VuCiAgICAgICAgPyB7IGFyOiBgJHtCQVNFfS9hci9yZXN1bWUtZXhhbXBsZXMvJHtqLnNsdWd9YCwgZW46IGAke0JBU0V9L3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gLCAieC1kZWZhdWx0IjogYCR7QkFTRX0vcmVzdW1lLWV4YW1wbGVzLyR7ai5zbHVnfWAgfQogICAgICAgIDogeyBhcjogYCR7QkFTRX0vYXIvcmVzdW1lLWV4YW1wbGVzLyR7ai5zbHVnfWAgfSwKICAgIH0sCiAgICBvcGVuR3JhcGg6IHsgdGl0bGU6IGDZhdir2KfZhCDYs9mK2LHYqSDYsNin2KrZitipICR7ai50aXRsZX0gKyDYp9mE2YXZh9in2LHYp9iqICgyMDI2KWAsIGRlc2NyaXB0aW9uOiBg2YPZhNmF2KfYqiBBVFMg2YjYp9mE2YXZh9in2LHYp9iqINmI2YbZhdmI2LDYrCDZg9in2YXZhCDZhNiz2YrYsdipICR7ai50aXRsZX0uYCwgdHlwZTogImFydGljbGUiIH0sCiAgfTsKfQoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gUGFnZSh7IHBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGpvYjogc3RyaW5nIH0+IH0pIHsKICBjb25zdCB7IGpvYiB9ID0gYXdhaXQgcGFyYW1zOwogIGNvbnN0IGogPSBnZXRKb2JBcihqb2IpOwogIGlmICghaikgbm90Rm91bmQoKTsKCiAgY29uc3Qgc2libGluZ3MgPSBKT0JTX0FSLmZpbHRlcigoeCkgPT4geC5jYXRlZ29yeSA9PT0gai5jYXRlZ29yeSAmJiB4LnNsdWcgIT09IGouc2x1Zykuc2xpY2UoMCwgNik7CiAgY29uc3Qgb3RoZXJzID0gSk9CU19BUi5maWx0ZXIoKHgpID0+IHguY2F0ZWdvcnkgIT09IGouY2F0ZWdvcnkpLnNsaWNlKDAsIDQpOwoKICBjb25zdCBmYXFzID0gWwogICAgeyBxOiBg2YXYpyDYp9mE2YXZh9in2LHYp9iqINin2YTYqtmKINmK2KzYqCDYo9mGINmK2LbYudmH2KcgJHtqLnRpdGxlfSDZgdmKINin2YTYs9mK2LHYqSDYp9mE2LDYp9iq2YrYqdifYCwgYTogYNij2YfZhSDZhdmH2KfYsdin2Kog2LPZitix2KkgJHtqLnRpdGxlfTogJHtqLnNraWxscy5zbGljZSgwLCA2KS5qb2luKCLYjCAiKX0uINi32KfYqNmC2YfYpyDZhdi5INi12YrYp9i62Kkg2KfZhNil2LnZhNin2YYg2KfZhNmI2LjZitmB2Yog2YTZitix2YHYuSDZhti42KfZhSBBVFMg2KrZgtmK2YrZhSDYs9mK2LHYqtmDLmAgfSwKICAgIHsgcTogYNmF2Kcg2YPZhNmF2KfYqiBBVFMg2KfZhNiq2Yog2KrYrdiq2KfYrNmH2Kcg2LPZitix2KkgJHtqLnRpdGxlfdifYCwgYTogYNiq2YHYrdi1INij2YbYuNmF2Kkg2KfZhNiq2YjYuNmK2YEg2LPZitixICR7ai50aXRsZX0g2LnZhiDZhdi12LfZhNit2KfYqiDZhdir2YQgJHtqLmtleXdvcmRzLnNsaWNlKDAsIDYpLmpvaW4oItiMICIpfS4g2KPYr9ix2Kwg2YXYpyDYqtmF2YTZg9mHINmB2LnZhNin2Ysg2KjZhtmB2LMg2LXZitin2LrYqSDYp9mE2KXYudmE2KfZhi5gIH0sCiAgICB7IHE6IGDZg9mFINmK2KzYqCDYo9mGINmK2YPZiNmGINi32YjZhCDYs9mK2LHYqSAke2oudGl0bGV92J9gLCBhOiBg2LXZgdit2Kkg2YjYp9it2K/YqSDZhNij2YLZhCDZhdmGINmh2aAg2LPZhtmI2KfYqiDYrtio2LHYqdiMINmI2LXZgdit2KrYp9mGINmD2K3YryDYo9mC2LXZiSDZhNmE2KPYr9mI2KfYsSDYp9mE2YPYqNmK2LHYqS4g2KfYrNi52YTZh9inINio2LnZhdmI2K8g2YjYp9it2K8g2YjZhdiq2YjYp9mB2YLYqSDZhdi5IEFUUyDYr9mI2YYg2KzYr9in2YjZhCDYo9mIINix2LPZiNmF2KfYqi5gIH0sCiAgICB7IHE6IGDZg9mK2YEg2KPYrNi52YQg2LPZitix2KkgJHtqLnRpdGxlfSDYqti52KjYsSDZhti42KfZhSBBVFPYn2AsIGE6IGDYp9iz2KrYrtiv2YUg2LnZhtin2YjZitmGINmC2YrYp9iz2YrYqdiMINi32KfYqNmCINin2YTZhdiz2YXZiSDYp9mE2YjYuNmK2YHZitiMINij2K/YsdisINmD2YTZhdin2KogJHtqLnRpdGxlfSDYo9i52YTYp9mH2Iwg2YjYtdi6INil2YbYrNin2LLYp9iq2YMg2KjYo9ix2YLYp9mFLiDYo9mIINin2YTYtdmC2YfYpyDZgdmKINin2YTZgdin2K3YtSDYp9mE2YXYrNin2YbZiiDZhNiq2LHZiSDZhtiz2KjYqSDYqti32KfYqNmC2YMg2YHZiNix2KfZiy5gIH0sCiAgXTsKCiAgY29uc3QgbGQgPSB7CiAgICAiQGNvbnRleHQiOiAiaHR0cHM6Ly9zY2hlbWEub3JnIiwKICAgICJAZ3JhcGgiOiBbCiAgICAgIHsgIkB0eXBlIjogIkJyZWFkY3J1bWJMaXN0IiwgaXRlbUxpc3RFbGVtZW50OiBbCiAgICAgICAgeyAiQHR5cGUiOiAiTGlzdEl0ZW0iLCBwb3NpdGlvbjogMSwgbmFtZTogItin2YTYsdim2YrYs9mK2KkiLCBpdGVtOiBgJHtCQVNFfS9hcmAgfSwKICAgICAgICB7ICJAdHlwZSI6ICJMaXN0SXRlbSIsIHBvc2l0aW9uOiAyLCBuYW1lOiAi2KPZhdir2YTYqSDYp9mE2LPZitixINin2YTYsNin2KrZitipIiwgaXRlbTogYCR7QkFTRX0vYXIvcmVzdW1lLWV4YW1wbGVzYCB9LAogICAgICAgIHsgIkB0eXBlIjogIkxpc3RJdGVtIiwgcG9zaXRpb246IDMsIG5hbWU6IGoudGl0bGUsIGl0ZW06IGAke0JBU0V9L2FyL3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gIH0sCiAgICAgIF19LAogICAgICB7ICJAdHlwZSI6ICJGQVFQYWdlIiwgbWFpbkVudGl0eTogZmFxcy5tYXAoKGYpID0+ICh7ICJAdHlwZSI6ICJRdWVzdGlvbiIsIG5hbWU6IGYucSwgYWNjZXB0ZWRBbnN3ZXI6IHsgIkB0eXBlIjogIkFuc3dlciIsIHRleHQ6IGYuYSB9IH0pKSB9LAogICAgXSwKICB9OwoKICBjb25zdCBTZWN0aW9uID0gKHsgdGl0bGUsIGNoaWxkcmVuIH06IHsgdGl0bGU6IHN0cmluZzsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSA9PiAoCiAgICA8c2VjdGlvbiBjbGFzc05hbWU9Im10LTEwIj4KICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LTJ4bCBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPnt0aXRsZX08L2gyPgogICAgICB7Y2hpbGRyZW59CiAgICA8L3NlY3Rpb24+CiAgKTsKCiAgcmV0dXJuICgKICAgIDxtYWluIGRpcj0icnRsIiBsYW5nPSJhciIgY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iMTQlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNXhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hciIgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMi41Ij4KICAgICAgICAgICAgPE9yYkJyYW5kIHNpemU9ezI2fSAvPgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtWzE1cHhdIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+2LPZitix2Kk8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPSIvYXIvb3B0aW1pemUiIGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC00IHB5LTIgdGV4dC1zbSI+2KfZgdit2LUg2LPZitix2KrZijwvTGluaz4KICAgICAgICA8L2Rpdj4KICAgICAgPC9uYXY+CgogICAgICA8YXJ0aWNsZSBjbGFzc05hbWU9Im14LWF1dG8gbWF4LXctM3hsIHB4LTYgcHktMTAiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi02IGZvbnQtbW9ubyB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+CiAgICAgICAgICA8TGluayBocmVmPSIvYXIiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7Yp9mE2LHYptmK2LPZitipPC9MaW5rPiDigLp7IiAifQogICAgICAgICAgPExpbmsgaHJlZj0iL2FyL3Jlc3VtZS1leGFtcGxlcyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19Ptij2YXYq9mE2Kkg2KfZhNiz2YrYsTwvTGluaz4g4oC6IHtqLnRpdGxlfQogICAgICAgIDwvZGl2PgoKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2hpcCBtYi00Ij57ai5jYXRlZ29yeX0gwrcg2YXYqtmI2KfZgdmC2Kkg2YXYuSBBVFM8L2Rpdj4KICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCBsZWFkaW5nLXRpZ2h0IHRyYWNraW5nLXRpZ2h0Ij7Zhdir2KfZhCDYs9mK2LHYqSDYsNin2KrZitipIHtqLnRpdGxlfSArINmD2YTZhdin2KogQVRTICgyMDI2KTwvaDE+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC00IHRleHQtbGcgbGVhZGluZy1yZWxheGVkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAgICB7ai5kZW1hbmR9INmG2LfYp9mCINin2YTYsdin2KrYqCDYp9mE2KrZgtix2YrYqNmKOiB7ai5zYWxhcnl9LiDYqtis2K8g2KPYr9mG2KfZhyDZhtmF2YjYsNisINiz2YrYsdipIHtqLnRpdGxlfSDZg9in2YXZhNin2Ysg2YXYuSDYp9mE2YPZhNmF2KfYqiDYp9mE2YXZgdiq2KfYrdmK2Kkg2KfZhNiq2Yog2KrZgdit2LXZh9inINij2YbYuNmF2Kkg2KfZhNiq2YjYuNmK2YEgKEFUUykg4oCUINir2YUg2KfYqNmG2ZAg2LPZitix2KrZgyDZhdis2KfZhtin2Ysg2KjYp9mE2KvZiNin2YbZii4KICAgICAgICA8L3A+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTYgZmxleCBmbGV4LXdyYXAgZ2FwLTMiPgogICAgICAgICAgPExpbmsgaHJlZj0iL2FyL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNiBweS0zIj7Yp9mB2K3YtSDYs9mK2LHYqSB7ai50aXRsZX0g2YXYrNin2YbYp9mLIOKGkDwvTGluaz4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hci9idWlsZGVyIiBjbGFzc05hbWU9ImJ0bi1naG9zdCBweC02IHB5LTMgZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19Ptin2KjZhtmQINmI2KfYrdiv2Kkg2YXZhiDYp9mE2LXZgdixPC9MaW5rPgogICAgICAgIDwvZGl2PgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT17YNmF2KvYp9mEINmF2YTYrti1INmF2YfZhtmKINmE2YAgJHtqLnRpdGxlfWB9PgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNhcmQgcC01IHRleHQtc20gbGVhZGluZy1yZWxheGVkIiBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PntqLnN1bW1hcnl9PC9kaXY+CiAgICAgICAgPC9TZWN0aW9uPgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT17YNmD2YTZhdin2KogQVRTINmE2LPZitix2KkgJHtqLnRpdGxlfWB9PgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJtYi0zIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT7Zh9iw2Ycg2KfZhNmF2LXYt9mE2K3Yp9iqINin2YTYqtmKINmK2YHYrdi12YfYpyDZhti42KfZhSBBVFMuINij2K/YsdisINmF2Kcg2KrZhdmE2YPZhyDZgdi52YTYp9mLINio2LXZitin2LrYqSDYp9mE2KXYudmE2KfZhiDYp9mE2YjYuNmK2YHZijo8L3A+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LXdyYXAgZ2FwLTIiPgogICAgICAgICAgICB7ai5rZXl3b3Jkcy5tYXAoKGspID0+ICgKICAgICAgICAgICAgICA8c3BhbiBrZXk9e2t9IGRpcj0ibHRyIiBjbGFzc05hbWU9InJvdW5kZWQtZnVsbCBweC0zIHB5LTEgdGV4dC14cyBmb250LW1lZGl1bSIgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMTM5LDkyLDI0NiwwLjE0KSIsIGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+e2t9PC9zcGFuPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9e2DYo9mH2YUg2YXZh9in2LHYp9iqICR7ai50aXRsZX1gfT4KICAgICAgICAgIDx1bCBjbGFzc05hbWU9ImdyaWQgZ2FwLTIgc206Z3JpZC1jb2xzLTIiPgogICAgICAgICAgICB7ai5za2lsbHMubWFwKChzKSA9PiAoCiAgICAgICAgICAgICAgPGxpIGtleT17c30gY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PjxzcGFuIGNsYXNzTmFtZT0idGV4dC1hY2NlbnQiPuKckzwvc3Bhbj4ge3N9PC9saT4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L3VsPgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9Itij2YXYq9mE2Kkg2LnZhNmJINil2YbYrNin2LLYp9iqINin2YTYrtio2LHYqSDYp9mE2LnZhdmE2YrYqSI+CiAgICAgICAgICA8dWwgY2xhc3NOYW1lPSJzcGFjZS15LTMiPgogICAgICAgICAgICB7ai5idWxsZXRzLm1hcCgoYikgPT4gKAogICAgICAgICAgICAgIDxsaSBrZXk9e2J9IGNsYXNzTmFtZT0iY2FyZCBwLTQgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNDQsMjQ1LDI0MywwLjg1KSIgfX0+4oCiIHtifTwvbGk+CiAgICAgICAgICAgICkpfQogICAgICAgICAgPC91bD4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtg2LTZh9in2K/Yp9iqINiq2YLZiNmR2Yog2LPZitix2KkgJHtqLnRpdGxlfWB9PgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0yIj4KICAgICAgICAgICAge2ouY2VydHMubWFwKChjKSA9PiAoCiAgICAgICAgICAgICAgPHNwYW4ga2V5PXtjfSBjbGFzc05hbWU9InJvdW5kZWQtbGcgcHgtMyBweS0xLjUgdGV4dC14cyBmb250LXNlbWlib2xkIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tc3VyZmFjZSkiLCBib3JkZXI6ICIxcHggc29saWQgdmFyKC0tbGluZSkiLCBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e2N9PC9zcGFuPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9e2DYrti32KMg2LTYp9im2Lkg2YHZiiDYs9mK2LHYqSAke2oudGl0bGV9YH0+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2FyZCBwLTUgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGJvcmRlckNvbG9yOiAicmdiYSgyNDgsMTEzLDExMywwLjMpIiwgY29sb3I6ICJyZ2JhKDI0NCwyNDUsMjQzLDAuODUpIiB9fT4KICAgICAgICAgICAgPHNwYW4gc3R5bGU9e3sgY29sb3I6ICIjZjg3MTcxIiB9fT7Yqtis2YbZkdioINmH2LDYpzo8L3NwYW4+IHtqLm1pc3Rha2V9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIG10LTEwIHAtNyB0ZXh0LWNlbnRlciIgc3R5bGU9e3sgYm9yZGVyQ29sb3I6ICJyZ2JhKDEzOSw5MiwyNDYsMC40KSIsIGJhY2tncm91bmQ6ICJyZ2JhKDEzOSw5MiwyNDYsMC4wNSkiIH19PgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1ib2xkIj7Zh9mEINiz2YrYsdipIHtqLnRpdGxlfSDYrNin2YfYstipINmE2KPZhti42YXYqSBBVFPYnzwvaDI+CiAgICAgICAgICA8cCBjbGFzc05hbWU9Im14LWF1dG8gbXQtMiBtYXgtdy1tZCB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+2KfZhNi12YLZh9inINmI2KfYrdi12YQg2LnZhNmJINmG2LPYqNipINiq2LfYp9io2YIg2YHZiNix2YrYqSArINin2YTZg9mE2YXYp9iqINin2YTZhtin2YLYtdipIOKAlCDZhdis2KfZhtin2Ysg2YjYqNiv2YjZhiDYqtiz2KzZitmELjwvcD4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hci9vcHRpbWl6ZSIgY2xhc3NOYW1lPSJidG4tYWNjZW50IG10LTUgaW5saW5lLWJsb2NrIHB4LTggcHktMyI+2KfZgdit2LUg2LPZitix2KrZiiDZhdis2KfZhtin2Ysg4oaQPC9MaW5rPgogICAgICAgIDwvZGl2PgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT0i2KfZhNij2LPYptmE2Kkg2KfZhNi02KfYpti52KkiPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktNCI+CiAgICAgICAgICAgIHtmYXFzLm1hcCgoZikgPT4gKAogICAgICAgICAgICAgIDxkaXYga2V5PXtmLnF9IGNsYXNzTmFtZT0iY2FyZCBwLTUiPgogICAgICAgICAgICAgICAgPGgzIGNsYXNzTmFtZT0iZm9udC1ib2xkIj57Zi5xfTwvaDM+CiAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57Zi5hfTwvcD4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPSLZhNmH2LDZhyDYp9mE2YXZh9mG2KkiPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0zIj4KICAgICAgICAgICAgPExpbmsgaHJlZj17YC9hci9jb3Zlci1sZXR0ZXItZXhhbXBsZXMvJHtqLnNsdWd9YH0gY2xhc3NOYW1lPSJidG4tZ2hvc3QgcHgtNCBweS0yIHRleHQtc20gZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19Ptiu2LfYp9ioINiq2LnYsdmK2YEge2oudGl0bGV9IOKGkDwvTGluaz4KICAgICAgICAgICAgPExpbmsgaHJlZj17YC9hci9yZXN1bWUtc2tpbGxzLyR7ai5zbHVnfWB9IGNsYXNzTmFtZT0iYnRuLWdob3N0IHB4LTQgcHktMiB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT7ZhdmH2KfYsdin2Kog2YjZg9mE2YXYp9iqIEFUUyDZhNmAIHtqLnRpdGxlfSDihpA8L0xpbms+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtg2YXYstmK2K8g2YXZhiDYo9mF2KvZhNipINiz2YrYsSAke2ouY2F0ZWdvcnl9YH0+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LXdyYXAgZ2FwLTIiPgogICAgICAgICAgICB7Wy4uLnNpYmxpbmdzLCAuLi5vdGhlcnNdLm1hcCgocykgPT4gKAogICAgICAgICAgICAgIDxMaW5rIGtleT17cy5zbHVnfSBocmVmPXtgL2FyL3Jlc3VtZS1leGFtcGxlcy8ke3Muc2x1Z31gfSBjbGFzc05hbWU9InJvdW5kZWQtbGcgcHgtMyBweS0xLjUgdGV4dC1zbSIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntzLnRpdGxlfTwvTGluaz4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hci9yZXN1bWUtZXhhbXBsZXMiIGNsYXNzTmFtZT0ibXQtNCBpbmxpbmUtYmxvY2sgdGV4dC1zbSBmb250LXNlbWlib2xkIHRleHQtYWNjZW50Ij7Zg9mEINij2YXYq9mE2Kkg2KfZhNiz2YrYsSDihpA8L0xpbms+CiAgICAgICAgPC9TZWN0aW9uPgogICAgICA8L2FydGljbGU+CgogICAgICA8Zm9vdGVyIGNsYXNzTmFtZT0icHgtNiBweS0xMCIgc3R5bGU9e3sgYm9yZGVyVG9wOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtY2VudGVyIGZvbnQtbW9ubyB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+wqkgMjAyNiDYs9mK2LHYqSDCtyDYrtiv2YXYqSDYs9mK2LEg2LDYp9iq2YrYqSDZhdmGIFJhYml0PC9wPgogICAgICA8L2Zvb3Rlcj4KCiAgICAgIDxzY3JpcHQgdHlwZT0iYXBwbGljYXRpb24vbGQranNvbiIgZGFuZ2Vyb3VzbHlTZXRJbm5lckhUTUw9e3sgX19odG1sOiBKU09OLnN0cmluZ2lmeShsZCkgfX0gLz4KICAgIDwvbWFpbj4KICApOwp9Cg=="}
+import type { Metadata } from "next";
+import OrbBrand from "../../../components/OrbBrand";
+import OrbSceneSetter from "../../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { JOBS_AR, AR_SLUGS, getJobAr } from "../../../lib/jobs-ar";
+import { getJob } from "../../../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export function generateStaticParams() {
+  return AR_SLUGS.map((job) => ({ job }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ job: string }> }): Promise<Metadata> {
+  const { job } = await params;
+  const j = getJobAr(job);
+  if (!j) return {};
+  // اربط hreflang بالنسخة الإنجليزية إن وُجدت لنفس المهنة.
+  const hasEn = !!getJob(job);
+  return {
+    title: `مثال سيرة ذاتية ${j.title} + كلمات ATS (2026)`,
+    description: `نموذج سيرة ذاتية ${j.title} مجاني مع كلمات ATS والمهارات التي تبحث عنها أنظمة التوظيف. حسّن أو ابنِ سيرتك بالثواني.`,
+    keywords: `سيرة ذاتية ${j.title}, نموذج سيرة ذاتية ${j.title}, مهارات ${j.title}, كلمات مفتاحية ${j.title}, ${j.titleEn} resume`,
+    alternates: {
+      canonical: `${BASE}/ar/resume-examples/${j.slug}`,
+      languages: hasEn
+        ? { ar: `${BASE}/ar/resume-examples/${j.slug}`, en: `${BASE}/resume-examples/${j.slug}`, "x-default": `${BASE}/resume-examples/${j.slug}` }
+        : { ar: `${BASE}/ar/resume-examples/${j.slug}` },
+    },
+    openGraph: { title: `مثال سيرة ذاتية ${j.title} + المهارات (2026)`, description: `كلمات ATS والمهارات ونموذج كامل لسيرة ${j.title}.`, type: "article" },
+  };
+}
+
+export default async function Page({ params }: { params: Promise<{ job: string }> }) {
+  const { job } = await params;
+  const j = getJobAr(job);
+  if (!j) notFound();
+
+  const siblings = JOBS_AR.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 6);
+  const others = JOBS_AR.filter((x) => x.category !== j.category).slice(0, 4);
+
+  const faqs = [
+    { q: `ما المهارات التي يجب أن يضعها ${j.title} في السيرة الذاتية؟`, a: `أهم مهارات سيرة ${j.title}: ${j.skills.slice(0, 6).join("، ")}. طابقها مع صياغة الإعلان الوظيفي ليرفع نظام ATS تقييم سيرتك.` },
+    { q: `ما كلمات ATS التي تحتاجها سيرة ${j.title}؟`, a: `تفحص أنظمة التوظيف سير ${j.title} عن مصطلحات مثل ${j.keywords.slice(0, 6).join("، ")}. أدرج ما تملكه فعلاً بنفس صياغة الإعلان.` },
+    { q: `كم يجب أن يكون طول سيرة ${j.title}؟`, a: `صفحة واحدة لأقل من ١٠ سنوات خبرة، وصفحتان كحد أقصى للأدوار الكبيرة. اجعلها بعمود واحد ومتوافقة مع ATS دون جداول أو رسومات.` },
+    { q: `كيف أجعل سيرة ${j.title} تعبر نظام ATS؟`, a: `استخدم عناوين قياسية، طابق المسمى الوظيفي، أدرج كلمات ${j.title} أعلاه، وصغ إنجازاتك بأرقام. أو الصقها في الفاحص المجاني لترى نسبة تطابقك فوراً.` },
+  ];
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "الرئيسية", item: `${BASE}/ar` },
+        { "@type": "ListItem", position: 2, name: "أمثلة السير الذاتية", item: `${BASE}/ar/resume-examples` },
+        { "@type": "ListItem", position: 3, name: j.title, item: `${BASE}/ar/resume-examples/${j.slug}` },
+      ]},
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+    ],
+  };
+
+  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <section className="mt-10">
+      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
+      {children}
+    </section>
+  );
+
+  return (
+    <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="14%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/ar" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
+          </Link>
+          <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">افحص سيرتي</Link>
+        </div>
+      </nav>
+
+      <article className="mx-auto max-w-3xl px-6 py-10">
+        <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          <Link href="/ar" style={{ color: "var(--faint)" }}>الرئيسية</Link> ›{" "}
+          <Link href="/ar/resume-examples" style={{ color: "var(--faint)" }}>أمثلة السير</Link> › {j.title}
+        </div>
+
+        <div className="chip mb-4">{j.category} · متوافقة مع ATS</div>
+        <h1 className="text-4xl font-extrabold leading-tight tracking-tight">مثال سيرة ذاتية {j.title} + كلمات ATS (2026)</h1>
+        <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
+          {j.demand} نطاق الراتب التقريبي: {j.salary}. تجد أدناه نموذج سيرة {j.title} كاملاً مع الكلمات المفتاحية التي تفحصها أنظمة التوظيف (ATS) — ثم ابنِ سيرتك مجاناً بالثواني.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href="/ar/optimize" className="btn-accent px-6 py-3">افحص سيرة {j.title} مجاناً ←</Link>
+          <Link href="/ar/builder" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>ابنِ واحدة من الصفر</Link>
+        </div>
+
+        <Section title={`مثال ملخص مهني لـ ${j.title}`}>
+          <div className="card p-5 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{j.summary}</div>
+        </Section>
+
+        <Section title={`كلمات ATS لسيرة ${j.title}`}>
+          <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>هذه المصطلحات التي يفحصها نظام ATS. أدرج ما تملكه فعلاً بصياغة الإعلان الوظيفي:</p>
+          <div className="flex flex-wrap gap-2">
+            {j.keywords.map((k) => (
+              <span key={k} dir="ltr" className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+            ))}
+          </div>
+        </Section>
+
+        <Section title={`أهم مهارات ${j.title}`}>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {j.skills.map((s) => (
+              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><span className="text-accent">✓</span> {s}</li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section title="أمثلة على إنجازات الخبرة العملية">
+          <ul className="space-y-3">
+            {j.bullets.map((b) => (
+              <li key={b} className="card p-4 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>• {b}</li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section title={`شهادات تقوّي سيرة ${j.title}`}>
+          <div className="flex flex-wrap gap-2">
+            {j.certs.map((c) => (
+              <span key={c} className="rounded-lg px-3 py-1.5 text-xs font-semibold" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{c}</span>
+            ))}
+          </div>
+        </Section>
+
+        <Section title={`خطأ شائع في سيرة ${j.title}`}>
+          <div className="card p-5 text-sm leading-relaxed" style={{ borderColor: "rgba(248,113,113,0.3)", color: "rgba(244,245,243,0.85)" }}>
+            <span style={{ color: "#f87171" }}>تجنّب هذا:</span> {j.mistake}
+          </div>
+        </Section>
+
+        <div className="card mt-10 p-7 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+          <h2 className="text-2xl font-bold">هل سيرة {j.title} جاهزة لأنظمة ATS؟</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>الصقها واحصل على نسبة تطابق فورية + الكلمات الناقصة — مجاناً وبدون تسجيل.</p>
+          <Link href="/ar/optimize" className="btn-accent mt-5 inline-block px-8 py-3">افحص سيرتي مجاناً ←</Link>
+        </div>
+
+        <Section title="الأسئلة الشائعة">
+          <div className="space-y-4">
+            {faqs.map((f) => (
+              <div key={f.q} className="card p-5">
+                <h3 className="font-bold">{f.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section title="لهذه المهنة">
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/ar/cover-letter-examples/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>خطاب تعريف {j.title} ←</Link>
+            <Link href={`/ar/resume-skills/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>مهارات وكلمات ATS لـ {j.title} ←</Link>
+          </div>
+        </Section>
+
+        <Section title={`مزيد من أمثلة سير ${j.category}`}>
+          <div className="flex flex-wrap gap-2">
+            {[...siblings, ...others].map((s) => (
+              <Link key={s.slug} href={`/ar/resume-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
+            ))}
+          </div>
+          <Link href="/ar/resume-examples" className="mt-4 inline-block text-sm font-semibold text-accent">كل أمثلة السير ←</Link>
+        </Section>
+      </article>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 سيرة · خدمة سير ذاتية من Rabit</p>
+      </footer>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+    </main>
+  );
+}

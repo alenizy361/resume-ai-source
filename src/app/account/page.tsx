@@ -1,1 +1,11 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgQWNjb3VudENsaWVudCBmcm9tICIuLi9jb21wb25lbnRzL0FjY291bnRDbGllbnQiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkFjY291bnQg4oCUIHlvdXIgcmVzdW1lcyAmIHNjYW5zIHwgY3YucmFiaXQuc2EiLAogIHJvYm90czogeyBpbmRleDogZmFsc2UsIGZvbGxvdzogZmFsc2UgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEFjY291bnRQYWdlKCkgewogIHJldHVybiA8QWNjb3VudENsaWVudCAvPjsKfQo="}
+import type { Metadata } from "next";
+import AccountClient from "../components/AccountClient";
+
+export const metadata: Metadata = {
+  title: "Account — your resumes & scans | cv.rabit.sa",
+  robots: { index: false, follow: false },
+};
+
+export default function AccountPage() {
+  return <AccountClient />;
+}

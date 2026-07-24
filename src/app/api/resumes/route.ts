@@ -1,1 +1,51 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgcmVhZFNlc3Npb24sIFNFU1NJT05fQ09PS0lFIH0gZnJvbSAiQC9hcHAvbGliL3Nlc3Npb24iOwppbXBvcnQgeyBsaXN0VXNlckNWcywgc2F2ZVVzZXJDViwgZGVsZXRlVXNlckNWLCBjdlN0b3JlQ29uZmlndXJlZCB9IGZyb20gIkAvYXBwL2xpYi9jdnN0b3JlIjsKCmV4cG9ydCBjb25zdCBtYXhEdXJhdGlvbiA9IDIwOwoKLyoqIFRoZSBzaWduZWQtaW4gZW1haWwsIG9yIG51bGwuIEFsbCByb3V0ZXMgaGVyZSByZXF1aXJlIGFuIGFjY291bnQuICovCmZ1bmN0aW9uIGNhbGxlcihyZXE6IE5leHRSZXF1ZXN0KTogc3RyaW5nIHwgbnVsbCB7CiAgcmV0dXJuIHJlYWRTZXNzaW9uKHJlcS5jb29raWVzLmdldChTRVNTSU9OX0NPT0tJRSk/LnZhbHVlLCBEYXRlLm5vdygpKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIEdFVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgY29uc3QgZW1haWwgPSBjYWxsZXIocmVxKTsKICBpZiAoIWVtYWlsKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogZmFsc2UsIHNpZ25lZEluOiBmYWxzZSwgY3ZzOiBbXSB9KTsKICBpZiAoIWN2U3RvcmVDb25maWd1cmVkKCkpIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiB0cnVlLCBzaWduZWRJbjogdHJ1ZSwgY3ZzOiBbXSwgc3RvcmU6IGZhbHNlIH0pOwogIHRyeSB7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogdHJ1ZSwgc2lnbmVkSW46IHRydWUsIGN2czogYXdhaXQgbGlzdFVzZXJDVnMoZW1haWwpIH0pOwogIH0gY2F0Y2ggewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IGZhbHNlLCBzaWduZWRJbjogdHJ1ZSwgY3ZzOiBbXSB9LCB7IHN0YXR1czogNTAwIH0pOwogIH0KfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIFBPU1QocmVxOiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IGVtYWlsID0gY2FsbGVyKHJlcSk7CiAgaWYgKCFlbWFpbCkgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IGZhbHNlLCBzaWduZWRJbjogZmFsc2UsIGVycm9yOiAiU2lnbiBpbiB0byBzYXZlIHRvIHlvdXIgYWNjb3VudC4iIH0sIHsgc3RhdHVzOiA0MDEgfSk7CiAgaWYgKCFjdlN0b3JlQ29uZmlndXJlZCgpKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogZmFsc2UsIGVycm9yOiAiQ2xvdWQgc2F2ZSBpcyBub3QgY29uZmlndXJlZC4iIH0sIHsgc3RhdHVzOiA1MDEgfSk7CiAgbGV0IGJvZHk6IHsgdGl0bGU/OiBzdHJpbmc7IHRleHQ/OiBzdHJpbmc7IHNvdXJjZT86IHN0cmluZzsgc2F2ZWRBdD86IG51bWJlcjsgaWQ/OiBzdHJpbmcgfTsKICB0cnkgeyBib2R5ID0gYXdhaXQgcmVxLmpzb24oKTsgfSBjYXRjaCB7IHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiBmYWxzZSwgZXJyb3I6ICJJbnZhbGlkIEpTT04iIH0sIHsgc3RhdHVzOiA0MDAgfSk7IH0KICBpZiAoIWJvZHkudGV4dD8udHJpbSgpIHx8ICFib2R5LnRpdGxlPy50cmltKCkpIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiBmYWxzZSwgZXJyb3I6ICJ0aXRsZSBhbmQgdGV4dCBhcmUgcmVxdWlyZWQiIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgdHJ5IHsKICAgIGNvbnN0IGN2cyA9IGF3YWl0IHNhdmVVc2VyQ1YoZW1haWwsIHsKICAgICAgaWQ6IGJvZHkuaWQsIHRpdGxlOiBib2R5LnRpdGxlLCB0ZXh0OiBib2R5LnRleHQsIHNvdXJjZTogYm9keS5zb3VyY2UsCiAgICAgIHNhdmVkQXQ6IHR5cGVvZiBib2R5LnNhdmVkQXQgPT09ICJudW1iZXIiID8gYm9keS5zYXZlZEF0IDogRGF0ZS5ub3coKSwKICAgIH0pOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IHRydWUsIGN2cyB9KTsKICB9IGNhdGNoIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiBmYWxzZSwgZXJyb3I6ICJDb3VsZG4ndCBzYXZlIOKAlCB0cnkgYWdhaW4uIiB9LCB7IHN0YXR1czogNTAwIH0pOwogIH0KfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIERFTEVURShyZXE6IE5leHRSZXF1ZXN0KSB7CiAgY29uc3QgZW1haWwgPSBjYWxsZXIocmVxKTsKICBpZiAoIWVtYWlsKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogZmFsc2UsIHNpZ25lZEluOiBmYWxzZSB9LCB7IHN0YXR1czogNDAxIH0pOwogIGNvbnN0IGlkID0gcmVxLm5leHRVcmwuc2VhcmNoUGFyYW1zLmdldCgiaWQiKTsKICBpZiAoIWlkKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogZmFsc2UsIGVycm9yOiAiaWQgcmVxdWlyZWQiIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgdHJ5IHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IG9rOiB0cnVlLCBjdnM6IGF3YWl0IGRlbGV0ZVVzZXJDVihlbWFpbCwgaWQpIH0pOwogIH0gY2F0Y2ggewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgb2s6IGZhbHNlLCBlcnJvcjogIkNvdWxkbid0IGRlbGV0ZSDigJQgdHJ5IGFnYWluLiIgfSwgeyBzdGF0dXM6IDUwMCB9KTsKICB9Cn0K"}
+import { NextRequest, NextResponse } from "next/server";
+import { readSession, SESSION_COOKIE } from "@/app/lib/session";
+import { listUserCVs, saveUserCV, deleteUserCV, cvStoreConfigured } from "@/app/lib/cvstore";
+
+export const maxDuration = 20;
+
+/** The signed-in email, or null. All routes here require an account. */
+function caller(req: NextRequest): string | null {
+  return readSession(req.cookies.get(SESSION_COOKIE)?.value, Date.now());
+}
+
+export async function GET(req: NextRequest) {
+  const email = caller(req);
+  if (!email) return NextResponse.json({ ok: false, signedIn: false, cvs: [] });
+  if (!cvStoreConfigured()) return NextResponse.json({ ok: true, signedIn: true, cvs: [], store: false });
+  try {
+    return NextResponse.json({ ok: true, signedIn: true, cvs: await listUserCVs(email) });
+  } catch {
+    return NextResponse.json({ ok: false, signedIn: true, cvs: [] }, { status: 500 });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  const email = caller(req);
+  if (!email) return NextResponse.json({ ok: false, signedIn: false, error: "Sign in to save to your account." }, { status: 401 });
+  if (!cvStoreConfigured()) return NextResponse.json({ ok: false, error: "Cloud save is not configured." }, { status: 501 });
+  let body: { title?: string; text?: string; source?: string; savedAt?: number; id?: string };
+  try { body = await req.json(); } catch { return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 }); }
+  if (!body.text?.trim() || !body.title?.trim()) return NextResponse.json({ ok: false, error: "title and text are required" }, { status: 400 });
+  try {
+    const cvs = await saveUserCV(email, {
+      id: body.id, title: body.title, text: body.text, source: body.source,
+      savedAt: typeof body.savedAt === "number" ? body.savedAt : Date.now(),
+    });
+    return NextResponse.json({ ok: true, cvs });
+  } catch {
+    return NextResponse.json({ ok: false, error: "Couldn't save — try again." }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const email = caller(req);
+  if (!email) return NextResponse.json({ ok: false, signedIn: false }, { status: 401 });
+  const id = req.nextUrl.searchParams.get("id");
+  if (!id) return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
+  try {
+    return NextResponse.json({ ok: true, cvs: await deleteUserCV(email, id) });
+  } catch {
+    return NextResponse.json({ ok: false, error: "Couldn't delete — try again." }, { status: 500 });
+  }
+}

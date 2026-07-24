@@ -1,1 +1,181 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgSk9CUywgSk9CX1NMVUdTLCBnZXRKb2IgfSBmcm9tICIuLi8uLi9saWIvam9icyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZnVuY3Rpb24gZ2VuZXJhdGVTdGF0aWNQYXJhbXMoKSB7CiAgcmV0dXJuIEpPQl9TTFVHUy5tYXAoKGpvYikgPT4gKHsgam9iIH0pKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBqb2I6IHN0cmluZyB9PiB9KTogUHJvbWlzZTxNZXRhZGF0YT4gewogIGNvbnN0IHsgam9iIH0gPSBhd2FpdCBwYXJhbXM7CiAgY29uc3QgaiA9IGdldEpvYihqb2IpOwogIGlmICghaikgcmV0dXJuIHt9OwogIHJldHVybiB7CiAgICB0aXRsZTogYCR7ai50aXRsZX0gUmVzdW1lIEV4YW1wbGUgJiBBVFMgS2V5d29yZHMgKDIwMjYpYCwKICAgIGRlc2NyaXB0aW9uOiBgRnJlZSAke2oudGl0bGV9IHJlc3VtZSBleGFtcGxlIHBsdXMgdGhlIGV4YWN0IEFUUyBrZXl3b3JkcyBhbmQgc2tpbGxzIHJlY3J1aXRlcnMgc2NhbiBmb3IuIEJ1aWxkIG9yIG9wdGltaXplIHlvdXIgJHtqLnRpdGxlfSByZXN1bWUgaW4gNjAgc2Vjb25kcy5gLAogICAga2V5d29yZHM6IGAke2oudGl0bGV9IHJlc3VtZSBleGFtcGxlLCByZXN1bWUgZm9yICR7ai50aXRsZX0sICR7ai50aXRsZX0gcmVzdW1lIHNraWxscywgcmVzdW1lIGtleXdvcmRzIGZvciAke2oudGl0bGV9LCAke2oudGl0bGV9IENWIGV4YW1wbGVgLAogICAgYWx0ZXJuYXRlczogeyBjYW5vbmljYWw6IGAke0JBU0V9L3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gIH0sCiAgICBvcGVuR3JhcGg6IHsgdGl0bGU6IGAke2oudGl0bGV9IFJlc3VtZSBFeGFtcGxlICYgU2tpbGxzICgyMDI2KWAsIGRlc2NyaXB0aW9uOiBgVGhlIEFUUyBrZXl3b3Jkcywgc2tpbGxzLCBhbmQgYSBmdWxsIGV4YW1wbGUgZm9yIGEgJHtqLnRpdGxlfSByZXN1bWUuYCwgdHlwZTogImFydGljbGUiIH0sCiAgfTsKfQoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gUGFnZSh7IHBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGpvYjogc3RyaW5nIH0+IH0pIHsKICBjb25zdCB7IGpvYiB9ID0gYXdhaXQgcGFyYW1zOwogIGNvbnN0IGogPSBnZXRKb2Ioam9iKTsKICBpZiAoIWopIG5vdEZvdW5kKCk7CgogIGNvbnN0IHNpYmxpbmdzID0gSk9CUy5maWx0ZXIoKHgpID0+IHguY2F0ZWdvcnkgPT09IGouY2F0ZWdvcnkgJiYgeC5zbHVnICE9PSBqLnNsdWcpLnNsaWNlKDAsIDYpOwogIGNvbnN0IG90aGVycyA9IEpPQlMuZmlsdGVyKCh4KSA9PiB4LmNhdGVnb3J5ICE9PSBqLmNhdGVnb3J5KS5zbGljZSgwLCA0KTsKCiAgY29uc3QgZmFxcyA9IFsKICAgIHsgcTogYFdoYXQgc2tpbGxzIHNob3VsZCBhICR7ai50aXRsZX0gcHV0IG9uIGEgcmVzdW1lP2AsIGE6IGBUaGUgbW9zdCBpbXBvcnRhbnQgJHtqLnRpdGxlfSByZXN1bWUgc2tpbGxzIGFyZTogJHtqLnNraWxscy5zbGljZSgwLCA2KS5qb2luKCIsICIpfS4gTWF0Y2ggdGhlc2UgdG8gdGhlIGV4YWN0IHdvcmRpbmcgaW4gdGhlIGpvYiBwb3N0aW5nIHNvIHRoZSBBVFMgc2NvcmVzIHlvdXIgcmVzdW1lIGhpZ2hlci5gIH0sCiAgICB7IHE6IGBXaGF0IEFUUyBrZXl3b3JkcyBkbyAke2oudGl0bGV9IHJlc3VtZXMgbmVlZD9gLCBhOiBgQXBwbGljYW50IHRyYWNraW5nIHN5c3RlbXMgc2NhbiAke2oudGl0bGV9IHJlc3VtZXMgZm9yIHRlcm1zIGxpa2UgJHtqLmF0c0tleXdvcmRzLnNsaWNlKDAsIDYpLmpvaW4oIiwgIil9LiBJbmNsdWRlIHRoZSBvbmVzIHlvdSBnZW51aW5lbHkgaGF2ZSwgdXNpbmcgdGhlIGV4YWN0IHBocmFzaW5nIGZyb20gdGhlIGpvYiBkZXNjcmlwdGlvbi5gIH0sCiAgICB7IHE6IGBIb3cgbG9uZyBzaG91bGQgYSAke2oudGl0bGV9IHJlc3VtZSBiZT9gLCBhOiBgT25lIHBhZ2UgZm9yIHVuZGVyIDEwIHllYXJzIG9mIGV4cGVyaWVuY2UsIHR3byBwYWdlcyBtYXhpbXVtIGZvciBzZW5pb3IgJHtqLnRpdGxlfSByb2xlcy4gS2VlcCBpdCBzaW5nbGUtY29sdW1uIGFuZCBBVFMtc2FmZSDigJQgbm8gdGFibGVzIG9yIGdyYXBoaWNzLmAgfSwKICAgIHsgcTogYEhvdyBkbyBJIG1ha2UgbXkgJHtqLnRpdGxlfSByZXN1bWUgcGFzcyB0aGUgQVRTP2AsIGE6IGBVc2Ugc3RhbmRhcmQgaGVhZGluZ3MsIG1pcnJvciB0aGUgam9iIHRpdGxlLCBpbmNsdWRlIHRoZSAke2oudGl0bGV9IGtleXdvcmRzIGFib3ZlLCBhbmQgcXVhbnRpZnkgeW91ciBidWxsZXRzLiBPciBwYXN0ZSBpdCBpbnRvIG91ciBmcmVlIHNjYW5uZXIgdG8gc2VlIHlvdXIgbWF0Y2ggc2NvcmUgaW5zdGFudGx5LmAgfSwKICBdOwoKICBjb25zdCBsZCA9IHsKICAgICJAY29udGV4dCI6ICJodHRwczovL3NjaGVtYS5vcmciLAogICAgIkBncmFwaCI6IFsKICAgICAgeyAiQHR5cGUiOiAiQnJlYWRjcnVtYkxpc3QiLCBpdGVtTGlzdEVsZW1lbnQ6IFsKICAgICAgICB7ICJAdHlwZSI6ICJMaXN0SXRlbSIsIHBvc2l0aW9uOiAxLCBuYW1lOiAiSG9tZSIsIGl0ZW06IEJBU0UgfSwKICAgICAgICB7ICJAdHlwZSI6ICJMaXN0SXRlbSIsIHBvc2l0aW9uOiAyLCBuYW1lOiAiUmVzdW1lIEV4YW1wbGVzIiwgaXRlbTogYCR7QkFTRX0vcmVzdW1lLWV4YW1wbGVzYCB9LAogICAgICAgIHsgIkB0eXBlIjogIkxpc3RJdGVtIiwgcG9zaXRpb246IDMsIG5hbWU6IGoudGl0bGUsIGl0ZW06IGAke0JBU0V9L3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gIH0sCiAgICAgIF19LAogICAgICB7ICJAdHlwZSI6ICJGQVFQYWdlIiwgbWFpbkVudGl0eTogZmFxcy5tYXAoKGYpID0+ICh7ICJAdHlwZSI6ICJRdWVzdGlvbiIsIG5hbWU6IGYucSwgYWNjZXB0ZWRBbnN3ZXI6IHsgIkB0eXBlIjogIkFuc3dlciIsIHRleHQ6IGYuYSB9IH0pKSB9LAogICAgXSwKICB9OwoKICBjb25zdCBTZWN0aW9uID0gKHsgdGl0bGUsIGNoaWxkcmVuIH06IHsgdGl0bGU6IHN0cmluZzsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSA9PiAoCiAgICA8c2VjdGlvbiBjbGFzc05hbWU9Im10LTEwIj4KICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LTJ4bCBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPnt0aXRsZX08L2gyPgogICAgICB7Y2hpbGRyZW59CiAgICA8L3NlY3Rpb24+CiAgKTsKCiAgcmV0dXJuICgKICAgIDxtYWluIGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICA8T3JiU2NlbmVTZXR0ZXIgdmlzaWJsZSBtb29kPSJpZGxlIiB0b3A9IjE0dmgiIGxlZnQ9Ijg2JSIgc2l6ZT17MTAwfSAvPgogICAgICA8bmF2IGNsYXNzTmFtZT0ic3RpY2t5IHRvcC0wIHotNTAiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJsaW5lYXItZ3JhZGllbnQoMTgwZGVnLCByZ2JhKDUsNywxMywwLjg1KSwgdHJhbnNwYXJlbnQpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXgtYXV0byBmbGV4IG1heC13LTV4bCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHB4LTYgcHktNCI+CiAgICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij5TaXJhPC9zcGFuPgogICAgICAgICAgPC9MaW5rPgogICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPlNjYW4gbXkgcmVzdW1lPC9MaW5rPgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxhcnRpY2xlIGNsYXNzTmFtZT0ibXgtYXV0byBtYXgtdy0zeGwgcHgtNiBweS0xMCI+CiAgICAgICAgey8qIEJyZWFkY3J1bWIgKi99CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTYgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT5Ib21lPC9MaW5rPiDigLp7IiAifQogICAgICAgICAgPExpbmsgaHJlZj0iL3Jlc3VtZS1leGFtcGxlcyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PlJlc3VtZSBFeGFtcGxlczwvTGluaz4g4oC6IHtqLnRpdGxlfQogICAgICAgIDwvZGl2PgoKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2hpcCBtYi00Ij57ai5jYXRlZ29yeX0gwrcgQVRTLW9wdGltaXplZDwvZGl2PgogICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtNHhsIGZvbnQtZXh0cmFib2xkIGxlYWRpbmctdGlnaHQgdHJhY2tpbmctdGlnaHQiPntqLnRpdGxlfSBSZXN1bWUgRXhhbXBsZSAmYW1wOyBBVFMgS2V5d29yZHMgKDIwMjYpPC9oMT4KICAgICAgICA8cCBjbGFzc05hbWU9Im10LTQgdGV4dC1sZyBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgIHtqLmRlbWFuZH0gVHlwaWNhbCBzYWxhcnk6IHtqLnNhbGFyeX0uIEJlbG93IGlzIGEgY29tcGxldGUge2oudGl0bGV9IHJlc3VtZSBleGFtcGxlIHBsdXMgdGhlIGV4YWN0IGtleXdvcmRzIGFwcGxpY2FudCB0cmFja2luZyBzeXN0ZW1zIChBVFMpIHNjYW4gZm9yIOKAlCB0aGVuIGJ1aWxkIHlvdXJzIGZyZWUgaW4gNjAgc2Vjb25kcy4KICAgICAgICA8L3A+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTYgZmxleCBmbGV4LXdyYXAgZ2FwLTMiPgogICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNiBweS0zIj5DaGVjayBteSB7ai50aXRsZX0gcmVzdW1lIGZyZWUg4oaSPC9MaW5rPgogICAgICAgICAgPExpbmsgaHJlZj0iL2J1aWxkIiBjbGFzc05hbWU9ImJ0bi1naG9zdCBweC02IHB5LTMgZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19PkJ1aWxkIG9uZSBmcm9tIHNjcmF0Y2g8L0xpbms+CiAgICAgICAgPC9kaXY+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtgUHJvZmVzc2lvbmFsIHN1bW1hcnkgZXhhbXBsZSBmb3IgYSAke2oudGl0bGV9YH0+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2FyZCBwLTUgZm9udC1tb25vIHRleHQtc20gbGVhZGluZy1yZWxheGVkIiBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PntqLnN1bW1hcnl9PC9kaXY+CiAgICAgICAgPC9TZWN0aW9uPgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT17YEFUUyBrZXl3b3JkcyBmb3IgYSAke2oudGl0bGV9IHJlc3VtZWB9PgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJtYi0zIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT5UaGVzZSBhcmUgdGhlIGV4YWN0IHRlcm1zIGFuIEFUUyBzY2FucyBmb3IuIEluY2x1ZGUgdGhlIG9uZXMgeW91IGdlbnVpbmVseSBoYXZlLCB3b3JkZWQgbGlrZSB0aGUgam9iIHBvc3Rpbmc6PC9wPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0yIj4KICAgICAgICAgICAge2ouYXRzS2V5d29yZHMubWFwKChrKSA9PiAoCiAgICAgICAgICAgICAgPHNwYW4ga2V5PXtrfSBjbGFzc05hbWU9InJvdW5kZWQtZnVsbCBweC0zIHB5LTEgdGV4dC14cyBmb250LW1lZGl1bSIgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMTM5LDkyLDI0NiwwLjE0KSIsIGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+e2t9PC9zcGFuPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9e2BUb3Agc2tpbGxzIGZvciBhICR7ai50aXRsZX1gfT4KICAgICAgICAgIDx1bCBjbGFzc05hbWU9ImdyaWQgZ2FwLTIgc206Z3JpZC1jb2xzLTIiPgogICAgICAgICAgICB7ai5za2lsbHMubWFwKChzKSA9PiAoCiAgICAgICAgICAgICAgPGxpIGtleT17c30gY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PjxzcGFuIGNsYXNzTmFtZT0idGV4dC1hY2NlbnQiPuKckzwvc3Bhbj4ge3N9PC9saT4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L3VsPgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9e2BXb3JrIGV4cGVyaWVuY2UgYnVsbGV0IGV4YW1wbGVzYH0+CiAgICAgICAgICA8dWwgY2xhc3NOYW1lPSJzcGFjZS15LTMiPgogICAgICAgICAgICB7ai5idWxsZXRzLm1hcCgoYikgPT4gKAogICAgICAgICAgICAgIDxsaSBrZXk9e2J9IGNsYXNzTmFtZT0iY2FyZCBwLTQgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNDQsMjQ1LDI0MywwLjg1KSIgfX0+4oCiIHtifTwvbGk+CiAgICAgICAgICAgICkpfQogICAgICAgICAgPC91bD4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtgQ2VydGlmaWNhdGlvbnMgdGhhdCBzdHJlbmd0aGVuIGEgJHtqLnRpdGxlfSByZXN1bWVgfT4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtd3JhcCBnYXAtMiI+CiAgICAgICAgICAgIHtqLmNlcnRzLm1hcCgoYykgPT4gKAogICAgICAgICAgICAgIDxzcGFuIGtleT17Y30gY2xhc3NOYW1lPSJyb3VuZGVkLWxnIHB4LTMgcHktMS41IHRleHQteHMgZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntjfTwvc3Bhbj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtgQ29tbW9uICR7ai50aXRsZX0gcmVzdW1lIG1pc3Rha2VgfT4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIHAtNSB0ZXh0LXNtIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgYm9yZGVyQ29sb3I6ICJyZ2JhKDI0OCwxMTMsMTEzLDAuMykiLCBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PgogICAgICAgICAgICA8c3BhbiBzdHlsZT17eyBjb2xvcjogIiNmODcxNzEiIH19PkF2b2lkIHRoaXM6PC9zcGFuPiB7ai5taXN0YWtlfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9TZWN0aW9uPgoKICAgICAgICB7LyogQ1RBICovfQogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIG10LTEwIHAtNyB0ZXh0LWNlbnRlciIgc3R5bGU9e3sgYm9yZGVyQ29sb3I6ICJyZ2JhKDEzOSw5MiwyNDYsMC40KSIsIGJhY2tncm91bmQ6ICJyZ2JhKDEzOSw5MiwyNDYsMC4wNSkiIH19PgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1ib2xkIj5JcyB5b3VyIHtqLnRpdGxlfSByZXN1bWUgQVRTLXJlYWR5PzwvaDI+CiAgICAgICAgICA8cCBjbGFzc05hbWU9Im14LWF1dG8gbXQtMiBtYXgtdy1tZCB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+UGFzdGUgaXQgYW5kIGdldCBhbiBpbnN0YW50IG1hdGNoIHNjb3JlIHBsdXMgdGhlIG1pc3Npbmcga2V5d29yZHMg4oCUIGZyZWUsIG5vIHNpZ24tdXAuPC9wPgogICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgbXQtNSBpbmxpbmUtYmxvY2sgcHgtOCBweS0zIj5TY2FuIG15IHJlc3VtZSBmcmVlIOKGkjwvTGluaz4KICAgICAgICA8L2Rpdj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9IkZBUSI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ic3BhY2UteS00Ij4KICAgICAgICAgICAge2ZhcXMubWFwKChmKSA9PiAoCiAgICAgICAgICAgICAgPGRpdiBrZXk9e2YucX0gY2xhc3NOYW1lPSJjYXJkIHAtNSI+CiAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPSJmb250LWJvbGQiPntmLnF9PC9oMz4KICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMiB0ZXh0LXNtIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntmLmF9PC9wPgogICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgey8qIENyb3NzLWxpbmtzIHRvIHRoaXMgam9iJ3MgY292ZXItbGV0dGVyICsgc2tpbGxzIHBhZ2VzICovfQogICAgICAgIDxTZWN0aW9uIHRpdGxlPSJGb3IgdGhpcyByb2xlIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtd3JhcCBnYXAtMyI+CiAgICAgICAgICAgIDxMaW5rIGhyZWY9e2AvY292ZXItbGV0dGVyLWV4YW1wbGVzLyR7ai5zbHVnfWB9IGNsYXNzTmFtZT0iYnRuLWdob3N0IHB4LTQgcHktMiB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT57ai50aXRsZX0gY292ZXIgbGV0dGVyIGV4YW1wbGUg4oaSPC9MaW5rPgogICAgICAgICAgICA8TGluayBocmVmPXtgL3Jlc3VtZS1za2lsbHMvJHtqLnNsdWd9YH0gY2xhc3NOYW1lPSJidG4tZ2hvc3QgcHgtNCBweS0yIHRleHQtc20gZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19PntqLnRpdGxlfSBza2lsbHMgJmFtcDsgQVRTIGtleXdvcmRzIOKGkjwvTGluaz4KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgey8qIEludGVybmFsIGxpbmtpbmcg4oCUIHNpYmxpbmdzICsgb3RoZXJzICovfQogICAgICAgIDxTZWN0aW9uIHRpdGxlPXtgTW9yZSAke2ouY2F0ZWdvcnl9IHJlc3VtZSBleGFtcGxlc2B9PgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0yIj4KICAgICAgICAgICAge3NpYmxpbmdzLm1hcCgocykgPT4gKAogICAgICAgICAgICAgIDxMaW5rIGtleT17cy5zbHVnfSBocmVmPXtgL3Jlc3VtZS1leGFtcGxlcy8ke3Muc2x1Z31gfSBjbGFzc05hbWU9InJvdW5kZWQtbGcgcHgtMyBweS0xLjUgdGV4dC1zbSIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntzLnRpdGxlfTwvTGluaz4KICAgICAgICAgICAgKSl9CiAgICAgICAgICAgIHtvdGhlcnMubWFwKChzKSA9PiAoCiAgICAgICAgICAgICAgPExpbmsga2V5PXtzLnNsdWd9IGhyZWY9e2AvcmVzdW1lLWV4YW1wbGVzLyR7cy5zbHVnfWB9IGNsYXNzTmFtZT0icm91bmRlZC1sZyBweC0zIHB5LTEuNSB0ZXh0LXNtIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tc3VyZmFjZSkiLCBib3JkZXI6ICIxcHggc29saWQgdmFyKC0tbGluZSkiLCBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e3MudGl0bGV9PC9MaW5rPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPExpbmsgaHJlZj0iL3Jlc3VtZS1leGFtcGxlcyIgY2xhc3NOYW1lPSJtdC00IGlubGluZS1ibG9jayB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdGV4dC1hY2NlbnQiPlNlZSBhbGwgcmVzdW1lIGV4YW1wbGVzIOKGkjwvTGluaz4KICAgICAgICA8L1NlY3Rpb24+CiAgICAgIDwvYXJ0aWNsZT4KCiAgICAgIDxmb290ZXIgY2xhc3NOYW1lPSJweC02IHB5LTEwIiBzdHlsZT17eyBib3JkZXJUb3A6ICIxcHggc29saWQgdmFyKC0tbGluZSkiIH19PgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7CqSAyMDI2IFNpcmEgwrcgYSByZXN1bWUgc2VydmljZSBieSBSYWJpdDwvcD4KICAgICAgPC9mb290ZXI+CgogICAgICA8c2NyaXB0IHR5cGU9ImFwcGxpY2F0aW9uL2xkK2pzb24iIGRhbmdlcm91c2x5U2V0SW5uZXJIVE1MPXt7IF9faHRtbDogSlNPTi5zdHJpbmdpZnkobGQpIH19IC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export function generateStaticParams() {
+  return JOB_SLUGS.map((job) => ({ job }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ job: string }> }): Promise<Metadata> {
+  const { job } = await params;
+  const j = getJob(job);
+  if (!j) return {};
+  return {
+    title: `${j.title} Resume Example & ATS Keywords (2026)`,
+    description: `Free ${j.title} resume example plus the exact ATS keywords and skills recruiters scan for. Build or optimize your ${j.title} resume in 60 seconds.`,
+    keywords: `${j.title} resume example, resume for ${j.title}, ${j.title} resume skills, resume keywords for ${j.title}, ${j.title} CV example`,
+    alternates: { canonical: `${BASE}/resume-examples/${j.slug}` },
+    openGraph: { title: `${j.title} Resume Example & Skills (2026)`, description: `The ATS keywords, skills, and a full example for a ${j.title} resume.`, type: "article" },
+  };
+}
+
+export default async function Page({ params }: { params: Promise<{ job: string }> }) {
+  const { job } = await params;
+  const j = getJob(job);
+  if (!j) notFound();
+
+  const siblings = JOBS.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 6);
+  const others = JOBS.filter((x) => x.category !== j.category).slice(0, 4);
+
+  const faqs = [
+    { q: `What skills should a ${j.title} put on a resume?`, a: `The most important ${j.title} resume skills are: ${j.skills.slice(0, 6).join(", ")}. Match these to the exact wording in the job posting so the ATS scores your resume higher.` },
+    { q: `What ATS keywords do ${j.title} resumes need?`, a: `Applicant tracking systems scan ${j.title} resumes for terms like ${j.atsKeywords.slice(0, 6).join(", ")}. Include the ones you genuinely have, using the exact phrasing from the job description.` },
+    { q: `How long should a ${j.title} resume be?`, a: `One page for under 10 years of experience, two pages maximum for senior ${j.title} roles. Keep it single-column and ATS-safe — no tables or graphics.` },
+    { q: `How do I make my ${j.title} resume pass the ATS?`, a: `Use standard headings, mirror the job title, include the ${j.title} keywords above, and quantify your bullets. Or paste it into our free scanner to see your match score instantly.` },
+  ];
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: BASE },
+        { "@type": "ListItem", position: 2, name: "Resume Examples", item: `${BASE}/resume-examples` },
+        { "@type": "ListItem", position: 3, name: j.title, item: `${BASE}/resume-examples/${j.slug}` },
+      ]},
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+    ],
+  };
+
+  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <section className="mt-10">
+      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
+      {children}
+    </section>
+  );
+
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
+        </div>
+      </nav>
+
+      <article className="mx-auto max-w-3xl px-6 py-10">
+        {/* Breadcrumb */}
+        <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          <Link href="/" style={{ color: "var(--faint)" }}>Home</Link> ›{" "}
+          <Link href="/resume-examples" style={{ color: "var(--faint)" }}>Resume Examples</Link> › {j.title}
+        </div>
+
+        <div className="chip mb-4">{j.category} · ATS-optimized</div>
+        <h1 className="text-4xl font-extrabold leading-tight tracking-tight">{j.title} Resume Example &amp; ATS Keywords (2026)</h1>
+        <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
+          {j.demand} Typical salary: {j.salary}. Below is a complete {j.title} resume example plus the exact keywords applicant tracking systems (ATS) scan for — then build yours free in 60 seconds.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href="/optimize" className="btn-accent px-6 py-3">Check my {j.title} resume free →</Link>
+          <Link href="/build" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Build one from scratch</Link>
+        </div>
+
+        <Section title={`Professional summary example for a ${j.title}`}>
+          <div className="card p-5 font-mono text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{j.summary}</div>
+        </Section>
+
+        <Section title={`ATS keywords for a ${j.title} resume`}>
+          <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>These are the exact terms an ATS scans for. Include the ones you genuinely have, worded like the job posting:</p>
+          <div className="flex flex-wrap gap-2">
+            {j.atsKeywords.map((k) => (
+              <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+            ))}
+          </div>
+        </Section>
+
+        <Section title={`Top skills for a ${j.title}`}>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {j.skills.map((s) => (
+              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><span className="text-accent">✓</span> {s}</li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section title={`Work experience bullet examples`}>
+          <ul className="space-y-3">
+            {j.bullets.map((b) => (
+              <li key={b} className="card p-4 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>• {b}</li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section title={`Certifications that strengthen a ${j.title} resume`}>
+          <div className="flex flex-wrap gap-2">
+            {j.certs.map((c) => (
+              <span key={c} className="rounded-lg px-3 py-1.5 text-xs font-semibold" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{c}</span>
+            ))}
+          </div>
+        </Section>
+
+        <Section title={`Common ${j.title} resume mistake`}>
+          <div className="card p-5 text-sm leading-relaxed" style={{ borderColor: "rgba(248,113,113,0.3)", color: "rgba(244,245,243,0.85)" }}>
+            <span style={{ color: "#f87171" }}>Avoid this:</span> {j.mistake}
+          </div>
+        </Section>
+
+        {/* CTA */}
+        <div className="card mt-10 p-7 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+          <h2 className="text-2xl font-bold">Is your {j.title} resume ATS-ready?</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>Paste it and get an instant match score plus the missing keywords — free, no sign-up.</p>
+          <Link href="/optimize" className="btn-accent mt-5 inline-block px-8 py-3">Scan my resume free →</Link>
+        </div>
+
+        <Section title="FAQ">
+          <div className="space-y-4">
+            {faqs.map((f) => (
+              <div key={f.q} className="card p-5">
+                <h3 className="font-bold">{f.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Cross-links to this job's cover-letter + skills pages */}
+        <Section title="For this role">
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/cover-letter-examples/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>{j.title} cover letter example →</Link>
+            <Link href={`/resume-skills/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>{j.title} skills &amp; ATS keywords →</Link>
+          </div>
+        </Section>
+
+        {/* Internal linking — siblings + others */}
+        <Section title={`More ${j.category} resume examples`}>
+          <div className="flex flex-wrap gap-2">
+            {siblings.map((s) => (
+              <Link key={s.slug} href={`/resume-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
+            ))}
+            {others.map((s) => (
+              <Link key={s.slug} href={`/resume-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
+            ))}
+          </div>
+          <Link href="/resume-examples" className="mt-4 inline-block text-sm font-semibold text-accent">See all resume examples →</Link>
+        </Section>
+      </article>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+    </main>
+  );
+}

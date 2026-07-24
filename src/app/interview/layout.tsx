@@ -1,1 +1,13 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkFJIEludGVydmlldyBQcmVwIOKAlCBMaWtlbHkgUXVlc3Rpb25zICYgU3Ryb25nIEFuc3dlcnMgfCBTaXJhIiwKICBkZXNjcmlwdGlvbjogIlBhc3RlIHlvdXIgcmVzdW1lIGFuZCB0aGUgam9iIGRlc2NyaXB0aW9uIOKAlCBnZXQgdGhlIDggbW9zdCBsaWtlbHkgaW50ZXJ2aWV3IHF1ZXN0aW9ucyB3aXRoIHN0cm9uZyBwZXJzb25hbGl6ZWQgYW5zd2VycywgcGx1cyB0aGUgcmVkIGZsYWdzIHRvIHByZXBhcmUgZm9yLiIsCiAgYWx0ZXJuYXRlczogeyBjYW5vbmljYWw6IGAke0JBU0V9L2ludGVydmlld2AgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEludGVydmlld0xheW91dCh7IGNoaWxkcmVuIH06IHsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSB7CiAgcmV0dXJuIGNoaWxkcmVuOwp9Cg=="}
+import type { Metadata } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "AI Interview Prep — Likely Questions & Strong Answers | Sira",
+  description: "Paste your resume and the job description — get the 8 most likely interview questions with strong personalized answers, plus the red flags to prepare for.",
+  alternates: { canonical: `${BASE}/interview` },
+};
+
+export default function InterviewLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

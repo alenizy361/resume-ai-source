@@ -1,1 +1,63 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVJlZiwgdXNlU3RhdGUgfSBmcm9tICJyZWFjdCI7CgovKioKICogQ291bnQtdXAgc3RhdC4gU0VPLWNyaXRpY2FsIGRldGFpbDogdGhlIEZJTkFMIHZhbHVlIGlzIHJlbmRlcmVkIGluIHRoZQogKiBpbml0aWFsIEhUTUwgKHNlcnZlciArIGZpcnN0IHBhaW50KSwgc28gY3Jhd2xlcnMgYW5kIHNoYXJlIHByZXZpZXdzIHJlYWQKICogIjM1IiwgbmV2ZXIgIjAiLiBUaGUgMOKGknZhbHVlIGFuaW1hdGlvbiBvbmx5IGtpY2tzIGluIGNsaWVudC1zaWRlLCBpbgogKiB2aWV3cG9ydCwgd2hlbiBtb3Rpb24gaXMgYWxsb3dlZCDigJQgYXMgYSBwdXJlbHkgdmlzdWFsIGVmZmVjdC4KICovCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIENvdW50ZXIoewogIHZhbHVlLAogIGRlY2ltYWxzID0gMCwKICBwcmVmaXggPSAiIiwKICBzdWZmaXggPSAiIiwKICBkdXJhdGlvbiA9IDEyMDAsCn06IHsKICB2YWx1ZTogbnVtYmVyOwogIGRlY2ltYWxzPzogbnVtYmVyOwogIHByZWZpeD86IHN0cmluZzsKICBzdWZmaXg/OiBzdHJpbmc7CiAgZHVyYXRpb24/OiBudW1iZXI7Cn0pIHsKICBjb25zdCByZWYgPSB1c2VSZWY8SFRNTFNwYW5FbGVtZW50PihudWxsKTsKICAvLyBTdGFydCBBVCB0aGUgZmluYWwgdmFsdWUgKHdoYXQgZ2V0cyBpbmRleGVkKTsgYW5pbWF0ZSBvbmx5IGFzIGFuIGVmZmVjdC4KICBjb25zdCBbZGlzcGxheSwgc2V0RGlzcGxheV0gPSB1c2VTdGF0ZSh2YWx1ZSk7CiAgY29uc3Qgc3RhcnRlZCA9IHVzZVJlZihmYWxzZSk7CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBjb25zdCBlbCA9IHJlZi5jdXJyZW50OwogICAgaWYgKCFlbCkgcmV0dXJuOwoKICAgIGNvbnN0IHJlZHVjZWQgPSB3aW5kb3cubWF0Y2hNZWRpYT8uKCIocHJlZmVycy1yZWR1Y2VkLW1vdGlvbjogcmVkdWNlKSIpLm1hdGNoZXM7CiAgICBpZiAocmVkdWNlZCkgcmV0dXJuOyAvLyBrZWVwIHRoZSBzdGF0aWMgZmluYWwgdmFsdWUKCiAgICBjb25zdCBpbyA9IG5ldyBJbnRlcnNlY3Rpb25PYnNlcnZlcigKICAgICAgKGVudHJpZXMpID0+IHsKICAgICAgICBpZiAoZW50cmllc1swXS5pc0ludGVyc2VjdGluZyAmJiAhc3RhcnRlZC5jdXJyZW50KSB7CiAgICAgICAgICBzdGFydGVkLmN1cnJlbnQgPSB0cnVlOwogICAgICAgICAgY29uc3Qgc3RhcnQgPSBwZXJmb3JtYW5jZS5ub3coKTsKICAgICAgICAgIGNvbnN0IHRpY2sgPSAobm93OiBudW1iZXIpID0+IHsKICAgICAgICAgICAgY29uc3QgcCA9IE1hdGgubWluKDEsIChub3cgLSBzdGFydCkgLyBkdXJhdGlvbik7CiAgICAgICAgICAgIGNvbnN0IGVhc2VkID0gMSAtIE1hdGgucG93KDEgLSBwLCAzKTsKICAgICAgICAgICAgc2V0RGlzcGxheSh2YWx1ZSAqIGVhc2VkKTsKICAgICAgICAgICAgaWYgKHAgPCAxKSByZXF1ZXN0QW5pbWF0aW9uRnJhbWUodGljayk7CiAgICAgICAgICAgIGVsc2Ugc2V0RGlzcGxheSh2YWx1ZSk7CiAgICAgICAgICB9OwogICAgICAgICAgcmVxdWVzdEFuaW1hdGlvbkZyYW1lKHRpY2spOwogICAgICAgIH0KICAgICAgfSwKICAgICAgeyB0aHJlc2hvbGQ6IDAuNCB9CiAgICApOwogICAgaW8ub2JzZXJ2ZShlbCk7CiAgICByZXR1cm4gKCkgPT4gaW8uZGlzY29ubmVjdCgpOwogIH0sIFt2YWx1ZSwgZHVyYXRpb25dKTsKCiAgcmV0dXJuICgKICAgIDxzcGFuIHJlZj17cmVmfT4KICAgICAge3ByZWZpeH0KICAgICAge2Rpc3BsYXkudG9GaXhlZChkZWNpbWFscyl9CiAgICAgIHtzdWZmaXh9CiAgICA8L3NwYW4+CiAgKTsKfQo="}
+"use client";
+import { useEffect, useRef, useState } from "react";
+
+/**
+ * Count-up stat. SEO-critical detail: the FINAL value is rendered in the
+ * initial HTML (server + first paint), so crawlers and share previews read
+ * "35", never "0". The 0→value animation only kicks in client-side, in
+ * viewport, when motion is allowed — as a purely visual effect.
+ */
+export default function Counter({
+  value,
+  decimals = 0,
+  prefix = "",
+  suffix = "",
+  duration = 1200,
+}: {
+  value: number;
+  decimals?: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  // Start AT the final value (what gets indexed); animate only as an effect.
+  const [display, setDisplay] = useState(value);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return; // keep the static final value
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !started.current) {
+          started.current = true;
+          const start = performance.now();
+          const tick = (now: number) => {
+            const p = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            setDisplay(value * eased);
+            if (p < 1) requestAnimationFrame(tick);
+            else setDisplay(value);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [value, duration]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {display.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}

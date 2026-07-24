@@ -1,1 +1,169 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgSk9CUywgSk9CX1NMVUdTLCBnZXRKb2IgfSBmcm9tICIuLi8uLi9saWIvam9icyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZnVuY3Rpb24gZ2VuZXJhdGVTdGF0aWNQYXJhbXMoKSB7CiAgcmV0dXJuIEpPQl9TTFVHUy5tYXAoKGpvYikgPT4gKHsgam9iIH0pKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBqb2I6IHN0cmluZyB9PiB9KTogUHJvbWlzZTxNZXRhZGF0YT4gewogIGNvbnN0IHsgam9iIH0gPSBhd2FpdCBwYXJhbXM7CiAgY29uc3QgaiA9IGdldEpvYihqb2IpOwogIGlmICghaikgcmV0dXJuIHsgdGl0bGU6ICJOb3QgZm91bmQiIH07CiAgcmV0dXJuIHsKICAgIHRpdGxlOiBgJHtqLnRpdGxlfSBDb3ZlciBMZXR0ZXIgRXhhbXBsZSAmIFRlbXBsYXRlICgyMDI2KSB8IFNpcmFgLAogICAgZGVzY3JpcHRpb246IGBBIHByb3ZlbiAke2oudGl0bGV9IGNvdmVyIGxldHRlciBzdHJ1Y3R1cmUgd2l0aCBhIGZpbGwtaW4gdGVtcGxhdGUsIHRoZSBrZXl3b3JkcyBoaXJpbmcgc3lzdGVtcyBsb29rIGZvciwgYW5kIHRoZSBtaXN0YWtlcyB0byBhdm9pZCDigJQgcGx1cyBhbiBBSSBnZW5lcmF0b3IuYCwKICAgIGFsdGVybmF0ZXM6IHsgY2Fub25pY2FsOiBgJHtCQVNFfS9jb3Zlci1sZXR0ZXItZXhhbXBsZXMvJHtqLnNsdWd9YCB9LAogIH07Cn0KCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIENvdmVyTGV0dGVyRXhhbXBsZVBhZ2UoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBqb2I6IHN0cmluZyB9PiB9KSB7CiAgY29uc3QgeyBqb2IgfSA9IGF3YWl0IHBhcmFtczsKICBjb25zdCBqID0gZ2V0Sm9iKGpvYik7CiAgaWYgKCFqKSBub3RGb3VuZCgpOwoKICBjb25zdCByZWxhdGVkID0gSk9CUy5maWx0ZXIoKHgpID0+IHguY2F0ZWdvcnkgPT09IGouY2F0ZWdvcnkgJiYgeC5zbHVnICE9PSBqLnNsdWcpLnNsaWNlKDAsIDQpOwogIGNvbnN0IHRvcFNraWxscyA9IGouc2tpbGxzLnNsaWNlKDAsIDMpOwogIGNvbnN0IHRvcEtleXdvcmRzID0gai5hdHNLZXl3b3Jkcy5zbGljZSgwLCA2KTsKCiAgY29uc3QgdGVtcGxhdGUgPSBgRGVhciBIaXJpbmcgTWFuYWdlciwKCldoZW4gSSBzYXcgeW91ciBvcGVuaW5nIGZvciBhICR7ai50aXRsZX0sIEkgcmVjb2duaXplZCBhIHJvbGUgd2hlcmUgbXkgYmFja2dyb3VuZCBpbiAke3RvcFNraWxsc1swXT8udG9Mb3dlckNhc2UoKSA/PyAidGhpcyBmaWVsZCJ9IGNvdWxkIGNvbnRyaWJ1dGUgZnJvbSBkYXkgb25lLiBbT25lIHNlbnRlbmNlIG9uIHdoeSBUSElTIGNvbXBhbnkgc3BlY2lmaWNhbGx5IOKAlCByZWZlcmVuY2UgYSBwcm9kdWN0LCBwcm9qZWN0LCBvciB2YWx1ZSBvZiB0aGVpcnMuXQoKSW4gbXkgY3VycmVudCByb2xlLCAke2ouYnVsbGV0c1swXT8uY2hhckF0KDApLnRvTG93ZXJDYXNlKCl9JHtqLmJ1bGxldHNbMF0/LnNsaWNlKDEpID8/ICJbeW91ciBzdHJvbmdlc3QsIG1vc3QgcXVhbnRpZmllZCBhY2hpZXZlbWVudF0ifS4gSSd2ZSBhbHNvIFtzZWNvbmQgYWNoaWV2ZW1lbnQg4oCUIHVzZSBhIHJlYWwgbnVtYmVyIG9mIHlvdXJzLCBlLmcuICIke2ouYnVsbGV0c1sxXSA/PyAiLi4uIn0iXS4KCllvdXIgcG9zdGluZyBlbXBoYXNpemVzICR7dG9wS2V5d29yZHMuc2xpY2UoMCwgMykuam9pbigiLCAiKX0g4oCUIGFyZWFzIEkgd29yayBpbiBkYWlseS4gW09uZSBzZW50ZW5jZSBjb25uZWN0aW5nIGEgc3BlY2lmaWMgcmVxdWlyZW1lbnQgZnJvbSB0aGUgcG9zdGluZyB0byBhIHNwZWNpZmljIGV4cGVyaWVuY2Ugb2YgeW91cnMuXQoKSSdkIHdlbGNvbWUgdGhlIGNoYW5jZSB0byBkaXNjdXNzIGhvdyBJIGNhbiBoZWxwIHlvdXIgdGVhbSBbdGhlIGdvYWwgaW1wbGllZCBieSB0aGUgcG9zdGluZ10uIFRoYW5rIHlvdSBmb3IgeW91ciBjb25zaWRlcmF0aW9uLgoKU2luY2VyZWx5LApbWW91ciBuYW1lXWA7CgogIGNvbnN0IGZhcXMgPSBbCiAgICB7IHE6IGBIb3cgbG9uZyBzaG91bGQgYSAke2oudGl0bGV9IGNvdmVyIGxldHRlciBiZT9gLCBhOiBgM+KAkzQgc2hvcnQgcGFyYWdyYXBocywgdW5kZXIgMzAwIHdvcmRzLiBIaXJpbmcgbWFuYWdlcnMgc2tpbSDigJQgb25lIHN0cm9uZywgcXVhbnRpZmllZCBhY2hpZXZlbWVudCBiZWF0cyB0aHJlZSB2YWd1ZSBvbmVzLmAgfSwKICAgIHsgcTogYFNob3VsZCBJIHJlcGVhdCBteSByZXN1bWUgaW4gdGhlIGNvdmVyIGxldHRlcj9gLCBhOiBgTm8uIFBpY2sgeW91ciAx4oCTMiBtb3N0IHJlbGV2YW50IGFjaGlldmVtZW50cyBhbmQgY29ubmVjdCB0aGVtIHRvIHRoZSBzcGVjaWZpYyBwb3N0aW5nLiBUaGUgbGV0dGVyIGFuc3dlcnMgIndoeSB0aGlzIHJvbGUsIHdoeSB0aGlzIGNvbXBhbnksIHdoeSB5b3UiIOKAlCBub3QgIndoYXQgaXMgZXZlcnl0aGluZyBJJ3ZlIGRvbmUiLmAgfSwKICAgIHsgcTogYFdoaWNoIGtleXdvcmRzIG1hdHRlciBmb3IgYSAke2oudGl0bGV9IGxldHRlcj9gLCBhOiBgTWlycm9yIHRoZSBwb3N0aW5nJ3Mgb3duIGxhbmd1YWdlLiBGb3IgJHtqLnRpdGxlfSByb2xlcyB0aGF0IHR5cGljYWxseSBpbmNsdWRlczogJHt0b3BLZXl3b3Jkcy5qb2luKCIsICIpfS4gVXNlIHRoZW0gbmF0dXJhbGx5IHdoZXJlIHRoZXkncmUgdHJ1ZSBvZiB5b3UuYCB9LAogICAgeyBxOiBgQ2FuIEkgZ2VuZXJhdGUgYSB0YWlsb3JlZCBjb3ZlciBsZXR0ZXIgYXV0b21hdGljYWxseT9gLCBhOiBgWWVzIOKAlCBvdXIgQUkgd3JpdGVzIG9uZSBmcm9tIHlvdXIgcmVzdW1lIGFuZCB0aGUgZXhhY3Qgam9iIHBvc3RpbmcsIHVzaW5nIG9ubHkgZmFjdHMgeW91IHByb3ZpZGVkLiBJdCdzIGluY2x1ZGVkIHdpdGggYW55IHBhaWQgcGFzcy5gIH0sCiAgXTsKCiAgcmV0dXJuICgKICAgIDxtYWluIGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICA8T3JiU2NlbmVTZXR0ZXIgdmlzaWJsZSBtb29kPSJpZGxlIiB0b3A9IjE0dmgiIGxlZnQ9Ijg2JSIgc2l6ZT17MTAwfSAvPgogICAgICA8bmF2IGNsYXNzTmFtZT0ic3RpY2t5IHRvcC0wIHotNTAiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJsaW5lYXItZ3JhZGllbnQoMTgwZGVnLCByZ2JhKDUsNywxMywwLjg1KSwgdHJhbnNwYXJlbnQpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXgtYXV0byBmbGV4IG1heC13LTR4bCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHB4LTYgcHktNCI+CiAgICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij5TaXJhPC9zcGFuPgogICAgICAgICAgPC9MaW5rPgogICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPlNjYW4gbXkgcmVzdW1lPC9MaW5rPgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1heC13LTN4bCBweC02IHB5LTEyIj4KICAgICAgICA8bmF2IGNsYXNzTmFtZT0ibWItNiBmb250LW1vbm8gdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PgogICAgICAgICAgPExpbmsgaHJlZj0iLyI+SG9tZTwvTGluaz4gLyA8TGluayBocmVmPSIvY292ZXItbGV0dGVyLWV4YW1wbGVzIj5Db3ZlciBMZXR0ZXIgRXhhbXBsZXM8L0xpbms+IC8gPHNwYW4gc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntqLnRpdGxlfTwvc3Bhbj4KICAgICAgICA8L25hdj4KCiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNoaXAgbWItNCI+e2ouY2F0ZWdvcnl9PC9kaXY+CiAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC00eGwgZm9udC1leHRyYWJvbGQgbGVhZGluZy10aWdodCB0cmFja2luZy10aWdodCI+CiAgICAgICAgICB7ai50aXRsZX0gQ292ZXIgTGV0dGVyIDxzcGFuIGNsYXNzTmFtZT0iYWNjZW50LXVuZGVybGluZSB0ZXh0LWFjY2VudCI+RXhhbXBsZSAmYW1wOyBUZW1wbGF0ZTwvc3Bhbj4KICAgICAgICA8L2gxPgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtNCB0ZXh0LWxnIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAge2ouZGVtYW5kfSBBIHN0cm9uZyBjb3ZlciBsZXR0ZXIgcGFpcnMgb25lIG9yIHR3byBxdWFudGlmaWVkIHdpbnMgd2l0aCB0aGUgcG9zdGluZyZhcG9zO3Mgb3duIGxhbmd1YWdlIOKAlCBoZXJlJmFwb3M7cyB0aGUgc3RydWN0dXJlIHRoYXQgd29ya3MgZm9yIHtqLnRpdGxlfSBhcHBsaWNhdGlvbnMsIHdpdGggYSB0ZW1wbGF0ZSB5b3UgY2FuIGZpbGwgaW4gaG9uZXN0bHkuCiAgICAgICAgPC9wPgoKICAgICAgICB7LyogU3RydWN0dXJlICovfQogICAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0ibXQtMTAiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LTJ4bCBmb250LWJvbGQiPlRoZSA0LXBhcmFncmFwaCBzdHJ1Y3R1cmU8L2gyPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktMyI+CiAgICAgICAgICAgIHtbCiAgICAgICAgICAgICAgeyBuOiAiMSIsIHQ6ICJUaGUgaG9vayIsIGQ6IGBOYW1lIHRoZSByb2xlIGFuZCBvbmUgc3BlY2lmaWMgcmVhc29uIHlvdSBmaXQg4oCUIGZvciAke2oudGl0bGV9IHJvbGVzLCBsZWFkIHdpdGggeW91ciBzdHJvbmdlc3QgYXJlYSAoZS5nLiAke3RvcFNraWxsc1swXT8udG9Mb3dlckNhc2UoKX0pLmAgfSwKICAgICAgICAgICAgICB7IG46ICIyIiwgdDogIlByb29mIiwgZDogIllvdXIgMeKAkzIgbW9zdCByZWxldmFudCwgcXVhbnRpZmllZCBhY2hpZXZlbWVudHMuIFJlYWwgbnVtYmVycyBvbmx5IOKAlCBpZiB5b3UgZG9uJ3QgaGF2ZSBvbmUsIGRlc2NyaWJlIHRoZSBjb25jcmV0ZSBvdXRjb21lIGluc3RlYWQuIiB9LAogICAgICAgICAgICAgIHsgbjogIjMiLCB0OiAiVGhlIG1hdGNoIiwgZDogYENvbm5lY3QgdGhlIHBvc3RpbmcncyByZXF1aXJlbWVudHMgKCR7dG9wS2V5d29yZHMuc2xpY2UoMCwgMykuam9pbigiLCAiKX3igKYpIHRvIHlvdXIgYWN0dWFsIGV4cGVyaWVuY2Ug4oCUIHRoaXMgaXMgd2hlcmUgQVRTIGtleXdvcmQgYWxpZ25tZW50IGhhcHBlbnMgbmF0dXJhbGx5LmAgfSwKICAgICAgICAgICAgICB7IG46ICI0IiwgdDogIlRoZSBjbG9zZSIsIGQ6ICJPbmUgY29uZmlkZW50IHNlbnRlbmNlIGFza2luZyBmb3IgdGhlIGNvbnZlcnNhdGlvbi4gTm8gYmVnZ2luZywgbm8gY2xpY2jDqXMuIiB9LAogICAgICAgICAgICBdLm1hcCgocykgPT4gKAogICAgICAgICAgICAgIDxkaXYga2V5PXtzLm59IGNsYXNzTmFtZT0iY2FyZCBmbGV4IGdhcC00IHAtNSI+CiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImZvbnQtbW9ubyB0ZXh0LWxnIGZvbnQtYm9sZCB0ZXh0LWFjY2VudCI+e3Mubn08L3NwYW4+CiAgICAgICAgICAgICAgICA8ZGl2PgogICAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPSJmb250LWJvbGQiPntzLnR9PC9oMz4KICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC0xIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57cy5kfTwvcD4KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvc2VjdGlvbj4KCiAgICAgICAgey8qIFRlbXBsYXRlICovfQogICAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0ibXQtMTIiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItMiB0ZXh0LTJ4bCBmb250LWJvbGQiPkZpbGwtaW4gdGVtcGxhdGU8L2gyPgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJtYi00IHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgICAgVGhlIDxzcGFuIHN0eWxlPXt7IGNvbG9yOiAiI2ZiYmYyNCIgfX0+W2JyYWNrZXRzXTwvc3Bhbj4gYXJlIHlvdXJzIHRvIGZpbGwgd2l0aCByZWFsIGZhY3RzIOKAlCB0aGUgZXhhbXBsZSBhY2hpZXZlbWVudHMgc2hvd24gYXJlIGlsbHVzdHJhdGlvbnMgb2YgdGhlIGxldmVsIG9mIHNwZWNpZmljaXR5IHRvIGFpbSBmb3IsIG5vdCBjbGFpbXMgdG8gY29weS4KICAgICAgICAgIDwvcD4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIHdoaXRlc3BhY2UtcHJlLXdyYXAgcC02IGZvbnQtbW9ubyB0ZXh0LXNtIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJyZ2JhKDI0NCwyNDUsMjQzLDAuODUpIiB9fT4KICAgICAgICAgICAge3RlbXBsYXRlfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9zZWN0aW9uPgoKICAgICAgICB7LyogTWlzdGFrZSAqL30KICAgICAgICA8c2VjdGlvbiBjbGFzc05hbWU9ImNhcmQgbXQtMTAgcC02IiBzdHlsZT17eyBib3JkZXJDb2xvcjogInJnYmEoMjQ4LDExMywxMTMsMC4zKSIgfX0+CiAgICAgICAgICA8aDIgY2xhc3NOYW1lPSJmb250LWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAiI2Y4NzE3MSIgfX0+4pqgIFRoZSBtb3N0IGNvbW1vbiB7ai50aXRsZX0gbWlzdGFrZTwvaDI+CiAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57ai5taXN0YWtlfTwvcD4KICAgICAgICA8L3NlY3Rpb24+CgogICAgICAgIHsvKiBDVEEgKi99CiAgICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPSJjYXJkIG10LTEwIHAtOCB0ZXh0LWNlbnRlciIgc3R5bGU9e3sgYm9yZGVyQ29sb3I6ICJyZ2JhKDEzOSw5MiwyNDYsMC40KSIsIGJhY2tncm91bmQ6ICJyZ2JhKDEzOSw5MiwyNDYsMC4wNSkiIH19PgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1ib2xkIj5HZW5lcmF0ZSB5b3VycyBmcm9tIHRoZSBhY3R1YWwgam9iIHBvc3Rpbmc8L2gyPgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJteC1hdXRvIG10LTIgbWF4LXctbWQgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICBQYXN0ZSB5b3VyIHJlc3VtZSArIHRoZSBwb3N0aW5nIOKAlCB0aGUgQUkgd3JpdGVzIGEgdGFpbG9yZWQgbGV0dGVyIHVzaW5nIG9ubHkgZmFjdHMgeW91IHByb3ZpZGVkLiBGcmVlIEFUUyBzY2FuIGluY2x1ZGVkLgogICAgICAgICAgPC9wPgogICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgbXQtNSBpbmxpbmUtYmxvY2sgcHgtOCBweS0zIj5TdGFydCB3aXRoIGEgZnJlZSBzY2FuIOKGkjwvTGluaz4KICAgICAgICA8L3NlY3Rpb24+CgogICAgICAgIHsvKiBGQVEgKi99CiAgICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPSJtdC0xMiI+CiAgICAgICAgICA8aDIgY2xhc3NOYW1lPSJtYi02IHRleHQtMnhsIGZvbnQtYm9sZCI+RnJlcXVlbnRseSBhc2tlZCBxdWVzdGlvbnM8L2gyPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktNCI+CiAgICAgICAgICAgIHtmYXFzLm1hcCgoZikgPT4gKAogICAgICAgICAgICAgIDxkaXYga2V5PXtmLnF9IGNsYXNzTmFtZT0iY2FyZCBwLTUiPgogICAgICAgICAgICAgICAgPGgzIGNsYXNzTmFtZT0iZm9udC1ib2xkIj57Zi5xfTwvaDM+CiAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57Zi5hfTwvcD4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L3NlY3Rpb24+CgogICAgICAgIHsvKiBDcm9zcy1saW5rcyAqL30KICAgICAgICA8c2VjdGlvbiBjbGFzc05hbWU9Im10LTEyIj4KICAgICAgICAgIDxoMiBjbGFzc05hbWU9Im1iLTQgdGV4dC1sZyBmb250LWJvbGQiPktlZXAgZ29pbmc8L2gyPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC13cmFwIGdhcC0zIHRleHQtc20iPgogICAgICAgICAgICA8TGluayBocmVmPXtgL3Jlc3VtZS1leGFtcGxlcy8ke2ouc2x1Z31gfSBjbGFzc05hbWU9ImJ0bi1naG9zdCBweC00IHB5LTIiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT57ai50aXRsZX0gcmVzdW1lIGV4YW1wbGU8L0xpbms+CiAgICAgICAgICAgIDxMaW5rIGhyZWY9e2AvcmVzdW1lLXNraWxscy8ke2ouc2x1Z31gfSBjbGFzc05hbWU9ImJ0bi1naG9zdCBweC00IHB5LTIiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT57ai50aXRsZX0gc2tpbGxzIGZvciB5b3VyIHJlc3VtZTwvTGluaz4KICAgICAgICAgICAge3JlbGF0ZWQubWFwKChyKSA9PiAoCiAgICAgICAgICAgICAgPExpbmsga2V5PXtyLnNsdWd9IGhyZWY9e2AvY292ZXItbGV0dGVyLWV4YW1wbGVzLyR7ci5zbHVnfWB9IGNsYXNzTmFtZT0iYnRuLWdob3N0IHB4LTQgcHktMiIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntyLnRpdGxlfSBjb3ZlciBsZXR0ZXI8L0xpbms+CiAgICAgICAgICAgICkpfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9zZWN0aW9uPgogICAgICA8L2Rpdj4KCiAgICAgIDxmb290ZXIgY2xhc3NOYW1lPSJweC02IHB5LTEwIiBzdHlsZT17eyBib3JkZXJUb3A6ICIxcHggc29saWQgdmFyKC0tbGluZSkiIH19PgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7CqSAyMDI2IFNpcmEgwrcgYSByZXN1bWUgc2VydmljZSBieSBSYWJpdDwvcD4KICAgICAgPC9mb290ZXI+CgogICAgICA8c2NyaXB0CiAgICAgICAgdHlwZT0iYXBwbGljYXRpb24vbGQranNvbiIKICAgICAgICBkYW5nZXJvdXNseVNldElubmVySFRNTD17ewogICAgICAgICAgX19odG1sOiBKU09OLnN0cmluZ2lmeSh7CiAgICAgICAgICAgICJAY29udGV4dCI6ICJodHRwczovL3NjaGVtYS5vcmciLAogICAgICAgICAgICAiQHR5cGUiOiAiRkFRUGFnZSIsCiAgICAgICAgICAgIG1haW5FbnRpdHk6IGZhcXMubWFwKChmKSA9PiAoeyAiQHR5cGUiOiAiUXVlc3Rpb24iLCBuYW1lOiBmLnEsIGFjY2VwdGVkQW5zd2VyOiB7ICJAdHlwZSI6ICJBbnN3ZXIiLCB0ZXh0OiBmLmEgfSB9KSksCiAgICAgICAgICB9KSwKICAgICAgICB9fQogICAgICAvPgogICAgPC9tYWluPgogICk7Cn0K"}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export function generateStaticParams() {
+  return JOB_SLUGS.map((job) => ({ job }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ job: string }> }): Promise<Metadata> {
+  const { job } = await params;
+  const j = getJob(job);
+  if (!j) return { title: "Not found" };
+  return {
+    title: `${j.title} Cover Letter Example & Template (2026) | Sira`,
+    description: `A proven ${j.title} cover letter structure with a fill-in template, the keywords hiring systems look for, and the mistakes to avoid — plus an AI generator.`,
+    alternates: { canonical: `${BASE}/cover-letter-examples/${j.slug}` },
+  };
+}
+
+export default async function CoverLetterExamplePage({ params }: { params: Promise<{ job: string }> }) {
+  const { job } = await params;
+  const j = getJob(job);
+  if (!j) notFound();
+
+  const related = JOBS.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 4);
+  const topSkills = j.skills.slice(0, 3);
+  const topKeywords = j.atsKeywords.slice(0, 6);
+
+  const template = `Dear Hiring Manager,
+
+When I saw your opening for a ${j.title}, I recognized a role where my background in ${topSkills[0]?.toLowerCase() ?? "this field"} could contribute from day one. [One sentence on why THIS company specifically — reference a product, project, or value of theirs.]
+
+In my current role, ${j.bullets[0]?.charAt(0).toLowerCase()}${j.bullets[0]?.slice(1) ?? "[your strongest, most quantified achievement]"}. I've also [second achievement — use a real number of yours, e.g. "${j.bullets[1] ?? "..."}"].
+
+Your posting emphasizes ${topKeywords.slice(0, 3).join(", ")} — areas I work in daily. [One sentence connecting a specific requirement from the posting to a specific experience of yours.]
+
+I'd welcome the chance to discuss how I can help your team [the goal implied by the posting]. Thank you for your consideration.
+
+Sincerely,
+[Your name]`;
+
+  const faqs = [
+    { q: `How long should a ${j.title} cover letter be?`, a: `3–4 short paragraphs, under 300 words. Hiring managers skim — one strong, quantified achievement beats three vague ones.` },
+    { q: `Should I repeat my resume in the cover letter?`, a: `No. Pick your 1–2 most relevant achievements and connect them to the specific posting. The letter answers "why this role, why this company, why you" — not "what is everything I've done".` },
+    { q: `Which keywords matter for a ${j.title} letter?`, a: `Mirror the posting's own language. For ${j.title} roles that typically includes: ${topKeywords.join(", ")}. Use them naturally where they're true of you.` },
+    { q: `Can I generate a tailored cover letter automatically?`, a: `Yes — our AI writes one from your resume and the exact job posting, using only facts you provided. It's included with any paid pass.` },
+  ];
+
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-3xl px-6 py-12">
+        <nav className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          <Link href="/">Home</Link> / <Link href="/cover-letter-examples">Cover Letter Examples</Link> / <span style={{ color: "var(--muted)" }}>{j.title}</span>
+        </nav>
+
+        <div className="chip mb-4">{j.category}</div>
+        <h1 className="text-4xl font-extrabold leading-tight tracking-tight">
+          {j.title} Cover Letter <span className="accent-underline text-accent">Example &amp; Template</span>
+        </h1>
+        <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
+          {j.demand} A strong cover letter pairs one or two quantified wins with the posting&apos;s own language — here&apos;s the structure that works for {j.title} applications, with a template you can fill in honestly.
+        </p>
+
+        {/* Structure */}
+        <section className="mt-10">
+          <h2 className="mb-4 text-2xl font-bold">The 4-paragraph structure</h2>
+          <div className="space-y-3">
+            {[
+              { n: "1", t: "The hook", d: `Name the role and one specific reason you fit — for ${j.title} roles, lead with your strongest area (e.g. ${topSkills[0]?.toLowerCase()}).` },
+              { n: "2", t: "Proof", d: "Your 1–2 most relevant, quantified achievements. Real numbers only — if you don't have one, describe the concrete outcome instead." },
+              { n: "3", t: "The match", d: `Connect the posting's requirements (${topKeywords.slice(0, 3).join(", ")}…) to your actual experience — this is where ATS keyword alignment happens naturally.` },
+              { n: "4", t: "The close", d: "One confident sentence asking for the conversation. No begging, no clichés." },
+            ].map((s) => (
+              <div key={s.n} className="card flex gap-4 p-5">
+                <span className="font-mono text-lg font-bold text-accent">{s.n}</span>
+                <div>
+                  <h3 className="font-bold">{s.t}</h3>
+                  <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{s.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Template */}
+        <section className="mt-12">
+          <h2 className="mb-2 text-2xl font-bold">Fill-in template</h2>
+          <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
+            The <span style={{ color: "#fbbf24" }}>[brackets]</span> are yours to fill with real facts — the example achievements shown are illustrations of the level of specificity to aim for, not claims to copy.
+          </p>
+          <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>
+            {template}
+          </div>
+        </section>
+
+        {/* Mistake */}
+        <section className="card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
+          <h2 className="font-bold" style={{ color: "#f87171" }}>⚠ The most common {j.title} mistake</h2>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.mistake}</p>
+        </section>
+
+        {/* CTA */}
+        <section className="card mt-10 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+          <h2 className="text-2xl font-bold">Generate yours from the actual job posting</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>
+            Paste your resume + the posting — the AI writes a tailored letter using only facts you provided. Free ATS scan included.
+          </p>
+          <Link href="/optimize" className="btn-accent mt-5 inline-block px-8 py-3">Start with a free scan →</Link>
+        </section>
+
+        {/* FAQ */}
+        <section className="mt-12">
+          <h2 className="mb-6 text-2xl font-bold">Frequently asked questions</h2>
+          <div className="space-y-4">
+            {faqs.map((f) => (
+              <div key={f.q} className="card p-5">
+                <h3 className="font-bold">{f.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Cross-links */}
+        <section className="mt-12">
+          <h2 className="mb-4 text-lg font-bold">Keep going</h2>
+          <div className="flex flex-wrap gap-3 text-sm">
+            <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>
+            <Link href={`/resume-skills/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} skills for your resume</Link>
+            {related.map((r) => (
+              <Link key={r.slug} href={`/cover-letter-examples/${r.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--muted)" }}>{r.title} cover letter</Link>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+          }),
+        }}
+      />
+    </main>
+  );
+}

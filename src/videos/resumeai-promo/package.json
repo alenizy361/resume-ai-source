@@ -1,1 +1,11 @@
-{"data":"ewogICJuYW1lIjogInJlc3VtZWFpLXByb21vIiwKICAicHJpdmF0ZSI6IHRydWUsCiAgInR5cGUiOiAibW9kdWxlIiwKICAic2NyaXB0cyI6IHsKICAgICJkZXYiOiAibnB4IC0teWVzIGh5cGVyZnJhbWVzQDAuNy42OCBwcmV2aWV3IiwKICAgICJjaGVjayI6ICJucHggLS15ZXMgaHlwZXJmcmFtZXNAMC43LjY4IGNoZWNrIiwKICAgICJyZW5kZXIiOiAibnB4IC0teWVzIGh5cGVyZnJhbWVzQDAuNy42OCByZW5kZXIiLAogICAgInB1Ymxpc2giOiAibnB4IC0teWVzIGh5cGVyZnJhbWVzQDAuNy42OCBwdWJsaXNoIgogIH0KfQo="}
+{
+  "name": "resumeai-promo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.7.68 preview",
+    "check": "npx --yes hyperframes@0.7.68 check",
+    "render": "npx --yes hyperframes@0.7.68 render",
+    "publish": "npx --yes hyperframes@0.7.68 publish"
+  }
+}

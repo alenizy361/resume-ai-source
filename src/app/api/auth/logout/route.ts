@@ -1,1 +1,8 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlc3BvbnNlIH0gZnJvbSAibmV4dC9zZXJ2ZXIiOwppbXBvcnQgeyBTRVNTSU9OX0NPT0tJRSB9IGZyb20gIkAvYXBwL2xpYi9zZXNzaW9uIjsKCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBQT1NUKCkgewogIGNvbnN0IHJlcyA9IE5leHRSZXNwb25zZS5qc29uKHsgb2s6IHRydWUgfSk7CiAgcmVzLmNvb2tpZXMuc2V0KFNFU1NJT05fQ09PS0lFLCAiIiwgeyBodHRwT25seTogdHJ1ZSwgc2VjdXJlOiB0cnVlLCBzYW1lU2l0ZTogImxheCIsIHBhdGg6ICIvIiwgbWF4QWdlOiAwIH0pOwogIHJldHVybiByZXM7Cn0K"}
+import { NextResponse } from "next/server";
+import { SESSION_COOKIE } from "@/app/lib/session";
+
+export async function POST() {
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(SESSION_COOKIE, "", { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 0 });
+  return res;
+}

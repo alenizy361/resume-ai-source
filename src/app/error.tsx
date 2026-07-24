@@ -1,1 +1,29 @@
-{"data":"InVzZSBjbGllbnQiOwoKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgdXNlRWZmZWN0IH0gZnJvbSAicmVhY3QiOwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gRXJyb3IoeyBlcnJvciwgcmVzZXQgfTogeyBlcnJvcjogRXJyb3IgJiB7IGRpZ2VzdD86IHN0cmluZyB9OyByZXNldDogKCkgPT4gdm9pZCB9KSB7CiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGNvbnNvbGUuZXJyb3IoIkFwcCBlcnJvcjoiLCBlcnJvcik7CiAgfSwgW2Vycm9yXSk7CgogIHJldHVybiAoCiAgICA8bWFpbiBjbGFzc05hbWU9ImZsZXggbWluLWgtc2NyZWVuIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBweC02IiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY2FyZCB3LWZ1bGwgbWF4LXctbWQgcC0xMCB0ZXh0LWNlbnRlciIgc3R5bGU9e3sgYm9yZGVyQ29sb3I6ICJyZ2JhKDI0OCwxMTMsMTEzLDAuNCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1iLTYgZmxleCBoLTE2IHctMTYgaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHJvdW5kZWQtZnVsbCBmb250LW1vbm8gdGV4dC0zeGwiCiAgICAgICAgICBzdHlsZT17eyBiYWNrZ3JvdW5kOiAicmdiYSgyNDgsMTEzLDExMywwLjEyKSIsIGNvbG9yOiAiI2Y4NzE3MSIsIGJvcmRlcjogIjFweCBzb2xpZCByZ2JhKDI0OCwxMTMsMTEzLDAuMykiIH19PgogICAgICAgICAgIQogICAgICAgIDwvZGl2PgogICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtMnhsIGZvbnQtYm9sZCI+U29tZXRoaW5nIHdlbnQgd3Jvbmc8L2gxPgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC0yIG1heC13LXNtIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgIEFuIHVuZXhwZWN0ZWQgZXJyb3Igb2NjdXJyZWQuIFlvdXIgd29yayBpc24mYXBvczt0IGxvc3Qg4oCUIHRyeSBhZ2Fpbiwgb3IgaGVhZCBiYWNrIGhvbWUuCiAgICAgICAgPC9wPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC02IGZsZXggZmxleC13cmFwIGp1c3RpZnktY2VudGVyIGdhcC0zIj4KICAgICAgICAgIDxidXR0b24gb25DbGljaz17cmVzZXR9IGNsYXNzTmFtZT0iYnRuLWFjY2VudCBweC02IHB5LTMiPlRyeSBhZ2FpbjwvYnV0dG9uPgogICAgICAgICAgPExpbmsgaHJlZj0iLyIgY2xhc3NOYW1lPSJidG4tZ2hvc3QgcHgtNiBweS0zIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT5CYWNrIGhvbWU8L0xpbms+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PgogICAgPC9tYWluPgogICk7Cn0K"}
+"use client";
+
+import Link from "next/link";
+import { useEffect } from "react";
+
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => {
+    console.error("App error:", error);
+  }, [error]);
+
+  return (
+    <main className="flex min-h-screen items-center justify-center px-6" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <div className="card w-full max-w-md p-10 text-center" style={{ borderColor: "rgba(248,113,113,0.4)" }}>
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full font-mono text-3xl"
+          style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "1px solid rgba(248,113,113,0.3)" }}>
+          !
+        </div>
+        <h1 className="text-2xl font-bold">Something went wrong</h1>
+        <p className="mx-auto mt-2 max-w-sm text-sm" style={{ color: "var(--muted)" }}>
+          An unexpected error occurred. Your work isn&apos;t lost — try again, or head back home.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <button onClick={reset} className="btn-accent px-6 py-3">Try again</button>
+          <Link href="/" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Back home</Link>
+        </div>
+      </div>
+    </main>
+  );
+}

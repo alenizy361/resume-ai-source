@@ -1,1 +1,17 @@
-{"data":"InVzZSBjbGllbnQiOwovKiogT25lLXNob3QgYXVyb3JhIHBhcnRpY2xlIGJ1cnN0IOKAlCBmaXJlcyB3aGVuIHRoZSBwYXltZW50IGxvY2sgb3BlbnMuIDIuMnMuICovCmNvbnN0IENPTE9SUyA9IFsiIzhiNWNmNiIsICIjZWM0ODk5IiwgIiNmNTllMGIiLCAiIzIyYzU1ZSIsICIjMjJkM2VlIl07CmNvbnN0IFBBUlRTID0gQXJyYXkuZnJvbSh7IGxlbmd0aDogMjggfSwgKF8sIGkpID0+IHsKICBjb25zdCBhbmcgPSAoaSAvIDI4KSAqIE1hdGguUEkgKiAyOwogIGNvbnN0IGRpc3QgPSA5MCArIChpICUgNSkgKiAyNjsKICByZXR1cm4geyBieDogTWF0aC5jb3MoYW5nKSAqIGRpc3QsIGJ5OiBNYXRoLnNpbihhbmcpICogZGlzdCwgY29sb3I6IENPTE9SU1tpICUgQ09MT1JTLmxlbmd0aF0gfTsKfSk7CmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEF1cm9yYUJ1cnN0KCkgewogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0iYXVyb3JhLWJ1cnN0IiBhcmlhLWhpZGRlbj4KICAgICAge1BBUlRTLm1hcCgocCwgaSkgPT4gKAogICAgICAgIDxzcGFuIGtleT17aX0gc3R5bGU9e3sgYmFja2dyb3VuZDogcC5jb2xvciwgYm94U2hhZG93OiBgMCAwIDhweCAke3AuY29sb3J9YCwgWyItLWJ4IiBhcyBzdHJpbmddOiBgJHtwLmJ4fXB4YCwgWyItLWJ5IiBhcyBzdHJpbmddOiBgJHtwLmJ5fXB4YCB9fSAvPgogICAgICApKX0KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+/** One-shot aurora particle burst — fires when the payment lock opens. 2.2s. */
+const COLORS = ["#8b5cf6", "#ec4899", "#f59e0b", "#22c55e", "#22d3ee"];
+const PARTS = Array.from({ length: 28 }, (_, i) => {
+  const ang = (i / 28) * Math.PI * 2;
+  const dist = 90 + (i % 5) * 26;
+  return { bx: Math.cos(ang) * dist, by: Math.sin(ang) * dist, color: COLORS[i % COLORS.length] };
+});
+export default function AuroraBurst() {
+  return (
+    <div className="aurora-burst" aria-hidden>
+      {PARTS.map((p, i) => (
+        <span key={i} style={{ background: p.color, boxShadow: `0 0 8px ${p.color}`, ["--bx" as string]: `${p.bx}px`, ["--by" as string]: `${p.by}px` }} />
+      ))}
+    </div>
+  );
+}

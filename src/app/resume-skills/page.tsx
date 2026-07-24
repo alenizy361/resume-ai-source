@@ -1,1 +1,59 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgSk9CUywgQ0FURUdPUklFUyB9IGZyb20gIi4uL2xpYi9qb2JzIjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICJSZXN1bWUgU2tpbGxzIGJ5IEpvYiAoMjAyNikg4oCUIEFUUyBLZXl3b3JkcyBmb3IgNTAgUm9sZXMgfCBTaXJhIiwKICBkZXNjcmlwdGlvbjogIlRoZSBleGFjdCBza2lsbHMgYW5kIEFUUyBrZXl3b3JkcyB0byBwdXQgb24geW91ciByZXN1bWUsIHJvbGUgYnkgcm9sZSDigJQgcGx1cyBhIGZyZWUgc2Nhbm5lciB0aGF0IHNob3dzIHdoaWNoIG9uZXMgeW91ciByZXN1bWUgaXMgbWlzc2luZy4iLAogIGFsdGVybmF0ZXM6IHsgY2Fub25pY2FsOiBgJHtCQVNFfS9yZXN1bWUtc2tpbGxzYCB9LAp9OwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUmVzdW1lU2tpbGxzSHViKCkgewogIHJldHVybiAoCiAgICA8bWFpbiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWJnKSIsIGNvbG9yOiAidmFyKC0tZmcpIiB9fT4KICAgICAgPE9yYlNjZW5lU2V0dGVyIHZpc2libGUgbW9vZD0iaWRsZSIgdG9wPSIxNHZoIiBsZWZ0PSI4NiUiIHNpemU9ezEwMH0gLz4KICAgICAgPG5hdiBjbGFzc05hbWU9InN0aWNreSB0b3AtMCB6LTUwIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAibGluZWFyLWdyYWRpZW50KDE4MGRlZywgcmdiYSg1LDcsMTMsMC44NSksIHRyYW5zcGFyZW50KSIgfX0+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gZmxleCBtYXgtdy01eGwgaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBweC02IHB5LTQiPgogICAgICAgICAgPExpbmsgaHJlZj0iLyIgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMi41Ij4KICAgICAgICAgICAgPE9yYkJyYW5kIHNpemU9ezI2fSAvPgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtWzE1cHhdIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+U2lyYTwvc3Bhbj4KICAgICAgICAgIDwvTGluaz4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9vcHRpbWl6ZSIgY2xhc3NOYW1lPSJidG4tYWNjZW50IHB4LTQgcHktMiB0ZXh0LXNtIj5TY2FuIG15IHJlc3VtZTwvTGluaz4KICAgICAgICA8L2Rpdj4KICAgICAgPC9uYXY+CgogICAgICA8ZGl2IGNsYXNzTmFtZT0ibXgtYXV0byBtYXgtdy01eGwgcHgtNiBweS0xNCI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQtY2VudGVyIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPlJlc3VtZSBza2lsbHM8L2Rpdj4KICAgICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtNHhsIGZvbnQtZXh0cmFib2xkIHRyYWNraW5nLXRpZ2h0Ij5UaGUgcmlnaHQgc2tpbGxzIDxzcGFuIGNsYXNzTmFtZT0iYWNjZW50LXVuZGVybGluZSB0ZXh0LWFjY2VudCI+Zm9yIGV2ZXJ5IHJlc3VtZTwvc3Bhbj48L2gxPgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJteC1hdXRvIG10LTQgbWF4LXctMnhsIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAgICAgIFJvbGUtYnktcm9sZTogdGhlIEFUUyBrZXl3b3JkcyBoaXJpbmcgc3lzdGVtcyBzY2FuIGZvciwgdGhlIHNraWxscyByZWNydWl0ZXJzIHNob3J0bGlzdCBvbiwgYW5kIGhvdyB0byBwcmVzZW50IHRoZW0gaG9uZXN0bHkuCiAgICAgICAgICA8L3A+CiAgICAgICAgPC9kaXY+CgogICAgICAgIHtDQVRFR09SSUVTLm1hcCgoY2F0KSA9PiAoCiAgICAgICAgICA8c2VjdGlvbiBrZXk9e2NhdH0gY2xhc3NOYW1lPSJtdC0xMiI+CiAgICAgICAgICAgIDxoMiBjbGFzc05hbWU9Im1iLTQgdGV4dC14bCBmb250LWJvbGQiPntjYXR9PC9oMj4KICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImdyaWQgZ2FwLTMgc206Z3JpZC1jb2xzLTIgbGc6Z3JpZC1jb2xzLTMiPgogICAgICAgICAgICAgIHtKT0JTLmZpbHRlcigoaikgPT4gai5jYXRlZ29yeSA9PT0gY2F0KS5tYXAoKGopID0+ICgKICAgICAgICAgICAgICAgIDxMaW5rIGtleT17ai5zbHVnfSBocmVmPXtgL3Jlc3VtZS1za2lsbHMvJHtqLnNsdWd9YH0gY2xhc3NOYW1lPSJjYXJkIGNhcmQtaG92ZXIgcC00IHRleHQtc20gZm9udC1zZW1pYm9sZCI+CiAgICAgICAgICAgICAgICAgIHtqLnRpdGxlfSBza2lsbHMg4oaSCiAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgKSl9CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPC9zZWN0aW9uPgogICAgICAgICkpfQogICAgICA8L2Rpdj4KCiAgICAgIDxmb290ZXIgY2xhc3NOYW1lPSJweC02IHB5LTEwIiBzdHlsZT17eyBib3JkZXJUb3A6ICIxcHggc29saWQgdmFyKC0tbGluZSkiIH19PgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7CqSAyMDI2IFNpcmEgwrcgYSByZXN1bWUgc2VydmljZSBieSBSYWJpdDwvcD4KICAgICAgPC9mb290ZXI+CiAgICAgICAgICA8SHViTGlua3MgY3VycmVudD0iL3Jlc3VtZS1za2lsbHMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../components/HubLinks";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { JOBS, CATEGORIES } from "../lib/jobs";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Resume Skills by Job (2026) — ATS Keywords for 50 Roles | Sira",
+  description: "The exact skills and ATS keywords to put on your resume, role by role — plus a free scanner that shows which ones your resume is missing.",
+  alternates: { canonical: `${BASE}/resume-skills` },
+};
+
+export default function ResumeSkillsHub() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-5xl px-6 py-14">
+        <div className="text-center">
+          <div className="chip mb-4">Resume skills</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">The right skills <span className="accent-underline text-accent">for every resume</span></h1>
+          <p className="mx-auto mt-4 max-w-2xl" style={{ color: "var(--muted)" }}>
+            Role-by-role: the ATS keywords hiring systems scan for, the skills recruiters shortlist on, and how to present them honestly.
+          </p>
+        </div>
+
+        {CATEGORIES.map((cat) => (
+          <section key={cat} className="mt-12">
+            <h2 className="mb-4 text-xl font-bold">{cat}</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {JOBS.filter((j) => j.category === cat).map((j) => (
+                <Link key={j.slug} href={`/resume-skills/${j.slug}`} className="card card-hover p-4 text-sm font-semibold">
+                  {j.title} skills →
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+          <HubLinks current="/resume-skills" />
+    </main>
+  );
+}

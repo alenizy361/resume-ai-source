@@ -1,1 +1,53 @@
-{"data":"aW1wb3J0IGNyeXB0byBmcm9tICJjcnlwdG8iOwoKLyoqCiAqIFN0YXRlbGVzcyBzaWduZWQgdG9rZW5zIGZvciBhdXRoOiBzZXNzaW9uIGNvb2tpZXMgYW5kIHNob3J0LWxpdmVkIG1hZ2ljIGxpbmtzLgogKiBCb3RoIGFyZSBgYmFzZTY0dXJsKHBheWxvYWQpLmhtYWNgLCBzaWduZWQgd2l0aCBBQ0NFU1NfU0VDUkVUIOKAlCBubyBEQiBuZWVkZWQKICogdG8gaXNzdWUgb3IgdmFsaWRhdGUgdGhlbSAoZW50aXRsZW1lbnRzIGxpdmUgaW4gUmVkaXM7IHNlZSBsaWIvZW50aXRsZW1lbnRzKS4KICogTm90ZTogd2l0aCBubyBzZXJ2ZXItc2lkZSBzdGF0ZSBhIG1hZ2ljIGxpbmsgaXNuJ3QgdHJ1bHkgc2luZ2xlLXVzZSDigJQgaXQgc3RheXMKICogdmFsaWQgZm9yIGl0cyBmdWxsIDE1LW1pbnV0ZSB3aW5kb3csIHNvIGtlZXAgdGhhdCB3aW5kb3cgc2hvcnQuCiAqLwoKY29uc3QgU0VDUkVUID0gcHJvY2Vzcy5lbnYuQUNDRVNTX1NFQ1JFVCB8fCAiZGV2LWluc2VjdXJlLXNlY3JldC1jaGFuZ2UtbWUiOwoKZXhwb3J0IGNvbnN0IFNFU1NJT05fQ09PS0lFID0gInJhX3Nlc3Npb24iOwoKZnVuY3Rpb24gc2lnbihkYXRhOiBzdHJpbmcpOiBzdHJpbmcgewogIHJldHVybiBjcnlwdG8uY3JlYXRlSG1hYygic2hhMjU2IiwgU0VDUkVUKS51cGRhdGUoZGF0YSkuZGlnZXN0KCJiYXNlNjR1cmwiKTsKfQoKZnVuY3Rpb24gZW5jb2RlKHBheWxvYWQ6IG9iamVjdCk6IHN0cmluZyB7CiAgY29uc3QgYm9keSA9IEJ1ZmZlci5mcm9tKEpTT04uc3RyaW5naWZ5KHBheWxvYWQpKS50b1N0cmluZygiYmFzZTY0dXJsIik7CiAgcmV0dXJuIGAke2JvZHl9LiR7c2lnbihib2R5KX1gOwp9CgpmdW5jdGlvbiBkZWNvZGU8VD4odG9rZW46IHN0cmluZyB8IHVuZGVmaW5lZCwgbm93OiBudW1iZXIpOiBUIHwgbnVsbCB7CiAgaWYgKCF0b2tlbiB8fCAhdG9rZW4uaW5jbHVkZXMoIi4iKSkgcmV0dXJuIG51bGw7CiAgY29uc3QgW2JvZHksIHNpZ10gPSB0b2tlbi5zcGxpdCgiLiIpOwogIGlmIChzaWduKGJvZHkpICE9PSBzaWcpIHJldHVybiBudWxsOwogIHRyeSB7CiAgICBjb25zdCBwYXlsb2FkID0gSlNPTi5wYXJzZShCdWZmZXIuZnJvbShib2R5LCAiYmFzZTY0dXJsIikudG9TdHJpbmcoInV0Zi04IikpIGFzIHsgZXhwOiBudW1iZXIgfTsKICAgIGlmICh0eXBlb2YgcGF5bG9hZC5leHAgIT09ICJudW1iZXIiIHx8IHBheWxvYWQuZXhwIDwgbm93KSByZXR1cm4gbnVsbDsKICAgIHJldHVybiBwYXlsb2FkIGFzIFQ7CiAgfSBjYXRjaCB7CiAgICByZXR1cm4gbnVsbDsKICB9Cn0KCi8vIOKUgOKUgCBNYWdpYyBsaW5rICgxNS1taW51dGUsIHB1cnBvc2Utc2NvcGVkKSDilIDilIAKZXhwb3J0IGZ1bmN0aW9uIGNyZWF0ZU1hZ2ljVG9rZW4oZW1haWw6IHN0cmluZywgbm93OiBudW1iZXIpOiBzdHJpbmcgewogIHJldHVybiBlbmNvZGUoeyBlbWFpbDogZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCksIHB1cnBvc2U6ICJtYWdpYyIsIGV4cDogbm93ICsgMTUgKiA2MCAqIDEwMDAgfSk7Cn0KZXhwb3J0IGZ1bmN0aW9uIHZlcmlmeU1hZ2ljVG9rZW4odG9rZW46IHN0cmluZyB8IHVuZGVmaW5lZCwgbm93OiBudW1iZXIpOiBzdHJpbmcgfCBudWxsIHsKICBjb25zdCBwID0gZGVjb2RlPHsgZW1haWw6IHN0cmluZzsgcHVycG9zZTogc3RyaW5nIH0+KHRva2VuLCBub3cpOwogIHJldHVybiBwICYmIHAucHVycG9zZSA9PT0gIm1hZ2ljIiA/IHAuZW1haWwgOiBudWxsOwp9CgovLyDilIDilIAgU2Vzc2lvbiAoMzAtZGF5KSDilIDilIAKZXhwb3J0IGZ1bmN0aW9uIGNyZWF0ZVNlc3Npb24oZW1haWw6IHN0cmluZywgbm93OiBudW1iZXIpOiBzdHJpbmcgewogIHJldHVybiBlbmNvZGUoeyBlbWFpbDogZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCksIHB1cnBvc2U6ICJzZXNzaW9uIiwgZXhwOiBub3cgKyAzMCAqIDI0ICogNjAgKiA2MCAqIDEwMDAgfSk7Cn0KZXhwb3J0IGZ1bmN0aW9uIHJlYWRTZXNzaW9uKHRva2VuOiBzdHJpbmcgfCB1bmRlZmluZWQsIG5vdzogbnVtYmVyKTogc3RyaW5nIHwgbnVsbCB7CiAgY29uc3QgcCA9IGRlY29kZTx7IGVtYWlsOiBzdHJpbmc7IHB1cnBvc2U6IHN0cmluZyB9Pih0b2tlbiwgbm93KTsKICByZXR1cm4gcCAmJiBwLnB1cnBvc2UgPT09ICJzZXNzaW9uIiA/IHAuZW1haWwgOiBudWxsOwp9Cg=="}
+import crypto from "crypto";
+
+/**
+ * Stateless signed tokens for auth: session cookies and short-lived magic links.
+ * Both are `base64url(payload).hmac`, signed with ACCESS_SECRET — no DB needed
+ * to issue or validate them (entitlements live in Redis; see lib/entitlements).
+ * Note: with no server-side state a magic link isn't truly single-use — it stays
+ * valid for its full 15-minute window, so keep that window short.
+ */
+
+const SECRET = process.env.ACCESS_SECRET || "dev-insecure-secret-change-me";
+
+export const SESSION_COOKIE = "ra_session";
+
+function sign(data: string): string {
+  return crypto.createHmac("sha256", SECRET).update(data).digest("base64url");
+}
+
+function encode(payload: object): string {
+  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  return `${body}.${sign(body)}`;
+}
+
+function decode<T>(token: string | undefined, now: number): T | null {
+  if (!token || !token.includes(".")) return null;
+  const [body, sig] = token.split(".");
+  if (sign(body) !== sig) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf-8")) as { exp: number };
+    if (typeof payload.exp !== "number" || payload.exp < now) return null;
+    return payload as T;
+  } catch {
+    return null;
+  }
+}
+
+// ── Magic link (15-minute, purpose-scoped) ──
+export function createMagicToken(email: string, now: number): string {
+  return encode({ email: email.toLowerCase().trim(), purpose: "magic", exp: now + 15 * 60 * 1000 });
+}
+export function verifyMagicToken(token: string | undefined, now: number): string | null {
+  const p = decode<{ email: string; purpose: string }>(token, now);
+  return p && p.purpose === "magic" ? p.email : null;
+}
+
+// ── Session (30-day) ──
+export function createSession(email: string, now: number): string {
+  return encode({ email: email.toLowerCase().trim(), purpose: "session", exp: now + 30 * 24 * 60 * 60 * 1000 });
+}
+export function readSession(token: string | undefined, now: number): string | null {
+  const p = decode<{ email: string; purpose: string }>(token, now);
+  return p && p.purpose === "session" ? p.email : null;
+}

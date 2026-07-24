@@ -1,1 +1,62 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi8uLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uLy4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgSk9CU19BUiwgQVJfQ0FURUdPUklFUyB9IGZyb20gIi4uLy4uL2xpYi9qb2JzLWFyIjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICLYo9mF2KvZhNipINiz2YrYsSDYsNin2KrZitipINi52LHYqNmK2Kkg2YTZg9mEINmF2YfZhtipICsg2YPZhNmF2KfYqiBBVFMgKDIwMjYpIiwKICBkZXNjcmlwdGlvbjogItiv2YTZitmEINij2YXYq9mE2Kkg2KfZhNiz2YrYsSDYp9mE2LDYp9iq2YrYqSDYp9mE2LnYsdio2YrYqSDZhNmD2YQg2YXZh9mG2Kkg4oCUINmD2YTZhdin2KogQVRT2Iwg2KfZhNmF2YfYp9ix2KfYqtiMINmI2YbZhdin2LDYrCDYrNin2YfYstipLiDYp9iu2KrYsSDZhdmH2YbYqtmDINmI2KfYqNmG2ZAg2LPZitix2KrZgyDYp9mE2YXYqtmI2KfZgdmC2Kkg2YXYuSDYo9mG2LjZhdipINin2YTYqtmI2LjZitmBINmF2KzYp9mG2KfZiy4iLAogIGFsdGVybmF0ZXM6IHsKICAgIGNhbm9uaWNhbDogYCR7QkFTRX0vYXIvcmVzdW1lLWV4YW1wbGVzYCwKICAgIGxhbmd1YWdlczogeyBhcjogYCR7QkFTRX0vYXIvcmVzdW1lLWV4YW1wbGVzYCwgZW46IGAke0JBU0V9L3Jlc3VtZS1leGFtcGxlc2AsICJ4LWRlZmF1bHQiOiBgJHtCQVNFfS9yZXN1bWUtZXhhbXBsZXNgIH0sCiAgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEh1YigpIHsKICByZXR1cm4gKAogICAgPG1haW4gZGlyPSJydGwiIGxhbmc9ImFyIiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWJnKSIsIGNvbG9yOiAidmFyKC0tZmcpIiB9fT4KICAgICAgPE9yYlNjZW5lU2V0dGVyIHZpc2libGUgbW9vZD0iaWRsZSIgdG9wPSIxNHZoIiBsZWZ0PSIxNCUiIHNpemU9ezEwMH0gLz4KICAgICAgPG5hdiBjbGFzc05hbWU9InN0aWNreSB0b3AtMCB6LTUwIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAibGluZWFyLWdyYWRpZW50KDE4MGRlZywgcmdiYSg1LDcsMTMsMC44NSksIHRyYW5zcGFyZW50KSIgfX0+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gZmxleCBtYXgtdy01eGwgaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBweC02IHB5LTQiPgogICAgICAgICAgPExpbmsgaHJlZj0iL2FyIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij7Ys9mK2LHYqTwvc3Bhbj4KICAgICAgICAgIDwvTGluaz4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hci9vcHRpbWl6ZSIgY2xhc3NOYW1lPSJidG4tYWNjZW50IHB4LTQgcHktMiB0ZXh0LXNtIj7Yp9mB2K3YtSDYs9mK2LHYqtmKPC9MaW5rPgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1heC13LTV4bCBweC02IHB5LTEyIj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY2hpcCBtYi00Ij7Yo9mF2KvZhNipINin2YTYs9mK2LEg2KfZhNiw2KfYqtmK2Kk8L2Rpdj4KICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCB0cmFja2luZy10aWdodCI+2KPZhdir2YTYqSDYs9mK2LEg2LDYp9iq2YrYqSDYudix2KjZitipINmE2YPZhCDZhdmH2YbYqTwvaDE+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC00IG1heC13LTJ4bCB0ZXh0LWxnIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAg2KfYrtiq2LEg2YXZh9mG2KrZgyDZhNiq2LHZiSDZhtmF2YjYsNisINiz2YrYsdipINiw2KfYqtmK2Kkg2YPYp9mF2YTYp9mL2Iwg2YPZhNmF2KfYqiBBVFMg2KfZhNiq2Yog2KrZgdit2LXZh9inINij2YbYuNmF2Kkg2KfZhNiq2YjYuNmK2YHYjCDYp9mE2YXZh9in2LHYp9iq2Iwg2YjYrti32KfYqCDYqti52LHZitmBINis2KfZh9iyIOKAlCDYq9mFINin2KjZhtmQINiz2YrYsdiq2YMg2YXYrNin2YbYp9mLLgogICAgICAgIDwvcD4KCiAgICAgICAge0FSX0NBVEVHT1JJRVMubWFwKChjYXQpID0+ICgKICAgICAgICAgIDxzZWN0aW9uIGtleT17Y2F0fSBjbGFzc05hbWU9Im10LTEwIj4KICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LXhsIGZvbnQtYm9sZCI+e2NhdH08L2gyPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtMyBzbTpncmlkLWNvbHMtMiBsZzpncmlkLWNvbHMtMyI+CiAgICAgICAgICAgICAge0pPQlNfQVIuZmlsdGVyKChqKSA9PiBqLmNhdGVnb3J5ID09PSBjYXQpLm1hcCgoaikgPT4gKAogICAgICAgICAgICAgICAgPExpbmsga2V5PXtqLnNsdWd9IGhyZWY9e2AvYXIvcmVzdW1lLWV4YW1wbGVzLyR7ai5zbHVnfWB9CiAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iY2FyZCBjYXJkLWhvdmVyIHAtNCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZm9udC1ib2xkIj57ai50aXRsZX08L2Rpdj4KICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTEgdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PtmF2KvYp9mEINiz2YrYsdipIMK3INmF2YfYp9ix2KfYqiDCtyDYrti32KfYqCDYqti52LHZitmBPC9kaXY+CiAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgKSl9CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPC9zZWN0aW9uPgogICAgICAgICkpfQogICAgICA8L2Rpdj4KCiAgICAgIDxmb290ZXIgY2xhc3NOYW1lPSJweC02IHB5LTEwIiBzdHlsZT17eyBib3JkZXJUb3A6ICIxcHggc29saWQgdmFyKC0tbGluZSkiIH19PgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgZm9udC1tb25vIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT7CqSAyMDI2INiz2YrYsdipIMK3INiu2K/ZhdipINiz2YrYsSDYsNin2KrZitipINmF2YYgUmFiaXQ8L3A+CiAgICAgIDwvZm9vdGVyPgogICAgICAgICAgPEh1YkxpbmtzIGFyIGN1cnJlbnQ9Ii9hci9yZXN1bWUtZXhhbXBsZXMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../../components/HubLinks";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { JOBS_AR, AR_CATEGORIES } from "../../lib/jobs-ar";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "أمثلة سير ذاتية عربية لكل مهنة + كلمات ATS (2026)",
+  description: "دليل أمثلة السير الذاتية العربية لكل مهنة — كلمات ATS، المهارات، ونماذج جاهزة. اختر مهنتك وابنِ سيرتك المتوافقة مع أنظمة التوظيف مجاناً.",
+  alternates: {
+    canonical: `${BASE}/ar/resume-examples`,
+    languages: { ar: `${BASE}/ar/resume-examples`, en: `${BASE}/resume-examples`, "x-default": `${BASE}/resume-examples` },
+  },
+};
+
+export default function Hub() {
+  return (
+    <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="14%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/ar" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
+          </Link>
+          <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">افحص سيرتي</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-5xl px-6 py-12">
+        <div className="chip mb-4">أمثلة السير الذاتية</div>
+        <h1 className="text-4xl font-extrabold tracking-tight">أمثلة سير ذاتية عربية لكل مهنة</h1>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
+          اختر مهنتك لترى نموذج سيرة ذاتية كاملاً، كلمات ATS التي تفحصها أنظمة التوظيف، المهارات، وخطاب تعريف جاهز — ثم ابنِ سيرتك مجاناً.
+        </p>
+
+        {AR_CATEGORIES.map((cat) => (
+          <section key={cat} className="mt-10">
+            <h2 className="mb-4 text-xl font-bold">{cat}</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {JOBS_AR.filter((j) => j.category === cat).map((j) => (
+                <Link key={j.slug} href={`/ar/resume-examples/${j.slug}`}
+                  className="card card-hover p-4" style={{ color: "var(--fg)" }}>
+                  <div className="font-bold">{j.title}</div>
+                  <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>مثال سيرة · مهارات · خطاب تعريف</div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 سيرة · خدمة سير ذاتية من Rabit</p>
+      </footer>
+          <HubLinks ar current="/ar/resume-examples" />
+    </main>
+  );
+}

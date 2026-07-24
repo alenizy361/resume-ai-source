@@ -1,1 +1,79 @@
-{"data":"InVzZSBjbGllbnQiOwovKioKICogVEhFIExJVklORyBCQUNLR1JPVU5EIOKAlCBvbmUgZ2xvYmFsIGZpZWxkLCBtb3VudGVkIGJ5IE9yYlByb3ZpZGVyIG9uIGV2ZXJ5CiAqIHJvdXRlLiBJdCByZWFjdHMgdG8gRVZFUllUSElORzoKICogICBjdXJzb3IgIOKGkiBhIHNvZnQgbGlnaHQgZm9sbG93cyB0aGUgaGFuZCAobGVycGVkLCBuZXZlciBqdW1weSkKICogICBjbGljayAgIOKGkiBhIHJpcHBsZSByaW5ncyBvdXQgZnJvbSB0aGUgdG91Y2ggcG9pbnQKICogICBtb29kICAgIOKGkiB0aGUgd2hvbGUgd2FzaCB0aW50cyB3aXRoIHRoZSBvcmIncyBzdGF0ZSAodGhpbmtpbmcgdmlvbGV0LAogKiAgICAgICAgICAgICBsaXN0ZW5pbmcgYmx1ZSwgZ29sZGVuIHBheW1lbnQsIG1pbnQgc3VjY2VzcykKICogICBzY3JvbGwgIOKGkiB0aGUgYXVyb3JhIGRyaWZ0cyBwYXJhbGxheCBhZ2FpbnN0IHRoZSBwYWdlCiAqLwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVJlZiB9IGZyb20gInJlYWN0IjsKaW1wb3J0IHR5cGUgeyBPcmJTdGF0ZSB9IGZyb20gIi4uL0FpT3JiIjsKaW1wb3J0IENvc21vc0ZpZWxkIGZyb20gIi4vQ29zbW9zRmllbGQiOwoKY29uc3QgVElOVFM6IFJlY29yZDxzdHJpbmcsIHN0cmluZz4gPSB7CiAgaWRsZTogInJnYmEoMjMyLDIzNiwyNDUsMC4wNCkiLAogIHRoaW5raW5nOiAicmdiYSgxMzksOTIsMjQ2LDAuMDc1KSIsCiAgbGlzdGVuaW5nOiAicmdiYSgxMjAsMTcwLDI1NSwwLjA2NSkiLAogIGdvbGRlbjogInJnYmEoMjQ1LDE4NCw2NCwwLjA2KSIsCiAgZG9uZTogInJnYmEoMTIwLDIyMCwxNzAsMC4wNSkiLAp9OwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQW1iaWVudEZpZWxkKHsgbW9vZCwgYWN0aXZlIH06IHsgbW9vZDogT3JiU3RhdGU7IGFjdGl2ZTogYm9vbGVhbiB9KSB7CiAgY29uc3QgcmVmID0gdXNlUmVmPEhUTUxEaXZFbGVtZW50PihudWxsKTsKICBjb25zdCBwb3MgPSB1c2VSZWYoeyB4OiAwLjUsIHk6IDAuMzIsIHR4OiAwLjUsIHR5OiAwLjMyIH0pOwoKICB1c2VFZmZlY3QoKCkgPT4gewogICAgY29uc3QgZWwgPSByZWYuY3VycmVudDsKICAgIGlmICghZWwpIHJldHVybjsKICAgIGlmICh3aW5kb3cubWF0Y2hNZWRpYSgiKHByZWZlcnMtcmVkdWNlZC1tb3Rpb246IHJlZHVjZSkiKS5tYXRjaGVzKSByZXR1cm47CiAgICBsZXQgcmFmID0gMDsKICAgIGxldCBydW5uaW5nID0gdHJ1ZTsKCiAgICBjb25zdCBvbk1vdmUgPSAoZTogUG9pbnRlckV2ZW50KSA9PiB7CiAgICAgIHBvcy5jdXJyZW50LnR4ID0gZS5jbGllbnRYIC8gd2luZG93LmlubmVyV2lkdGg7CiAgICAgIHBvcy5jdXJyZW50LnR5ID0gZS5jbGllbnRZIC8gd2luZG93LmlubmVySGVpZ2h0OwogICAgfTsKICAgIGNvbnN0IG9uRG93biA9IChlOiBQb2ludGVyRXZlbnQpID0+IHsKICAgICAgY29uc3QgciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoInNwYW4iKTsKICAgICAgci5jbGFzc05hbWUgPSAiYW1iLXJpcHBsZSI7CiAgICAgIHIuc3R5bGUubGVmdCA9IGAke2UuY2xpZW50WH1weGA7CiAgICAgIHIuc3R5bGUudG9wID0gYCR7ZS5jbGllbnRZfXB4YDsKICAgICAgZWwuYXBwZW5kQ2hpbGQocik7CiAgICAgIHdpbmRvdy5zZXRUaW1lb3V0KCgpID0+IHIucmVtb3ZlKCksIDE0MDApOwogICAgfTsKICAgIGNvbnN0IGxvb3AgPSAoKSA9PiB7CiAgICAgIGlmICghcnVubmluZykgcmV0dXJuOwogICAgICBjb25zdCBwID0gcG9zLmN1cnJlbnQ7CiAgICAgIHAueCArPSAocC50eCAtIHAueCkgKiAwLjA1NTsKICAgICAgcC55ICs9IChwLnR5IC0gcC55KSAqIDAuMDU1OwogICAgICBlbC5zdHlsZS5zZXRQcm9wZXJ0eSgiLS1teCIsIGAkeyhwLnggKiAxMDApLnRvRml4ZWQoMil9JWApOwogICAgICBlbC5zdHlsZS5zZXRQcm9wZXJ0eSgiLS1teSIsIGAkeyhwLnkgKiAxMDApLnRvRml4ZWQoMil9JWApOwogICAgICBlbC5zdHlsZS5zZXRQcm9wZXJ0eSgiLS1zY3kiLCBTdHJpbmcod2luZG93LnNjcm9sbFkgfHwgMCkpOwogICAgICByYWYgPSByZXF1ZXN0QW5pbWF0aW9uRnJhbWUobG9vcCk7CiAgICB9OwoKICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJwb2ludGVybW92ZSIsIG9uTW92ZSwgeyBwYXNzaXZlOiB0cnVlIH0pOwogICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoInBvaW50ZXJkb3duIiwgb25Eb3duLCB7IHBhc3NpdmU6IHRydWUgfSk7CiAgICByYWYgPSByZXF1ZXN0QW5pbWF0aW9uRnJhbWUobG9vcCk7CiAgICByZXR1cm4gKCkgPT4gewogICAgICBydW5uaW5nID0gZmFsc2U7CiAgICAgIGNhbmNlbEFuaW1hdGlvbkZyYW1lKHJhZik7CiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCJwb2ludGVybW92ZSIsIG9uTW92ZSk7CiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCJwb2ludGVyZG93biIsIG9uRG93bik7CiAgICB9OwogIH0sIFtdKTsKCiAgcmV0dXJuICgKICAgIDxkaXYgcmVmPXtyZWZ9IGNsYXNzTmFtZT17YGFtYmllbnQtZmllbGQgJHthY3RpdmUgPyAiaXMtYWN0aXZlIiA6ICIifWB9IGFyaWEtaGlkZGVuPgogICAgICA8Q29zbW9zRmllbGQgLz4KICAgICAgPGRpdiBjbGFzc05hbWU9ImFtYi10aW50IiBzdHlsZT17eyBiYWNrZ3JvdW5kOiBUSU5UU1ttb29kXSA/PyBUSU5UUy5pZGxlIH19IC8+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJhbWItcGFyYWxsYXgiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhbWItZHJpZnQgZDEiIC8+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImFtYi1kcmlmdCBkMiIgLz4KICAgICAgPC9kaXY+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJhbWItbGlnaHQiIC8+CiAgICA8L2Rpdj4KICApOwp9Cg=="}
+"use client";
+/**
+ * THE LIVING BACKGROUND — one global field, mounted by OrbProvider on every
+ * route. It reacts to EVERYTHING:
+ *   cursor  → a soft light follows the hand (lerped, never jumpy)
+ *   click   → a ripple rings out from the touch point
+ *   mood    → the whole wash tints with the orb's state (thinking violet,
+ *             listening blue, golden payment, mint success)
+ *   scroll  → the aurora drifts parallax against the page
+ */
+import { useEffect, useRef } from "react";
+import type { OrbState } from "../AiOrb";
+import CosmosField from "./CosmosField";
+
+const TINTS: Record<string, string> = {
+  idle: "rgba(232,236,245,0.04)",
+  thinking: "rgba(139,92,246,0.075)",
+  listening: "rgba(120,170,255,0.065)",
+  golden: "rgba(245,184,64,0.06)",
+  done: "rgba(120,220,170,0.05)",
+};
+
+export default function AmbientField({ mood, active }: { mood: OrbState; active: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const pos = useRef({ x: 0.5, y: 0.32, tx: 0.5, ty: 0.32 });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let running = true;
+
+    const onMove = (e: PointerEvent) => {
+      pos.current.tx = e.clientX / window.innerWidth;
+      pos.current.ty = e.clientY / window.innerHeight;
+    };
+    const onDown = (e: PointerEvent) => {
+      const r = document.createElement("span");
+      r.className = "amb-ripple";
+      r.style.left = `${e.clientX}px`;
+      r.style.top = `${e.clientY}px`;
+      el.appendChild(r);
+      window.setTimeout(() => r.remove(), 1400);
+    };
+    const loop = () => {
+      if (!running) return;
+      const p = pos.current;
+      p.x += (p.tx - p.x) * 0.055;
+      p.y += (p.ty - p.y) * 0.055;
+      el.style.setProperty("--mx", `${(p.x * 100).toFixed(2)}%`);
+      el.style.setProperty("--my", `${(p.y * 100).toFixed(2)}%`);
+      el.style.setProperty("--scy", String(window.scrollY || 0));
+      raf = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    raf = requestAnimationFrame(loop);
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className={`ambient-field ${active ? "is-active" : ""}`} aria-hidden>
+      <CosmosField />
+      <div className="amb-tint" style={{ background: TINTS[mood] ?? TINTS.idle }} />
+      <div className="amb-parallax">
+        <div className="amb-drift d1" />
+        <div className="amb-drift d2" />
+      </div>
+      <div className="amb-light" />
+    </div>
+  );
+}

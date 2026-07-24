@@ -1,1 +1,10 @@
-{"data":"InVzZSBjbGllbnQiOwovKioKICogRmxvYXRpbmcgYXVyb3JhIGJsb2JzIOKAlCB0aGUgYW1iaWVudCBiYWNrZ3JvdW5kIG9mIHRoZSBDT1NNT1MgKGRhcmspIHdvcmxkLgogKiBUd28tdGhyZWUgc29mdCBjb2xvciBvcmJzIGRyaWZ0aW5nIG9uIGEgc2xvdyB0cmFuc2Zvcm0gbG9vcC4gUHVyZSBDU1MsIEdQVQogKiAodHJhbnNmb3JtL29wYWNpdHkgb25seSksIHJlZHVjZWQtbW90aW9uIHNhZmUgKHRoZSAuYXVyb3JhLWJnIHJ1bGVzIGFscmVhZHkKICoga2lsbCB0aGUgZHJpZnQpLiBSZXVzZWQgYWNyb3NzIGRhcmsgcGFnZXMgc28gZXZlcnkgc2NyZWVuIHNoYXJlcyBvbmUgc2t5LgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQXVyb3JhQmxvYnMoeyBjbGFzc05hbWUgPSAiIiB9OiB7IGNsYXNzTmFtZT86IHN0cmluZyB9KSB7CiAgcmV0dXJuIDxkaXYgY2xhc3NOYW1lPXtgYXVyb3JhLWJnICR7Y2xhc3NOYW1lfWB9IGFyaWEtaGlkZGVuIC8+Owp9Cg=="}
+"use client";
+/**
+ * Floating aurora blobs — the ambient background of the COSMOS (dark) world.
+ * Two-three soft color orbs drifting on a slow transform loop. Pure CSS, GPU
+ * (transform/opacity only), reduced-motion safe (the .aurora-bg rules already
+ * kill the drift). Reused across dark pages so every screen shares one sky.
+ */
+export default function AuroraBlobs({ className = "" }: { className?: string }) {
+  return <div className={`aurora-bg ${className}`} aria-hidden />;
+}

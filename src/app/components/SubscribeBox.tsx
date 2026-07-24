@@ -1,1 +1,50 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKCi8qKiBOZXdzbGV0dGVyIGNhcHR1cmUg4oCUIHRoZSBvd25lZC1hdWRpZW5jZSBlbmdpbmUgZm9yIGF1dG9ub21vdXMgbWFya2V0aW5nLiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBTdWJzY3JpYmVCb3goeyBhciA9IGZhbHNlIH06IHsgYXI/OiBib29sZWFuIH0pIHsKICBjb25zdCBbZW1haWwsIHNldEVtYWlsXSA9IHVzZVN0YXRlKCIiKTsKICBjb25zdCBbc3RhdGUsIHNldFN0YXRlXSA9IHVzZVN0YXRlPCJpZGxlIiB8ICJidXN5IiB8ICJkb25lIiB8ICJlcnIiPigiaWRsZSIpOwoKICBjb25zdCB0ID0gYXIKICAgID8geyB0aXRsZTogItmG2LXZitit2Kkg2KrZiNi42YrZgSDYo9iz2KjZiNi52YrYqSIsIHN1YjogItmG2LXYp9im2K0gQVRTINmI2YHYsdi1INin2YTYs9mI2YIg2KfZhNiz2LnZiNiv2Yog4oCUINmF2KzYp9mG2KfZiyDYudmE2Ykg2KjYsdmK2K/Zg9iMINmI2KXZhNi62KfYoSDYp9mE2KfYtNiq2LHYp9mDINio2LbYuti32KkuIiwgcGg6ICLYqNix2YrYr9mDINin2YTYpdmE2YPYqtix2YjZhtmKIiwgY3RhOiAi2KfYtNiq2LHZgyIsIGRvbmU6ICLYqtmFISDYo9mI2YQg2LHYs9in2YTYqSDYqtmI2LXZhNmDINmC2LHZitio2KfZiyDinJMiLCBlcnI6ICLYqti52LDZkdixINin2YTYp9i02KrYsdin2YMg4oCUINit2KfZiNmEINir2KfZhtmK2KkuIiB9CiAgICA6IHsgdGl0bGU6ICJPbmUgc2hhcnAgY2FyZWVyIHRpcCwgd2Vla2x5Iiwgc3ViOiAiQVRTIHRhY3RpY3MgYW5kIFNhdWRpL0d1bGYgbWFya2V0IGluc2lnaHRzIOKAlCBmcmVlLCB1bnN1YnNjcmliZSBhbnl0aW1lLiIsIHBoOiAiWW91ciBlbWFpbCIsIGN0YTogIlN1YnNjcmliZSIsIGRvbmU6ICJEb25lISBGaXJzdCBpc3N1ZSBjb21pbmcgc29vbiDinJMiLCBlcnI6ICJDb3VsZG4ndCBzdWJzY3JpYmUg4oCUIHRyeSBhZ2Fpbi4iIH07CgogIGFzeW5jIGZ1bmN0aW9uIHN1Ym1pdChlOiBSZWFjdC5Gb3JtRXZlbnQpIHsKICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIGlmICghZW1haWwudHJpbSgpKSByZXR1cm47CiAgICBzZXRTdGF0ZSgiYnVzeSIpOwogICAgdHJ5IHsKICAgICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goIi9hcGkvc3Vic2NyaWJlIiwgewogICAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICAgIGhlYWRlcnM6IHsgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiB9LAogICAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgZW1haWwgfSksCiAgICAgIH0pOwogICAgICBzZXRTdGF0ZShyZXMub2sgPyAiZG9uZSIgOiAiZXJyIik7CiAgICB9IGNhdGNoIHsKICAgICAgc2V0U3RhdGUoImVyciIpOwogICAgfQogIH0KCiAgcmV0dXJuICgKICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0icHgtNiBweS0xNCIgc3R5bGU9e3sgYm9yZGVyVG9wOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gbWF4LXcteGwgdGV4dC1jZW50ZXIiPgogICAgICAgIDxoMiBjbGFzc05hbWU9InRleHQtMnhsIGZvbnQtYm9sZCI+e3QudGl0bGV9PC9oMj4KICAgICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19Pnt0LnN1Yn08L3A+CiAgICAgICAge3N0YXRlID09PSAiZG9uZSIgPyAoCiAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTUgZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1hY2NlbnQpIiB9fT57dC5kb25lfTwvcD4KICAgICAgICApIDogKAogICAgICAgICAgPGZvcm0gb25TdWJtaXQ9e3N1Ym1pdH0gY2xhc3NOYW1lPSJtdC01IGZsZXggZ2FwLTIiPgogICAgICAgICAgICA8aW5wdXQgdHlwZT0iZW1haWwiIHZhbHVlPXtlbWFpbH0gb25DaGFuZ2U9eyhlKSA9PiBzZXRFbWFpbChlLnRhcmdldC52YWx1ZSl9IHBsYWNlaG9sZGVyPXt0LnBofSByZXF1aXJlZCBkaXI9Imx0ciIKICAgICAgICAgICAgICBjbGFzc05hbWU9e2BmbGV4LTEgcm91bmRlZC14bCBweC00IHB5LTMgdGV4dC1zbSBmb2N1czpvdXRsaW5lLW5vbmUgJHthciA/ICJ0ZXh0LXJpZ2h0IiA6ICIifWB9CiAgICAgICAgICAgICAgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19IC8+CiAgICAgICAgICAgIDxidXR0b24gdHlwZT0ic3VibWl0IiBkaXNhYmxlZD17c3RhdGUgPT09ICJidXN5In0gY2xhc3NOYW1lPSJidG4tYWNjZW50IHB4LTYgcHktMyB0ZXh0LXNtIGRpc2FibGVkOm9wYWNpdHktNTAiPgogICAgICAgICAgICAgIHtzdGF0ZSA9PT0gImJ1c3kiID8gIuKApiIgOiB0LmN0YX0KICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICA8L2Zvcm0+CiAgICAgICAgKX0KICAgICAgICB7c3RhdGUgPT09ICJlcnIiICYmIDxwIGNsYXNzTmFtZT0ibXQtMiB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogIiNmODcxNzEiIH19Pnt0LmVycn08L3A+fQogICAgICA8L2Rpdj4KICAgIDwvc2VjdGlvbj4KICApOwp9Cg=="}
+"use client";
+import { useState } from "react";
+
+/** Newsletter capture — the owned-audience engine for autonomous marketing. */
+export default function SubscribeBox({ ar = false }: { ar?: boolean }) {
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState<"idle" | "busy" | "done" | "err">("idle");
+
+  const t = ar
+    ? { title: "نصيحة توظيف أسبوعية", sub: "نصائح ATS وفرص السوق السعودي — مجاناً على بريدك، وإلغاء الاشتراك بضغطة.", ph: "بريدك الإلكتروني", cta: "اشترك", done: "تم! أول رسالة توصلك قريباً ✓", err: "تعذّر الاشتراك — حاول ثانية." }
+    : { title: "One sharp career tip, weekly", sub: "ATS tactics and Saudi/Gulf market insights — free, unsubscribe anytime.", ph: "Your email", cta: "Subscribe", done: "Done! First issue coming soon ✓", err: "Couldn't subscribe — try again." };
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setState("busy");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setState(res.ok ? "done" : "err");
+    } catch {
+      setState("err");
+    }
+  }
+
+  return (
+    <section className="px-6 py-14" style={{ borderTop: "1px solid var(--line)" }}>
+      <div className="mx-auto max-w-xl text-center">
+        <h2 className="text-2xl font-bold">{t.title}</h2>
+        <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
+        {state === "done" ? (
+          <p className="mt-5 font-semibold" style={{ color: "var(--accent)" }}>{t.done}</p>
+        ) : (
+          <form onSubmit={submit} className="mt-5 flex gap-2">
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.ph} required dir="ltr"
+              className={`flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none ${ar ? "text-right" : ""}`}
+              style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+            <button type="submit" disabled={state === "busy"} className="btn-accent px-6 py-3 text-sm disabled:opacity-50">
+              {state === "busy" ? "…" : t.cta}
+            </button>
+          </form>
+        )}
+        {state === "err" && <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{t.err}</p>}
+      </div>
+    </section>
+  );
+}

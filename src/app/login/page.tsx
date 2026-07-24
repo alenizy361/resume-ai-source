@@ -1,1 +1,111 @@
-{"data":"InVzZSBjbGllbnQiOwoKaW1wb3J0IHsgdXNlU3RhdGUsIHVzZUVmZmVjdCwgU3VzcGVuc2UgfSBmcm9tICJyZWFjdCI7CmltcG9ydCB7IHVzZVNlYXJjaFBhcmFtcyB9IGZyb20gIm5leHQvbmF2aWdhdGlvbiI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCBBdXJvcmFCbG9icyBmcm9tICIuLi9jb21wb25lbnRzL29yYi9BdXJvcmFCbG9icyI7CmltcG9ydCB7IHVzZU9yYlNjZW5lIH0gZnJvbSAiLi4vY29tcG9uZW50cy9vcmIvT3JiUHJvdmlkZXIiOwppbXBvcnQgQWlPcmIgZnJvbSAiLi4vY29tcG9uZW50cy9BaU9yYiI7CmltcG9ydCB1c2VMYW5nIGZyb20gIi4uL2NvbXBvbmVudHMvdXNlTGFuZyI7CgpmdW5jdGlvbiBMb2dpbklubmVyKCkgewogIGNvbnN0IHBhcmFtcyA9IHVzZVNlYXJjaFBhcmFtcygpOwogIGNvbnN0IGFyID0gdXNlTGFuZygpOwogIGNvbnN0IFtlbWFpbCwgc2V0RW1haWxdID0gdXNlU3RhdGUoIiIpOwogIGNvbnN0IFtzdGF0ZSwgc2V0U3RhdGVdID0gdXNlU3RhdGU8ImlkbGUiIHwgInNlbmRpbmciIHwgInNlbnQiPigiaWRsZSIpOwogIC8vIFN1cnZpdmUgcmVmcmVzaC9iYWNrIGFmdGVyIHNlbmRpbmcg4oCUIG90aGVyd2lzZSB1c2VycyByZS1yZXF1ZXN0IGR1cGxpY2F0ZXMuCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIHRyeSB7CiAgICAgIC8vIEFycml2aW5nIHZpYSBhbiBleHBpcmVkIGxpbmsgbXVzdCBzaG93IHRoYXQgbWVzc2FnZSBpbiB0aGUgZm9ybSDigJQgbm90IHRoZQogICAgICAvLyBzdGFsZSAiQ2hlY2sgeW91ciBpbmJveCIgdmlldyByZXN0b3JlZCBmcm9tIGEgcHJldmlvdXMgcmVxdWVzdC4KICAgICAgaWYgKHBhcmFtcy5nZXQoImVycm9yIikgPT09ICJleHBpcmVkIikgewogICAgICAgIHNlc3Npb25TdG9yYWdlLnJlbW92ZUl0ZW0oInJhX2xvZ2luX3NlbnQiKTsKICAgICAgICByZXR1cm47CiAgICAgIH0KICAgICAgY29uc3Qgc2F2ZWQgPSBzZXNzaW9uU3RvcmFnZS5nZXRJdGVtKCJyYV9sb2dpbl9zZW50Iik7CiAgICAgIGlmIChzYXZlZCkgeyBzZXRFbWFpbChzYXZlZCk7IHNldFN0YXRlKCJzZW50Iik7IH0KICAgIH0gY2F0Y2ggeyAvKiBub29wICovIH0KICB9LCBbcGFyYW1zXSk7CiAgY29uc3QgW2Vycm9yLCBzZXRFcnJvcl0gPSB1c2VTdGF0ZShwYXJhbXMuZ2V0KCJlcnJvciIpID09PSAiZXhwaXJlZCIgPyAoYXIgPyAi2KfZhtiq2YfYqiDYtdmE2KfYrdmK2Kkg2KfZhNix2KfYqNi3IOKAlCDYp9i32YTYqCDYsdin2KjYt9in2Ysg2KzYr9mK2K/Yp9mLLiIgOiAiVGhhdCBsaW5rIGV4cGlyZWQg4oCUIHJlcXVlc3QgYSBuZXcgb25lLiIpIDogIiIpOwoKICAvLyDYsdin2KjYtyBkcml2ZXMgdGhpcyBzY2VuZTogdGhlIEdhdGUuIFRoaW5raW5nIHdoaWxlIHNlbmRpbmcsIGEgcmFkaW8tcHVsc2UKICAvLyBicm9hZGNhc3QgdGhlIG1vbWVudCB0aGUgbWFnaWMgbGluayBpcyBzZW50LgogIHVzZU9yYlNjZW5lKAogICAgeyB2aXNpYmxlOiB0cnVlLCB0b3A6IHN0YXRlID09PSAic2VudCIgPyAiMjB2aCIgOiAiMjJ2aCIsIHNpemU6IDcyLCBtb29kOiBzdGF0ZSA9PT0gInNlbmRpbmciID8gInRoaW5raW5nIiA6IHN0YXRlID09PSAic2VudCIgPyAiZG9uZSIgOiAiaWRsZSIsIHJhZGlvOiBzdGF0ZSA9PT0gInNlbnQiIH0sCiAgICBbc3RhdGVdCiAgKTsKCiAgYXN5bmMgZnVuY3Rpb24gc3VibWl0KGU6IFJlYWN0LkZvcm1FdmVudCkgewogICAgZS5wcmV2ZW50RGVmYXVsdCgpOwogICAgc2V0RXJyb3IoIiIpOwogICAgc2V0U3RhdGUoInNlbmRpbmciKTsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKCIvYXBpL2F1dGgvcmVxdWVzdCIsIHsKICAgICAgICBtZXRob2Q6ICJQT1NUIiwKICAgICAgICBoZWFkZXJzOiB7ICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IGVtYWlsIH0pLAogICAgICB9KTsKICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoZGF0YS5lcnJvciB8fCAiRmFpbGVkIik7CiAgICAgIHNldFN0YXRlKCJzZW50Iik7CiAgICAgIHRyeSB7IHNlc3Npb25TdG9yYWdlLnNldEl0ZW0oInJhX2xvZ2luX3NlbnQiLCBlbWFpbCk7IH0gY2F0Y2ggeyAvKiBub29wICovIH0KICAgIH0gY2F0Y2ggKGVycikgewogICAgICBzZXRFcnJvcihlcnIgaW5zdGFuY2VvZiBFcnJvciA/IGVyci5tZXNzYWdlIDogIlNvbWV0aGluZyB3ZW50IHdyb25nLiIpOwogICAgICBzZXRTdGF0ZSgiaWRsZSIpOwogICAgfQogIH0KCiAgcmV0dXJuICgKICAgIDxtYWluIGRpcj17YXIgPyAicnRsIiA6ICJsdHIifSBjbGFzc05hbWU9InJlbGF0aXZlIGZsZXggbWluLWgtc2NyZWVuIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBvdmVyZmxvdy1oaWRkZW4gcHgtNiIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWNvc21vcy1iZykiLCBjb2xvcjogInZhcigtLWNvc21vcy10ZXh0KSIgfX0+CiAgICAgIDxBdXJvcmFCbG9icyAvPgogICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUgdy1mdWxsIG1heC13LXNtIHJvdW5kZWQtM3hsIHAtOCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMjU1LDI1NSwyNTUsMC4wNCkiLCBib3JkZXI6ICIxcHggc29saWQgcmdiYSgyNTUsMjU1LDI1NSwwLjEpIiwgYmFja2Ryb3BGaWx0ZXI6ICJibHVyKDEycHgpIiB9fT4KICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9Im1iLTYgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIuNSI+CiAgICAgICAgICA8QWlPcmIgc2l6ZT17MzB9IC8+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtWzE1cHhdIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+U2lyYTwvc3Bhbj4KICAgICAgICA8L0xpbms+CgogICAgICAgIHtzdGF0ZSA9PT0gInNlbnQiID8gKAogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQtY2VudGVyIj4KICAgICAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1ib2xkIj57YXIgPyAi2KrZgdmC2ZHYryDYqNix2YrYr9mDINin2YTZiNin2LHYryIgOiAiQ2hlY2sgeW91ciBpbmJveCJ9PC9oMT4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC0yIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tY29zbW9zLW11dGVkKSIgfX0+CiAgICAgICAgICAgICAge2FyID8gPD7Yo9ix2LPZhNmG2Kcg2LHYp9io2Lcg2KfZhNiv2K7ZiNmEINil2YTZiSA8c3Ryb25nPntlbWFpbH08L3N0cm9uZz4uINin2YbZgtix2Ycg2YTZhNmF2KrYp9io2LnYqSDigJQg2KrZhtiq2YfZiiDYtdmE2KfYrdmK2KrZhyDYrtmE2KfZhCDZodmlINiv2YLZitmC2KkuPC8+IDogPD5XZSBzZW50IGEgc2lnbi1pbiBsaW5rIHRvIDxzdHJvbmc+e2VtYWlsfTwvc3Ryb25nPi4gQ2xpY2sgaXQgdG8gY29udGludWUg4oCUIGl0IGV4cGlyZXMgaW4gMTUgbWludXRlcy48Lz59CiAgICAgICAgICAgIDwvcD4KICAgICAgICAgICAgPGJ1dHRvbgogICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHsgdHJ5IHsgc2Vzc2lvblN0b3JhZ2UucmVtb3ZlSXRlbSgicmFfbG9naW5fc2VudCIpOyB9IGNhdGNoIHsgLyogbm9vcCAqLyB9IHNldEVtYWlsKCIiKTsgc2V0U3RhdGUoImlkbGUiKTsgfX0KICAgICAgICAgICAgICBjbGFzc05hbWU9Im10LTQgdGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWFjY2VudCkiIH19PgogICAgICAgICAgICAgIHthciA/ICLYp9iz2KrYrtiv2KfZhSDYqNix2YrYryDYotiu2LEg4oaQIiA6ICJVc2UgYSBkaWZmZXJlbnQgZW1haWwg4oaSIn0KICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICApIDogKAogICAgICAgICAgPD4KICAgICAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1ib2xkIj57YXIgPyAi2LPZitix2KrZgyDYqNin2YbYqti42KfYsdmDIiA6ICJZb3VyIHJlc3VtZSBhd2FpdHMifTwvaDE+CiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMSB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWNvc21vcy1tdXRlZCkiIH19PnthciA/ICLYo9iv2K7ZhCDYqNix2YrYr9mDINin2YTYpdmE2YPYqtix2YjZhtmKINmI2LPZhtix2LPZhCDZhNmDINix2KfYqNi3INiv2K7ZiNmEIOKAlCDYqNmE2Kcg2YPZhNmF2Kkg2YXYsdmI2LEuIiA6ICJFbnRlciB5b3VyIGVtYWlsIGFuZCB3ZSdsbCBzZW5kIHlvdSBhIG1hZ2ljIGxpbmsg4oCUIG5vIHBhc3N3b3JkLiJ9PC9wPgogICAgICAgICAgICA8Zm9ybSBvblN1Ym1pdD17c3VibWl0fSBjbGFzc05hbWU9Im10LTUgc3BhY2UteS0zIj4KICAgICAgICAgICAgICA8aW5wdXQKICAgICAgICAgICAgICAgIHR5cGU9ImVtYWlsIgogICAgICAgICAgICAgICAgdmFsdWU9e2VtYWlsfQogICAgICAgICAgICAgICAgb25DaGFuZ2U9eyhlKSA9PiBzZXRFbWFpbChlLnRhcmdldC52YWx1ZSl9CiAgICAgICAgICAgICAgICBwbGFjZWhvbGRlcj0ieW91QGVtYWlsLmNvbSIKICAgICAgICAgICAgICAgIHJlcXVpcmVkCiAgICAgICAgICAgICAgICBjbGFzc05hbWU9InctZnVsbCByb3VuZGVkLWxnIHB4LTQgcHktMi41IHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIgogICAgICAgICAgICAgICAgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLCBib3JkZXI6ICIxcHggc29saWQgcmdiYSgyNTUsMjU1LDI1NSwwLjE0KSIsIGNvbG9yOiAidmFyKC0tY29zbW9zLXRleHQpIiwgZm9udFNpemU6IDE2IH19CiAgICAgICAgICAgICAgLz4KICAgICAgICAgICAgICB7ZXJyb3IgJiYgPGRpdiBjbGFzc05hbWU9InJvdW5kZWQtbGcgcHgtMyBweS0yIHRleHQteHMiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDI0OCwxMTMsMTEzLDAuMSkiLCBjb2xvcjogIiNmODcxNzEiIH19PntlcnJvcn08L2Rpdj59CiAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPSJzdWJtaXQiIGRpc2FibGVkPXtzdGF0ZSA9PT0gInNlbmRpbmcifSBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgdy1mdWxsIHB5LTMgZGlzYWJsZWQ6b3BhY2l0eS01MCI+CiAgICAgICAgICAgICAgICB7c3RhdGUgPT09ICJzZW5kaW5nIiA/IChhciA/ICLYrNin2LHZjSDYp9mE2KXYsdiz2KfZhOKApiIgOiAiU2VuZGluZ+KApiIpIDogKGFyID8gItij2LHYs9mEINix2KfYqNi3INin2YTYr9iu2YjZhCIgOiAiU2VuZCBtYWdpYyBsaW5rIil9CiAgICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICAgIDwvZm9ybT4KICAgICAgICAgIDwvPgogICAgICAgICl9CiAgICAgIDwvZGl2PgogICAgPC9tYWluPgogICk7Cn0KCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIExvZ2luUGFnZSgpIHsKICByZXR1cm4gKAogICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8bWFpbiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWJnKSIgfX0gLz59PgogICAgICA8TG9naW5Jbm5lciAvPgogICAgPC9TdXNwZW5zZT4KICApOwp9Cg=="}
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import AuroraBlobs from "../components/orb/AuroraBlobs";
+import { useOrbScene } from "../components/orb/OrbProvider";
+import AiOrb from "../components/AiOrb";
+import useLang from "../components/useLang";
+
+function LoginInner() {
+  const params = useSearchParams();
+  const ar = useLang();
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+  // Survive refresh/back after sending — otherwise users re-request duplicates.
+  useEffect(() => {
+    try {
+      // Arriving via an expired link must show that message in the form — not the
+      // stale "Check your inbox" view restored from a previous request.
+      if (params.get("error") === "expired") {
+        sessionStorage.removeItem("ra_login_sent");
+        return;
+      }
+      const saved = sessionStorage.getItem("ra_login_sent");
+      if (saved) { setEmail(saved); setState("sent"); }
+    } catch { /* noop */ }
+  }, [params]);
+  const [error, setError] = useState(params.get("error") === "expired" ? (ar ? "انتهت صلاحية الرابط — اطلب رابطاً جديداً." : "That link expired — request a new one.") : "");
+
+  // رابط drives this scene: the Gate. Thinking while sending, a radio-pulse
+  // broadcast the moment the magic link is sent.
+  useOrbScene(
+    { visible: true, top: state === "sent" ? "20vh" : "22vh", size: 72, mood: state === "sending" ? "thinking" : state === "sent" ? "done" : "idle", radio: state === "sent" },
+    [state]
+  );
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setState("sending");
+    try {
+      const res = await fetch("/api/auth/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed");
+      setState("sent");
+      try { sessionStorage.setItem("ra_login_sent", email); } catch { /* noop */ }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setState("idle");
+    }
+  }
+
+  return (
+    <main dir={ar ? "rtl" : "ltr"} className="relative flex min-h-screen items-center justify-center overflow-hidden px-6" style={{ background: "var(--cosmos-bg)", color: "var(--cosmos-text)" }}>
+      <AuroraBlobs />
+      <div className="relative w-full max-w-sm rounded-3xl p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(12px)" }}>
+        <Link href="/" className="mb-6 flex items-center gap-2.5">
+          <AiOrb size={30} />
+          <span className="text-[15px] font-bold tracking-tight">Sira</span>
+        </Link>
+
+        {state === "sent" ? (
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">{ar ? "تفقّد بريدك الوارد" : "Check your inbox"}</h1>
+            <p className="mt-2 text-sm" style={{ color: "var(--cosmos-muted)" }}>
+              {ar ? <>أرسلنا رابط الدخول إلى <strong>{email}</strong>. انقره للمتابعة — تنتهي صلاحيته خلال ١٥ دقيقة.</> : <>We sent a sign-in link to <strong>{email}</strong>. Click it to continue — it expires in 15 minutes.</>}
+            </p>
+            <button
+              onClick={() => { try { sessionStorage.removeItem("ra_login_sent"); } catch { /* noop */ } setEmail(""); setState("idle"); }}
+              className="mt-4 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+              {ar ? "استخدام بريد آخر ←" : "Use a different email →"}
+            </button>
+          </div>
+        ) : (
+          <>
+            <h1 className="text-2xl font-bold">{ar ? "سيرتك بانتظارك" : "Your resume awaits"}</h1>
+            <p className="mt-1 text-sm" style={{ color: "var(--cosmos-muted)" }}>{ar ? "أدخل بريدك الإلكتروني وسنرسل لك رابط دخول — بلا كلمة مرور." : "Enter your email and we'll send you a magic link — no password."}</p>
+            <form onSubmit={submit} className="mt-5 space-y-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                required
+                className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none"
+                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.14)", color: "var(--cosmos-text)", fontSize: 16 }}
+              />
+              {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+              <button type="submit" disabled={state === "sending"} className="btn-accent w-full py-3 disabled:opacity-50">
+                {state === "sending" ? (ar ? "جارٍ الإرسال…" : "Sending…") : (ar ? "أرسل رابط الدخول" : "Send magic link")}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen" style={{ background: "var(--bg)" }} />}>
+      <LoginInner />
+    </Suspense>
+  );
+}

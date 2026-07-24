@@ -1,1 +1,88 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKCi8qKgogKiBJbnRlcmFjdGl2ZSBnYXAtZmlsbGluZzogdGhlIEFJIEFTS1MgdGhlIHVzZXIgYWJvdXQgdGhlIHNwZWNpZmljIHRoaW5ncyB0aGVpcgogKiByZXN1bWUgaXMgbWlzc2luZyAoc2tpbGxzL2tleXdvcmRzIHRoZSBqb2Igd2FudHMsIHJlYWwgbnVtYmVycykuIElmIHRoZSB1c2VyCiAqIEhBUyB0aGVtLCB0aGV5IHR5cGUgdGhlbSBpbjsgd2UgYXBwZW5kIHRoZSBjb25maXJtZWQgZmFjdHMgdG8gdGhlIHJlc3VtZSBhbmQKICogcmUtb3B0aW1pemUg4oaSIGEgaGlnaGVyLCBob25lc3Qgc2NvcmUuIE5vdGhpbmcgaXMgaW52ZW50ZWQg4oCUIHRoZSB1c2VyIHN1cHBsaWVzCiAqIHRoZWlyIG93biByZWFsIGluZm9ybWF0aW9uLgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gR2FwRmlsbGVyKHsKICBtaXNzaW5nS2V5d29yZHMsIHNraWxsc0dhcCwgYXIgPSBmYWxzZSwgYnVzeSA9IGZhbHNlLCBvbkFwcGx5LAp9OiB7CiAgbWlzc2luZ0tleXdvcmRzOiBzdHJpbmdbXTsKICBza2lsbHNHYXA6IHN0cmluZ1tdOwogIGFyPzogYm9vbGVhbjsKICBidXN5PzogYm9vbGVhbjsKICBvbkFwcGx5OiAoYWRkaXRpb25zOiBzdHJpbmcpID0+IHZvaWQ7Cn0pIHsKICAvLyBCdWlsZCB1cCB0byA2IHF1ZXN0aW9ucyBmcm9tIHRoZSBnYXBzIHRoZSBBSSBmb3VuZC4KICBjb25zdCBnYXBzID0gQXJyYXkuZnJvbShuZXcgU2V0KFsuLi4oc2tpbGxzR2FwIHx8IFtdKSwgLi4uKG1pc3NpbmdLZXl3b3JkcyB8fCBbXSldKSkuc2xpY2UoMCwgNik7CiAgY29uc3QgW2Fuc3dlcnMsIHNldEFuc3dlcnNdID0gdXNlU3RhdGU8UmVjb3JkPHN0cmluZywgc3RyaW5nPj4oe30pOwogIGNvbnN0IFtub3RlLCBzZXROb3RlXSA9IHVzZVN0YXRlKCIiKTsKCiAgaWYgKGdhcHMubGVuZ3RoID09PSAwKSByZXR1cm4gbnVsbDsKCiAgY29uc3QgdCA9IGFyCiAgICA/IHsKICAgICAgICB0aXRsZTogIvCfpJ0g2K7ZhNmR2YbYpyDZhtmD2YXZkdmEINiz2YrYsdiq2YMg2LPZiNinIiwKICAgICAgICBzdWI6ICLYp9mE2YjYuNmK2YHYqSDYqti32YTYqCDZh9iw2Yog2KfZhNij2LTZitin2KEg2YjZhdinINmE2YLZitmG2KfZh9inINmB2Yog2LPZitix2KrZgy4g2YTZiCDYudmG2K/ZgyDYrtio2LHYqSDZgdmK2YfYpyDZgdi52YTYp9mL2Iwg2KfZg9iq2KjZh9inINmI2KjZhti22YrZgdmH2Kcg2YjZhtix2YHYuSDYr9ix2KzYqtmDLiDZhNmIINmF2Kcg2LnZhtiv2YfYp9iMINin2KrYsdmD2YfYpyDZgdin2LHYutipIOKAlCDZhdinINmG2K7Yqtix2Lkg2LTZitim2KfZiy4iLAogICAgICAgIHE6IChnOiBzdHJpbmcpID0+IGDYudmG2K/ZgyDYrtio2LHYqSDZgdmKIMKrJHtnfcK72J8g2LXZgdmH2Kcg2KjYrNmF2YTYqWAsCiAgICAgICAgcGg6ICLZhdir2KfZhDog2KfYs9iq2K7Yr9mF2Kog4oCmINmB2Yog2YXYtNix2YjYuSDigKYg2YTZhdiv2Kkg4oCmIiwKICAgICAgICBleHRyYTogItij2Yog2KXZhtis2KfYsiDYo9mIINix2YLZhSDYotiu2LEg2KrYrdioINiq2LbZitmB2YfYnyIsCiAgICAgICAgYXBwbHk6ICLYo9i22ZDZgSDZiNij2LnYryDYp9mE2KrYrdiz2YrZhiIsCiAgICAgICAgYXBwbHlpbmc6ICLYrNin2LHZjSDYp9mE2KrYrdiz2YrZhuKApiIsCiAgICAgICAgbm9uZTogItin2YTYrdmC2YjZhCDYp9mE2YHYp9ix2LrYqSDYqtmP2KrYrNin2YfZjtmEIOKAlCDZhti22YrZgSDZgdmC2Lcg2YXYpyDZg9iq2KjYqtmHLiIsCiAgICAgIH0KICAgIDogewogICAgICAgIHRpdGxlOiAi8J+knSBMZXQncyBmaW5pc2ggeW91ciByZXN1bWUgdG9nZXRoZXIiLAogICAgICAgIHN1YjogIlRoZSBqb2IgYXNrcyBmb3IgdGhlc2UgYW5kIHdlIGRpZG4ndCBmaW5kIHRoZW0gaW4geW91ciByZXN1bWUuIElmIHlvdSBnZW51aW5lbHkgaGF2ZSB0aGUgZXhwZXJpZW5jZSwgdHlwZSBpdCBhbmQgd2UnbGwgYWRkIGl0IGFuZCByYWlzZSB5b3VyIHNjb3JlLiBJZiBub3QsIGxlYXZlIGl0IGJsYW5rIOKAlCB3ZSBuZXZlciBpbnZlbnQgYW55dGhpbmcuIiwKICAgICAgICBxOiAoZzogc3RyaW5nKSA9PiBgRG8geW91IGhhdmUgZXhwZXJpZW5jZSB3aXRoICIke2d9Ij8gRGVzY3JpYmUgaXQgaW4gYSBzZW50ZW5jZWAsCiAgICAgICAgcGg6ICJlLmcuIFVzZWQg4oCmIG9uIOKApiBwcm9qZWN0IGZvciDigKYgbW9udGhzIiwKICAgICAgICBleHRyYTogIkFueSBvdGhlciBhY2hpZXZlbWVudCBvciBudW1iZXIgdG8gYWRkPyIsCiAgICAgICAgYXBwbHk6ICJBZGQgJiByZS1vcHRpbWl6ZSIsCiAgICAgICAgYXBwbHlpbmc6ICJPcHRpbWl6aW5n4oCmIiwKICAgICAgICBub25lOiAiRW1wdHkgZmllbGRzIGFyZSBpZ25vcmVkIOKAlCB3ZSBvbmx5IGFkZCB3aGF0IHlvdSB3cml0ZS4iLAogICAgICB9OwoKICBmdW5jdGlvbiBhcHBseSgpIHsKICAgIGNvbnN0IGxpbmVzOiBzdHJpbmdbXSA9IFtdOwogICAgZm9yIChjb25zdCBnIG9mIGdhcHMpIHsKICAgICAgY29uc3QgdiA9IChhbnN3ZXJzW2ddIHx8ICIiKS50cmltKCk7CiAgICAgIGlmICh2KSBsaW5lcy5wdXNoKGAke2d9OiAke3Z9YCk7CiAgICB9CiAgICBpZiAobm90ZS50cmltKCkpIGxpbmVzLnB1c2gobm90ZS50cmltKCkpOwogICAgaWYgKGxpbmVzLmxlbmd0aCA9PT0gMCkgcmV0dXJuOwogICAgLy8gSGFuZCB0aGUgY29uZmlybWVkIGZhY3RzIGJhY2sgdG8gdGhlIHBhZ2UgdG8gYXBwZW5kICsgcmUtc2Nhbi4KICAgIG9uQXBwbHkoYFxuXG5BRERJVElPTkFMIEVYUEVSSUVOQ0UgQ09ORklSTUVEIEJZIFRIRSBDQU5ESURBVEUgKGluY29ycG9yYXRlIG5hdHVyYWxseSk6XG4tICR7bGluZXMuam9pbigiXG4tICIpfWApOwogIH0KCiAgY29uc3QgaW5wID0geyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH0gYXMgY29uc3Q7CiAgY29uc3QgYW55RmlsbGVkID0gZ2Fwcy5zb21lKChnKSA9PiAoYW5zd2Vyc1tnXSB8fCAiIikudHJpbSgpKSB8fCBub3RlLnRyaW0oKS5sZW5ndGggPiAwOwoKICByZXR1cm4gKAogICAgPGRpdiBjbGFzc05hbWU9Im15LTYgcm91bmRlZC0yeGwgcC01IiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAicmdiYSg5OSwxMDIsMjQxLDAuMDUpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoOTksMTAyLDI0MSwwLjMpIiB9fSBkaXI9e2FyID8gInJ0bCIgOiAibHRyIn0+CiAgICAgIDxoMyBjbGFzc05hbWU9InRleHQtbGcgZm9udC1ib2xkIj57dC50aXRsZX08L2gzPgogICAgICA8cCBjbGFzc05hbWU9Im1iLTQgbXQtMSB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e3Quc3VifTwvcD4KICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktMyI+CiAgICAgICAge2dhcHMubWFwKChnKSA9PiAoCiAgICAgICAgICA8ZGl2IGtleT17Z30+CiAgICAgICAgICAgIDxsYWJlbCBjbGFzc05hbWU9Im1iLTEgYmxvY2sgdGV4dC14cyBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZnKSIgfX0+e3QucShnKX08L2xhYmVsPgogICAgICAgICAgICA8aW5wdXQgdmFsdWU9e2Fuc3dlcnNbZ10gfHwgIiJ9IG9uQ2hhbmdlPXsoZSkgPT4gc2V0QW5zd2VycygoYSkgPT4gKHsgLi4uYSwgW2ddOiBlLnRhcmdldC52YWx1ZSB9KSl9CiAgICAgICAgICAgICAgcGxhY2Vob2xkZXI9e3QucGh9IGNsYXNzTmFtZT0idy1mdWxsIHJvdW5kZWQtbGcgcHgtMyBweS0yIHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgICAgPC9kaXY+CiAgICAgICAgKSl9CiAgICAgICAgPGRpdj4KICAgICAgICAgIDxsYWJlbCBjbGFzc05hbWU9Im1iLTEgYmxvY2sgdGV4dC14cyBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZnKSIgfX0+e3QuZXh0cmF9PC9sYWJlbD4KICAgICAgICAgIDxpbnB1dCB2YWx1ZT17bm90ZX0gb25DaGFuZ2U9eyhlKSA9PiBzZXROb3RlKGUudGFyZ2V0LnZhbHVlKX0gcGxhY2Vob2xkZXI9e3QucGh9IGNsYXNzTmFtZT0idy1mdWxsIHJvdW5kZWQtbGcgcHgtMyBweS0yIHRleHQtc20gZm9jdXM6b3V0bGluZS1ub25lIiBzdHlsZT17aW5wfSAvPgogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj4KICAgICAgPGJ1dHRvbiBvbkNsaWNrPXthcHBseX0gZGlzYWJsZWQ9e2J1c3kgfHwgIWFueUZpbGxlZH0KICAgICAgICBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgbXQtNCB3LWZ1bGwgcHktMyB0ZXh0LWJhc2UgZm9udC1ib2xkIGRpc2FibGVkOm9wYWNpdHktNDAiPgogICAgICAgIHtidXN5ID8gdC5hcHBseWluZyA6IHQuYXBwbHl9CiAgICAgIDwvYnV0dG9uPgogICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1jZW50ZXIgdGV4dC1bMTFweF0iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT57dC5ub25lfTwvcD4KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+import { useState } from "react";
+
+/**
+ * Interactive gap-filling: the AI ASKS the user about the specific things their
+ * resume is missing (skills/keywords the job wants, real numbers). If the user
+ * HAS them, they type them in; we append the confirmed facts to the resume and
+ * re-optimize → a higher, honest score. Nothing is invented — the user supplies
+ * their own real information.
+ */
+export default function GapFiller({
+  missingKeywords, skillsGap, ar = false, busy = false, onApply,
+}: {
+  missingKeywords: string[];
+  skillsGap: string[];
+  ar?: boolean;
+  busy?: boolean;
+  onApply: (additions: string) => void;
+}) {
+  // Build up to 6 questions from the gaps the AI found.
+  const gaps = Array.from(new Set([...(skillsGap || []), ...(missingKeywords || [])])).slice(0, 6);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [note, setNote] = useState("");
+
+  if (gaps.length === 0) return null;
+
+  const t = ar
+    ? {
+        title: "🤝 خلّنا نكمّل سيرتك سوا",
+        sub: "الوظيفة تطلب هذي الأشياء وما لقيناها في سيرتك. لو عندك خبرة فيها فعلاً، اكتبها وبنضيفها ونرفع درجتك. لو ما عندها، اتركها فارغة — ما نخترع شيئاً.",
+        q: (g: string) => `عندك خبرة في «${g}»؟ صفها بجملة`,
+        ph: "مثال: استخدمت … في مشروع … لمدة …",
+        extra: "أي إنجاز أو رقم آخر تحب تضيفه؟",
+        apply: "أضِف وأعد التحسين",
+        applying: "جارٍ التحسين…",
+        none: "الحقول الفارغة تُتجاهَل — نضيف فقط ما كتبته.",
+      }
+    : {
+        title: "🤝 Let's finish your resume together",
+        sub: "The job asks for these and we didn't find them in your resume. If you genuinely have the experience, type it and we'll add it and raise your score. If not, leave it blank — we never invent anything.",
+        q: (g: string) => `Do you have experience with "${g}"? Describe it in a sentence`,
+        ph: "e.g. Used … on … project for … months",
+        extra: "Any other achievement or number to add?",
+        apply: "Add & re-optimize",
+        applying: "Optimizing…",
+        none: "Empty fields are ignored — we only add what you write.",
+      };
+
+  function apply() {
+    const lines: string[] = [];
+    for (const g of gaps) {
+      const v = (answers[g] || "").trim();
+      if (v) lines.push(`${g}: ${v}`);
+    }
+    if (note.trim()) lines.push(note.trim());
+    if (lines.length === 0) return;
+    // Hand the confirmed facts back to the page to append + re-scan.
+    onApply(`\n\nADDITIONAL EXPERIENCE CONFIRMED BY THE CANDIDATE (incorporate naturally):\n- ${lines.join("\n- ")}`);
+  }
+
+  const inp = { background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" } as const;
+  const anyFilled = gaps.some((g) => (answers[g] || "").trim()) || note.trim().length > 0;
+
+  return (
+    <div className="my-6 rounded-2xl p-5" style={{ background: "rgba(99,102,241,0.05)", border: "1px solid rgba(99,102,241,0.3)" }} dir={ar ? "rtl" : "ltr"}>
+      <h3 className="text-lg font-bold">{t.title}</h3>
+      <p className="mb-4 mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
+      <div className="space-y-3">
+        {gaps.map((g) => (
+          <div key={g}>
+            <label className="mb-1 block text-xs font-semibold" style={{ color: "var(--fg)" }}>{t.q(g)}</label>
+            <input value={answers[g] || ""} onChange={(e) => setAnswers((a) => ({ ...a, [g]: e.target.value }))}
+              placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={inp} />
+          </div>
+        ))}
+        <div>
+          <label className="mb-1 block text-xs font-semibold" style={{ color: "var(--fg)" }}>{t.extra}</label>
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={inp} />
+        </div>
+      </div>
+      <button onClick={apply} disabled={busy || !anyFilled}
+        className="btn-accent mt-4 w-full py-3 text-base font-bold disabled:opacity-40">
+        {busy ? t.applying : t.apply}
+      </button>
+      <p className="mt-2 text-center text-[11px]" style={{ color: "var(--faint)" }}>{t.none}</p>
+    </div>
+  );
+}

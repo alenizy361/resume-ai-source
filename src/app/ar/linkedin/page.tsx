@@ -1,1 +1,7 @@
-{"data":"aW1wb3J0IHsgcmVkaXJlY3QgfSBmcm9tICJuZXh0L25hdmlnYXRpb24iOwoKLy8gVGhlIGxpbmtlZGluIGZlYXR1cmUgY3VycmVudGx5IGxpdmVzIG9uIHRoZSBzaGFyZWQgKEVuZ2xpc2ggVUkpIHJvdXRlOyBBcmFiaWMKLy8gdmlzaXRvcnMgd2hvIGhpdCAvYXIvbGlua2VkaW4gZGlyZWN0bHkgYXJlIHNlbnQgdGhlcmUgaW5zdGVhZCBvZiBhIDQwNC4KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQXJSZWRpcmVjdCgpIHsKICByZWRpcmVjdCgiL2xpbmtlZGluP2xhbmc9YXIiKTsKfQo="}
+import { redirect } from "next/navigation";
+
+// The linkedin feature currently lives on the shared (English UI) route; Arabic
+// visitors who hit /ar/linkedin directly are sent there instead of a 404.
+export default function ArRedirect() {
+  redirect("/linkedin?lang=ar");
+}

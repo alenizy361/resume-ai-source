@@ -1,1 +1,154 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CmltcG9ydCB7IHZlcmlmeVBhc3MsIEFDQ0VTU19DT09LSUUgfSBmcm9tICJAL2FwcC9saWIvYWNjZXNzIjsKaW1wb3J0IHsgcmVhZFNlc3Npb24sIFNFU1NJT05fQ09PS0lFIH0gZnJvbSAiQC9hcHAvbGliL3Nlc3Npb24iOwppbXBvcnQgeyBoYXNBY3RpdmVFbnRpdGxlbWVudCB9IGZyb20gIkAvYXBwL2xpYi9lbnRpdGxlbWVudHMiOwoKZXhwb3J0IGNvbnN0IG1heER1cmF0aW9uID0gNjA7CgovKiogVGhlIGxpdmUgaW50ZXJ2aWV3IGlzIGEgUEFJRCBmZWF0dXJlIOKAlCBhIHNpZ25lZC1pbiBhY2NvdW50IHdpdGggYW4gYWN0aXZlCiAqICBlbnRpdGxlbWVudCwgb3IgYSB2YWxpZCBwYWlkIGRldmljZSBwYXNzIG9uIHRoaXMgYnJvd3Nlci4gKi8KYXN5bmMgZnVuY3Rpb24gaXNQYWlkKHJlcTogTmV4dFJlcXVlc3QpOiBQcm9taXNlPGJvb2xlYW4+IHsKICBjb25zdCBlbWFpbCA9IHJlYWRTZXNzaW9uKHJlcS5jb29raWVzLmdldChTRVNTSU9OX0NPT0tJRSk/LnZhbHVlLCBEYXRlLm5vdygpKTsKICBpZiAoZW1haWwgJiYgKGF3YWl0IGhhc0FjdGl2ZUVudGl0bGVtZW50KGVtYWlsLCBEYXRlLm5vdygpKSkpIHJldHVybiB0cnVlOwogIHJldHVybiAhIXZlcmlmeVBhc3MocmVxLmNvb2tpZXMuZ2V0KEFDQ0VTU19DT09LSUUpPy52YWx1ZSwgRGF0ZS5ub3coKSk7Cn0KCi8qKgogKiBMaXZlIEFJIG1vY2staW50ZXJ2aWV3IGVuZ2luZS4KICogICBtb2RlICJxdWVzdGlvbnMiIOKGkiBnZW5lcmF0ZSBhIHNldCBvZiBpbnRlcnZpZXcgcXVlc3Rpb25zIGZyb20gcmVzdW1lICsgcm9sZS4KICogICBtb2RlICJmZWVkYmFjayIgIOKGkiBzY29yZSArIGNvYWNoIE9ORSBzcG9rZW4vdHlwZWQgYW5zd2VyIHRvIG9uZSBxdWVzdGlvbi4KICogUGxhaW4tdGV4dCBkZWxpbWl0ZWQgb3V0cHV0IChub3QgSlNPTikgcGFyc2VkIGJ5IHJlZ2V4IOKAlCBzYW1lIHJlbGlhYmlsaXR5CiAqIGFwcHJvYWNoIGFzIC9hcGkvb3B0aW1pemUsIHNvIGEgc2xpZ2h0bHktb2ZmIG1vZGVsIHJlcGx5IG5ldmVyIGJyZWFrcyB0aGUgVUkuCiAqLwoKY29uc3QgUVVFU1RJT05TX1BST01QVCA9IChyZXN1bWU6IHN0cmluZywgcm9sZTogc3RyaW5nLCB1aUxhbmc6IHN0cmluZykgPT4gYFlvdSBhcmUgYSBzZW5pb3IgaW50ZXJ2aWV3ZXIgYXQgYSB0b3AgY29tcGFueSBoaXJpbmcgZm9yOiAke3JvbGUgfHwgInRoZSBjYW5kaWRhdGUncyB0YXJnZXQgcm9sZSJ9LgpCYXNlZCBvbiB0aGUgY2FuZGlkYXRlJ3MgYmFja2dyb3VuZCBiZWxvdywgcHJvZHVjZSA2IHJlYWxpc3RpYyBpbnRlcnZpZXcgcXVlc3Rpb25zIHRoZXkgd2lsbCBsaWtlbHkgZmFjZSDigJQgYSBtaXggb2Y6IDEgb3BlbmluZy9tb3RpdmF0aW9uLCAzIGJlaGF2aW9yYWwgKFNUQVIpLCAyIHJvbGUtc3BlY2lmaWMvdGVjaG5pY2FsLiBPcmRlciB0aGVtIGxpa2UgYSByZWFsIGludGVydmlldy4KCkNBTkRJREFURSBCQUNLR1JPVU5EOgoke3Jlc3VtZX0KCiR7dWlMYW5nID09PSAiYXIiID8gIldyaXRlIGVhY2ggcXVlc3Rpb24gaW4gY2xlYXIgQVJBQklDICh0aGUgY2FuZGlkYXRlIHdpbGwgYW5zd2VyIGFsb3VkIGluIEFyYWJpYyBvciBFbmdsaXNoKS4iIDogIldyaXRlIGVhY2ggcXVlc3Rpb24gaW4gY2xlYXIgRW5nbGlzaC4ifQoKT1VUUFVUIOKAlCBwbGFpbiB0ZXh0LCBFWEFDVExZIG9uZSBxdWVzdGlvbiBwZXIgbGluZSwgbm8gbnVtYmVyaW5nLCBubyBleHRyYSB0ZXh0OgpROiA8cXVlc3Rpb24gMT4KUTogPHF1ZXN0aW9uIDI+ClE6IDxxdWVzdGlvbiAzPgpROiA8cXVlc3Rpb24gND4KUTogPHF1ZXN0aW9uIDU+ClE6IDxxdWVzdGlvbiA2PmA7Cgpjb25zdCBGRUVEQkFDS19QUk9NUFQgPSAocXVlc3Rpb246IHN0cmluZywgYW5zd2VyOiBzdHJpbmcsIHJvbGU6IHN0cmluZywgdWlMYW5nOiBzdHJpbmcpID0+IGBZb3UgYXJlIGFuIGV4cGVydCBpbnRlcnZpZXcgY29hY2guIFRoZSBjYW5kaWRhdGUgaXMgaW50ZXJ2aWV3aW5nIGZvcjogJHtyb2xlIHx8ICJ0aGVpciB0YXJnZXQgcm9sZSJ9LgoKUVVFU1RJT04gQVNLRUQ6CiR7cXVlc3Rpb259CgpDQU5ESURBVEUnUyBTUE9LRU4gQU5TV0VSICh0cmFuc2NyaWJlZCwgbWF5IGJlIHJvdWdoKToKJHthbnN3ZXJ9CgpFdmFsdWF0ZSBob25lc3RseSBhbmQgY29hY2ggdGhlbS4gJHt1aUxhbmcgPT09ICJhciIgPyAiV3JpdGUgQUxMIGZlZWRiYWNrIGluIEFSQUJJQy4iIDogIldyaXRlIGluIEVuZ2xpc2guIn0gQmUgc3BlY2lmaWMgYW5kIGVuY291cmFnaW5nIGJ1dCByZWFsLgoKT1VUUFVUIOKAlCBwbGFpbiB0ZXh0IHdpdGggRVhBQ1RMWSB0aGVzZSBtYXJrZXJzLCBpbiBvcmRlciAobm8gSlNPTiwgbm8gbWFya2Rvd24pOgpTQ09SRTogPG51bWJlciAxLTEwIGZvciB0aGlzIGFuc3dlcj4KU1RSRU5HVEhTOiA8b25lIHNlbnRlbmNlIG9uIHdoYXQgd29ya2VkPgpJTVBST1ZFOiA8b25lIHNwZWNpZmljLCBhY3Rpb25hYmxlIHRoaW5nIHRvIGZpeD4KTU9ERUw6IDxhIHN0cm9uZ2VyIDItNCBzZW50ZW5jZSBtb2RlbCBhbnN3ZXIgdGhleSBjb3VsZCBoYXZlIGdpdmVuLCB1c2luZyBUSEVJUiByZWFsIGJhY2tncm91bmQg4oCUIG5ldmVyIGludmVudCBmYWN0cyB0aGV5IGRpZG4ndCBtZW50aW9uPmA7Cgphc3luYyBmdW5jdGlvbiBjYWxsTW9kZWwocHJvbXB0OiBzdHJpbmcsIHN5c3RlbTogc3RyaW5nLCBtYXhUb2tlbnM6IG51bWJlcik6IFByb21pc2U8c3RyaW5nPiB7CiAgY29uc3Qga2V5ID0gcHJvY2Vzcy5lbnYuTlZJRElBX0FQSV9LRVk7CiAgaWYgKCFrZXkpIHRocm93IG5ldyBFcnJvcigiTlZJRElBX0FQSV9LRVkgaXMgbm90IHNldCIpOwogIGNvbnN0IG1vZGVsID0gcHJvY2Vzcy5lbnYuQUlfTU9ERUwgfHwgIm1ldGEvbGxhbWEtNC1tYXZlcmljay0xN2ItMTI4ZS1pbnN0cnVjdCI7CiAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goImh0dHBzOi8vaW50ZWdyYXRlLmFwaS5udmlkaWEuY29tL3YxL2NoYXQvY29tcGxldGlvbnMiLCB7CiAgICBtZXRob2Q6ICJQT1NUIiwKICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2tleX1gLCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7CiAgICAgIG1vZGVsLCB0ZW1wZXJhdHVyZTogMC41LCB0b3BfcDogMC45LCBtYXhfdG9rZW5zOiBtYXhUb2tlbnMsCiAgICAgIG1lc3NhZ2VzOiBbeyByb2xlOiAic3lzdGVtIiwgY29udGVudDogc3lzdGVtIH0sIHsgcm9sZTogInVzZXIiLCBjb250ZW50OiBwcm9tcHQgfV0sCiAgICB9KSwKICB9KTsKICBpZiAoIXJlcy5vaykgdGhyb3cgbmV3IEVycm9yKGBOVklESUEgJHtyZXMuc3RhdHVzfTogJHsoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKX1gKTsKICBjb25zdCBkYXRhID0gYXdhaXQgcmVzLmpzb24oKTsKICByZXR1cm4gZGF0YT8uY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50ID8/ICIiOwp9Cgphc3luYyBmdW5jdGlvbiB3aXRoUmV0cnkoZm46ICgpID0+IFByb21pc2U8c3RyaW5nPiwgdmFsaWQ6IChzOiBzdHJpbmcpID0+IGJvb2xlYW4pOiBQcm9taXNlPHN0cmluZz4gewogIGxldCBsYXN0ID0gIiI7CiAgZm9yIChsZXQgaSA9IDA7IGkgPCAzOyBpKyspIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IG91dCA9IGF3YWl0IGZuKCk7CiAgICAgIGlmIChvdXQudHJpbSgpICYmIHZhbGlkKG91dCkpIHJldHVybiBvdXQ7CiAgICAgIGxhc3QgPSBvdXQ7CiAgICB9IGNhdGNoIChlKSB7CiAgICAgIGNvbnNvbGUuZXJyb3IoImludGVydmlldy1saXZlIGF0dGVtcHQgZmFpbGVkOiIsIGUpOwogICAgfQogIH0KICBpZiAobGFzdCkgcmV0dXJuIGxhc3Q7CiAgdGhyb3cgbmV3IEVycm9yKCJNb2RlbCBmYWlsZWQgYWZ0ZXIgcmV0cmllcyIpOwp9Cgpjb25zdCBncmFiID0gKHJhdzogc3RyaW5nLCBuYW1lOiBzdHJpbmcpID0+IHsKICBjb25zdCBtID0gcmF3LnJlcGxhY2UoL1wqXCovZywgIiIpLm1hdGNoKG5ldyBSZWdFeHAoYF4ke25hbWV9OlxccyooLiopJGAsICJtaSIpKTsKICByZXR1cm4gbSA/IG1bMV0udHJpbSgpIDogIiI7Cn07CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIGlmICghKGF3YWl0IGFsbG93U2hhcmVkKGBpbnRlcnZpZXdsaXZlOiR7Y2xpZW50SXAocmVxKX1gLCAzMCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogItio2LfZkdimINi02YjZiiDwn5mCIOKAlCDYrdin2YjZhCDYqNi52K8g2K/ZgtmK2YLYqS4iIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CiAgICBsZXQgYm9keTsKICAgIHRyeSB7IGJvZHkgPSBhd2FpdCByZXEuanNvbigpOyB9IGNhdGNoIHsgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJJbnZhbGlkIEpTT04gYm9keS4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7IH0KICAgIGlmICghYm9keSB8fCB0eXBlb2YgYm9keSAhPT0gIm9iamVjdCIpIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiSW52YWxpZCByZXF1ZXN0IGJvZHkuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgY29uc3QgbW9kZSA9IFN0cmluZyhib2R5Lm1vZGUgfHwgIiIpOwogICAgY29uc3QgdWlMYW5nID0gYm9keS51aUxhbmcgPT09ICJhciIgPyAiYXIiIDogImVuIjsKCiAgICAvLyBQYWlkIGZlYXR1cmUg4oCUIGJsb2NrIGZyZWUgdXNlcnMgc28gdGhlIGNsaWVudCBzaG93cyB0aGUgQUktc3Bva2VuIHBheXdhbGwuCiAgICBpZiAoIShhd2FpdCBpc1BhaWQocmVxKSkpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsKICAgICAgICBwYXl3YWxsOiB0cnVlLAogICAgICAgIHNwb2tlbjogdWlMYW5nID09PSAiYXIiCiAgICAgICAgICA/ICLYo9mH2YTYp9mLINio2YMhINin2YTZhdmC2KfYqNmE2Kkg2KfZhNiq2YHYp9i52YTZitipINin2YTZhdio2KfYtNix2Kkg2YXZitiy2Kkg2YHZiiDYp9mE2K3YstmF2Kkg2KfZhNmD2KfZhdmE2KnYjCDZiNio2KfZgtiq2YMg2KfZhNit2KfZhNmK2Kkg2YTYpyDYqtiv2LnZhdmH2KcuINin2YHYqtitINin2YTYrdiy2YXYqSDYp9mE2YPYp9mF2YTYqSDYp9mE2KLZhiDZiNmG2KjYr9ijINmF2YLYp9io2YTYqtmDINmB2YjYsdin2YsuIgogICAgICAgICAgOiAiV2VsY29tZSEgVGhlIGxpdmUgaW50ZXJhY3RpdmUgaW50ZXJ2aWV3IGlzIHBhcnQgb2YgdGhlIENvbXBsZXRlIFBhY2ssIGFuZCB5b3VyIGN1cnJlbnQgcGxhbiBkb2Vzbid0IGluY2x1ZGUgaXQuIFVubG9jayB0aGUgQ29tcGxldGUgUGFjayBhbmQgd2UnbGwgc3RhcnQgcmlnaHQgYXdheS4iLAogICAgICAgIGVycm9yOiB1aUxhbmcgPT09ICJhciIgPyAi2KfZhNmF2YLYp9io2YTYqSDYp9mE2KrZgdin2LnZhNmK2Kkg2YXZitiy2Kkg2YXYr9mB2YjYudipLiIgOiAiVGhlIGxpdmUgaW50ZXJ2aWV3IGlzIGEgcGFpZCBmZWF0dXJlLiIsCiAgICAgIH0sIHsgc3RhdHVzOiA0MDIgfSk7CiAgICB9CgogICAgaWYgKG1vZGUgPT09ICJxdWVzdGlvbnMiKSB7CiAgICAgIGNvbnN0IHJlc3VtZSA9IFN0cmluZyhib2R5LnJlc3VtZSB8fCAiIikuc2xpY2UoMCwgNjAwMCk7CiAgICAgIGNvbnN0IHJvbGUgPSBTdHJpbmcoYm9keS5yb2xlIHx8ICIiKS5zbGljZSgwLCAxMjApOwogICAgICBpZiAocmVzdW1lLnRyaW0oKS5sZW5ndGggPCAzMCkgewogICAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiB1aUxhbmcgPT09ICJhciIgPyAi2KPYttmQ2YEg2YbYqNiw2Kkg2KPYt9mI2YQg2LnZhiDYrtio2LHYqtmDINij2YjZhNin2YsuIiA6ICJBZGQgYSBiaXQgbW9yZSBhYm91dCB5b3VyIGV4cGVyaWVuY2UgZmlyc3QuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogICAgICB9CiAgICAgIGNvbnN0IHJhdyA9IGF3YWl0IHdpdGhSZXRyeSgKICAgICAgICAoKSA9PiBjYWxsTW9kZWwoUVVFU1RJT05TX1BST01QVChyZXN1bWUsIHJvbGUsIHVpTGFuZyksICJZb3Ugb3V0cHV0IG9ubHkgJ1E6IC4uLicgbGluZXMsIG9uZSBxdWVzdGlvbiBwZXIgbGluZS4gTm8gbnVtYmVyaW5nLCBubyBleHRyYSB0ZXh0LiIsIDkwMCksCiAgICAgICAgKHMpID0+IChzLm1hdGNoKC9eUTpccyouKy9naW0pPy5sZW5ndGggfHwgMCkgPj0gMywKICAgICAgKTsKICAgICAgY29uc3QgcXVlc3Rpb25zID0gKHJhdy5tYXRjaCgvXlE6XHMqKC4rKSQvZ2ltKSB8fCBbXSkubWFwKChsKSA9PiBsLnJlcGxhY2UoL15ROlxzKi9pLCAiIikudHJpbSgpKS5maWx0ZXIoQm9vbGVhbikuc2xpY2UoMCwgNik7CiAgICAgIGlmICghcXVlc3Rpb25zLmxlbmd0aCkgdGhyb3cgbmV3IEVycm9yKCJObyBxdWVzdGlvbnMgcGFyc2VkIik7CiAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IHF1ZXN0aW9ucyB9KTsKICAgIH0KCiAgICBpZiAobW9kZSA9PT0gImZlZWRiYWNrIikgewogICAgICBjb25zdCBxdWVzdGlvbiA9IFN0cmluZyhib2R5LnF1ZXN0aW9uIHx8ICIiKS5zbGljZSgwLCA1MDApOwogICAgICBjb25zdCBhbnN3ZXIgPSBTdHJpbmcoYm9keS5hbnN3ZXIgfHwgIiIpLnNsaWNlKDAsIDMwMDApOwogICAgICBjb25zdCByb2xlID0gU3RyaW5nKGJvZHkucm9sZSB8fCAiIikuc2xpY2UoMCwgMTIwKTsKICAgICAgaWYgKGFuc3dlci50cmltKCkubGVuZ3RoIDwgNSkgewogICAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiB1aUxhbmcgPT09ICJhciIgPyAi2YTZhSDZhtmE2KrZgti3INil2KzYp9io2Kkg4oCUINit2KfZiNmEINmF2LHYqSDYo9iu2LHZiS4iIDogIldlIGRpZG4ndCBjYXRjaCBhbiBhbnN3ZXIg4oCUIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgICAgIH0KICAgICAgY29uc3QgcmF3ID0gYXdhaXQgd2l0aFJldHJ5KAogICAgICAgICgpID0+IGNhbGxNb2RlbChGRUVEQkFDS19QUk9NUFQocXVlc3Rpb24sIGFuc3dlciwgcm9sZSwgdWlMYW5nKSwgIllvdSBhcmUgYW4gaW50ZXJ2aWV3IGNvYWNoLiBGb2xsb3cgdGhlIGV4YWN0IFNDT1JFL1NUUkVOR1RIUy9JTVBST1ZFL01PREVMIGZvcm1hdC4gUGxhaW4gdGV4dCBvbmx5LiIsIDcwMCksCiAgICAgICAgKHMpID0+IC9TQ09SRTovaS50ZXN0KHMpICYmIC9JTVBST1ZFOi9pLnRlc3QocyksCiAgICAgICk7CiAgICAgIGNvbnN0IHNjb3JlID0gTWF0aC5tYXgoMSwgTWF0aC5taW4oMTAsIHBhcnNlSW50KGdyYWIocmF3LCAiU0NPUkUiKS5yZXBsYWNlKC9bXjAtOV0vZywgIiIpKSB8fCA2KSk7CiAgICAgIGNvbnN0IHN0cmVuZ3RocyA9IGdyYWIocmF3LCAiU1RSRU5HVEhTIik7CiAgICAgIGNvbnN0IGltcHJvdmUgPSBncmFiKHJhdywgIklNUFJPVkUiKTsKICAgICAgY29uc3QgbW9kZWwgPSAocmF3Lm1hdGNoKC9NT0RFTDpccyooW1xzXFNdKikkL2kpPy5bMV0gfHwgIiIpLnRyaW0oKS5yZXBsYWNlKC9cKlwqL2csICIiKTsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgc2NvcmUsIHN0cmVuZ3RocywgaW1wcm92ZSwgbW9kZWwgfSk7CiAgICB9CgogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJVbmtub3duIG1vZGUiIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJpbnRlcnZpZXctbGl2ZSBlcnJvcjoiLCBlcnIpOwogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICLYrdiv2Ksg2K7Yt9ijIOKAlCDYrdin2YjZhCDZhdix2Kkg2KPYrtix2YkuXG5Tb21ldGhpbmcgd2VudCB3cm9uZyDigJQgcGxlYXNlIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA1MDAgfSk7CiAgfQp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+import { verifyPass, ACCESS_COOKIE } from "@/app/lib/access";
+import { readSession, SESSION_COOKIE } from "@/app/lib/session";
+import { hasActiveEntitlement } from "@/app/lib/entitlements";
+
+export const maxDuration = 60;
+
+/** The live interview is a PAID feature — a signed-in account with an active
+ *  entitlement, or a valid paid device pass on this browser. */
+async function isPaid(req: NextRequest): Promise<boolean> {
+  const email = readSession(req.cookies.get(SESSION_COOKIE)?.value, Date.now());
+  if (email && (await hasActiveEntitlement(email, Date.now()))) return true;
+  return !!verifyPass(req.cookies.get(ACCESS_COOKIE)?.value, Date.now());
+}
+
+/**
+ * Live AI mock-interview engine.
+ *   mode "questions" → generate a set of interview questions from resume + role.
+ *   mode "feedback"  → score + coach ONE spoken/typed answer to one question.
+ * Plain-text delimited output (not JSON) parsed by regex — same reliability
+ * approach as /api/optimize, so a slightly-off model reply never breaks the UI.
+ */
+
+const QUESTIONS_PROMPT = (resume: string, role: string, uiLang: string) => `You are a senior interviewer at a top company hiring for: ${role || "the candidate's target role"}.
+Based on the candidate's background below, produce 6 realistic interview questions they will likely face — a mix of: 1 opening/motivation, 3 behavioral (STAR), 2 role-specific/technical. Order them like a real interview.
+
+CANDIDATE BACKGROUND:
+${resume}
+
+${uiLang === "ar" ? "Write each question in clear ARABIC (the candidate will answer aloud in Arabic or English)." : "Write each question in clear English."}
+
+OUTPUT — plain text, EXACTLY one question per line, no numbering, no extra text:
+Q: <question 1>
+Q: <question 2>
+Q: <question 3>
+Q: <question 4>
+Q: <question 5>
+Q: <question 6>`;
+
+const FEEDBACK_PROMPT = (question: string, answer: string, role: string, uiLang: string) => `You are an expert interview coach. The candidate is interviewing for: ${role || "their target role"}.
+
+QUESTION ASKED:
+${question}
+
+CANDIDATE'S SPOKEN ANSWER (transcribed, may be rough):
+${answer}
+
+Evaluate honestly and coach them. ${uiLang === "ar" ? "Write ALL feedback in ARABIC." : "Write in English."} Be specific and encouraging but real.
+
+OUTPUT — plain text with EXACTLY these markers, in order (no JSON, no markdown):
+SCORE: <number 1-10 for this answer>
+STRENGTHS: <one sentence on what worked>
+IMPROVE: <one specific, actionable thing to fix>
+MODEL: <a stronger 2-4 sentence model answer they could have given, using THEIR real background — never invent facts they didn't mention>`;
+
+async function callModel(prompt: string, system: string, maxTokens: number): Promise<string> {
+  const key = process.env.NVIDIA_API_KEY;
+  if (!key) throw new Error("NVIDIA_API_KEY is not set");
+  const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model, temperature: 0.5, top_p: 0.9, max_tokens: maxTokens,
+      messages: [{ role: "system", content: system }, { role: "user", content: prompt }],
+    }),
+  });
+  if (!res.ok) throw new Error(`NVIDIA ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return data?.choices?.[0]?.message?.content ?? "";
+}
+
+async function withRetry(fn: () => Promise<string>, valid: (s: string) => boolean): Promise<string> {
+  let last = "";
+  for (let i = 0; i < 3; i++) {
+    try {
+      const out = await fn();
+      if (out.trim() && valid(out)) return out;
+      last = out;
+    } catch (e) {
+      console.error("interview-live attempt failed:", e);
+    }
+  }
+  if (last) return last;
+  throw new Error("Model failed after retries");
+}
+
+const grab = (raw: string, name: string) => {
+  const m = raw.replace(/\*\*/g, "").match(new RegExp(`^${name}:\\s*(.*)$`, "mi"));
+  return m ? m[1].trim() : "";
+};
+
+export async function POST(req: NextRequest) {
+  try {
+    if (!(await allowShared(`interviewlive:${clientIp(req)}`, 30, 10 * 60 * 1000))) {
+      return NextResponse.json({ error: "بطّئ شوي 🙂 — حاول بعد دقيقة." }, { status: 429 });
+    }
+    let body;
+    try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+    if (!body || typeof body !== "object") return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+    const mode = String(body.mode || "");
+    const uiLang = body.uiLang === "ar" ? "ar" : "en";
+
+    // Paid feature — block free users so the client shows the AI-spoken paywall.
+    if (!(await isPaid(req))) {
+      return NextResponse.json({
+        paywall: true,
+        spoken: uiLang === "ar"
+          ? "أهلاً بك! المقابلة التفاعلية المباشرة ميزة في الحزمة الكاملة، وباقتك الحالية لا تدعمها. افتح الحزمة الكاملة الآن ونبدأ مقابلتك فوراً."
+          : "Welcome! The live interactive interview is part of the Complete Pack, and your current plan doesn't include it. Unlock the Complete Pack and we'll start right away.",
+        error: uiLang === "ar" ? "المقابلة التفاعلية ميزة مدفوعة." : "The live interview is a paid feature.",
+      }, { status: 402 });
+    }
+
+    if (mode === "questions") {
+      const resume = String(body.resume || "").slice(0, 6000);
+      const role = String(body.role || "").slice(0, 120);
+      if (resume.trim().length < 30) {
+        return NextResponse.json({ error: uiLang === "ar" ? "أضِف نبذة أطول عن خبرتك أولاً." : "Add a bit more about your experience first." }, { status: 400 });
+      }
+      const raw = await withRetry(
+        () => callModel(QUESTIONS_PROMPT(resume, role, uiLang), "You output only 'Q: ...' lines, one question per line. No numbering, no extra text.", 900),
+        (s) => (s.match(/^Q:\s*.+/gim)?.length || 0) >= 3,
+      );
+      const questions = (raw.match(/^Q:\s*(.+)$/gim) || []).map((l) => l.replace(/^Q:\s*/i, "").trim()).filter(Boolean).slice(0, 6);
+      if (!questions.length) throw new Error("No questions parsed");
+      return NextResponse.json({ questions });
+    }
+
+    if (mode === "feedback") {
+      const question = String(body.question || "").slice(0, 500);
+      const answer = String(body.answer || "").slice(0, 3000);
+      const role = String(body.role || "").slice(0, 120);
+      if (answer.trim().length < 5) {
+        return NextResponse.json({ error: uiLang === "ar" ? "لم نلتقط إجابة — حاول مرة أخرى." : "We didn't catch an answer — try again." }, { status: 400 });
+      }
+      const raw = await withRetry(
+        () => callModel(FEEDBACK_PROMPT(question, answer, role, uiLang), "You are an interview coach. Follow the exact SCORE/STRENGTHS/IMPROVE/MODEL format. Plain text only.", 700),
+        (s) => /SCORE:/i.test(s) && /IMPROVE:/i.test(s),
+      );
+      const score = Math.max(1, Math.min(10, parseInt(grab(raw, "SCORE").replace(/[^0-9]/g, "")) || 6));
+      const strengths = grab(raw, "STRENGTHS");
+      const improve = grab(raw, "IMPROVE");
+      const model = (raw.match(/MODEL:\s*([\s\S]*)$/i)?.[1] || "").trim().replace(/\*\*/g, "");
+      return NextResponse.json({ score, strengths, improve, model });
+    }
+
+    return NextResponse.json({ error: "Unknown mode" }, { status: 400 });
+  } catch (err) {
+    console.error("interview-live error:", err);
+    return NextResponse.json({ error: "حدث خطأ — حاول مرة أخرى.\nSomething went wrong — please try again." }, { status: 500 });
+  }
+}

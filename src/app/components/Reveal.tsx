@@ -1,1 +1,47 @@
-{"data":"InVzZSBjbGllbnQiOwoKaW1wb3J0IHsgdXNlRWZmZWN0LCB1c2VSZWYsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwoKLyoqIEZhZGVzICsgc2xpZGVzIGNoaWxkcmVuIGluIHdoZW4gdGhleSBzY3JvbGwgaW50byB2aWV3LiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSZXZlYWwoewogIGNoaWxkcmVuLAogIGRlbGF5ID0gMCwKICBjbGFzc05hbWUgPSAiIiwKfTogewogIGNoaWxkcmVuOiBSZWFjdC5SZWFjdE5vZGU7CiAgZGVsYXk/OiBudW1iZXI7CiAgY2xhc3NOYW1lPzogc3RyaW5nOwp9KSB7CiAgY29uc3QgcmVmID0gdXNlUmVmPEhUTUxEaXZFbGVtZW50PihudWxsKTsKICBjb25zdCBbc2hvd24sIHNldFNob3duXSA9IHVzZVN0YXRlKGZhbHNlKTsKCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGNvbnN0IGVsID0gcmVmLmN1cnJlbnQ7CiAgICBpZiAoIWVsKSByZXR1cm47CiAgICBjb25zdCBpbyA9IG5ldyBJbnRlcnNlY3Rpb25PYnNlcnZlcigKICAgICAgKGVudHJpZXMpID0+IHsKICAgICAgICBpZiAoZW50cmllc1swXS5pc0ludGVyc2VjdGluZykgewogICAgICAgICAgc2V0U2hvd24odHJ1ZSk7CiAgICAgICAgICBpby5kaXNjb25uZWN0KCk7CiAgICAgICAgfQogICAgICB9LAogICAgICB7IHRocmVzaG9sZDogMC4xNSB9CiAgICApOwogICAgaW8ub2JzZXJ2ZShlbCk7CiAgICByZXR1cm4gKCkgPT4gaW8uZGlzY29ubmVjdCgpOwogIH0sIFtdKTsKCiAgcmV0dXJuICgKICAgIDxkaXYKICAgICAgcmVmPXtyZWZ9CiAgICAgIGNsYXNzTmFtZT17Y2xhc3NOYW1lfQogICAgICBzdHlsZT17ewogICAgICAgIG9wYWNpdHk6IHNob3duID8gMSA6IDAsCiAgICAgICAgdHJhbnNmb3JtOiBzaG93biA/ICJ0cmFuc2xhdGVZKDApIiA6ICJ0cmFuc2xhdGVZKDI0cHgpIiwKICAgICAgICB0cmFuc2l0aW9uOiBgb3BhY2l0eSAwLjdzIGVhc2UgJHtkZWxheX1tcywgdHJhbnNmb3JtIDAuN3MgY3ViaWMtYmV6aWVyKDAuMTYsMSwwLjMsMSkgJHtkZWxheX1tc2AsCiAgICAgIH19CiAgICA+CiAgICAgIHtjaGlsZHJlbn0KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+/** Fades + slides children in when they scroll into view. */
+export default function Reveal({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: shown ? 1 : 0,
+        transform: shown ? "translateY(0)" : "translateY(24px)",
+        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}

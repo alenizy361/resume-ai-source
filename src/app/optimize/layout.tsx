@@ -1,1 +1,16 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkFJIFJlc3VtZSBPcHRpbWl6ZXIgJiBGcmVlIEFUUyBTY29yZSBDaGVja2VyIHwgU2lyYSIsCiAgZGVzY3JpcHRpb246ICJQYXN0ZSB5b3VyIHJlc3VtZSBhbmQgYW55IGpvYiBkZXNjcmlwdGlvbiB0byBnZXQgYSBmcmVlIEFUUyBtYXRjaCBzY29yZSwgdGhlIG1pc3Npbmcga2V5d29yZHMgcmVjcnVpdGVycyBzY2FuIGZvciwgYW5kIGFuIGhvbmVzdCBBSSByZXdyaXRlIOKAlCBubyBpbnZlbnRlZCBmYWN0cy4iLAogIGFsdGVybmF0ZXM6IHsKICAgIGNhbm9uaWNhbDogYCR7QkFTRX0vb3B0aW1pemVgLAogICAgbGFuZ3VhZ2VzOiB7IGVuOiBgJHtCQVNFfS9vcHRpbWl6ZWAsIGFyOiBgJHtCQVNFfS9hci9vcHRpbWl6ZWAsICJ4LWRlZmF1bHQiOiBgJHtCQVNFfS9vcHRpbWl6ZWAgfSwKICB9LAp9OwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gT3B0aW1pemVMYXlvdXQoeyBjaGlsZHJlbiB9OiB7IGNoaWxkcmVuOiBSZWFjdC5SZWFjdE5vZGUgfSkgewogIHJldHVybiBjaGlsZHJlbjsKfQo="}
+import type { Metadata } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "AI Resume Optimizer & Free ATS Score Checker | Sira",
+  description: "Paste your resume and any job description to get a free ATS match score, the missing keywords recruiters scan for, and an honest AI rewrite — no invented facts.",
+  alternates: {
+    canonical: `${BASE}/optimize`,
+    languages: { en: `${BASE}/optimize`, ar: `${BASE}/ar/optimize`, "x-default": `${BASE}/optimize` },
+  },
+};
+
+export default function OptimizeLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

@@ -1,1 +1,114 @@
-{"data":"InVzZSBjbGllbnQiOwoKLyoqCiAqIEFjdGl2ZSBjb2FjaGluZyBvbiB0aGUgcmVzdWx0OiBhIGNlbGVicmF0b3J5ICJpbXByb3ZlZCIgcmV2ZWFsICsgYSBjb25jcmV0ZQogKiAiYWRkIHRoZXNlIHRvIGdvIGhpZ2hlciIgZ3VpZGUgdGhhdCB0ZWFjaGVzIHRoZSB1c2VyIGV4YWN0bHkgd2hhdCB0aGVpciByZXN1bWUKICogaXMgbWlzc2luZyAoa2V5d29yZHMsIHJlYWwgbnVtYmVycywgc2tpbGxzLCBjbGFpbXMgdG8gY29uZmlybSkgc28gdGhleSBjYW4gcHVzaAogKiB0aGUgc2NvcmUgdXAgdGhlbXNlbHZlcyDigJQgaW5zdGVhZCBvZiBhIHBhc3NpdmUgbGlzdC4KICovCmludGVyZmFjZSBJbXByb3ZlbWVudCB7IGFyZWE6IHN0cmluZzsgaXNzdWU6IHN0cmluZzsgZml4OiBzdHJpbmc7IHNvdXJjZT86IHN0cmluZyB9CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSZXN1bHRDb2FjaGluZyh7CiAgYmVmb3JlLCBhZnRlciwgaW1wcm92ZW1lbnRzLCBtaXNzaW5nS2V5d29yZHMsIHNraWxsc0dhcCwgaGFzUGxhY2Vob2xkZXJzLCBhciA9IGZhbHNlLAp9OiB7CiAgYmVmb3JlOiBudW1iZXI7IGFmdGVyOiBudW1iZXI7CiAgaW1wcm92ZW1lbnRzOiBJbXByb3ZlbWVudFtdOwogIG1pc3NpbmdLZXl3b3Jkczogc3RyaW5nW107CiAgc2tpbGxzR2FwOiBzdHJpbmdbXTsKICBoYXNQbGFjZWhvbGRlcnM6IGJvb2xlYW47CiAgYXI/OiBib29sZWFuOwp9KSB7CiAgY29uc3QgZ2FpbiA9IE1hdGgubWF4KDAsIGFmdGVyIC0gYmVmb3JlKTsKICBjb25zdCBjb25maXJtID0gaW1wcm92ZW1lbnRzLmZpbHRlcigoaSkgPT4gaS5zb3VyY2UgPT09ICJuZWVkcy1jb25maXJtYXRpb24iKTsKICBjb25zdCBtaXNzaW5nUmVxID0gaW1wcm92ZW1lbnRzLmZpbHRlcigoaSkgPT4gaS5zb3VyY2UgPT09ICJtaXNzaW5nLXJlcXVpcmVtZW50Iik7CgogIGNvbnN0IHQgPSBhcgogICAgPyB7CiAgICAgICAgaW1wcm92ZWQ6ICLYqtmFINiq2K3Ys9mK2YYg2LPZitix2KrZgyIsCiAgICAgICAgZ2FpbmVkOiBnYWluID4gMCA/IGDYp9ix2KrZgdi52Kog2K/Ysdis2KrZgyAke2JlZm9yZX0g4oaQICR7YWZ0ZXJ9ICgrJHtnYWlufSlgIDogItij2LnYr9mG2Kcg2LXZitin2LrYqSDYs9mK2LHYqtmDINio2LXZitin2LrYqSDYo9mC2YjZiSIsCiAgICAgICAgaGVhZGluZzogItij2YPZhdmE2YfYpyDYqNmG2YHYs9mDIOKAlCDYo9i22YEg2YXYpyDZitmE2Yog2YTYsdmB2Lkg2K/Ysdis2KrZgyIsCiAgICAgICAgc3ViOiAi2YTYpyDZhtiu2KrZhNmCINij2Yog2YXYudmE2YjZhdipIOKAlCDYp9mE2KjYp9mC2Yog2KjZitmGINmK2K/ZitmDLiDYo9i22YEg2YfYsNmHINin2YTZhdi52YTZiNmF2KfYqiDYp9mE2K3ZgtmK2YLZitipINir2YUg2KPYudivINin2YTZgdit2LUg2YTYqtix2KrZgdi5INin2YTYr9ix2KzYqToiLAogICAgICAgIG51bWJlcnM6ICLYo9i22YEg2KPYsdmC2KfZhdin2Ysg2K3ZgtmK2YLZitipINmE2KXZhtis2KfYstin2KrZgyIsCiAgICAgICAgbnVtYmVyc0hpbnQ6ICLYp9iz2KrYqNiv2YQgW9ij2LbZgSDYsdmC2YXZg10g2KjZhtiz2KjYqS/YsdmC2YUg2YHYudmE2Yog4oCUINmF2KvYp9mEOiDCq9ix2YHYudiqINin2YTZhdio2YrYudin2Kog2aPZoNmqwrsg2KjYr9mEIMKr2YXYs9ik2YjZhCDYudmGINin2YTZhdio2YrYudin2KrCuy4g2KfZhNij2LHZgtin2YUg2KrYsdmB2Lkg2KfZhNiv2LHYrNipINmD2KvZitix2KfZiy4iLAogICAgICAgIGtleXdvcmRzOiAi2YPZhNmF2KfYqiDZhdmB2KrYp9it2YrYqSDYqti32YTYqNmH2Kcg2KfZhNmI2LjZitmB2Kkg2YjYqtmG2YLYtSDYs9mK2LHYqtmDIiwKICAgICAgICBrZXl3b3Jkc0hpbnQ6ICLYpdmGINmD2YbYqiDYqtmF2YTZgyDZh9iw2Ycg2KfZhNiu2KjYsdipINmB2LnZhNin2Ysg2YHYo9i22YHZh9inIOKAlCDZhNinINiq2YPYqtioINmF2Kcg2YTZitizINi12K3Zitit2KfZizoiLAogICAgICAgIHNraWxsczogItmF2YfYp9ix2KfYqiDZhdi32YTZiNio2Kkg2YLYryDYqtmG2YLYtdmDIiwKICAgICAgICBza2lsbHNIaW50OiAi2KXZhiDZg9mG2Kog2KrZhdmE2YPZh9inINmB2KPYttmB2YfYp9iMINmI2KXZhNinINmB2YPZkdixINmB2Yog2KrYudmE2ZHZhdmH2Kc6IiwKICAgICAgICBjb25maXJtOiAi2LHYp9is2Lkg2YfYsNmHINin2YTYqti52K/ZitmE2KfYqiIsCiAgICAgICAgY29uZmlybUhpbnQ6ICLYrdiz2ZHZhtmR2Kcg2KfZhNi12YrYp9i62Kkg4oCUINiq2KPZg9ivINij2YbZh9inINiq2LfYp9io2YIg2K/ZiNix2YMg2KfZhNmB2LnZhNmKINmC2KjZhCDYp9mE2KfYudiq2YXYp9ivOiIsCiAgICAgICAgbWlzc2luZzogItmF2KrYt9mE2KjYp9iqINin2YTZiNi42YrZgdipINi62YrYsSDYp9mE2LjYp9mH2LHYqSDZgdmKINiz2YrYsdiq2YMiLAogICAgICAgIHJlc2NhbjogItio2LnYryDYp9mE2KXYttin2YHYqdiMINij2LnYryDYp9mE2YHYrdi1INmE2KrYsdmJINin2YTYr9ix2KzYqSDYqtix2KrZgdi5IiwKICAgICAgfQogICAgOiB7CiAgICAgICAgaW1wcm92ZWQ6ICJZb3VyIHJlc3VtZSBoYXMgYmVlbiBpbXByb3ZlZCIsCiAgICAgICAgZ2FpbmVkOiBnYWluID4gMCA/IGBXZSByYWlzZWQgeW91ciBzY29yZSAke2JlZm9yZX0g4oaSICR7YWZ0ZXJ9ICgrJHtnYWlufSlgIDogIldlIHJld3JvdGUgeW91ciByZXN1bWUgc3Ryb25nZXIiLAogICAgICAgIGhlYWRpbmc6ICJGaW5pc2ggaXQgeW91cnNlbGYg4oCUIGFkZCB0aGVzZSB0byByYWlzZSB0aGUgc2NvcmUiLAogICAgICAgIHN1YjogIk91ciBlbmdpbmUgbmV2ZXIgaW52ZW50cyBhbnl0aGluZywgc28gdGhlIHJlc3QgaXMgaW4geW91ciBoYW5kcy4gQWRkIHRoaXMgcmVhbCBpbmZvcm1hdGlvbiBhbmQgcmUtc2NhbiB0byByYWlzZSB0aGUgc2NvcmU6IiwKICAgICAgICBudW1iZXJzOiAiQWRkIHJlYWwgbnVtYmVycyB0byB5b3VyIGFjaGlldmVtZW50cyIsCiAgICAgICAgbnVtYmVyc0hpbnQ6ICJSZXBsYWNlIFthZGQgeW91ciBudW1iZXJdIHdpdGggYW4gYWN0dWFsIG1ldHJpYyDigJQgZS5nLiBcImdyZXcgc2FsZXMgMzAlXCIgYmVhdHMgXCJyZXNwb25zaWJsZSBmb3Igc2FsZXNcIi4gTnVtYmVycyByYWlzZSB0aGUgc2NvcmUgdGhlIG1vc3QuIiwKICAgICAgICBrZXl3b3JkczogIktleXdvcmRzIHRoZSBqb2Igd2FudHMgdGhhdCB5b3UncmUgbWlzc2luZyIsCiAgICAgICAga2V5d29yZHNIaW50OiAiSWYgeW91IGdlbnVpbmVseSBoYXZlIHRoaXMgZXhwZXJpZW5jZSwgYWRkIGl0IChuZXZlciB3cml0ZSBhbnl0aGluZyB1bnRydWUpOiIsCiAgICAgICAgc2tpbGxzOiAiUmVxdWlyZWQgc2tpbGxzIHlvdSBtYXkgYmUgbWlzc2luZyIsCiAgICAgICAgc2tpbGxzSGludDogIkFkZCB0aGVtIGlmIHlvdSBoYXZlIHRoZW07IGlmIG5vdCwgY29uc2lkZXIgbGVhcm5pbmcgdGhlbSB0byBzdHJlbmd0aGVuIHlvdXIgcHJvZmlsZToiLAogICAgICAgIGNvbmZpcm06ICJDb25maXJtIHRoZXNlIGVkaXRzIGFyZSB0cnVlIiwKICAgICAgICBjb25maXJtSGludDogIldlIHN0cmVuZ3RoZW5lZCB0aGUgd29yZGluZyDigJQgbWFrZSBzdXJlIGl0IG1hdGNoZXMgeW91ciByZWFsIHJvbGUgYmVmb3JlIHVzaW5nIGl0OiIsCiAgICAgICAgbWlzc2luZzogIkpvYiByZXF1aXJlbWVudHMgbm90IHNob3duIGluIHlvdXIgcmVzdW1lIiwKICAgICAgICByZXNjYW46ICJBZnRlciB5b3UgYWRkIHRoZW0sIHJlLXNjYW4gdG8gc2VlIHRoZSBzY29yZSByaXNlIiwKICAgICAgfTsKCiAgY29uc3QgU2VjdGlvbiA9ICh7IGljb24sIHRpdGxlLCBoaW50LCBpdGVtcyB9OiB7IGljb246IHN0cmluZzsgdGl0bGU6IHN0cmluZzsgaGludDogc3RyaW5nOyBpdGVtczogc3RyaW5nW10gfSkgPT4KICAgIGl0ZW1zLmxlbmd0aCA9PT0gMCA/IG51bGwgOiAoCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZXZlYWwtcmlzZSByb3VuZGVkLXhsIHAtNCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWItMSB0ZXh0LXNtIGZvbnQtYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mZykiIH19PntpY29ufSB7dGl0bGV9PC9kaXY+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTIgdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntoaW50fTwvZGl2PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtd3JhcCBnYXAtMS41Ij4KICAgICAgICAgIHtpdGVtcy5zbGljZSgwLCAxMikubWFwKChrLCBpKSA9PiAoCiAgICAgICAgICAgIDxzcGFuIGtleT17aX0gY2xhc3NOYW1lPSJyb3VuZGVkLWZ1bGwgcHgtMi41IHB5LTEgdGV4dC14cyIgc3R5bGU9e3sgYmFja2dyb3VuZDogInJnYmEoMTM5LDkyLDI0NiwwLjA4KSIsIGNvbG9yOiAidmFyKC0tYWNjZW50KSIsIGJvcmRlcjogIjFweCBzb2xpZCByZ2JhKDEzOSw5MiwyNDYsMC4yNSkiIH19PntrfTwvc3Bhbj4KICAgICAgICAgICkpfQogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj4KICAgICk7CgogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0ibXktNiI+CiAgICAgIHsvKiBSZXZlYWwgYmFubmVyICovfQogICAgICA8ZGl2IGNsYXNzTmFtZT0iaW1wcm92ZWQtYmFubmVyIHJldmVhbC1wb3AgbWItNSByb3VuZGVkLTJ4bCBwLTUgdGV4dC1jZW50ZXIiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCByZ2JhKDEzOSw5MiwyNDYsMC4xNSksIHJnYmEoMTM5LDkyLDI0NiwwLjA1KSkiLCBib3JkZXI6ICIxcHggc29saWQgcmdiYSgxMzksOTIsMjQ2LDAuNCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJ0ZXh0LTJ4bCBmb250LWV4dHJhYm9sZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1hY2NlbnQpIiB9fT57dC5pbXByb3ZlZH08L2Rpdj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMSB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT57dC5nYWluZWR9PC9kaXY+CiAgICAgIDwvZGl2PgoKICAgICAgey8qIENvYWNoaW5nICovfQogICAgICA8ZGl2IGNsYXNzTmFtZT0icm91bmRlZC0yeGwgcC01IiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAicmdiYSgxMzksOTIsMjQ2LDAuMDQpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoMTM5LDkyLDI0NiwwLjI1KSIgfX0+CiAgICAgICAgPGgzIGNsYXNzTmFtZT0ibWItMSB0ZXh0LWxnIGZvbnQtYm9sZCI+e3QuaGVhZGluZ308L2gzPgogICAgICAgIDxwIGNsYXNzTmFtZT0ibWItNCB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+e3Quc3VifTwvcD4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ic3BhY2UteS0zIj4KICAgICAgICAgIHtoYXNQbGFjZWhvbGRlcnMgJiYgKAogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icmV2ZWFsLXJpc2Ugcm91bmRlZC14bCBwLTQiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1zdXJmYWNlKSIsIGJvcmRlcjogIjFweCBzb2xpZCByZ2JhKDI1MSwxOTEsMzYsMC4zNSkiIH19PgogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi0xIHRleHQtc20gZm9udC1ib2xkIiBzdHlsZT17eyBjb2xvcjogIiNmYmJmMjQiIH19Pnt0Lm51bWJlcnN9PC9kaXY+CiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57dC5udW1iZXJzSGludH08L2Rpdj4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICApfQogICAgICAgICAgPFNlY3Rpb24gaWNvbj0iIiB0aXRsZT17dC5rZXl3b3Jkc30gaGludD17dC5rZXl3b3Jkc0hpbnR9IGl0ZW1zPXttaXNzaW5nS2V5d29yZHN9IC8+CiAgICAgICAgICA8U2VjdGlvbiBpY29uPSIiIHRpdGxlPXt0LnNraWxsc30gaGludD17dC5za2lsbHNIaW50fSBpdGVtcz17c2tpbGxzR2FwfSAvPgogICAgICAgICAge2NvbmZpcm0ubGVuZ3RoID4gMCAmJiAoCiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZXZlYWwtcmlzZSByb3VuZGVkLXhsIHAtNCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoMjUxLDE5MSwzNiwwLjM1KSIgfX0+CiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTIgdGV4dC1zbSBmb250LWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAiI2ZiYmYyNCIgfX0+4pqg77iPIHt0LmNvbmZpcm19PC9kaXY+CiAgICAgICAgICAgICAgPHVsIGNsYXNzTmFtZT0ic3BhY2UteS0xIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgICAgICAgIHtjb25maXJtLnNsaWNlKDAsIDUpLm1hcCgoYywgaSkgPT4gPGxpIGtleT17aX0+4oCiIHtjLmZpeH08L2xpPil9CiAgICAgICAgICAgICAgPC91bD4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICApfQogICAgICAgICAge21pc3NpbmdSZXEubGVuZ3RoID4gMCAmJiAoCiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZXZlYWwtcmlzZSByb3VuZGVkLXhsIHAtNCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLXN1cmZhY2UpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoMjQ4LDExMywxMTMsMC4zKSIgfX0+CiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTIgdGV4dC1zbSBmb250LWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAiI2Y4NzE3MSIgfX0+4p2XIHt0Lm1pc3Npbmd9PC9kaXY+CiAgICAgICAgICAgICAgPHVsIGNsYXNzTmFtZT0ic3BhY2UteS0xIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgICAgICAgIHttaXNzaW5nUmVxLnNsaWNlKDAsIDUpLm1hcCgoYywgaSkgPT4gPGxpIGtleT17aX0+4oCiIHtjLmlzc3VlfTwvbGk+KX0KICAgICAgICAgICAgICA8L3VsPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICl9CiAgICAgICAgPC9kaXY+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTQgcm91bmRlZC14bCBweC00IHB5LTIuNSB0ZXh0LWNlbnRlciB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDEzOSw5MiwyNDYsMC4xKSIsIGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+e3QucmVzY2FufTwvZGl2PgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+
+/**
+ * Active coaching on the result: a celebratory "improved" reveal + a concrete
+ * "add these to go higher" guide that teaches the user exactly what their resume
+ * is missing (keywords, real numbers, skills, claims to confirm) so they can push
+ * the score up themselves — instead of a passive list.
+ */
+interface Improvement { area: string; issue: string; fix: string; source?: string }
+
+export default function ResultCoaching({
+  before, after, improvements, missingKeywords, skillsGap, hasPlaceholders, ar = false,
+}: {
+  before: number; after: number;
+  improvements: Improvement[];
+  missingKeywords: string[];
+  skillsGap: string[];
+  hasPlaceholders: boolean;
+  ar?: boolean;
+}) {
+  const gain = Math.max(0, after - before);
+  const confirm = improvements.filter((i) => i.source === "needs-confirmation");
+  const missingReq = improvements.filter((i) => i.source === "missing-requirement");
+
+  const t = ar
+    ? {
+        improved: "تم تحسين سيرتك",
+        gained: gain > 0 ? `ارتفعت درجتك ${before} ← ${after} (+${gain})` : "أعدنا صياغة سيرتك بصياغة أقوى",
+        heading: "أكملها بنفسك — أضف ما يلي لرفع درجتك",
+        sub: "لا نختلق أي معلومة — الباقي بين يديك. أضف هذه المعلومات الحقيقية ثم أعد الفحص لترتفع الدرجة:",
+        numbers: "أضف أرقاماً حقيقية لإنجازاتك",
+        numbersHint: "استبدل [أضف رقمك] بنسبة/رقم فعلي — مثال: «رفعت المبيعات ٣٠٪» بدل «مسؤول عن المبيعات». الأرقام ترفع الدرجة كثيراً.",
+        keywords: "كلمات مفتاحية تطلبها الوظيفة وتنقص سيرتك",
+        keywordsHint: "إن كنت تملك هذه الخبرة فعلاً فأضفها — لا تكتب ما ليس صحيحاً:",
+        skills: "مهارات مطلوبة قد تنقصك",
+        skillsHint: "إن كنت تملكها فأضفها، وإلا فكّر في تعلّمها:",
+        confirm: "راجع هذه التعديلات",
+        confirmHint: "حسّنّا الصياغة — تأكد أنها تطابق دورك الفعلي قبل الاعتماد:",
+        missing: "متطلبات الوظيفة غير الظاهرة في سيرتك",
+        rescan: "بعد الإضافة، أعد الفحص لترى الدرجة ترتفع",
+      }
+    : {
+        improved: "Your resume has been improved",
+        gained: gain > 0 ? `We raised your score ${before} → ${after} (+${gain})` : "We rewrote your resume stronger",
+        heading: "Finish it yourself — add these to raise the score",
+        sub: "Our engine never invents anything, so the rest is in your hands. Add this real information and re-scan to raise the score:",
+        numbers: "Add real numbers to your achievements",
+        numbersHint: "Replace [add your number] with an actual metric — e.g. \"grew sales 30%\" beats \"responsible for sales\". Numbers raise the score the most.",
+        keywords: "Keywords the job wants that you're missing",
+        keywordsHint: "If you genuinely have this experience, add it (never write anything untrue):",
+        skills: "Required skills you may be missing",
+        skillsHint: "Add them if you have them; if not, consider learning them to strengthen your profile:",
+        confirm: "Confirm these edits are true",
+        confirmHint: "We strengthened the wording — make sure it matches your real role before using it:",
+        missing: "Job requirements not shown in your resume",
+        rescan: "After you add them, re-scan to see the score rise",
+      };
+
+  const Section = ({ icon, title, hint, items }: { icon: string; title: string; hint: string; items: string[] }) =>
+    items.length === 0 ? null : (
+      <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+        <div className="mb-1 text-sm font-bold" style={{ color: "var(--fg)" }}>{icon} {title}</div>
+        <div className="mb-2 text-xs" style={{ color: "var(--muted)" }}>{hint}</div>
+        <div className="flex flex-wrap gap-1.5">
+          {items.slice(0, 12).map((k, i) => (
+            <span key={i} className="rounded-full px-2.5 py-1 text-xs" style={{ background: "rgba(139,92,246,0.08)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
+          ))}
+        </div>
+      </div>
+    );
+
+  return (
+    <div className="my-6">
+      {/* Reveal banner */}
+      <div className="improved-banner reveal-pop mb-5 rounded-2xl p-5 text-center" style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05))", border: "1px solid rgba(139,92,246,0.4)" }}>
+        <div className="text-2xl font-extrabold" style={{ color: "var(--accent)" }}>{t.improved}</div>
+        <div className="mt-1 text-sm font-semibold" style={{ color: "var(--fg)" }}>{t.gained}</div>
+      </div>
+
+      {/* Coaching */}
+      <div className="rounded-2xl p-5" style={{ background: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.25)" }}>
+        <h3 className="mb-1 text-lg font-bold">{t.heading}</h3>
+        <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
+        <div className="space-y-3">
+          {hasPlaceholders && (
+            <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(251,191,36,0.35)" }}>
+              <div className="mb-1 text-sm font-bold" style={{ color: "#fbbf24" }}>{t.numbers}</div>
+              <div className="text-xs" style={{ color: "var(--muted)" }}>{t.numbersHint}</div>
+            </div>
+          )}
+          <Section icon="" title={t.keywords} hint={t.keywordsHint} items={missingKeywords} />
+          <Section icon="" title={t.skills} hint={t.skillsHint} items={skillsGap} />
+          {confirm.length > 0 && (
+            <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(251,191,36,0.35)" }}>
+              <div className="mb-2 text-sm font-bold" style={{ color: "#fbbf24" }}>⚠️ {t.confirm}</div>
+              <ul className="space-y-1 text-xs" style={{ color: "var(--muted)" }}>
+                {confirm.slice(0, 5).map((c, i) => <li key={i}>• {c.fix}</li>)}
+              </ul>
+            </div>
+          )}
+          {missingReq.length > 0 && (
+            <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(248,113,113,0.3)" }}>
+              <div className="mb-2 text-sm font-bold" style={{ color: "#f87171" }}>❗ {t.missing}</div>
+              <ul className="space-y-1 text-xs" style={{ color: "var(--muted)" }}>
+                {missingReq.slice(0, 5).map((c, i) => <li key={i}>• {c.issue}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="mt-4 rounded-xl px-4 py-2.5 text-center text-sm font-semibold" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)" }}>{t.rescan}</div>
+      </div>
+    </div>
+  );
+}

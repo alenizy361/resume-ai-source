@@ -1,1 +1,237 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZU1lbW8sIHVzZVJlZiwgdXNlU3RhdGUgfSBmcm9tICJyZWFjdCI7CgovKioKICogVmlzdWFsLCBkZXNpZ25lZCByZXN1bWUgdGVtcGxhdGUgd2l0aCBhIGxpdmUgcHJldmlldyArIGEgb25lLWNsaWNrIGRlc2lnbmVkCiAqIFBERiBleHBvcnQgKGh0bWwyY2FudmFzIOKGkiBqc1BERikuIFRoZSBBcmFiIG1hcmtldCAiYnV5cyB3aXRoIHRoZSBleWUiLCBhbmQKICogZXZlcnkgbWFqb3IgY29tcGV0aXRvciBzaGlwcyBzdHlsZWQgdGVtcGxhdGVzIOKAlCB0aGlzIGlzIG91ciBhbnN3ZXIuCiAqCiAqIElNUE9SVEFOVDogdGhpcyBkZXNpZ25lZCBQREYgaXMgYSBSQVNURVIgaW1hZ2UsIGdyZWF0IGZvciBhIGh1bWFuIHJlY3J1aXRlciAvCiAqIExpbmtlZEluLCBidXQgTk9UIEFUUy1wYXJzZWFibGUuIFRoZSBwbGFpbiBQZGZFeHBvcnQvRG9jeEV4cG9ydCByZW1haW4gdGhlCiAqIEFUUy1zYWZlIGRvd25sb2FkcyDigJQgd2UgbGFiZWwgdGhlbSBzbyB0aGUgdXNlciBwaWNrcyB0aGUgcmlnaHQgb25lLgogKgogKiBQYXJzZXMgdGhlIHBsYWluLXRleHQgQ1YgKHN0YW5kYXJkIGhlYWRpbmdzKSBpbnRvIHNlY3Rpb25zIGFuZCBsYXlzIHRoZW0gb3V0CiAqIGFzIGEgdHdvLWNvbHVtbiBBNCBwYWdlLiBVc2VzIGV4cGxpY2l0IGhleCBjb2xvcnMgKG5vdCBDU1MgdmFycykgc28gdGhlCiAqIG9mZi1zY3JlZW4gaHRtbDJjYW52YXMgY2FwdHVyZSByZW5kZXJzIGNvcnJlY3RseSByZWdhcmRsZXNzIG9mIHNpdGUgdGhlbWUuCiAqLwoKaW50ZXJmYWNlIFNlY3Rpb24geyBoZWFkaW5nOiBzdHJpbmc7IGxpbmVzOiBzdHJpbmdbXSB9CmludGVyZmFjZSBQYXJzZWQgeyBuYW1lOiBzdHJpbmc7IGNvbnRhY3Q6IHN0cmluZzsgc2VjdGlvbnM6IFNlY3Rpb25bXSB9Cgpjb25zdCBIRUFESU5HUyA9IFsKICAiUFJPRkVTU0lPTkFMIFNVTU1BUlkiLCAiU1VNTUFSWSIsICJQUk9GSUxFIiwgIk9CSkVDVElWRSIsCiAgIlNLSUxMUyIsICJDT1JFIFNLSUxMUyIsICJURUNITklDQUwgU0tJTExTIiwKICAiRVhQRVJJRU5DRSIsICJXT1JLIEVYUEVSSUVOQ0UiLCAiUFJPRkVTU0lPTkFMIEVYUEVSSUVOQ0UiLCAiRU1QTE9ZTUVOVCBISVNUT1JZIiwKICAiRURVQ0FUSU9OIiwgIkNFUlRJRklDQVRJT05TIiwgIkNFUlRJRklDQVRFUyIsICJMQU5HVUFHRVMiLCAiUFJPSkVDVFMiLAogICJQRVJTT05BTCBERVRBSUxTIiwgIlBFUlNPTkFMIElORk9STUFUSU9OIiwgIkFDSElFVkVNRU5UUyIsICJBV0FSRFMiLCAiUkVGRVJFTkNFUyIsCl07CgovLyBBcmFiaWMgc2VjdGlvbiBoZWFkaW5ncyAoTW9kZXJuIFN0YW5kYXJkIEFyYWJpYykgc28gUlRMIGFuZCBiaWxpbmd1YWwgcmVzdW1lcwovLyBwYXJzZSBpbnRvIHRoZSBzYW1lIHNlY3Rpb25zIGFzIEVuZ2xpc2ggb25lcy4KY29uc3QgSEVBRElOR1NfQVIgPSBbCiAgItin2YTZhdmE2K7YtSDYp9mE2YXZh9mG2YoiLCAi2KfZhNmF2YTYrti1IiwgItmG2KjYsNipIiwgItin2YTZh9iv2YEg2KfZhNmI2LjZitmB2YoiLAogICLYp9mE2YXZh9in2LHYp9iqIiwgItin2YTZhdmH2KfYsdin2Kog2KfZhNij2LPYp9iz2YrYqSIsICLYp9mE2YXZh9in2LHYp9iqINin2YTYqtmC2YbZitipIiwKICAi2KfZhNiu2KjYsdipIiwgItin2YTYrtio2LHYqSDYp9mE2LnZhdmE2YrYqSIsICLYp9mE2K7YqNix2KfYqiIsICLYp9mE2KrYp9ix2YrYriDYp9mE2YjYuNmK2YHZiiIsCiAgItin2YTYqti52YTZitmFIiwgItin2YTZhdik2YfZhNin2KoiLCAi2KfZhNi02YfYp9iv2KfYqiIsICLYp9mE2YTYutin2KoiLCAi2KfZhNmF2LTYp9ix2YrYuSIsCiAgItin2YTYqNmK2KfZhtin2Kog2KfZhNi02K7YtdmK2KkiLCAi2KfZhNmF2LnZhNmI2YXYp9iqINin2YTYtNiu2LXZitipIiwgItin2YTYpdmG2KzYp9iy2KfYqiIsICLYp9mE2KzZiNin2KbYsiIsICLYp9mE2YXYsdin2KzYuSIsCl07CgpmdW5jdGlvbiBpc0hlYWRpbmcobGluZTogc3RyaW5nKTogYm9vbGVhbiB7CiAgLy8gQmlsaW5ndWFsIGhlYWRpbmdzIGxvb2sgbGlrZSAiRVhQRVJJRU5DRSDCtyDYp9mE2K7YqNix2KkiIOKAlCB0ZXN0IGVhY2ggc2lkZS4KICBjb25zdCBwYXJ0cyA9IGxpbmUuc3BsaXQoL1vCt3wv4oCT4oCULV0vKS5tYXAoKHApID0+IHAudHJpbSgpKS5maWx0ZXIoQm9vbGVhbik7CiAgY29uc3QgY2FuZGlkYXRlcyA9IHBhcnRzLmxlbmd0aCA+IDEgPyBbbGluZS50cmltKCksIC4uLnBhcnRzXSA6IFtsaW5lLnRyaW0oKV07CiAgZm9yIChjb25zdCBjIG9mIGNhbmRpZGF0ZXMpIHsKICAgIGNvbnN0IHQgPSBjLnJlcGxhY2UoLzokLywgIiIpLnRyaW0oKTsKICAgIGlmICh0Lmxlbmd0aCA+IDQyKSBjb250aW51ZTsKICAgIGlmIChIRUFESU5HUy5pbmNsdWRlcyh0LnRvVXBwZXJDYXNlKCkpKSByZXR1cm4gdHJ1ZTsKICAgIGlmIChIRUFESU5HU19BUi5pbmNsdWRlcyh0KSkgcmV0dXJuIHRydWU7CiAgICAvLyBBIHNob3J0IEFMTC1DQVBTIExhdGluIGxpbmUgd2l0aCBubyBidWxsZXQvZW1haWwgaXMgYSBoZWFkaW5nLgogICAgaWYgKC9eW0EtWl1bQS1aICYvXXsyLDM4fSQvLnRlc3QodCkgJiYgIXQuaW5jbHVkZXMoIkAiKSkgcmV0dXJuIHRydWU7CiAgfQogIHJldHVybiBmYWxzZTsKfQoKZnVuY3Rpb24gcGFyc2UodGV4dDogc3RyaW5nKTogUGFyc2VkIHsKICBjb25zdCByYXcgPSB0ZXh0LnJlcGxhY2UoL1xyL2csICIiKS5zcGxpdCgiXG4iKTsKICBjb25zdCBub25FbXB0eSA9IHJhdy5tYXAoKGwpID0+IGwudHJpbUVuZCgpKTsKICBsZXQgaSA9IDA7CiAgd2hpbGUgKGkgPCBub25FbXB0eS5sZW5ndGggJiYgIW5vbkVtcHR5W2ldLnRyaW0oKSkgaSsrOwogIGNvbnN0IG5hbWUgPSAobm9uRW1wdHlbaV0gfHwgIllvdXIgTmFtZSIpLnRyaW0oKTsKICBpKys7CiAgbGV0IGNvbnRhY3QgPSAiIjsKICB3aGlsZSAoaSA8IG5vbkVtcHR5Lmxlbmd0aCAmJiAhbm9uRW1wdHlbaV0udHJpbSgpKSBpKys7CiAgaWYgKGkgPCBub25FbXB0eS5sZW5ndGggJiYgIWlzSGVhZGluZyhub25FbXB0eVtpXSkpIHsgY29udGFjdCA9IG5vbkVtcHR5W2ldLnRyaW0oKTsgaSsrOyB9CiAgLy8gTW9kZWxzIHNvbWV0aW1lcyBidXJ5IHRoZSBjb250YWN0IGxpbmUgKGVtYWlsL3Bob25lKSBmdXJ0aGVyIGRvd24gdGhlCiAgLy8gaGVhZGVyIGJsb2NrIG9yIGluc2lkZSB0aGUgc3VtbWFyeSDigJQgcHVsbCB0aGUgZmlyc3QgbGluZSB0aGF0IGxvb2tzIGxpa2UKICAvLyBjb250YWN0IGluZm8gb3V0IG9mIHRoZSB0b3Agb2YgdGhlIGRvY3VtZW50IHNvIGl0IHJlbmRlcnMgdW5kZXIgdGhlIG5hbWUsCiAgLy8gbm90IG1pZC1zZWN0aW9uLgogIGNvbnN0IGxvb2tzQ29udGFjdCA9IChzOiBzdHJpbmcpID0+IC9AfChcKz9cZFtcZFxzKCktXXs2LH0pLy50ZXN0KHMpICYmIHMubGVuZ3RoIDwgMTYwOwogIGlmICghbG9va3NDb250YWN0KGNvbnRhY3QpKSB7CiAgICBmb3IgKGxldCBrID0gaTsgayA8IE1hdGgubWluKGkgKyAxMCwgbm9uRW1wdHkubGVuZ3RoKTsgaysrKSB7CiAgICAgIGNvbnN0IGNhbmQgPSBub25FbXB0eVtrXS50cmltKCk7CiAgICAgIGlmIChjYW5kICYmICFpc0hlYWRpbmcoY2FuZCkgJiYgbG9va3NDb250YWN0KGNhbmQpKSB7CiAgICAgICAgY29udGFjdCA9IGNvbnRhY3QgPyBjb250YWN0IDogY2FuZDsKICAgICAgICBub25FbXB0eS5zcGxpY2UoaywgMSk7CiAgICAgICAgYnJlYWs7CiAgICAgIH0KICAgIH0KICB9CgogIGNvbnN0IHNlY3Rpb25zOiBTZWN0aW9uW10gPSBbXTsKICBsZXQgY3VyOiBTZWN0aW9uIHwgbnVsbCA9IG51bGw7CiAgZm9yICg7IGkgPCBub25FbXB0eS5sZW5ndGg7IGkrKykgewogICAgY29uc3QgbGluZSA9IG5vbkVtcHR5W2ldOwogICAgaWYgKGlzSGVhZGluZyhsaW5lKSkgewogICAgICBjdXIgPSB7IGhlYWRpbmc6IGxpbmUudHJpbSgpLnJlcGxhY2UoLzokLywgIiIpLnRvVXBwZXJDYXNlKCksIGxpbmVzOiBbXSB9OwogICAgICBzZWN0aW9ucy5wdXNoKGN1cik7CiAgICB9IGVsc2UgaWYgKGN1cikgewogICAgICBjdXIubGluZXMucHVzaChsaW5lKTsKICAgIH0gZWxzZSBpZiAobGluZS50cmltKCkpIHsKICAgICAgY3VyID0geyBoZWFkaW5nOiAiU1VNTUFSWSIsIGxpbmVzOiBbbGluZV0gfTsKICAgICAgc2VjdGlvbnMucHVzaChjdXIpOwogICAgfQogIH0KICByZXR1cm4geyBuYW1lLCBjb250YWN0LCBzZWN0aW9ucyB9Owp9CgovLyBBTEwgdmFyaWFudHMgYXJlIHNpbmdsZS1jb2x1bW46IHJlc2VhcmNoIGNvbnNlbnN1cyAoSm9ic2NhbiwgUmVzdW1lLmlvLCBhbmQKLy8gZXZlcnkgMjAyNiBBVFMgZm9ybWF0dGluZyBndWlkZSkgaXMgdGhhdCBtdWx0aS1jb2x1bW4gbGF5b3V0cywgdGFibGVzLCBhbmQKLy8gc2lkZWJhcnMgZ2V0IHNjcmFtYmxlZCBieSBwYXJzZXJzLiBWYXJpYW50cyBkaWZmZXIgaW4gdHlwb2dyYXBoeSBhbmQgaGVhZGVyCi8vIHRyZWF0bWVudCBvbmx5IOKAlCB0aGUgc3RydWN0dXJlIHVuZGVybmVhdGggaXMgaWRlbnRpY2FsIGFuZCBBVFMtc2FmZToKLy8gc3RhbmRhcmQgaGVhZGluZ3MsIHJldmVyc2UtY2hyb25vbG9naWNhbCwgMTAtMTJwdCBib2R5LCAwLjUtMWluIG1hcmdpbnMuCmV4cG9ydCB0eXBlIFRlbXBsYXRlVmFyaWFudCA9ICJjbGFzc2ljIiB8ICJtb2Rlcm4iIHwgIm1pbmltYWwiIHwgImVsZWdhbnQiIHwgImNvbHVtbiI7CgovLyBBIENWIHBhc3RlZCBvciBnZW5lcmF0ZWQgaW4gRW5nbGlzaCBtdXN0IHJlbmRlciBMVFIgZXZlbiBpbnNpZGUgdGhlIEFyYWJpYwovLyBVSSAoYW5kIHZpY2UgdmVyc2EpIOKAlCB0aGUgcGFnZSBsYW5ndWFnZSBzYXlzIG5vdGhpbmcgYWJvdXQgdGhlIENWIGxhbmd1YWdlLgovLyBNYWpvcml0eSBzY3JpcHQgb2YgdGhlIGNvbnRlbnQgZGVjaWRlcyB0aGUgbGF5b3V0IGRpcmVjdGlvbi4KZXhwb3J0IGZ1bmN0aW9uIGRldGVjdERpcih0ZXh0OiBzdHJpbmcpOiAibHRyIiB8ICJydGwiIHsKICBjb25zdCBzYW1wbGUgPSB0ZXh0LnNsaWNlKDAsIDEyMDApOwogIGNvbnN0IGFyYWJpYyA9IChzYW1wbGUubWF0Y2goL1vYgC3bv10vZykgfHwgW10pLmxlbmd0aDsKICBjb25zdCBsYXRpbiA9IChzYW1wbGUubWF0Y2goL1tBLVphLXpdL2cpIHx8IFtdKS5sZW5ndGg7CiAgcmV0dXJuIGFyYWJpYyA+IGxhdGluID8gInJ0bCIgOiAibHRyIjsKfQoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUmVzdW1lVGVtcGxhdGUoeyB0ZXh0LCBuYW1lID0gInJlc3VtZSIsIGFjY2VudCA9ICIjMGY3NjZlIiwgdmFyaWFudCA9ICJjbGFzc2ljIiwgcHJldmlldyA9IGZhbHNlLCBkaXIgPSAiYXV0byIsIGZpdFdpZHRoID0gZmFsc2UgfTogeyB0ZXh0OiBzdHJpbmc7IG5hbWU/OiBzdHJpbmc7IGFjY2VudD86IHN0cmluZzsgdmFyaWFudD86IFRlbXBsYXRlVmFyaWFudDsgcHJldmlldz86IGJvb2xlYW47IGRpcj86ICJsdHIiIHwgInJ0bCIgfCAiYXV0byI7IGZpdFdpZHRoPzogYm9vbGVhbiB9KSB7CiAgY29uc3QgcGFyc2VkID0gdXNlTWVtbygoKSA9PiBwYXJzZSh0ZXh0KSwgW3RleHRdKTsKICBjb25zdCByZWYgPSB1c2VSZWY8SFRNTERpdkVsZW1lbnQ+KG51bGwpOwogIGNvbnN0IHdyYXBSZWYgPSB1c2VSZWY8SFRNTERpdkVsZW1lbnQ+KG51bGwpOwogIGNvbnN0IFtidXN5LCBzZXRCdXN5XSA9IHVzZVN0YXRlKGZhbHNlKTsKICAvLyBTY2FsZSB0aGUgQTQtd2lkdGggKDc5NHB4KSBwYWdlIGRvd24gdG8gZml0IHRoZSBjb250YWluZXIgc28gdGhlIHByZXZpZXcgaXMKICAvLyBuZXZlciBjcm9wcGVkIG9uIG1vYmlsZTsgUERGIGNhcHR1cmUgc3RpbGwgdXNlcyB0aGUgZnVsbC1yZXMgYHJlZmAuCiAgY29uc3QgW2ZpdCwgc2V0Rml0XSA9IHVzZVN0YXRlKDEpOwogIGNvbnN0IFtwYWdlSCwgc2V0UGFnZUhdID0gdXNlU3RhdGUoMCk7CiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGlmICghZml0V2lkdGgpIHJldHVybjsKICAgIGNvbnN0IGVsID0gd3JhcFJlZi5jdXJyZW50OwogICAgaWYgKCFlbCkgcmV0dXJuOwogICAgY29uc3QgbWVhc3VyZSA9ICgpID0+IHsKICAgICAgc2V0Rml0KE1hdGgubWluKDEsIGVsLmNsaWVudFdpZHRoIC8gNzk0KSk7CiAgICAgIGlmIChyZWYuY3VycmVudCkgc2V0UGFnZUgocmVmLmN1cnJlbnQuc2Nyb2xsSGVpZ2h0KTsKICAgIH07CiAgICBtZWFzdXJlKCk7CiAgICBjb25zdCBybyA9IG5ldyBSZXNpemVPYnNlcnZlcihtZWFzdXJlKTsKICAgIHJvLm9ic2VydmUoZWwpOwogICAgcmV0dXJuICgpID0+IHJvLmRpc2Nvbm5lY3QoKTsKICB9LCBbZml0V2lkdGgsIHRleHQsIHZhcmlhbnQsIGRpcl0pOwoKICBjb25zdCBpc1J0bCA9IChkaXIgPT09ICJhdXRvIiA/IGRldGVjdERpcih0ZXh0KSA6IGRpcikgPT09ICJydGwiOwoKICAvLyBQZXItdmFyaWFudCB0eXBvZ3JhcGh5IChzdHJ1Y3R1cmUgaXMgaWRlbnRpY2FsICYgQVRTLXNhZmUgaW4gYWxsIG9mIHRoZW0pLgogIGNvbnN0IGhlYWRlckNlbnRlcmVkID0gdmFyaWFudCA9PT0gImVsZWdhbnQiOwogIGNvbnN0IHNlcmlmID0gdmFyaWFudCA9PT0gImVsZWdhbnQiOwogIGNvbnN0IHN0cmljdCA9IHZhcmlhbnQgPT09ICJjb2x1bW4iOyAvLyAiQVRTIFBybyI6IHplcm8gZGVjb3JhdGlvbiBiZXlvbmQgYm9sZCArIHJ1bGVzCgogIGFzeW5jIGZ1bmN0aW9uIGRvd25sb2FkUGRmKCkgewogICAgaWYgKCFyZWYuY3VycmVudCkgcmV0dXJuOwogICAgc2V0QnVzeSh0cnVlKTsKICAgIHRyeSB7CiAgICAgIGNvbnN0IFt7IGRlZmF1bHQ6IGh0bWwyY2FudmFzIH0sIHsganNQREYgfV0gPSBhd2FpdCBQcm9taXNlLmFsbChbaW1wb3J0KCJodG1sMmNhbnZhcyIpLCBpbXBvcnQoImpzcGRmIildKTsKICAgICAgY29uc3QgY2FudmFzID0gYXdhaXQgaHRtbDJjYW52YXMocmVmLmN1cnJlbnQsIHsgc2NhbGU6IDIsIGJhY2tncm91bmRDb2xvcjogIiNmZmZmZmYiLCB1c2VDT1JTOiB0cnVlIH0pOwogICAgICBjb25zdCBpbWcgPSBjYW52YXMudG9EYXRhVVJMKCJpbWFnZS9qcGVnIiwgMC45NSk7CiAgICAgIGNvbnN0IHBkZiA9IG5ldyBqc1BERih7IHVuaXQ6ICJtbSIsIGZvcm1hdDogImE0IiB9KTsKICAgICAgY29uc3QgcHcgPSAyMTAsIHBoID0gMjk3OwogICAgICBjb25zdCBpaCA9IChjYW52YXMuaGVpZ2h0ICogcHcpIC8gY2FudmFzLndpZHRoOwogICAgICBsZXQgaGVpZ2h0TGVmdCA9IGloLCBwb3MgPSAwOwogICAgICBwZGYuYWRkSW1hZ2UoaW1nLCAiSlBFRyIsIDAsIHBvcywgcHcsIGloKTsKICAgICAgaGVpZ2h0TGVmdCAtPSBwaDsKICAgICAgd2hpbGUgKGhlaWdodExlZnQgPiAwKSB7CiAgICAgICAgcG9zIC09IHBoOwogICAgICAgIHBkZi5hZGRQYWdlKCk7CiAgICAgICAgcGRmLmFkZEltYWdlKGltZywgIkpQRUciLCAwLCBwb3MsIHB3LCBpaCk7CiAgICAgICAgaGVpZ2h0TGVmdCAtPSBwaDsKICAgICAgfQogICAgICBwZGYuc2F2ZShgJHtuYW1lIHx8ICJyZXN1bWUifS1kZXNpZ25lZC5wZGZgKTsKICAgIH0gY2F0Y2ggewogICAgICBhbGVydCgi2KrYudiw2ZHYsSDYqtmG2LLZitmEINin2YTZgtin2YTYqCDigJQg2KfYs9iq2K7Yr9mFINiq2YbYstmK2YQgUERGINin2YTZhti12YouXG5Db3VsZG4ndCBleHBvcnQgdGhlIGRlc2lnbmVkIHRlbXBsYXRlIOKAlCB1c2UgdGhlIHBsYWluIFBERi4iKTsKICAgIH0gZmluYWxseSB7CiAgICAgIHNldEJ1c3koZmFsc2UpOwogICAgfQogIH0KCiAgY29uc3QgcmVuZGVyTGluZXMgPSAobGluZXM6IHN0cmluZ1tdKSA9PgogICAgbGluZXMuZmlsdGVyKChsKSA9PiBsLnRyaW0oKSkubWFwKChsLCBpZHgpID0+IHsKICAgICAgY29uc3QgYnVsbGV0ID0gL15bLeKAoipdLy50ZXN0KGwudHJpbSgpKTsKICAgICAgY29uc3QgY29udGVudCA9IGwudHJpbSgpLnJlcGxhY2UoL15bLeKAoipdXHMqLywgIiIpOwogICAgICBjb25zdCBzdWJoZWFkID0gIWJ1bGxldCAmJiBjb250ZW50Lmxlbmd0aCA8IDcwICYmIC9bQS1aYS162IAt279dLy50ZXN0KGNvbnRlbnQpICYmICgvXGR7NH0vLnRlc3QoY29udGVudCkgfHwgL1xiYXRcYnzigJR84oCTfFx8Ly50ZXN0KGNvbnRlbnQpKTsKICAgICAgaWYgKGJ1bGxldCkgcmV0dXJuIDxsaSBrZXk9e2lkeH0gc3R5bGU9e3sgbWFyZ2luQm90dG9tOiA0LCBsaW5lSGVpZ2h0OiAxLjUgfX0+e2NvbnRlbnR9PC9saT47CiAgICAgIHJldHVybiA8ZGl2IGtleT17aWR4fSBzdHlsZT17eyBmb250V2VpZ2h0OiBzdWJoZWFkID8gNzAwIDogNDAwLCBtYXJnaW5Ub3A6IHN1YmhlYWQgPyAxMCA6IDIsIG1hcmdpbkJvdHRvbTogMiwgbGluZUhlaWdodDogMS41LCBjb2xvcjogc3ViaGVhZCA/ICIjMTExODI3IiA6ICIjMzc0MTUxIiB9fT57Y29udGVudH08L2Rpdj47CiAgICB9KTsKCiAgLy8gUGVyLXZhcmlhbnQgc2VjdGlvbi1oZWFkaW5nIHRyZWF0bWVudC4gU2FtZSAxMy0xNHB4IGJvbGQgdXBwZXJjYXNlIGJhc2UKICAvLyAo4omIMTJwdCDigJQgdGhlIHJlY3J1aXRlci1wcmVmZXJyZWQgaGVhZGluZyBzaXplKTsgb25seSB0aGUgcnVsZS9hY2NlbnQgbW92ZXMuCiAgY29uc3Qgc2VjdGlvbkhlYWRpbmdTdHlsZTogUmVhY3QuQ1NTUHJvcGVydGllcyA9IHsKICAgIGZvbnRTaXplOiAxNCwKICAgIGZvbnRXZWlnaHQ6IDcwMCwKICAgIGxldHRlclNwYWNpbmc6IHNlcmlmID8gMiA6IDEsCiAgICB0ZXh0VHJhbnNmb3JtOiAidXBwZXJjYXNlIiwKICAgIG1hcmdpbkJvdHRvbTogOCwKICAgIGNvbG9yOiBzdHJpY3QgfHwgdmFyaWFudCA9PT0gIm1pbmltYWwiID8gIiMxMTE4MjciIDogdmFyaWFudCA9PT0gIm1vZGVybiIgPyBhY2NlbnQgOiAiIzExMTgyNyIsCiAgICBmb250RmFtaWx5OiBzZXJpZiA/ICJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIDogdW5kZWZpbmVkLAogICAgLi4uKHZhcmlhbnQgPT09ICJtb2Rlcm4iCiAgICAgID8geyBib3JkZXJJbmxpbmVTdGFydDogYDRweCBzb2xpZCAke2FjY2VudH1gLCBwYWRkaW5nSW5saW5lU3RhcnQ6IDEwIH0KICAgICAgOiB7IHBhZGRpbmdCb3R0b206IDQsIGJvcmRlckJvdHRvbTogdmFyaWFudCA9PT0gImNsYXNzaWMiID8gYDJweCBzb2xpZCAke2FjY2VudH1gIDogc2VyaWYgPyBgMXB4IHNvbGlkICM5Y2EzYWZgIDogYDEuNXB4IHNvbGlkICNkMWQ1ZGJgIH0pLAogIH07CgogIC8vIFNpbmdsZS1jb2x1bW4gYm9keSDigJQgdGhlIG9ubHkgc3RydWN0dXJlIGV2ZXJ5IEFUUyBwYXJzZXMgcmVsaWFibHkuCiAgLy8gfjY0cHggc2lkZSBwYWRkaW5nIOKJiCAwLjg1aW4gbWFyZ2lucyBvbiBBNDsgYm9keSAxMy41cHgg4omIIDEwLjVwdC4KICBjb25zdCBib2R5ID0gKAogICAgPGRpdiBzdHlsZT17eyBwYWRkaW5nOiAiMjJweCA2NHB4IDQwcHgiIH19PgogICAgICB7cGFyc2VkLnNlY3Rpb25zLm1hcCgocykgPT4gKAogICAgICAgIDxkaXYga2V5PXtzLmhlYWRpbmd9IHN0eWxlPXt7IG1hcmdpbkJvdHRvbTogMTggfX0+CiAgICAgICAgICA8ZGl2IHN0eWxlPXtzZWN0aW9uSGVhZGluZ1N0eWxlfT57cy5oZWFkaW5nfTwvZGl2PgogICAgICAgICAgPHVsIHN0eWxlPXt7IG1hcmdpbjogMCwgcGFkZGluZ0lubGluZVN0YXJ0OiAxOCwgZm9udFNpemU6IDEzLjUgfX0+e3JlbmRlckxpbmVzKHMubGluZXMpfTwvdWw+CiAgICAgICAgPC9kaXY+CiAgICAgICkpfQogICAgPC9kaXY+CiAgKTsKCiAgcmV0dXJuICgKICAgIDxkaXY+CiAgICAgIHshcHJldmlldyAmJiAoCiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTMgZmxleCBmbGV4LXdyYXAgaXRlbXMtY2VudGVyIGdhcC0yIj4KICAgICAgICAgIDxidXR0b24gb25DbGljaz17ZG93bmxvYWRQZGZ9IGRpc2FibGVkPXtidXN5fSBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNSBweS0yLjUgdGV4dC1zbSBmb250LWJvbGQgZGlzYWJsZWQ6b3BhY2l0eS01MCI+CiAgICAgICAgICAgIHtidXN5ID8gIuKApiIgOiBpc1J0bCA/ICLihpMg2KrZhtiy2YrZhCDYp9mE2YLYp9mE2Kgg2KfZhNmF2LXZhdmR2YUgKFBERikiIDogIuKGkyBEb3dubG9hZCBkZXNpZ25lZCAoUERGKSJ9CiAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19Pntpc1J0bCA/ICLZhtiz2K7YqSDZhdi12YXZkdmF2Kkg2YTZhNi52LHYtiDigJQg2YTZhNmAIEFUUyDYp9iz2KrYrtiv2YUgUERGL1dvcmQg2KfZhNmG2LXZiiIgOiAiRGVzaWduZWQgZm9yIHZpZXdpbmcg4oCUIGZvciBBVFMgdXNlIHRoZSBwbGFpbiBQREYvV29yZCJ9PC9zcGFuPgogICAgICAgIDwvZGl2PgogICAgICApfQoKICAgICAgey8qIExpdmUgcHJldmlldyAoYWxzbyB0aGUgY2FwdHVyZSBzb3VyY2UpLiBkaXIgZHJpdmVzIFJUTCBmb3IgQXJhYmljOwogICAgICAgICAgdGhlIGNvbnRhY3QgbGluZSBzdGF5cyBMVFIgc28gcGhvbmUvZW1haWwvZGF0ZXMgcmVhZCBjb3JyZWN0bHkuICovfQogICAgICA8ZGl2IHJlZj17d3JhcFJlZn0gY2xhc3NOYW1lPXtwcmV2aWV3ID8gIiIgOiAicm91bmRlZC14bCJ9IHN0eWxlPXtwcmV2aWV3ID8gdW5kZWZpbmVkIDogeyBib3JkZXI6ICIxcHggc29saWQgdmFyKC0tbGluZSkiLCBvdmVyZmxvdzogImhpZGRlbiIsIGhlaWdodDogZml0V2lkdGggJiYgcGFnZUggPyBwYWdlSCAqIGZpdCA6IHVuZGVmaW5lZCB9fT4KICAgICAgICA8ZGl2IHN0eWxlPXtmaXRXaWR0aCA/IHsgd2lkdGg6IDc5NCwgdHJhbnNmb3JtOiBgc2NhbGUoJHtmaXR9KWAsIHRyYW5zZm9ybU9yaWdpbjogaXNSdGwgPyAidG9wIHJpZ2h0IiA6ICJ0b3AgbGVmdCIgfSA6IHVuZGVmaW5lZH0+CiAgICAgICAgPGRpdiByZWY9e3JlZn0gZGlyPXtpc1J0bCA/ICJydGwiIDogImx0ciJ9IGxhbmc9e2lzUnRsID8gImFyIiA6IHVuZGVmaW5lZH0gc3R5bGU9e3sgd2lkdGg6IDc5NCwgbWluSGVpZ2h0OiAxMTIzLCBiYWNrZ3JvdW5kOiAiI2ZmZmZmZiIsIGNvbG9yOiAiIzM3NDE1MSIsIGZvbnRGYW1pbHk6IGlzUnRsID8gIidTZWdvZSBVSScsIFRhaG9tYSwgQXJpYWwsIHNhbnMtc2VyaWYiIDogIkFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWYiLCBmb250U2l6ZTogMTMuNSwgdGV4dEFsaWduOiBpc1J0bCA/ICJyaWdodCIgOiAibGVmdCIgfX0+CiAgICAgICAgICB7LyogSGVhZGVyOiB3aGl0ZSBiYWNrZ3JvdW5kIGFsd2F5cyAoY29sb3JlZCBoZWFkZXIgYmxvY2tzIGNvbmZ1c2Ugc29tZQogICAgICAgICAgICAgIHBhcnNlcnMgYW5kIHdhc3RlIHRvbmVyKS4gTmFtZSDiiYggMjJwdDsgY29udGFjdCBvbmUgbGluZSBiZWxvdy4gKi99CiAgICAgICAgICA8ZGl2IHN0eWxlPXt7IHBhZGRpbmc6ICI0MHB4IDY0cHggMCIsIHRleHRBbGlnbjogaGVhZGVyQ2VudGVyZWQgPyAiY2VudGVyIiA6ICJzdGFydCIgfX0+CiAgICAgICAgICAgIDxkaXYgc3R5bGU9e3sgZm9udFNpemU6IDI5LCBmb250V2VpZ2h0OiBzZXJpZiA/IDcwMCA6IDgwMCwgbGV0dGVyU3BhY2luZzogc2VyaWYgPyAxLjUgOiAwLjMsIGNvbG9yOiBzdHJpY3QgfHwgdmFyaWFudCA9PT0gIm1pbmltYWwiID8gIiMxMTE4MjciIDogYWNjZW50LCBmb250RmFtaWx5OiBzZXJpZiA/ICJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIDogdW5kZWZpbmVkIH19PntwYXJzZWQubmFtZX08L2Rpdj4KICAgICAgICAgICAge3BhcnNlZC5jb250YWN0ICYmIDxkaXYgZGlyPSJsdHIiIHN0eWxlPXt7IG1hcmdpblRvcDogOCwgZm9udFNpemU6IDEyLjUsIGNvbG9yOiAiIzRiNTU2MyIsIHRleHRBbGlnbjogaGVhZGVyQ2VudGVyZWQgPyAiY2VudGVyIiA6IGlzUnRsID8gInJpZ2h0IiA6ICJsZWZ0IiwgdW5pY29kZUJpZGk6ICJwbGFpbnRleHQiIH19PntwYXJzZWQuY29udGFjdH08L2Rpdj59CiAgICAgICAgICAgIDxkaXYgc3R5bGU9e3sgbWFyZ2luVG9wOiAxNCwgYm9yZGVyQm90dG9tOiBzdHJpY3QgPyAiMS41cHggc29saWQgIzExMTgyNyIgOiB2YXJpYW50ID09PSAiY2xhc3NpYyIgPyBgM3B4IHNvbGlkICR7YWNjZW50fWAgOiB2YXJpYW50ID09PSAibW9kZXJuIiA/IGAycHggc29saWQgJHthY2NlbnR9YCA6IHNlcmlmID8gIjFweCBzb2xpZCAjOWNhM2FmIiA6ICIxLjVweCBzb2xpZCAjZDFkNWRiIiB9fSAvPgogICAgICAgICAgPC9kaXY+CiAgICAgICAgICB7Ym9keX0KICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L2Rpdj4KICApOwp9Cg=="}
+"use client";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+/**
+ * Visual, designed resume template with a live preview + a one-click designed
+ * PDF export (html2canvas → jsPDF). The Arab market "buys with the eye", and
+ * every major competitor ships styled templates — this is our answer.
+ *
+ * IMPORTANT: this designed PDF is a RASTER image, great for a human recruiter /
+ * LinkedIn, but NOT ATS-parseable. The plain PdfExport/DocxExport remain the
+ * ATS-safe downloads — we label them so the user picks the right one.
+ *
+ * Parses the plain-text CV (standard headings) into sections and lays them out
+ * as a two-column A4 page. Uses explicit hex colors (not CSS vars) so the
+ * off-screen html2canvas capture renders correctly regardless of site theme.
+ */
+
+interface Section { heading: string; lines: string[] }
+interface Parsed { name: string; contact: string; sections: Section[] }
+
+const HEADINGS = [
+  "PROFESSIONAL SUMMARY", "SUMMARY", "PROFILE", "OBJECTIVE",
+  "SKILLS", "CORE SKILLS", "TECHNICAL SKILLS",
+  "EXPERIENCE", "WORK EXPERIENCE", "PROFESSIONAL EXPERIENCE", "EMPLOYMENT HISTORY",
+  "EDUCATION", "CERTIFICATIONS", "CERTIFICATES", "LANGUAGES", "PROJECTS",
+  "PERSONAL DETAILS", "PERSONAL INFORMATION", "ACHIEVEMENTS", "AWARDS", "REFERENCES",
+];
+
+// Arabic section headings (Modern Standard Arabic) so RTL and bilingual resumes
+// parse into the same sections as English ones.
+const HEADINGS_AR = [
+  "الملخص المهني", "الملخص", "نبذة", "الهدف الوظيفي",
+  "المهارات", "المهارات الأساسية", "المهارات التقنية",
+  "الخبرة", "الخبرة العملية", "الخبرات", "التاريخ الوظيفي",
+  "التعليم", "المؤهلات", "الشهادات", "اللغات", "المشاريع",
+  "البيانات الشخصية", "المعلومات الشخصية", "الإنجازات", "الجوائز", "المراجع",
+];
+
+function isHeading(line: string): boolean {
+  // Bilingual headings look like "EXPERIENCE · الخبرة" — test each side.
+  const parts = line.split(/[·|/–—-]/).map((p) => p.trim()).filter(Boolean);
+  const candidates = parts.length > 1 ? [line.trim(), ...parts] : [line.trim()];
+  for (const c of candidates) {
+    const t = c.replace(/:$/, "").trim();
+    if (t.length > 42) continue;
+    if (HEADINGS.includes(t.toUpperCase())) return true;
+    if (HEADINGS_AR.includes(t)) return true;
+    // A short ALL-CAPS Latin line with no bullet/email is a heading.
+    if (/^[A-Z][A-Z &/]{2,38}$/.test(t) && !t.includes("@")) return true;
+  }
+  return false;
+}
+
+function parse(text: string): Parsed {
+  const raw = text.replace(/\r/g, "").split("\n");
+  const nonEmpty = raw.map((l) => l.trimEnd());
+  let i = 0;
+  while (i < nonEmpty.length && !nonEmpty[i].trim()) i++;
+  const name = (nonEmpty[i] || "Your Name").trim();
+  i++;
+  let contact = "";
+  while (i < nonEmpty.length && !nonEmpty[i].trim()) i++;
+  if (i < nonEmpty.length && !isHeading(nonEmpty[i])) { contact = nonEmpty[i].trim(); i++; }
+  // Models sometimes bury the contact line (email/phone) further down the
+  // header block or inside the summary — pull the first line that looks like
+  // contact info out of the top of the document so it renders under the name,
+  // not mid-section.
+  const looksContact = (s: string) => /@|(\+?\d[\d\s()-]{6,})/.test(s) && s.length < 160;
+  if (!looksContact(contact)) {
+    for (let k = i; k < Math.min(i + 10, nonEmpty.length); k++) {
+      const cand = nonEmpty[k].trim();
+      if (cand && !isHeading(cand) && looksContact(cand)) {
+        contact = contact ? contact : cand;
+        nonEmpty.splice(k, 1);
+        break;
+      }
+    }
+  }
+
+  const sections: Section[] = [];
+  let cur: Section | null = null;
+  for (; i < nonEmpty.length; i++) {
+    const line = nonEmpty[i];
+    if (isHeading(line)) {
+      cur = { heading: line.trim().replace(/:$/, "").toUpperCase(), lines: [] };
+      sections.push(cur);
+    } else if (cur) {
+      cur.lines.push(line);
+    } else if (line.trim()) {
+      cur = { heading: "SUMMARY", lines: [line] };
+      sections.push(cur);
+    }
+  }
+  return { name, contact, sections };
+}
+
+// ALL variants are single-column: research consensus (Jobscan, Resume.io, and
+// every 2026 ATS formatting guide) is that multi-column layouts, tables, and
+// sidebars get scrambled by parsers. Variants differ in typography and header
+// treatment only — the structure underneath is identical and ATS-safe:
+// standard headings, reverse-chronological, 10-12pt body, 0.5-1in margins.
+export type TemplateVariant = "classic" | "modern" | "minimal" | "elegant" | "column";
+
+// A CV pasted or generated in English must render LTR even inside the Arabic
+// UI (and vice versa) — the page language says nothing about the CV language.
+// Majority script of the content decides the layout direction.
+export function detectDir(text: string): "ltr" | "rtl" {
+  const sample = text.slice(0, 1200);
+  const arabic = (sample.match(/[؀-ۿ]/g) || []).length;
+  const latin = (sample.match(/[A-Za-z]/g) || []).length;
+  return arabic > latin ? "rtl" : "ltr";
+}
+
+export default function ResumeTemplate({ text, name = "resume", accent = "#0f766e", variant = "classic", preview = false, dir = "auto", fitWidth = false }: { text: string; name?: string; accent?: string; variant?: TemplateVariant; preview?: boolean; dir?: "ltr" | "rtl" | "auto"; fitWidth?: boolean }) {
+  const parsed = useMemo(() => parse(text), [text]);
+  const ref = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [busy, setBusy] = useState(false);
+  // Scale the A4-width (794px) page down to fit the container so the preview is
+  // never cropped on mobile; PDF capture still uses the full-res `ref`.
+  const [fit, setFit] = useState(1);
+  const [pageH, setPageH] = useState(0);
+  useEffect(() => {
+    if (!fitWidth) return;
+    const el = wrapRef.current;
+    if (!el) return;
+    const measure = () => {
+      setFit(Math.min(1, el.clientWidth / 794));
+      if (ref.current) setPageH(ref.current.scrollHeight);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fitWidth, text, variant, dir]);
+
+  const isRtl = (dir === "auto" ? detectDir(text) : dir) === "rtl";
+
+  // Per-variant typography (structure is identical & ATS-safe in all of them).
+  const headerCentered = variant === "elegant";
+  const serif = variant === "elegant";
+  const strict = variant === "column"; // "ATS Pro": zero decoration beyond bold + rules
+
+  async function downloadPdf() {
+    if (!ref.current) return;
+    setBusy(true);
+    try {
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas"), import("jspdf")]);
+      const canvas = await html2canvas(ref.current, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const img = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ unit: "mm", format: "a4" });
+      const pw = 210, ph = 297;
+      const ih = (canvas.height * pw) / canvas.width;
+      let heightLeft = ih, pos = 0;
+      pdf.addImage(img, "JPEG", 0, pos, pw, ih);
+      heightLeft -= ph;
+      while (heightLeft > 0) {
+        pos -= ph;
+        pdf.addPage();
+        pdf.addImage(img, "JPEG", 0, pos, pw, ih);
+        heightLeft -= ph;
+      }
+      pdf.save(`${name || "resume"}-designed.pdf`);
+    } catch {
+      alert("تعذّر تنزيل القالب — استخدم تنزيل PDF النصي.\nCouldn't export the designed template — use the plain PDF.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const renderLines = (lines: string[]) =>
+    lines.filter((l) => l.trim()).map((l, idx) => {
+      const bullet = /^[-•*]/.test(l.trim());
+      const content = l.trim().replace(/^[-•*]\s*/, "");
+      const subhead = !bullet && content.length < 70 && /[A-Za-z؀-ۿ]/.test(content) && (/\d{4}/.test(content) || /\bat\b|—|–|\|/.test(content));
+      if (bullet) return <li key={idx} style={{ marginBottom: 4, lineHeight: 1.5 }}>{content}</li>;
+      return <div key={idx} style={{ fontWeight: subhead ? 700 : 400, marginTop: subhead ? 10 : 2, marginBottom: 2, lineHeight: 1.5, color: subhead ? "#111827" : "#374151" }}>{content}</div>;
+    });
+
+  // Per-variant section-heading treatment. Same 13-14px bold uppercase base
+  // (≈12pt — the recruiter-preferred heading size); only the rule/accent moves.
+  const sectionHeadingStyle: React.CSSProperties = {
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: serif ? 2 : 1,
+    textTransform: "uppercase",
+    marginBottom: 8,
+    color: strict || variant === "minimal" ? "#111827" : variant === "modern" ? accent : "#111827",
+    fontFamily: serif ? "Georgia, 'Times New Roman', serif" : undefined,
+    ...(variant === "modern"
+      ? { borderInlineStart: `4px solid ${accent}`, paddingInlineStart: 10 }
+      : { paddingBottom: 4, borderBottom: variant === "classic" ? `2px solid ${accent}` : serif ? `1px solid #9ca3af` : `1.5px solid #d1d5db` }),
+  };
+
+  // Single-column body — the only structure every ATS parses reliably.
+  // ~64px side padding ≈ 0.85in margins on A4; body 13.5px ≈ 10.5pt.
+  const body = (
+    <div style={{ padding: "22px 64px 40px" }}>
+      {parsed.sections.map((s) => (
+        <div key={s.heading} style={{ marginBottom: 18 }}>
+          <div style={sectionHeadingStyle}>{s.heading}</div>
+          <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 13.5 }}>{renderLines(s.lines)}</ul>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div>
+      {!preview && (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <button onClick={downloadPdf} disabled={busy} className="btn-accent px-5 py-2.5 text-sm font-bold disabled:opacity-50">
+            {busy ? "…" : isRtl ? "↓ تنزيل القالب المصمّم (PDF)" : "↓ Download designed (PDF)"}
+          </button>
+          <span className="text-xs" style={{ color: "var(--faint)" }}>{isRtl ? "نسخة مصمّمة للعرض — للـ ATS استخدم PDF/Word النصي" : "Designed for viewing — for ATS use the plain PDF/Word"}</span>
+        </div>
+      )}
+
+      {/* Live preview (also the capture source). dir drives RTL for Arabic;
+          the contact line stays LTR so phone/email/dates read correctly. */}
+      <div ref={wrapRef} className={preview ? "" : "rounded-xl"} style={preview ? undefined : { border: "1px solid var(--line)", overflow: "hidden", height: fitWidth && pageH ? pageH * fit : undefined }}>
+        <div style={fitWidth ? { width: 794, transform: `scale(${fit})`, transformOrigin: isRtl ? "top right" : "top left" } : undefined}>
+        <div ref={ref} dir={isRtl ? "rtl" : "ltr"} lang={isRtl ? "ar" : undefined} style={{ width: 794, minHeight: 1123, background: "#ffffff", color: "#374151", fontFamily: isRtl ? "'Segoe UI', Tahoma, Arial, sans-serif" : "Arial, Helvetica, sans-serif", fontSize: 13.5, textAlign: isRtl ? "right" : "left" }}>
+          {/* Header: white background always (colored header blocks confuse some
+              parsers and waste toner). Name ≈ 22pt; contact one line below. */}
+          <div style={{ padding: "40px 64px 0", textAlign: headerCentered ? "center" : "start" }}>
+            <div style={{ fontSize: 29, fontWeight: serif ? 700 : 800, letterSpacing: serif ? 1.5 : 0.3, color: strict || variant === "minimal" ? "#111827" : accent, fontFamily: serif ? "Georgia, 'Times New Roman', serif" : undefined }}>{parsed.name}</div>
+            {parsed.contact && <div dir="ltr" style={{ marginTop: 8, fontSize: 12.5, color: "#4b5563", textAlign: headerCentered ? "center" : isRtl ? "right" : "left", unicodeBidi: "plaintext" }}>{parsed.contact}</div>}
+            <div style={{ marginTop: 14, borderBottom: strict ? "1.5px solid #111827" : variant === "classic" ? `3px solid ${accent}` : variant === "modern" ? `2px solid ${accent}` : serif ? "1px solid #9ca3af" : "1.5px solid #d1d5db" }} />
+          </div>
+          {body}
+        </div>
+        </div>
+      </div>
+    </div>
+  );
+}

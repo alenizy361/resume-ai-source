@@ -1,1 +1,42 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwoKLyoqCiAqIFdoZW4gYSByZXN1bHRzIHZpZXcgaXMgb3BlbiwgcHJlc3NpbmcgQmFjayBzaG91bGQgcmV0dXJuIHRvIHRoZSBzY2FuIGZvcm0g4oCUCiAqIG5vdCBleGl0IHRoZSB3aG9sZSBzaXRlICh0aGUgcmVzdWx0cyBwYWdlIHB1c2hlcyBubyBoaXN0b3J5IHN0YXRlIG9uIGl0cyBvd24pLgogKiBQdXNoZXMgb25lIGhpc3RvcnkgZW50cnkgd2hpbGUgYGFjdGl2ZWAgYW5kIGNsZWFycyB0aGUgcmVzdWx0IG9uIHBvcHN0YXRlLgogKi8KZXhwb3J0IGZ1bmN0aW9uIHVzZUJhY2tUb0Zvcm0oYWN0aXZlOiBib29sZWFuLCBvbkJhY2s6ICgpID0+IHZvaWQpIHsKICB1c2VFZmZlY3QoKCkgPT4gewogICAgaWYgKCFhY3RpdmUpIHJldHVybjsKICAgIHdpbmRvdy5oaXN0b3J5LnB1c2hTdGF0ZSh7IHJhUmVzdWx0OiB0cnVlIH0sICIiKTsKICAgIGNvbnN0IG9uUG9wID0gKCkgPT4gb25CYWNrKCk7CiAgICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigicG9wc3RhdGUiLCBvblBvcCk7CiAgICByZXR1cm4gKCkgPT4gd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoInBvcHN0YXRlIiwgb25Qb3ApOwogICAgLy8gb25CYWNrIGlzIHJlY3JlYXRlZCBlYWNoIHJlbmRlcjsgd2Ugb25seSB3YW50IHRvIChyZSlhcm0gd2hlbiBgYWN0aXZlYAogICAgLy8gZmxpcHMsIHNvIGludGVudGlvbmFsbHkgb21pdCBpdCBmcm9tIGRlcHMuCiAgICAvLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmUgcmVhY3QtaG9va3MvZXhoYXVzdGl2ZS1kZXBzCiAgfSwgW2FjdGl2ZV0pOwp9CgovKioKICogQ291bnQtdXAgdG93YXJkIGB0YXJnZXRgIG92ZXIgfjkwMG1zIChlYXNlT3V0Q3ViaWMpIHNvIHRoZSBzY29yZSByZXZlYWwgZmVlbHMKICogZWFybmVkIGluc3RlYWQgb2YgcG9wcGluZyBpbiBzdGF0aWNhbGx5LiBSZXR1cm5zIHRoZSBjdXJyZW50IGRpc3BsYXkgdmFsdWUuCiAqLwpleHBvcnQgZnVuY3Rpb24gdXNlQ291bnRVcCh0YXJnZXQ6IG51bWJlciwgZHVyYXRpb25NcyA9IDkwMCk6IG51bWJlciB7CiAgY29uc3QgW3ZhbHVlLCBzZXRWYWx1ZV0gPSB1c2VTdGF0ZSgwKTsKICB1c2VFZmZlY3QoKCkgPT4gewogICAgaWYgKCF0YXJnZXQpIHsgc2V0VmFsdWUoMCk7IHJldHVybjsgfQogICAgY29uc3Qgc3RhcnQgPSBwZXJmb3JtYW5jZS5ub3coKTsKICAgIGxldCByYWYgPSAwOwogICAgY29uc3QgdGljayA9IChub3c6IG51bWJlcikgPT4gewogICAgICBjb25zdCB0ID0gTWF0aC5taW4oMSwgKG5vdyAtIHN0YXJ0KSAvIGR1cmF0aW9uTXMpOwogICAgICBjb25zdCBlYXNlZCA9IDEgLSBNYXRoLnBvdygxIC0gdCwgMyk7CiAgICAgIHNldFZhbHVlKE1hdGgucm91bmQoZWFzZWQgKiB0YXJnZXQpKTsKICAgICAgaWYgKHQgPCAxKSByYWYgPSByZXF1ZXN0QW5pbWF0aW9uRnJhbWUodGljayk7CiAgICB9OwogICAgcmFmID0gcmVxdWVzdEFuaW1hdGlvbkZyYW1lKHRpY2spOwogICAgcmV0dXJuICgpID0+IGNhbmNlbEFuaW1hdGlvbkZyYW1lKHJhZik7CiAgfSwgW3RhcmdldCwgZHVyYXRpb25Nc10pOwogIHJldHVybiB2YWx1ZTsKfQo="}
+"use client";
+import { useEffect, useState } from "react";
+
+/**
+ * When a results view is open, pressing Back should return to the scan form —
+ * not exit the whole site (the results page pushes no history state on its own).
+ * Pushes one history entry while `active` and clears the result on popstate.
+ */
+export function useBackToForm(active: boolean, onBack: () => void) {
+  useEffect(() => {
+    if (!active) return;
+    window.history.pushState({ raResult: true }, "");
+    const onPop = () => onBack();
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+    // onBack is recreated each render; we only want to (re)arm when `active`
+    // flips, so intentionally omit it from deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
+}
+
+/**
+ * Count-up toward `target` over ~900ms (easeOutCubic) so the score reveal feels
+ * earned instead of popping in statically. Returns the current display value.
+ */
+export function useCountUp(target: number, durationMs = 900): number {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!target) { setValue(0); return; }
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / durationMs);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(eased * target));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, durationMs]);
+  return value;
+}

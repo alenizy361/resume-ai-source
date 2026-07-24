@@ -1,1 +1,33 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgcmVhZFNlc3Npb24sIFNFU1NJT05fQ09PS0lFIH0gZnJvbSAiQC9hcHAvbGliL3Nlc3Npb24iOwppbXBvcnQgeyBnZXRFbnRpdGxlbWVudCB9IGZyb20gIkAvYXBwL2xpYi9lbnRpdGxlbWVudHMiOwppbXBvcnQgeyB2ZXJpZnlQYXNzLCB2ZXJpZnlFbnRQYXNzLCBBQ0NFU1NfQ09PS0lFLCBFTlRfQ09PS0lFIH0gZnJvbSAiQC9hcHAvbGliL2FjY2VzcyI7CgovKiogUmV0dXJucyBzaWduLWluIHN0YXRlLCBhY2NvdW50IGVudGl0bGVtZW50LCBBTkQgZGV2aWNlLXBhc3MgYWNjZXNzIOKAlAogKiBgaGFzQWNjZXNzYCBpcyB0aGUgc2luZ2xlIGZsYWcgdGhlIFVJIG5lZWRzOiBjYW4gdGhpcyBicm93c2VyIGdldCB0aGUKICogZnVsbCAodW5sb2NrZWQpIHJlc3VtZSByaWdodCBub3c/ICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBHRVQocmVxOiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IG5vdyA9IERhdGUubm93KCk7CiAgY29uc3QgcGFzcyA9IHZlcmlmeVBhc3MocmVxLmNvb2tpZXMuZ2V0KEFDQ0VTU19DT09LSUUpPy52YWx1ZSwgbm93KTsKICBjb25zdCBlbWFpbCA9IHJlYWRTZXNzaW9uKHJlcS5jb29raWVzLmdldChTRVNTSU9OX0NPT0tJRSk/LnZhbHVlLCBub3cpOwoKICBpZiAoIWVtYWlsKSB7CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBzaWduZWRJbjogZmFsc2UsIGhhc0FjY2VzczogISFwYXNzIH0pOwogIH0KCiAgY29uc3QgdW50aWwgPSBhd2FpdCBnZXRFbnRpdGxlbWVudChlbWFpbCk7CiAgLy8gRmFsbCBiYWNrIHRvIHRoZSBzaWduZWQgZW50aXRsZW1lbnQgY29va2llIHdoZW4gdGhlIHNlcnZlciBzdG9yZSBtaXNzZXMsIGJ1dAogIC8vIG9ubHkgaWYgaXQgYmVsb25ncyB0byBUSElTIHNpZ25lZC1pbiBlbWFpbCDigJQgc28gYW4gaW5mcmEgaGljY3VwIGNhbid0IGxvY2sgYQogIC8vIHBhaWQgYnV5ZXIgb3V0LCBhbmQgdGhlIGNvb2tpZSBjYW4gbmV2ZXIgdW5sb2NrIGEgZGlmZmVyZW50IGFjY291bnQuCiAgY29uc3QgZW50Q29va2llID0gdmVyaWZ5RW50UGFzcyhyZXEuY29va2llcy5nZXQoRU5UX0NPT0tJRSk/LnZhbHVlLCBub3cpOwogIGNvbnN0IGNvb2tpZVVudGlsID0gZW50Q29va2llPy5lbWFpbCA9PT0gZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCkgPyBlbnRDb29raWUuZXhwIDogMDsKICBjb25zdCBlZmZlY3RpdmVVbnRpbCA9IE1hdGgubWF4KHVudGlsLCBjb29raWVVbnRpbCk7CiAgY29uc3QgdW5saW1pdGVkID0gZWZmZWN0aXZlVW50aWwgPiBub3c7CiAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsKICAgIHNpZ25lZEluOiB0cnVlLAogICAgZW1haWwsCiAgICB1bmxpbWl0ZWQ6IHVubGltaXRlZCB8fCAhIXBhc3MsCiAgICB1bnRpbDogZWZmZWN0aXZlVW50aWwsCiAgICBoYXNBY2Nlc3M6IHVubGltaXRlZCB8fCAhIXBhc3MsCiAgfSk7Cn0K"}
+import { NextRequest, NextResponse } from "next/server";
+import { readSession, SESSION_COOKIE } from "@/app/lib/session";
+import { getEntitlement } from "@/app/lib/entitlements";
+import { verifyPass, verifyEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
+
+/** Returns sign-in state, account entitlement, AND device-pass access —
+ * `hasAccess` is the single flag the UI needs: can this browser get the
+ * full (unlocked) resume right now? */
+export async function GET(req: NextRequest) {
+  const now = Date.now();
+  const pass = verifyPass(req.cookies.get(ACCESS_COOKIE)?.value, now);
+  const email = readSession(req.cookies.get(SESSION_COOKIE)?.value, now);
+
+  if (!email) {
+    return NextResponse.json({ signedIn: false, hasAccess: !!pass });
+  }
+
+  const until = await getEntitlement(email);
+  // Fall back to the signed entitlement cookie when the server store misses, but
+  // only if it belongs to THIS signed-in email — so an infra hiccup can't lock a
+  // paid buyer out, and the cookie can never unlock a different account.
+  const entCookie = verifyEntPass(req.cookies.get(ENT_COOKIE)?.value, now);
+  const cookieUntil = entCookie?.email === email.toLowerCase().trim() ? entCookie.exp : 0;
+  const effectiveUntil = Math.max(until, cookieUntil);
+  const unlimited = effectiveUntil > now;
+  return NextResponse.json({
+    signedIn: true,
+    email,
+    unlimited: unlimited || !!pass,
+    until: effectiveUntil,
+    hasAccess: unlimited || !!pass,
+  });
+}

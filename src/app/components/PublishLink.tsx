@@ -1,1 +1,126 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKCi8qKiBQdWJsaXNoZXMgdGhlIGdpdmVuIHJlc3VtZSB0ZXh0IHRvIGEgcHVibGljIC9yL3tzbHVnfSBsaW5rIGFuZCBzaG93cyBpdAogKiAgd2l0aCBhIGNvcHkgYnV0dG9uLiBQdWJsaXNoZWQgbGlua3MgKHNsdWcgKyB1bnB1Ymxpc2ggdG9rZW4pIGFyZSBwZXJzaXN0ZWQKICogIHRvIGxvY2FsU3RvcmFnZSBzbyB0aGUgdXNlciBjYW4gc3RpbGwgc2VlL3VucHVibGlzaCB0aGVtIGxhdGVyIGZyb20KICogIC9hY2NvdW50IOKAlCBwcmV2aW91c2x5IGxlYXZpbmcgdGhlIHBhZ2UgbG9zdCB0aGUgdG9rZW4gZm9yZXZlci4gKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHVibGlzaExpbmsoeyB0ZXh0LCBuYW1lLCByb2xlLCBhciA9IGZhbHNlIH06IHsgdGV4dDogc3RyaW5nOyBuYW1lPzogc3RyaW5nOyByb2xlPzogc3RyaW5nOyBhcj86IGJvb2xlYW4gfSkgewogIGNvbnN0IFt1cmwsIHNldFVybF0gPSB1c2VTdGF0ZSgiIik7CiAgY29uc3QgW3NsdWcsIHNldFNsdWddID0gdXNlU3RhdGUoIiIpOwogIGNvbnN0IFt0b2tlbiwgc2V0VG9rZW5dID0gdXNlU3RhdGUoIiIpOwogIGNvbnN0IFtsb2FkaW5nLCBzZXRMb2FkaW5nXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCBbY29waWVkLCBzZXRDb3BpZWRdID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGUoIiIpOwoKICBjb25zdCB0ID0gYXIKICAgID8gewogICAgICAgIGN0YTogIvCflJcg2KPZhti02KYg2LHYp9io2LfYp9mLINi52KfZhdin2Ysg2YTYs9mK2LHYqtmDIiwKICAgICAgICBwdWJsaXNoaW5nOiAi2KzYp9ix2Y0g2KfZhNmG2LTYseKApiIsCiAgICAgICAgeW91ckxpbms6ICLYsdin2KjYtyDYs9mK2LHYqtmDINin2YTYudin2YUiLAogICAgICAgIGNvcHk6ICLZhtiz2K4g2KfZhNix2KfYqNi3IiwKICAgICAgICBjb3BpZWQ6ICLZhtmP2LPYriIsCiAgICAgICAgc2hhcmU6ICLYtNin2LHZg9mHINmF2Lkg2KzZh9in2Kog2KfZhNiq2YjYuNmK2YEg2KPZiCDYudmE2Ykg2YTZitmG2YPYr9il2YYg4oCUINio2K/ZiNmGINmF2YTZgSBQREYuIiwKICAgICAgICB1bnB1Ymxpc2g6ICLYpdmE2LrYp9ihINin2YTZhti02LEiLAogICAgICAgIHJlbW92aW5nOiAi2KzYp9ix2Y0g2KfZhNit2LDZgeKApiIsCiAgICAgICAgZmFpbGVkOiAi2KrYudiw2ZHYsSDYp9mE2YbYtNixLiIsCiAgICAgIH0KICAgIDogewogICAgICAgIGN0YTogIvCflJcgR2V0IGEgc2hhcmVhYmxlIGxpbmsiLAogICAgICAgIHB1Ymxpc2hpbmc6ICJQdWJsaXNoaW5n4oCmIiwKICAgICAgICB5b3VyTGluazogIllvdXIgcHVibGljIHJlc3VtZSBsaW5rIiwKICAgICAgICBjb3B5OiAiQ29weSBsaW5rIiwKICAgICAgICBjb3BpZWQ6ICJDb3BpZWQiLAogICAgICAgIHNoYXJlOiAiU2hhcmUgdGhpcyB3aXRoIHJlY3J1aXRlcnMgb3Igb24gTGlua2VkSW4g4oCUIG5vIFBERiBuZWVkZWQuIiwKICAgICAgICB1bnB1Ymxpc2g6ICJVbnB1Ymxpc2ggdGhpcyBsaW5rIiwKICAgICAgICByZW1vdmluZzogIlJlbW92aW5n4oCmIiwKICAgICAgICBmYWlsZWQ6ICJDb3VsZCBub3QgcHVibGlzaC4iLAogICAgICB9OwoKICBmdW5jdGlvbiByZW1lbWJlcihlbnRyeTogeyBzbHVnOiBzdHJpbmc7IHVybDogc3RyaW5nOyB0b2tlbjogc3RyaW5nIH0pIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJhdyA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKCJyYV9wdWJsaXNoZWQiKTsKICAgICAgY29uc3QgbGlzdCA9IHJhdyA/IEpTT04ucGFyc2UocmF3KSA6IFtdOwogICAgICBsaXN0LnVuc2hpZnQoeyAuLi5lbnRyeSwgY3JlYXRlZDogbmV3IERhdGUoKS50b0lTT1N0cmluZygpIH0pOwogICAgICBsb2NhbFN0b3JhZ2Uuc2V0SXRlbSgicmFfcHVibGlzaGVkIiwgSlNPTi5zdHJpbmdpZnkobGlzdC5zbGljZSgwLCAyMCkpKTsKICAgIH0gY2F0Y2ggeyAvKiBub29wICovIH0KICB9CgogIGZ1bmN0aW9uIGZvcmdldChzOiBzdHJpbmcpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJhdyA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKCJyYV9wdWJsaXNoZWQiKTsKICAgICAgaWYgKCFyYXcpIHJldHVybjsKICAgICAgY29uc3QgbGlzdCA9IChKU09OLnBhcnNlKHJhdykgYXMgeyBzbHVnOiBzdHJpbmcgfVtdKS5maWx0ZXIoKGUpID0+IGUuc2x1ZyAhPT0gcyk7CiAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKCJyYV9wdWJsaXNoZWQiLCBKU09OLnN0cmluZ2lmeShsaXN0KSk7CiAgICB9IGNhdGNoIHsgLyogbm9vcCAqLyB9CiAgfQoKICBhc3luYyBmdW5jdGlvbiBwdWJsaXNoKCkgewogICAgc2V0TG9hZGluZyh0cnVlKTsKICAgIHNldEVycm9yKCIiKTsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKCIvYXBpL3B1Ymxpc2giLCB7CiAgICAgICAgbWV0aG9kOiAiUE9TVCIsCiAgICAgICAgaGVhZGVyczogeyAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoeyB0ZXh0LCBuYW1lLCByb2xlIH0pLAogICAgICB9KTsKICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoZGF0YS5lcnJvciB8fCB0LmZhaWxlZCk7CiAgICAgIGNvbnN0IGZ1bGwgPSBgJHt3aW5kb3cubG9jYXRpb24ub3JpZ2lufSR7ZGF0YS51cmx9YDsKICAgICAgc2V0VXJsKGZ1bGwpOwogICAgICBzZXRTbHVnKGRhdGEuc2x1ZyB8fCAiIik7CiAgICAgIHNldFRva2VuKGRhdGEudW5wdWJsaXNoVG9rZW4gfHwgIiIpOwogICAgICBpZiAoZGF0YS5zbHVnICYmIGRhdGEudW5wdWJsaXNoVG9rZW4pIHJlbWVtYmVyKHsgc2x1ZzogZGF0YS5zbHVnLCB1cmw6IGZ1bGwsIHRva2VuOiBkYXRhLnVucHVibGlzaFRva2VuIH0pOwogICAgfSBjYXRjaCAoZSkgewogICAgICBzZXRFcnJvcihlIGluc3RhbmNlb2YgRXJyb3IgPyBlLm1lc3NhZ2UgOiB0LmZhaWxlZCk7CiAgICB9IGZpbmFsbHkgewogICAgICBzZXRMb2FkaW5nKGZhbHNlKTsKICAgIH0KICB9CgogIGFzeW5jIGZ1bmN0aW9uIHVucHVibGlzaCgpIHsKICAgIGlmICghc2x1ZyB8fCAhdG9rZW4pIHJldHVybjsKICAgIHNldExvYWRpbmcodHJ1ZSk7CiAgICB0cnkgewogICAgICBhd2FpdCBmZXRjaChgL2FwaS9wdWJsaXNoP3NsdWc9JHtlbmNvZGVVUklDb21wb25lbnQoc2x1Zyl9JnRva2VuPSR7ZW5jb2RlVVJJQ29tcG9uZW50KHRva2VuKX1gLCB7IG1ldGhvZDogIkRFTEVURSIgfSk7CiAgICAgIGZvcmdldChzbHVnKTsKICAgICAgc2V0VXJsKCIiKTsKICAgICAgc2V0U2x1ZygiIik7CiAgICAgIHNldFRva2VuKCIiKTsKICAgIH0gY2F0Y2ggewogICAgICBzZXRFcnJvcih0LmZhaWxlZCk7CiAgICB9IGZpbmFsbHkgewogICAgICBzZXRMb2FkaW5nKGZhbHNlKTsKICAgIH0KICB9CgogIGlmICh1cmwpIHsKICAgIHJldHVybiAoCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIG10LTYgcC01IiBzdHlsZT17eyBib3JkZXJDb2xvcjogInJnYmEoMTM5LDkyLDI0NiwwLjQpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWItMiBmb250LW1vbm8gdGV4dC14cyB0cmFja2luZy13aWRlciIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiLCB0ZXh0VHJhbnNmb3JtOiBhciA/ICJub25lIiA6ICJ1cHBlcmNhc2UiIH19Pnt0LnlvdXJMaW5rfTwvZGl2PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtd3JhcCBpdGVtcy1jZW50ZXIgZ2FwLTIiPgogICAgICAgICAgPGEgaHJlZj17dXJsfSB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciBub3JlZmVycmVyIiBkaXI9Imx0ciIgY2xhc3NOYW1lPSJmbGV4LTEgdHJ1bmNhdGUgdGV4dC1zbSB0ZXh0LWFjY2VudCI+e3VybH08L2E+CiAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IHsgbmF2aWdhdG9yLmNsaXBib2FyZC53cml0ZVRleHQodXJsKTsgc2V0Q29waWVkKHRydWUpOyBzZXRUaW1lb3V0KCgpID0+IHNldENvcGllZChmYWxzZSksIDE4MDApOyB9fQogICAgICAgICAgICBjbGFzc05hbWU9InJvdW5kZWQtbGcgcHgtNCBweS0yIHRleHQtc20gZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWFjY2VudCkiLCBjb2xvcjogIiNmZmZmZmYiIH19PgogICAgICAgICAgICB7Y29waWVkID8gdC5jb3BpZWQgOiB0LmNvcHl9CiAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICA8L2Rpdj4KICAgICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19Pnt0LnNoYXJlfTwvcD4KICAgICAgICB7dG9rZW4gJiYgKAogICAgICAgICAgPGJ1dHRvbiBvbkNsaWNrPXt1bnB1Ymxpc2h9IGRpc2FibGVkPXtsb2FkaW5nfSBjbGFzc05hbWU9Im10LTIgdGV4dC14cyBkaXNhYmxlZDpvcGFjaXR5LTUwIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+CiAgICAgICAgICAgIHtsb2FkaW5nID8gdC5yZW1vdmluZyA6IHQudW5wdWJsaXNofQogICAgICAgICAgPC9idXR0b24+CiAgICAgICAgKX0KICAgICAgPC9kaXY+CiAgICApOwogIH0KCiAgcmV0dXJuICgKICAgIDxkaXYgY2xhc3NOYW1lPSJtdC00IHRleHQtY2VudGVyIj4KICAgICAgPGJ1dHRvbiBvbkNsaWNrPXtwdWJsaXNofSBkaXNhYmxlZD17bG9hZGluZ30gY2xhc3NOYW1lPSJidG4tZ2hvc3QgcHgtNiBweS0yLjUgdGV4dC1zbSBmb250LXNlbWlib2xkIGRpc2FibGVkOm9wYWNpdHktNTAiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmcpIiB9fT4KICAgICAgICB7bG9hZGluZyA/IHQucHVibGlzaGluZyA6IHQuY3RhfQogICAgICA8L2J1dHRvbj4KICAgICAge2Vycm9yICYmIDxwIGNsYXNzTmFtZT0ibXQtMiB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogIiNmODcxNzEiIH19PntlcnJvcn08L3A+fQogICAgPC9kaXY+CiAgKTsKfQo="}
+"use client";
+import { useState } from "react";
+
+/** Publishes the given resume text to a public /r/{slug} link and shows it
+ *  with a copy button. Published links (slug + unpublish token) are persisted
+ *  to localStorage so the user can still see/unpublish them later from
+ *  /account — previously leaving the page lost the token forever. */
+export default function PublishLink({ text, name, role, ar = false }: { text: string; name?: string; role?: string; ar?: boolean }) {
+  const [url, setUrl] = useState("");
+  const [slug, setSlug] = useState("");
+  const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [error, setError] = useState("");
+
+  const t = ar
+    ? {
+        cta: "🔗 أنشئ رابطاً عاماً لسيرتك",
+        publishing: "جارٍ النشر…",
+        yourLink: "رابط سيرتك العام",
+        copy: "نسخ الرابط",
+        copied: "نُسخ",
+        share: "شاركه مع جهات التوظيف أو على لينكدإن — بدون ملف PDF.",
+        unpublish: "إلغاء النشر",
+        removing: "جارٍ الحذف…",
+        failed: "تعذّر النشر.",
+      }
+    : {
+        cta: "🔗 Get a shareable link",
+        publishing: "Publishing…",
+        yourLink: "Your public resume link",
+        copy: "Copy link",
+        copied: "Copied",
+        share: "Share this with recruiters or on LinkedIn — no PDF needed.",
+        unpublish: "Unpublish this link",
+        removing: "Removing…",
+        failed: "Could not publish.",
+      };
+
+  function remember(entry: { slug: string; url: string; token: string }) {
+    try {
+      const raw = localStorage.getItem("ra_published");
+      const list = raw ? JSON.parse(raw) : [];
+      list.unshift({ ...entry, created: new Date().toISOString() });
+      localStorage.setItem("ra_published", JSON.stringify(list.slice(0, 20)));
+    } catch { /* noop */ }
+  }
+
+  function forget(s: string) {
+    try {
+      const raw = localStorage.getItem("ra_published");
+      if (!raw) return;
+      const list = (JSON.parse(raw) as { slug: string }[]).filter((e) => e.slug !== s);
+      localStorage.setItem("ra_published", JSON.stringify(list));
+    } catch { /* noop */ }
+  }
+
+  async function publish() {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, name, role }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || t.failed);
+      const full = `${window.location.origin}${data.url}`;
+      setUrl(full);
+      setSlug(data.slug || "");
+      setToken(data.unpublishToken || "");
+      if (data.slug && data.unpublishToken) remember({ slug: data.slug, url: full, token: data.unpublishToken });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t.failed);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function unpublish() {
+    if (!slug || !token) return;
+    setLoading(true);
+    try {
+      await fetch(`/api/publish?slug=${encodeURIComponent(slug)}&token=${encodeURIComponent(token)}`, { method: "DELETE" });
+      forget(slug);
+      setUrl("");
+      setSlug("");
+      setToken("");
+    } catch {
+      setError(t.failed);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (url) {
+    return (
+      <div className="card mt-6 p-5" style={{ borderColor: "rgba(139,92,246,0.4)" }}>
+        <div className="mb-2 font-mono text-xs tracking-wider" style={{ color: "var(--faint)", textTransform: ar ? "none" : "uppercase" }}>{t.yourLink}</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <a href={url} target="_blank" rel="noopener noreferrer" dir="ltr" className="flex-1 truncate text-sm text-accent">{url}</a>
+          <button onClick={() => { navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1800); }}
+            className="rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "var(--accent)", color: "#ffffff" }}>
+            {copied ? t.copied : t.copy}
+          </button>
+        </div>
+        <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{t.share}</p>
+        {token && (
+          <button onClick={unpublish} disabled={loading} className="mt-2 text-xs disabled:opacity-50" style={{ color: "var(--faint)" }}>
+            {loading ? t.removing : t.unpublish}
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 text-center">
+      <button onClick={publish} disabled={loading} className="btn-ghost px-6 py-2.5 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--fg)" }}>
+        {loading ? t.publishing : t.cta}
+      </button>
+      {error && <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{error}</p>}
+    </div>
+  );
+}

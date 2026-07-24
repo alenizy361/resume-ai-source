@@ -1,1 +1,12 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgTGFuZGluZ1Njcm9sbCBmcm9tICIuLi9jb21wb25lbnRzL0xhbmRpbmdTY3JvbGwiOwoKLy8gdjEgc2Nyb2xseXRlbGxpbmcgbGFuZGluZywga2VwdCBmb3IgQS1CIGNvbXBhcmlzb24gYWdhaW5zdCB0aGUgdjIgQWR2aXNvci4KZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIlNpcmEg4oCUIHYxIiwKICByb2JvdHM6IHsgaW5kZXg6IGZhbHNlLCBmb2xsb3c6IGZhbHNlIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBWMSgpIHsKICByZXR1cm4gPExhbmRpbmdTY3JvbGwgbGFuZz0iZW4iIC8+Owp9Cg=="}
+import type { Metadata } from "next";
+import LandingScroll from "../components/LandingScroll";
+
+// v1 scrollytelling landing, kept for A-B comparison against the v2 Advisor.
+export const metadata: Metadata = {
+  title: "Sira — v1",
+  robots: { index: false, follow: false },
+};
+
+export default function V1() {
+  return <LandingScroll lang="en" />;
+}

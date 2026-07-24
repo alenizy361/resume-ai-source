@@ -1,1 +1,32 @@
-{"data":"aW1wb3J0IHsgSW1hZ2VSZXNwb25zZSB9IGZyb20gIm5leHQvb2ciOwppbXBvcnQgeyBOZXh0UmVxdWVzdCB9IGZyb20gIm5leHQvc2VydmVyIjsKCmV4cG9ydCBjb25zdCBydW50aW1lID0gImVkZ2UiOwoKLyoqIER5bmFtaWMgc29jaWFsLXNoYXJlIGNhcmQ6ICJNeSByZXN1bWUgc2NvcmVkIDkyLzEwMCIuIEV2ZXJ5IG11bHRpLWNoaWxkCiAqICBkaXYgZGVjbGFyZXMgZGlzcGxheTpmbGV4IChyZXF1aXJlZCBieSBTYXRvcmkpLiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gR0VUKHJlcTogTmV4dFJlcXVlc3QpIHsKICBjb25zdCBwID0gcmVxLm5leHRVcmwuc2VhcmNoUGFyYW1zOwogIGNvbnN0IHNjb3JlID0gTWF0aC5tYXgoMCwgTWF0aC5taW4oMTAwLCBwYXJzZUludChwLmdldCgic2NvcmUiKSB8fCAiMCIpIHx8IDApKTsKICBjb25zdCBsYWJlbCA9IHNjb3JlID49IDc1ID8gIlNIT1JUTElTVEVEIiA6IHNjb3JlID49IDU1ID8gIkJPUkRFUkxJTkUiIDogIk5FRURTIFdPUksiOwogIGNvbnN0IGFjY2VudCA9IHNjb3JlID49IDc1ID8gIiM0YWRlODAiIDogc2NvcmUgPj0gNTUgPyAiI2ZiYmYyNCIgOiAiI2Y4NzE3MSI7CgogIHJldHVybiBuZXcgSW1hZ2VSZXNwb25zZSgKICAgICgKICAgICAgPGRpdiBzdHlsZT17eyBoZWlnaHQ6ICIxMDAlIiwgd2lkdGg6ICIxMDAlIiwgZGlzcGxheTogImZsZXgiLCBmbGV4RGlyZWN0aW9uOiAiY29sdW1uIiwgYWxpZ25JdGVtczogImNlbnRlciIsIGp1c3RpZnlDb250ZW50OiAiY2VudGVyIiwgYmFja2dyb3VuZDogIiMwNTA3MGQiLCBjb2xvcjogIiNmNGY1ZjMiLCBmb250RmFtaWx5OiAic2Fucy1zZXJpZiIgfX0+CiAgICAgICAgPGRpdiBzdHlsZT17eyBkaXNwbGF5OiAiZmxleCIsIGFsaWduSXRlbXM6ICJjZW50ZXIiLCBtYXJnaW5Cb3R0b206IDMwIH19PgogICAgICAgICAgPGRpdiBzdHlsZT17eyB3aWR0aDogNDQsIGhlaWdodDogNDQsIGJvcmRlclJhZGl1czogOTk5LCBiYWNrZ3JvdW5kOiAibGluZWFyLWdyYWRpZW50KDEzNWRlZywjOGI1Y2Y2LCNlYzQ4OTkpIiwgY29sb3I6ICIjZmZmIiwgZGlzcGxheTogImZsZXgiLCBhbGlnbkl0ZW1zOiAiY2VudGVyIiwganVzdGlmeUNvbnRlbnQ6ICJjZW50ZXIiLCBmb250U2l6ZTogMjYsIGZvbnRXZWlnaHQ6IDgwMCwgbWFyZ2luUmlnaHQ6IDE0IH19PlM8L2Rpdj4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogImZsZXgiLCBmb250U2l6ZTogMzAsIGZvbnRXZWlnaHQ6IDcwMCB9fT5TaXJhPC9kaXY+CiAgICAgICAgPC9kaXY+CiAgICAgICAgPGRpdiBzdHlsZT17eyBkaXNwbGF5OiAiZmxleCIsIGZvbnRTaXplOiAyNiwgY29sb3I6ICIjOGE4YThhIiwgbGV0dGVyU3BhY2luZzogNiB9fT5NWSBBVFMgUkVTVU1FIFNDT1JFPC9kaXY+CiAgICAgICAgPGRpdiBzdHlsZT17eyBkaXNwbGF5OiAiZmxleCIsIGFsaWduSXRlbXM6ICJiYXNlbGluZSIgfX0+CiAgICAgICAgICA8ZGl2IHN0eWxlPXt7IGRpc3BsYXk6ICJmbGV4IiwgZm9udFNpemU6IDIyMCwgZm9udFdlaWdodDogODAwLCBjb2xvcjogYWNjZW50LCBsaW5lSGVpZ2h0OiAxIH19PntzY29yZX08L2Rpdj4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogImZsZXgiLCBmb250U2l6ZTogNzAsIGNvbG9yOiAiIzU1NSIgfX0+LzEwMDwvZGl2PgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogImZsZXgiLCBtYXJnaW5Ub3A6IDE0LCBwYWRkaW5nOiAiMTBweCAyNnB4IiwgYm9yZGVyUmFkaXVzOiAxMiwgYmFja2dyb3VuZDogYCR7YWNjZW50fTIyYCwgYm9yZGVyOiBgMnB4IHNvbGlkICR7YWNjZW50fWAsIGNvbG9yOiBhY2NlbnQsIGZvbnRTaXplOiAyOCwgZm9udFdlaWdodDogNzAwLCBsZXR0ZXJTcGFjaW5nOiAzIH19PntsYWJlbH08L2Rpdj4KICAgICAgICA8ZGl2IHN0eWxlPXt7IGRpc3BsYXk6ICJmbGV4IiwgbWFyZ2luVG9wOiA0MCwgZm9udFNpemU6IDI2LCBjb2xvcjogIiM4YThhOGEiIH19PkNoZWNrIHlvdXIgcmVzdW1lIGZyZWUgYXQgY3YucmFiaXQuc2E8L2Rpdj4KICAgICAgPC9kaXY+CiAgICApLAogICAgeyB3aWR0aDogMTIwMCwgaGVpZ2h0OiA2MzAgfQogICk7Cn0K"}
+import { ImageResponse } from "next/og";
+import { NextRequest } from "next/server";
+
+export const runtime = "edge";
+
+/** Dynamic social-share card: "My resume scored 92/100". Every multi-child
+ *  div declares display:flex (required by Satori). */
+export async function GET(req: NextRequest) {
+  const p = req.nextUrl.searchParams;
+  const score = Math.max(0, Math.min(100, parseInt(p.get("score") || "0") || 0));
+  const label = score >= 75 ? "SHORTLISTED" : score >= 55 ? "BORDERLINE" : "NEEDS WORK";
+  const accent = score >= 75 ? "#4ade80" : score >= 55 ? "#fbbf24" : "#f87171";
+
+  return new ImageResponse(
+    (
+      <div style={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#05070d", color: "#f4f5f3", fontFamily: "sans-serif" }}>
+        <div style={{ display: "flex", alignItems: "center", marginBottom: 30 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 999, background: "linear-gradient(135deg,#8b5cf6,#ec4899)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, fontWeight: 800, marginRight: 14 }}>S</div>
+          <div style={{ display: "flex", fontSize: 30, fontWeight: 700 }}>Sira</div>
+        </div>
+        <div style={{ display: "flex", fontSize: 26, color: "#8a8a8a", letterSpacing: 6 }}>MY ATS RESUME SCORE</div>
+        <div style={{ display: "flex", alignItems: "baseline" }}>
+          <div style={{ display: "flex", fontSize: 220, fontWeight: 800, color: accent, lineHeight: 1 }}>{score}</div>
+          <div style={{ display: "flex", fontSize: 70, color: "#555" }}>/100</div>
+        </div>
+        <div style={{ display: "flex", marginTop: 14, padding: "10px 26px", borderRadius: 12, background: `${accent}22`, border: `2px solid ${accent}`, color: accent, fontSize: 28, fontWeight: 700, letterSpacing: 3 }}>{label}</div>
+        <div style={{ display: "flex", marginTop: 40, fontSize: 26, color: "#8a8a8a" }}>Check your resume free at cv.rabit.sa</div>
+      </div>
+    ),
+    { width: 1200, height: 630 }
+  );
+}

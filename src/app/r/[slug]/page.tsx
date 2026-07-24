@@ -1,1 +1,53 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgTGluayBmcm9tICJuZXh0L2xpbmsiOwppbXBvcnQgeyBub3RGb3VuZCB9IGZyb20gIm5leHQvbmF2aWdhdGlvbiI7CmltcG9ydCB7IGdldFB1YmxpY1Jlc3VtZSB9IGZyb20gIi4uLy4uL2xpYi9wdWJsaWNyZXN1bWUiOwppbXBvcnQgQWlPcmIgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9BaU9yYiI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CmV4cG9ydCBjb25zdCBkeW5hbWljID0gImZvcmNlLWR5bmFtaWMiOwoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBzbHVnOiBzdHJpbmcgfT4gfSk6IFByb21pc2U8TWV0YWRhdGE+IHsKICBjb25zdCB7IHNsdWcgfSA9IGF3YWl0IHBhcmFtczsKICBjb25zdCByID0gYXdhaXQgZ2V0UHVibGljUmVzdW1lKHNsdWcpOwogIGlmICghcikgcmV0dXJuIHsgdGl0bGU6ICJSZXN1bWUgbm90IGZvdW5kIiB9OwogIGNvbnN0IHRpdGxlID0gYCR7ci5uYW1lIHx8ICJSZXN1bWUifSR7ci5yb2xlID8gIiDigJQgIiArIHIucm9sZSA6ICIifWA7CiAgcmV0dXJuIHsKICAgIHRpdGxlLAogICAgZGVzY3JpcHRpb246IGAke3IubmFtZX0ncyBwcm9mZXNzaW9uYWwgcmVzdW1lJHtyLnJvbGUgPyAiIGZvciAiICsgci5yb2xlIDogIiJ9LmAsCiAgICAvLyBTaGFyZWFibGUgYnkgbGluaywgYnV0IGtlZXAgcGVyc29uYWwgcmVzdW1lcyAoUElJKSBvdXQgb2Ygc2VhcmNoIGluZGV4ZXMuCiAgICByb2JvdHM6IHsgaW5kZXg6IGZhbHNlLCBmb2xsb3c6IHRydWUgfSwKICAgIG9wZW5HcmFwaDogeyB0aXRsZSwgZGVzY3JpcHRpb246IGBWaWV3ICR7ci5uYW1lfSdzIHJlc3VtZS5gLCB0eXBlOiAicHJvZmlsZSIgfSwKICB9Owp9CgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBQdWJsaWNSZXN1bWVQYWdlKHsgcGFyYW1zIH06IHsgcGFyYW1zOiBQcm9taXNlPHsgc2x1Zzogc3RyaW5nIH0+IH0pIHsKICBjb25zdCB7IHNsdWcgfSA9IGF3YWl0IHBhcmFtczsKICBjb25zdCByID0gYXdhaXQgZ2V0UHVibGljUmVzdW1lKHNsdWcpOwogIGlmICghcikgbm90Rm91bmQoKTsKCiAgLy8gVGhlIHB1YmxpYyAic2hvd2luZyIgd29ybGQgaXMgR0xBU1MgKGxpZ2h0KTogYSBjbGVhbiBmcm9zdGVkIGZyYW1lIG9uIGEKICAvLyBzb2Z0IGdyYWRpZW50LiBkaXI9ImF1dG8iIGxldHMgYW4gQXJhYmljIHJlc3VtZSByZW5kZXIgUlRMIChkb2N1bWVudGVkIGZpeCkuCiAgY29uc3QgYXIgPSAvW9iALdu/XS8udGVzdCgoci50ZXh0IHx8ICIiKS5zbGljZSgwLCA0MDApKTsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyYWRpYWwtZ3JhZGllbnQoMTIwMHB4IDYwMHB4IGF0IDUwJSAtMTAlLCAjZTllY2Y1LCB2YXIoLS1nbGFzcy1iZykpIiwgY29sb3I6ICJ2YXIoLS1nbGFzcy10ZXh0KSIgfX0+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1heC13LTN4bCBweC01IHB5LTEyIj4KICAgICAgICB7LyogVGhlIHJlc3VtZSBpbnNpZGUgYSBsaWdodCBnbGFzcyBmcmFtZSAqL30KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ2xhc3Mtc3VyZmFjZSBwLTgiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDI1NSwyNTUsMjU1LDAuOSkiIH19PgogICAgICAgICAgPGRpdiBkaXI9ImF1dG8iIGNsYXNzTmFtZT0id2hpdGVzcGFjZS1wcmUtd3JhcCBicmVhay13b3JkcyBmb250LW1vbm8gdGV4dC1zbSBsZWFkaW5nLXJlbGF4ZWQiIHN0eWxlPXt7IGNvbG9yOiAiIzFmMjkzNyIsIG92ZXJmbG93V3JhcDogImFueXdoZXJlIiB9fT57ci50ZXh0fTwvZGl2PgogICAgICAgIDwvZGl2PgoKICAgICAgICB7LyogVmlyYWwgZm9vdGVyIOKAlCBvcmIgKyAibWFrZSB5b3VyIG93biIgKGZyZWUgZ3Jvd3RoIGNoYW5uZWwgb24gZXZlcnkgc2hhcmUpICovfQogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC03IGZsZXggZmxleC1jb2wgaXRlbXMtY2VudGVyIGdhcC00IHRleHQtY2VudGVyIj4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIgdGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWdsYXNzLW11dGVkKSIgfX0+CiAgICAgICAgICAgIDxBaU9yYiBzaXplPXsyMn0gbGlnaHQgLz4KICAgICAgICAgICAge2FyID8gItiz2Y/ZiNmQ2ZHZitiqINio2YAg2LPZitix2KkgwrcgY3YucmFiaXQuc2EiIDogIkJ1aWx0IHdpdGggU2lyYSDCtyBjdi5yYWJpdC5zYSJ9CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPXthciA/ICIvYXIiIDogIi8ifSBjbGFzc05hbWU9InJvdW5kZWQtZnVsbCBweC03IHB5LTMgdGV4dC1zbSBmb250LWJvbGQgdGV4dC13aGl0ZSIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxMzVkZWcsIzhiNWNmNiwjN2MzYWVkKSIsIGJveFNoYWRvdzogIjAgNnB4IDI0cHggcmdiYSgxMzksOTIsMjQ2LDAuMzUpIiB9fT4KICAgICAgICAgICAge2FyID8gItiz2YjZkSDYs9mK2LHYqtmDINmF2KvZhNmH2Kcg4oCUINmF2KzYp9mG2KfZiyDihpciIDogIk1ha2UgeW91ciBvd24gbGlrZSB0aGlzIOKAlCBmcmVlIOKGlyJ9CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PgogICAgPC9tYWluPgogICk7Cn0K"}
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getPublicResume } from "../../lib/publicresume";
+import AiOrb from "../../components/AiOrb";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const r = await getPublicResume(slug);
+  if (!r) return { title: "Resume not found" };
+  const title = `${r.name || "Resume"}${r.role ? " — " + r.role : ""}`;
+  return {
+    title,
+    description: `${r.name}'s professional resume${r.role ? " for " + r.role : ""}.`,
+    // Shareable by link, but keep personal resumes (PII) out of search indexes.
+    robots: { index: false, follow: true },
+    openGraph: { title, description: `View ${r.name}'s resume.`, type: "profile" },
+  };
+}
+
+export default async function PublicResumePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const r = await getPublicResume(slug);
+  if (!r) notFound();
+
+  // The public "showing" world is GLASS (light): a clean frosted frame on a
+  // soft gradient. dir="auto" lets an Arabic resume render RTL (documented fix).
+  const ar = /[؀-ۿ]/.test((r.text || "").slice(0, 400));
+  return (
+    <main className="min-h-screen" style={{ background: "radial-gradient(1200px 600px at 50% -10%, #e9ecf5, var(--glass-bg))", color: "var(--glass-text)" }}>
+      <div className="mx-auto max-w-3xl px-5 py-12">
+        {/* The resume inside a light glass frame */}
+        <div className="glass-surface p-8" style={{ background: "rgba(255,255,255,0.9)" }}>
+          <div dir="auto" className="whitespace-pre-wrap break-words font-mono text-sm leading-relaxed" style={{ color: "#1f2937", overflowWrap: "anywhere" }}>{r.text}</div>
+        </div>
+
+        {/* Viral footer — orb + "make your own" (free growth channel on every share) */}
+        <div className="mt-7 flex flex-col items-center gap-4 text-center">
+          <Link href="/" className="flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--glass-muted)" }}>
+            <AiOrb size={22} light />
+            {ar ? "سُوِّيت بـ سيرة · cv.rabit.sa" : "Built with Sira · cv.rabit.sa"}
+          </Link>
+          <Link href={ar ? "/ar" : "/"} className="rounded-full px-7 py-3 text-sm font-bold text-white" style={{ background: "linear-gradient(135deg,#8b5cf6,#7c3aed)", boxShadow: "0 6px 24px rgba(139,92,246,0.35)" }}>
+            {ar ? "سوّ سيرتك مثلها — مجاناً ↗" : "Make your own like this — free ↗"}
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
+}

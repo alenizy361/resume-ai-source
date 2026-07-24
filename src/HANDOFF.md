@@ -1,1 +1,261 @@
-{"data":"IyDYrdiy2YXYqSDYqtiz2YTZitmFINin2YTZhdi02LHZiNi5IOKAlCBjdi5yYWJpdC5zYSAoUmVzdW1lQUkpCgo+ICoq2YTZhNmF2KfZhNmDOioqINmH2LDYpyDYp9mE2YXZhNmBINmB2YrZhyDZg9mEINi02Yog2YrYrdiq2KfYrNmHINin2YTZhdi32YjZkdixINin2YTYrNiv2YrYryAqKtmF2Kcg2LnYr9inINin2YTZgtmK2YUg2KfZhNiz2LHZitipINmG2YHYs9mH2KcqKi4KPiDYp9mE2YLZitmFINin2YTYrdmC2YrZgtmK2Kkg2YTZhNmF2YHYp9iq2YrYrSDZhdit2YHZiNi42Kkg2YHZiiBWZXJjZWwg4oCUINin2YTZhdi32YjZkdixINmK2LPYrdio2YfYpyDYqNmG2YHYs9mHINio2KPZhdin2YYgKNi02LHYrSDYqNin2YTYo9iz2YHZhCnYjAo+INio2K/ZiNmGINmF2Kcg2KrZhtmD2LTZgSDZgdmKINmF2YTZgSDYr9in2KbZhS4g2KfZgtix2KMg2YLYs9mFICoqItiq2LPZhNmK2YUg2KfZhNij2LPYsdin2LEg2KjYo9mF2KfZhiIqKiDZgdmKINii2K7YsSDYp9mE2YXZhNmBLgoK2KLYrtixINiq2K3Yr9mK2Ks6INmK2Y/ZhdmE2KMg2YrYr9mI2YrYp9mLINi52YbYryDYp9mE2KrYs9mE2YrZhSDCtyDYp9mE2YHYsdi5INin2YTYrdin2YTZijogYGNsYXVkZS9jcmF3bDRhaS1pbnN0YWxsLW8wajh3ZmAKCi0tLQoKIyMgMCkg2YbYuNix2Kkg2LnYp9mF2Kkg2LPYsdmK2LnYqQoKLSAqKtin2YTZhdmG2KrYrDoqKiDZhdit2LPZkdmGINiz2YrYsSDYsNin2KrZitipINio2KfZhNiw2YPYp9ihINin2YTYp9i12LfZhtin2LnZitiMINi12KfYr9mCICjZhNinINmK2K7YqtmE2YIg2K3Zgtin2KbZginYjCDYq9mG2KfYptmKINin2YTZhNi62KkgKNi52LHYqNmKIFJUTCArINil2YbYrNmE2YrYstmKKdiMINiz2YjZgiDYp9mE2LPYudmI2K/ZitipL9in2YTYrtmE2YrYrC4KLSAqKtin2YTYpdi32KfYsToqKiBOZXh0LmpzICoqMTYqKiAoQXBwIFJvdXRlcikgKyBSZWFjdCAxOSArIFR5cGVTY3JpcHQgKyBUYWlsd2luZCBDU1MgdjQuICoq2KrZhtio2YrZhzoqKiDZh9iw2Ycg2YbYs9iu2KkgTmV4dCAxNiDZgdmK2YfYpyDYqti62YrZitix2KfYqiDYrNiw2LHZitipIOKAlCBgbWlkZGxld2FyZWAg2LXYp9ixINin2LPZhdmHIGBwcm94eWAgKNmF2YTZgSBgcHJveHkudHNgKS4g2LHYp9is2LkgYEFHRU5UUy5tZGAuCi0gKirYp9mE2KfYs9iq2LbYp9mB2Kk6KiogVmVyY2VsICjZhdi02LHZiNi5IGByZXN1bWUtYWlgKSDCtyDYp9mE2K/ZiNmF2YrZhiBgY3YucmFiaXQuc2FgLgotICoq2KfZhNiq2K7YstmK2YY6Kiog2YTYpyDYqtmI2KzYryDZgtin2LnYr9ipINio2YrYp9mG2KfYqiBTUUwg4oCUINmD2YTZhyAqKmtleS12YWx1ZSoqINi52YTZiSBWZXJjZWwgRWRnZSBDb25maWcgKNij2LPYp9iz2YopICsgVXBzdGFzaCBSZWRpcyAo2KfYrdiq2YrYp9i32YopLiDYqtmB2KfYtdmK2YQg2KjYp9mE2KPYs9mB2YQuCi0gKirYp9mE2KPZhdin2YY6Kiog2YTYpyDYo9iz2LHYp9ixINmB2Yog2KfZhNmD2YjYr9ibINmD2YTZh9inIGVudiB2YXJzLiDYp9mE2KzZhNiz2KfYqiDZiNin2YTYsdmI2KfYqNi3INin2YTYs9it2LHZitipICoqc3RhdGVsZXNzKiog2YXZiNmC2ZHYudipINio2YBITUFDLgoKLS0tCgojIyAxKSDZiNi12YjZhCBHaXRIdWIKCi0gKirYsdin2KjYtyDYp9mE2LHZitio2Yg6KiogYGh0dHBzOi8vZ2l0aHViLmNvbS90YW1hcmFhYmR1bGF6aXo0LWVuZy9tZWVuYS1zY2hlZHVsaW5nYAotICoq2YXYs9in2LEg2KfZhNmF2LTYsdmI2Lkg2K/Yp9iu2YQg2KfZhNix2YrYqNmIOioqIGByZXN1bWUtYWkvYCAo2KfZhNmF2LTYsdmI2Lkg2YHZiiDZhdis2YTYryDZgdix2LnZitiMINmF2Ygg2YHZiiDYp9mE2KzYsNixKS4KLSAqKtin2YTZgdix2Lkg2KfZhNij2K3Yr9irOioqIGBjbGF1ZGUvY3Jhd2w0YWktaW5zdGFsbC1vMGo4d2ZgICjZgdmK2Ycg2KPYrdiv2Ksg2KfZhNiq2LXZhdmK2YUpLiDYp9mE2YHYsdi5INin2YTYsdim2YrYs9mKOiBgbWFpbmAuCgojIyMg2YPZitmBINiq2LnYt9mKINin2YTZhdi32YjZkdixINi12YTYp9it2YrYqSBDb250ZW50czogUmVhZCAmIFdyaXRlICjYrti32YjYp9iqINiq2LPZiNmK2YfYpyDYo9mG2KopCgrYp9mE2K7Zitin2LEg2KfZhNij2YHYttmEIOKAlCAqKtij2LbZgdmHIENvbGxhYm9yYXRvcioqICjYo9mG2LjZgSDZhdmGINiq2YjZg9mK2YYg2YjYo9iz2YfZhCDYs9it2KgpOgoxLiDYp9mB2KrYrTogYGh0dHBzOi8vZ2l0aHViLmNvbS90YW1hcmFhYmR1bGF6aXo0LWVuZy9tZWVuYS1zY2hlZHVsaW5nL3NldHRpbmdzL2FjY2Vzc2AKMi4gKipBZGQgcGVvcGxlKiog4oaSINin2YPYqtioINmK2YjYstix2Ycg4oaSINi12YTYp9it2YrYqSAqKldyaXRlKiog4oaSIFNlbmQgaW52aXRhdGlvbi4KCtij2YggKipGaW5lLWdyYWluZWQgUEFUKiog2KXYsNinINmK2KjZiiDYqtmI2YPZitmGICjYqtiz2YjZitmHINij2YbYqiDZhdmGINit2LPYp9io2YMg4oCUINij2YbYpyDZhdinINij2YLYr9ixINij2YbYtNim2Ycg2YbZitin2KjYqSDYudmG2YMpOgoxLiBgaHR0cHM6Ly9naXRodWIuY29tL3NldHRpbmdzL3BlcnNvbmFsLWFjY2Vzcy10b2tlbnMvbmV3YAoyLiBUb2tlbiBuYW1lOiBgaGFuZG9mZi1jdnJhYml0YCDCtyBFeHBpcmF0aW9uOiAqKjcgZGF5cyoqCjMuIFJlc291cmNlIG93bmVyOiBgdGFtYXJhYWJkdWxheml6NC1lbmdgIMK3IFJlcG9zaXRvcnkgYWNjZXNzOiAqKk9ubHkgc2VsZWN0IHJlcG9zaXRvcmllcyoqIOKGkiBgbWVlbmEtc2NoZWR1bGluZ2AKNC4gUGVybWlzc2lvbnMg4oaSIFJlcG9zaXRvcnkgcGVybWlzc2lvbnMg4oaSICoqQ29udGVudHM6IFJlYWQgYW5kIHdyaXRlKiogKCsgTWV0YWRhdGE6IFJlYWTYjCDZitmG2LbYp9mBINiq2YTZgtin2KbZiikKNS4gR2VuZXJhdGUgdG9rZW4g4oaSINin2YbYs9iu2Ycg2YjZhtin2YjZhNmHINin2YTZhdi32YjZkdixICoq2LnYqNixINmC2YbYp9ipINmF2LTZgdmR2LHYqSoqICjZhdmIINil2YrZhdmK2YQv2LTYp9iqINi52KfYr9mKKS4KCi0tLQoKIyMgMikg2YXYqti62YrYsdin2Kog2KfZhNio2YrYptipIOKAlCDYp9mE2KPYs9mF2KfYoSDZiNin2YTYo9iv2YjYp9ixICjYp9mE2YLZitmFINiq2Y/Ys9it2Kgg2YXZhiBWZXJjZWwpCgo+INmD2YQg2YfYsNmKINmF2LPYrNmR2YTYqSDZgdmKICoqVmVyY2VsIOKGkiBQcm9qZWN0IHJlc3VtZS1haSDihpIgU2V0dGluZ3Mg4oaSIEVudmlyb25tZW50IFZhcmlhYmxlcyoqLgo+INin2YTZhdi32YjZkdixINmK2LPYrdio2YfYpyDZg9mE2YfYpyDYr9mB2LnYqSDZiNit2K/YqSDYqNij2YXYsSDZiNin2K3YryDYqNi52K8g2LHYqNi3INin2YTZhdi02LHZiNi5ICjYp9mG2LjYsSDZgtiz2YUgNSk6Cj4gYGBgCj4gbnB4IHZlcmNlbCBsaW5rICAgICAgICAgICAjINin2LHYqNi3INin2YTZhdis2YTYryByZXN1bWUtYWkg2KjZhdi02LHZiNi5IHJlc3VtZS1haQo+IG5weCB2ZXJjZWwgZW52IHB1bGwgLmVudi5sb2NhbCAtLWVudmlyb25tZW50PXByb2R1Y3Rpb24KPiBgYGAKPiDZh9iw2Kcg2YrZhtiy2ZHZhCDZhdmE2YEgYC5lbnYubG9jYWxgINio2YPZhCDYp9mE2YLZitmFINin2YTYrdmC2YrZgtmK2Kkg2YXYqNin2LTYsdipINmF2YYgVmVyY2VsIOKAlCDYqNiv2YjZhiDZhdinINij2YbYs9iu2YfYpyDZh9mG2KcuCgojIyMg2KPYs9in2LPZitipINmE2KrYtNi62YrZhCDYp9mE2LDZg9in2KEg2KfZhNin2LXYt9mG2KfYudmKICjZiti02LrZkdmEIC9hcGkvaW50ZXJ2aWV3LCAvYXBpL2J1aWxkLWN2LCAvYXBpL29wdGltaXplLCAvYXBpL3N1Z2dlc3QsIC9hcGkvY292ZXItbGV0dGVyLCAvYXBpL3JlZmluZSwgL2FwaS90b29scykKCnwg2KfZhNmF2KrYutmK2LEgfCDYp9mE2K/ZiNixIHwgdGVzdC9wcm9kIHwKfC0tLXwtLS18LS0tfAp8IGBBSV9QUk9WSURFUmAgfCDZhdiy2YjZkdivINin2YTZgExMTTogYG52aWRpYWAgKNin2YHYqtix2KfYttmKKSDYo9mIIGBhbnRocm9waWNgIHwgcHJvZCB8CnwgYE5WSURJQV9BUElfS0VZYCB8INmF2YHYqtin2K0gTlZJRElBIChlbmRwb2ludCDZhdis2KfZhtmKINmF2KrZiNin2YHZgiDZhdi5IE9wZW5BSSkg4oCUICoq2KfZhNmF2K3YsdmR2YMg2KfZhNij2LPYp9iz2Yog2YTZg9mEINmG2K/Yp9ih2KfYqiDYp9mE2LDZg9in2KEqKiB8IHByb2QgfAp8IGBBSV9NT0RFTGAgfCDYp9iz2YUg2KfZhNmF2YjYr9mK2YQgKNin2YHYqtix2KfYttmKIGBtZXRhL2xsYW1hLTQtbWF2ZXJpY2stMTdiLTEyOGUtaW5zdHJ1Y3RgKSB8IHByb2QgfAp8IGBBTlRIUk9QSUNfQVBJX0tFWWAgfCDYqNiv2YrZhCDZhNmIIGBBSV9QUk9WSURFUj1hbnRocm9waWNgIChDbGF1ZGUpLiDYp9iu2KrZitin2LHZiiB8IHByb2QgfAoKPiAqKtmF2YTYp9it2LjYqToqKiBgL2FwaS9leHRyYWN0YCAo2LHZgdi5IFBERi9Xb3JkL3R4dCkgKirZhNinINmK2LPYqtiu2K/ZhSDYo9mKINmF2YHYqtin2K0gQUkqKiDigJQg2YrYs9iq2K7YsdisINin2YTZhti1INmF2K3ZhNmK2KfZiyDYqNmF2YPYqtio2KrZiiBgdW5wZGZgINmIYG1hbW1vdGhgLiDZiti02KrYutmEINiv2KfYptmF2KfZiy4KCiMjIyDYp9mE2K/Zgdi5IOKAlCBQYXlsaW5rICjZiti02LrZkdmEIC9hcGkvcGF5INmIIC9hcGkvcGF5L3ZlcmlmeSkKCnwg2KfZhNmF2KrYutmK2LEgfCDYp9mE2K/ZiNixIHwgdGVzdC9wcm9kIHwKfC0tLXwtLS18LS0tfAp8IGBQQVlMSU5LX0FQSV9JRGAgfCDZhdi52LHZkdmBINmI2KfYrNmH2KkgUGF5bGluayAoYXBpSWQpIHwg2K3Ys9ioINin2YTZiNi22LkgfAp8IGBQQVlMSU5LX1NFQ1JFVF9LRVlgIHwg2KfZhNmF2YHYqtin2K0g2KfZhNiz2LHZiiDZhNmAUGF5bGluayDigJQgKirYrdiz2ZHYp9iz2Iwg2YjYtdmI2YQg2YXYp9mE2Yog2YXYqNin2LTYsSoqIHwg2K3Ys9ioINin2YTZiNi22LkgfAp8IGBQQVlMSU5LX0JBU0VfVVJMYCB8IGBodHRwczovL3Jlc3RhcGkucGF5bGluay5zYWAgKHByb2R1Y3Rpb24pINij2YggYGh0dHBzOi8vcmVzdHBpbG90LnBheWxpbmsuc2FgICh0ZXN0L3BpbG90KSB8ICoq2YrYrdiv2K8gdGVzdCDYo9mFIGxpdmUqKiB8CnwgYE5FWFRfUFVCTElDX1BBWV9NT0RFYCB8INmI2LbYuSDYp9mE2YBTREsg2YHZiiDYp9mE2YjYp9is2YfYqTogYHRlc3RgINij2Ygg2LrZitix2YcgKHByb2R1Y3Rpb24pIHwg2YrYrdiv2K8gdGVzdCDYo9mFIGxpdmUgfAp8IGBQQVlfQ1VSUkVOQ1lgIHwg2KfZhNi52YXZhNipICjYp9mB2KrYsdin2LbZiiBTQVIpIHwgcHJvZCB8CnwgYFBSSUNFX1NJTkdMRWAgfCDYs9i52LEg2KfZhNio2KfZgtipINin2YTZhdmB2LHYr9ipICjYp9mB2KrYsdin2LbZiiAzNSkgfCBwcm9kIHwKfCBgUFJJQ0VfQ09NUExFVEVgIHwg2LPYudixINin2YTYrdiy2YXYqSDYp9mE2YPYp9mF2YTYqSAo2KfZgdiq2LHYp9i22YogOTkpIHwgcHJvZCB8CnwgYFBSSUNFX01PTlRITFlgIHwg2LPYudixINin2YTYp9i02KrYsdin2YMg2KfZhNi02YfYsdmKICjYp9mB2KrYsdin2LbZiiA3NSkgfCBwcm9kIHwKCj4gKirYsdin2KjYtyDYp9mE2YBjYWxsYmFjayAo2YXYs9is2ZHZhCDYqtmE2YLYp9im2YrYp9mLINmB2Yog2KfZhNi32YTYqNiMINmF2Yggd2ViaG9vayDZhdmG2YHYtdmEKToqKgo+IGBodHRwczovL2N2LnJhYml0LnNhL3BheS9jYWxsYmFjaz9sYW5nPTxhcnxlbj5gIOKAlCDZitmP2YXYsdmO2ZHYsSDZhNmAUGF5bGluayDZgdmKIGBjYWxsQmFja1VybGAg2LnZhtivINil2YbYtNin2KEg2KfZhNmB2KfYqtmI2LHYqSAoYGFwcC9hcGkvcGF5L3JvdXRlLnRzYCkuCj4gUGF5bGluayDZitix2KzZkdi5INin2YTZhdiz2KrYrtiv2YUg2YTZh9iw2Kcg2KfZhNix2KfYqNi32Iwg2YjYp9mE2LXZgdit2Kkg2KrYqtit2YLZgiDZhdmGINin2YTYr9mB2Lkg2LnYqNixIGAvYXBpL3BheS92ZXJpZnlgICjYp9iz2KrYudmE2KfZhSBnZXRJbnZvaWNlKS4gKirZhNinINmK2LnYqtmF2K8g2KfZhNmF2LTYsdmI2Lkg2LnZhNmJIHdlYmhvb2sg2YjYp9ix2K8qKiDigJQg2KfZhNiq2K3ZgtmCIHB1bGwtYmFzZWQuINmE2YggUGF5bGluayDZhdiz2KzZkdmEINi52YbYr9mH2YUgd2ViaG9va9iMINiq2KPZg9ivINmF2YbZhyDZgdmKINmE2YjYrdipIFBheWxpbmsuCgojIyMg2KfZhNil2YrZhdmK2YQg4oCUIFJlc2VuZCAo2YrYtNi62ZHZhCDYp9mE2LHZiNin2KjYtyDYp9mE2LPYrdix2YrYqSAvYXBpL2F1dGgvcmVxdWVzdCArINil2YrYtdin2YTYp9iqIC9hcGkvZW1haWwtcmVzdWx0cykKCnwg2KfZhNmF2KrYutmK2LEgfCDYp9mE2K/ZiNixIHwgdGVzdC9wcm9kIHwKfC0tLXwtLS18LS0tfAp8IGBSRVNFTkRfQVBJX0tFWWAgfCDZhdmB2KrYp9itIFJlc2VuZCDZhNil2LHYs9in2YQg2KfZhNil2YrZhdmK2YTYp9iqIChtYWdpYyBsaW5rcyArINil2YrYtdin2YTYp9iqKSB8IHByb2QgfAp8IGBFTUFJTF9GUk9NYCB8INi52YbZiNin2YYg2KfZhNmF2Y/Ysdiz2ZDZhCAo2YTYp9iy2YUg2K/ZiNmF2YrZhiDZhdmP2KrYrdmC2ZHZgiDZhdmG2Ycg2YHZiiBSZXNlbmQpIHwgcHJvZCB8CnwgYFJFU0VORF9BVURJRU5DRV9JRGAgfCDZhdi52LHZkdmBINis2YXZh9mI2LEgUmVzZW5kINmE2YTZhti02LHYqS/Yp9mE2KfYtNiq2LHYp9mDICjYp9iu2KrZitin2LHZiikgfCBwcm9kIHwKCiMjIyDYp9mE2KrYrtiy2YrZhiBrZXktdmFsdWUgKNin2YTYrdmC2YjZgi/Yp9mE2YjYtdmI2YQg2KfZhNmF2K/ZgdmI2LkgKyDYp9mE2LPZitixINin2YTZhdmG2LTZiNix2KkgKyDYp9mE2LPZitixINin2YTYs9it2KfYqNmK2KkpCgp8INin2YTZhdiq2LrZitixIHwg2KfZhNiv2YjYsSB8IHRlc3QvcHJvZCB8CnwtLS18LS0tfC0tLXwKfCBgRURHRV9DT05GSUdfSURgIHwg2YXYudix2ZHZgSBWZXJjZWwgRWRnZSBDb25maWcgKNin2YTZhdiu2LLZhiDYp9mE2KPYs9in2LPZiikgfCBwcm9kIHwKfCBgRURHRV9DT05GSUdfUkVBRF9UT0tFTmAgfCDYqtmI2YPZitmGINmC2LHYp9ih2Kkg2LPYsdmK2Lkg2LnYp9mE2YXZiiDZhdmGIGVkZ2UtY29uZmlnLnZlcmNlbC5jb20gfCBwcm9kIHwKfCBgRURHRV9DT05GSUdfVEVBTV9JRGAgfCDZhdi52LHZkdmBINin2YTZgdix2YrZgiAo2YTZhNmD2KrYp9io2Kkg2LnYqNixIGFwaS52ZXJjZWwuY29tKSB8IHByb2QgfAp8IGBWRVJDRUxfQVBJX1RPS0VOYCB8INiq2YjZg9mK2YYgVmVyY2VsIEFQSSDigJQgKirZitmD2KrYqCoqINi52YTZiSBFZGdlIENvbmZpZyDYudmG2K8g2YPZhCDYudmF2YTZitipINi02LHYp9ihIHwgcHJvZCB8CnwgYFVQU1RBU0hfUkVESVNfUkVTVF9VUkxgIHwg2KjYr9mK2YQg2KfYrdiq2YrYp9i32Yog2YTZiCBFZGdlIENvbmZpZyDZhdmIINmF2YfZitmR2KMgfCBwcm9kICjYp9iu2KrZitin2LHZiikgfAp8IGBVUFNUQVNIX1JFRElTX1JFU1RfVE9LRU5gIHwg2KrZiNmD2YrZhiBVcHN0YXNoIHwgcHJvZCAo2KfYrtiq2YrYp9ix2YopIHwKCiMjIyDYp9mE2KzZhNiz2KfYqiDZiNin2YTYqtmI2YPZhtin2KoKCnwg2KfZhNmF2KrYutmK2LEgfCDYp9mE2K/ZiNixIHwgdGVzdC9wcm9kIHwKfC0tLXwtLS18LS0tfAp8IGBBQ0NFU1NfU0VDUkVUYCB8ICoq2LPYsSDYqtmI2YLZiti5IEhNQUMqKiDZhNmD2YjZg9mK2LIg2KfZhNis2YTYs9ipINmI2KfZhNix2YjYp9io2Lcg2KfZhNiz2K3YsdmK2Kkg4oCUINmE2Ygg2KrYutmK2ZHYsdiMINmD2YQg2KfZhNis2YTYs9in2Kog2KrYqNi32YQgfCBwcm9kIHwKfCBgQURNSU5fU0VDUkVUYCB8INiz2LEg2YXYs9in2LHYp9iqINin2YTYo9iv2YXZhiAo2YTZiCDZhdiz2KrYrtiv2YUpIHwgcHJvZCB8CgojIyMg2LHZiNin2KjYtyDZiNmG2LfYp9mCCgp8INin2YTZhdiq2LrZitixIHwg2KfZhNiv2YjYsSB8IHRlc3QvcHJvZCB8CnwtLS18LS0tfC0tLXwKfCBgTkVYVF9QVUJMSUNfQVBQX1VSTGAgfCDYp9mE2KPYtdmEINin2YTYudin2YUgKGBodHRwczovL2N2LnJhYml0LnNhYCkg4oCUINmK2Y/Ys9iq2K7Yr9mFINmB2Yog2KfZhNix2YjYp9io2Lcg2YjYp9mE2YBjYWxsYmFjayDZiNin2YTYpdmK2YXZitmE2KfYqiB8IHByb2QgfAoKIyMjINin2YTYtdmI2KogVFRTICjYp9iu2KrZitin2LHZiiDigJQg2YrYtNi62ZHZhCAvYXBpL3R0cyDZiCAvYXBpL2ludGVydmlldy1saXZl2Iwg2KfZhNmF2YLYp9io2YTYqSDYp9mE2LXZiNiq2YrYqSkKCnwg2KfZhNmF2KrYutmK2LEgfCDYp9mE2K/ZiNixIHwgdGVzdC9wcm9kIHwKfC0tLXwtLS18LS0tfAp8IGBHRU1JTklfVFRTX0tFWWAgfCBHb29nbGUgR2VtaW5pIFRUUyAo2KfZhNij2YPYq9ixINio2LTYsdmK2KnYjCDZhdis2KfZhtmKINi52KjYsSBBSSBTdHVkaW8pIOKAlCDYp9mE2YXYstmI2ZHYryDYp9mE2KPZiNmEIHwgcHJvZCB8CnwgYEdFTUlOSV9UVFNfTU9ERUxgIHwg2KfZgdiq2LHYp9i22YogYGdlbWluaS0yLjUtZmxhc2gtcHJldmlldy10dHNgIHwgcHJvZCB8CnwgYEVMRVZFTkxBQlNfS0VZYCB8IEVsZXZlbkxhYnMgKNi52LHYqNmKINmF2LHYrNi52YopIOKAlCDYp9it2KrZitin2LfZiiDYq9in2YbZjSB8IHByb2QgKNin2K7YqtmK2KfYsdmKKSB8CnwgYEVMRVZFTkxBQlNfVk9JQ0VfRmAgLyBgRUxFVkVOTEFCU19WT0lDRV9NYCB8INmF2LnYsdmR2YHYp9iqINin2YTYo9i12YjYp9iqINij2YbYq9mJL9iw2YPYsSB8IHByb2QgKNin2K7YqtmK2KfYsdmKKSB8CnwgYEFaVVJFX1NQRUVDSF9LRVlgIC8gYEFaVVJFX1NQRUVDSF9SRUdJT05gIHwgQXp1cmUgU3BlZWNoIOKAlCDYp9it2KrZitin2LfZiiDYq9in2YTYqyB8IHByb2QgKNin2K7YqtmK2KfYsdmKKSB8CgojIyMg2KrYrdmE2YrZhNin2Kov2KXYudmE2KfZhtin2KogKNin2K7YqtmK2KfYsdmKIOKAlCDZg9mE2YfYpyBkb3JtYW50INmE2Ygg2YXYpyDYqti52YrZkdmG2KopCgp8INin2YTZhdiq2LrZitixIHwg2KfZhNiv2YjYsSB8CnwtLS18LS0tfAp8IGBORVhUX1BVQkxJQ19HT09HTEVfQURTX0lEYCAvIGBORVhUX1BVQkxJQ19HT09HTEVfQURTX0NPTlZfTEFCRUxgIHwg2KrYqtio2ZHYuSDYqtit2YjZitmEIEdvb2dsZSBBZHMgKNmK2Y/Yt9mE2YIg2YHZgti3INi52YbYryDYr9mB2LnYqSDZhdik2YPYr9ipKSB8CnwgYE5FWFRfUFVCTElDX01FVEFfUElYRUxfSURgIHwgTWV0YSBQaXhlbCAoUGFnZVZpZXcgKyBQdXJjaGFzZSkgfAp8IGBNRVRBX0FEX0FDQ09VTlRfSURgIC8gYE1FVEFfUEFHRV9JRGAgLyBgTUVUQV9TWVNURU1fVVNFUl9UT0tFTmAgfCBNZXRhIE1hcmtldGluZyBBUEkgKNin2K7YqtmK2KfYsdmKKSB8Cgo+IGBAdmVyY2VsL2FuYWx5dGljc2Ag2YXZgdi52ZHZhCDYqtmE2YLYp9im2YrYp9mLINmB2YogYGFwcC9sYXlvdXQudHN4YCDYqNiv2YjZhiDYo9mKIGVudi4KCi0tLQoKIyMgMykg2LPYrNmEINin2YTYrtiv2YXYp9iqINin2YTYrtin2LHYrNmK2KkKCnwg2KfZhNiu2K/ZhdipIHwg2KfZhNiv2YjYsSB8INmF2LPYp9ixINin2YTZg9mI2K8gfCDZhNmI2K3YqSDYp9mE2KrYrdmD2YUgfAp8LS0tfC0tLXwtLS18LS0tfAp8ICoqTlZJRElBIEFQSSoqIChMTE0g2YXYrNin2YbZiikgfCDZg9mEINmG2K/Yp9ih2KfYqiDYp9mE2LDZg9in2KEgKNiq2K3Ys9mK2YbYjCDYqNmG2KfYodiMINmF2YLYp9io2YTYqdiMINin2YLYqtix2KfYrdiMINiu2LfYp9ioKSB8IGBhcHAvYXBpLyovcm91dGUudHNgINi52KjYsSBgc3RyZWFtTnZpZGlhYNibINin2YTZhdix2KzYuSDYp9mE2YPYp9mF2YQgYGFwcC9hcGkvb3B0aW1pemUvcm91dGUudHNgIHwgaHR0cHM6Ly9idWlsZC5udmlkaWEuY29tIChpbnRlZ3JhdGUuYXBpLm52aWRpYS5jb20pIHwKfCAqKkFudGhyb3BpYyoqICjYqNiv2YrZhCkgfCDYqNiv2YrZhCDYp9mE2YBMTE0g2YTZiCBgQUlfUFJPVklERVI9YW50aHJvcGljYCB8IGBhcHAvYXBpL29wdGltaXplL3JvdXRlLnRzYCAoYGNhbGxBbnRocm9waWNgKSB8IGh0dHBzOi8vY29uc29sZS5hbnRocm9waWMuY29tIHwKfCAqKlBheWxpbmsqKiB8INin2YTYr9mB2LkgKNmB2YjYp9iq2YrYsSArINiq2K3ZgtmCKSB8IGBhcHAvYXBpL3BheS9yb3V0ZS50c2AsIGBhcHAvYXBpL3BheS92ZXJpZnkvcm91dGUudHNgLCBgYXBwL2NvbXBvbmVudHMvQ2hlY2tvdXRCdXR0b24udHN4YCB8IGh0dHBzOi8vbXkucGF5bGluay5zYSB8CnwgKipSZXNlbmQqKiB8INil2LHYs9in2YQg2KfZhNil2YrZhdmK2YTYp9iqICjYsdmI2KfYqNi3INiz2K3YsdmK2KkgKyDYpdmK2LXYp9mE2KfYqikgfCBgYXBwL2xpYi9lbWFpbC50c2AsIGBhcHAvYXBpL2F1dGgvcmVxdWVzdC9yb3V0ZS50c2AsIGBhcHAvYXBpL2VtYWlsLXJlc3VsdHMvcm91dGUudHNgIHwgaHR0cHM6Ly9yZXNlbmQuY29tL2VtYWlscyB8CnwgKipWZXJjZWwgRWRnZSBDb25maWcqKiB8INmF2K7YstmGINin2YTYrdmC2YjZgi/Yp9mE2YjYtdmI2YQg2KfZhNmF2K/ZgdmI2LkgKyDYp9mE2LPZitixINin2YTZhdmG2LTZiNix2KkgKyDYp9mE2LPZitixINin2YTYs9it2KfYqNmK2KkgfCBgYXBwL2xpYi9lbnRpdGxlbWVudHMudHNgLCBgYXBwL2xpYi9wdWJsaWNyZXN1bWUudHNgLCBgYXBwL2xpYi9jdnN0b3JlLnRzYCB8IGh0dHBzOi8vdmVyY2VsLmNvbS9kYXNoYm9hcmQgKFN0b3JhZ2Ug4oaSIEVkZ2UgQ29uZmlnKSB8CnwgKipVcHN0YXNoIFJlZGlzKiogfCDZhdiu2LLZhiDYp9it2KrZitin2LfZiiAoZmFsbGJhY2spINmE2YbZgdizINmF2Kcg2YHZiNmCIHwg2YbZgdizINmF2YTZgdin2KogbGliINij2LnZhNin2YcgfCBodHRwczovL2NvbnNvbGUudXBzdGFzaC5jb20gfAp8ICoqR29vZ2xlIEdlbWluaSBUVFMqKiB8INiq2K3ZiNmK2YQg2KfZhNmG2LUg2YTYtdmI2KogKNin2YTZhdmC2KfYqNmE2Kkg2KfZhNi12YjYqtmK2KkpIHwgYGFwcC9hcGkvdHRzL3JvdXRlLnRzYCB8IGh0dHBzOi8vYWlzdHVkaW8uZ29vZ2xlLmNvbSB8CnwgKipFbGV2ZW5MYWJzIC8gQXp1cmUgU3BlZWNoKiogfCDYp9it2KrZitin2LfZiiBUVFMgfCBgYXBwL2FwaS90dHMvcm91dGUudHNgIHwgaHR0cHM6Ly9lbGV2ZW5sYWJzLmlvIMK3IGh0dHBzOi8vcG9ydGFsLmF6dXJlLmNvbSB8CnwgKipWZXJjZWwqKiB8INin2YTYp9iz2KrYttin2YHYqSDZiNin2YTZhti02LEg2YjYp9mE2K/ZiNmF2YrZhiDZiNin2YTZgEVkZ2UgQ29uZmlnIHwg2YPZhCDYp9mE2YXYtNix2YjYuSB8IGh0dHBzOi8vdmVyY2VsLmNvbS9kYXNoYm9hcmQgfAp8ICoqVmVyY2VsIEFuYWx5dGljcyoqIHwg2KrYrdmE2YrZhNin2Kog2KfZhNiy2YjYp9ixIHwgYGFwcC9sYXlvdXQudHN4YCAoYDxBbmFseXRpY3MvPmApIHwgVmVyY2VsIOKGkiBBbmFseXRpY3MgfAp8ICoqR29vZ2xlIEFkcyAvIE1ldGEgUGl4ZWwqKiB8INiq2KrYqNmR2Lkg2KfZhNil2LnZhNin2YbYp9iqICjYp9iu2KrZitin2LHZitiMIGRvcm1hbnQpIHwgYGFwcC9wYXkvY2FsbGJhY2svcGFnZS50c3hgLCBgYXBwL2xheW91dC50c3hgIHwgaHR0cHM6Ly9hZHMuZ29vZ2xlLmNvbSDCtyBodHRwczovL2J1c2luZXNzLmZhY2Vib29rLmNvbSB8Cgo+ICoq2YTYpyDZitmI2KzYryBTZW50cnkg2KPZiCDYo9mKIGVycm9yLXRyYWNraW5nINit2KfZhNmK2KfZiyoqIOKAlCDZitmP2YbYtditINin2YTZhdi32YjZkdixINin2YTYrNiv2YrYryDZiti22YrZgSDZiNin2K3Yry4KCi0tLQoKIyMgNCkg2YLYp9i52K/YqSDYp9mE2KjZitin2YbYp9iqIC8g2KfZhNiq2K7YstmK2YYKCioq2YTYpyDZitmI2KzYryBTUUwvUHJpc21hL01vbmdvLioqINin2YTYqtiu2LLZitmGINmD2YTZhyBrZXktdmFsdWUgKFZlcmNlbCBFZGdlIENvbmZpZyDYo9iz2KfYs9mK2IwgVXBzdGFzaCBSZWRpcyDYp9it2KrZitin2LfZiikuCtmD2YQgItin2YTYrNiv2KfZiNmEIiDZh9mKINmF2YHYp9iq2YrYrSDYqNij2YbZhdin2Lcg2KvYp9io2KrYqToKCnwg2KfZhNmF2YHYqtin2K0gKNin2YTZhtmF2LcpIHwg2KfZhNmC2YrZhdipIHwg2YrZj9mD2KrYqCDZhdmGIHwg2KfZhNmD2YjYryB8CnwtLS18LS0tfC0tLXwtLS18CnwgYGVudF88YmFzZTY0dXJsKGVtYWlsKT5gIHwgZXBvY2ggbXMg2YrZhtiq2YfZiiDYudmG2K/ZhyDYp9mE2YjYtdmI2YQg2KfZhNmF2K/ZgdmI2LkgKHVubGltaXRlZCkgfCDYudmG2K8g2LTYsdin2KEg2YXYpNmD2K8gfCBgYXBwL2xpYi9lbnRpdGxlbWVudHMudHNgIHwKfCBgcHViXzxzbHVnPmAgfCBKU09OOiBgeyBuYW1lLCByb2xlLCB0ZXh0LCBjcmVhdGVkIH1gIOKAlCDYs9mK2LHYqSDZhdmG2LTZiNix2Kkg2LnYp9mF2KkgfCDYudmG2K8g2KfZhNmG2LTYsSDZhdmGINin2YTYqNin2YbZiiB8IGBhcHAvbGliL3B1YmxpY3Jlc3VtZS50c2AgKNmK2K7Yr9mFIGAvci9bc2x1Z11gKSB8CnwgYHJlc188YmFzZTY0dXJsKGVtYWlsKT5gIHwgSlNPTiBhcnJheTog2LPZitixINin2YTZhdiz2KrYrtiv2YUg2KfZhNmF2K3ZgdmI2LjYqSDYs9it2KfYqNmK2KfZiyB8INi52YbYryDYp9mE2K3Zgdi4INmE2K3Ys9in2Kgg2YXYs9is2ZHZhCB8IGBhcHAvbGliL2N2c3RvcmUudHNgICjZitiu2K/ZhSBgL2FwaS9yZXN1bWVzYCkgfAoKLSAqKtin2YTZgtix2KfYodipOioqIGBodHRwczovL2VkZ2UtY29uZmlnLnZlcmNlbC5jb20vPEVER0VfQ09ORklHX0lEPi9pdGVtLzxrZXk+P3Rva2VuPTxSRUFEX1RPS0VOPmAKLSAqKtin2YTZg9iq2KfYqNipOioqIGBodHRwczovL2FwaS52ZXJjZWwuY29tL3YxL2VkZ2UtY29uZmlnLzxFREdFX0NPTkZJR19JRD4vaXRlbXNgINmF2LkgYFZFUkNFTF9BUElfVE9LRU5gIChCZWFyZXIpLgotICoq2KfZhNmI2LXZiNmEINmE2YTZiNit2Kk6KiogVmVyY2VsIERhc2hib2FyZCDihpIgU3RvcmFnZSDihpIgRWRnZSBDb25maWcg4oaSICjYp9mE2YXYrtiy2YYpIOKGkiBJdGVtcyAo2KrYtNmI2YEv2KrYudiv2ZHZhCDZitiv2YjZitin2YspLgotICoq2KjZitin2YbYp9iqINi52YTZiSDYp9mE2KzZh9in2LIg2YHZgti3ICjZhdmIINmB2Yog2KfZhNiz2K3Yp9io2KkpOioqINiz2KzZhCDYp9mE2YHYrdmI2LXYp9iq2Iwg2YXYs9mI2K/Zkdin2Kog2KfZhNio2KfZhtmK2Iwg2KrYqtio2ZHYuSDYp9mE2YjYuNin2KbZgSDigJQg2YPZhNmH2KcgYGxvY2FsU3RvcmFnZWAg2LnYqNixIGBhcHAvbGliL2xvY2FsZGF0YS50c2AuINmE2Kcg2KrZj9ix2YHYuSDZhNij2Yog2LPZitix2YHYsS4KCioqItin2YTZhdiu2LfYtyIg2KfZhNmD2KfZhdmEINmF2YjYrNmI2K8g2YPYqti52YTZitmC2KfYqiDZhdmI2KvZkdmC2Kkg2YHZiiDYsdik2YjYsyDZh9iw2Yog2KfZhNmF2YTZgdin2KoqKiDigJQg2KfZgdiq2K0gYGFwcC9saWIvZW50aXRsZW1lbnRzLnRzYCwgYHB1YmxpY3Jlc3VtZS50c2AsIGBjdnN0b3JlLnRzYCwgYHNlc3Npb24udHNgLgoKLS0tCgojIyA1KSDYp9mE2KrYtNi62YrZhCDYp9mE2YXYrdmE2Yog4oCUINiu2LfZiNipINio2K7Yt9mI2KkKCmBgYGJhc2gKIyAxKSDYp9iz2KrZhtiz2K4g2YjYp9iv2K7ZhCDZhdis2YTYryDYp9mE2YXYtNix2YjYuSAo2KfZhNmF2LTYsdmI2Lkg2YHZiiDZhdis2YTYryDZgdix2LnZiiEpCmdpdCBjbG9uZSBodHRwczovL2dpdGh1Yi5jb20vdGFtYXJhYWJkdWxheml6NC1lbmcvbWVlbmEtc2NoZWR1bGluZy5naXQKY2QgbWVlbmEtc2NoZWR1bGluZy9yZXN1bWUtYWkKZ2l0IGNoZWNrb3V0IGNsYXVkZS9jcmF3bDRhaS1pbnN0YWxsLW8wajh3ZiAgICMg2KPYrdiv2Ksg2YHYsdi5CgojIDIpINmG2LXZkdioINin2YTYrdiy2YUKbnBtIGluc3RhbGwKCiMgMykg2KfYs9it2Kgg2YXYqti62YrYsdin2Kog2KfZhNio2YrYptipINin2YTYrdmC2YrZgtmK2Kkg2YXZhiBWZXJjZWwgKNmK2KrYt9mE2Kgg2LXZhNin2K3ZitipINi52YTZiSDYp9mE2YXYtNix2YjYuSkKbnBtIGkgLWcgdmVyY2VsICAgICAgICAjINij2YggbnB4IHZlcmNlbAp2ZXJjZWwgbG9naW4KdmVyY2VsIGxpbmsgICAgICAgICAgICAjINin2K7YqtixINmF2LTYsdmI2LkgcmVzdW1lLWFpCnZlcmNlbCBlbnYgcHVsbCAuZW52LmxvY2FsIC0tZW52aXJvbm1lbnQ9cHJvZHVjdGlvbgoKIyA0KSDYtNi62ZHZhCDYp9mE2KrYt9mI2YrYsQpucG0gcnVuIGRldiAgICAgICAgICAgICMgaHR0cDovL2xvY2FsaG9zdDozMDAwCgojINij2YjYp9mF2LEg2KvYp9mG2YrYqToKbnBtIHJ1biBidWlsZCAgICAgICAgICAjINio2YbYp9ihINil2YbYqtin2KzZiiAoVHVyYm9wYWNrKQpucG0gcnVuIHN0YXJ0ICAgICAgICAgICMg2KrYtNi62YrZhCDZhtiz2K7YqSDZhdio2YbZitipCm5wbSBydW4gbGludCAgICAgICAgICAgIyDZgdit2LUgRVNMaW50CmBgYAoKIyMjINij2KzYstin2KEg2YXYpyDYqti02KrYutmEINmF2K3ZhNmK2KfZiyAo2YjZiNi0INin2YTYs9io2KgpCgotICoq2KjYr9mI2YYgYC5lbnYubG9jYWxgOioqINmD2YQg2YbYr9in2KHYp9iqINin2YTYsNmD2KfYoSAoYC9hcGkvaW50ZXJ2aWV3YCwgYC9hcGkvYnVpbGQtY3ZgLCBgL2FwaS9vcHRpbWl6ZWApINiq2LHYrNi5IDUwMi81MDMg2YTYo9mGIGBOVklESUFfQVBJX0tFWWAg2YXZgdmC2YjYry4g2YTYp9iy2YUgYHZlcmNlbCBlbnYgcHVsbGAg2KPZiNmE2KfZiy4KLSAqKtin2YTYr9mB2Lkg2YXYrdmE2YrYp9mLOioqINmK2LTYqti62YQg2YXZgtin2KjZhCBQYXlsaW5rINin2YTYrdmC2YrZgtmKL9in2YTYqtis2LHZitio2Yog2K3Ys9ioIGBQQVlMSU5LX0JBU0VfVVJMYNiMINmE2YPZhiDYsdis2LnYqSDYp9mE2YBjYWxsYmFjayDYqtix2YjYrSDZhNmAYE5FWFRfUFVCTElDX0FQUF9VUkxgICjYp9mE2KXZhtiq2KfYrCkg4oCUINmE2YTYp9iu2KrYqNin2LEg2KfZhNmF2K3ZhNmKINio2K/ZkdmE2YfYpyDZhNmAYGh0dHA6Ly9sb2NhbGhvc3Q6MzAwMGAg2YXYpNmC2KrYp9mLLgotICoq2KfZhNiq2K7YstmK2YYg2YXYrdmE2YrYp9mLOioqINmK2K3Yqtin2Kwg2KrZiNmD2YbYp9iqIEVkZ2UgQ29uZmln2Jsg2KjYr9mI2YbZh9inINin2YTYrdmC2YjZgi/Yp9mE2YbYtNixINmF2Kcg2KrZj9it2YHYuCAo2YrYsdis2LkgIm5vLWFjY2VzcyIg2KjZhNi32YEg2KjYr9mEINmF2Kcg2YrZhtmD2LPYsSkuCi0gKirYp9mE2LXZiNiqIFRUUzoqKiDZitit2KrYp9isIGBHRU1JTklfVFRTX0tFWWDYmyDYqNiv2YjZhtmHINin2YTZhdmC2KfYqNmE2Kkg2KfZhNi12YjYqtmK2Kkg2YXYudi32ZHZhNipICjYp9mE2YbYtSDZiti02KrYutmEINi52KfYr9mKKS4KCi0tLQoKIyMgNikg2KfZhNmG2LTYsSAoVmVyY2VsKSDZiNix2KjYtyDYp9mE2K/ZiNmF2YrZhgoKLSAqKtin2YTZhdi02LHZiNi5OioqIFZlcmNlbCBwcm9qZWN0IGByZXN1bWUtYWlgIChSb290IERpcmVjdG9yeSA9IGByZXN1bWUtYWkvYCkuCi0gKirYp9mE2KXYudiv2KfYr9in2KogKNmF2YYgYHZlcmNlbC5qc29uYCk6KioKICAtIEZyYW1ld29yazogKipuZXh0anMqKgogIC0gQnVpbGQgY29tbWFuZDogKipgbnBtIHJ1biBidWlsZGAqKgogIC0gT3V0cHV0OiBgLm5leHRgCiAgLSBSZWdpb246ICoqYGlhZDFgKioKICAtIEZ1bmN0aW9ucyDYqNmF2YfZhNipINmF2YXYqtiv2Kk6IGBhcHAvYXBpL29wdGltaXplL3JvdXRlLnRzYCDZiCBgYXBwL2FwaS9jb3Zlci1sZXR0ZXIvcm91dGUudHNgIOKGkiBgbWF4RHVyYXRpb246IDMwMGAuCiAgLSAo2KjYudi2INin2YTZhdiz2KfYsdin2Kog2KfZhNij2K7YsdmJINiq2LnYsdmR2YEgYG1heER1cmF0aW9uYCDYr9in2K7ZhCDYp9mE2YXZhNmBINmG2YHYs9mH2Iwg2YXYq9mEIGJ1aWxkLWN2PTMwMNiMIGV4dHJhY3Q9MzAuKQotICoq2KfZhNmG2LTYsToqKiDYo9mKIHB1c2gg2LnZhNmJINin2YTZgdix2Lkg2KfZhNmF2YbYtNmI2LHYjCDYo9mIINmK2K/ZiNmK2KfZizoKICBgYGBiYXNoCiAgY2QgcmVzdW1lLWFpCiAgdmVyY2VsIGRlcGxveSAtLXByb2QKICBgYGAKLSAqKtmC2KfYptmF2KkgZW52IHZhcnMg2KfZhNmF2LPYrNmR2YTYqSDZgdmKIFZlcmNlbDoqKiDZg9mE2YfYpyDZgdmKINin2YTZgtiz2YUgMiDYo9i52YTYp9mHIOKAlCDYtNmI2YHZh9inINmB2YogU2V0dGluZ3Mg4oaSIEVudmlyb25tZW50IFZhcmlhYmxlc9iMINij2YggYHZlcmNlbCBlbnYgbHNgLgotICoq2KfZhNiv2YjZhdmK2YYgY3YucmFiaXQuc2E6KioKICAtINmF2LHYqNmI2Lcg2YHZiiBWZXJjZWwg4oaSIFByb2plY3QgYHJlc3VtZS1haWAg4oaSIFNldHRpbmdzIOKGkiAqKkRvbWFpbnMqKiDihpIgYGN2LnJhYml0LnNhYC4KICAtINin2YTYr9mI2YXZitmGIGByYWJpdC5zYWAg2YXZj9iv2KfYsSDYudio2LEg2YXYstmI2ZHYryBETlMgKNiq2K3ZgtmCINmF2YYg2KfZhNiz2KzZhDog2LnYp9iv2KkgYENOQU1FIGN2IOKGkiBjbmFtZS52ZXJjZWwtZG5zLmNvbWAg2KPZiCBBIHJlY29yZCDZhNmAVmVyY2VsKS4KICAtIGBORVhUX1BVQkxJQ19BUFBfVVJMPWh0dHBzOi8vY3YucmFiaXQuc2FgINmE2KfYstmFINmK2LfYp9io2YIg2KfZhNiv2YjZhdmK2YYg2KfZhNmF2Y/Zhtiq2Y7YrC4KCi0tLQoKIyMgNykg2K7YsdmK2LfYqSDZhdi52YXYp9ix2YrYqSDYs9ix2YrYudipICjZhNmE2YXYt9mI2ZHYsSDYp9mE2KzYr9mK2K8pCgotIGBhcHAvcGFnZS50c3hgICsgYGFwcC9hci9wYWdlLnRzeGAg4oaSINin2YTZhNin2YbYr9mK2YbZgiA9ICoqItin2YTZhdiz2KrYtNin2LEiKiogKGBhcHAvY29tcG9uZW50cy9BZHZpc29yTGFuZGluZy50c3hgKSDigJQg2YXZgtin2KjZhNipINmF2K3Yp9iv2KvYqSDZhdiv2YHZiNi52Kkg2KjYp9mE2LnZgtmELgotICoq2LHYp9io2LcgKNin2YTZgE9yYiDYp9mE2YjYp9it2K8pOioqIGBhcHAvY29tcG9uZW50cy9vcmIvT3JiUHJvdmlkZXIudHN4YCDZhdix2YPZkdioINmB2YogYGFwcC9sYXlvdXQudHN4YCDigJQgb3JiINmI2KfYrdivINmK2LnZiti0INi52KjYsSDZg9mEINin2YTZhdiz2KfYsdin2KrYmyDZg9mEINi12YHYrdipINiq2LXZgSDZhdi02YfYr9mHINio2YBgdXNlT3JiU2NlbmVgLiDYp9mE2YBDU1Mg2YHZiiBgYXBwL2dsb2JhbHMuY3NzYCAoYC5haS1vcmJgKS4KLSAqKtin2YTYudmC2YQ6KiogYGFwcC9hcGkvaW50ZXJ2aWV3L3JvdXRlLnRzYCDigJQgYWN0aW9uczogYHR1cm5gICjYp9mE2LnZgtmEINin2YTZg9in2YXZhCnYjCBgcmVwaHJhc2Vg2IwgYGdhcHNgLiDZgtin2YbZiNmGINin2YTYtdiv2YIgKNmE2Kcg2KfYrtiq2YTYp9mCKS4KLSAqKtin2YTZgtmI2KfZhNioOioqIGBhcHAvY29tcG9uZW50cy9SZXN1bWVUZW1wbGF0ZS50c3hgICsgYGFwcC9saWIvdGVtcGxhdGVDYXRhbG9nLnRzYCAoMTAg2YLZiNin2YTYqNiMIHNpbmdsZS1jb2x1bW4gQVRT2Iwg2YPYtNmBINin2YTYp9iq2KzYp9mHINiq2YTZgtin2KbZitin2YspLgotICoq2KfZhNiv2YHYuToqKiBgYXBwL2NvbXBvbmVudHMvQ2hlY2tvdXRCdXR0b24udHN4YCDihpIgYGFwcC9hcGkvcGF5YCDihpIgYGFwcC9wYXkvY2FsbGJhY2svcGFnZS50c3hgIOKGkiBgYXBwL2FwaS9wYXkvdmVyaWZ5YC4KLSAqKtin2YTZhdi12KfYr9mC2Kk6Kiog2LHZiNin2KjYtyDYs9it2LHZitipIHN0YXRlbGVzcyDigJQgYGFwcC9hcGkvYXV0aC97cmVxdWVzdCx2ZXJpZnksbWUsbG9nb3V0fWAsIGBhcHAvbGliL3Nlc3Npb24udHNgLgoKLS0tCgojIyA4KSDZgti22KfZitinINmF2LnYsdmI2YHYqSDZitio2K/YoyDZhdmG2YfYpyDYp9mE2YXYt9mI2ZHYsSDYp9mE2KzYr9mK2K8KCi0g4pqg77iPICoq2KfZhNmF2YrZg9ix2YjZgdmI2YYg2YXYudi32ZHZhCDYqNin2YTZh9mK2K/YsToqKiBgbmV4dC5jb25maWcudHNgINmB2YrZhyBgUGVybWlzc2lvbnMtUG9saWN5OiBtaWNyb3Bob25lPSgpYCDigJQg2YfYsNinICoq2YrZhdmG2LkqKiDZhdmK2LLYqSDYp9mE2KXYr9iu2KfZhCDYp9mE2LXZiNiq2YogKNin2YTZhdmC2KfYqNmE2Kkg2KfZhNi12YjYqtmK2KkgLyDYstixINin2YTZhdin2YrZgykuINmE2Ygg2KrYqNmKINin2YTYtdmI2KrYjCDYudiv2ZHZhNmH2Kcg2YTZgGBtaWNyb3Bob25lPShzZWxmKWAuCi0g8J+UkSAqKtiq2K/ZiNmK2LEg2KfZhNmF2YHYp9iq2YrYrToqKiDYqNi52LYg2KfZhNmF2YHYp9iq2YrYrSDYp9mG2YPYtNmB2Kog2KPYq9mG2KfYoSDYp9mE2KrYt9mI2YrYsSDigJQg2YrZj9mG2LXYrSAqKtiq2KzYr9mK2K8qKiBgTlZJRElBX0FQSV9LRVlgLCBgUEFZTElOS19TRUNSRVRfS0VZYCwgYEdFTUlOSV9UVFNfS0VZYCwgYFJFU0VORF9BUElfS0VZYCwgYEFDQ0VTU19TRUNSRVRgINmC2KjZhCDYp9mE2KrYs9mE2YrZhSDYp9mE2YbZh9in2KbZiiAo2KfZhNmF2YfZhdipICMyINmB2Yog2YLYp9im2YXYqSDYp9mE2LnZhdmEKS4KLSDwn4yQICoq2YXYstmI2ZHYryBOVklESUEg2KfZhNmF2KzYp9mG2Yog2YXYqtiw2KjYsNioKiogKH7Yo9it2YrYp9mG2KfZiyA1MDIpIOKAlCDZgdmK2YcgcmV0cnkg2LXYp9mF2KrYjCDZhNmD2YYg2YTZhNil2YbYqtin2Kwg2KfZhNis2KfYryDZitmP2YbYtditINmF2LLZiNmR2K8g2YXYr9mB2YjYuSDZhdiz2KrZgtixINij2YggYEFJX1BST1ZJREVSPWFudGhyb3BpY2AuCi0g8J+TiiAqKtmE2KcgZXJyb3ItdHJhY2tpbmcqKiAoU2VudHJ5INmF2KvZhNin2YspIOKAlCDZitmP2YbYtditINil2LbYp9mB2KrZhy4KCi0tLQoKIyMg2KrYs9mE2YrZhSDYp9mE2KPYs9ix2KfYsSDYqNij2YXYp9mGICjYp9mC2LHYo9mHKQoKKirZhNinINiq2YbYs9iuINin2YTZgtmK2YUg2KfZhNiz2LHZitipINmB2Yog2YfYsNinINin2YTZhdmE2YEg2YjZhNinINmB2Yog2KPZiiDYtNin2Kov2KXZitmF2YrZhC4qKiDYp9mE2LfYsdmCINin2YTYotmF2YbYqToKCjEuICoq2KfZhNij2YHYttmEIOKAlCDYo9i22YEg2KfZhNmF2LfZiNmR2LEgQ29sbGFib3JhdG9yINi52YTZiSBWZXJjZWw6KioKICAgVmVyY2VsIOKGkiBQcm9qZWN0IGByZXN1bWUtYWlgIOKGkiBTZXR0aW5ncyDihpIgTWVtYmVycyDihpIgSW52aXRlLiDYqNi52K/Zh9inINmH2Ygg2YrYs9mI2YogYHZlcmNlbCBlbnYgcHVsbGAg2YjZitiz2K3YqCDZg9mEINin2YTZgtmK2YUg2KjZhtmB2LPZhy4gKirYtdmB2LEg2YbYs9iuINmK2K/ZiNmKLioqCjIuICoq2KPZiCDZgtmG2KfYqSDZhdi02YHZkdix2Kkg2YTZhdix2Kkg2YjYp9it2K/YqToqKiDYtNin2LHZgyDYp9mE2YXZgdin2KrZititINi52KjYsSAxUGFzc3dvcmQgLyBCaXR3YXJkZW4gU2VuZCAvINix2LPYp9mE2Kkg2KrZhtiq2YfZiiDYqNin2YTYrdiw2YEuINmE2KcgU2xhY2sv2KXZitmF2YrZhCDYudin2K/Zii4KMy4gKirYqNi52K8g2KfZhNiq2LPZhNmK2YU6Kiog2YTZiCDYp9mG2KrZh9iqINmF2YfZhdipINin2YTZhdi32YjZkdix2Iwg2KfYrdiw2YHZhyDZhdmGIFZlcmNlbC9HaXRIdWIg2YjYrNiv2ZHYryDYp9mE2YXZgdin2KrZititINin2YTYrdiz2ZHYp9iz2KkuCgo+INin2YTYs9io2Kg6INin2YTZhdmB2KrYp9itINin2YTYs9ix2Yog2YTZgFBheWxpbmsgPSDZiNi12YjZhCDZhdin2YTZiiDZhdio2KfYtNix2Iwg2YhgQUNDRVNTX1NFQ1JFVGAgPSDYp9mG2KrYrdin2YQg2KPZiiDZhdiz2KrYrtiv2YUuINiq2LPYsdmK2KjZh9inINmB2Yog2YXZhNmBINmK2KjZgtmJINmB2Yog2KfZhNiz2KzZhNin2Kog2YjYp9mE2YbYs9iuINin2YTYp9it2KrZitin2LfZitipINit2KrZiSDYqNi52K8g2K3YsNmBINin2YTZhdmE2YEuCg=="}
+# حزمة تسليم المشروع — cv.rabit.sa (ResumeAI)
+
+> **للمالك:** هذا الملف فيه كل شي يحتاجه المطوّر الجديد **ما عدا القيم السرية نفسها**.
+> القيم الحقيقية للمفاتيح محفوظة في Vercel — المطوّر يسحبها بنفسه بأمان (شرح بالأسفل)،
+> بدون ما تنكشف في ملف دائم. اقرأ قسم **"تسليم الأسرار بأمان"** في آخر الملف.
+
+آخر تحديث: يُملأ يدوياً عند التسليم · الفرع الحالي: `claude/crawl4ai-install-o0j8wf`
+
+---
+
+## 0) نظرة عامة سريعة
+
+- **المنتج:** محسّن سير ذاتية بالذكاء الاصطناعي، صادق (لا يختلق حقائق)، ثنائي اللغة (عربي RTL + إنجليزي)، سوق السعودية/الخليج.
+- **الإطار:** Next.js **16** (App Router) + React 19 + TypeScript + Tailwind CSS v4. **تنبيه:** هذه نسخة Next 16 فيها تغييرات جذرية — `middleware` صار اسمه `proxy` (ملف `proxy.ts`). راجع `AGENTS.md`.
+- **الاستضافة:** Vercel (مشروع `resume-ai`) · الدومين `cv.rabit.sa`.
+- **التخزين:** لا توجد قاعدة بيانات SQL — كله **key-value** على Vercel Edge Config (أساسي) + Upstash Redis (احتياطي). تفاصيل بالأسفل.
+- **الأمان:** لا أسرار في الكود؛ كلها env vars. الجلسات والروابط السحرية **stateless** موقّعة بـHMAC.
+
+---
+
+## 1) وصول GitHub
+
+- **رابط الريبو:** `https://github.com/tamaraabdulaziz4-eng/meena-scheduling`
+- **مسار المشروع داخل الريبو:** `resume-ai/` (المشروع في مجلد فرعي، مو في الجذر).
+- **الفرع الأحدث:** `claude/crawl4ai-install-o0j8wf` (فيه أحدث التصميم). الفرع الرئيسي: `main`.
+
+### كيف تعطي المطوّر صلاحية Contents: Read & Write (خطوات تسويها أنت)
+
+الخيار الأفضل — **أضفه Collaborator** (أنظف من توكين وأسهل سحب):
+1. افتح: `https://github.com/tamaraabdulaziz4-eng/meena-scheduling/settings/access`
+2. **Add people** → اكتب يوزره → صلاحية **Write** → Send invitation.
+
+أو **Fine-grained PAT** إذا يبي توكين (تسويه أنت من حسابك — أنا ما أقدر أنشئه نيابة عنك):
+1. `https://github.com/settings/personal-access-tokens/new`
+2. Token name: `handoff-cvrabit` · Expiration: **7 days**
+3. Resource owner: `tamaraabdulaziz4-eng` · Repository access: **Only select repositories** → `meena-scheduling`
+4. Permissions → Repository permissions → **Contents: Read and write** (+ Metadata: Read، ينضاف تلقائي)
+5. Generate token → انسخه وناوله المطوّر **عبر قناة مشفّرة** (مو إيميل/شات عادي).
+
+---
+
+## 2) متغيرات البيئة — الأسماء والأدوار (القيم تُسحب من Vercel)
+
+> كل هذي مسجّلة في **Vercel → Project resume-ai → Settings → Environment Variables**.
+> المطوّر يسحبها كلها دفعة وحدة بأمر واحد بعد ربط المشروع (انظر قسم 5):
+> ```
+> npx vercel link           # اربط المجلد resume-ai بمشروع resume-ai
+> npx vercel env pull .env.local --environment=production
+> ```
+> هذا ينزّل ملف `.env.local` بكل القيم الحقيقية مباشرة من Vercel — بدون ما أنسخها هنا.
+
+### أساسية لتشغيل الذكاء الاصطناعي (يشغّل /api/interview, /api/build-cv, /api/optimize, /api/suggest, /api/cover-letter, /api/refine, /api/tools)
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `AI_PROVIDER` | مزوّد الـLLM: `nvidia` (افتراضي) أو `anthropic` | prod |
+| `NVIDIA_API_KEY` | مفتاح NVIDIA (endpoint مجاني متوافق مع OpenAI) — **المحرّك الأساسي لكل نداءات الذكاء** | prod |
+| `AI_MODEL` | اسم الموديل (افتراضي `meta/llama-4-maverick-17b-128e-instruct`) | prod |
+| `ANTHROPIC_API_KEY` | بديل لو `AI_PROVIDER=anthropic` (Claude). اختياري | prod |
+
+> **ملاحظة:** `/api/extract` (رفع PDF/Word/txt) **لا يستخدم أي مفتاح AI** — يستخرج النص محلياً بمكتبتي `unpdf` و`mammoth`. يشتغل دائماً.
+
+### الدفع — Paylink (يشغّل /api/pay و /api/pay/verify)
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `PAYLINK_API_ID` | معرّف واجهة Paylink (apiId) | حسب الوضع |
+| `PAYLINK_SECRET_KEY` | المفتاح السري لـPaylink — **حسّاس، وصول مالي مباشر** | حسب الوضع |
+| `PAYLINK_BASE_URL` | `https://restapi.paylink.sa` (production) أو `https://restpilot.paylink.sa` (test/pilot) | **يحدد test أم live** |
+| `NEXT_PUBLIC_PAY_MODE` | وضع الـSDK في الواجهة: `test` أو غيره (production) | يحدد test أم live |
+| `PAY_CURRENCY` | العملة (افتراضي SAR) | prod |
+| `PRICE_SINGLE` | سعر الباقة المفردة (افتراضي 35) | prod |
+| `PRICE_COMPLETE` | سعر الحزمة الكاملة (افتراضي 99) | prod |
+| `PRICE_MONTHLY` | سعر الاشتراك الشهري (افتراضي 75) | prod |
+
+> **رابط الـcallback (مسجّل تلقائياً في الطلب، مو webhook منفصل):**
+> `https://cv.rabit.sa/pay/callback?lang=<ar|en>` — يُمرَّر لـPaylink في `callBackUrl` عند إنشاء الفاتورة (`app/api/pay/route.ts`).
+> Paylink يرجّع المستخدم لهذا الرابط، والصفحة تتحقق من الدفع عبر `/api/pay/verify` (استعلام getInvoice). **لا يعتمد المشروع على webhook وارد** — التحقق pull-based. لو Paylink مسجّل عندهم webhook، تأكد منه في لوحة Paylink.
+
+### الإيميل — Resend (يشغّل الروابط السحرية /api/auth/request + إيصالات /api/email-results)
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `RESEND_API_KEY` | مفتاح Resend لإرسال الإيميلات (magic links + إيصالات) | prod |
+| `EMAIL_FROM` | عنوان المُرسِل (لازم دومين مُتحقّق منه في Resend) | prod |
+| `RESEND_AUDIENCE_ID` | معرّف جمهور Resend للنشرة/الاشتراك (اختياري) | prod |
+
+### التخزين key-value (الحقوق/الوصول المدفوع + السير المنشورة + السير السحابية)
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `EDGE_CONFIG_ID` | معرّف Vercel Edge Config (المخزن الأساسي) | prod |
+| `EDGE_CONFIG_READ_TOKEN` | توكين قراءة سريع عالمي من edge-config.vercel.com | prod |
+| `EDGE_CONFIG_TEAM_ID` | معرّف الفريق (للكتابة عبر api.vercel.com) | prod |
+| `VERCEL_API_TOKEN` | توكين Vercel API — **يكتب** على Edge Config عند كل عملية شراء | prod |
+| `UPSTASH_REDIS_REST_URL` | بديل احتياطي لو Edge Config مو مهيّأ | prod (اختياري) |
+| `UPSTASH_REDIS_REST_TOKEN` | توكين Upstash | prod (اختياري) |
+
+### الجلسات والتوكنات
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `ACCESS_SECRET` | **سر توقيع HMAC** لكوكيز الجلسة والروابط السحرية — لو تغيّر، كل الجلسات تبطل | prod |
+| `ADMIN_SECRET` | سر مسارات الأدمن (لو مستخدم) | prod |
+
+### روابط ونطاق
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `NEXT_PUBLIC_APP_URL` | الأصل العام (`https://cv.rabit.sa`) — يُستخدم في الروابط والـcallback والإيميلات | prod |
+
+### الصوت TTS (اختياري — يشغّل /api/tts و /api/interview-live، المقابلة الصوتية)
+
+| المتغير | الدور | test/prod |
+|---|---|---|
+| `GEMINI_TTS_KEY` | Google Gemini TTS (الأكثر بشرية، مجاني عبر AI Studio) — المزوّد الأول | prod |
+| `GEMINI_TTS_MODEL` | افتراضي `gemini-2.5-flash-preview-tts` | prod |
+| `ELEVENLABS_KEY` | ElevenLabs (عربي مرجعي) — احتياطي ثانٍ | prod (اختياري) |
+| `ELEVENLABS_VOICE_F` / `ELEVENLABS_VOICE_M` | معرّفات الأصوات أنثى/ذكر | prod (اختياري) |
+| `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | Azure Speech — احتياطي ثالث | prod (اختياري) |
+
+### تحليلات/إعلانات (اختياري — كلها dormant لو ما تعيّنت)
+
+| المتغير | الدور |
+|---|---|
+| `NEXT_PUBLIC_GOOGLE_ADS_ID` / `NEXT_PUBLIC_GOOGLE_ADS_CONV_LABEL` | تتبّع تحويل Google Ads (يُطلق فقط عند دفعة مؤكدة) |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Meta Pixel (PageView + Purchase) |
+| `META_AD_ACCOUNT_ID` / `META_PAGE_ID` / `META_SYSTEM_USER_TOKEN` | Meta Marketing API (اختياري) |
+
+> `@vercel/analytics` مفعّل تلقائياً في `app/layout.tsx` بدون أي env.
+
+---
+
+## 3) سجل الخدمات الخارجية
+
+| الخدمة | الدور | مسار الكود | لوحة التحكم |
+|---|---|---|---|
+| **NVIDIA API** (LLM مجاني) | كل نداءات الذكاء (تحسين، بناء، مقابلة، اقتراح، خطاب) | `app/api/*/route.ts` عبر `streamNvidia`؛ المرجع الكامل `app/api/optimize/route.ts` | https://build.nvidia.com (integrate.api.nvidia.com) |
+| **Anthropic** (بديل) | بديل الـLLM لو `AI_PROVIDER=anthropic` | `app/api/optimize/route.ts` (`callAnthropic`) | https://console.anthropic.com |
+| **Paylink** | الدفع (فواتير + تحقق) | `app/api/pay/route.ts`, `app/api/pay/verify/route.ts`, `app/components/CheckoutButton.tsx` | https://my.paylink.sa |
+| **Resend** | إرسال الإيميلات (روابط سحرية + إيصالات) | `app/lib/email.ts`, `app/api/auth/request/route.ts`, `app/api/email-results/route.ts` | https://resend.com/emails |
+| **Vercel Edge Config** | مخزن الحقوق/الوصول المدفوع + السير المنشورة + السير السحابية | `app/lib/entitlements.ts`, `app/lib/publicresume.ts`, `app/lib/cvstore.ts` | https://vercel.com/dashboard (Storage → Edge Config) |
+| **Upstash Redis** | مخزن احتياطي (fallback) لنفس ما فوق | نفس ملفات lib أعلاه | https://console.upstash.com |
+| **Google Gemini TTS** | تحويل النص لصوت (المقابلة الصوتية) | `app/api/tts/route.ts` | https://aistudio.google.com |
+| **ElevenLabs / Azure Speech** | احتياطي TTS | `app/api/tts/route.ts` | https://elevenlabs.io · https://portal.azure.com |
+| **Vercel** | الاستضافة والنشر والدومين والـEdge Config | كل المشروع | https://vercel.com/dashboard |
+| **Vercel Analytics** | تحليلات الزوار | `app/layout.tsx` (`<Analytics/>`) | Vercel → Analytics |
+| **Google Ads / Meta Pixel** | تتبّع الإعلانات (اختياري، dormant) | `app/pay/callback/page.tsx`, `app/layout.tsx` | https://ads.google.com · https://business.facebook.com |
+
+> **لا يوجد Sentry أو أي error-tracking حالياً** — يُنصح المطوّر الجديد يضيف واحد.
+
+---
+
+## 4) قاعدة البيانات / التخزين
+
+**لا يوجد SQL/Prisma/Mongo.** التخزين كله key-value (Vercel Edge Config أساسي، Upstash Redis احتياطي).
+كل "الجداول" هي مفاتيح بأنماط ثابتة:
+
+| المفتاح (النمط) | القيمة | يُكتب من | الكود |
+|---|---|---|---|
+| `ent_<base64url(email)>` | epoch ms ينتهي عنده الوصول المدفوع (unlimited) | عند شراء مؤكد | `app/lib/entitlements.ts` |
+| `pub_<slug>` | JSON: `{ name, role, text, created }` — سيرة منشورة عامة | عند النشر من الباني | `app/lib/publicresume.ts` (يخدم `/r/[slug]`) |
+| `res_<base64url(email)>` | JSON array: سير المستخدم المحفوظة سحابياً | عند الحفظ لحساب مسجّل | `app/lib/cvstore.ts` (يخدم `/api/resumes`) |
+
+- **القراءة:** `https://edge-config.vercel.com/<EDGE_CONFIG_ID>/item/<key>?token=<READ_TOKEN>`
+- **الكتابة:** `https://api.vercel.com/v1/edge-config/<EDGE_CONFIG_ID>/items` مع `VERCEL_API_TOKEN` (Bearer).
+- **الوصول للوحة:** Vercel Dashboard → Storage → Edge Config → (المخزن) → Items (تشوف/تعدّل يدوياً).
+- **بيانات على الجهاز فقط (مو في السحابة):** سجل الفحوصات، مسودّات الباني، تتبّع الوظائف — كلها `localStorage` عبر `app/lib/localdata.ts`. لا تُرفع لأي سيرفر.
+
+**"المخطط" الكامل موجود كتعليقات موثّقة في رؤوس هذي الملفات** — افتح `app/lib/entitlements.ts`, `publicresume.ts`, `cvstore.ts`, `session.ts`.
+
+---
+
+## 5) التشغيل المحلي — خطوة بخطوة
+
+```bash
+# 1) استنسخ وادخل مجلد المشروع (المشروع في مجلد فرعي!)
+git clone https://github.com/tamaraabdulaziz4-eng/meena-scheduling.git
+cd meena-scheduling/resume-ai
+git checkout claude/crawl4ai-install-o0j8wf   # أحدث فرع
+
+# 2) نصّب الحزم
+npm install
+
+# 3) اسحب متغيرات البيئة الحقيقية من Vercel (يتطلب صلاحية على المشروع)
+npm i -g vercel        # أو npx vercel
+vercel login
+vercel link            # اختر مشروع resume-ai
+vercel env pull .env.local --environment=production
+
+# 4) شغّل التطوير
+npm run dev            # http://localhost:3000
+
+# أوامر ثانية:
+npm run build          # بناء إنتاجي (Turbopack)
+npm run start          # تشغيل نسخة مبنية
+npm run lint           # فحص ESLint
+```
+
+### أجزاء ما تشتغل محلياً (ووش السبب)
+
+- **بدون `.env.local`:** كل نداءات الذكاء (`/api/interview`, `/api/build-cv`, `/api/optimize`) ترجع 502/503 لأن `NVIDIA_API_KEY` مفقود. لازم `vercel env pull` أولاً.
+- **الدفع محلياً:** يشتغل مقابل Paylink الحقيقي/التجريبي حسب `PAYLINK_BASE_URL`، لكن رجعة الـcallback تروح لـ`NEXT_PUBLIC_APP_URL` (الإنتاج) — للاختبار المحلي بدّلها لـ`http://localhost:3000` مؤقتاً.
+- **التخزين محلياً:** يحتاج توكنات Edge Config؛ بدونها الحقوق/النشر ما تُحفظ (يرجع "no-access" بلطف بدل ما ينكسر).
+- **الصوت TTS:** يحتاج `GEMINI_TTS_KEY`؛ بدونه المقابلة الصوتية معطّلة (النص يشتغل عادي).
+
+---
+
+## 6) النشر (Vercel) وربط الدومين
+
+- **المشروع:** Vercel project `resume-ai` (Root Directory = `resume-ai/`).
+- **الإعدادات (من `vercel.json`):**
+  - Framework: **nextjs**
+  - Build command: **`npm run build`**
+  - Output: `.next`
+  - Region: **`iad1`**
+  - Functions بمهلة ممتدة: `app/api/optimize/route.ts` و `app/api/cover-letter/route.ts` → `maxDuration: 300`.
+  - (بعض المسارات الأخرى تعرّف `maxDuration` داخل الملف نفسه، مثل build-cv=300، extract=30.)
+- **النشر:** أي push على الفرع المنشور، أو يدوياً:
+  ```bash
+  cd resume-ai
+  vercel deploy --prod
+  ```
+- **قائمة env vars المسجّلة في Vercel:** كلها في القسم 2 أعلاه — شوفها في Settings → Environment Variables، أو `vercel env ls`.
+- **الدومين cv.rabit.sa:**
+  - مربوط في Vercel → Project `resume-ai` → Settings → **Domains** → `cv.rabit.sa`.
+  - الدومين `rabit.sa` مُدار عبر مزوّد DNS (تحقق من السجل: عادة `CNAME cv → cname.vercel-dns.com` أو A record لـVercel).
+  - `NEXT_PUBLIC_APP_URL=https://cv.rabit.sa` لازم يطابق الدومين المُنتَج.
+
+---
+
+## 7) خريطة معمارية سريعة (للمطوّر الجديد)
+
+- `app/page.tsx` + `app/ar/page.tsx` → اللاندينق = **"المستشار"** (`app/components/AdvisorLanding.tsx`) — مقابلة محادثة مدفوعة بالعقل.
+- **رابط (الـOrb الواحد):** `app/components/orb/OrbProvider.tsx` مركّب في `app/layout.tsx` — orb واحد يعيش عبر كل المسارات؛ كل صفحة تصف مشهده بـ`useOrbScene`. الـCSS في `app/globals.css` (`.ai-orb`).
+- **العقل:** `app/api/interview/route.ts` — actions: `turn` (العقل الكامل)، `rephrase`، `gaps`. قانون الصدق (لا اختلاق).
+- **القوالب:** `app/components/ResumeTemplate.tsx` + `app/lib/templateCatalog.ts` (10 قوالب، single-column ATS، كشف الاتجاه تلقائياً).
+- **الدفع:** `app/components/CheckoutButton.tsx` → `app/api/pay` → `app/pay/callback/page.tsx` → `app/api/pay/verify`.
+- **المصادقة:** روابط سحرية stateless — `app/api/auth/{request,verify,me,logout}`, `app/lib/session.ts`.
+
+---
+
+## 8) قضايا معروفة يبدأ منها المطوّر الجديد
+
+- ⚠️ **الميكروفون معطّل بالهيدر:** `next.config.ts` فيه `Permissions-Policy: microphone=()` — هذا **يمنع** ميزة الإدخال الصوتي (المقابلة الصوتية / زر المايك). لو تبي الصوت، عدّلها لـ`microphone=(self)`.
+- 🔑 **تدوير المفاتيح:** بعض المفاتيح انكشفت أثناء التطوير — يُنصح **تجديد** `NVIDIA_API_KEY`, `PAYLINK_SECRET_KEY`, `GEMINI_TTS_KEY`, `RESEND_API_KEY`, `ACCESS_SECRET` قبل التسليم النهائي (المهمة #2 في قائمة العمل).
+- 🌐 **مزوّد NVIDIA المجاني متذبذب** (~أحياناً 502) — فيه retry صامت، لكن للإنتاج الجاد يُنصح مزوّد مدفوع مستقر أو `AI_PROVIDER=anthropic`.
+- 📊 **لا error-tracking** (Sentry مثلاً) — يُنصح إضافته.
+
+---
+
+## تسليم الأسرار بأمان (اقرأه)
+
+**لا تنسخ القيم السرية في هذا الملف ولا في أي شات/إيميل.** الطرق الآمنة:
+
+1. **الأفضل — أضف المطوّر Collaborator على Vercel:**
+   Vercel → Project `resume-ai` → Settings → Members → Invite. بعدها هو يسوي `vercel env pull` ويسحب كل القيم بنفسه. **صفر نسخ يدوي.**
+2. **أو قناة مشفّرة لمرة واحدة:** شارك المفاتيح عبر 1Password / Bitwarden Send / رسالة تنتهي بالحذف. لا Slack/إيميل عادي.
+3. **بعد التسليم:** لو انتهت مهمة المطوّر، احذفه من Vercel/GitHub وجدّد المفاتيح الحسّاسة.
+
+> السبب: المفتاح السري لـPaylink = وصول مالي مباشر، و`ACCESS_SECRET` = انتحال أي مستخدم. تسريبها في ملف يبقى في السجلات والنسخ الاحتياطية حتى بعد حذف الملف.

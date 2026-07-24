@@ -1,1 +1,74 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVJlZiwgdXNlU3RhdGUgfSBmcm9tICJyZWFjdCI7CmltcG9ydCBBaU9yYiBmcm9tICIuLi9BaU9yYiI7CgovKioKICogPFNjb3JlT3JiPiDigJQgdGhlIGNvdW50ZXIgYW5kIHRoZSBPcmIgYmVjb21lIG9uZSB0aGluZy4gQSBsaXZpbmcgb3JiIHNpdHMgYXQKICogdGhlIGNlbnRlciB3aGlsZSBhIGNvbG9yZWQgYXJjIHN3ZWVwcyBmcm9tIDAgdG8gdGhlIHJlYWwgc2NvcmU7IHRoZSBudW1iZXIKICogY291bnRzIHVwIGluIHN0ZXAuIEJhbmQgY29sb3I6IHJlZCA8IDU1LCBhbWJlciA1NeKAkzc0LCBncmVlbiDiiaUgNzUuIFVzZWQgb24KICogdGhlIHJlc3VsdCBzY3JlZW4gYW5kIChtaW5pKSBvbiBhY2NvdW50IHNjYW4gY2FyZHMsIHNvICJ5b3VyIHNjb3JlIiBhbHdheXMKICogbG9va3MgdGhlIHNhbWUgYWNyb3NzIHRoZSB3aG9sZSBzaXRlLgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gU2NvcmVPcmIoewogIHZhbHVlLCBzaXplID0gMTgwLCBsYWJlbCwgc3ViLCBhbmltYXRlID0gdHJ1ZSwgY29sb3I6IGNvbG9yT3ZlcnJpZGUsIGxpZ2h0ID0gZmFsc2UsCn06IHsgdmFsdWU6IG51bWJlcjsgc2l6ZT86IG51bWJlcjsgbGFiZWw/OiBzdHJpbmc7IHN1Yj86IHN0cmluZzsgYW5pbWF0ZT86IGJvb2xlYW47IGNvbG9yPzogc3RyaW5nOyBsaWdodD86IGJvb2xlYW4gfSkgewogIGNvbnN0IHRhcmdldCA9IE1hdGgubWF4KDAsIE1hdGgubWluKDEwMCwgTWF0aC5yb3VuZCh2YWx1ZSkpKTsKICBjb25zdCBbZGlzcGxheSwgc2V0RGlzcGxheV0gPSB1c2VTdGF0ZShhbmltYXRlID8gMCA6IHRhcmdldCk7CiAgY29uc3QgcmFmUmVmID0gdXNlUmVmPG51bWJlciB8IG51bGw+KG51bGwpOwoKICB1c2VFZmZlY3QoKCkgPT4gewogICAgaWYgKCFhbmltYXRlKSB7IHNldERpc3BsYXkodGFyZ2V0KTsgcmV0dXJuOyB9CiAgICBjb25zdCByZWR1Y2UgPSB0eXBlb2Ygd2luZG93ICE9PSAidW5kZWZpbmVkIiAmJiB3aW5kb3cubWF0Y2hNZWRpYT8uKCIocHJlZmVycy1yZWR1Y2VkLW1vdGlvbjogcmVkdWNlKSIpLm1hdGNoZXM7CiAgICBpZiAocmVkdWNlKSB7IHNldERpc3BsYXkodGFyZ2V0KTsgcmV0dXJuOyB9CiAgICBjb25zdCBkdXIgPSAxMzAwOwogICAgbGV0IHN0YXJ0OiBudW1iZXIgfCBudWxsID0gbnVsbDsKICAgIGNvbnN0IHRpY2sgPSAodHM6IG51bWJlcikgPT4gewogICAgICBpZiAoc3RhcnQgPT09IG51bGwpIHN0YXJ0ID0gdHM7CiAgICAgIGNvbnN0IHAgPSBNYXRoLm1pbigxLCAodHMgLSBzdGFydCkgLyBkdXIpOwogICAgICBjb25zdCBlYXNlZCA9IDEgLSBNYXRoLnBvdygxIC0gcCwgMyk7IC8vIGVhc2Utb3V0IGN1YmljCiAgICAgIHNldERpc3BsYXkoTWF0aC5yb3VuZCh0YXJnZXQgKiBlYXNlZCkpOwogICAgICBpZiAocCA8IDEpIHJhZlJlZi5jdXJyZW50ID0gcmVxdWVzdEFuaW1hdGlvbkZyYW1lKHRpY2spOwogICAgfTsKICAgIHJhZlJlZi5jdXJyZW50ID0gcmVxdWVzdEFuaW1hdGlvbkZyYW1lKHRpY2spOwogICAgcmV0dXJuICgpID0+IHsgaWYgKHJhZlJlZi5jdXJyZW50KSBjYW5jZWxBbmltYXRpb25GcmFtZShyYWZSZWYuY3VycmVudCk7IH07CiAgfSwgW3RhcmdldCwgYW5pbWF0ZV0pOwoKICBjb25zdCBjb2xvciA9IGNvbG9yT3ZlcnJpZGUgPz8gKGRpc3BsYXkgPCA1NSA/ICIjRTU0ODREIiA6IGRpc3BsYXkgPCA3NSA/ICIjZjU5ZTBiIiA6ICIjMjJDNTVFIik7CiAgY29uc3Qgc3Ryb2tlID0gTWF0aC5tYXgoOCwgTWF0aC5yb3VuZChzaXplICogMC4wNTUpKTsKICBjb25zdCByID0gc2l6ZSAvIDIgLSBzdHJva2U7CiAgY29uc3QgYyA9IDIgKiBNYXRoLlBJICogcjsKICBjb25zdCBkYXNoID0gKGRpc3BsYXkgLyAxMDApICogYzsKICBjb25zdCBjeCA9IHNpemUgLyAyOwoKICByZXR1cm4gKAogICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC1jb2wgaXRlbXMtY2VudGVyIj4KICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIiBzdHlsZT17eyB3aWR0aDogc2l6ZSwgaGVpZ2h0OiBzaXplIH19PgogICAgICAgIHsvKiBnbG93aW5nIG9yYiBjb3JlIGJlaGluZCB0aGUgYXJjIOKAlCB0aW50ZWQgd2l0aCB0aGUgYmFuZCBjb2xvciAqL30KICAgICAgICB7Lyogd3JhcHBlciBjYXJyaWVzIHRoZSBhYnNvbHV0ZSBjZW50ZXJpbmcg4oCUIGAuYWktb3JiYCBpcyBwb3NpdGlvbjpyZWxhdGl2ZQogICAgICAgICAgICBpbiBDU1MgYW5kIHdvdWxkIG90aGVyd2lzZSBvdmVycmlkZSBhbiBgYWJzb2x1dGVgIGNsYXNzIG9uIHRoZSBvcmIsCiAgICAgICAgICAgIGRyb3BwaW5nIGl0IGludG8gZmxvdyBhbmQgc3RhY2tpbmcgaXQgYWJvdmUgdGhlIHJpbmcuICovfQogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhYnNvbHV0ZSBpbnNldC0wIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIj4KICAgICAgICAgIDxBaU9yYgogICAgICAgICAgICBzaXplPXtzaXplICogMC42Mn0KICAgICAgICAgICAgbGlnaHQ9e2xpZ2h0fQogICAgICAgICAgICBzdHlsZT17eyBbIi0tbGlnaHQiIGFzIHN0cmluZ106IGNvbG9yLCBbIi0tYmxvb20tbyIgYXMgc3RyaW5nXTogIjAuNjUiIH19CiAgICAgICAgICAvPgogICAgICAgIDwvZGl2PgogICAgICAgIDxzdmcgd2lkdGg9e3NpemV9IGhlaWdodD17c2l6ZX0gdmlld0JveD17YDAgMCAke3NpemV9ICR7c2l6ZX1gfSBjbGFzc05hbWU9InJlbGF0aXZlIj4KICAgICAgICAgIDxjaXJjbGUgY3g9e2N4fSBjeT17Y3h9IHI9e3J9IGZpbGw9Im5vbmUiIHN0cm9rZT17bGlnaHQgPyAicmdiYSgxNSwyMyw0MiwwLjEwKSIgOiAicmdiYSgyNTUsMjU1LDI1NSwwLjEpIn0gc3Ryb2tlV2lkdGg9e3N0cm9rZX0gLz4KICAgICAgICAgIDxjaXJjbGUKICAgICAgICAgICAgY3g9e2N4fSBjeT17Y3h9IHI9e3J9IGZpbGw9Im5vbmUiIHN0cm9rZT17Y29sb3J9IHN0cm9rZVdpZHRoPXtzdHJva2V9IHN0cm9rZUxpbmVjYXA9InJvdW5kIgogICAgICAgICAgICBzdHJva2VEYXNoYXJyYXk9e2Ake2Rhc2h9ICR7Y31gfSB0cmFuc2Zvcm09e2Byb3RhdGUoLTkwICR7Y3h9ICR7Y3h9KWB9CiAgICAgICAgICAgIHN0eWxlPXt7IGZpbHRlcjogYGRyb3Atc2hhZG93KDAgMCA2cHggJHtjb2xvcn0pYCB9fQogICAgICAgICAgLz4KICAgICAgICA8L3N2Zz4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iYWJzb2x1dGUgaW5zZXQtMCBmbGV4IGZsZXgtY29sIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciIgc3R5bGU9e3sgdGV4dFNoYWRvdzogIjAgMnB4IDEycHggcmdiYSgwLDAsMCwwLjUpIiB9fT4KICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iZm9udC1tb25vIGZvbnQtYmxhY2sgdGFidWxhci1udW1zIiBzdHlsZT17eyBjb2xvcjogIiNmZmYiLCBmb250U2l6ZTogc2l6ZSAqIDAuMjgsIGxpbmVIZWlnaHQ6IDEgfX0+e2Rpc3BsYXl9PC9zcGFuPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJmb250LW1vbm8iIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNTUsMjU1LDI1NSwwLjYpIiwgZm9udFNpemU6IHNpemUgKiAwLjA3NSB9fT4vIDEwMDwvc3Bhbj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICAgIHtsYWJlbCAmJiA8ZGl2IGNsYXNzTmFtZT0ibXQtMiBmb250LW1vbm8gdGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTVlbV0iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT57bGFiZWx9PC9kaXY+fQogICAgICB7c3ViICYmIDxkaXYgY2xhc3NOYW1lPSJtdC0xIHRleHQteHMiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tZmFpbnQpIiB9fT57c3VifTwvZGl2Pn0KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+import { useEffect, useRef, useState } from "react";
+import AiOrb from "../AiOrb";
+
+/**
+ * <ScoreOrb> — the counter and the Orb become one thing. A living orb sits at
+ * the center while a colored arc sweeps from 0 to the real score; the number
+ * counts up in step. Band color: red < 55, amber 55–74, green ≥ 75. Used on
+ * the result screen and (mini) on account scan cards, so "your score" always
+ * looks the same across the whole site.
+ */
+export default function ScoreOrb({
+  value, size = 180, label, sub, animate = true, color: colorOverride, light = false,
+}: { value: number; size?: number; label?: string; sub?: string; animate?: boolean; color?: string; light?: boolean }) {
+  const target = Math.max(0, Math.min(100, Math.round(value)));
+  const [display, setDisplay] = useState(animate ? 0 : target);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!animate) { setDisplay(target); return; }
+    const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { setDisplay(target); return; }
+    const dur = 1300;
+    let start: number | null = null;
+    const tick = (ts: number) => {
+      if (start === null) start = ts;
+      const p = Math.min(1, (ts - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      setDisplay(Math.round(target * eased));
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [target, animate]);
+
+  const color = colorOverride ?? (display < 55 ? "#E5484D" : display < 75 ? "#f59e0b" : "#22C55E");
+  const stroke = Math.max(8, Math.round(size * 0.055));
+  const r = size / 2 - stroke;
+  const c = 2 * Math.PI * r;
+  const dash = (display / 100) * c;
+  const cx = size / 2;
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative" style={{ width: size, height: size }}>
+        {/* glowing orb core behind the arc — tinted with the band color */}
+        {/* wrapper carries the absolute centering — `.ai-orb` is position:relative
+            in CSS and would otherwise override an `absolute` class on the orb,
+            dropping it into flow and stacking it above the ring. */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <AiOrb
+            size={size * 0.62}
+            light={light}
+            style={{ ["--light" as string]: color, ["--bloom-o" as string]: "0.65" }}
+          />
+        </div>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="relative">
+          <circle cx={cx} cy={cx} r={r} fill="none" stroke={light ? "rgba(15,23,42,0.10)" : "rgba(255,255,255,0.1)"} strokeWidth={stroke} />
+          <circle
+            cx={cx} cy={cx} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round"
+            strokeDasharray={`${dash} ${c}`} transform={`rotate(-90 ${cx} ${cx})`}
+            style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>
+          <span className="font-mono font-black tabular-nums" style={{ color: "#fff", fontSize: size * 0.28, lineHeight: 1 }}>{display}</span>
+          <span className="font-mono" style={{ color: "rgba(255,255,255,0.6)", fontSize: size * 0.075 }}>/ 100</span>
+        </div>
+      </div>
+      {label && <div className="mt-2 font-mono text-xs uppercase tracking-[0.15em]" style={{ color: "var(--faint)" }}>{label}</div>}
+      {sub && <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{sub}</div>}
+    </div>
+  );
+}

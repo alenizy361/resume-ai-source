@@ -1,1 +1,107 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCBDaGVja291dEJ1dHRvbiBmcm9tICIuLi8uLi9jb21wb25lbnRzL0NoZWNrb3V0QnV0dG9uIjsKaW1wb3J0IHsgUExBTlMgfSBmcm9tICIuLi8uLi9saWIvcGxhbnMiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogItin2YTYo9iz2LnYp9ixIOKAlCDYr9mB2LnYqSDZiNin2K3Yr9ip2Iwg2KjYr9mI2YYg2KfYtNiq2LHYp9mDIHwg2LPZitix2KkiLAogIGRlc2NyaXB0aW9uOgogICAgItij2LPYudin2LEg2KjYs9mK2LfYqSDYqNiv2YHYudipINmI2KfYrdiv2Kk6INmj2aUg2LHZitin2YTYp9mLINmE2YjYtdmI2YQg2YPYp9mF2YQg2aLZpCDYs9in2LnYqSDYo9mIINmp2akg2LHZitin2YTYp9mLINmE2YAg2anZoCDZitmI2YXYp9mLLiDZg9mEINin2YTZhdiy2KfZitinINmB2Yog2KfZhNio2KfZgtiq2YrZhiDigJQg2KfZhNmB2LHZgiDYp9mE2YjYrdmK2K8g2YXYr9ipINin2YTZiNi12YjZhC4g2KjYr9mI2YYg2KfYtNiq2LHYp9mD2Iwg2YjYttmF2KfZhiDYp9iz2KrYsdiv2KfYryDZpyDYo9mK2KfZhSDYudmE2Ykg2KfZhNit2LLZhdipINin2YTZg9in2YXZhNipLiIsCiAgYWx0ZXJuYXRlczogewogICAgY2Fub25pY2FsOiBgJHtCQVNFfS9hci9wcmljaW5nYCwKICAgIGxhbmd1YWdlczogeyBlbjogYCR7QkFTRX0vcHJpY2luZ2AsIGFyOiBgJHtCQVNFfS9hci9wcmljaW5nYCwgIngtZGVmYXVsdCI6IGAke0JBU0V9L3ByaWNpbmdgIH0sCiAgfSwKICBvcGVuR3JhcGg6IHsgdGl0bGU6ICLYo9iz2LnYp9ixINiz2YrYsdipIOKAlCDYp9iv2YHYuSDZhdix2KnYjCDYqNiv2YjZhiDYp9i02KrYsdin2YMiLCBkZXNjcmlwdGlvbjogItmj2aUg2LHZitin2YTYp9mLICjZotmkINiz2KfYudipKSDYo9mIINmp2akg2LHZitin2YTYp9mLICjZqdmgINmK2YjZhdin2YspLiDZg9mEINin2YTZhdiy2KfZitinINmB2Yog2KfZhNio2KfZgtiq2YrZhi4iLCB1cmw6IGAke0JBU0V9L2FyL3ByaWNpbmdgIH0sCn07CgpmdW5jdGlvbiBQbGFuQ2FyZCh7IGlkLCBoaWdobGlnaHQgfTogeyBpZDogInNpbmdsZSIgfCAiY29tcGxldGUiOyBoaWdobGlnaHQ/OiBib29sZWFuIH0pIHsKICBjb25zdCBwID0gUExBTlNbaWRdOwogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0iY2FyZCBwLTgiIHN0eWxlPXtoaWdobGlnaHQgPyB7IGJvcmRlckNvbG9yOiAicmdiYSgxMzksOTIsMjQ2LDAuNSkiLCBiYWNrZ3JvdW5kOiAicmdiYSgxMzksOTIsMjQ2LDAuMDYpIiwgcG9zaXRpb246ICJyZWxhdGl2ZSIsIGJveFNoYWRvdzogIjAgMzBweCA4MHB4IC0zMHB4IHJnYmEoMTM5LDkyLDI0NiwwLjU1KSIgfSA6IHVuZGVmaW5lZH0+CiAgICAgIHtoaWdobGlnaHQgJiYgKAogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhYnNvbHV0ZSByaWdodC01IHRvcC01IHJvdW5kZWQtZnVsbCBweC0yLjUgcHktMSBmb250LW1vbm8gdGV4dC1bMTBweF0gZm9udC1ib2xkIHRyYWNraW5nLXdpZGVyIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYWNjZW50KSIsIGNvbG9yOiAiI2ZmZmZmZiIgfX0+2KfZhNij2YHYttmEINmC2YrZhdipPC9kaXY+CiAgICAgICl9CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJmb250LW1vbm8gdGV4dC14cyB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXN0IiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+e3AubmFtZUFyfSDCtyDYr9mB2LnYqSDZiNin2K3Yr9ipPC9kaXY+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC00IGZsZXggaXRlbXMtYmFzZWxpbmUgZ2FwLTEiPgogICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC01eGwgZm9udC1leHRyYWJvbGQiPntwLnByaWNlU2FyfSDYsdmK2KfZhNin2Ys8L3NwYW4+CiAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+2YXYsdipINmI2KfYrdiv2KkgKHtwLnByaWNlVXNkfSk8L3NwYW4+CiAgICAgIDwvZGl2PgogICAgICA8cCBjbGFzc05hbWU9Im10LTIgdGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWFjY2VudCkiIH19PntwLmFjY2Vzc0xhYmVsQXJ9PC9wPgogICAgICA8cCBjbGFzc05hbWU9Im10LTEgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PntwLnRhZ2xpbmVBcn08L3A+CiAgICAgIDx1bCBjbGFzc05hbWU9Im10LTYgc3BhY2UteS0zIHRleHQtc20iPgogICAgICAgIHtwLmZlYXR1cmVzQXIubWFwKChmKSA9PiAoCiAgICAgICAgICA8bGkga2V5PXtmfSBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0zIiBzdHlsZT17eyBjb2xvcjogInJnYmEoMjQ0LDI0NSwyNDMsMC44NSkiIH19PgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtYWNjZW50Ij7inJM8L3NwYW4+IHtmfQogICAgICAgICAgPC9saT4KICAgICAgICApKX0KICAgICAgICB7aWQgPT09ICJjb21wbGV0ZSIgJiYgKAogICAgICAgICAgPGxpIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTMiIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNDQsMjQ1LDI0MywwLjg1KSIgfX0+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1hY2NlbnQiPuKckzwvc3Bhbj4g2LbZhdin2YYg2KfYs9iq2LHYr9in2K8g2acg2KPZitin2YUKICAgICAgICAgIDwvbGk+CiAgICAgICAgKX0KICAgICAgPC91bD4KICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTgiPgogICAgICAgIDxDaGVja291dEJ1dHRvbiBwbGFuPXtpZH0gbGFiZWw9e2lkID09PSAic2luZ2xlIiA/ICLZiNi12YjZhCDZotmkINiz2KfYudipIiA6ICLYp9mE2K3YstmF2Kkg2KfZhNmD2KfZhdmE2Kkg4oaQIn0gdmFyaWFudD17aGlnaGxpZ2h0ID8gImFjY2VudCIgOiAiZ2hvc3QifSAvPgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogICk7Cn0KCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEFyYWJpY1ByaWNpbmdQYWdlKCkgewogIHJldHVybiAoCiAgICA8bWFpbiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiIgZGlyPSJydGwiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctNnhsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hciIgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMi41Ij4KICAgICAgICAgICAgPE9yYkJyYW5kIHNpemU9ezI2fSAvPgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtWzE1cHhdIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+2LPZitix2Kk8L3NwYW4+CiAgICAgICAgICA8L0xpbms+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTQiPgogICAgICAgICAgICA8TGluayBocmVmPSIvcHJpY2luZyIgY2xhc3NOYW1lPSJ0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT5FTjwvTGluaz4KICAgICAgICAgICAgPExpbmsgaHJlZj0iL2FyL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPtmB2K3YtSDZhdis2KfZhtmKIOKGkDwvTGluaz4KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0icmVsYXRpdmUgbXgtYXV0byBtYXgtdy0zeGwgcHgtNiBweS0xNiI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Imhlcm8tYW1iaWVudCIgYXJpYS1oaWRkZW4gLz4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUgbWItMTIgdGV4dC1jZW50ZXIiPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNoaXAgbWItNCI+2KfZhNij2LPYudin2LE8L2Rpdj4KICAgICAgICAgIDxoMSBjbGFzc05hbWU9InRleHQtNHhsIGZvbnQtZXh0cmFib2xkIHRyYWNraW5nLXRpZ2h0Ij7Yp9iv2YHYuSDZhdix2Kkg2YjYp9it2K/YqS4g2KjYr9mI2YYg2KfYtNiq2LHYp9mDLjwvaDE+CiAgICAgICAgICA8cCBjbGFzc05hbWU9Im14LWF1dG8gbXQtMyBtYXgtdy14bCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICDYp9mE2KjYp9mC2KrYp9mGINiq2YHYqtit2KfZhiA8c3Ryb25nPtmD2YQg2KfZhNmF2LLYp9mK2Kc8L3N0cm9uZz4g4oCUINil2LnYp9iv2Kkg2YPYqtin2KjYqSDYp9mE2LPZitix2Kkg2YPYp9mF2YTYqdiMINiu2LfYp9ioINin2YTYqti52LHZitmB2Iwg2YTZitmG2YPYr9il2YbYjCDYqtit2LbZitixINin2YTZhdmC2KfYqNmE2KfYqtiMINmI2KrZhtiy2YrZhCDYqNiv2YjZhiDYudmE2KfZhdipINmF2KfYptmK2KkuINin2YTZgdix2YIg2KfZhNmI2K3ZitivINmH2Ygg2YXYr9ipINin2YTZiNi12YjZhC4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtNSBtZDpncmlkLWNvbHMtMiI+CiAgICAgICAgICA8UGxhbkNhcmQgaWQ9InNpbmdsZSIgLz4KICAgICAgICAgIDxQbGFuQ2FyZCBpZD0iY29tcGxldGUiIGhpZ2hsaWdodCAvPgogICAgICAgIDwvZGl2PgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtOCB0ZXh0LWNlbnRlciBmb250LW1vbm8gdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PgogICAgICAgICAg2K/Zgdi5INii2YXZhiDYudio2LEgUGF5bGluayDCtyDZiNi12YjZhCDZgdmI2LHZiiDCtyDYttmF2KfZhiDYp9iz2KrYsdiv2KfYryDZpyDYo9mK2KfZhSDYudmE2Ykg2KfZhNit2LLZhdipINin2YTZg9in2YXZhNipIMK3INio2K/ZiNmGINin2LTYqtix2KfZgyDYo9io2K/Yp9mLCiAgICAgICAgPC9wPgoKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMTYiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNiB0ZXh0LTJ4bCBmb250LWJvbGQiPtij2LPYptmE2Kkg2LTYp9im2LnYqTwvaDI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ic3BhY2UteS00Ij4KICAgICAgICAgICAge1sKICAgICAgICAgICAgICBbItmH2YQg2KfZhNmB2K3YtSDZhdis2KfZhtmK2J8iLCAi2YbYudmFIOKAlCDYr9ix2KzYqSDYp9mE2KrZiNin2YHZgiDZhdi5IEFUUyDZiNin2YTZg9mE2YXYp9iqINin2YTZhtin2YLYtdipINmI2YHYrNmI2Kkg2KfZhNmF2YfYp9ix2KfYqiDZiNmF2LnYp9mK2YbYqSDYp9mE2KrYrdiz2YrZhtin2Kog2YPZhNmH2Kcg2YXYrNin2YbZitipLiDYpdi52KfYr9ipINin2YTZg9iq2KfYqNipINin2YTZg9in2YXZhNipINmI2KfZhNiq2YbYstmK2YQg2KrZhtmB2KrYrSDYqNiv2YHYudipINmI2KfYrdiv2KkuIl0sCiAgICAgICAgICAgICAgWyLZh9mEINmH2Ygg2KfYtNiq2LHYp9mD2J8iLCAi2YTYpy4g2KfYr9mB2Lkg2YXYsdipINmI2KfYrdiv2KkuINmj2aUg2LHZitin2YTYp9mLINiq2YHYqtitINmI2LXZiNmE2KfZiyDZg9in2YXZhNin2Ysg2aLZpCDYs9in2LnYqdiMINmI2anZqSDYsdmK2KfZhNin2Ysg2KrZgdiq2K0g2anZoCDZitmI2YXYp9mLLiDZhNinINi02YrYoSDZitiq2YPYsdixLiJdLAogICAgICAgICAgICAgIFsi2YXYpyDYp9mE2YHYsdmCINio2YrZhiDYp9mE2KjYp9mC2KrZitmG2J8iLCAi2YTYpyDZgdix2YIg2YHZiiDYp9mE2YXYstin2YrYpyDigJQg2YPZhNiq2KfZh9mF2Kcg2KrZgdiq2K0g2YPZhCDYtNmK2KEuINin2YTZgCDZqdmpINix2YrYp9mE2KfZiyDYqtmP2KjZgtmKINmI2LXZiNmE2YMg2YXZgdiq2YjYrdin2Ysg2anZoCDZitmI2YXYp9mL2Iwg2YXYq9in2YTZitipINmE2YXZiNiz2YUg2KrZiNi42YrZgSDZhti02LcuIl0sCiAgICAgICAgICAgICAgWyLZh9mEINmK2YXZg9mG2YbZiiDYp9mE2KfYs9iq2LHYr9in2K/YnyIsICLZhti52YUg4oCUINin2YTYrdiy2YXYqSDYp9mE2YPYp9mF2YTYqSAo2anZoCDZitmI2YXYp9mLKSDYudmE2YrZh9inINi22YXYp9mGINin2LPYqtix2K/Yp9ivINmnINij2YrYp9mFLiJdLAogICAgICAgICAgICBdLm1hcCgoW3EsIGFdKSA9PiAoCiAgICAgICAgICAgICAgPGRpdiBrZXk9e3F9IGNsYXNzTmFtZT0iY2FyZCBwLTUiPgogICAgICAgICAgICAgICAgPGgzIGNsYXNzTmFtZT0iZm9udC1ib2xkIj57cX08L2gzPgogICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC0xIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57YX08L3A+CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICkpfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvc2VjdGlvbj4KICAgIDwvbWFpbj4KICApOwp9Cg=="}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import CheckoutButton from "../../components/CheckoutButton";
+import { PLANS } from "../../lib/plans";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "الأسعار — دفعة واحدة، بدون اشتراك | سيرة",
+  description:
+    "أسعار بسيطة بدفعة واحدة: ٣٥ ريالاً لوصول كامل ٢٤ ساعة أو ٩٩ ريالاً لـ ٩٠ يوماً. كل المزايا في الباقتين — الفرق الوحيد مدة الوصول. بدون اشتراك، وضمان استرداد ٧ أيام على الحزمة الكاملة.",
+  alternates: {
+    canonical: `${BASE}/ar/pricing`,
+    languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },
+  },
+  openGraph: { title: "أسعار سيرة — ادفع مرة، بدون اشتراك", description: "٣٥ ريالاً (٢٤ ساعة) أو ٩٩ ريالاً (٩٠ يوماً). كل المزايا في الباقتين.", url: `${BASE}/ar/pricing` },
+};
+
+function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: boolean }) {
+  const p = PLANS[id];
+  return (
+    <div className="card p-8" style={highlight ? { borderColor: "rgba(139,92,246,0.5)", background: "rgba(139,92,246,0.06)", position: "relative", boxShadow: "0 30px 80px -30px rgba(139,92,246,0.55)" } : undefined}>
+      {highlight && (
+        <div className="absolute right-5 top-5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent)", color: "#ffffff" }}>الأفضل قيمة</div>
+      )}
+      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.nameAr} · دفعة واحدة</div>
+      <div className="mt-4 flex items-baseline gap-1">
+        <span className="text-5xl font-extrabold">{p.priceSar} ريالاً</span>
+        <span className="text-sm" style={{ color: "var(--muted)" }}>مرة واحدة ({p.priceUsd})</span>
+      </div>
+      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>{p.accessLabelAr}</p>
+      <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{p.taglineAr}</p>
+      <ul className="mt-6 space-y-3 text-sm">
+        {p.featuresAr.map((f) => (
+          <li key={f} className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+            <span className="text-accent">✓</span> {f}
+          </li>
+        ))}
+        {id === "complete" && (
+          <li className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+            <span className="text-accent">✓</span> ضمان استرداد ٧ أيام
+          </li>
+        )}
+      </ul>
+      <div className="mt-8">
+        <CheckoutButton plan={id} label={id === "single" ? "وصول ٢٤ ساعة" : "الحزمة الكاملة ←"} variant={highlight ? "accent" : "ghost"} />
+      </div>
+    </div>
+  );
+}
+
+export default function ArabicPricingPage() {
+  return (
+    <main className="min-h-screen" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/ar" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/pricing" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>EN</Link>
+            <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">فحص مجاني ←</Link>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative mx-auto max-w-3xl px-6 py-16">
+        <div className="hero-ambient" aria-hidden />
+        <div className="relative mb-12 text-center">
+          <div className="chip mb-4">الأسعار</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">ادفع مرة واحدة. بدون اشتراك.</h1>
+          <p className="mx-auto mt-3 max-w-xl" style={{ color: "var(--muted)" }}>
+            الباقتان تفتحان <strong>كل المزايا</strong> — إعادة كتابة السيرة كاملة، خطاب التعريف، لينكدإن، تحضير المقابلات، وتنزيل بدون علامة مائية. الفرق الوحيد هو مدة الوصول.
+          </p>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <PlanCard id="single" />
+          <PlanCard id="complete" highlight />
+        </div>
+        <p className="mt-8 text-center font-mono text-xs" style={{ color: "var(--faint)" }}>
+          دفع آمن عبر Paylink · وصول فوري · ضمان استرداد ٧ أيام على الحزمة الكاملة · بدون اشتراك أبداً
+        </p>
+
+        <div className="mt-16">
+          <h2 className="mb-6 text-2xl font-bold">أسئلة شائعة</h2>
+          <div className="space-y-4">
+            {[
+              ["هل الفحص مجاني؟", "نعم — درجة التوافق مع ATS والكلمات الناقصة وفجوة المهارات ومعاينة التحسينات كلها مجانية. إعادة الكتابة الكاملة والتنزيل تنفتح بدفعة واحدة."],
+              ["هل هو اشتراك؟", "لا. ادفع مرة واحدة. ٣٥ ريالاً تفتح وصولاً كاملاً ٢٤ ساعة، و٩٩ ريالاً تفتح ٩٠ يوماً. لا شيء يتكرر."],
+              ["ما الفرق بين الباقتين؟", "لا فرق في المزايا — كلتاهما تفتح كل شيء. الـ ٩٩ ريالاً تُبقي وصولك مفتوحاً ٩٠ يوماً، مثالية لموسم توظيف نشط."],
+              ["هل يمكنني الاسترداد؟", "نعم — الحزمة الكاملة (٩٠ يوماً) عليها ضمان استرداد ٧ أيام."],
+            ].map(([q, a]) => (
+              <div key={q} className="card p-5">
+                <h3 className="font-bold">{q}</h3>
+                <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

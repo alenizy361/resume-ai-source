@@ -1,1 +1,24 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwppbXBvcnQgTGluayBmcm9tICJuZXh0L2xpbmsiOwoKLyoqIENvbXBhY3Qgc2Vzc2lvbi1hd2FyZSBuYXYgbGluazogIlNpZ24gaW4iIHdoZW4gbG9nZ2VkIG91dCwgIuKXjyBBY2NvdW50IiB3aGVuIGluLiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBOYXZBY2NvdW50TGluayh7IGFyID0gZmFsc2UgfTogeyBhcj86IGJvb2xlYW4gfSkgewogIGNvbnN0IFttZSwgc2V0TWVdID0gdXNlU3RhdGU8eyBzaWduZWRJbjogYm9vbGVhbiB9IHwgbnVsbD4obnVsbCk7CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBmZXRjaCgiL2FwaS9hdXRoL21lIikudGhlbigocikgPT4gci5qc29uKCkpLnRoZW4oc2V0TWUpLmNhdGNoKCgpID0+IHNldE1lKHsgc2lnbmVkSW46IGZhbHNlIH0pKTsKICB9LCBbXSk7CgogIGlmICghbWUpIHJldHVybiBudWxsOwogIHJldHVybiBtZS5zaWduZWRJbiA/ICgKICAgIDxMaW5rIGhyZWY9Ii9hY2NvdW50IiBjbGFzc05hbWU9ImhpZGRlbiBpdGVtcy1jZW50ZXIgZ2FwLTEuNSB0ZXh0LXNtIHNtOmZsZXgiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tYWNjZW50KSIgfX0+CiAgICAgIDxzcGFuIGNsYXNzTmFtZT0iaW5saW5lLWJsb2NrIGgtMS41IHctMS41IHJvdW5kZWQtZnVsbCIgc3R5bGU9e3sgYmFja2dyb3VuZDogInZhcigtLWFjY2VudCkiIH19IC8+CiAgICAgIHthciA/ICLYrdiz2KfYqNmKIiA6ICJBY2NvdW50In0KICAgIDwvTGluaz4KICApIDogKAogICAgPExpbmsgaHJlZj0iL2xvZ2luIiBjbGFzc05hbWU9ImhpZGRlbiB0ZXh0LXNtIHNtOmJsb2NrIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgIHthciA/ICLYqtiz2KzZitmEINin2YTYr9iu2YjZhCIgOiAiU2lnbiBpbiJ9CiAgICA8L0xpbms+CiAgKTsKfQo="}
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+/** Compact session-aware nav link: "Sign in" when logged out, "● Account" when in. */
+export default function NavAccountLink({ ar = false }: { ar?: boolean }) {
+  const [me, setMe] = useState<{ signedIn: boolean } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me").then((r) => r.json()).then(setMe).catch(() => setMe({ signedIn: false }));
+  }, []);
+
+  if (!me) return null;
+  return me.signedIn ? (
+    <Link href="/account" className="hidden items-center gap-1.5 text-sm sm:flex" style={{ color: "var(--accent)" }}>
+      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "var(--accent)" }} />
+      {ar ? "حسابي" : "Account"}
+    </Link>
+  ) : (
+    <Link href="/login" className="hidden text-sm sm:block" style={{ color: "var(--muted)" }}>
+      {ar ? "تسجيل الدخول" : "Sign in"}
+    </Link>
+  );
+}

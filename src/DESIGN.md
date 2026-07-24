@@ -1,1 +1,76 @@
-{"data":"IyBERVNJR04ubWQg4oCUIEV4ZWN1dGlvbiBibHVlcHJpbnQgKG5vdCBqdXN0IGNvbG9ycykKCiMjIFZpc3VhbCBzeXN0ZW0KLSBEYXJrLW9ubHkgIlNhYVMgTm9pciI6IGJnIGAjMDgwOTBhYCwgc3VyZmFjZSBgIzEwMTMxNmAsIGFjY2VudCBgIzRhZGU4MGAsCiAgZGFuZ2VyIGAjZjg3MTcxYCwgd2FybiBgI2ZiYmYyNGAuIEludGVyIGJvZHksIG1vbm8gZm9yIGRhdGEvY2hpcHMuCi0gTGl2aW5nIGhlcm86IDMgYmx1cnJlZCBvcmJzICgyNuKAkzM0cyBpbmRlcGVuZGVudCBkcmlmdCksIGdyaWQtbGluZXMgbWFzaywgZHVhbAogIGdsb3cgZHJpZnQsIGZpbG0tZ3JhaW4gb3ZlcmxheSAoM+KAkzUlIG9wYWNpdHkpLCBsb29waW5nIFNjYW5EZW1vIChzY2FuIOKGkiA5MiUg4oaSCiAgaG9sZCA1LjJzIOKGkiByZXdpbmQpLiBMaXZlVGlja2VyIHJvdGF0ZXMgY3VyYXRlZCBldmVudHMgZXZlcnkgMy44cy4gQVRTIG1hcnF1ZWUKICAzMnMgbG9vcCwgcGF1c2Ugb24gaG92ZXIuIEFMTCBhbmltYXRpb24gaXMgcHVyZSBDU1MvcmVxdWVzdEFuaW1hdGlvbkZyYW1lIGFuZAogIE1VU1QgYmUgZ2F0ZWQgYmVoaW5kIGBwcmVmZXJzLXJlZHVjZWQtbW90aW9uOiBuby1wcmVmZXJlbmNlYC4KCiMjIFVYIGZsb3dzCgojIyMgU2NhbiBmbG93IChvcHRpbWl6ZSwgRU4vQVIpCnBhc3RlL3VwbG9hZCDihpIgc3VibWl0IOKGkiBzdHJlYW1pbmcgTkRKU09OOiBgdGhpbmtgIChsaXZlIGFuYWx5c2lzIHBhbmVsLCBzaG93cwpwbGFjZWhvbGRlciBpbW1lZGlhdGVseSDigJQgbmV2ZXIgYSBmcm96ZW4gc3Bpbm5lcikg4oaSIGByZXN1bHRgIOKGkiBzY29yZSBjYXJkICsgdGFicy4KLSAqKkZyZWVtaXVtIGdhdGUgKHNlcnZlci1zaWRlIG9ubHkpOioqIGZyZWUgY2FsbGVycyBnZXQgYGxvY2tlZDp0cnVlYCArIGZpcnN0IDYKICBsaW5lcyBvZiB0aGUgcmVzdW1lLiBUaGUgZnVsbCB0ZXh0IE5FVkVSIGxlYXZlcyB0aGUgc2VydmVyIGZvciBmcmVlIHVzZXJzLgotICoqTG9ja2VkIGNhcmQgc3RhdGVzOioqIG5vIGFjY2VzcyDihpIgcHJpY2luZyBDVEE7IGBoYXNBY2Nlc3NgIChmcm9tCiAgL2FwaS9hdXRoL21lKSDihpIgIlBheW1lbnQgY29uZmlybWVkIOKAlCByZXNjYW4gdG8gdW5sb2NrIiBvbmUtY2xpY2sgYHJ1blNjYW4oKWAuCiAgVGhpcyBleGlzdHMgYmVjYXVzZSByZXN1bHRzIHBlcnNpc3QgY2xpZW50LXNpZGUgYW5kIG1heSBwcmVkYXRlIHBheW1lbnQuCgojIyMgU3RhdGUgcGVyc2lzdGVuY2UgKGxvY2FsU3RvcmFnZSBrZXlzKQotIGByYV9vcHRpbWl6ZV9kcmFmdGAgLyBgcmFfYXJfb3B0aW1pemVfZHJhZnRgIOKAlCB7cmVzdW1lLCBqb2JEZXNjcmlwdGlvbn0KLSBgcmFfb3B0aW1pemVfcmVzdWx0YCAvIGByYV9hcl9vcHRpbWl6ZV9yZXN1bHRgIOKAlCBsYXN0IHJlc3VsdCAoY2xlYXJlZCBvbgogIHBheW1lbnQgc3VjY2VzcyBpbiAvcGF5L2NhbGxiYWNrIHNvIHN0YWxlIGxvY2tlZCBwcmV2aWV3cyBkaWUpCi0gYHJhX2J1aWxkX2RyYWZ0YCAvIGByYV9hcl9idWlsZF9kcmFmdGAg4oCUIGZ1bGwgd2l6YXJkIHN0YXRlIGluY2wuIGBzdGVwYApSdWxlczogcmVoeWRyYXRlIG9uIG1vdW50OyBjbGVhciBkcmFmdCBvbiBzdWNjZXNzZnVsIGdlbmVyYXRlIC8gZXhwbGljaXQgcmVzZXQ7CmBiZWZvcmV1bmxvYWRgIHdhcm5pbmcgd2hpbGUgYGxvYWRpbmdgLgoKIyMjIFBheW1lbnQgZmxvdwpDaGVja291dEJ1dHRvbiBtb2RhbCAobmFtZS9lbWFpbC9tb2JpbGUpIOKGkiAvYXBpL3BheSDihpIgUGF5bGluayBob3N0ZWQgcGFnZSDihpIKL3BheS9jYWxsYmFjaz90cmFuc2FjdGlvbk5vIOKGkiAvYXBpL3BheS92ZXJpZnk6IGNvbmZpcm1zIGBwYWlkYCwgdmFsaWRhdGVzCmFtb3VudCDiiaUgcGxhbiBwcmljZSwgc2V0cyBkZXZpY2UgcGFzcyBjb29raWU7IGF1dG8tc2lnbi1pbiArIGFjY291bnQgZW50aXRsZW1lbnQKT05MWSBpZiB0aGUgYHJhX3BheWAgYmluZGluZyBjb29raWUgbWF0Y2hlcyAoYW50aS1yZXBsYXkpLiBDYWxsYmFjayBjb3B5IHN0YXRlcwp0aGUgcmVhbCBwbGFuICgyNGggdnMgMzAtZGF5KSDigJQgbmV2ZXIgc2F5ICJ1bmxpbWl0ZWQiIGZvciBzaW5nbGUuCgojIyMgQXV0aCBmbG93Ci9sb2dpbiDihpIgbWFnaWMgbGluayAoMTUtbWluIHRva2VuKSDihpIgL2FwaS9hdXRoL3ZlcmlmeSDihpIgcmVkaXJlY3QKL2FjY291bnQ/d2VsY29tZT0xICh2aXNpYmxlIHN1Y2Nlc3MgYmFubmVyKS4gQXV0aE5hdi9OYXZBY2NvdW50TGluayBwb2xsCi9hcGkvYXV0aC9tZSBhbmQgcmVmbGVjdCBzaWduZWQtaW4gZW1haWwgKyBhY2Nlc3Mgc3RhdGUg4oCUIHRoZSBuYXYgbXVzdCBuZXZlcgpzaG93ICJTaWduIGluIiB0byBhIHNpZ25lZC1pbiB1c2VyLgoKIyMgRXJyb3IgaGFuZGxpbmcKLSBNb2RlbCBjYWxsOiBzZXJ2ZXIgcmV0cmllcyBvbmNlIChzaWxlbnQsIHRpbWUtZ3VhcmRlZCk7IG1pc3NpbmcgUkVTVU1FCiAgc2VjdGlvbiA9IHBhcnNlIGZhaWx1cmUgKHRyaWdnZXJzIHJldHJ5IOKAlCBhIHNjb3JlIHdpdGhvdXQgYSByZXN1bWUgaXMgYSBidWcpLgotIE5PIGNsaWVudC1zaWRlIGF1dG8tcmV0cnkgb24gL2FwaS9vcHRpbWl6ZSAoaXQgZG91YmxlLWNoYXJnZXMgbm90aGluZyBub3csCiAgYnV0IGtlZXAgc2luZ2xlLXNob3Q6IHNlcnZlciBvd25zIHJldHJpZXMpLgotIEV2ZXJ5IEFJIGVuZHBvaW50IHJldHVybnMgZnJpZW5kbHkgbWVzc2FnZXM7IDQyOSBvbiByYXRlIGxpbWl0cwogIChtYWdpYy1saW5rIDQvaC9lbWFpbCwgb3B0aW1pemUgMTUvMTBtaW4vSVApOyA0MDIgKyBgcGF5d2FsbDp0cnVlYCBmb3IgZ2F0ZWQKICBmZWF0dXJlcy4KLSBDdXN0b20gYXBwL25vdC1mb3VuZC50c3ggKyBhcHAvZXJyb3IudHN4IChicmFuZGVkLCB3aXRoIHJlY292ZXJ5IGFjdGlvbnMpLgoKIyMgQWNjZXNzaWJpbGl0eSAmIHJlc3BvbnNpdmUKLSBBbGwgbW90aW9uIGJlaGluZCByZWR1Y2VkLW1vdGlvbiBtZWRpYSBxdWVyaWVzOyBjb3VudGVycy90aWNrZXIgcmVuZGVyIGZpbmFsCiAgc3RhdGUgc3RhdGljYWxseSB3aGVuIHJlZHVjZWQuCi0gRmx1aWQgbGF5b3V0cyBvbmx5IChtYXgtdyArIGdyaWQgY29sbGFwc2UpOyB0ZXh0YXJlYXMgcmVzaXplLXkgd2l0aAogIG1heExlbmd0aCArIGFtYmVyIGNvdW50ZXIgcGFzdCA5MCU7IHdpemFyZCBzdGVwIGxhYmVscyB2aXNpYmxlIG9uIG1vYmlsZS4KLSBSVEw6IC9hciBwYWdlcyBzZXQgYGRpcj0icnRsImA7IEVuZ2xpc2ggcmVzdW1lIG91dHB1dCBibG9ja3MgZm9yY2UKICBgZGlyPSJsdHIiYCArIGxlZnQtYWxpZ247IGtlZXAgbnVtZXJhbHMgTFRSIGluc2lkZSBSVEwgY29weS4KCiMjIENvbXBvbmVudCBiZWhhdmlvciBjb250cmFjdHMKLSBTY2FuRGVtbzogbG9vcHMgb25seSB3aGVuIGluIHZpZXdwb3J0IGFuZCBtb3Rpb24gYWxsb3dlZDsgbmV2ZXIgYmxvY2tzIExDUC4KLSBDb3VudGVyOiBJbnRlcnNlY3Rpb25PYnNlcnZlciBvbmNlLCBlYXNlT3V0Q3ViaWMsIGluc3RhbnQgd2hlbiByZWR1Y2VkLgotIFB1Ymxpc2hMaW5rOiBwdWJsaXNoIHJldHVybnMgdW5wdWJsaXNoVG9rZW4g4oaSIGtlZXAgaW4gc3RhdGU7ICJVbnB1Ymxpc2giCiAgbXVzdCBjYWxsIERFTEVURSB3aXRoIHNsdWcrdG9rZW4uIFNsdWdzOiBuYW1lICsgMTAgcmFuZG9tIGNoYXJzLgotIFBkZkV4cG9ydDogY2xpZW50LW9ubHksIHBsYWluLXRleHQg4oaSIHN0eWxlZCBQREYuCgojIyBEZXNpZ24gY29uc3RyYWludHMKLSBObyBuZXcgcnVudGltZSBkZXBzIGZvciB2aXN1YWxzIChwdXJlIENTUyBmaXJzdCkuIEJ1bmRsZSBkaXNjaXBsaW5lOiB0aGUgb25seQogIGFsbG93ZWQgYWRkaXRpb25zIGFyZSBmcmFtZXItbW90aW9uIChgbW90aW9uL3JlYWN0YCkgSUYgb3JjaGVzdHJhdGlvbiBiZWNvbWVzCiAgbmVjZXNzYXJ5IOKAlCBub3QgYmVmb3JlLgotIENvcHkgdG9uZTogY29uZmlkZW50LCBjb25jcmV0ZSBudW1iZXJzLCBubyBjbGljaMOpczsgQXJhYmljIGNvcHkgaXMgU2F1ZGkKICBjb2xsb3F1aWFsLWxlYW5pbmcgKCLZiNi0INin2YTZhtin2YLYtSIpIG5vdCBNU0Etc3RpZmYuCi0gUHJpY2VzIGFsd2F5cyBTQVIgKNmj2aUv2afZpSDvt7wgaW4gQXJhYmljLCBTQVIgMzUvNzUgaW4gRW5nbGlzaCkg4oCUIGdyZXAgZm9yIGAkOWAKICBvciBgJDE5YCBiZWZvcmUgYW55IHJlbGVhc2U7IHRoZXkgbXVzdCBub3QgZXhpc3QuCg=="}
+# DESIGN.md — Execution blueprint (not just colors)
+
+## Visual system
+- Dark-only "SaaS Noir": bg `#08090a`, surface `#101316`, accent `#4ade80`,
+  danger `#f87171`, warn `#fbbf24`. Inter body, mono for data/chips.
+- Living hero: 3 blurred orbs (26–34s independent drift), grid-lines mask, dual
+  glow drift, film-grain overlay (3–5% opacity), looping ScanDemo (scan → 92% →
+  hold 5.2s → rewind). LiveTicker rotates curated events every 3.8s. ATS marquee
+  32s loop, pause on hover. ALL animation is pure CSS/requestAnimationFrame and
+  MUST be gated behind `prefers-reduced-motion: no-preference`.
+
+## UX flows
+
+### Scan flow (optimize, EN/AR)
+paste/upload → submit → streaming NDJSON: `think` (live analysis panel, shows
+placeholder immediately — never a frozen spinner) → `result` → score card + tabs.
+- **Freemium gate (server-side only):** free callers get `locked:true` + first 6
+  lines of the resume. The full text NEVER leaves the server for free users.
+- **Locked card states:** no access → pricing CTA; `hasAccess` (from
+  /api/auth/me) → "Payment confirmed — rescan to unlock" one-click `runScan()`.
+  This exists because results persist client-side and may predate payment.
+
+### State persistence (localStorage keys)
+- `ra_optimize_draft` / `ra_ar_optimize_draft` — {resume, jobDescription}
+- `ra_optimize_result` / `ra_ar_optimize_result` — last result (cleared on
+  payment success in /pay/callback so stale locked previews die)
+- `ra_build_draft` / `ra_ar_build_draft` — full wizard state incl. `step`
+Rules: rehydrate on mount; clear draft on successful generate / explicit reset;
+`beforeunload` warning while `loading`.
+
+### Payment flow
+CheckoutButton modal (name/email/mobile) → /api/pay → Paylink hosted page →
+/pay/callback?transactionNo → /api/pay/verify: confirms `paid`, validates
+amount ≥ plan price, sets device pass cookie; auto-sign-in + account entitlement
+ONLY if the `ra_pay` binding cookie matches (anti-replay). Callback copy states
+the real plan (24h vs 30-day) — never say "unlimited" for single.
+
+### Auth flow
+/login → magic link (15-min token) → /api/auth/verify → redirect
+/account?welcome=1 (visible success banner). AuthNav/NavAccountLink poll
+/api/auth/me and reflect signed-in email + access state — the nav must never
+show "Sign in" to a signed-in user.
+
+## Error handling
+- Model call: server retries once (silent, time-guarded); missing RESUME
+  section = parse failure (triggers retry — a score without a resume is a bug).
+- NO client-side auto-retry on /api/optimize (it double-charges nothing now,
+  but keep single-shot: server owns retries).
+- Every AI endpoint returns friendly messages; 429 on rate limits
+  (magic-link 4/h/email, optimize 15/10min/IP); 402 + `paywall:true` for gated
+  features.
+- Custom app/not-found.tsx + app/error.tsx (branded, with recovery actions).
+
+## Accessibility & responsive
+- All motion behind reduced-motion media queries; counters/ticker render final
+  state statically when reduced.
+- Fluid layouts only (max-w + grid collapse); textareas resize-y with
+  maxLength + amber counter past 90%; wizard step labels visible on mobile.
+- RTL: /ar pages set `dir="rtl"`; English resume output blocks force
+  `dir="ltr"` + left-align; keep numerals LTR inside RTL copy.
+
+## Component behavior contracts
+- ScanDemo: loops only when in viewport and motion allowed; never blocks LCP.
+- Counter: IntersectionObserver once, easeOutCubic, instant when reduced.
+- PublishLink: publish returns unpublishToken → keep in state; "Unpublish"
+  must call DELETE with slug+token. Slugs: name + 10 random chars.
+- PdfExport: client-only, plain-text → styled PDF.
+
+## Design constraints
+- No new runtime deps for visuals (pure CSS first). Bundle discipline: the only
+  allowed additions are framer-motion (`motion/react`) IF orchestration becomes
+  necessary — not before.
+- Copy tone: confident, concrete numbers, no clichés; Arabic copy is Saudi
+  colloquial-leaning ("وش الناقص") not MSA-stiff.
+- Prices always SAR (٣٥/٧٥ ﷼ in Arabic, SAR 35/75 in English) — grep for `$9`
+  or `$19` before any release; they must not exist.

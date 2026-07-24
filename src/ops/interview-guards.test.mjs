@@ -1,1 +1,110 @@
-{"data": "aW1wb3J0IHsKICBzY3J1YlBpaSwgc2NydWJEZWVwLCBub3JtYWxpemVQYXRjaCwgY29tcHV0ZVByb2dyZXNzLCBnYXRlRmluaXNoLAogIHN0YXRlZEFnZSwgc2Vuc2l0aXZlVG9waWMsIGlzUmVwZWF0LCBzdHJpcFBsYWNlaG9sZGVycywKfSBmcm9tICIuLi9hcHAvbGliL2ludGVydmlld0d1YXJkcy50cyI7CgpsZXQgcGFzcyA9IDAsIGZhaWwgPSAwOwpjb25zdCBlcSA9IChuYW1lLCBnb3QsIHdhbnQpID0+IHsKICBjb25zdCBvayA9IEpTT04uc3RyaW5naWZ5KGdvdCkgPT09IEpTT04uc3RyaW5naWZ5KHdhbnQpOwogIG9rID8gcGFzcysrIDogZmFpbCsrOwogIGNvbnNvbGUubG9nKGAke29rID8gIuKchSIgOiAi4p2MIn0gJHtuYW1lfSR7b2sgPyAiIiA6IGBcbiAgICAgZ290ICAke0pTT04uc3RyaW5naWZ5KGdvdCl9XG4gICAgIHdhbnQgJHtKU09OLnN0cmluZ2lmeSh3YW50KX1gfWApOwp9Owpjb25zdCBvayA9IChuYW1lLCBjb25kKSA9PiB7IGNvbmQgPyBwYXNzKysgOiBmYWlsKys7IGNvbnNvbGUubG9nKGAke2NvbmQgPyAi4pyFIiA6ICLinYwifSAke25hbWV9YCk7IH07Cgpjb25zb2xlLmxvZygiXG7ilIDilIAgc2NlbmFyaW8gNDU6IEFyYWJpYyBuYXRpb25hbCBJRCArIElCQU4gcmVhY2hlZCBjb250YWN0IOKUgOKUgCIpOwpjb25zdCBzNDUgPSBzY3J1YlBpaSgi2LHZgtmFINin2YTZh9mI2YrYqTogMTA5ODc2NTQzMtiMINin2YrYqNin2YY6IFNBMDM4MDAwMDAwMDYwODAxMDE2NzUxOSIpOwplcSgiNDUgY29udGFjdCBpcyBlbXB0aWVkIiwgczQ1LnRleHQsICIiKTsKb2soIjQ1IGZsYWdzIG5hdGlvbmFsX2lkICsgaWJhbiIsIHM0NS5oaXRzLmluY2x1ZGVzKCJuYXRpb25hbF9pZCIpICYmIHM0NS5oaXRzLmluY2x1ZGVzKCJpYmFuIikpOwoKY29uc29sZS5sb2coIlxu4pSA4pSAIHNjZW5hcmlvIDQ2IHBhcml0eTogRW5nbGlzaCBTU04gLyBwYXNzcG9ydCAvIHNhbGFyeSDilIDilIAiKTsKZXEoIlNTTiBzdHJpcHBlZCIsIHNjcnViUGlpKCJNeSBTU04gaXMgMTIzLTQ1LTY3ODkiKS50ZXh0LCAiTXkgU1NOIGlzIik7CmVxKCJwYXNzcG9ydCBzdHJpcHBlZCIsIHNjcnViUGlpKCJQYXNzcG9ydCBudW1iZXIgQTEyMzQ1Njc4IikudGV4dCwgIiIpOwplcSgic2FsYXJ5IHN0cmlwcGVkIiwgc2NydWJQaWkoItix2KfYqtio2YogMjUwMDAg2LHZitin2YQiKS50ZXh0LCAiIik7Cgpjb25zb2xlLmxvZygiXG7ilIDilIAgVEhFIE9ORSBMQVcgbXVzdCBzdXJ2aXZlOiByZWFsIHJlc3VtZSBudW1iZXJzIGFyZSBOT1QgUElJIOKUgOKUgCIpOwplcSgiU0FSIDQwTSByZXZlbnVlIGtlcHQiLCBzY3J1YlBpaSgiTWFuYWdlZCBib29rcyBmb3IgMTUgYnJhbmNoZXMgd2l0aCBTQVIgNDBNIGFubnVhbCByZXZlbnVlIikudGV4dCwKICAgIk1hbmFnZWQgYm9va3MgZm9yIDE1IGJyYW5jaGVzIHdpdGggU0FSIDQwTSBhbm51YWwgcmV2ZW51ZSIpOwplcSgicGVyY2VudGFnZSBrZXB0Iiwgc2NydWJQaWkoItiu2YHZkdi2INij2K7Yt9in2KEg2KfZhNmC2YHZhNipINin2YTYtNmH2LHZitipINmj2aDZqiDYqNij2KrZhdiq2Kkg2KfZhNiq2LPZiNmK2KfYqiIpLnRleHQsCiAgICLYrtmB2ZHYtiDYo9iu2LfYp9ihINin2YTZgtmB2YTYqSDYp9mE2LTZh9ix2YrYqSAzMNmqINio2KPYqtmF2KrYqSDYp9mE2KrYs9mI2YrYp9iqIik7CmVxKCJwaG9uZStlbWFpbCBrZXB0IChoZWFkZXIpIiwgc2NydWJQaWkoIjA1MDEyMzQ1NjcgfCB0ZXN0QHRlc3QuY29tIikudGV4dCwgIjA1MDEyMzQ1NjcgfCB0ZXN0QHRlc3QuY29tIik7Cgpjb25zb2xlLmxvZygiXG7ilIDilIAgc2NlbmFyaW8gMTogcGxhY2Vob2xkZXIgcmVhY2hlZCBwcm9maWxlX3BhdGNoLnN1bW1hcnkg4pSA4pSAIik7CmNvbnN0IHMxID0gbm9ybWFsaXplUGF0Y2goCiAgeyByb2xlOiAi2YXZh9mG2K/YsyDZhdiv2YbZiiIsIHN1bW1hcnk6ICLZhdmH2YbYr9izINmF2K/ZhtmKINio2K7YqNix2Kkg2aQg2LPZhtmI2KfYqiDZhdiq2K7Ytdi1INmB2YogW9ij2LbZgSDYp9mE2KrYrti12LVdLiDZhNiv2YrZhyDZhdmH2KfYsdin2Kog2YHZiiBb2KPYttmBINmF2YfYp9ix2KrZitmGXS4iIH0sCiAgeyBzb3VyY2VUZXh0OiAi2KPZhtinINmF2YfZhtiv2LMg2YXYr9mG2Yog2YjYtNiq2LrZhNiqINmkINiz2YbZiNin2Kog2YHZiiDYtNix2YPYqSDZhdmC2KfZiNmE2KfYqiDYqNin2YTYsdmK2KfYtiIgfSwKKTsKb2soInN1bW1hcnkgaGFzIG5vIGJyYWNrZXQgbGVmdCIsICEvXFsvLnRlc3QoU3RyaW5nKHMxLnBhdGNoLnN1bW1hcnkpKSk7Cgpjb25zb2xlLmxvZygiXG7ilIDilIAgc2NlbmFyaW8gNDogcm9sZSBzd2FsbG93ZWQgYSB3aG9sZSBzZW50ZW5jZSDilIDilIAiKTsKY29uc3QgczQgPSBub3JtYWxpemVQYXRjaCh7IHJvbGU6ICJOdXJzZSwgNSB5ZWFycyBpbiBlbWVyZ2VuY3kgY2FyZSIgfSwgeyBzb3VyY2VUZXh0OiAiSSdtIGEgbnVyc2Ugd2l0aCA1IHllYXJzIGluIGVtZXJnZW5jeSBjYXJlIiB9KTsKZXEoInJvbGUgaXMgdGhlIHRpdGxlIG9ubHkiLCBzNC5wYXRjaC5yb2xlLCAiTnVyc2UiKTsKZXEoInllYXJzIGV4dHJhY3RlZCIsIHM0LnBhdGNoLnllYXJzX29mX2V4cGVyaWVuY2UsIDUpOwoKY29uc29sZS5sb2coIlxu4pSA4pSAIHNjZW5hcmlvIDExOiB5ZWFycyAvIHllYXJzX29mX2V4cGVyaWVuY2UgLyB5b2UgY29sbGFwc2UgdG8gb25lIGtleSDilIDilIAiKTsKZXEoInllYXJzIC0+IHllYXJzX29mX2V4cGVyaWVuY2UiLCBub3JtYWxpemVQYXRjaCh7IHllYXJzOiAiNSIgfSwgeyBzb3VyY2VUZXh0OiAiIiB9KS5wYXRjaC55ZWFyc19vZl9leHBlcmllbmNlLCA1KTsKZXEoInlvZSAtPiB5ZWFyc19vZl9leHBlcmllbmNlIiwgbm9ybWFsaXplUGF0Y2goeyB5b2U6IDggfSwgeyBzb3VyY2VUZXh0OiAiIiB9KS5wYXRjaC55ZWFyc19vZl9leHBlcmllbmNlLCA4KTsKCmNvbnNvbGUubG9nKCJcbuKUgOKUgCBzY2VuYXJpbyAyMjogZ3JhZHVhdGlvbi15ZWFyIGZvcmdlcnkg4pSA4pSAIik7CmNvbnN0IHMyMiA9IG5vcm1hbGl6ZVBhdGNoKAogIHsgZWR1Y2F0aW9uOiB7IGRlZ3JlZTogIiIsIHVuaXZlcnNpdHk6ICIiLCBncmFkdWF0aW9uX3llYXI6ICIyMDIyIiB9IH0sCiAgeyBzb3VyY2VUZXh0OiAi2LrZitmR2LEg2KrYp9ix2YrYriDYp9mE2KrYrtix2Kwg2YXZhiDZotmg2aHZqSDYp9mE2Ykg2aLZoNmi2aIiLCBleGlzdGluZzogeyBlZHVjYXRpb246IHsgZ3JhZHVhdGlvbl95ZWFyOiAiMjAxOSIgfSB9IH0sCik7Cm9rKCIyMDE5IC0+IDIwMjIgcmVmdXNlZCIsICFKU09OLnN0cmluZ2lmeShzMjIucGF0Y2gpLmluY2x1ZGVzKCIyMDIyIikpOwpvaygicmVmdXNhbCBpcyByZWNvcmRlZCIsIHMyMi5kcm9wcGVkLnNvbWUoKGQpID0+IGQuaW5jbHVkZXMoIjIwMTktPjIwMjIiKSkpOwplcSgiYSBGSVJTVCBncmFkdWF0aW9uIHllYXIgaXMgYWNjZXB0ZWQiLAogICBub3JtYWxpemVQYXRjaCh7IGVkdWNhdGlvbjogeyBncmFkdWF0aW9uX3llYXI6ICIyMDE5IiB9IH0sIHsgc291cmNlVGV4dDogItiq2K7Ysdis2Kog2aLZoNmh2akiIH0pLnBhdGNoLmVkdWNhdGlvbiwKICAgeyBncmFkdWF0aW9uX3llYXI6ICIyMDE5IiB9KTsKCmNvbnNvbGUubG9nKCJcbuKUgOKUgCAjNzogZ3JhZHVhdGlvbiB5ZWFyIGJlY2FtZSBhIGpvYiBzdGFydF9kYXRlIOKUgOKUgCIpOwpjb25zdCBzNyA9IG5vcm1hbGl6ZVBhdGNoKHsgZXhwZXJpZW5jZXM6IFt7IGhlYWRlcjogeyB0aXRsZTogItmF2K3Yp9iz2KgiLCBjb21wYW55OiAi2LTYsdmD2KkiLCBzdGFydF9kYXRlOiAiMjAxNyIgfSwgYnVsbGV0czogWyItINij2K/ZitixINmB2LHZitmCIl0gfV0gfSwgeyBzb3VyY2VUZXh0OiAi2KrYrtix2KzYqiDZotmg2aHZpyIgfSk7CmVxKCJidWxsZXQgZGUtZGFzaGVkIGZvciBleHBlcmllbmNlc1tdIiwgczcucGF0Y2guZXhwZXJpZW5jZXNbMF0uYnVsbGV0cywgWyLYo9iv2YrYsSDZgdix2YrZgiJdKTsKCmNvbnNvbGUubG9nKCJcbuKUgOKUgCAjMTIgLyAjNjogcHJvZ3Jlc3MgaXMgY29tcHV0ZWQsIEZJTklTSCBpcyBnYXRlZCDilIDilIAiKTsKZXEoImVtcHR5IHByb2ZpbGUgPSAwIiwgY29tcHV0ZVByb2dyZXNzKHt9KSwgMCk7CmVxKCJyb2xlIG9ubHkgPSAxNyIsIGNvbXB1dGVQcm9ncmVzcyh7IHJvbGU6ICLZhdit2KfYs9ioIiB9KSwgMTcpOwplcSgiYWxsIHNpeCBheGVzID0gMTAwIiwgY29tcHV0ZVByb2dyZXNzKHsKICByb2xlOiAi2YXYrdin2LPYqCIsIHN1bW1hcnk6ICLZhdmE2K7YtSDZhdmH2YbZiiDYrdmC2YrZgtmKIiwgd292ZW5MaW5lczogWyItINiz2LfYsSJdLCBza2lsbHM6ICJTQVAiLCBlZHVjYXRpb246ICLYqNmD2KfZhNmI2LHZitmI2LMiLCBuYW1lOiAi2YXYrdmF2K8iLCBjb250YWN0OiAiMDV4IiwKfSksIDEwMCk7CmVxKCJGSU5JU0ggb24gYW4gaW5jb21wbGV0ZSBwcm9maWxlIGRvd25ncmFkZXMgdG8gQVNLIiwgZ2F0ZUZpbmlzaCgiRklOSVNIIiwgeyByb2xlOiAi2YXYrdin2LPYqCIgfSkuYWN0aW9uLCAiQVNLIik7CmVxKCJGSU5JU0ggb24gYSBjb21wbGV0ZSBwcm9maWxlIHN0YW5kcyIsIGdhdGVGaW5pc2goIkZJTklTSCIsIHsKICByb2xlOiAi2YXYrdin2LPYqCIsIHN1bW1hcnk6ICLYsyIsIHdvdmVuTGluZXM6IFsiLSDYsyJdLCBza2lsbHM6ICJTQVAiLCBuYW1lOiAi2YXYrdmF2K8iLCBjb250YWN0OiAiMDV4IiwKfSkuYWN0aW9uLCAiRklOSVNIIik7Cgpjb25zb2xlLmxvZygiXG7ilIDilIAgIzE4OiBtaW5vcnMg4pSA4pSAIik7CmVxKCLYp9io2LrZiSDYp9i02KrYutmEINmI2LnZhdix2Yog2aHZpSDYs9mG2KkiLCBzdGF0ZWRBZ2UoItin2KjYutmJINin2LTYqti62YQg2YjYudmF2LHZiiDZodmlINiz2YbYqSIpLCAxNSk7CmVxKCJJJ20gMTYsIGhlbHAgbWUgZ2V0IGEgZnVsbCB0aW1lIGpvYiIsIHN0YXRlZEFnZSgiSSdtIDE2LCBoZWxwIG1lIGdldCBhIGZ1bGwgdGltZSBqb2IiKSwgMTYpOwplcSgibm8gYWdlIHN0YXRlZCIsIHN0YXRlZEFnZSgi2KPZhtinINmF2K3Yp9iz2Kgg2YXZhiDZpyDYs9mG2YjYp9iqIiksIG51bGwpOwoKY29uc29sZS5sb2coIlxu4pSA4pSAICMxNzogc2Vuc2l0aXZlIGRpc2Nsb3N1cmVzIGFyZSByZWNvZ25pc2VkIOKUgOKUgCIpOwplcSgicHJpc29uIiwgc2Vuc2l0aXZlVG9waWMoItmD2YbYqiDZhdiz2KzZiNmGINiz2YbYqtmK2YYg2YjYp9io2LrZiSDYp9iu2YHZiiDYp9mE2YHYqtix2Kkg2YfYsNmKIiksICJyZWNvcmQiKTsKZXEoImRlcHJlc3Npb24iLCBzZW5zaXRpdmVUb3BpYygiSSBoYXZlIGEgMy15ZWFyIGdhcCBiZWNhdXNlIG9mIGRlcHJlc3Npb24iKSwgImhlYWx0aF9nYXAiKTsKZXEoImRpc2FiaWxpdHkiLCBzZW5zaXRpdmVUb3BpYygi2LnZhtiv2Yog2KfYudin2YLYqSDYrdix2YPZitipINmH2YQg2KrYo9ir2LEg2LnZhNmJINiq2YjYuNmK2YHZitifIiksICJkaXNhYmlsaXR5Iik7CmVxKCJhZ2Ugd29ycnkiLCBzZW5zaXRpdmVUb3BpYygi2LnZhdix2Yog2aXZpSDZiNiu2KfZitmBINmF2Kcg2KfYrdivINmK2YjYuNmB2YbZiiIpLCAiYWdlIik7CmVxKCJob3BlIiwgc2Vuc2l0aXZlVG9waWMoIkkndmUgYmVlbiB1bmVtcGxveWVkIGZvciAzIHllYXJzIGFuZCBJJ20gbG9zaW5nIGhvcGUiKSwgImhvcGUiKTsKZXEoImEgbm9ybWFsIGFuc3dlciBpcyBub3Qgc2Vuc2l0aXZlIiwgc2Vuc2l0aXZlVG9waWMoItij2YbYpyDZhdmH2YbYr9izINmF2K/ZhtmKINmI2LTYqti62YTYqiDZpCDYs9mG2YjYp9iqIiksIG51bGwpOwoKY29uc29sZS5sb2coIlxu4pSA4pSAICMxNTogdmVyYmF0aW0gcmVwZXRpdGlvbiBpcyBkZXRlY3RlZCDilIDilIAiKTsKY29uc3QgaGlzdCA9IFt7IHdobzogImFpIiwgdGV4dDogItmF2Kcg2YfZiCDYp9iz2YUg2YjYuNmK2YHYqtmDINin2YTYrdin2YTZitip2J8iIH0sIHsgd2hvOiAidXNlciIsIHRleHQ6ICLZpyDYs9mG2YjYp9iqIiB9XTsKb2soInNhbWUgcXVlc3Rpb24gY2F1Z2h0IiwgaXNSZXBlYXQoItmF2Kcg2YfZiCDYp9iz2YUg2YjYuNmK2YHYqtmDINin2YTYrdin2YTZitip2J8iLCBoaXN0KSk7Cm9rKCJkaWZmZXJlbnQgcXVlc3Rpb24gcGFzc2VzIiwgIWlzUmVwZWF0KCLZhdinINij2YfZhSDZhdmH2KfYsdiq2YrZhiDYqtiz2KrYrtiv2YXZh9mF2KfYnyIsIGhpc3QpKTsKCmNvbnNvbGUubG9nKCJcbuKUgOKUgCBwbGFjZWhvbGRlciBidWRnZXQ6IGFsbG93ZWQgb25jZSwgb25seSB3aGVuIG5vIG51bWJlciBleGlzdHMg4pSA4pSAIik7CmNvbnN0IGIgPSB7IGxlZnQ6IDEgfTsKZXEoImtlcHQgd2hlbiBubyBkaWdpdHMgaW4gc291cmNlIiwgc3RyaXBQbGFjZWhvbGRlcnMoItit2YLZgiBb2KPYttmBINin2YTYsdmC2YVdIiwgZmFsc2UsIGIpLCAi2K3ZgtmCIFvYo9i22YEg2KfZhNix2YLZhV0iKTsKZXEoInNlY29uZCBvbmUgc3RyaXBwZWQiLCBzdHJpcFBsYWNlaG9sZGVycygi2YjZhtmF2ZHZiSBb2KPYttmBINin2YTYsdmC2YVdIiwgZmFsc2UsIGIpLCAi2YjZhtmF2ZHZiSIpOwplcSgic3RyaXBwZWQgd2hlbiB0aGUgbnVtYmVyIGV4aXN0cyIsIHN0cmlwUGxhY2Vob2xkZXJzKCLYrtmB2ZHYtiDYp9mE2KrZg9in2YTZitmBIFvYo9i22YEg2KfZhNix2YLZhV0iLCB0cnVlLCB7IGxlZnQ6IDEgfSksICLYrtmB2ZHYtiDYp9mE2KrZg9in2YTZitmBIik7CgoKY29uc29sZS5sb2coIlxu4pSA4pSAICMxMDogYSBzZWN0b3Igb3IgYSBsaWZlIHN0YWdlIGlzIG5vdCBhIGpvYiB0aXRsZSDilIDilIAiKTsKZm9yIChjb25zdCBbaW5wdXQsIHdoeV0gb2YgW1si2LPZitin2K3YqSIsICJzZWN0b3IgKGFyKSJdLCBbIlRvdXJpc20iLCAic2VjdG9yIChlbikiXSwgWyLYrtix2YrYrCDYrNiv2YrYryIsICJzdGF0dXMgKGFyKSJdLCBbImZyZXNoIGdyYWR1YXRlIiwgInN0YXR1cyAoZW4pIl0sIFsiSFIiLCAiaW5pdGlhbGlzbSJdXSkgewogIGNvbnN0IHIgPSBub3JtYWxpemVQYXRjaCh7IHJvbGU6IGlucHV0IH0sIHsgc291cmNlVGV4dDogIiIgfSk7CiAgb2soYCIke2lucHV0fSIgZmxhZ2dlZCDigJQgJHt3aHl9YCwgci5yb2xlTmVlZHNUaXRsZSA9PT0gdHJ1ZSk7CiAgb2soYCIke2lucHV0fSIgaXMgc3RpbGwga2VwdCwgbm90IGRpc2NhcmRlZGAsIEJvb2xlYW4oci5wYXRjaC5yb2xlKSk7Cn0KZm9yIChjb25zdCByZWFsIG9mIFsi2YXYrdin2LPYqCIsICJOdXJzZSIsICJTYWxlcyBNYW5hZ2VyIiwgItmF2YfZhtiv2LMg2YXYr9mG2YoiLCAi2YXYr9mK2LEg2YXYqNmK2LnYp9iqIl0pIHsKICBvayhgIiR7cmVhbH0iIHBhc3NlcyBhcyBhIHJlYWwgdGl0bGVgLCBub3JtYWxpemVQYXRjaCh7IHJvbGU6IHJlYWwgfSwgeyBzb3VyY2VUZXh0OiAiIiB9KS5yb2xlTmVlZHNUaXRsZSA9PT0gZmFsc2UpOwp9CmVxKCJhIGZsYWdnZWQgc2VjdG9yIGlzIGZpbGVkIGFzIGluZHVzdHJ5Iiwgbm9ybWFsaXplUGF0Y2goeyByb2xlOiAi2LPZitin2K3YqSIgfSwgeyBzb3VyY2VUZXh0OiAiIiB9KS5wYXRjaC5pbmR1c3RyeSwgItiz2YrYp9it2KkiKTsKCmNvbnNvbGUubG9nKGBcbiR7ZmFpbCA9PT0gMCA/ICJBTEwgUEFTUyIgOiAiRkFJTFVSRVMifSDigJQgJHtwYXNzfSBwYXNzZWQsICR7ZmFpbH0gZmFpbGVkXG5gKTsKcHJvY2Vzcy5leGl0KGZhaWwgPyAxIDogMCk7Cg=="}
+import {
+  scrubPii, scrubDeep, normalizePatch, computeProgress, gateFinish,
+  statedAge, sensitiveTopic, isRepeat, stripPlaceholders,
+} from "../app/lib/interviewGuards.ts";
+
+let pass = 0, fail = 0;
+const eq = (name, got, want) => {
+  const ok = JSON.stringify(got) === JSON.stringify(want);
+  ok ? pass++ : fail++;
+  console.log(`${ok ? "✅" : "❌"} ${name}${ok ? "" : `\n     got  ${JSON.stringify(got)}\n     want ${JSON.stringify(want)}`}`);
+};
+const ok = (name, cond) => { cond ? pass++ : fail++; console.log(`${cond ? "✅" : "❌"} ${name}`); };
+
+console.log("\n── scenario 45: Arabic national ID + IBAN reached contact ──");
+const s45 = scrubPii("رقم الهوية: 1098765432، ايبان: SA0380000000608010167519");
+eq("45 contact is emptied", s45.text, "");
+ok("45 flags national_id + iban", s45.hits.includes("national_id") && s45.hits.includes("iban"));
+
+console.log("\n── scenario 46 parity: English SSN / passport / salary ──");
+eq("SSN stripped", scrubPii("My SSN is 123-45-6789").text, "My SSN is");
+eq("passport stripped", scrubPii("Passport number A12345678").text, "");
+eq("salary stripped", scrubPii("راتبي 25000 ريال").text, "");
+
+console.log("\n── THE ONE LAW must survive: real resume numbers are NOT PII ──");
+eq("SAR 40M revenue kept", scrubPii("Managed books for 15 branches with SAR 40M annual revenue").text,
+   "Managed books for 15 branches with SAR 40M annual revenue");
+eq("percentage kept", scrubPii("خفّض أخطاء القفلة الشهرية ٣٠٪ بأتمتة التسويات").text,
+   "خفّض أخطاء القفلة الشهرية 30٪ بأتمتة التسويات");
+eq("phone+email kept (header)", scrubPii("0501234567 | test@test.com").text, "0501234567 | test@test.com");
+
+console.log("\n── scenario 1: placeholder reached profile_patch.summary ──");
+const s1 = normalizePatch(
+  { role: "مهندس مدني", summary: "مهندس مدني بخبرة ٤ سنوات متخصص في [أضف التخصص]. لديه مهارات في [أضف مهارتين]." },
+  { sourceText: "أنا مهندس مدني وشتغلت ٤ سنوات في شركة مقاولات بالرياض" },
+);
+ok("summary has no bracket left", !/\[/.test(String(s1.patch.summary)));
+
+console.log("\n── scenario 4: role swallowed a whole sentence ──");
+const s4 = normalizePatch({ role: "Nurse, 5 years in emergency care" }, { sourceText: "I'm a nurse with 5 years in emergency care" });
+eq("role is the title only", s4.patch.role, "Nurse");
+eq("years extracted", s4.patch.years_of_experience, 5);
+
+console.log("\n── scenario 11: years / years_of_experience / yoe collapse to one key ──");
+eq("years -> years_of_experience", normalizePatch({ years: "5" }, { sourceText: "" }).patch.years_of_experience, 5);
+eq("yoe -> years_of_experience", normalizePatch({ yoe: 8 }, { sourceText: "" }).patch.years_of_experience, 8);
+
+console.log("\n── scenario 22: graduation-year forgery ──");
+const s22 = normalizePatch(
+  { education: { degree: "", university: "", graduation_year: "2022" } },
+  { sourceText: "غيّر تاريخ التخرج من ٢٠١٩ الى ٢٠٢٢", existing: { education: { graduation_year: "2019" } } },
+);
+ok("2019 -> 2022 refused", !JSON.stringify(s22.patch).includes("2022"));
+ok("refusal is recorded", s22.dropped.some((d) => d.includes("2019->2022")));
+eq("a FIRST graduation year is accepted",
+   normalizePatch({ education: { graduation_year: "2019" } }, { sourceText: "تخرجت ٢٠١٩" }).patch.education,
+   { graduation_year: "2019" });
+
+console.log("\n── #7: graduation year became a job start_date ──");
+const s7 = normalizePatch({ experiences: [{ header: { title: "محاسب", company: "شركة", start_date: "2017" }, bullets: ["- أدير فريق"] }] }, { sourceText: "تخرجت ٢٠١٧" });
+eq("bullet de-dashed for experiences[]", s7.patch.experiences[0].bullets, ["أدير فريق"]);
+
+console.log("\n── #12 / #6: progress is computed, FINISH is gated ──");
+eq("empty profile = 0", computeProgress({}), 0);
+eq("role only = 17", computeProgress({ role: "محاسب" }), 17);
+eq("all six axes = 100", computeProgress({
+  role: "محاسب", summary: "ملخص مهني حقيقي", wovenLines: ["- سطر"], skills: "SAP", education: "بكالوريوس", name: "محمد", contact: "05x",
+}), 100);
+eq("FINISH on an incomplete profile downgrades to ASK", gateFinish("FINISH", { role: "محاسب" }).action, "ASK");
+eq("FINISH on a complete profile stands", gateFinish("FINISH", {
+  role: "محاسب", summary: "س", wovenLines: ["- س"], skills: "SAP", name: "محمد", contact: "05x",
+}).action, "FINISH");
+
+console.log("\n── #18: minors ──");
+eq("ابغى اشتغل وعمري ١٥ سنة", statedAge("ابغى اشتغل وعمري ١٥ سنة"), 15);
+eq("I'm 16, help me get a full time job", statedAge("I'm 16, help me get a full time job"), 16);
+eq("no age stated", statedAge("أنا محاسب من ٧ سنوات"), null);
+
+console.log("\n── #17: sensitive disclosures are recognised ──");
+eq("prison", sensitiveTopic("كنت مسجون سنتين وابغى اخفي الفترة هذي"), "record");
+eq("depression", sensitiveTopic("I have a 3-year gap because of depression"), "health_gap");
+eq("disability", sensitiveTopic("عندي اعاقة حركية هل تأثر على توظيفي؟"), "disability");
+eq("age worry", sensitiveTopic("عمري ٥٥ وخايف ما احد يوظفني"), "age");
+eq("hope", sensitiveTopic("I've been unemployed for 3 years and I'm losing hope"), "hope");
+eq("a normal answer is not sensitive", sensitiveTopic("أنا مهندس مدني وشتغلت ٤ سنوات"), null);
+
+console.log("\n── #15: verbatim repetition is detected ──");
+const hist = [{ who: "ai", text: "ما هو اسم وظيفتك الحالية؟" }, { who: "user", text: "٧ سنوات" }];
+ok("same question caught", isRepeat("ما هو اسم وظيفتك الحالية؟", hist));
+ok("different question passes", !isRepeat("ما أهم مهارتين تستخدمهما؟", hist));
+
+console.log("\n── placeholder budget: allowed once, only when no number exists ──");
+const b = { left: 1 };
+eq("kept when no digits in source", stripPlaceholders("حقق [أضف الرقم]", false, b), "حقق [أضف الرقم]");
+eq("second one stripped", stripPlaceholders("ونمّى [أضف الرقم]", false, b), "ونمّى");
+eq("stripped when the number exists", stripPlaceholders("خفّض التكاليف [أضف الرقم]", true, { left: 1 }), "خفّض التكاليف");
+
+
+console.log("\n── #10: a sector or a life stage is not a job title ──");
+for (const [input, why] of [["سياحة", "sector (ar)"], ["Tourism", "sector (en)"], ["خريج جديد", "status (ar)"], ["fresh graduate", "status (en)"], ["HR", "initialism"]]) {
+  const r = normalizePatch({ role: input }, { sourceText: "" });
+  ok(`"${input}" flagged — ${why}`, r.roleNeedsTitle === true);
+  ok(`"${input}" is still kept, not discarded`, Boolean(r.patch.role));
+}
+for (const real of ["محاسب", "Nurse", "Sales Manager", "مهندس مدني", "مدير مبيعات"]) {
+  ok(`"${real}" passes as a real title`, normalizePatch({ role: real }, { sourceText: "" }).roleNeedsTitle === false);
+}
+eq("a flagged sector is filed as industry", normalizePatch({ role: "سياحة" }, { sourceText: "" }).patch.industry, "سياحة");
+
+console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed\n`);
+process.exit(fail ? 1 : 0);

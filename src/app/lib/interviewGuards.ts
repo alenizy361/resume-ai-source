@@ -1,1 +1,429 @@
-{"data": "LyoqCiAqIFNlcnZlci1zaWRlIGd1YXJkcyBmb3IgdGhlIEFkdmlzb3IgaW50ZXJ2aWV3ICgvYXBpL2ludGVydmlldykuCiAqCiAqIFRoZSBtb2RlbCBpcyBpbnN0cnVjdGVkIHRvIGJlaGF2ZTsgdGhlc2UgZnVuY3Rpb25zIG1ha2UgaXQgc3RydWN0dXJhbC4gRXZlcnkKICogb25lIG9mIHRoZW0gZXhpc3RzIGJlY2F1c2UgYSBsaXZlIHJ1biBvZiAxMDAgc2NlbmFyaW9zIHByb3ZlZCB0aGUgcHJvbXB0IGFsb25lCiAqIHdhcyBub3QgZW5vdWdoOgogKgogKiAtIHNjcnViUGlpICAgICAgICAgIOKGkiBzY2VuYXJpbyA0NSBzdG9yZWQgYSBuYXRpb25hbCBJRCArIElCQU4gaW50byBjb250YWN0CiAqICAgICAgICAgICAgICAgICAgICAgICAodGhlIEVuZ2xpc2ggU1NOIGNhc2Ugd2FzIHJlZnVzZWQsIHRoZSBBcmFiaWMgb25lIHdhcyBub3QpLgogKiAtIHN0cmlwUGxhY2Vob2xkZXJzIOKGkiBzY2VuYXJpbyAxIHdyb3RlICJb2KPYttmBINin2YTYqtiu2LXYtV0iIGludG8gcHJvZmlsZV9wYXRjaC5zdW1tYXJ5LAogKiAgICAgICAgICAgICAgICAgICAgICAgd2hpY2ggaXMgcHJpbnRlZCB2ZXJiYXRpbSBvbiB0aGUgUERGLiBndWFyZExpbmVzIG9ubHkgZXZlcgogKiAgICAgICAgICAgICAgICAgICAgICAgY292ZXJlZCByZXN1bWVfbGluZXMuCiAqIC0gbm9ybWFsaXplUGF0Y2ggICAg4oaSIHRoZSBtb2RlbCBlbWl0dGVkIHllYXJzIC8geWVhcnNfb2ZfZXhwZXJpZW5jZSAvIGluZHVzdHJ5IC8KICogICAgICAgICAgICAgICAgICAgICAgIGV4cGVyaWVuY2VzW10gaW50ZXJjaGFuZ2VhYmx5LCBhbmQgcm9sZSBzd2FsbG93ZWQgd2hvbGUKICogICAgICAgICAgICAgICAgICAgICAgIHNlbnRlbmNlcyAoIk51cnNlLCA1IHllYXJzIGluIGVtZXJnZW5jeSBjYXJlIikuCiAqIC0gZnJlZXplSGlzdG9yeSAgICAg4oaSIHNjZW5hcmlvIDIyIGFjY2VwdGVkICLYutmK2ZHYsSDYqtin2LHZitiuINin2YTYqtiu2LHYrCDZhdmGINmi2aDZodmpINin2YTZiSDZotmg2aLZoiIuCiAqIC0gY29tcHV0ZVByb2dyZXNzICAg4oaSIHRoZSBtb2RlbCdzIG93biBwcm9ncmVzcyB3YXMgMCBvciAxNyBhbmQgbm90aGluZyBlbHNlLgogKiAtIGdhdGVGaW5pc2ggICAgICAgIOKGkiBhIGNvbnZlcnNhdGlvbiByZWFjaGVkIEZJTklTSC8xMDAgdGhlbiBmZWxsIGJhY2sgdG8gQVNLLzgzLgogKiAtIGFnZUdhdGUgLyBTRU5TSVRJVkUg4oaSIG1pbm9ycyBnb3QgYSBwbGFpbiBqb2ItdGl0bGUgcXVlc3Rpb247IHNvIGRpZCAi2YPZhtiqINmF2LPYrNmI2YYKICogICAgICAgICAgICAgICAgICAgICAgINiz2YbYqtmK2YYiIGFuZCAiSSBoYXZlIGEgMy15ZWFyIGdhcCBiZWNhdXNlIG9mIGRlcHJlc3Npb24iLgogKi8KCi8qIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCBkaWdpdHMg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAICovCgpjb25zdCBBUl9ESUdJVFMgPSAi2aDZodmi2aPZpNml2abZp9mo2akiOwoKLyoqIEZvbGQgQXJhYmljLUluZGljIGRpZ2l0cyB0byBBU0NJSSBzbyBvbmUgc2V0IG9mIHBhdHRlcm5zIGNvdmVycyBib3RoIHNjcmlwdHMuICovCmV4cG9ydCBmdW5jdGlvbiBmb2xkRGlnaXRzKHM6IHN0cmluZyk6IHN0cmluZyB7CiAgcmV0dXJuIHMucmVwbGFjZSgvW9mgLdmpXS9nLCAoZCkgPT4gU3RyaW5nKEFSX0RJR0lUUy5pbmRleE9mKGQpKSk7Cn0KCmV4cG9ydCBmdW5jdGlvbiBoYXNEaWdpdHMoczogc3RyaW5nKTogYm9vbGVhbiB7CiAgcmV0dXJuIC9cZHxb2aAt2aldLy50ZXN0KHMpOwp9CgovKiDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgUElJIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCAqLwoKLyoqCiAqIFBhdHRlcm5zIGZvciBkYXRhIHRoYXQgbXVzdCBuZXZlciByZWFjaCBhIHJlc3VtZSDigJQgaXQgaXMgcHJpbnRlZCBvbiBhIGRvY3VtZW50CiAqIHRoZSB1c2VyIGhhbmRzIHRvIGFuIGVtcGxveWVyLiBEZWxpYmVyYXRlbHkgbmFycm93OiBhIHJlc3VtZSBpcyBGVUxMIG9mCiAqIGxlZ2l0aW1hdGUgbnVtYmVycyAoU0FSIDQwTSByZXZlbnVlLCAxNSBicmFuY2hlcywgMzAlIHJlZHVjdGlvbikgYW5kIHNjcnViYmluZwogKiB0aG9zZSB3b3VsZCBicmVhayBUSEUgT05FIExBVyBoYXJkZXIgdGhhbiBsZWFraW5nIGFuIElEIHdvdWxkLgogKgogKiBQaG9uZSBudW1iZXJzIGFuZCBlbWFpbHMgYXJlIGludGVudGlvbmFsbHkgTk9UIGhlcmUg4oCUIHRoZXkgYmVsb25nIGluIHRoZSBoZWFkZXIuCiAqLwpjb25zdCBQSUlfUlVMRVM6IEFycmF5PHsgbmFtZTogc3RyaW5nOyByZTogUmVnRXhwIH0+ID0gWwogIC8vIFNhdWRpIElCQU4gKFNBICsgMiBjaGVjayBkaWdpdHMgKyAxOCkgYW5kIElCQU5zIGdlbmVyYWxseS4KICB7IG5hbWU6ICJpYmFuIiwgcmU6IC9cYltBLVpdezJ9XGR7Mn1bQS1aMC05XXsxMSwyOH1cYi9nIH0sCiAgLy8gU2F1ZGkgbmF0aW9uYWwgSUQgLyBJcWFtYTogZXhhY3RseSAxMCBkaWdpdHMgc3RhcnRpbmcgMSBvciAyLiBBIGJhcmUgMTAtZGlnaXQKICAvLyBydW4gaXMgbm90IHNvbWV0aGluZyBhbiBhY2hpZXZlbWVudCBidWxsZXQgbGVnaXRpbWF0ZWx5IGNvbnRhaW5zLgogIHsgbmFtZTogIm5hdGlvbmFsX2lkIiwgcmU6IC8oPzwhXGQpWzEyXVxkezl9KD8hXGQpL2cgfSwKICAvLyBVUyBTU04uCiAgeyBuYW1lOiAic3NuIiwgcmU6IC9cYlxkezN9LVxkezJ9LVxkezR9XGIvZyB9LAogIC8vIFBhc3Nwb3J0OiBvbmUgbGV0dGVyICsgNy04IGRpZ2l0cy4KICB7IG5hbWU6ICJwYXNzcG9ydCIsIHJlOiAvXGJbQS1aXVxkezcsOH1cYi9nIH0sCiAgLy8gUGF5bWVudCBjYXJkcyAoMTMtMTkgZGlnaXRzLCBvcHRpb25hbGx5IGdyb3VwZWQpLgogIHsgbmFtZTogImNhcmQiLCByZTogL1xiKD86XGRbIC1dPyl7MTMsMTl9XGIvZyB9LApdOwoKLyoqCiAqIFNhbGFyeS9jb21wZW5zYXRpb24gZmlndXJlcywga2V5d29yZC1hbmNob3JlZCBzbyByZXZlbnVlIGFuZCBoZWFkY291bnQgc3Vydml2ZS4KICogVGhlIEFyYWJpYyBrZXl3b3JkIHRha2VzIHBvc3Nlc3NpdmUgc3VmZml4ZXMgaW4gb3JkaW5hcnkgc3BlZWNoICgi2LHYp9iq2KjZiiIsCiAqICLZhdix2KrYqNmH2KciKSwgc28gdGhlIHN0ZW0gaXMgbWF0Y2hlZCB3aXRoIHRoZW0gYXR0YWNoZWQuCiAqLwpjb25zdCBTQUxBUllfUkUgPQogIC8oPzooPzrYp9mEKT8oPzrYsdin2KrYqHzZhdix2KrYqHzYo9is2LF82KfYrNixKSg/OtmKfNmHfNmH2Kd82YfZhXzZg3zZhtinKT982LXYp9mB2YpccyrYp9mE2LHYp9iq2Kh8c2FsYXJ5fG1vbnRobHlccytwYXl8Y29tcGVuc2F0aW9uKVxzKig/OtmH2Yh82KfZhNit2KfZhNmKfNin2YTYtNmH2LHZinxpc3x3YXMpP1xzKls62J89XT9ccypbXGQsLl0rXHMqKD86U0FSfNixXC4/2LN82LHZitin2YR8VVNEfFwkKT8vZ2k7CgovKiogRXhwbGljaXQgSUQvSUJBTiBsYWJlbHMsIHNvIHRoZSBsYWJlbCBkb2VzIG5vdCBzdXJ2aXZlIGl0cyBvd24gdmFsdWUuICovCmNvbnN0IFBJSV9MQUJFTF9SRSA9CiAgLyg/Otix2YLZhVxzKig/Otin2YQpPyg/OtmH2YjZitipfNin2YTZh9mI2YrZh3zYp9mE2KXZgtin2YXYqXzYp9mE2KfZgtin2YXYqXzYrNmI2KfYstmKP3zYp9mE2KzZiNin2LIpfNmH2YjZitiq2Yp82KfZitio2KfZhnzYp9mE2KfZitio2KfZhnzYp9mE2KLZitio2KfZhnxuYXRpb25hbFxzKmlkfGlxYW1hfHBhc3Nwb3J0XHMqKD86bm9cLj98bnVtYmVyKXxpYmFuKVxzKls62J89XT9ccyovZ2k7CgpleHBvcnQgaW50ZXJmYWNlIFNjcnViUmVzdWx0IHsgdGV4dDogc3RyaW5nOyBoaXRzOiBzdHJpbmdbXSB9CgovKiogUmVtb3ZlIFBJSSBmcm9tIGEgc2luZ2xlIHN0cmluZywgcmVwb3J0aW5nIHdoaWNoIHJ1bGVzIGZpcmVkLiAqLwpleHBvcnQgZnVuY3Rpb24gc2NydWJQaWkoaW5wdXQ6IHN0cmluZyk6IFNjcnViUmVzdWx0IHsKICBjb25zdCBoaXRzOiBzdHJpbmdbXSA9IFtdOwogIGxldCBvdXQgPSBpbnB1dDsKICBjb25zdCBmb2xkZWQgPSBmb2xkRGlnaXRzKG91dCk7CgogIC8vIFdvcmsgb24gdGhlIGZvbGRlZCBjb3B5IGZvciBkZXRlY3Rpb24sIGJ1dCByZWJ1aWxkIGZyb20gaXQgc28gQXJhYmljLUluZGljCiAgLy8gZGlnaXRzIGluc2lkZSBhbiBJRCBjYW5ub3Qgc2xpcCBwYXN0IGJ5IHN0YXlpbmcgdW4tbm9ybWFsaXplZC4KICBvdXQgPSBmb2xkZWQ7CgogIGZvciAoY29uc3QgeyBuYW1lLCByZSB9IG9mIFBJSV9SVUxFUykgewogICAgaWYgKHJlLnRlc3Qob3V0KSkgeyBoaXRzLnB1c2gobmFtZSk7IG91dCA9IG91dC5yZXBsYWNlKHJlLCAiIik7IH0KICAgIHJlLmxhc3RJbmRleCA9IDA7CiAgfQogIGlmIChTQUxBUllfUkUudGVzdChvdXQpKSB7IGhpdHMucHVzaCgic2FsYXJ5Iik7IG91dCA9IG91dC5yZXBsYWNlKFNBTEFSWV9SRSwgIiIpOyB9CiAgU0FMQVJZX1JFLmxhc3RJbmRleCA9IDA7CgogIGlmIChoaXRzLmxlbmd0aCkgewogICAgLy8gRHJvcCB0aGUgbm93LW9ycGhhbmVkIGxhYmVscyAoItix2YLZhSDYp9mE2YfZiNmK2Kk6INiMINin2YrYqNin2YY6ICIpLgogICAgb3V0ID0gb3V0LnJlcGxhY2UoUElJX0xBQkVMX1JFLCAiIik7CiAgICBQSUlfTEFCRUxfUkUubGFzdEluZGV4ID0gMDsKICB9CiAgLy8gVGlkeSB0aGUgcHVuY3R1YXRpb24gdGhlIHJlbW92YWxzIGxlZnQgYmVoaW5kLgogIG91dCA9IG91dAogICAgLnJlcGxhY2UoL1vYjCw7fF1ccyooPz1b2IwsO3xdKS9nLCAiIikKICAgIC5yZXBsYWNlKC9eW1xz2IwsO3w6Llwt4oCT4oCUXSsvLCAiIikKICAgIC5yZXBsYWNlKC9bXHPYjCw7fDpcLeKAk+KAlF0rJC8sICIiKQogICAgLnJlcGxhY2UoL1xzezIsfS9nLCAiICIpCiAgICAudHJpbSgpOwoKICByZXR1cm4geyB0ZXh0OiBvdXQsIGhpdHMgfTsKfQoKLyoqIFJlY3Vyc2l2ZWx5IHNjcnViIGV2ZXJ5IHN0cmluZyBpbnNpZGUgYSBKU09OLWlzaCB2YWx1ZS4gKi8KZXhwb3J0IGZ1bmN0aW9uIHNjcnViRGVlcDxUPih2YWx1ZTogVCwgaGl0czogc3RyaW5nW10gPSBbXSk6IFQgewogIGlmICh0eXBlb2YgdmFsdWUgPT09ICJzdHJpbmciKSB7CiAgICBjb25zdCByID0gc2NydWJQaWkodmFsdWUpOwogICAgaGl0cy5wdXNoKC4uLnIuaGl0cyk7CiAgICByZXR1cm4gci50ZXh0IGFzIHVua25vd24gYXMgVDsKICB9CiAgaWYgKEFycmF5LmlzQXJyYXkodmFsdWUpKSByZXR1cm4gdmFsdWUubWFwKCh2KSA9PiBzY3J1YkRlZXAodiwgaGl0cykpIGFzIHVua25vd24gYXMgVDsKICBpZiAodmFsdWUgJiYgdHlwZW9mIHZhbHVlID09PSAib2JqZWN0IikgewogICAgY29uc3Qgb3V0OiBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPiA9IHt9OwogICAgZm9yIChjb25zdCBbaywgdl0gb2YgT2JqZWN0LmVudHJpZXModmFsdWUgYXMgUmVjb3JkPHN0cmluZywgdW5rbm93bj4pKSBvdXRba10gPSBzY3J1YkRlZXAodiwgaGl0cyk7CiAgICByZXR1cm4gb3V0IGFzIHVua25vd24gYXMgVDsKICB9CiAgcmV0dXJuIHZhbHVlOwp9CgovKiDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgcGxhY2Vob2xkZXJzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCAqLwoKY29uc3QgUExBQ0VIT0xERVJfUkUgPSAvXFtbXlxdXSooPzphZGR82KPYttmBfNix2YLZhXxudW1iZXJ8ZmlndXJlfNin2LDZg9ixfNit2K/YrylbXlxdXSpcXS9naTsKCi8qKgogKiBTdHJpcCBicmFja2V0ZWQgW2FkZCDigKZdIHBsYWNlaG9sZGVycy4gQWxsb3dlZCBhdCBtb3N0IG9uY2UgcGVyIHJlc3BvbnNlIGFuZAogKiBuZXZlciB3aGVuIHRoZSB1c2VyJ3Mgb3duIHdvcmRzIGFscmVhZHkgY2FycnkgdGhlIG51bWJlci4KICovCmV4cG9ydCBmdW5jdGlvbiBzdHJpcFBsYWNlaG9sZGVycyh0ZXh0OiBzdHJpbmcsIHNvdXJjZUhhc0RpZ2l0czogYm9vbGVhbiwgYnVkZ2V0OiB7IGxlZnQ6IG51bWJlciB9KTogc3RyaW5nIHsKICBpZiAoIVBMQUNFSE9MREVSX1JFLnRlc3QodGV4dCkpIHsgUExBQ0VIT0xERVJfUkUubGFzdEluZGV4ID0gMDsgcmV0dXJuIHRleHQ7IH0KICBQTEFDRUhPTERFUl9SRS5sYXN0SW5kZXggPSAwOwogIGlmICghc291cmNlSGFzRGlnaXRzICYmIGJ1ZGdldC5sZWZ0ID4gMCkgeyBidWRnZXQubGVmdC0tOyByZXR1cm4gdGV4dDsgfQogIHJldHVybiB0ZXh0CiAgICAucmVwbGFjZSgvWyzYjF0/XHMqKD86Ynl82KjZhtiz2KjYqXxvZnzZgdmKKT9ccypcW1teXF1dKlxdL2dpLCAiIikKICAgIC5yZXBsYWNlKC9cc3syLH0vZywgIiAiKQogICAgLnJlcGxhY2UoL1xzKyhbLtiMLF0pL2csICIkMSIpCiAgICAucmVwbGFjZSgvW1xz2IwsXC3igJPigJRdKyQvLCAiIikKICAgIC50cmltKCk7Cn0KCi8qIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCBzY2hlbWEgbm9ybWFsaXphdGlvbiDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgKi8KCmV4cG9ydCBpbnRlcmZhY2UgTm9ybWFsaXplZFBhdGNoIHsKICBwYXRjaDogUmVjb3JkPHN0cmluZywgdW5rbm93bj47CiAgLyoqIEZpZWxkcyB0aGUgZ3VhcmRzIHJlZnVzZWQsIGZvciBsb2dnaW5nIOKAlCBuZXZlciBzdXJmYWNlZCB0byB0aGUgY2xpZW50LiAqLwogIGRyb3BwZWQ6IHN0cmluZ1tdOwogIC8qKgogICAqIFRoZSByb2xlIHdlIGNhcHR1cmVkIGlzIGEgc2VjdG9yIG9yIGEgbGlmZSBzdGFnZSwgbm90IGEgam9iIHRpdGxlIOKAlCB0aGUKICAgKiBsaXZlIHJ1biBwcm9kdWNlZCByb2xlOiLYs9mK2KfYrdipIiAoYW4gaW5kdXN0cnkpIGFuZCByb2xlOiLYrtix2YrYrCDYrNiv2YrYryIgKGEgc3RhdHVzKSwKICAgKiBib3RoIG9mIHdoaWNoIHByaW50IGFzIHRoZSBoZWFkbGluZSBvZiB0aGUgcmVzdW1lLiBUaGUgdmFsdWUgaXMgS0VQVCAodGhyb3dpbmcKICAgKiBhd2F5IHdoYXQgdGhlIHVzZXIgc2FpZCB3b3VsZCBiZSBpdHMgb3duIGJ1Zyk7IHRoZSByb3V0ZSB1c2VzIHRoaXMgdG8gYXNrIGZvcgogICAqIHRoZSBhY3R1YWwgdGl0bGUgaW5zdGVhZCBvZiBtb3Zpbmcgb24uCiAgICovCiAgcm9sZU5lZWRzVGl0bGU6IGJvb2xlYW47Cn0KCi8qKgogKiBTZWN0b3JzIGFuZCBsaWZlIHN0YWdlcyB0aGF0IGdldCB0eXBlZCBpbiB3aGVuIHNvbWVvbmUgaXMgYXNrZWQgIndoYXQgaXMgeW91cgogKiBqb2IgdGl0bGU/Ii4gTWF0Y2hlZCBvbmx5IGFzIHRoZSBXSE9MRSByb2xlIOKAlCAi2YXZh9mG2K/YsyDYs9mK2KfYrdipIiBvciAiU2FsZXMgTWFuYWdlciIKICogYXJlIHJlYWwgdGl0bGVzIGFuZCBtdXN0IHBhc3MgdW50b3VjaGVkLgogKi8KY29uc3QgTk9UX0FfVElUTEUgPSBuZXcgU2V0KFsKICAvLyBzZWN0b3JzIC8gZmllbGRzCiAgItiz2YrYp9it2KkiLCAi2KfZhNiz2YrYp9it2KkiLCAidG91cmlzbSIsICLZhdio2YrYudin2KoiLCAic2FsZXMiLCAi2KrYs9mI2YrZgiIsICJtYXJrZXRpbmciLAogICLZhdit2KfYs9io2KkiLCAiYWNjb3VudGluZyIsICLZh9mG2K/Ys9ipIiwgImVuZ2luZWVyaW5nIiwgItiq2YLZhtmK2Kkg2KfZhNmF2LnZhNmI2YXYp9iqIiwgIml0IiwKICAi2KfZhNmF2YjYp9ix2K8g2KfZhNio2LTYsdmK2KkiLCAiaHIiLCAiaHVtYW4gcmVzb3VyY2VzIiwgIti32KgiLCAibWVkaWNpbmUiLCAi2KrYudmE2YrZhSIsICJlZHVjYXRpb24iLAogICLZgtin2YbZiNmGIiwgImxhdyIsICLYpdiv2KfYsdipIiwgIm1hbmFnZW1lbnQiLCAi2YTZiNis2LPYqtmK2KfYqiIsICJsb2dpc3RpY3MiLCAi2YXYp9mE2YrYqSIsICJmaW5hbmNlIiwKICAvLyBsaWZlIHN0YWdlcyAvIHN0YXR1c2VzCiAgItiu2LHZitisINis2K/ZitivIiwgItiu2LHZitis2Kkg2KzYr9mK2K/YqSIsICJmcmVzaCBncmFkdWF0ZSIsICJuZXcgZ3JhZHVhdGUiLCAiZ3JhZHVhdGUiLAogICLYt9in2YTYqCIsICLYt9in2YTYqNipIiwgInN0dWRlbnQiLCAi2LnYp9i32YQiLCAi2LnYp9i32YQg2LnZhiDYp9mE2LnZhdmEIiwgInVuZW1wbG95ZWQiLAogICLYqNin2K3YqyDYudmGINi52YXZhCIsICLYqNin2K3Yq9ipINi52YYg2LnZhdmEIiwgImpvYiBzZWVrZXIiLCAi2YXYqtmC2KfYudivIiwgInJldGlyZWQiLApdKTsKCmZ1bmN0aW9uIGlzTm90QVRpdGxlKHJvbGU6IHN0cmluZyk6IGJvb2xlYW4gewogIHJldHVybiBOT1RfQV9USVRMRS5oYXMocm9sZS50cmltKCkudG9Mb3dlckNhc2UoKS5yZXBsYWNlKC9eKNin2YQpKD89W15cc117Myx9KS8sICIiKSk7Cn0KCmNvbnN0IFlFQVJTX0tFWVMgPSBbInllYXJzX29mX2V4cGVyaWVuY2UiLCAieWVhcnMiLCAiZXhwZXJpZW5jZV95ZWFycyIsICJ5ZWFyc09mRXhwZXJpZW5jZSIsICJ5b2UiXTsKCi8qKiAiTnVyc2UsIDUgeWVhcnMgaW4gZW1lcmdlbmN5IGNhcmUiIOKGkiB7IHJvbGU6ICJOdXJzZSIsIHllYXJzX29mX2V4cGVyaWVuY2U6IDUgfSAqLwpmdW5jdGlvbiBzcGxpdFJvbGUocmF3OiBzdHJpbmcpOiB7IHJvbGU6IHN0cmluZzsgeWVhcnM/OiBudW1iZXIgfSB7CiAgbGV0IHJvbGUgPSBmb2xkRGlnaXRzKHJhdykudHJpbSgpLnJlcGxhY2UoL15bXHNcLeKAk+KAlCzYjF0rfFtcc1wt4oCT4oCULNiMLl0rJC9nLCAiIik7CiAgbGV0IHllYXJzOiBudW1iZXIgfCB1bmRlZmluZWQ7CgogIGNvbnN0IG0gPSByb2xlLm1hdGNoKC8oXGR7MSwyfSlccyooPzpcKyk/XHMqKD86eWVhcnM/fHlycz982LPZhtmI2KfYqnzYs9mG2Kl82LPZhtmK2YZ82LnYp9mFfNij2LnZiNin2YUpL2kpOwogIGlmIChtKSB7CiAgICB5ZWFycyA9IE51bWJlcihtWzFdKTsKICAgIHJvbGUgPSByb2xlLnJlcGxhY2UobVswXSwgIiIpOwogIH0KICAvLyBBIGpvYiB0aXRsZSBpcyBhIG5vdW4gcGhyYXNlLCBub3QgYSBzZW50ZW5jZTogY3V0IGF0IHRoZSBmaXJzdCBjbGF1c2UgYnJlYWsuCiAgcm9sZSA9IHJvbGUuc3BsaXQoL1xzKlss2Iw6OygpXVxzKnxccysoPzp3aXRofGlufGF0fNmF2YZ82YHZinzZhNiv2Yl82YXYuSlccysvaSlbMF07CiAgcm9sZSA9IHJvbGUucmVwbGFjZSgvXltcc1wt4oCT4oCULNiMXSt8W1xzXC3igJPigJQs2IwuXSskL2csICIiKS5zbGljZSgwLCA4MCk7CiAgcmV0dXJuIHsgcm9sZSwgeWVhcnMgfTsKfQoKLyoqCiAqIENvbGxhcHNlIHRoZSBtb2RlbCdzIGluY29uc2lzdGVudCBrZXkgbmFtZXMgaW50byBvbmUgc2hhcGUgYW5kIHJlamVjdCB2YWx1ZXMKICogdGhhdCB3b3VsZCBjb3JydXB0IHRoZSByZXN1bWUuCiAqCiAqIEBwYXJhbSBleGlzdGluZyB0aGUgcHJvZmlsZSB0aGUgY2xpZW50IGFscmVhZHkgaG9sZHMsIHVzZWQgdG8gZnJlZXplIGhpc3RvcnkKICovCmV4cG9ydCBmdW5jdGlvbiBub3JtYWxpemVQYXRjaCgKICByYXc6IFJlY29yZDxzdHJpbmcsIHVua25vd24+LAogIG9wdHM6IHsgc291cmNlVGV4dDogc3RyaW5nOyBleGlzdGluZz86IFJlY29yZDxzdHJpbmcsIHVua25vd24+IH0gPSB7IHNvdXJjZVRleHQ6ICIiIH0sCik6IE5vcm1hbGl6ZWRQYXRjaCB7CiAgY29uc3QgZHJvcHBlZDogc3RyaW5nW10gPSBbXTsKICBjb25zdCBwYXRjaDogUmVjb3JkPHN0cmluZywgdW5rbm93bj4gPSB7fTsKICBsZXQgcm9sZU5lZWRzVGl0bGUgPSBmYWxzZTsKICBjb25zdCBzcmMgPSBvcHRzLnNvdXJjZVRleHQgfHwgIiI7CiAgY29uc3Qgc3JjRGlnaXRzID0gaGFzRGlnaXRzKHNyYyk7CiAgY29uc3QgYnVkZ2V0ID0geyBsZWZ0OiAxIH07CgogIGNvbnN0IHN0ciA9ICh2OiB1bmtub3duLCBjYXA6IG51bWJlcik6IHN0cmluZyB8IG51bGwgPT4gewogICAgaWYgKHR5cGVvZiB2ICE9PSAic3RyaW5nIikgcmV0dXJuIG51bGw7CiAgICBjb25zdCBzID0gc3RyaXBQbGFjZWhvbGRlcnModi50cmltKCksIHNyY0RpZ2l0cywgYnVkZ2V0KS5zbGljZSgwLCBjYXApOwogICAgcmV0dXJuIHMgfHwgbnVsbDsKICB9OwoKICAvLyDilIDilIAgcm9sZSAoKyB5ZWFycyBoaWRpbmcgaW5zaWRlIGl0KQogIGlmICh0eXBlb2YgcmF3LnJvbGUgPT09ICJzdHJpbmciICYmIHJhdy5yb2xlLnRyaW0oKSkgewogICAgY29uc3QgeyByb2xlLCB5ZWFycyB9ID0gc3BsaXRSb2xlKHJhdy5yb2xlKTsKICAgIGlmIChyb2xlKSB7CiAgICAgIHBhdGNoLnJvbGUgPSByb2xlOwogICAgICBpZiAoaXNOb3RBVGl0bGUocm9sZSkpIHsKICAgICAgICByb2xlTmVlZHNUaXRsZSA9IHRydWU7CiAgICAgICAgLy8gQSBzZWN0b3IgaXMgc3RpbGwgdXNlZnVsIGluZm9ybWF0aW9uIOKAlCBmaWxlIGl0IHdoZXJlIGl0IGJlbG9uZ3MuCiAgICAgICAgaWYgKCFwYXRjaC5pbmR1c3RyeSkgcGF0Y2guaW5kdXN0cnkgPSByb2xlOwogICAgICB9CiAgICB9CiAgICBpZiAoeWVhcnMgIT09IHVuZGVmaW5lZCkgcGF0Y2gueWVhcnNfb2ZfZXhwZXJpZW5jZSA9IHllYXJzOwogIH0KICBpZiAodHlwZW9mIHJhdy50YXJnZXRSb2xlID09PSAic3RyaW5nIiAmJiByYXcudGFyZ2V0Um9sZS50cmltKCkgJiYgIXBhdGNoLnJvbGUpIHsKICAgIGNvbnN0IHsgcm9sZSB9ID0gc3BsaXRSb2xlKHJhdy50YXJnZXRSb2xlKTsKICAgIGlmIChyb2xlKSB7CiAgICAgIHBhdGNoLnJvbGUgPSByb2xlOwogICAgICBpZiAoaXNOb3RBVGl0bGUocm9sZSkpIHJvbGVOZWVkc1RpdGxlID0gdHJ1ZTsKICAgIH0KICB9CgogIC8vIOKUgOKUgCB5ZWFyczogb25lIGNhbm9uaWNhbCBrZXkKICBmb3IgKGNvbnN0IGsgb2YgWUVBUlNfS0VZUykgewogICAgaWYgKHBhdGNoLnllYXJzX29mX2V4cGVyaWVuY2UgIT09IHVuZGVmaW5lZCkgYnJlYWs7CiAgICBjb25zdCB2ID0gKHJhdyBhcyBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPilba107CiAgICBjb25zdCBuID0gdHlwZW9mIHYgPT09ICJudW1iZXIiID8gdiA6IHR5cGVvZiB2ID09PSAic3RyaW5nIiA/IE51bWJlcihmb2xkRGlnaXRzKHYpLnJlcGxhY2UoL1teXGQuXS9nLCAiIikpIDogTmFOOwogICAgaWYgKE51bWJlci5pc0Zpbml0ZShuKSAmJiBuID49IDAgJiYgbiA8PSA2MCkgcGF0Y2gueWVhcnNfb2ZfZXhwZXJpZW5jZSA9IE1hdGgucm91bmQobik7CiAgICBlbHNlIGlmICh2ICE9PSB1bmRlZmluZWQpIGRyb3BwZWQucHVzaChrKTsKICB9CgogIC8vIOKUgOKUgCBwbGFpbiBzdHJpbmcgZmllbGRzCiAgY29uc3QgUzogQXJyYXk8W3N0cmluZywgbnVtYmVyXT4gPSBbCiAgICBbIm5hbWUiLCAxMDBdLCBbImNvbnRhY3QiLCAyMDBdLCBbInN1bW1hcnkiLCA3MDBdLAogICAgWyJpbmR1c3RyeSIsIDgwXSwgWyJza2lsbHMiLCA0MDBdLCBbImNlcnRpZmljYXRpb25zIiwgMzAwXSwKICBdOwogIGZvciAoY29uc3QgW2ssIGNhcF0gb2YgUykgewogICAgY29uc3QgcyA9IHN0cihyYXdba10sIGNhcCk7CiAgICBpZiAocykgcGF0Y2hba10gPSBzOwogIH0KICBpZiAoQXJyYXkuaXNBcnJheShyYXcuc2tpbGxzKSkgewogICAgY29uc3Qgc2sgPSByYXcuc2tpbGxzLm1hcChTdHJpbmcpLm1hcCgocykgPT4gcy50cmltKCkpLmZpbHRlcihCb29sZWFuKS5zbGljZSgwLCAxMik7CiAgICBpZiAoc2subGVuZ3RoKSBwYXRjaC5za2lsbHMgPSBzay5qb2luKCLYjCAiKTsKICB9CgogIC8vIOKUgOKUgCBlZHVjYXRpb246IG9iamVjdCBvciBzdHJpbmcsIHdpdGggZ3JhZHVhdGlvbl95ZWFyIGZyb3plbgogIGlmICh0eXBlb2YgcmF3LmVkdWNhdGlvbiA9PT0gInN0cmluZyIpIHsKICAgIGNvbnN0IHMgPSBzdHIocmF3LmVkdWNhdGlvbiwgNDAwKTsKICAgIGlmIChzKSBwYXRjaC5lZHVjYXRpb24gPSBzOwogIH0gZWxzZSBpZiAocmF3LmVkdWNhdGlvbiAmJiB0eXBlb2YgcmF3LmVkdWNhdGlvbiA9PT0gIm9iamVjdCIpIHsKICAgIGNvbnN0IGUgPSByYXcuZWR1Y2F0aW9uIGFzIFJlY29yZDxzdHJpbmcsIHVua25vd24+OwogICAgY29uc3QgZWR1OiBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPiA9IHt9OwogICAgZm9yIChjb25zdCBrIG9mIFsiZGVncmVlIiwgInVuaXZlcnNpdHkiLCAiZmllbGQiXSkgewogICAgICBjb25zdCBzID0gc3RyKGVba10sIDE2MCk7CiAgICAgIGlmIChzKSBlZHVba10gPSBzOwogICAgfQogICAgY29uc3QgZ3kgPSBmb2xkRGlnaXRzKFN0cmluZyhlLmdyYWR1YXRpb25feWVhciA/PyAiIikpLm1hdGNoKC9cZHs0fS8pPy5bMF07CiAgICBpZiAoZ3kpIHsKICAgICAgY29uc3QgcHJpb3IgPSBTdHJpbmcoCiAgICAgICAgKG9wdHMuZXhpc3Rpbmc/LmVkdWNhdGlvbiBhcyBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPiB8IHVuZGVmaW5lZCk/LmdyYWR1YXRpb25feWVhciA/PwogICAgICAgIChvcHRzLmV4aXN0aW5nPy5ncmFkdWF0aW9uX3llYXIgPz8gIiIpLAogICAgICApLm1hdGNoKC9cZHs0fS8pPy5bMF07CiAgICAgIC8vIERhdGVzIGFyZSBoaXN0b3J5LiBPbmNlIGEgZ3JhZHVhdGlvbiB5ZWFyIGlzIG9uIHJlY29yZCwgYSBsYXRlciB0dXJuIG1heQogICAgICAvLyBub3Qgc2lsZW50bHkgb3ZlcndyaXRlIGl0IHdpdGggYSBkaWZmZXJlbnQgb25lIOKAlCB0aGF0IGlzIHRoZSBmb3JnZXJ5IHRoZQogICAgICAvLyBwcm9kdWN0IHByb21pc2VzIG5vdCB0byBkby4KICAgICAgaWYgKHByaW9yICYmIHByaW9yICE9PSBneSkgZHJvcHBlZC5wdXNoKGBlZHVjYXRpb24uZ3JhZHVhdGlvbl95ZWFyOiR7cHJpb3J9LT4ke2d5fWApOwogICAgICBlbHNlIGVkdS5ncmFkdWF0aW9uX3llYXIgPSBneTsKICAgIH0KICAgIGlmIChPYmplY3Qua2V5cyhlZHUpLmxlbmd0aCkgcGF0Y2guZWR1Y2F0aW9uID0gZWR1OwogIH0KCiAgLy8g4pSA4pSAIGV4cGVyaWVuY2VzW10KICBpZiAoQXJyYXkuaXNBcnJheShyYXcuZXhwZXJpZW5jZXMpKSB7CiAgICBjb25zdCBleHBzID0gKHJhdy5leHBlcmllbmNlcyBhcyBBcnJheTxSZWNvcmQ8c3RyaW5nLCB1bmtub3duPj4pCiAgICAgIC5tYXAoKGV4KSA9PiB7CiAgICAgICAgY29uc3QgaCA9IChleD8uaGVhZGVyICYmIHR5cGVvZiBleC5oZWFkZXIgPT09ICJvYmplY3QiID8gZXguaGVhZGVyIDoge30pIGFzIFJlY29yZDxzdHJpbmcsIHVua25vd24+OwogICAgICAgIGNvbnN0IGhlYWRlciA9IHR5cGVvZiBleD8uaGVhZGVyID09PSAic3RyaW5nIgogICAgICAgICAgPyB7IHRpdGxlOiBTdHJpbmcoZXguaGVhZGVyKS5zbGljZSgwLCAxMjApLCBjb21wYW55OiAiIiwgc3RhcnRfZGF0ZTogIiIgfQogICAgICAgICAgOiB7CiAgICAgICAgICAgICAgdGl0bGU6IHN0cihoLnRpdGxlLCAxMjApIHx8ICIiLAogICAgICAgICAgICAgIGNvbXBhbnk6IHN0cihoLmNvbXBhbnksIDEyMCkgfHwgIiIsCiAgICAgICAgICAgICAgc3RhcnRfZGF0ZTogbm9ybWFsaXplRGF0ZShTdHJpbmcoaC5zdGFydF9kYXRlID8/ICIiKSksCiAgICAgICAgICAgIH07CiAgICAgICAgY29uc3QgYnVsbGV0cyA9IEFycmF5LmlzQXJyYXkoZXg/LmJ1bGxldHMpCiAgICAgICAgICA/IChleC5idWxsZXRzIGFzIHVua25vd25bXSkKICAgICAgICAgICAgICAubWFwKChiKSA9PiBzdHJpcFBsYWNlaG9sZGVycyhTdHJpbmcoYikucmVwbGFjZSgvXlst4oCiKl1ccyovLCAiIikudHJpbSgpLCBzcmNEaWdpdHMsIGJ1ZGdldCkpCiAgICAgICAgICAgICAgLmZpbHRlcigoYikgPT4gYi5sZW5ndGggPiAyKQogICAgICAgICAgICAgIC5zbGljZSgwLCA0KQogICAgICAgICAgOiBbXTsKICAgICAgICByZXR1cm4geyBoZWFkZXIsIGJ1bGxldHMgfTsKICAgICAgfSkKICAgICAgLmZpbHRlcigoZXgpID0+IGV4LmhlYWRlci50aXRsZSB8fCBleC5idWxsZXRzLmxlbmd0aCkKICAgICAgLnNsaWNlKDAsIDYpOwogICAgaWYgKGV4cHMubGVuZ3RoKSBwYXRjaC5leHBlcmllbmNlcyA9IGV4cHM7CiAgfQoKICBpZiAoQXJyYXkuaXNBcnJheShyYXcuZXh0cmFzKSkgewogICAgY29uc3QgZXggPSByYXcuZXh0cmFzLm1hcChTdHJpbmcpLm1hcCgocykgPT4gcy50cmltKCkpLmZpbHRlcihCb29sZWFuKS5zbGljZSgwLCA2KTsKICAgIGlmIChleC5sZW5ndGgpIHBhdGNoLmV4dHJhcyA9IGV4OwogIH0KCiAgcmV0dXJuIHsgcGF0Y2gsIGRyb3BwZWQsIHJvbGVOZWVkc1RpdGxlIH07Cn0KCi8qKgogKiBBIGdyYWR1YXRpb24geWVhciBpcyBub3QgYSBqb2Igc3RhcnQgZGF0ZS4gVGhlIG1vZGVsIHB1dCAiMjAxNyIgKHRoZSB5ZWFyIHRoZQogKiB1c2VyIGdyYWR1YXRlZCkgaW50byBleHBlcmllbmNlc1swXS5oZWFkZXIuc3RhcnRfZGF0ZTsgYSBiYXJlIDQtZGlnaXQgeWVhciBpcwogKiBhY2NlcHRlZCBhcy1pcyBidXQgbmV2ZXIgaW52ZW50ZWQgaW50byBhIG1vbnRoLgogKi8KZnVuY3Rpb24gbm9ybWFsaXplRGF0ZShyYXc6IHN0cmluZyk6IHN0cmluZyB7CiAgY29uc3QgcyA9IGZvbGREaWdpdHMocmF3KS50cmltKCk7CiAgaWYgKCFzKSByZXR1cm4gIiI7CiAgY29uc3QgbXkgPSBzLm1hdGNoKC9eKFtBLVphLXrYgC3bv10rKVxzKyhcZHs0fSkkLyk7CiAgaWYgKG15KSByZXR1cm4gYCR7bXlbMV19ICR7bXlbMl19YDsKICBjb25zdCBpc28gPSBzLm1hdGNoKC9eKFxkezR9KS0oXGR7Mn0pJC8pOwogIGlmIChpc28pIHJldHVybiBgJHtpc29bMV19LSR7aXNvWzJdfWA7CiAgY29uc3QgeSA9IHMubWF0Y2goL14oXGR7NH0pJC8pOwogIGlmICh5KSByZXR1cm4geVsxXTsKICByZXR1cm4gcy5zbGljZSgwLCAyNCk7Cn0KCi8qIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCBwcm9ncmVzcyAmIGZpbmlzaCDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgKi8KCmV4cG9ydCBpbnRlcmZhY2UgUHJvZmlsZUxpa2UgewogIHJvbGU/OiBzdHJpbmc7IHN1bW1hcnk/OiBzdHJpbmc7IHNraWxscz86IHN0cmluZzsgbmFtZT86IHN0cmluZzsgY29udGFjdD86IHN0cmluZzsKICBlZHVjYXRpb24/OiB1bmtub3duOyB3b3ZlbkxpbmVzPzogdW5rbm93bltdOyBleHBlcmllbmNlcz86IHVua25vd25bXTsKfQoKLyoqCiAqIFByb2dyZXNzIGlzIGEgZmFjdCBhYm91dCB0aGUgcHJvZmlsZSwgbm90IGFuIG9waW5pb24gb2YgdGhlIG1vZGVsJ3MuIFNpeCBheGVzLAogKiBlYWNoIGVpdGhlciBoYXMgcmVhbCBjb250ZW50IG9yIGRvZXMgbm90LgogKi8KZXhwb3J0IGZ1bmN0aW9uIGNvbXB1dGVQcm9ncmVzcyhwOiBQcm9maWxlTGlrZSk6IG51bWJlciB7CiAgY29uc3QgZmlsbGVkID0gKHY6IHVua25vd24pOiBib29sZWFuID0+IHsKICAgIGlmICh0eXBlb2YgdiA9PT0gInN0cmluZyIpIHJldHVybiB2LnRyaW0oKS5sZW5ndGggPiAxOwogICAgaWYgKEFycmF5LmlzQXJyYXkodikpIHJldHVybiB2Lmxlbmd0aCA+IDA7CiAgICBpZiAodiAmJiB0eXBlb2YgdiA9PT0gIm9iamVjdCIpIHJldHVybiBPYmplY3QudmFsdWVzKHYpLnNvbWUoKHgpID0+IGZpbGxlZCh4KSk7CiAgICByZXR1cm4gZmFsc2U7CiAgfTsKICBjb25zdCBheGVzID0gWwogICAgZmlsbGVkKHAucm9sZSksCiAgICBmaWxsZWQocC5zdW1tYXJ5KSwKICAgIGZpbGxlZChwLndvdmVuTGluZXMpIHx8IGZpbGxlZChwLmV4cGVyaWVuY2VzKSwKICAgIGZpbGxlZChwLnNraWxscyksCiAgICBmaWxsZWQocC5lZHVjYXRpb24pLAogICAgZmlsbGVkKHAubmFtZSkgJiYgZmlsbGVkKHAuY29udGFjdCksCiAgXTsKICByZXR1cm4gTWF0aC5yb3VuZCgoYXhlcy5maWx0ZXIoQm9vbGVhbikubGVuZ3RoIC8gYXhlcy5sZW5ndGgpICogMTAwKTsKfQoKLyoqCiAqIEZJTklTSCBpcyBvbmx5IHJlYWwgd2hlbiB0aGUgcmVzdW1lIGlzIGFjdHVhbGx5IGNvbXBsZXRlLiBXaXRob3V0IHRoaXMgdGhlCiAqIGludGVydmlldyBhbm5vdW5jZXMgItiq2YUg2KjZhtin2KEg2KfZhNiz2YrYsdipINin2YTYsNin2KrZitipINio2YbYrNin2K0iIGFuZCB0aGVuIGFza3MgYW5vdGhlcgogKiBxdWVzdGlvbiBvbiB0aGUgbmV4dCB0dXJuLCB3aGljaCBpcyBob3cgYSBmaW5pc2hlZCBDViAidW4tZmluaXNoZXMiIGl0c2VsZi4KICovCmV4cG9ydCBmdW5jdGlvbiBnYXRlRmluaXNoKGFjdGlvbjogc3RyaW5nLCBtZXJnZWQ6IFByb2ZpbGVMaWtlKTogeyBhY3Rpb246IHN0cmluZzsgYmxvY2tlZDogYm9vbGVhbiB9IHsKICBpZiAoYWN0aW9uICE9PSAiRklOSVNIIikgcmV0dXJuIHsgYWN0aW9uLCBibG9ja2VkOiBmYWxzZSB9OwogIGNvbnN0IG9rID0KICAgIEJvb2xlYW4obWVyZ2VkLnJvbGUpICYmCiAgICBCb29sZWFuKG1lcmdlZC5zdW1tYXJ5KSAmJgogICAgKChtZXJnZWQud292ZW5MaW5lcz8ubGVuZ3RoID8/IDApID4gMCB8fCAobWVyZ2VkLmV4cGVyaWVuY2VzPy5sZW5ndGggPz8gMCkgPiAwKSAmJgogICAgQm9vbGVhbihtZXJnZWQuc2tpbGxzKSAmJgogICAgQm9vbGVhbihtZXJnZWQubmFtZSkgJiYKICAgIEJvb2xlYW4obWVyZ2VkLmNvbnRhY3QpOwogIHJldHVybiBvayA/IHsgYWN0aW9uOiAiRklOSVNIIiwgYmxvY2tlZDogZmFsc2UgfSA6IHsgYWN0aW9uOiAiQVNLIiwgYmxvY2tlZDogdHJ1ZSB9Owp9CgovKiDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgcGVvcGxlLCBub3QgZmllbGRzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCAqLwoKLyoqIFN0YXRlZCBhZ2UsIHdoZW4gdGhlIHVzZXIgdm9sdW50ZWVycyBvbmUuICovCmV4cG9ydCBmdW5jdGlvbiBzdGF0ZWRBZ2UodGV4dDogc3RyaW5nKTogbnVtYmVyIHwgbnVsbCB7CiAgY29uc3QgcyA9IGZvbGREaWdpdHModGV4dCk7CiAgY29uc3QgbSA9CiAgICBzLm1hdGNoKC8oPzrYudmF2LHZinzYs9mG2Yp82KPYqNmE2LooPzpccyrZhdmGXHMq2KfZhNi52YXYsSk/KVxzKihcZHsxLDJ9KS8pIHx8CiAgICBzLm1hdGNoKC9cYkkoPzonbXwgYW0pXHMqKFxkezEsMn0pXGIvaSkgfHwKICAgIHMubWF0Y2goL1xiKFxkezEsMn0pXHMqKD86eWVhcnM/XHMqb2xkfNiz2YbYqVxzKiQpL2kpOwogIGNvbnN0IG4gPSBtID8gTnVtYmVyKG1bMV0pIDogTmFOOwogIHJldHVybiBOdW1iZXIuaXNGaW5pdGUobikgJiYgbiA+IDggJiYgbiA8IDEwMCA/IG4gOiBudWxsOwp9CgovKioKICogVG9waWNzIHdoZXJlIHRoZSBjb3JyZWN0IGZpcnN0IG1vdmUgaXMgdG8gYW5zd2VyIHRoZSBodW1hbiBiZWluZywgbm90IHRvIGFzawogKiBmb3IgYSBqb2IgdGl0bGUuIEVhY2ggcmV0dXJucyBhIGtleTsgdGhlIHJvdXRlIHBhaXJzIGl0IHdpdGggYSByZWFsIHJlcGx5LgogKi8KZXhwb3J0IGZ1bmN0aW9uIHNlbnNpdGl2ZVRvcGljKHRleHQ6IHN0cmluZyk6IHN0cmluZyB8IG51bGwgewogIGNvbnN0IHMgPSBmb2xkRGlnaXRzKHRleHQpLnRvTG93ZXJDYXNlKCk7CiAgY29uc3QgdGVzdCA9ICguLi5wYXRzOiBSZWdFeHBbXSkgPT4gcGF0cy5zb21lKChwKSA9PiBwLnRlc3QocykpOwoKICAvLyBPcmRlcmVkIGJ5IGFjdXRlbmVzcywgbm90IGJ5IGtleXdvcmQgZnJlcXVlbmN5OiAidW5lbXBsb3llZCBmb3IgMyB5ZWFycyBhbmQKICAvLyBJJ20gbG9zaW5nIGhvcGUiIGlzIGEgcGVyc29uIGluIGRpc3RyZXNzIGJlZm9yZSBpdCBpcyBhIENWIGdhcC4KICBpZiAodGVzdCgv2YHYp9mC2K9ccyrYp9mE2KPZhdmEfNij2YHZgtivXHMq2KfZhNij2YXZhHxsb3Npbmdccypob3BlfNmK2KfYptizfGhvcGVsZXNzfNmF2KdccyrYudin2K9ccyrZhNmKXHMq2KPZhdmELykpIHJldHVybiAiaG9wZSI7CiAgaWYgKHRlc3QoL9mF2LPYrNmI2YZ82LPYrNmGfNiz2KfYqNmC2KlccyrYrNmG2KfYptmK2Kl8aW5jYXJjZXJhdHxcYmluXHMrcHJpc29uXGJ8Y3JpbWluYWxccytyZWNvcmQvKSkgcmV0dXJuICJyZWNvcmQiOwogIGlmICh0ZXN0KC/Yp9mD2KrYptin2Kh8ZGVwcmVzc3zYtdit2KrZilxzKtin2YTZhtmB2LPZitipfG1lbnRhbFxzK2hlYWx0aHxidXJub3V0LykpIHJldHVybiAiaGVhbHRoX2dhcCI7CiAgaWYgKHRlc3QoL9il2LnYp9mC2Kl82KfYudin2YLYqXxkaXNhYnzZg9ix2LPZilxzKtmF2KrYrdix2YN8d2hlZWxjaGFpci8pKSByZXR1cm4gImRpc2FiaWxpdHkiOwogIGlmICh0ZXN0KC/YudmF2LHZilxzKig/OjVbMC05XXxbNi05XVswLTldKXzYrtin2YrZgVxzKtmF2KdccyrYp9it2K9ccyrZitmI2LjZgdmG2Yp8dG9vXHMqb2xkfGFnZVxzKmRpc2NyaW1pbmF0LykpIHJldHVybiAiYWdlIjsKICBpZiAodGVzdCgv2YHYtdmE2Kp82LfYsdiv2Kp8bGFpZFxzKm9mZnxcYmZpcmVkXGJ82KPZhtmH2YjYp1xzKtiu2K/Zhdiq2YovKSkgcmV0dXJuICJsYXlvZmYiOwogIGlmICh0ZXN0KC/Zgdis2YjYqXzYp9mG2YLYt9in2Ll8XGJnYXBcYnzYudin2LfZhHx1bmVtcGxveXzYqNiv2YjZhlxzKti52YXZhC8pKSByZXR1cm4gImdhcCI7CiAgcmV0dXJuIG51bGw7Cn0KCi8qKiBEaWQgdGhlIG1vZGVsIGp1c3QgcmVwZWF0IGl0c2VsZiB2ZXJiYXRpbT8gKFRoZSBzaW5nbGUgbG91ZGVzdCBVWCBmYWlsdXJlLikgKi8KZXhwb3J0IGZ1bmN0aW9uIGlzUmVwZWF0KHNheTogc3RyaW5nLCBoaXN0b3J5OiBBcnJheTx7IHdobz86IHN0cmluZzsgcm9sZT86IHN0cmluZzsgdGV4dD86IHN0cmluZzsgY29udGVudD86IHN0cmluZyB9Pik6IGJvb2xlYW4gewogIGNvbnN0IG5vcm0gPSAoczogc3RyaW5nKSA9PiBzLnJlcGxhY2UoL1tcc9mLLdmSLizYjCE/2J9dL2csICIiKS50b0xvd2VyQ2FzZSgpOwogIGNvbnN0IHRhcmdldCA9IG5vcm0oc2F5KTsKICBpZiAodGFyZ2V0Lmxlbmd0aCA8IDgpIHJldHVybiBmYWxzZTsKICByZXR1cm4gaGlzdG9yeQogICAgLmZpbHRlcigoaCkgPT4gKGgud2hvIHx8IGgucm9sZSkgPT09ICJhaSIgfHwgKGgud2hvIHx8IGgucm9sZSkgPT09ICJhc3Npc3RhbnQiKQogICAgLnNsaWNlKC0zKQogICAgLnNvbWUoKGgpID0+IG5vcm0oU3RyaW5nKGgudGV4dCB8fCBoLmNvbnRlbnQgfHwgIiIpKSA9PT0gdGFyZ2V0KTsKfQo="}
+/**
+ * Server-side guards for the Advisor interview (/api/interview).
+ *
+ * The model is instructed to behave; these functions make it structural. Every
+ * one of them exists because a live run of 100 scenarios proved the prompt alone
+ * was not enough:
+ *
+ * - scrubPii          → scenario 45 stored a national ID + IBAN into contact
+ *                       (the English SSN case was refused, the Arabic one was not).
+ * - stripPlaceholders → scenario 1 wrote "[أضف التخصص]" into profile_patch.summary,
+ *                       which is printed verbatim on the PDF. guardLines only ever
+ *                       covered resume_lines.
+ * - normalizePatch    → the model emitted years / years_of_experience / industry /
+ *                       experiences[] interchangeably, and role swallowed whole
+ *                       sentences ("Nurse, 5 years in emergency care").
+ * - freezeHistory     → scenario 22 accepted "غيّر تاريخ التخرج من ٢٠١٩ الى ٢٠٢٢".
+ * - computeProgress   → the model's own progress was 0 or 17 and nothing else.
+ * - gateFinish        → a conversation reached FINISH/100 then fell back to ASK/83.
+ * - ageGate / SENSITIVE → minors got a plain job-title question; so did "كنت مسجون
+ *                       سنتين" and "I have a 3-year gap because of depression".
+ */
+
+/* ────────────────────────── digits ────────────────────────── */
+
+const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+
+/** Fold Arabic-Indic digits to ASCII so one set of patterns covers both scripts. */
+export function foldDigits(s: string): string {
+  return s.replace(/[٠-٩]/g, (d) => String(AR_DIGITS.indexOf(d)));
+}
+
+export function hasDigits(s: string): boolean {
+  return /\d|[٠-٩]/.test(s);
+}
+
+/* ────────────────────────── PII ────────────────────────── */
+
+/**
+ * Patterns for data that must never reach a resume — it is printed on a document
+ * the user hands to an employer. Deliberately narrow: a resume is FULL of
+ * legitimate numbers (SAR 40M revenue, 15 branches, 30% reduction) and scrubbing
+ * those would break THE ONE LAW harder than leaking an ID would.
+ *
+ * Phone numbers and emails are intentionally NOT here — they belong in the header.
+ */
+const PII_RULES: Array<{ name: string; re: RegExp }> = [
+  // Saudi IBAN (SA + 2 check digits + 18) and IBANs generally.
+  { name: "iban", re: /\b[A-Z]{2}\d{2}[A-Z0-9]{11,28}\b/g },
+  // Saudi national ID / Iqama: exactly 10 digits starting 1 or 2. A bare 10-digit
+  // run is not something an achievement bullet legitimately contains.
+  { name: "national_id", re: /(?<!\d)[12]\d{9}(?!\d)/g },
+  // US SSN.
+  { name: "ssn", re: /\b\d{3}-\d{2}-\d{4}\b/g },
+  // Passport: one letter + 7-8 digits.
+  { name: "passport", re: /\b[A-Z]\d{7,8}\b/g },
+  // Payment cards (13-19 digits, optionally grouped).
+  { name: "card", re: /\b(?:\d[ -]?){13,19}\b/g },
+];
+
+/**
+ * Salary/compensation figures, keyword-anchored so revenue and headcount survive.
+ * The Arabic keyword takes possessive suffixes in ordinary speech ("راتبي",
+ * "مرتبها"), so the stem is matched with them attached.
+ */
+const SALARY_RE =
+  /(?:(?:ال)?(?:راتب|مرتب|أجر|اجر)(?:ي|ه|ها|هم|ك|نا)?|صافي\s*الراتب|salary|monthly\s+pay|compensation)\s*(?:هو|الحالي|الشهري|is|was)?\s*[:؟=]?\s*[\d,.]+\s*(?:SAR|ر\.?س|ريال|USD|\$)?/gi;
+
+/** Explicit ID/IBAN labels, so the label does not survive its own value. */
+const PII_LABEL_RE =
+  /(?:رقم\s*(?:ال)?(?:هوية|الهويه|الإقامة|الاقامة|جوازي?|الجواز)|هويتي|ايبان|الايبان|الآيبان|national\s*id|iqama|passport\s*(?:no\.?|number)|iban)\s*[:؟=]?\s*/gi;
+
+export interface ScrubResult { text: string; hits: string[] }
+
+/** Remove PII from a single string, reporting which rules fired. */
+export function scrubPii(input: string): ScrubResult {
+  const hits: string[] = [];
+  let out = input;
+  const folded = foldDigits(out);
+
+  // Work on the folded copy for detection, but rebuild from it so Arabic-Indic
+  // digits inside an ID cannot slip past by staying un-normalized.
+  out = folded;
+
+  for (const { name, re } of PII_RULES) {
+    if (re.test(out)) { hits.push(name); out = out.replace(re, ""); }
+    re.lastIndex = 0;
+  }
+  if (SALARY_RE.test(out)) { hits.push("salary"); out = out.replace(SALARY_RE, ""); }
+  SALARY_RE.lastIndex = 0;
+
+  if (hits.length) {
+    // Drop the now-orphaned labels ("رقم الهوية: ، ايبان: ").
+    out = out.replace(PII_LABEL_RE, "");
+    PII_LABEL_RE.lastIndex = 0;
+  }
+  // Tidy the punctuation the removals left behind.
+  out = out
+    .replace(/[،,;|]\s*(?=[،,;|])/g, "")
+    .replace(/^[\s،,;|:.\-–—]+/, "")
+    .replace(/[\s،,;|:\-–—]+$/, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  return { text: out, hits };
+}
+
+/** Recursively scrub every string inside a JSON-ish value. */
+export function scrubDeep<T>(value: T, hits: string[] = []): T {
+  if (typeof value === "string") {
+    const r = scrubPii(value);
+    hits.push(...r.hits);
+    return r.text as unknown as T;
+  }
+  if (Array.isArray(value)) return value.map((v) => scrubDeep(v, hits)) as unknown as T;
+  if (value && typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) out[k] = scrubDeep(v, hits);
+    return out as unknown as T;
+  }
+  return value;
+}
+
+/* ────────────────────── placeholders ────────────────────── */
+
+const PLACEHOLDER_RE = /\[[^\]]*(?:add|أضف|رقم|number|figure|اذكر|حدد)[^\]]*\]/gi;
+
+/**
+ * Strip bracketed [add …] placeholders. Allowed at most once per response and
+ * never when the user's own words already carry the number.
+ */
+export function stripPlaceholders(text: string, sourceHasDigits: boolean, budget: { left: number }): string {
+  if (!PLACEHOLDER_RE.test(text)) { PLACEHOLDER_RE.lastIndex = 0; return text; }
+  PLACEHOLDER_RE.lastIndex = 0;
+  if (!sourceHasDigits && budget.left > 0) { budget.left--; return text; }
+  return text
+    .replace(/[,،]?\s*(?:by|بنسبة|of|في)?\s*\[[^\]]*\]/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([.،,])/g, "$1")
+    .replace(/[\s،,\-–—]+$/, "")
+    .trim();
+}
+
+/* ─────────────────── schema normalization ─────────────────── */
+
+export interface NormalizedPatch {
+  patch: Record<string, unknown>;
+  /** Fields the guards refused, for logging — never surfaced to the client. */
+  dropped: string[];
+  /**
+   * The role we captured is a sector or a life stage, not a job title — the
+   * live run produced role:"سياحة" (an industry) and role:"خريج جديد" (a status),
+   * both of which print as the headline of the resume. The value is KEPT (throwing
+   * away what the user said would be its own bug); the route uses this to ask for
+   * the actual title instead of moving on.
+   */
+  roleNeedsTitle: boolean;
+}
+
+/**
+ * Sectors and life stages that get typed in when someone is asked "what is your
+ * job title?". Matched only as the WHOLE role — "مهندس سياحة" or "Sales Manager"
+ * are real titles and must pass untouched.
+ */
+const NOT_A_TITLE = new Set([
+  // sectors / fields
+  "سياحة", "السياحة", "tourism", "مبيعات", "sales", "تسويق", "marketing",
+  "محاسبة", "accounting", "هندسة", "engineering", "تقنية المعلومات", "it",
+  "الموارد البشرية", "hr", "human resources", "طب", "medicine", "تعليم", "education",
+  "قانون", "law", "إدارة", "management", "لوجستيات", "logistics", "مالية", "finance",
+  // life stages / statuses
+  "خريج جديد", "خريجة جديدة", "fresh graduate", "new graduate", "graduate",
+  "طالب", "طالبة", "student", "عاطل", "عاطل عن العمل", "unemployed",
+  "باحث عن عمل", "باحثة عن عمل", "job seeker", "متقاعد", "retired",
+]);
+
+function isNotATitle(role: string): boolean {
+  return NOT_A_TITLE.has(role.trim().toLowerCase().replace(/^(ال)(?=[^\s]{3,})/, ""));
+}
+
+const YEARS_KEYS = ["years_of_experience", "years", "experience_years", "yearsOfExperience", "yoe"];
+
+/** "Nurse, 5 years in emergency care" → { role: "Nurse", years_of_experience: 5 } */
+function splitRole(raw: string): { role: string; years?: number } {
+  let role = foldDigits(raw).trim().replace(/^[\s\-–—,،]+|[\s\-–—,،.]+$/g, "");
+  let years: number | undefined;
+
+  const m = role.match(/(\d{1,2})\s*(?:\+)?\s*(?:years?|yrs?|سنوات|سنة|سنين|عام|أعوام)/i);
+  if (m) {
+    years = Number(m[1]);
+    role = role.replace(m[0], "");
+  }
+  // A job title is a noun phrase, not a sentence: cut at the first clause break.
+  role = role.split(/\s*[,،:;()]\s*|\s+(?:with|in|at|من|في|لدى|مع)\s+/i)[0];
+  role = role.replace(/^[\s\-–—,،]+|[\s\-–—,،.]+$/g, "").slice(0, 80);
+  return { role, years };
+}
+
+/**
+ * Collapse the model's inconsistent key names into one shape and reject values
+ * that would corrupt the resume.
+ *
+ * @param existing the profile the client already holds, used to freeze history
+ */
+export function normalizePatch(
+  raw: Record<string, unknown>,
+  opts: { sourceText: string; existing?: Record<string, unknown> } = { sourceText: "" },
+): NormalizedPatch {
+  const dropped: string[] = [];
+  const patch: Record<string, unknown> = {};
+  let roleNeedsTitle = false;
+  const src = opts.sourceText || "";
+  const srcDigits = hasDigits(src);
+  const budget = { left: 1 };
+
+  const str = (v: unknown, cap: number): string | null => {
+    if (typeof v !== "string") return null;
+    const s = stripPlaceholders(v.trim(), srcDigits, budget).slice(0, cap);
+    return s || null;
+  };
+
+  // ── role (+ years hiding inside it)
+  if (typeof raw.role === "string" && raw.role.trim()) {
+    const { role, years } = splitRole(raw.role);
+    if (role) {
+      patch.role = role;
+      if (isNotATitle(role)) {
+        roleNeedsTitle = true;
+        // A sector is still useful information — file it where it belongs.
+        if (!patch.industry) patch.industry = role;
+      }
+    }
+    if (years !== undefined) patch.years_of_experience = years;
+  }
+  if (typeof raw.targetRole === "string" && raw.targetRole.trim() && !patch.role) {
+    const { role } = splitRole(raw.targetRole);
+    if (role) {
+      patch.role = role;
+      if (isNotATitle(role)) roleNeedsTitle = true;
+    }
+  }
+
+  // ── years: one canonical key
+  for (const k of YEARS_KEYS) {
+    if (patch.years_of_experience !== undefined) break;
+    const v = (raw as Record<string, unknown>)[k];
+    const n = typeof v === "number" ? v : typeof v === "string" ? Number(foldDigits(v).replace(/[^\d.]/g, "")) : NaN;
+    if (Number.isFinite(n) && n >= 0 && n <= 60) patch.years_of_experience = Math.round(n);
+    else if (v !== undefined) dropped.push(k);
+  }
+
+  // ── plain string fields
+  const S: Array<[string, number]> = [
+    ["name", 100], ["contact", 200], ["summary", 700],
+    ["industry", 80], ["skills", 400], ["certifications", 300],
+  ];
+  for (const [k, cap] of S) {
+    const s = str(raw[k], cap);
+    if (s) patch[k] = s;
+  }
+  if (Array.isArray(raw.skills)) {
+    const sk = raw.skills.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 12);
+    if (sk.length) patch.skills = sk.join("، ");
+  }
+
+  // ── education: object or string, with graduation_year frozen
+  if (typeof raw.education === "string") {
+    const s = str(raw.education, 400);
+    if (s) patch.education = s;
+  } else if (raw.education && typeof raw.education === "object") {
+    const e = raw.education as Record<string, unknown>;
+    const edu: Record<string, unknown> = {};
+    for (const k of ["degree", "university", "field"]) {
+      const s = str(e[k], 160);
+      if (s) edu[k] = s;
+    }
+    const gy = foldDigits(String(e.graduation_year ?? "")).match(/\d{4}/)?.[0];
+    if (gy) {
+      const prior = String(
+        (opts.existing?.education as Record<string, unknown> | undefined)?.graduation_year ??
+        (opts.existing?.graduation_year ?? ""),
+      ).match(/\d{4}/)?.[0];
+      // Dates are history. Once a graduation year is on record, a later turn may
+      // not silently overwrite it with a different one — that is the forgery the
+      // product promises not to do.
+      if (prior && prior !== gy) dropped.push(`education.graduation_year:${prior}->${gy}`);
+      else edu.graduation_year = gy;
+    }
+    if (Object.keys(edu).length) patch.education = edu;
+  }
+
+  // ── experiences[]
+  if (Array.isArray(raw.experiences)) {
+    const exps = (raw.experiences as Array<Record<string, unknown>>)
+      .map((ex) => {
+        const h = (ex?.header && typeof ex.header === "object" ? ex.header : {}) as Record<string, unknown>;
+        const header = typeof ex?.header === "string"
+          ? { title: String(ex.header).slice(0, 120), company: "", start_date: "" }
+          : {
+              title: str(h.title, 120) || "",
+              company: str(h.company, 120) || "",
+              start_date: normalizeDate(String(h.start_date ?? "")),
+            };
+        const bullets = Array.isArray(ex?.bullets)
+          ? (ex.bullets as unknown[])
+              .map((b) => stripPlaceholders(String(b).replace(/^[-•*]\s*/, "").trim(), srcDigits, budget))
+              .filter((b) => b.length > 2)
+              .slice(0, 4)
+          : [];
+        return { header, bullets };
+      })
+      .filter((ex) => ex.header.title || ex.bullets.length)
+      .slice(0, 6);
+    if (exps.length) patch.experiences = exps;
+  }
+
+  if (Array.isArray(raw.extras)) {
+    const ex = raw.extras.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6);
+    if (ex.length) patch.extras = ex;
+  }
+
+  return { patch, dropped, roleNeedsTitle };
+}
+
+/**
+ * A graduation year is not a job start date. The model put "2017" (the year the
+ * user graduated) into experiences[0].header.start_date; a bare 4-digit year is
+ * accepted as-is but never invented into a month.
+ */
+function normalizeDate(raw: string): string {
+  const s = foldDigits(raw).trim();
+  if (!s) return "";
+  const my = s.match(/^([A-Za-z؀-ۿ]+)\s+(\d{4})$/);
+  if (my) return `${my[1]} ${my[2]}`;
+  const iso = s.match(/^(\d{4})-(\d{2})$/);
+  if (iso) return `${iso[1]}-${iso[2]}`;
+  const y = s.match(/^(\d{4})$/);
+  if (y) return y[1];
+  return s.slice(0, 24);
+}
+
+/* ────────────────────── progress & finish ────────────────────── */
+
+export interface ProfileLike {
+  role?: string; summary?: string; skills?: string; name?: string; contact?: string;
+  education?: unknown; wovenLines?: unknown[]; experiences?: unknown[];
+}
+
+/**
+ * Progress is a fact about the profile, not an opinion of the model's. Six axes,
+ * each either has real content or does not.
+ */
+export function computeProgress(p: ProfileLike): number {
+  const filled = (v: unknown): boolean => {
+    if (typeof v === "string") return v.trim().length > 1;
+    if (Array.isArray(v)) return v.length > 0;
+    if (v && typeof v === "object") return Object.values(v).some((x) => filled(x));
+    return false;
+  };
+  const axes = [
+    filled(p.role),
+    filled(p.summary),
+    filled(p.wovenLines) || filled(p.experiences),
+    filled(p.skills),
+    filled(p.education),
+    filled(p.name) && filled(p.contact),
+  ];
+  return Math.round((axes.filter(Boolean).length / axes.length) * 100);
+}
+
+/**
+ * FINISH is only real when the resume is actually complete. Without this the
+ * interview announces "تم بناء السيرة الذاتية بنجاح" and then asks another
+ * question on the next turn, which is how a finished CV "un-finishes" itself.
+ */
+export function gateFinish(action: string, merged: ProfileLike): { action: string; blocked: boolean } {
+  if (action !== "FINISH") return { action, blocked: false };
+  const ok =
+    Boolean(merged.role) &&
+    Boolean(merged.summary) &&
+    ((merged.wovenLines?.length ?? 0) > 0 || (merged.experiences?.length ?? 0) > 0) &&
+    Boolean(merged.skills) &&
+    Boolean(merged.name) &&
+    Boolean(merged.contact);
+  return ok ? { action: "FINISH", blocked: false } : { action: "ASK", blocked: true };
+}
+
+/* ────────────────────── people, not fields ────────────────────── */
+
+/** Stated age, when the user volunteers one. */
+export function statedAge(text: string): number | null {
+  const s = foldDigits(text);
+  const m =
+    s.match(/(?:عمري|سني|أبلغ(?:\s*من\s*العمر)?)\s*(\d{1,2})/) ||
+    s.match(/\bI(?:'m| am)\s*(\d{1,2})\b/i) ||
+    s.match(/\b(\d{1,2})\s*(?:years?\s*old|سنة\s*$)/i);
+  const n = m ? Number(m[1]) : NaN;
+  return Number.isFinite(n) && n > 8 && n < 100 ? n : null;
+}
+
+/**
+ * Topics where the correct first move is to answer the human being, not to ask
+ * for a job title. Each returns a key; the route pairs it with a real reply.
+ */
+export function sensitiveTopic(text: string): string | null {
+  const s = foldDigits(text).toLowerCase();
+  const test = (...pats: RegExp[]) => pats.some((p) => p.test(s));
+
+  // Ordered by acuteness, not by keyword frequency: "unemployed for 3 years and
+  // I'm losing hope" is a person in distress before it is a CV gap.
+  if (test(/فاقد\s*الأمل|أفقد\s*الأمل|losing\s*hope|يائس|hopeless|ما\s*عاد\s*لي\s*أمل/)) return "hope";
+  if (test(/مسجون|سجن|سابقة\s*جنائية|incarcerat|\bin\s+prison\b|criminal\s+record/)) return "record";
+  if (test(/اكتئاب|depress|صحتي\s*النفسية|mental\s+health|burnout/)) return "health_gap";
+  if (test(/إعاقة|اعاقة|disab|كرسي\s*متحرك|wheelchair/)) return "disability";
+  if (test(/عمري\s*(?:5[0-9]|[6-9][0-9])|خايف\s*ما\s*احد\s*يوظفني|too\s*old|age\s*discriminat/)) return "age";
+  if (test(/فصلت|طردت|laid\s*off|\bfired\b|أنهوا\s*خدمتي/)) return "layoff";
+  if (test(/فجوة|انقطاع|\bgap\b|عاطل|unemploy|بدون\s*عمل/)) return "gap";
+  return null;
+}
+
+/** Did the model just repeat itself verbatim? (The single loudest UX failure.) */
+export function isRepeat(say: string, history: Array<{ who?: string; role?: string; text?: string; content?: string }>): boolean {
+  const norm = (s: string) => s.replace(/[\sً-ْ.,،!?؟]/g, "").toLowerCase();
+  const target = norm(say);
+  if (target.length < 8) return false;
+  return history
+    .filter((h) => (h.who || h.role) === "ai" || (h.who || h.role) === "assistant")
+    .slice(-3)
+    .some((h) => norm(String(h.text || h.content || "")) === target);
+}

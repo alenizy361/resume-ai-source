@@ -1,1 +1,24 @@
-{"data":"aW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IEF1cm9yYUJsb2JzIGZyb20gIi4vY29tcG9uZW50cy9vcmIvQXVyb3JhQmxvYnMiOwppbXBvcnQgT3JiU2NlbmVTZXR0ZXIgZnJvbSAiLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBOb3RGb3VuZCgpIHsKICByZXR1cm4gKAogICAgPG1haW4gY2xhc3NOYW1lPSJyZWxhdGl2ZSBmbGV4IG1pbi1oLXNjcmVlbiBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgb3ZlcmZsb3ctaGlkZGVuIHB4LTYiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1jb3Ntb3MtYmcpIiwgY29sb3I6ICJ2YXIoLS1jb3Ntb3MtdGV4dCkiIH19PgogICAgICA8QXVyb3JhQmxvYnMgLz4KICAgICAgey8qINix2KfYqNi3LCBsb3N0IGFuZCBkcmlmdGluZyB0aHJvdWdoIHNwYWNlICovfQogICAgICA8T3JiU2NlbmVTZXR0ZXIgdmlzaWJsZSBtb29kPSJsb3N0IiB0b3A9IjI0dmgiIHNpemU9ezcyfSAvPgogICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUgbXQtMTYgdy1mdWxsIG1heC13LW1kIHJvdW5kZWQtM3hsIHAtMTAgdGV4dC1jZW50ZXIiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiwgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsMC4xKSIsIGJhY2tkcm9wRmlsdGVyOiAiYmx1cigxMHB4KSIgfX0+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTIgZm9udC1tb25vIHRleHQtc20gdHJhY2tpbmctWzAuM2VtXSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1jb3Ntb3MtbXV0ZWQpIiB9fT40MDQ8L2Rpdj4KICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTJ4bCBmb250LWJvbGQiPkxvc3QgaW4gc3BhY2U8L2gxPgogICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC0yIG1heC13LXNtIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tY29zbW9zLW11dGVkKSIgfX0+CiAgICAgICAgICBUaGUgcGFnZSB5b3UmYXBvcztyZSBsb29raW5nIGZvciBkcmlmdGVkIG9mZiDigJQgaXQgZG9lc24mYXBvczt0IGV4aXN0IG9yIG1heSBoYXZlIG1vdmVkLgogICAgICAgIDwvcD4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtNiBmbGV4IGZsZXgtd3JhcCBqdXN0aWZ5LWNlbnRlciBnYXAtMyI+CiAgICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNiBweS0zIj5CYWNrIGhvbWU8L0xpbms+CiAgICAgICAgICA8TGluayBocmVmPSIvb3B0aW1pemUiIGNsYXNzTmFtZT0icm91bmRlZC14bCBweC02IHB5LTMgZm9udC1zZW1pYm9sZCIgc3R5bGU9e3sgYm9yZGVyOiAiMXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiLCBjb2xvcjogInZhcigtLWNvc21vcy10ZXh0KSIgfX0+U2NhbiBhIHJlc3VtZTwvTGluaz4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import Link from "next/link";
+import AuroraBlobs from "./components/orb/AuroraBlobs";
+import OrbSceneSetter from "./components/orb/OrbSceneSetter";
+
+export default function NotFound() {
+  return (
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6" style={{ background: "var(--cosmos-bg)", color: "var(--cosmos-text)" }}>
+      <AuroraBlobs />
+      {/* رابط, lost and drifting through space */}
+      <OrbSceneSetter visible mood="lost" top="24vh" size={72} />
+      <div className="relative mt-16 w-full max-w-md rounded-3xl p-10 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(10px)" }}>
+        <div className="mb-2 font-mono text-sm tracking-[0.3em]" style={{ color: "var(--cosmos-muted)" }}>404</div>
+        <h1 className="text-2xl font-bold">Lost in space</h1>
+        <p className="mx-auto mt-2 max-w-sm text-sm" style={{ color: "var(--cosmos-muted)" }}>
+          The page you&apos;re looking for drifted off — it doesn&apos;t exist or may have moved.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/" className="btn-accent px-6 py-3">Back home</Link>
+          <Link href="/optimize" className="rounded-xl px-6 py-3 font-semibold" style={{ border: "1px solid rgba(255,255,255,0.18)", color: "var(--cosmos-text)" }}>Scan a resume</Link>
+        </div>
+      </div>
+    </main>
+  );
+}

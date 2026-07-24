@@ -1,1 +1,5 @@
-{"data":"PCEtLSBCRUdJTjpuZXh0anMtYWdlbnQtcnVsZXMgLS0+CiMgVGhpcyBpcyBOT1QgdGhlIE5leHQuanMgeW91IGtub3cKClRoaXMgdmVyc2lvbiBoYXMgYnJlYWtpbmcgY2hhbmdlcyDigJQgQVBJcywgY29udmVudGlvbnMsIGFuZCBmaWxlIHN0cnVjdHVyZSBtYXkgYWxsIGRpZmZlciBmcm9tIHlvdXIgdHJhaW5pbmcgZGF0YS4gUmVhZCB0aGUgcmVsZXZhbnQgZ3VpZGUgaW4gYG5vZGVfbW9kdWxlcy9uZXh0L2Rpc3QvZG9jcy9gIGJlZm9yZSB3cml0aW5nIGFueSBjb2RlLiBIZWVkIGRlcHJlY2F0aW9uIG5vdGljZXMuCjwhLS0gRU5EOm5leHRqcy1hZ2VudC1ydWxlcyAtLT4K"}
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->

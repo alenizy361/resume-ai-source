@@ -1,1 +1,188 @@
-{"data":"LyoqCiAqIEF1dG9ub21vdXMgTWV0YSAoRmFjZWJvb2svSW5zdGFncmFtKSBhZHMgbW9kdWxlLgogKgogKiBEcml2ZXMgdGhlIE1ldGEgTWFya2V0aW5nIEFQSSAoR3JhcGggQVBJKSB0byBjcmVhdGUgYW5kIG1hbmFnZSB0aGUgcGFpZAogKiBhY3F1aXNpdGlvbiBjYW1wYWlnbiBmb3IgUmVzdW1lQUkgd2l0aG91dCBtYW51YWwgc3RlcHMuIFJlYWRzIGFsbCBjcmVkZW50aWFscwogKiBmcm9tIGVudmlyb25tZW50IHZhcmlhYmxlcyDigJQgbm90aGluZyBpcyBldmVyIGhhcmQtY29kZWQgKHRoaXMgcmVwbyBpcyBwdWJsaWMpOgogKgogKiAgIE1FVEFfU1lTVEVNX1VTRVJfVE9LRU4gICBub24tZXhwaXJpbmcgc3lzdGVtLXVzZXIgdG9rZW4sIHNjb3BlIGFkc19tYW5hZ2VtZW50CiAqICAgTUVUQV9BRF9BQ0NPVU5UX0lEICAgICAgIGUuZy4gYWN0XzEyMzQ1Njc4OTAKICogICBNRVRBX1BBR0VfSUQgICAgICAgICAgICAgdGhlIEZhY2Vib29rIFBhZ2UgdGhlIGFkcyBydW4gdW5kZXIKICoKICogU0FGRVRZOiBldmVyeSBzcGVuZCBwYXRoIGlzIGJvdW5kZWQgYnkgREFJTFlfQlVER0VUX0NBUF9TQVIuIFRoZSBtb2R1bGUgbmV2ZXIKICogcmFpc2VzIGJ1ZGdldCBhYm92ZSBpdCwgYW5kIHRoZSB1c2VyJ3MgTWV0YS1zaWRlIGFjY291bnQgc3BlbmQgY2FwIGlzIHRoZSBoYXJkCiAqIGJhY2tzdG9wIHVuZGVybmVhdGguIFJlYWQtb25seSBpbnNpZ2h0cyBhcmUgYWx3YXlzIHNhZmUgdG8gY2FsbC4KICovCgpjb25zdCBHUkFQSCA9ICJodHRwczovL2dyYXBoLmZhY2Vib29rLmNvbS92MjEuMCI7CgovLyBIYXJkIGNlaWxpbmcgdGhpcyBtb2R1bGUgd2lsbCBuZXZlciBleGNlZWQgb24gaXRzIG93bi4gUmFpc2luZyBpdCBpcyBhCi8vIGRlbGliZXJhdGUsIGh1bWFuLWFwcHJvdmVkIGNoYW5nZSB0byB0aGlzIGNvbnN0YW50IOKAlCBub3Qgc29tZXRoaW5nIGEgc2hpZnQgZG9lcy4KZXhwb3J0IGNvbnN0IERBSUxZX0JVREdFVF9DQVBfU0FSID0gMTU7CgpleHBvcnQgaW50ZXJmYWNlIE1ldGFDcmVkcyB7CiAgdG9rZW46IHN0cmluZzsKICBhZEFjY291bnRJZDogc3RyaW5nOyAvLyBhY3RfWFhYWAogIHBhZ2VJZDogc3RyaW5nOwp9CgpleHBvcnQgZnVuY3Rpb24gZ2V0TWV0YUNyZWRzKCk6IE1ldGFDcmVkcyB8IG51bGwgewogIGNvbnN0IHRva2VuID0gcHJvY2Vzcy5lbnYuTUVUQV9TWVNURU1fVVNFUl9UT0tFTjsKICBjb25zdCBhZEFjY291bnRJZCA9IHByb2Nlc3MuZW52Lk1FVEFfQURfQUNDT1VOVF9JRDsKICBjb25zdCBwYWdlSWQgPSBwcm9jZXNzLmVudi5NRVRBX1BBR0VfSUQ7CiAgaWYgKCF0b2tlbiB8fCAhYWRBY2NvdW50SWQgfHwgIXBhZ2VJZCkgcmV0dXJuIG51bGw7CiAgcmV0dXJuIHsgdG9rZW4sIGFkQWNjb3VudElkLCBwYWdlSWQgfTsKfQoKLyoqIE1ldGEgZXhwZWN0cyBtaW5vciB1bml0cyAoaGFsYWxhcyBmb3IgU0FSKS4gKi8KZnVuY3Rpb24gc2FyKGFtb3VudDogbnVtYmVyKTogc3RyaW5nIHsKICByZXR1cm4gU3RyaW5nKE1hdGgucm91bmQoYW1vdW50ICogMTAwKSk7Cn0KCmFzeW5jIGZ1bmN0aW9uIGdyYXBoKAogIHBhdGg6IHN0cmluZywKICBtZXRob2Q6ICJHRVQiIHwgIlBPU1QiLAogIHRva2VuOiBzdHJpbmcsCiAgcGFyYW1zOiBSZWNvcmQ8c3RyaW5nLCBzdHJpbmc+ID0ge30sCik6IFByb21pc2U8UmVjb3JkPHN0cmluZywgdW5rbm93bj4+IHsKICBjb25zdCB1cmwgPSBuZXcgVVJMKGAke0dSQVBIfS8ke3BhdGh9YCk7CiAgY29uc3QgYm9keSA9IG5ldyBVUkxTZWFyY2hQYXJhbXMoeyAuLi5wYXJhbXMsIGFjY2Vzc190b2tlbjogdG9rZW4gfSk7CiAgY29uc3QgcmVzID0KICAgIG1ldGhvZCA9PT0gIkdFVCIKICAgICAgPyBhd2FpdCBmZXRjaChgJHt1cmx9PyR7Ym9keX1gKQogICAgICA6IGF3YWl0IGZldGNoKHVybCwgeyBtZXRob2QsIGJvZHksIGhlYWRlcnM6IHsgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi94LXd3dy1mb3JtLXVybGVuY29kZWQiIH0gfSk7CiAgY29uc3QganNvbiA9IChhd2FpdCByZXMuanNvbigpKSBhcyBSZWNvcmQ8c3RyaW5nLCB1bmtub3duPjsKICBpZiAoIXJlcy5vayB8fCBqc29uLmVycm9yKSB7CiAgICBjb25zdCBlcnIgPSBqc29uLmVycm9yIGFzIHsgbWVzc2FnZT86IHN0cmluZyB9IHwgdW5kZWZpbmVkOwogICAgdGhyb3cgbmV3IEVycm9yKGBNZXRhIEFQSSAke3Jlcy5zdGF0dXN9OiAke2Vycj8ubWVzc2FnZSB8fCBKU09OLnN0cmluZ2lmeShqc29uKS5zbGljZSgwLCAyMDApfWApOwogIH0KICByZXR1cm4ganNvbjsKfQoKLyoqIFRoZSByZWFkeSBBcmFiaWMgYWQg4oCUIG1pcnJvcnMgQ0FNUEFJR04ubWQsIHBvaW50cyBhdCB0aGUgQXJhYmljIGxhbmRpbmcgcGFnZS4gKi8KZXhwb3J0IGNvbnN0IEFEX0NSRUFUSVZFID0gewogIG1lc3NhZ2U6CiAgICAi2afZpdmqINmF2YYg2KfZhNiz2YrYsSDYp9mE2LDYp9iq2YrYqSDZitix2YHYttmH2Kcg2YbYuNin2YUg2KfZhNiq2YjYuNmK2YEg2YLYqNmEINij2YYg2YrYsdin2YfYpyDYqNi02LEuINin2YHYrdi1INiz2YrYsdiq2YMg2YXYrNin2YbYp9mL2Iwg2KfZg9iq2LTZgSDYp9mE2YPZhNmF2KfYqiDYp9mE2YbYp9mC2LXYqdiMINmI2KfYrdi12YQg2LnZhNmJINmG2LPYrtipINmF2K3Ys9mR2YbYqSDYqti52KjYsSDYp9mE2YHZhNiq2LEg4oCUINio2K/ZiNmGINin2K7YqtmE2KfZgiDYo9mKINmF2LnZhNmI2YXYqS4iLAogIGxpbms6ICJodHRwczovL2N2LnJhYml0LnNhL2FyIiwKICBuYW1lOiAi2K3Ys9mR2YYg2LPZitix2KrZgyDYp9mE2LDYp9iq2YrYqSDYqNin2YTYsNmD2KfYoSDYp9mE2KfYtdi32YbYp9i52Yog4oCUINmB2K3YtSDZhdis2KfZhtmKIiwKICBkZXNjcmlwdGlvbjogItmG2LPYqNipINiq2YjYp9mB2YIg2LPZitix2KrZgyDZhdi5INin2YTZiNi42YrZgdipICsg2KfZhNmD2YTZhdin2Kog2KfZhNmG2KfZgti12KnYjCDYqNin2YTYq9mI2KfZhtmKLiIsCn07CgovKioKICogQ3JlYXRlIHRoZSBmdWxsIGNhbXBhaWduIOKGkiBhZCBzZXQg4oaSIGFkLCBQQVVTRUQsIHNvIGEgaHVtYW4gKG9yIHRoZSBuZXh0IHNoaWZ0CiAqIGFmdGVyIHJldmlldykgZmxpcHMgaXQgbGl2ZS4gVGFyZ2V0cyBTYXVkaSBBcmFiaWEsIGpvYi1zZWVrZXIgaW50ZXJlc3RzLgogKiBEYWlseSBidWRnZXQgaXMgY2xhbXBlZCB0byBEQUlMWV9CVURHRVRfQ0FQX1NBUi4KICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBjcmVhdGVDYW1wYWlnbigKICBjcmVkczogTWV0YUNyZWRzLAogIGRhaWx5QnVkZ2V0U2FyID0gREFJTFlfQlVER0VUX0NBUF9TQVIsCik6IFByb21pc2U8eyBjYW1wYWlnbklkOiBzdHJpbmc7IGFkU2V0SWQ6IHN0cmluZzsgYWRJZDogc3RyaW5nIH0+IHsKICBjb25zdCBidWRnZXQgPSBNYXRoLm1pbihkYWlseUJ1ZGdldFNhciwgREFJTFlfQlVER0VUX0NBUF9TQVIpOwogIGNvbnN0IHsgdG9rZW4sIGFkQWNjb3VudElkLCBwYWdlSWQgfSA9IGNyZWRzOwoKICBjb25zdCBjYW1wYWlnbiA9IGF3YWl0IGdyYXBoKGAke2FkQWNjb3VudElkfS9jYW1wYWlnbnNgLCAiUE9TVCIsIHRva2VuLCB7CiAgICBuYW1lOiAiUmVzdW1lQUkg4oCUIFNBIFRyYWZmaWMgKGF1dG8pIiwKICAgIG9iamVjdGl2ZTogIk9VVENPTUVfVFJBRkZJQyIsCiAgICBzdGF0dXM6ICJQQVVTRUQiLAogICAgc3BlY2lhbF9hZF9jYXRlZ29yaWVzOiAiW10iLAogIH0pOwogIGNvbnN0IGNhbXBhaWduSWQgPSBjYW1wYWlnbi5pZCBhcyBzdHJpbmc7CgogIGNvbnN0IGFkU2V0ID0gYXdhaXQgZ3JhcGgoYCR7YWRBY2NvdW50SWR9L2Fkc2V0c2AsICJQT1NUIiwgdG9rZW4sIHsKICAgIG5hbWU6ICJTQSDigJQgam9iIHNlZWtlcnMiLAogICAgY2FtcGFpZ25faWQ6IGNhbXBhaWduSWQsCiAgICBkYWlseV9idWRnZXQ6IHNhcihidWRnZXQpLAogICAgYmlsbGluZ19ldmVudDogIklNUFJFU1NJT05TIiwKICAgIG9wdGltaXphdGlvbl9nb2FsOiAiTElOS19DTElDS1MiLAogICAgYmlkX3N0cmF0ZWd5OiAiTE9XRVNUX0NPU1RfV0lUSE9VVF9DQVAiLAogICAgc3RhdHVzOiAiUEFVU0VEIiwKICAgIHRhcmdldGluZzogSlNPTi5zdHJpbmdpZnkoewogICAgICBnZW9fbG9jYXRpb25zOiB7IGNvdW50cmllczogWyJTQSJdIH0sCiAgICAgIGFnZV9taW46IDIwLAogICAgICBhZ2VfbWF4OiA0NSwKICAgICAgcHVibGlzaGVyX3BsYXRmb3JtczogWyJmYWNlYm9vayIsICJpbnN0YWdyYW0iXSwKICAgIH0pLAogIH0pOwogIGNvbnN0IGFkU2V0SWQgPSBhZFNldC5pZCBhcyBzdHJpbmc7CgogIGNvbnN0IGNyZWF0aXZlID0gYXdhaXQgZ3JhcGgoYCR7YWRBY2NvdW50SWR9L2FkY3JlYXRpdmVzYCwgIlBPU1QiLCB0b2tlbiwgewogICAgbmFtZTogIlJlc3VtZUFJIEFSIGNyZWF0aXZlIiwKICAgIG9iamVjdF9zdG9yeV9zcGVjOiBKU09OLnN0cmluZ2lmeSh7CiAgICAgIHBhZ2VfaWQ6IHBhZ2VJZCwKICAgICAgbGlua19kYXRhOiB7CiAgICAgICAgbWVzc2FnZTogQURfQ1JFQVRJVkUubWVzc2FnZSwKICAgICAgICBsaW5rOiBBRF9DUkVBVElWRS5saW5rLAogICAgICAgIG5hbWU6IEFEX0NSRUFUSVZFLm5hbWUsCiAgICAgICAgZGVzY3JpcHRpb246IEFEX0NSRUFUSVZFLmRlc2NyaXB0aW9uLAogICAgICAgIGNhbGxfdG9fYWN0aW9uOiB7IHR5cGU6ICJMRUFSTl9NT1JFIiwgdmFsdWU6IHsgbGluazogQURfQ1JFQVRJVkUubGluayB9IH0sCiAgICAgIH0sCiAgICB9KSwKICB9KTsKICBjb25zdCBjcmVhdGl2ZUlkID0gY3JlYXRpdmUuaWQgYXMgc3RyaW5nOwoKICBjb25zdCBhZCA9IGF3YWl0IGdyYXBoKGAke2FkQWNjb3VudElkfS9hZHNgLCAiUE9TVCIsIHRva2VuLCB7CiAgICBuYW1lOiAiUmVzdW1lQUkgQVIgYWQiLAogICAgYWRzZXRfaWQ6IGFkU2V0SWQsCiAgICBjcmVhdGl2ZTogSlNPTi5zdHJpbmdpZnkoeyBjcmVhdGl2ZV9pZDogY3JlYXRpdmVJZCB9KSwKICAgIHN0YXR1czogIlBBVVNFRCIsCiAgfSk7CgogIHJldHVybiB7IGNhbXBhaWduSWQsIGFkU2V0SWQsIGFkSWQ6IGFkLmlkIGFzIHN0cmluZyB9Owp9CgpleHBvcnQgaW50ZXJmYWNlIEFkSW5zaWdodCB7CiAgYWRJZDogc3RyaW5nOwogIG5hbWU6IHN0cmluZzsKICBzcGVuZFNhcjogbnVtYmVyOwogIGNsaWNrczogbnVtYmVyOwogIGltcHJlc3Npb25zOiBudW1iZXI7CiAgY3BjU2FyOiBudW1iZXIgfCBudWxsOwogIHB1cmNoYXNlczogbnVtYmVyOwogIGNvc3RQZXJQdXJjaGFzZVNhcjogbnVtYmVyIHwgbnVsbDsKfQoKLyoqIFJlYWQgcGVyLWFkIHBlcmZvcm1hbmNlIChsYXN0IE4gZGF5cykgc28gYSBzaGlmdCBjYW4gZGVjaWRlIHdoYXQgdG8gcGF1c2Uvc2NhbGUuICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZWFkSW5zaWdodHMoY3JlZHM6IE1ldGFDcmVkcywgZGF5cyA9IDMpOiBQcm9taXNlPEFkSW5zaWdodFtdPiB7CiAgY29uc3QgeyB0b2tlbiwgYWRBY2NvdW50SWQgfSA9IGNyZWRzOwogIGNvbnN0IGpzb24gPSBhd2FpdCBncmFwaChgJHthZEFjY291bnRJZH0vaW5zaWdodHNgLCAiR0VUIiwgdG9rZW4sIHsKICAgIGxldmVsOiAiYWQiLAogICAgZGF0ZV9wcmVzZXQ6IGRheXMgPD0gMSA/ICJ0b2RheSIgOiBkYXlzIDw9IDcgPyAibGFzdF83ZCIgOiAibGFzdF8zMGQiLAogICAgZmllbGRzOiAiYWRfaWQsYWRfbmFtZSxzcGVuZCxjbGlja3MsaW1wcmVzc2lvbnMsY3BjLGFjdGlvbnMiLAogIH0pOwogIGNvbnN0IHJvd3MgPSAoanNvbi5kYXRhIGFzIFJlY29yZDxzdHJpbmcsIHVua25vd24+W10pIHx8IFtdOwogIHJldHVybiByb3dzLm1hcCgocikgPT4gewogICAgY29uc3QgYWN0aW9ucyA9IChyLmFjdGlvbnMgYXMgeyBhY3Rpb25fdHlwZTogc3RyaW5nOyB2YWx1ZTogc3RyaW5nIH1bXSkgfHwgW107CiAgICBjb25zdCBwdXJjaGFzZXMgPSBhY3Rpb25zCiAgICAgIC5maWx0ZXIoKGEpID0+IGEuYWN0aW9uX3R5cGUuaW5jbHVkZXMoInB1cmNoYXNlIikpCiAgICAgIC5yZWR1Y2UoKG4sIGEpID0+IG4gKyBOdW1iZXIoYS52YWx1ZSB8fCAwKSwgMCk7CiAgICBjb25zdCBzcGVuZCA9IE51bWJlcihyLnNwZW5kIHx8IDApOwogICAgcmV0dXJuIHsKICAgICAgYWRJZDogU3RyaW5nKHIuYWRfaWQgfHwgIiIpLAogICAgICBuYW1lOiBTdHJpbmcoci5hZF9uYW1lIHx8ICIiKSwKICAgICAgc3BlbmRTYXI6IHNwZW5kLAogICAgICBjbGlja3M6IE51bWJlcihyLmNsaWNrcyB8fCAwKSwKICAgICAgaW1wcmVzc2lvbnM6IE51bWJlcihyLmltcHJlc3Npb25zIHx8IDApLAogICAgICBjcGNTYXI6IHIuY3BjID8gTnVtYmVyKHIuY3BjKSA6IG51bGwsCiAgICAgIHB1cmNoYXNlcywKICAgICAgY29zdFBlclB1cmNoYXNlU2FyOiBwdXJjaGFzZXMgPiAwID8gc3BlbmQgLyBwdXJjaGFzZXMgOiBudWxsLAogICAgfTsKICB9KTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIHNldEFkU3RhdHVzKAogIGNyZWRzOiBNZXRhQ3JlZHMsCiAgYWRJZDogc3RyaW5nLAogIHN0YXR1czogIkFDVElWRSIgfCAiUEFVU0VEIiwKKTogUHJvbWlzZTx2b2lkPiB7CiAgYXdhaXQgZ3JhcGgoYWRJZCwgIlBPU1QiLCBjcmVkcy50b2tlbiwgeyBzdGF0dXMgfSk7Cn0KCi8qKiBDbGFtcCBoZWxwZXIgdGhlIHNoaWZ0IG11c3Qgcm91dGUgZXZlcnkgYnVkZ2V0IGNoYW5nZSB0aHJvdWdoLiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gc2V0QWRTZXREYWlseUJ1ZGdldCgKICBjcmVkczogTWV0YUNyZWRzLAogIGFkU2V0SWQ6IHN0cmluZywKICBkYWlseUJ1ZGdldFNhcjogbnVtYmVyLAopOiBQcm9taXNlPHZvaWQ+IHsKICBjb25zdCBjbGFtcGVkID0gTWF0aC5taW4oZGFpbHlCdWRnZXRTYXIsIERBSUxZX0JVREdFVF9DQVBfU0FSKTsKICBhd2FpdCBncmFwaChhZFNldElkLCAiUE9TVCIsIGNyZWRzLnRva2VuLCB7IGRhaWx5X2J1ZGdldDogc2FyKGNsYW1wZWQpIH0pOwp9Cg=="}
+/**
+ * Autonomous Meta (Facebook/Instagram) ads module.
+ *
+ * Drives the Meta Marketing API (Graph API) to create and manage the paid
+ * acquisition campaign for ResumeAI without manual steps. Reads all credentials
+ * from environment variables — nothing is ever hard-coded (this repo is public):
+ *
+ *   META_SYSTEM_USER_TOKEN   non-expiring system-user token, scope ads_management
+ *   META_AD_ACCOUNT_ID       e.g. act_1234567890
+ *   META_PAGE_ID             the Facebook Page the ads run under
+ *
+ * SAFETY: every spend path is bounded by DAILY_BUDGET_CAP_SAR. The module never
+ * raises budget above it, and the user's Meta-side account spend cap is the hard
+ * backstop underneath. Read-only insights are always safe to call.
+ */
+
+const GRAPH = "https://graph.facebook.com/v21.0";
+
+// Hard ceiling this module will never exceed on its own. Raising it is a
+// deliberate, human-approved change to this constant — not something a shift does.
+export const DAILY_BUDGET_CAP_SAR = 15;
+
+export interface MetaCreds {
+  token: string;
+  adAccountId: string; // act_XXXX
+  pageId: string;
+}
+
+export function getMetaCreds(): MetaCreds | null {
+  const token = process.env.META_SYSTEM_USER_TOKEN;
+  const adAccountId = process.env.META_AD_ACCOUNT_ID;
+  const pageId = process.env.META_PAGE_ID;
+  if (!token || !adAccountId || !pageId) return null;
+  return { token, adAccountId, pageId };
+}
+
+/** Meta expects minor units (halalas for SAR). */
+function sar(amount: number): string {
+  return String(Math.round(amount * 100));
+}
+
+async function graph(
+  path: string,
+  method: "GET" | "POST",
+  token: string,
+  params: Record<string, string> = {},
+): Promise<Record<string, unknown>> {
+  const url = new URL(`${GRAPH}/${path}`);
+  const body = new URLSearchParams({ ...params, access_token: token });
+  const res =
+    method === "GET"
+      ? await fetch(`${url}?${body}`)
+      : await fetch(url, { method, body, headers: { "Content-Type": "application/x-www-form-urlencoded" } });
+  const json = (await res.json()) as Record<string, unknown>;
+  if (!res.ok || json.error) {
+    const err = json.error as { message?: string } | undefined;
+    throw new Error(`Meta API ${res.status}: ${err?.message || JSON.stringify(json).slice(0, 200)}`);
+  }
+  return json;
+}
+
+/** The ready Arabic ad — mirrors CAMPAIGN.md, points at the Arabic landing page. */
+export const AD_CREATIVE = {
+  message:
+    "٧٥٪ من السير الذاتية يرفضها نظام التوظيف قبل أن يراها بشر. افحص سيرتك مجاناً، اكتشف الكلمات الناقصة، واحصل على نسخة محسّنة تعبر الفلتر — بدون اختلاق أي معلومة.",
+  link: "https://cv.rabit.sa/ar",
+  name: "حسّن سيرتك الذاتية بالذكاء الاصطناعي — فحص مجاني",
+  description: "نسبة توافق سيرتك مع الوظيفة + الكلمات الناقصة، بالثواني.",
+};
+
+/**
+ * Create the full campaign → ad set → ad, PAUSED, so a human (or the next shift
+ * after review) flips it live. Targets Saudi Arabia, job-seeker interests.
+ * Daily budget is clamped to DAILY_BUDGET_CAP_SAR.
+ */
+export async function createCampaign(
+  creds: MetaCreds,
+  dailyBudgetSar = DAILY_BUDGET_CAP_SAR,
+): Promise<{ campaignId: string; adSetId: string; adId: string }> {
+  const budget = Math.min(dailyBudgetSar, DAILY_BUDGET_CAP_SAR);
+  const { token, adAccountId, pageId } = creds;
+
+  const campaign = await graph(`${adAccountId}/campaigns`, "POST", token, {
+    name: "ResumeAI — SA Traffic (auto)",
+    objective: "OUTCOME_TRAFFIC",
+    status: "PAUSED",
+    special_ad_categories: "[]",
+  });
+  const campaignId = campaign.id as string;
+
+  const adSet = await graph(`${adAccountId}/adsets`, "POST", token, {
+    name: "SA — job seekers",
+    campaign_id: campaignId,
+    daily_budget: sar(budget),
+    billing_event: "IMPRESSIONS",
+    optimization_goal: "LINK_CLICKS",
+    bid_strategy: "LOWEST_COST_WITHOUT_CAP",
+    status: "PAUSED",
+    targeting: JSON.stringify({
+      geo_locations: { countries: ["SA"] },
+      age_min: 20,
+      age_max: 45,
+      publisher_platforms: ["facebook", "instagram"],
+    }),
+  });
+  const adSetId = adSet.id as string;
+
+  const creative = await graph(`${adAccountId}/adcreatives`, "POST", token, {
+    name: "ResumeAI AR creative",
+    object_story_spec: JSON.stringify({
+      page_id: pageId,
+      link_data: {
+        message: AD_CREATIVE.message,
+        link: AD_CREATIVE.link,
+        name: AD_CREATIVE.name,
+        description: AD_CREATIVE.description,
+        call_to_action: { type: "LEARN_MORE", value: { link: AD_CREATIVE.link } },
+      },
+    }),
+  });
+  const creativeId = creative.id as string;
+
+  const ad = await graph(`${adAccountId}/ads`, "POST", token, {
+    name: "ResumeAI AR ad",
+    adset_id: adSetId,
+    creative: JSON.stringify({ creative_id: creativeId }),
+    status: "PAUSED",
+  });
+
+  return { campaignId, adSetId, adId: ad.id as string };
+}
+
+export interface AdInsight {
+  adId: string;
+  name: string;
+  spendSar: number;
+  clicks: number;
+  impressions: number;
+  cpcSar: number | null;
+  purchases: number;
+  costPerPurchaseSar: number | null;
+}
+
+/** Read per-ad performance (last N days) so a shift can decide what to pause/scale. */
+export async function readInsights(creds: MetaCreds, days = 3): Promise<AdInsight[]> {
+  const { token, adAccountId } = creds;
+  const json = await graph(`${adAccountId}/insights`, "GET", token, {
+    level: "ad",
+    date_preset: days <= 1 ? "today" : days <= 7 ? "last_7d" : "last_30d",
+    fields: "ad_id,ad_name,spend,clicks,impressions,cpc,actions",
+  });
+  const rows = (json.data as Record<string, unknown>[]) || [];
+  return rows.map((r) => {
+    const actions = (r.actions as { action_type: string; value: string }[]) || [];
+    const purchases = actions
+      .filter((a) => a.action_type.includes("purchase"))
+      .reduce((n, a) => n + Number(a.value || 0), 0);
+    const spend = Number(r.spend || 0);
+    return {
+      adId: String(r.ad_id || ""),
+      name: String(r.ad_name || ""),
+      spendSar: spend,
+      clicks: Number(r.clicks || 0),
+      impressions: Number(r.impressions || 0),
+      cpcSar: r.cpc ? Number(r.cpc) : null,
+      purchases,
+      costPerPurchaseSar: purchases > 0 ? spend / purchases : null,
+    };
+  });
+}
+
+export async function setAdStatus(
+  creds: MetaCreds,
+  adId: string,
+  status: "ACTIVE" | "PAUSED",
+): Promise<void> {
+  await graph(adId, "POST", creds.token, { status });
+}
+
+/** Clamp helper the shift must route every budget change through. */
+export async function setAdSetDailyBudget(
+  creds: MetaCreds,
+  adSetId: string,
+  dailyBudgetSar: number,
+): Promise<void> {
+  const clamped = Math.min(dailyBudgetSar, DAILY_BUDGET_CAP_SAR);
+  await graph(adSetId, "POST", creds.token, { daily_budget: sar(clamped) });
+}

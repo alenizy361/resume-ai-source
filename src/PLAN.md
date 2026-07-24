@@ -1,1 +1,56 @@
-{"data":"IyDYp9mE2K7Yt9ipINin2YTZhtmH2KfYptmK2Kkg4oCUINis2YTYqCDYudmF2YTYp9ihINiv2KfZgdi52YrZhiDYqtmE2YLYp9im2YrYp9mLIChNZXRhIEFkcyBBUEkpCgrYqNit2Ksg2YXYpNix2ZHYriDZitmI2YTZitmIINmi2aDZotmmLiDYp9mE2K7Zitin2LEg2YXYrdiz2YjZhTogKipNZXRhIE1hcmtldGluZyBBUEkqKiDigJQg2KrZiNmD2YYg2YTYpyDZitmG2KrZh9mK2IwK2KjYr9mI2YYg2YXYsdin2KzYudipINiq2LfYqNmK2YIg2YTYrdiz2KfYqNmD2Iwg2YjYpdmG2LPYqtmC2LHYp9mFL9mB2YrYs9io2YjZgyDYttiu2YUg2YHZiiDYp9mE2LPYudmI2K/ZitipINmI2YbZgtix2KfYqtmHINix2K7Ziti12KkuCihHb29nbGUgQWRzIEFQSSDYtdin2LEg2KfZhtiq2LjYp9ixINmF2YjYp9mB2YLYqtmHINij2LPYp9io2YrYudibIFRpa1RvayDYqtmI2YPZhtmHINmK2YbYqtmH2Yog2YjZitit2KrYp9isINiq2KzYr9mK2K8uKQoKLS0tCgojIyDZg9mK2YEg2YrYtNiq2LrZhCDYp9mE2YbYuNin2YUg2KrZhNmC2KfYptmK2KfZiyAo2KjYudivINmF2Kcg2KrYs9mE2ZHZhdmG2Yog2KfZhNmF2YHYp9iq2YrYrSkKCmBgYArYo9mG2Kcg2KPZhti02KYg2KfZhNit2YXZhNipINi52KjYsSBBUEkgIOKGkiAgTWV0YSDZitmG2LTYsdmH2Kcg2YTYrNmF2YfZiNixINiz2LnZiNiv2Yog2YXYs9iq2YfYr9mBICDihpIK2LLZiNmR2KfYsSDZitmI2LXZhNmI2YYgY3YucmFiaXQuc2EvYXIgIOKGkiAgUGl4ZWwg2YrZgtmK2LMg2YXZhiDYr9mB2LkgIOKGkgrYp9mE2YjYsdiv2YrYqSDYp9mE2YrZiNmF2YrYqSDYqtmC2LHYoyDYp9mE2KPYr9in2KE6INiq2YjZgtmBINin2YTYrtin2LPYsdiMINiq2YPYqNmR2LEg2KfZhNix2KfYqNitICDihpIgINij2LHYqNin2K0KYGBgCgotICoq2LPZgtmBINin2YTYtdix2YEg2YHZiiBNZXRhINiq2K3YqiDYs9mK2LfYsdiq2YMqKiDigJQg2KPZhtinINmB2YrYstmK2KfYptmK2KfZiyDZhdinINij2YLYr9ixINij2KrYudiv2KfZh9iMINmI2YTZiCDYrdio2YrYqi4KLSDYp9mE2YjZg9mE2KfYoSDZitiv2YrYsdmI2YYg2KfZhNit2YXZhNipINmD2YQg2YjYsdiv2YrYqSAo2YrZiNmF2YrYp9mLKdiMINio2K/ZiNmGINiq2K/YrtmR2YQg2YXZhtmDLgoKLS0tCgojIyDwn5SRINin2YTZhNmKINij2K3Yqtin2KzZhyDZhdmG2YMg4oCUINmF2LHYqSDZiNit2K/YqSAo2aUg2YXZgdin2KrZititKQoK2YPZhNmH2Kcg2KrZj9mG2LTYoyDZhdmGICoqYnVzaW5lc3MuZmFjZWJvb2suY29tKiogKNmF2KzYp9mG2YopLiDYs9is2ZHZhCDYqNit2LPYp9io2YM6Cgp8ICMgfCDYp9mE2YXZgdiq2KfYrSB8INmF2YYg2YjZitmGIHwg2YXZhNin2K3YuNipIHwKfC0tLXwtLS0tLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tfAp8IDEgfCAqKkJ1c2luZXNzIE1hbmFnZXIqKiDZhdmB2LnZkdmEIHwgYnVzaW5lc3MuZmFjZWJvb2suY29tIOKGkiBDcmVhdGUgQWNjb3VudCB8INmF2KzYp9mG2YogfAp8IDIgfCAqKti12YHYrdipINmB2YrYs9io2YjZgyoqINmE2YTZhdi02LHZiNi5IChSZXN1bWVBSSkgfCBCdXNpbmVzcyBTZXR0aW5ncyDihpIgUGFnZXMg4oaSIEFkZCB8INin2YTYpdi52YTYp9mGINmK2K3Yqtin2Kwg2LXZgdit2KkuINij2LnYt9mG2YogKipQYWdlIElEKiogfAp8IDMgfCAqKkFkIEFjY291bnQqKiArINio2LfYp9mC2KrZgyArICoq2LPZgtmBINi12LHZgSDZotmg2aAg2LHZitin2YQqKiB8IEJ1c2luZXNzIFNldHRpbmdzIOKGkiBBZCBBY2NvdW50cyDihpIgQ3JlYXRlIOKGkiBQYXltZW50IHwg2KfZhNio2LfYp9mC2Kkg2YHZiiBNZXRhINmF2KjYp9i02LHYqdiMINmF2Ygg2YTZii4g2KPYudi32YbZiiAqKkFkIEFjY291bnQgSUQqKiAoYGFjdF9YWFhYWFhYYCkgfAp8IDQgfCAqKlN5c3RlbSBVc2VyIChBZG1pbikqKiArICoq2KrZiNmD2YYg2YTYpyDZitmG2KrZh9mKKiog2KjYtdmE2KfYrdmK2KkgYGFkc19tYW5hZ2VtZW50YCB8IEJ1c2luZXNzIFNldHRpbmdzIOKGkiBTeXN0ZW0gVXNlcnMg4oaSIEFkZCDihpIgR2VuZXJhdGUgVG9rZW4gfCDimqDvuI8g2LPYsdmR2Yog4oCUINij2LnYt9mG2Yog2KfZhNiq2YjZg9mGICjYqNit2LfZhyDZhdiq2LrZitixINio2YrYptip2Iwg2KPYqNiv2KfZiyDZhdmIINmB2Yog2KfZhNmD2YjYrykgfAp8IDUgfCAqKk1ldGEgUGl4ZWwqKiB8IEV2ZW50cyBNYW5hZ2VyIOKGkiBDb25uZWN0IERhdGEgU291cmNlIOKGkiBXZWIgfCDYo9i52LfZhtmKICoqUGl4ZWwgSUQqKiDigJQg2KPYsdmD2ZHYqNmHINmB2Yog2KfZhNmF2YjZgti5INmE2YrZgtmK2LMg2KfZhNmF2KjZiti52KfYqiB8CgoqKtiq2LPZhNmR2YXZhtmKOioqIFBhZ2UgSUQgKyBBZCBBY2NvdW50IElEICsgU3lzdGVtIFVzZXIgVG9rZW4gKyBQaXhlbCBJRCDihpIg2YjYo9io2K/Yoy4KCi0tLQoKIyMg2KfZhNmE2Yog2KPYqNmG2YrZhyDYo9mG2Kcg2KjYudivINmF2Kcg2KrYs9mE2ZHZhSAo2KrZhNmC2KfYptmKINio2KfZhNmD2KfZhdmEKQoKMS4gKirZiNit2K/YqSDYpdi52YTYp9mG2KfYqiBNZXRhKiogKGBsaWIvbWV0YUFkcy50c2ApOiDYqtmG2LTYpiBDYW1wYWlnbiArIEFkIFNldCAo2KfYs9iq2YfYr9in2YEg2KfZhNiz2LnZiNiv2YrYqdiMINiz2YLZgSDZitmI2YXZiikgKyBBZCAo2KfZhNmG2LUg2KfZhNi52LHYqNmKINin2YTYrNin2YfYsiDZhdmGIENBTVBBSUdOLm1k2Iwg2YrZiNis2ZHZhyDZhNmAIGN2LnJhYml0LnNhL2FyKS4KMi4gKipNZXRhIFBpeGVsICsg2KrYqtio2ZHYuSDYp9mE2LTYsdin2KEqKiDZgdmKINin2YTZhdmI2YLYuSAo2YXYq9mEINmF2Kcg2LPZiNmK2Kog2KrYqtio2ZHYuSDZgtmI2YLZhCDigJQg2K7Yp9mF2YQg2YTZitmGINij2K3YtyDYp9mE2YAgUGl4ZWwgSUQpLgozLiAqKti32YjYsSDYp9mE2YjYsdiv2YrYqSDYp9mE2YrZiNmF2YrYqSAi2YXYr9mK2LEg2KfZhNil2LnZhNin2YbYp9iqIioqOiDZitmC2LHYoyDYp9mE2KPYr9in2KEg2LnYqNixIEFQSSDZg9mEINmK2YjZhSDihpIg2YrZiNmC2YEg2KfZhNil2LnZhNin2YbYp9iqINin2YTYrtin2LPYsdip2Iwg2YrYstmK2K8g2YXZitiy2KfZhtmK2Kkg2KfZhNix2KfYqNit2KnYjCDZitis2LHZkdioINmG2LXZiNi1INis2K/Zitiv2KkuINiq2K3YqiDYp9mE2LPZgtmBINiv2KfZitmF2KfZiy4KCi0tLQoKIyMg2KrZiNmC2ZHYuSDYtdin2K/ZgiDZhNij2YjZhCDZotmg2aAg2LHZitin2YQKLSDYpdmG2LPYqtmC2LHYp9mFL9mB2YrYs9io2YjZgyDZgdmKINin2YTYs9i52YjYr9mK2Kk6INmG2YLYsdipIOKJiCDZoC7ZpeKAk9mhLtmlINix2YrYp9mEIOKGkiAqKtmh2aXZoOKAk9mk2aDZoCDZhtmC2LHYqSoqCi0g2KfZhNmH2K/ZgSDYp9mE2KPZiNmEOiDZhti52LHZgSAqKtiq2YPZhNmB2Kkg2KfZhNi52YXZitmEINin2YTZiNin2K3Yryoq2Iwg2KvZhSDZhtmC2LHYsSDZhtmD2KjZkdixLgotINmE2Ygg2KfZhNmF2YjZgti5INmK2K3ZiNmR2YQg2aLigJPZpNmqIOKGkiDYo9mI2YQg2LnZhdmE2KfYoSDYr9in2YHYudmK2YYg2YXZhiDYp9mE2K3ZhdmE2KkuCgotLS0KCiMjINin2YTZhdi12KfYr9ixCi0gTWV0YTog2KrZiNmD2YYgU3lzdGVtIFVzZXIg2YTYpyDZitmG2KrZh9mK2Iwg2KjYr9mI2YYg2YXYsdin2KzYudipINiq2LfYqNmK2YIg2YTZhNit2LPYp9ioINin2YTYrtin2LUKLSBHb29nbGUgQWRzOiDYp9mG2KrYuNin2LEg2YXZiNin2YHZgtipIGRldmVsb3BlciB0b2tlbiDYtdin2LEg2KPYs9in2KjZiti5ICjYqtmD2K/ZkdizINmi2aDZotmmKQotIFRpa1Rvazog2KrZiNmD2YYgT0F1dGgg2YrZhtiq2YfZiiDZiNmK2K3Yqtin2Kwg2KrYrNiv2YrYryDYr9mI2LHZigo="}
+# الخطة النهائية — جلب عملاء دافعين تلقائياً (Meta Ads API)
+
+بحث مؤرّخ يوليو ٢٠٢٦. الخيار محسوم: **Meta Marketing API** — توكن لا ينتهي،
+بدون مراجعة تطبيق لحسابك، وإنستقرام/فيسبوك ضخم في السعودية ونقراته رخيصة.
+(Google Ads API صار انتظار موافقته أسابيع؛ TikTok توكنه ينتهي ويحتاج تجديد.)
+
+---
+
+## كيف يشتغل النظام تلقائياً (بعد ما تسلّمني المفاتيح)
+
+```
+أنا أنشئ الحملة عبر API  →  Meta ينشرها لجمهور سعودي مستهدف  →
+زوّار يوصلون cv.rabit.sa/ar  →  Pixel يقيس من دفع  →
+الوردية اليومية تقرأ الأداء: توقف الخاسر، تكبّر الرابح  →  أرباح
+```
+
+- **سقف الصرف في Meta تحت سيطرتك** — أنا فيزيائياً ما أقدر أتعداه، ولو حبيت.
+- الوكلاء يديرون الحملة كل وردية (يومياً)، بدون تدخّل منك.
+
+---
+
+## 🔑 اللي أحتاجه منك — مرة وحدة (٥ مفاتيح)
+
+كلها تُنشأ من **business.facebook.com** (مجاني). سجّل بحسابك:
+
+| # | المفتاح | من وين | ملاحظة |
+|---|---------|--------|---------|
+| 1 | **Business Manager** مفعّل | business.facebook.com → Create Account | مجاني |
+| 2 | **صفحة فيسبوك** للمشروع (ResumeAI) | Business Settings → Pages → Add | الإعلان يحتاج صفحة. أعطني **Page ID** |
+| 3 | **Ad Account** + بطاقتك + **سقف صرف ٢٠٠ ريال** | Business Settings → Ad Accounts → Create → Payment | البطاقة في Meta مباشرة، مو لي. أعطني **Ad Account ID** (`act_XXXXXXX`) |
+| 4 | **System User (Admin)** + **توكن لا ينتهي** بصلاحية `ads_management` | Business Settings → System Users → Add → Generate Token | ⚠️ سرّي — أعطني التوكن (بحطه متغير بيئة، أبداً مو في الكود) |
+| 5 | **Meta Pixel** | Events Manager → Connect Data Source → Web | أعطني **Pixel ID** — أركّبه في الموقع ليقيس المبيعات |
+
+**تسلّمني:** Page ID + Ad Account ID + System User Token + Pixel ID → وأبدأ.
+
+---
+
+## اللي أبنيه أنا بعد ما تسلّم (تلقائي بالكامل)
+
+1. **وحدة إعلانات Meta** (`lib/metaAds.ts`): تنشئ Campaign + Ad Set (استهداف السعودية، سقف يومي) + Ad (النص العربي الجاهز من CAMPAIGN.md، يوجّه لـ cv.rabit.sa/ar).
+2. **Meta Pixel + تتبّع الشراء** في الموقع (مثل ما سويت تتبّع قوقل — خامل لين أحط الـ Pixel ID).
+3. **طور الوردية اليومية "مدير الإعلانات"**: يقرأ الأداء عبر API كل يوم → يوقف الإعلانات الخاسرة، يزيد ميزانية الرابحة، يجرّب نصوص جديدة. تحت السقف دايماً.
+
+---
+
+## توقّع صادق لأول ٢٠٠ ريال
+- إنستقرام/فيسبوك في السعودية: نقرة ≈ ٠.٥–١.٥ ريال → **١٥٠–٤٠٠ نقرة**
+- الهدف الأول: نعرف **تكلفة العميل الواحد**، ثم نقرر نكبّر.
+- لو الموقع يحوّل ٢–٤٪ → أول عملاء دافعين من الحملة.
+
+---
+
+## المصادر
+- Meta: توكن System User لا ينتهي، بدون مراجعة تطبيق للحساب الخاص
+- Google Ads: انتظار موافقة developer token صار أسابيع (تكدّس ٢٠٢٦)
+- TikTok: توكن OAuth ينتهي ويحتاج تجديد دوري

@@ -1,1 +1,58 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlc3BvbnNlIH0gZnJvbSAibmV4dC9zZXJ2ZXIiOwppbXBvcnQgdHlwZSB7IE5leHRSZXF1ZXN0IH0gZnJvbSAibmV4dC9zZXJ2ZXIiOwoKLy8gTmV4dCAxNiByZW5hbWVkIGBtaWRkbGV3YXJlYCAtPiBgcHJveHlgIChydW50aW1lIGlzIG5vZGVqcywgbm90IGVkZ2UpLgovLwovLyBUd28gam9iczoKLy8gMSkgU3VyZmFjZSB0aGUgcmVxdWVzdCBwYXRobmFtZSB0byB0aGUgcm9vdCBsYXlvdXQgc28gaXQgY2FuIHNlcnZlCi8vICAgIDxodG1sIGxhbmc9ImFyIiBkaXI9InJ0bCI+IG9uIEFyYWJpYyAoL2FyKSByb3V0ZXMgaW5zdGVhZCBvZiAiZW4iLgovLyAyKSBPTkUgaTE4biBzeXN0ZW06IGxvY2FsZSBsaXZlcyBpbiB0aGUgUEFUSCAoL2FyLyopLiBMZWdhY3kgP2xhbmc9YXIvZW4KLy8gICAgcGFyYW1ldGVycyAzMDgtcmVkaXJlY3QgdG8gdGhlIG1hdGNoaW5nIHBhdGgg4oCUIGJ1dCBvbmx5IHdoZW4gYSB0d2luCi8vICAgIGFjdHVhbGx5IGV4aXN0cywgc28gRW5nbGlzaC1vbmx5IHRvb2xzIGFyZSBuZXZlciBzZW50IHRvIGEgNDA0Lgpjb25zdCBBUl9UV0lOUzogUmVnRXhwW10gPSBbCiAgL15cLyQvLAogIC9eXC9vcHRpbWl6ZSQvLAogIC9eXC9pbnRlcnZpZXckLywKICAvXlwvYWNjb3VudCQvLAogIC9eXC9idWlsZCQvLAogIC9eXC9idWlsZGVyJC8sCiAgL15cL2xpbmtlZGluJC8sCiAgL15cL2xvZ2luJC8sCiAgL15cL3ByaWNpbmckLywKICAvXlwvdGVtcGxhdGVzJC8sCiAgL15cL3YxJC8sCiAgL15cL3Njb3JlKFwvfCQpLywKICAvXlwvcmVzdW1lLWV4YW1wbGVzKFwvfCQpLywKICAvXlwvY292ZXItbGV0dGVyLWV4YW1wbGVzKFwvfCQpLywKICAvXlwvcmVzdW1lLXNraWxscyhcL3wkKS8sCl07CgpleHBvcnQgZnVuY3Rpb24gcHJveHkocmVxdWVzdDogTmV4dFJlcXVlc3QpIHsKICBjb25zdCB7IHBhdGhuYW1lLCBzZWFyY2hQYXJhbXMgfSA9IHJlcXVlc3QubmV4dFVybDsKICBjb25zdCBsYW5nID0gc2VhcmNoUGFyYW1zLmdldCgibGFuZyIpOwoKICBpZiAobGFuZykgewogICAgaWYgKHBhdGhuYW1lLnN0YXJ0c1dpdGgoIi9hciIpKSB7CiAgICAgIGlmIChsYW5nID09PSAiZW4iKSB7CiAgICAgICAgY29uc3QgdXJsID0gcmVxdWVzdC5uZXh0VXJsLmNsb25lKCk7CiAgICAgICAgdXJsLnBhdGhuYW1lID0gcGF0aG5hbWUucmVwbGFjZSgvXlwvYXIvLCAiIikgfHwgIi8iOwogICAgICAgIHVybC5zZWFyY2hQYXJhbXMuZGVsZXRlKCJsYW5nIik7CiAgICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5yZWRpcmVjdCh1cmwsIDMwOCk7CiAgICAgIH0KICAgIH0gZWxzZSBpZiAobGFuZyA9PT0gImFyIiAmJiBBUl9UV0lOUy5zb21lKChyKSA9PiByLnRlc3QocGF0aG5hbWUpKSkgewogICAgICBjb25zdCB1cmwgPSByZXF1ZXN0Lm5leHRVcmwuY2xvbmUoKTsKICAgICAgdXJsLnBhdGhuYW1lID0gYC9hciR7cGF0aG5hbWUgPT09ICIvIiA/ICIiIDogcGF0aG5hbWV9YDsKICAgICAgdXJsLnNlYXJjaFBhcmFtcy5kZWxldGUoImxhbmciKTsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5yZWRpcmVjdCh1cmwsIDMwOCk7CiAgICB9CiAgfQoKICBjb25zdCByZXF1ZXN0SGVhZGVycyA9IG5ldyBIZWFkZXJzKHJlcXVlc3QuaGVhZGVycyk7CiAgcmVxdWVzdEhlYWRlcnMuc2V0KCJ4LXBhdGhuYW1lIiwgcGF0aG5hbWUpOwogIHJldHVybiBOZXh0UmVzcG9uc2UubmV4dCh7IHJlcXVlc3Q6IHsgaGVhZGVyczogcmVxdWVzdEhlYWRlcnMgfSB9KTsKfQoKZXhwb3J0IGNvbnN0IGNvbmZpZyA9IHsKICAvLyBTa2lwIGFzc2V0cyArIG1ldGFkYXRhIHJvdXRlczsgb25seSBwYWdlIHJvdXRlcyBuZWVkIHRoZSBwYXRobmFtZSBoZWFkZXIuCiAgbWF0Y2hlcjogWyIvKCg/IWFwaXxfbmV4dC9zdGF0aWN8X25leHQvaW1hZ2V8ZmF2aWNvbi5pY298c2l0ZW1hcC54bWx8cm9ib3RzLnR4dCkuKikiXSwKfTsK"}
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+// Next 16 renamed `middleware` -> `proxy` (runtime is nodejs, not edge).
+//
+// Two jobs:
+// 1) Surface the request pathname to the root layout so it can serve
+//    <html lang="ar" dir="rtl"> on Arabic (/ar) routes instead of "en".
+// 2) ONE i18n system: locale lives in the PATH (/ar/*). Legacy ?lang=ar/en
+//    parameters 308-redirect to the matching path — but only when a twin
+//    actually exists, so English-only tools are never sent to a 404.
+const AR_TWINS: RegExp[] = [
+  /^\/$/,
+  /^\/optimize$/,
+  /^\/interview$/,
+  /^\/account$/,
+  /^\/build$/,
+  /^\/builder$/,
+  /^\/linkedin$/,
+  /^\/login$/,
+  /^\/pricing$/,
+  /^\/templates$/,
+  /^\/v1$/,
+  /^\/score(\/|$)/,
+  /^\/resume-examples(\/|$)/,
+  /^\/cover-letter-examples(\/|$)/,
+  /^\/resume-skills(\/|$)/,
+];
+
+export function proxy(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
+  const lang = searchParams.get("lang");
+
+  if (lang) {
+    if (pathname.startsWith("/ar")) {
+      if (lang === "en") {
+        const url = request.nextUrl.clone();
+        url.pathname = pathname.replace(/^\/ar/, "") || "/";
+        url.searchParams.delete("lang");
+        return NextResponse.redirect(url, 308);
+      }
+    } else if (lang === "ar" && AR_TWINS.some((r) => r.test(pathname))) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/ar${pathname === "/" ? "" : pathname}`;
+      url.searchParams.delete("lang");
+      return NextResponse.redirect(url, 308);
+    }
+  }
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", pathname);
+  return NextResponse.next({ request: { headers: requestHeaders } });
+}
+
+export const config = {
+  // Skip assets + metadata routes; only page routes need the pathname header.
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
+};

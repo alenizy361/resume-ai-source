@@ -1,1 +1,52 @@
-{"data":"aW1wb3J0IHR5cGUgeyBUZW1wbGF0ZURlZiB9IGZyb20gIi4uL2xpYi90ZW1wbGF0ZUNhdGFsb2ciOwoKLyoqCiAqIEEgbGlnaHR3ZWlnaHQsIHJlY29nbml6YWJsZSBtaW5pLW1vY2sgb2YgYSByZXN1bWUgdGVtcGxhdGUg4oCUIGEgdGlueSB3aGl0ZQogKiAicGFwZXIiIHdob3NlIGxheW91dCBzaWduYXR1cmUgKHNpbmdsZSBjb2x1bW4gLyBzaWRlYmFyIC8gYm9sZCBoZWFkZXIg4oCmKSBhbmQKICogYWNjZW50IGNvbG9yIGRpc3Rpbmd1aXNoIGl0IGF0IGEgZ2xhbmNlLiBVc2VkIGluIHRoZSB0ZW1wbGF0ZSBDQVJEIGdhbGxlcnkgb24KICogdGhlIHJldmVhbCBzdGVwIChhIHJlYWwgUmVzdW1lVGVtcGxhdGUgcGVyIGNhcmQgd291bGQgYmUgZmFyIHRvbyBoZWF2eSkuCiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBUZW1wbGF0ZVRodW1iKHsgZGVmIH06IHsgZGVmOiBUZW1wbGF0ZURlZiB9KSB7CiAgY29uc3QgYSA9IGRlZi5hY2NlbnQ7CiAgY29uc3QgdiA9IGRlZi52YXJpYW50OwogIGNvbnN0IEJhciA9ICh7IHcsIGMgPSAiI2Q0ZDdkZCIsIGggPSAyLjUgfTogeyB3OiBzdHJpbmcgfCBudW1iZXI7IGM/OiBzdHJpbmc7IGg/OiBudW1iZXIgfSkgPT4gKAogICAgPGRpdiBzdHlsZT17eyB3aWR0aDogdywgaGVpZ2h0OiBoLCBiYWNrZ3JvdW5kOiBjLCBib3JkZXJSYWRpdXM6IDIgfX0gLz4KICApOwogIGNvbnN0IEhlYWQgPSAoKSA9PiAoCiAgICA8ZGl2IHN0eWxlPXt7IGhlaWdodDogMy41LCB3aWR0aDogIjQyJSIsIGJhY2tncm91bmQ6IGEsIGJvcmRlclJhZGl1czogMiwgbWFyZ2luVG9wOiA3LCBtYXJnaW5Cb3R0b206IDQgfX0gLz4KICApOwogIGNvbnN0IGxpbmVzID0gKAogICAgPD4KICAgICAgPEhlYWQgLz4KICAgICAgPGRpdiBzdHlsZT17eyBkaXNwbGF5OiAiZmxleCIsIGZsZXhEaXJlY3Rpb246ICJjb2x1bW4iLCBnYXA6IDIuNSB9fT4KICAgICAgICA8QmFyIHc9IjEwMCUiIC8+PEJhciB3PSI5MiUiIC8+PEJhciB3PSI3NiUiIC8+CiAgICAgIDwvZGl2PgogICAgICA8SGVhZCAvPgogICAgICA8ZGl2IHN0eWxlPXt7IGRpc3BsYXk6ICJmbGV4IiwgZmxleERpcmVjdGlvbjogImNvbHVtbiIsIGdhcDogMi41IH19PgogICAgICAgIDxCYXIgdz0iODglIiAvPjxCYXIgdz0iOTYlIiAvPgogICAgICA8L2Rpdj4KICAgIDwvPgogICk7CgogIHJldHVybiAoCiAgICA8ZGl2IHN0eWxlPXt7IGJhY2tncm91bmQ6ICIjZmZmIiwgYm9yZGVyUmFkaXVzOiA3LCBvdmVyZmxvdzogImhpZGRlbiIsIGFzcGVjdFJhdGlvOiAiMyAvIDQiLCBkaXNwbGF5OiAiZmxleCIsIGJveFNoYWRvdzogImluc2V0IDAgMCAwIDFweCByZ2JhKDAsMCwwLDAuMDYpIiB9fT4KICAgICAgeyh2ID09PSAiY29sdW1uIikgJiYgKAogICAgICAgIDxkaXYgc3R5bGU9e3sgd2lkdGg6ICIzNCUiLCBiYWNrZ3JvdW5kOiBhLCBwYWRkaW5nOiA2LCBkaXNwbGF5OiAiZmxleCIsIGZsZXhEaXJlY3Rpb246ICJjb2x1bW4iLCBnYXA6IDMgfX0+CiAgICAgICAgICA8ZGl2IHN0eWxlPXt7IHdpZHRoOiAiODAlIiwgaGVpZ2h0OiA0LCBiYWNrZ3JvdW5kOiAicmdiYSgyNTUsMjU1LDI1NSwwLjkpIiwgYm9yZGVyUmFkaXVzOiAyIH19IC8+CiAgICAgICAgICA8ZGl2IHN0eWxlPXt7IHdpZHRoOiAiNjAlIiwgaGVpZ2h0OiAyLjUsIGJhY2tncm91bmQ6ICJyZ2JhKDI1NSwyNTUsMjU1LDAuNTUpIiwgYm9yZGVyUmFkaXVzOiAyLCBtYXJnaW5Ub3A6IDIgfX0gLz4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgd2lkdGg6ICI3MCUiLCBoZWlnaHQ6IDIuNSwgYmFja2dyb3VuZDogInJnYmEoMjU1LDI1NSwyNTUsMC40NSkiLCBib3JkZXJSYWRpdXM6IDIsIG1hcmdpblRvcDogOCB9fSAvPgogICAgICAgICAgPGRpdiBzdHlsZT17eyB3aWR0aDogIjU1JSIsIGhlaWdodDogMi41LCBiYWNrZ3JvdW5kOiAicmdiYSgyNTUsMjU1LDI1NSwwLjQ1KSIsIGJvcmRlclJhZGl1czogMiB9fSAvPgogICAgICAgIDwvZGl2PgogICAgICApfQogICAgICA8ZGl2IHN0eWxlPXt7IGZsZXg6IDEsIHBhZGRpbmc6IDggfX0+CiAgICAgICAgey8qIG5hbWUg4oCUIGJvbGQvYWNjZW50IGZvciAnYm9sZCcvJ21vZGVybicsIGluayBvdGhlcndpc2U7IGNlbnRlcmVkIGZvciBlbGVnYW50ICovfQogICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogImZsZXgiLCBmbGV4RGlyZWN0aW9uOiAiY29sdW1uIiwgYWxpZ25JdGVtczogdiA9PT0gImVsZWdhbnQiID8gImNlbnRlciIgOiAiZmxleC1zdGFydCIsIGdhcDogMyB9fT4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgd2lkdGg6IHYgPT09ICJlbGVnYW50IiA/ICI2MiUiIDogIjU4JSIsIGhlaWdodDogNSwgYmFja2dyb3VuZDogdiA9PT0gIm1vZGVybiIgPyBhIDogIiMxZjI0MzAiLCBib3JkZXJSYWRpdXM6IDIgfX0gLz4KICAgICAgICAgIDxkaXYgc3R5bGU9e3sgd2lkdGg6IHYgPT09ICJlbGVnYW50IiA/ICI0NCUiIDogIjQwJSIsIGhlaWdodDogMi41LCBiYWNrZ3JvdW5kOiAiIzlhYTBhYiIsIGJvcmRlclJhZGl1czogMiB9fSAvPgogICAgICAgICAge3YgPT09ICJlbGVnYW50IiAmJiA8ZGl2IHN0eWxlPXt7IHdpZHRoOiAiMzAlIiwgaGVpZ2h0OiAxLjUsIGJhY2tncm91bmQ6IGEsIGJvcmRlclJhZGl1czogMiwgbWFyZ2luVG9wOiAyIH19IC8+fQogICAgICAgIDwvZGl2PgogICAgICAgIHtsaW5lc30KICAgICAgPC9kaXY+CiAgICA8L2Rpdj4KICApOwp9Cg=="}
+import type { TemplateDef } from "../lib/templateCatalog";
+
+/**
+ * A lightweight, recognizable mini-mock of a resume template — a tiny white
+ * "paper" whose layout signature (single column / sidebar / bold header …) and
+ * accent color distinguish it at a glance. Used in the template CARD gallery on
+ * the reveal step (a real ResumeTemplate per card would be far too heavy).
+ */
+export default function TemplateThumb({ def }: { def: TemplateDef }) {
+  const a = def.accent;
+  const v = def.variant;
+  const Bar = ({ w, c = "#d4d7dd", h = 2.5 }: { w: string | number; c?: string; h?: number }) => (
+    <div style={{ width: w, height: h, background: c, borderRadius: 2 }} />
+  );
+  const Head = () => (
+    <div style={{ height: 3.5, width: "42%", background: a, borderRadius: 2, marginTop: 7, marginBottom: 4 }} />
+  );
+  const lines = (
+    <>
+      <Head />
+      <div style={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        <Bar w="100%" /><Bar w="92%" /><Bar w="76%" />
+      </div>
+      <Head />
+      <div style={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        <Bar w="88%" /><Bar w="96%" />
+      </div>
+    </>
+  );
+
+  return (
+    <div style={{ background: "#fff", borderRadius: 7, overflow: "hidden", aspectRatio: "3 / 4", display: "flex", boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.06)" }}>
+      {(v === "column") && (
+        <div style={{ width: "34%", background: a, padding: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{ width: "80%", height: 4, background: "rgba(255,255,255,0.9)", borderRadius: 2 }} />
+          <div style={{ width: "60%", height: 2.5, background: "rgba(255,255,255,0.55)", borderRadius: 2, marginTop: 2 }} />
+          <div style={{ width: "70%", height: 2.5, background: "rgba(255,255,255,0.45)", borderRadius: 2, marginTop: 8 }} />
+          <div style={{ width: "55%", height: 2.5, background: "rgba(255,255,255,0.45)", borderRadius: 2 }} />
+        </div>
+      )}
+      <div style={{ flex: 1, padding: 8 }}>
+        {/* name — bold/accent for 'bold'/'modern', ink otherwise; centered for elegant */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: v === "elegant" ? "center" : "flex-start", gap: 3 }}>
+          <div style={{ width: v === "elegant" ? "62%" : "58%", height: 5, background: v === "modern" ? a : "#1f2430", borderRadius: 2 }} />
+          <div style={{ width: v === "elegant" ? "44%" : "40%", height: 2.5, background: "#9aa0ab", borderRadius: 2 }} />
+          {v === "elegant" && <div style={{ width: "30%", height: 1.5, background: a, borderRadius: 2, marginTop: 2 }} />}
+        </div>
+        {lines}
+      </div>
+    </div>
+  );
+}

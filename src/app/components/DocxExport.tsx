@@ -1,1 +1,93 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKCi8qKgogKiBSZWFsIC5kb2N4IChNaWNyb3NvZnQgV29yZCkgZXhwb3J0IGZyb20gdGhlIHBsYWluLXRleHQgQ1Yg4oCUIGEgY29tcGV0aXRpdmUKICogZ2FwIHZzIFN0eWxpbmdDVi9FbmhhbmN2LCBhbmQgaGVhdmlseSByZXF1ZXN0ZWQgaW4gdGhlIEd1bGYgd2hlcmUgZW1wbG95ZXJzCiAqIGFzayBmb3IgYW4gZWRpdGFibGUgV29yZCBmaWxlLiBVbmxpa2Ugb3VyIGpzUERGIGV4cG9ydCwgZG9jeCByZW5kZXJzIEFyYWJpYwogKiBjb3JyZWN0bHkgKFJUTC1hd2FyZSksIHNvIHRoaXMgZG91YmxlcyBhcyB0aGUgQXJhYmljLXNhZmUgZG93bmxvYWQgcGF0aC4KICogQ2xpZW50LXNpZGUgdmlhIHRoZSBgZG9jeGAgbGlicmFyeSAoZHluYW1pYyBpbXBvcnQg4oaSIG5vIFNTUiB3ZWlnaHQpLgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gRG9jeEV4cG9ydCh7IHRleHQsIGxhYmVsID0gIuKGkyBXb3JkICguZG9jeCkiLCBmaWxlbmFtZSA9ICJyZXN1bWUuZG9jeCIsIHdhdGVybWFyayA9IGZhbHNlLCBsYW5nID0gImVuIiB9OiB7IHRleHQ6IHN0cmluZzsgbGFiZWw/OiBzdHJpbmc7IGZpbGVuYW1lPzogc3RyaW5nOyB3YXRlcm1hcms/OiBib29sZWFuOyBsYW5nPzogImVuIiB8ICJhciIgfSkgewogIGNvbnN0IFtidXN5LCBzZXRCdXN5XSA9IHVzZVN0YXRlKGZhbHNlKTsKCiAgYXN5bmMgZnVuY3Rpb24gZXhwb3J0RG9jeCgpIHsKICAgIHNldEJ1c3kodHJ1ZSk7CiAgICB0cnkgewogICAgICBjb25zdCB7IERvY3VtZW50LCBQYWNrZXIsIFBhcmFncmFwaCwgVGV4dFJ1biwgQWxpZ25tZW50VHlwZSwgRm9vdGVyIH0gPSBhd2FpdCBpbXBvcnQoImRvY3giKTsKICAgICAgY29uc3QgaGFzQXJhYmljID0gL1vYgC3bv10vLnRlc3QodGV4dCk7CiAgICAgIGNvbnN0IGxpbmVzID0gdGV4dC5yZXBsYWNlKC9cci9nLCAiIikuc3BsaXQoIlxuIik7CgogICAgICAvLyBIZXVyaXN0aWM6IHRoZSBmaXJzdCBub24tZW1wdHkgbGluZSBpcyB0aGUgbmFtZTsgQUxMLUNBUFMgb3Igc2hvcnQKICAgICAgLy8gY29sb24tZnJlZSBsaW5lcyB0aGF0IGxvb2sgbGlrZSBzZWN0aW9uIGhlYWRpbmdzIGdldCBib2xkZWQvbGFyZ2VyLgogICAgICBsZXQgbmFtZVVzZWQgPSBmYWxzZTsKICAgICAgY29uc3QgcGFyYWdyYXBocyA9IGxpbmVzLm1hcCgocmF3KSA9PiB7CiAgICAgICAgY29uc3QgbGluZSA9IHJhdy50cmltRW5kKCk7CiAgICAgICAgaWYgKCFsaW5lLnRyaW0oKSkgcmV0dXJuIG5ldyBQYXJhZ3JhcGgoeyB0ZXh0OiAiIiB9KTsKCiAgICAgICAgY29uc3QgYmlkaSA9IC9b2IAt279dLy50ZXN0KGxpbmUpOwogICAgICAgIGNvbnN0IGFsaWduID0gYmlkaSA/IEFsaWdubWVudFR5cGUuUklHSFQgOiBBbGlnbm1lbnRUeXBlLkxFRlQ7CgogICAgICAgIGlmICghbmFtZVVzZWQgJiYgbGluZS50cmltKCkpIHsKICAgICAgICAgIG5hbWVVc2VkID0gdHJ1ZTsKICAgICAgICAgIHJldHVybiBuZXcgUGFyYWdyYXBoKHsKICAgICAgICAgICAgYWxpZ25tZW50OiBhbGlnbiwgYmlkaXJlY3Rpb25hbDogYmlkaSwKICAgICAgICAgICAgY2hpbGRyZW46IFtuZXcgVGV4dFJ1bih7IHRleHQ6IGxpbmUudHJpbSgpLCBib2xkOiB0cnVlLCBzaXplOiAzMiB9KV0sCiAgICAgICAgICB9KTsKICAgICAgICB9CiAgICAgICAgLy8gU2VjdGlvbiBoZWFkaW5nOiBhIHNob3J0IGxpbmUsIG5vIGJ1bGxldCwgbW9zdGx5IGhlYWRpbmctbGlrZS4KICAgICAgICBjb25zdCBpc0hlYWRpbmcgPSBsaW5lLmxlbmd0aCA8IDQwICYmICEvXlst4oCiKl0vLnRlc3QobGluZS50cmltKCkpICYmICFsaW5lLmluY2x1ZGVzKCJAIikgJiYgL1tBLVphLXrYgC3bv10vLnRlc3QobGluZSkgJiYgbGluZSA9PT0gbGluZS50b1VwcGVyQ2FzZSgpICYmIGxpbmUubGVuZ3RoID4gMjsKICAgICAgICBpZiAoaXNIZWFkaW5nKSB7CiAgICAgICAgICByZXR1cm4gbmV3IFBhcmFncmFwaCh7CiAgICAgICAgICAgIGFsaWdubWVudDogYWxpZ24sIGJpZGlyZWN0aW9uYWw6IGJpZGksIHNwYWNpbmc6IHsgYmVmb3JlOiAyMDAsIGFmdGVyOiA4MCB9LAogICAgICAgICAgICBjaGlsZHJlbjogW25ldyBUZXh0UnVuKHsgdGV4dDogbGluZS50cmltKCksIGJvbGQ6IHRydWUsIHNpemU6IDI0IH0pXSwKICAgICAgICAgIH0pOwogICAgICAgIH0KICAgICAgICByZXR1cm4gbmV3IFBhcmFncmFwaCh7CiAgICAgICAgICBhbGlnbm1lbnQ6IGFsaWduLCBiaWRpcmVjdGlvbmFsOiBiaWRpLAogICAgICAgICAgY2hpbGRyZW46IFtuZXcgVGV4dFJ1bih7IHRleHQ6IGxpbmUsIHNpemU6IDIyIH0pXSwKICAgICAgICB9KTsKICAgICAgfSk7CgogICAgICAvLyBGcmVlIGRvd25sb2FkcyBjYXJyeSBhIHN1YnRsZSBmb290ZXIgd2F0ZXJtYXJrOyBwYXlpbmcgcmVtb3ZlcyBpdC4KICAgICAgY29uc3QgZm9vdGVycyA9IHdhdGVybWFyawogICAgICAgID8gewogICAgICAgICAgICBkZWZhdWx0OiBuZXcgRm9vdGVyKHsKICAgICAgICAgICAgICBjaGlsZHJlbjogW25ldyBQYXJhZ3JhcGgoewogICAgICAgICAgICAgICAgYWxpZ25tZW50OiBBbGlnbm1lbnRUeXBlLkNFTlRFUiwKICAgICAgICAgICAgICAgIGNoaWxkcmVuOiBbbmV3IFRleHRSdW4oeyB0ZXh0OiBsYW5nID09PSAiYXIiID8gItij2Y/Zhti02KbYqiDZhdis2KfZhtin2Ysg2LnYqNixIGN2LnJhYml0LnNhIiA6ICJDcmVhdGVkIGZyZWUgd2l0aCBjdi5yYWJpdC5zYSIsIHNpemU6IDE0LCBjb2xvcjogIjlBQTBBNiIgfSldLAogICAgICAgICAgICAgIH0pXSwKICAgICAgICAgICAgfSksCiAgICAgICAgICB9CiAgICAgICAgOiB1bmRlZmluZWQ7CgogICAgICBjb25zdCBkb2MgPSBuZXcgRG9jdW1lbnQoewogICAgICAgIHN0eWxlczogeyBkZWZhdWx0OiB7IGRvY3VtZW50OiB7IHJ1bjogeyBmb250OiBoYXNBcmFiaWMgPyAiQXJpYWwiIDogIkNhbGlicmkiIH0gfSB9IH0sCiAgICAgICAgc2VjdGlvbnM6IFt7IHByb3BlcnRpZXM6IHt9LCBjaGlsZHJlbjogcGFyYWdyYXBocywgLi4uKGZvb3RlcnMgPyB7IGZvb3RlcnMgfSA6IHt9KSB9XSwKICAgICAgfSk7CgogICAgICBjb25zdCBibG9iID0gYXdhaXQgUGFja2VyLnRvQmxvYihkb2MpOwogICAgICBjb25zdCB1cmwgPSBVUkwuY3JlYXRlT2JqZWN0VVJMKGJsb2IpOwogICAgICBjb25zdCBhID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgiYSIpOwogICAgICBhLmhyZWYgPSB1cmw7CiAgICAgIGEuZG93bmxvYWQgPSBmaWxlbmFtZTsKICAgICAgYS5jbGljaygpOwogICAgICBVUkwucmV2b2tlT2JqZWN0VVJMKHVybCk7CiAgICB9IGNhdGNoIHsKICAgICAgYWxlcnQoItiq2LnYsNmR2LEg2KXZhti02KfYoSDZhdmE2YEgV29yZCDigJQg2K3Yp9mI2YQg2YXYsdipINij2K7YsdmJLlxuQ291bGRuJ3QgZ2VuZXJhdGUgdGhlIFdvcmQgZmlsZSDigJQgcGxlYXNlIHRyeSBhZ2Fpbi4iKTsKICAgIH0gZmluYWxseSB7CiAgICAgIHNldEJ1c3koZmFsc2UpOwogICAgfQogIH0KCiAgcmV0dXJuICgKICAgIDxidXR0b24KICAgICAgb25DbGljaz17ZXhwb3J0RG9jeH0KICAgICAgZGlzYWJsZWQ9e2J1c3l9CiAgICAgIGNsYXNzTmFtZT0icm91bmRlZC1sZyBweC00IHB5LTIgdGV4dC1zbSBmb250LXNlbWlib2xkIGRpc2FibGVkOm9wYWNpdHktNTAiCiAgICAgIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJyZ2JhKDEzOSw5MiwyNDYsMC4xMikiLCBjb2xvcjogInZhcigtLWFjY2VudCkiLCBib3JkZXI6ICIxcHggc29saWQgcmdiYSgxMzksOTIsMjQ2LDAuMykiIH19CiAgICA+CiAgICAgIHtidXN5ID8gIuKApiIgOiBsYWJlbH0KICAgIDwvYnV0dG9uPgogICk7Cn0K"}
+"use client";
+import { useState } from "react";
+
+/**
+ * Real .docx (Microsoft Word) export from the plain-text CV — a competitive
+ * gap vs StylingCV/Enhancv, and heavily requested in the Gulf where employers
+ * ask for an editable Word file. Unlike our jsPDF export, docx renders Arabic
+ * correctly (RTL-aware), so this doubles as the Arabic-safe download path.
+ * Client-side via the `docx` library (dynamic import → no SSR weight).
+ */
+export default function DocxExport({ text, label = "↓ Word (.docx)", filename = "resume.docx", watermark = false, lang = "en" }: { text: string; label?: string; filename?: string; watermark?: boolean; lang?: "en" | "ar" }) {
+  const [busy, setBusy] = useState(false);
+
+  async function exportDocx() {
+    setBusy(true);
+    try {
+      const { Document, Packer, Paragraph, TextRun, AlignmentType, Footer } = await import("docx");
+      const hasArabic = /[؀-ۿ]/.test(text);
+      const lines = text.replace(/\r/g, "").split("\n");
+
+      // Heuristic: the first non-empty line is the name; ALL-CAPS or short
+      // colon-free lines that look like section headings get bolded/larger.
+      let nameUsed = false;
+      const paragraphs = lines.map((raw) => {
+        const line = raw.trimEnd();
+        if (!line.trim()) return new Paragraph({ text: "" });
+
+        const bidi = /[؀-ۿ]/.test(line);
+        const align = bidi ? AlignmentType.RIGHT : AlignmentType.LEFT;
+
+        if (!nameUsed && line.trim()) {
+          nameUsed = true;
+          return new Paragraph({
+            alignment: align, bidirectional: bidi,
+            children: [new TextRun({ text: line.trim(), bold: true, size: 32 })],
+          });
+        }
+        // Section heading: a short line, no bullet, mostly heading-like.
+        const isHeading = line.length < 40 && !/^[-•*]/.test(line.trim()) && !line.includes("@") && /[A-Za-z؀-ۿ]/.test(line) && line === line.toUpperCase() && line.length > 2;
+        if (isHeading) {
+          return new Paragraph({
+            alignment: align, bidirectional: bidi, spacing: { before: 200, after: 80 },
+            children: [new TextRun({ text: line.trim(), bold: true, size: 24 })],
+          });
+        }
+        return new Paragraph({
+          alignment: align, bidirectional: bidi,
+          children: [new TextRun({ text: line, size: 22 })],
+        });
+      });
+
+      // Free downloads carry a subtle footer watermark; paying removes it.
+      const footers = watermark
+        ? {
+            default: new Footer({
+              children: [new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [new TextRun({ text: lang === "ar" ? "أُنشئت مجاناً عبر cv.rabit.sa" : "Created free with cv.rabit.sa", size: 14, color: "9AA0A6" })],
+              })],
+            }),
+          }
+        : undefined;
+
+      const doc = new Document({
+        styles: { default: { document: { run: { font: hasArabic ? "Arial" : "Calibri" } } } },
+        sections: [{ properties: {}, children: paragraphs, ...(footers ? { footers } : {}) }],
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("تعذّر إنشاء ملف Word — حاول مرة أخرى.\nCouldn't generate the Word file — please try again.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <button
+      onClick={exportDocx}
+      disabled={busy}
+      className="rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-50"
+      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}
+    >
+      {busy ? "…" : label}
+    </button>
+  );
+}

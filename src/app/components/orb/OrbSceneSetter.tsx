@@ -1,1 +1,8 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VPcmJTY2VuZSwgdHlwZSBPcmJTY2VuZSB9IGZyb20gIi4vT3JiUHJvdmlkZXIiOwoKLyoqIExldHMgYSBzZXJ2ZXIgY29tcG9uZW50IHNldCB0aGUgZ2xvYmFsIG9yYiBzY2VuZSBieSByZW5kZXJpbmcgdGhpcyBjaGlsZC4gKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gT3JiU2NlbmVTZXR0ZXIoc2NlbmU6IFBhcnRpYWw8T3JiU2NlbmU+KSB7CiAgdXNlT3JiU2NlbmUoc2NlbmUsIFtKU09OLnN0cmluZ2lmeShzY2VuZSldKTsKICByZXR1cm4gbnVsbDsKfQo="}
+"use client";
+import { useOrbScene, type OrbScene } from "./OrbProvider";
+
+/** Lets a server component set the global orb scene by rendering this child. */
+export default function OrbSceneSetter(scene: Partial<OrbScene>) {
+  useOrbScene(scene, [JSON.stringify(scene)]);
+  return null;
+}

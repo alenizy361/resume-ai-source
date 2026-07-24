@@ -1,1 +1,56 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgSHViTGlua3MgZnJvbSAiLi4vY29tcG9uZW50cy9IdWJMaW5rcyI7CmltcG9ydCBPcmJCcmFuZCBmcm9tICIuLi9jb21wb25lbnRzL09yYkJyYW5kIjsKaW1wb3J0IE9yYlNjZW5lU2V0dGVyIGZyb20gIi4uL2NvbXBvbmVudHMvb3JiL09yYlNjZW5lU2V0dGVyIjsKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IFRlbXBsYXRlc0dhbGxlcnkgZnJvbSAiLi9UZW1wbGF0ZXNHYWxsZXJ5IjsKCmNvbnN0IEJBU0UgPSBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUFBfVVJMIHx8ICJodHRwczovL2N2LnJhYml0LnNhIjsKCmV4cG9ydCBjb25zdCBtZXRhZGF0YTogTWV0YWRhdGEgPSB7CiAgdGl0bGU6ICJSZXN1bWUgVGVtcGxhdGVzIOKAlCBBVFMtU2FmZSwgUlRMICYgRW5nbGlzaCB8IFNpcmEiLAogIGRlc2NyaXB0aW9uOgogICAgIkJyb3dzZSBwcm9mZXNzaW9uYWwsIEFUUy1zYWZlIHJlc3VtZSB0ZW1wbGF0ZXMgaW4gQXJhYmljIChSVEwpIGFuZCBFbmdsaXNoLiBQaWNrIGEgZGVzaWduLCB0aGVuIGxldCBBSSBmaWxsIGl0IHdpdGggeW91ciByZWFsIGV4cGVyaWVuY2Ug4oCUIG5vIGZhYnJpY2F0ZWQgZmFjdHMuIEZyZWUgdG8gc3RhcnQuIiwKICBhbHRlcm5hdGVzOiB7CiAgICBjYW5vbmljYWw6IGAke0JBU0V9L3RlbXBsYXRlc2AsCiAgICBsYW5ndWFnZXM6IHsgZW46IGAke0JBU0V9L3RlbXBsYXRlc2AsIGFyOiBgJHtCQVNFfS9hci90ZW1wbGF0ZXNgLCAieC1kZWZhdWx0IjogYCR7QkFTRX0vdGVtcGxhdGVzYCB9LAogIH0sCiAgb3BlbkdyYXBoOiB7IHRpdGxlOiAiUmVzdW1lIFRlbXBsYXRlcyDigJQgQVRTLVNhZmUsIEFyYWJpYyAmIEVuZ2xpc2giLCBkZXNjcmlwdGlvbjogIlByb2Zlc3Npb25hbCByZXN1bWUgdGVtcGxhdGVzIHRoYXQgcGFzcyBBVFMsIGluIFJUTCBhbmQgRW5nbGlzaC4iLCB1cmw6IGAke0JBU0V9L3RlbXBsYXRlc2AgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFRlbXBsYXRlc1BhZ2UoKSB7CiAgcmV0dXJuICgKICAgIDxtYWluIGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICA8T3JiU2NlbmVTZXR0ZXIgdmlzaWJsZSBtb29kPSJpZGxlIiB0b3A9IjE0dmgiIGxlZnQ9Ijg2JSIgc2l6ZT17MTAwfSAvPgogICAgICA8bmF2IGNsYXNzTmFtZT0ic3RpY2t5IHRvcC0wIHotNTAiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJsaW5lYXItZ3JhZGllbnQoMTgwZGVnLCByZ2JhKDUsNywxMywwLjg1KSwgdHJhbnNwYXJlbnQpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXgtYXV0byBmbGV4IG1heC13LTZ4bCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHB4LTYgcHktNCI+CiAgICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij5TaXJhPC9zcGFuPgogICAgICAgICAgPC9MaW5rPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC00Ij4KICAgICAgICAgICAgPExpbmsgaHJlZj0iL2FyL3RlbXBsYXRlcyIgY2xhc3NOYW1lPSJ0ZXh0LXNtIGZvbnQtc2VtaWJvbGQiIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT7YuTwvTGluaz4KICAgICAgICAgICAgPExpbmsgaHJlZj0iL3ByaWNpbmciIGNsYXNzTmFtZT0idGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+UHJpY2luZzwvTGluaz4KICAgICAgICAgICAgPExpbmsgaHJlZj0iL29wdGltaXplIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPkZyZWUgc2NhbiDihpI8L0xpbms+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9uYXY+CgogICAgICA8c2VjdGlvbiBjbGFzc05hbWU9InJlbGF0aXZlIG14LWF1dG8gbWF4LXctNnhsIHB4LTYgcHktMTQiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJoZXJvLWFtYmllbnQiIGFyaWEtaGlkZGVuIC8+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InJlbGF0aXZlIG1iLTEwIHRleHQtY2VudGVyIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPlRlbXBsYXRlczwvZGl2PgogICAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC00eGwgZm9udC1leHRyYWJvbGQgdHJhY2tpbmctdGlnaHQiPlByb2Zlc3Npb25hbCByZXN1bWUgdGVtcGxhdGVzPC9oMT4KICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXgtYXV0byBtdC0zIG1heC13LTJ4bCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PgogICAgICAgICAgICBFdmVyeSB0ZW1wbGF0ZSBpcyA8c3Ryb25nPkFUUy1zYWZlPC9zdHJvbmc+IGFuZCB3b3JrcyBpbiBib3RoIDxzdHJvbmc+QXJhYmljIChSVEwpPC9zdHJvbmc+IGFuZCBFbmdsaXNoLiBQaWNrIGEgZGVzaWduIOKAlCB0aGVuIEFJIGZpbGxzIGl0IHdpdGggPGVtPnlvdXI8L2VtPiByZWFsIGV4cGVyaWVuY2UsIG5ldmVyIGludmVudGVkIGZhY3RzLgogICAgICAgICAgPC9wPgogICAgICAgIDwvZGl2PgogICAgICAgIDxUZW1wbGF0ZXNHYWxsZXJ5IC8+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC0xMCB0ZXh0LWNlbnRlciB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+CiAgICAgICAgICBEZXNpZ25lZCBQREYgaXMgZ3JlYXQgZm9yIHJlY3J1aXRlcnMgJmFtcDsgTGlua2VkSW4uIEZvciB0aGUgYXBwbGljYW50LXRyYWNraW5nIHVwbG9hZCwgdXNlIHRoZSBwbGFpbiBBVFMgUERGL1dvcmQg4oCUIGJvdGggYXJlIGluY2x1ZGVkLgogICAgICAgIDwvcD4KICAgICAgPC9zZWN0aW9uPgogICAgICAgICAgPEh1YkxpbmtzIGN1cnJlbnQ9Ii90ZW1wbGF0ZXMiIC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import HubLinks from "../components/HubLinks";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import TemplatesGallery from "./TemplatesGallery";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Resume Templates — ATS-Safe, RTL & English | Sira",
+  description:
+    "Browse professional, ATS-safe resume templates in Arabic (RTL) and English. Pick a design, then let AI fill it with your real experience — no fabricated facts. Free to start.",
+  alternates: {
+    canonical: `${BASE}/templates`,
+    languages: { en: `${BASE}/templates`, ar: `${BASE}/ar/templates`, "x-default": `${BASE}/templates` },
+  },
+  openGraph: { title: "Resume Templates — ATS-Safe, Arabic & English", description: "Professional resume templates that pass ATS, in RTL and English.", url: `${BASE}/templates` },
+};
+
+export default function TemplatesPage() {
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/ar/templates" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>ع</Link>
+            <Link href="/pricing" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>Pricing</Link>
+            <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Free scan →</Link>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative mx-auto max-w-6xl px-6 py-14">
+        <div className="hero-ambient" aria-hidden />
+        <div className="relative mb-10 text-center">
+          <div className="chip mb-4">Templates</div>
+          <h1 className="text-4xl font-extrabold tracking-tight">Professional resume templates</h1>
+          <p className="mx-auto mt-3 max-w-2xl" style={{ color: "var(--muted)" }}>
+            Every template is <strong>ATS-safe</strong> and works in both <strong>Arabic (RTL)</strong> and English. Pick a design — then AI fills it with <em>your</em> real experience, never invented facts.
+          </p>
+        </div>
+        <TemplatesGallery />
+        <p className="mt-10 text-center text-sm" style={{ color: "var(--faint)" }}>
+          Designed PDF is great for recruiters &amp; LinkedIn. For the applicant-tracking upload, use the plain ATS PDF/Word — both are included.
+        </p>
+      </section>
+          <HubLinks current="/templates" />
+    </main>
+  );
+}

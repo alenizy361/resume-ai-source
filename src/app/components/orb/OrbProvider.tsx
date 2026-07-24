@@ -1,1 +1,128 @@
-{"data":"InVzZSBjbGllbnQiOwovKioKICog2LHYp9io2Lcg4oCUIFRIRSBPTkUgT1JCLiBJdCBsaXZlcyBoZXJlLCBpbiBhIHByb3ZpZGVyIG1vdW50ZWQgb25jZSBpbiB0aGUgcm9vdAogKiBsYXlvdXQsIHNvIGl0IE5FVkVSIHVubW91bnRzIGFjcm9zcyBuYXZpZ2F0aW9uLiBFdmVyeSByb3V0ZSBvbmx5IGRlc2NyaWJlcyBhCiAqICpzY2VuZSogKG1vb2QgKyBwb3NpdGlvbiArIGFkb3JubWVudHMpIHZpYSBgdXNlT3JiU2NlbmVgOyB0aGUgc2FtZSBwaHlzaWNhbAogKiBvcmIgdGhlbiBmbGllcyB0byB0aGF0IHNjZW5lIHdpdGggYSBzcHJpbmcuIFRoZSB2aXNpdG9yIG5ldmVyIHNlZXMgaXQgcmVsb2FkCiAqIG9yIGRpc2FwcGVhciDigJQg2LHYp9io2LcgY2FycmllcyB0aGVtIGJldHdlZW4gd29ybGRzLgogKgogKiBMYXcgMSAoY29udGludWl0eSk6IG9uZSBtb3VudGVkIG9yYiwgYWx3YXlzLiBMYXcgMiAoZW1pc3Npb24pOiBjb250ZW50IGlzCiAqIGJvcm4gYXJvdW5kIGl0LiBMYXcgMyAobW9vZHMpOiBncmVldGluZyDihpIgaW50ZXJ2aWV3IOKGkiB0aGlua2luZyDihpIgd2VhdmluZyDihpIKICogc2NvcmUg4oaSIGdvbGRlbiDihpIgc3VjY2VzcyDihpIgbGlicmFyeSDihpIgZ2F0ZSDihpIgbG9zdCDigJQgb25lIGxpdmluZyBlbnRpdHkuCiAqLwppbXBvcnQgeyBjcmVhdGVDb250ZXh0LCB1c2VDb250ZXh0LCB1c2VFZmZlY3QsIHVzZU1lbW8sIHVzZVJlZiwgdXNlU3RhdGUgfSBmcm9tICJyZWFjdCI7CmltcG9ydCB7IHVzZVBhdGhuYW1lIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgQW5pbWF0ZVByZXNlbmNlLCBtb3Rpb24sIHVzZU1vdGlvblZhbHVlLCB1c2VNb3Rpb25WYWx1ZUV2ZW50LCB1c2VSZWR1Y2VkTW90aW9uLCB1c2VTcHJpbmcgfSBmcm9tICJmcmFtZXItbW90aW9uIjsKaW1wb3J0IEFpT3JiLCB7IHR5cGUgT3JiU3RhdGUgfSBmcm9tICIuLi9BaU9yYiI7CmltcG9ydCBBbWJpZW50RmllbGQgZnJvbSAiLi9BbWJpZW50RmllbGQiOwoKLyoqCiAqIFJvdXRlIGNyb3NzZmFkZS4gT1BBQ0lUWSBPTkxZIOKAlCBuZXZlciB5L3NjYWxlL3RyYW5zZm9ybSBvbiB0aGlzIHdyYXBwZXI6IGEKICogdHJhbnNmb3JtIG9uIGFuIGFuY2VzdG9yIGNvbGxhcHNlcyBgcG9zaXRpb246Zml4ZWRgIGRlc2NlbmRhbnRzICh0aGUgZ2xvYmFsCiAqIG9yYiwgdGhlIGxhbmRpbmcgZG9jaykgaW50byBpdC4gRXZlcnkgcm91dGUgZGlzc29sdmVzIGludG8gdGhlIG5leHQgc28gdGhlCiAqIHNpdGUgcmVhZHMgYXMgb25lIGNvbnRpbnVvdXMgc3VyZmFjZSByYXRoZXIgdGhhbiBhIHN0YWNrIG9mIHBhZ2UgbG9hZHMuCiAqLwpmdW5jdGlvbiBQYWdlVHJhbnNpdGlvbih7IGNoaWxkcmVuIH06IHsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSB7CiAgY29uc3QgcGF0aG5hbWUgPSB1c2VQYXRobmFtZSgpOwogIGNvbnN0IHJlZHVjZSA9IHVzZVJlZHVjZWRNb3Rpb24oKTsKICByZXR1cm4gKAogICAgPEFuaW1hdGVQcmVzZW5jZSBtb2RlPSJ3YWl0IiBpbml0aWFsPXtmYWxzZX0+CiAgICAgIDxtb3Rpb24uZGl2CiAgICAgICAga2V5PXtwYXRobmFtZX0KICAgICAgICBpbml0aWFsPXtyZWR1Y2UgPyBmYWxzZSA6IHsgb3BhY2l0eTogMCB9fQogICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSB9fQogICAgICAgIGV4aXQ9e3JlZHVjZSA/IHVuZGVmaW5lZCA6IHsgb3BhY2l0eTogMCB9fQogICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IHJlZHVjZSA/IDAgOiAwLjI4LCBlYXNlOiAiZWFzZUluT3V0IiB9fQogICAgICA+CiAgICAgICAge2NoaWxkcmVufQogICAgICA8L21vdGlvbi5kaXY+CiAgICA8L0FuaW1hdGVQcmVzZW5jZT4KICApOwp9CgpleHBvcnQgaW50ZXJmYWNlIE9yYlNjZW5lIHsKICB2aXNpYmxlOiBib29sZWFuOwogIG1vb2Q6IE9yYlN0YXRlOwogIHRvcDogc3RyaW5nOyAgICAgICAgLy8gdmggb3IgcHggZnJvbSB0aGUgdG9wCiAgbGVmdD86IHN0cmluZzsgICAgICAvLyBob3Jpem9udGFsIGFuY2hvciAoZGVmYXVsdCAiNTAlIiA9IGNlbnRlcmVkKQogIHNpemU6IG51bWJlcjsKICBwcm9ncmVzczogbnVtYmVyOyAgIC8vIDDigJMxMDAgcmluZyBhcm91bmQgdGhlIG9yYiAoMCA9IG5vbmUpCiAgcmluZ3M6IGJvb2xlYW47ICAgICAvLyBmdWxsLXNjcmVlbiBhdXJvcmEgcHVsc2UgcmluZ3MgKHRoaW5raW5nKQogIGJhZGdlOiBzdHJpbmcgfCBudWxsOyAvLyBhIGdseXBoIGxheWVyZWQgb24gdGhlIG9yYiAoZS5nLiDwn5SSIC8g8J+UkykKICByYWRpbzogYm9vbGVhbjsgICAgIC8vIHJhZGlvLXB1bHNlIGJyb2FkY2FzdCAobWFnaWMgbGluayBzZW50KQogIGxpZ2h0OiBib29sZWFuOyAgICAgLy8gcmVuZGVyIHRoZSBsaWdodC1zdXJmYWNlIHZhcmlhbnQgKGdsYXNzL2RvY3VtZW50IHdvcmxkcykKICB6OiBudW1iZXI7Cn0KY29uc3QgREVGQVVMVDogT3JiU2NlbmUgPSB7IHZpc2libGU6IGZhbHNlLCBtb29kOiAiaWRsZSIsIHRvcDogIjQwdmgiLCBsZWZ0OiAiNTAlIiwgc2l6ZTogMTIwLCBwcm9ncmVzczogMCwgcmluZ3M6IGZhbHNlLCBiYWRnZTogbnVsbCwgcmFkaW86IGZhbHNlLCBsaWdodDogZmFsc2UsIHo6IDMwIH07CgppbnRlcmZhY2UgQ3R4IHsgc2V0U2NlbmU6IChzOiBQYXJ0aWFsPE9yYlNjZW5lPiB8IG51bGwpID0+IHZvaWQgfQpjb25zdCBPcmJDdHggPSBjcmVhdGVDb250ZXh0PEN0eD4oeyBzZXRTY2VuZTogKCkgPT4ge30gfSk7CgovKiogRGVzY3JpYmUgdGhlIG9yYiBzY2VuZSBmb3IgdGhlIGN1cnJlbnQgcm91dGUuIFBhc3MgbnVsbCAvIG9taXQgdG8gaGlkZSBpdC4gKi8KZXhwb3J0IGZ1bmN0aW9uIHVzZU9yYlNjZW5lKHNjZW5lOiBQYXJ0aWFsPE9yYlNjZW5lPiB8IG51bGwsIGRlcHM6IHVua25vd25bXSA9IFtdKSB7CiAgY29uc3QgeyBzZXRTY2VuZSB9ID0gdXNlQ29udGV4dChPcmJDdHgpOwogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBzZXRTY2VuZShzY2VuZSk7CiAgICByZXR1cm4gKCkgPT4gc2V0U2NlbmUoeyB2aXNpYmxlOiBmYWxzZSB9KTsKICAgIC8vIGVzbGludC1kaXNhYmxlLW5leHQtbGluZSByZWFjdC1ob29rcy9leGhhdXN0aXZlLWRlcHMKICB9LCBkZXBzKTsKfQoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gT3JiUHJvdmlkZXIoeyBjaGlsZHJlbiB9OiB7IGNoaWxkcmVuOiBSZWFjdC5SZWFjdE5vZGUgfSkgewogIGNvbnN0IFtzY2VuZSwgc2V0U2NlbmVTdGF0ZV0gPSB1c2VTdGF0ZTxPcmJTY2VuZT4oREVGQVVMVCk7CiAgY29uc3QgcmVkdWNlID0gdXNlUmVkdWNlZE1vdGlvbigpOwogIC8vIENvYWxlc2NlIHRoZSB1bm1vdW50LWhpZGUgb2YgYW4gb3V0Z29pbmcgcGFnZSB3aXRoIHRoZSBtb3VudC1zZXQgb2YgdGhlCiAgLy8gaW5jb21pbmcgb25lLCBzbyBhIHJvdXRlIGNoYW5nZSBuZXZlciBibGlua3MgdGhlIG9yYiBvZmYgdGhlbiBvbi4KICBjb25zdCByYWYgPSB1c2VSZWY8bnVtYmVyIHwgbnVsbD4obnVsbCk7CiAgY29uc3Qgc2V0U2NlbmUgPSB1c2VNZW1vPEN0eFsic2V0U2NlbmUiXT4oKCkgPT4gKHMpID0+IHsKICAgIGlmIChyYWYuY3VycmVudCkgY2FuY2VsQW5pbWF0aW9uRnJhbWUocmFmLmN1cnJlbnQpOwogICAgcmFmLmN1cnJlbnQgPSByZXF1ZXN0QW5pbWF0aW9uRnJhbWUoKCkgPT4gc2V0U2NlbmVTdGF0ZSgocHJldikgPT4gKHMgPyB7IC4uLnByZXYsIC4uLnMgfSA6IHsgLi4uREVGQVVMVCwgdmlzaWJsZTogZmFsc2UgfSkpKTsKICB9LCBbXSk7CiAgY29uc3QgY3R4ID0gdXNlTWVtbygoKSA9PiAoeyBzZXRTY2VuZSB9KSwgW3NldFNjZW5lXSk7CgogIC8vIFRoZSBvcmIgUEhZU0lDQUxMWSBncm93cy9zaHJpbmtzIGJldHdlZW4gc2NlbmVzIChoZXJvIDM4MHB4IOKGlCBtaW5pIDQ0cHgpCiAgLy8g4oCUIGEgc3ByaW5nIG9uIHRoZSBzaXplIGl0c2VsZiwgbm90IGFuIGluc3RhbnQganVtcC4gU2lnbmF0dXJlIG1vdmUuCiAgY29uc3Qgc2l6ZU12ID0gdXNlTW90aW9uVmFsdWUoc2NlbmUuc2l6ZSk7CiAgY29uc3Qgc2l6ZVNwcmluZyA9IHVzZVNwcmluZyhzaXplTXYsIHsgc3RpZmZuZXNzOiAxMTAsIGRhbXBpbmc6IDE3IH0pOwogIGNvbnN0IFtkaXNwbGF5U2l6ZSwgc2V0RGlzcGxheVNpemVdID0gdXNlU3RhdGUoc2NlbmUuc2l6ZSk7CiAgdXNlRWZmZWN0KCgpID0+IHsgc2l6ZU12LnNldChzY2VuZS5zaXplKTsgfSwgW3NjZW5lLnNpemUsIHNpemVNdl0pOwogIHVzZU1vdGlvblZhbHVlRXZlbnQoc2l6ZVNwcmluZywgImNoYW5nZSIsICh2KSA9PiBzZXREaXNwbGF5U2l6ZShNYXRoLnJvdW5kKHYpKSk7CgogIGNvbnN0IHJpbmcgPSAyICogTWF0aC5QSSAqIDQ0OwoKICByZXR1cm4gKAogICAgPE9yYkN0eC5Qcm92aWRlciB2YWx1ZT17Y3R4fT4KICAgICAgey8qIHRoZSBsaXZpbmcgYmFja2dyb3VuZCDigJQgYmVuZWF0aCBldmVyeSBwYWdlLCByZWFjdGluZyB0byBldmVyeXRoaW5nICovfQogICAgICA8QW1iaWVudEZpZWxkIG1vb2Q9e3NjZW5lLm1vb2R9IGFjdGl2ZT17c2NlbmUudmlzaWJsZX0gLz4KICAgICAgPFBhZ2VUcmFuc2l0aW9uPntjaGlsZHJlbn08L1BhZ2VUcmFuc2l0aW9uPgogICAgICB7c2NlbmUudmlzaWJsZSAmJiAoCiAgICAgICAgPG1vdGlvbi5kaXYKICAgICAgICAgIGNsYXNzTmFtZT0icG9pbnRlci1ldmVudHMtbm9uZSBmaXhlZCIKICAgICAgICAgIHN0eWxlPXt7IHpJbmRleDogc2NlbmUueiB9fQogICAgICAgICAgaW5pdGlhbD17ZmFsc2V9CiAgICAgICAgICBhbmltYXRlPXt7IHRvcDogc2NlbmUudG9wLCBsZWZ0OiBzY2VuZS5sZWZ0ID8/ICI1MCUiLCB4OiAiLTUwJSIsIG9wYWNpdHk6IDEgfX0KICAgICAgICAgIHRyYW5zaXRpb249e3JlZHVjZSA/IHsgZHVyYXRpb246IDAgfSA6IHsgdHlwZTogInNwcmluZyIsIHN0aWZmbmVzczogMTIwLCBkYW1waW5nOiAxOCB9fQogICAgICAgID4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPXtgb3JiLWJvZHkgcmVsYXRpdmUgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgJHtzY2VuZS5sZWZ0ICYmIHNjZW5lLmxlZnQgIT09ICI1MCUiID8gIm9yYi1jb3JuZXIiIDogIiJ9ICR7c2NlbmUucmFkaW8gPyAicmFkaW8tcHVsc2UiIDogIiJ9YH0gc3R5bGU9e3sgd2lkdGg6IGRpc3BsYXlTaXplLCBoZWlnaHQ6IGRpc3BsYXlTaXplIH19PgogICAgICAgICAgICB7c2NlbmUucmluZ3MgJiYgIXJlZHVjZSAmJiAoPD48c3BhbiBjbGFzc05hbWU9InB1bHNlLXJpbmcgcjEiIC8+PHNwYW4gY2xhc3NOYW1lPSJwdWxzZS1yaW5nIHIyIiAvPjxzcGFuIGNsYXNzTmFtZT0icHVsc2UtcmluZyByMyIgLz48c3BhbiBjbGFzc05hbWU9InB1bHNlLXJpbmcgcjQiIC8+PC8+KX0KICAgICAgICAgICAge3NjZW5lLnByb2dyZXNzID4gMCAmJiAoCiAgICAgICAgICAgICAgPHN2ZyBjbGFzc05hbWU9ImFic29sdXRlIiB3aWR0aD17ZGlzcGxheVNpemUgKyAxNn0gaGVpZ2h0PXtkaXNwbGF5U2l6ZSArIDE2fSBzdHlsZT17eyB0cmFuc2Zvcm06ICJyb3RhdGUoLTkwZGVnKSIgfX0+CiAgICAgICAgICAgICAgICA8ZGVmcz4KICAgICAgICAgICAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJvcmJQcm9ncmVzc0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3BDb2xvcj0iIzhiNWNmNiIgLz4KICAgICAgICAgICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjU1JSIgc3RvcENvbG9yPSIjZWM0ODk5IiAvPgogICAgICAgICAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcENvbG9yPSIjZjU5ZTBiIiAvPgogICAgICAgICAgICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgICAgICAgICAgPC9kZWZzPgogICAgICAgICAgICAgICAgPGNpcmNsZSBjeD17KGRpc3BsYXlTaXplICsgMTYpIC8gMn0gY3k9eyhkaXNwbGF5U2l6ZSArIDE2KSAvIDJ9IHI9IjQ0IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlV2lkdGg9IjMiIC8+CiAgICAgICAgICAgICAgICA8Y2lyY2xlIGN4PXsoZGlzcGxheVNpemUgKyAxNikgLyAyfSBjeT17KGRpc3BsYXlTaXplICsgMTYpIC8gMn0gcj0iNDQiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNvcmJQcm9ncmVzc0dyYWQpIiBzdHJva2VXaWR0aD0iMyIgc3Ryb2tlTGluZWNhcD0icm91bmQiIHN0cm9rZURhc2hhcnJheT17cmluZ30gc3Ryb2tlRGFzaG9mZnNldD17cmluZyAqICgxIC0gc2NlbmUucHJvZ3Jlc3MgLyAxMDApfSBzdHlsZT17eyB0cmFuc2l0aW9uOiAic3Ryb2tlLWRhc2hvZmZzZXQgLjZzIGVhc2UiIH19IC8+CiAgICAgICAgICAgICAgPC9zdmc+CiAgICAgICAgICAgICl9CiAgICAgICAgICAgIDxBaU9yYiBzaXplPXtkaXNwbGF5U2l6ZX0gc3RhdGU9e3NjZW5lLm1vb2R9IGxpZ2h0PXtzY2VuZS5saWdodH0gLz4KICAgICAgICAgICAge3NjZW5lLmJhZGdlICYmIDxzcGFuIGNsYXNzTmFtZT0iYWJzb2x1dGUiIHN0eWxlPXt7IGZvbnRTaXplOiBkaXNwbGF5U2l6ZSAqIDAuMyB9fT57c2NlbmUuYmFkZ2V9PC9zcGFuPn0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvbW90aW9uLmRpdj4KICAgICAgKX0KICAgIDwvT3JiQ3R4LlByb3ZpZGVyPgogICk7Cn0K"}
+"use client";
+/**
+ * رابط — THE ONE ORB. It lives here, in a provider mounted once in the root
+ * layout, so it NEVER unmounts across navigation. Every route only describes a
+ * *scene* (mood + position + adornments) via `useOrbScene`; the same physical
+ * orb then flies to that scene with a spring. The visitor never sees it reload
+ * or disappear — رابط carries them between worlds.
+ *
+ * Law 1 (continuity): one mounted orb, always. Law 2 (emission): content is
+ * born around it. Law 3 (moods): greeting → interview → thinking → weaving →
+ * score → golden → success → library → gate → lost — one living entity.
+ */
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "framer-motion";
+import AiOrb, { type OrbState } from "../AiOrb";
+import AmbientField from "./AmbientField";
+
+/**
+ * Route crossfade. OPACITY ONLY — never y/scale/transform on this wrapper: a
+ * transform on an ancestor collapses `position:fixed` descendants (the global
+ * orb, the landing dock) into it. Every route dissolves into the next so the
+ * site reads as one continuous surface rather than a stack of page loads.
+ */
+function PageTransition({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const reduce = useReducedMotion();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={pathname}
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={reduce ? undefined : { opacity: 0 }}
+        transition={{ duration: reduce ? 0 : 0.28, ease: "easeInOut" }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+export interface OrbScene {
+  visible: boolean;
+  mood: OrbState;
+  top: string;        // vh or px from the top
+  left?: string;      // horizontal anchor (default "50%" = centered)
+  size: number;
+  progress: number;   // 0–100 ring around the orb (0 = none)
+  rings: boolean;     // full-screen aurora pulse rings (thinking)
+  badge: string | null; // a glyph layered on the orb (e.g. 🔒 / 🔓)
+  radio: boolean;     // radio-pulse broadcast (magic link sent)
+  light: boolean;     // render the light-surface variant (glass/document worlds)
+  z: number;
+}
+const DEFAULT: OrbScene = { visible: false, mood: "idle", top: "40vh", left: "50%", size: 120, progress: 0, rings: false, badge: null, radio: false, light: false, z: 30 };
+
+interface Ctx { setScene: (s: Partial<OrbScene> | null) => void }
+const OrbCtx = createContext<Ctx>({ setScene: () => {} });
+
+/** Describe the orb scene for the current route. Pass null / omit to hide it. */
+export function useOrbScene(scene: Partial<OrbScene> | null, deps: unknown[] = []) {
+  const { setScene } = useContext(OrbCtx);
+  useEffect(() => {
+    setScene(scene);
+    return () => setScene({ visible: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}
+
+export default function OrbProvider({ children }: { children: React.ReactNode }) {
+  const [scene, setSceneState] = useState<OrbScene>(DEFAULT);
+  const reduce = useReducedMotion();
+  // Coalesce the unmount-hide of an outgoing page with the mount-set of the
+  // incoming one, so a route change never blinks the orb off then on.
+  const raf = useRef<number | null>(null);
+  const setScene = useMemo<Ctx["setScene"]>(() => (s) => {
+    if (raf.current) cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(() => setSceneState((prev) => (s ? { ...prev, ...s } : { ...DEFAULT, visible: false })));
+  }, []);
+  const ctx = useMemo(() => ({ setScene }), [setScene]);
+
+  // The orb PHYSICALLY grows/shrinks between scenes (hero 380px ↔ mini 44px)
+  // — a spring on the size itself, not an instant jump. Signature move.
+  const sizeMv = useMotionValue(scene.size);
+  const sizeSpring = useSpring(sizeMv, { stiffness: 110, damping: 17 });
+  const [displaySize, setDisplaySize] = useState(scene.size);
+  useEffect(() => { sizeMv.set(scene.size); }, [scene.size, sizeMv]);
+  useMotionValueEvent(sizeSpring, "change", (v) => setDisplaySize(Math.round(v)));
+
+  const ring = 2 * Math.PI * 44;
+
+  return (
+    <OrbCtx.Provider value={ctx}>
+      {/* the living background — beneath every page, reacting to everything */}
+      <AmbientField mood={scene.mood} active={scene.visible} />
+      <PageTransition>{children}</PageTransition>
+      {scene.visible && (
+        <motion.div
+          className="pointer-events-none fixed"
+          style={{ zIndex: scene.z }}
+          initial={false}
+          animate={{ top: scene.top, left: scene.left ?? "50%", x: "-50%", opacity: 1 }}
+          transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 18 }}
+        >
+          <div className={`orb-body relative flex items-center justify-center ${scene.left && scene.left !== "50%" ? "orb-corner" : ""} ${scene.radio ? "radio-pulse" : ""}`} style={{ width: displaySize, height: displaySize }}>
+            {scene.rings && !reduce && (<><span className="pulse-ring r1" /><span className="pulse-ring r2" /><span className="pulse-ring r3" /><span className="pulse-ring r4" /></>)}
+            {scene.progress > 0 && (
+              <svg className="absolute" width={displaySize + 16} height={displaySize + 16} style={{ transform: "rotate(-90deg)" }}>
+                <defs>
+                  <linearGradient id="orbProgressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#8b5cf6" />
+                    <stop offset="55%" stopColor="#ec4899" />
+                    <stop offset="100%" stopColor="#f59e0b" />
+                  </linearGradient>
+                </defs>
+                <circle cx={(displaySize + 16) / 2} cy={(displaySize + 16) / 2} r="44" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
+                <circle cx={(displaySize + 16) / 2} cy={(displaySize + 16) / 2} r="44" fill="none" stroke="url(#orbProgressGrad)" strokeWidth="3" strokeLinecap="round" strokeDasharray={ring} strokeDashoffset={ring * (1 - scene.progress / 100)} style={{ transition: "stroke-dashoffset .6s ease" }} />
+              </svg>
+            )}
+            <AiOrb size={displaySize} state={scene.mood} light={scene.light} />
+            {scene.badge && <span className="absolute" style={{ fontSize: displaySize * 0.3 }}>{scene.badge}</span>}
+          </div>
+        </motion.div>
+      )}
+    </OrbCtx.Provider>
+  );
+}

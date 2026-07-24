@@ -1,1 +1,7 @@
-{"data":"aW1wb3J0IHsgcmVkaXJlY3QgfSBmcm9tICJuZXh0L25hdmlnYXRpb24iOwoKLy8gVGhlIGxvZ2luIGZlYXR1cmUgY3VycmVudGx5IGxpdmVzIG9uIHRoZSBzaGFyZWQgKEVuZ2xpc2ggVUkpIHJvdXRlOyBBcmFiaWMKLy8gdmlzaXRvcnMgd2hvIGhpdCAvYXIvbG9naW4gZGlyZWN0bHkgYXJlIHNlbnQgdGhlcmUgaW5zdGVhZCBvZiBhIDQwNC4KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQXJSZWRpcmVjdCgpIHsKICByZWRpcmVjdCgiL2xvZ2luP2xhbmc9YXIiKTsKfQo="}
+import { redirect } from "next/navigation";
+
+// The login feature currently lives on the shared (English UI) route; Arabic
+// visitors who hit /ar/login directly are sent there instead of a 404.
+export default function ArRedirect() {
+  redirect("/login?lang=ar");
+}

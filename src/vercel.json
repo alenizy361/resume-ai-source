@@ -1,1 +1,10 @@
-{"data":"ewogICJidWlsZENvbW1hbmQiOiAibnBtIHJ1biBidWlsZCIsCiAgIm91dHB1dERpcmVjdG9yeSI6ICIubmV4dCIsCiAgImZyYW1ld29yayI6ICJuZXh0anMiLAogICJyZWdpb25zIjogWyJpYWQxIl0sCiAgImZ1bmN0aW9ucyI6IHsKICAgICJhcHAvYXBpL29wdGltaXplL3JvdXRlLnRzIjogeyAibWF4RHVyYXRpb24iOiAzMDAgfSwKICAgICJhcHAvYXBpL2NvdmVyLWxldHRlci9yb3V0ZS50cyI6IHsgIm1heER1cmF0aW9uIjogMzAwIH0KICB9Cn0K"}
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "functions": {
+    "app/api/optimize/route.ts": { "maxDuration": 300 },
+    "app/api/cover-letter/route.ts": { "maxDuration": 300 }
+  }
+}

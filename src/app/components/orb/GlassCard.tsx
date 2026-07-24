@@ -1,1 +1,11 @@
-{"data":"InVzZSBjbGllbnQiOwovKiogRnJvc3RlZC1nbGFzcyBzdXJmYWNlIOKAlCB0aGUgIm93bmluZyIgd29ybGQgKEdMQVNTKS4gTGlnaHQsIHNvZnQsIGVsZXZhdGVkLiAqLwpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBHbGFzc0NhcmQoewogIGNoaWxkcmVuLCBjbGFzc05hbWUgPSAiIiwgc3R5bGUsCn06IHsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZTsgY2xhc3NOYW1lPzogc3RyaW5nOyBzdHlsZT86IFJlYWN0LkNTU1Byb3BlcnRpZXMgfSkgewogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT17YGdsYXNzLXN1cmZhY2UgJHtjbGFzc05hbWV9YH0gc3R5bGU9e3N0eWxlfT4KICAgICAge2NoaWxkcmVufQogICAgPC9kaXY+CiAgKTsKfQo="}
+"use client";
+/** Frosted-glass surface — the "owning" world (GLASS). Light, soft, elevated. */
+export default function GlassCard({
+  children, className = "", style,
+}: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  return (
+    <div className={`glass-surface ${className}`} style={style}>
+      {children}
+    </div>
+  );
+}

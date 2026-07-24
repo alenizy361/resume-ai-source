@@ -1,1 +1,77 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgYWxsb3dTaGFyZWQsIGNsaWVudElwIH0gZnJvbSAiQC9hcHAvbGliL3JhdGVsaW1pdCI7CgpleHBvcnQgY29uc3QgbWF4RHVyYXRpb24gPSAyMDsKCi8qKgogKiBGZXRjaCBhIGpvYi1wb3N0aW5nIFVSTCBhbmQgcmV0dXJuIGl0cyByZWFkYWJsZSB0ZXh0IHNvIG1vYmlsZSB1c2VycyBjYW4KICogcGFzdGUgYSBsaW5rIGluc3RlYWQgb2YgY29weWluZyBhIGxvbmcgcG9zdGluZy4gU3RyaXBzIEhUTUwgdG8gcGxhaW4gdGV4dC4KICogU1NSRi1ndWFyZGVkOiBvbmx5IHB1YmxpYyBodHRwKHMpIGhvc3RzLCBubyBpbnRlcm5hbC9wcml2YXRlIHRhcmdldHMuCiAqLwoKZnVuY3Rpb24gaXNCbG9ja2VkSG9zdChob3N0OiBzdHJpbmcpOiBib29sZWFuIHsKICBjb25zdCBoID0gaG9zdC50b0xvd2VyQ2FzZSgpOwogIGlmIChoID09PSAibG9jYWxob3N0IiB8fCBoLmVuZHNXaXRoKCIubG9jYWxob3N0IikgfHwgaC5lbmRzV2l0aCgiLmludGVybmFsIikgfHwgaC5lbmRzV2l0aCgiLmxvY2FsIikpIHJldHVybiB0cnVlOwogIC8vIFJhdyBJUHMgaW4gcHJpdmF0ZSAvIGxvb3BiYWNrIC8gbGluay1sb2NhbCAvIG1ldGFkYXRhIHJhbmdlcy4KICBpZiAoL14xMjdcLi8udGVzdChoKSB8fCAvXjEwXC4vLnRlc3QoaCkgfHwgL14xOTJcLjE2OFwuLy50ZXN0KGgpIHx8IC9eMTY5XC4yNTRcLi8udGVzdChoKSkgcmV0dXJuIHRydWU7CiAgaWYgKC9eMTcyXC4oMVs2LTldfDJbMC05XXwzWzAtMV0pXC4vLnRlc3QoaCkpIHJldHVybiB0cnVlOwogIGlmIChoID09PSAiMC4wLjAuMCIgfHwgaCA9PT0gIjo6MSIgfHwgaCA9PT0gIls6OjFdIikgcmV0dXJuIHRydWU7CiAgcmV0dXJuIGZhbHNlOwp9CgpmdW5jdGlvbiBodG1sVG9UZXh0KGh0bWw6IHN0cmluZyk6IHN0cmluZyB7CiAgcmV0dXJuIGh0bWwKICAgIC5yZXBsYWNlKC88c2NyaXB0W1xzXFNdKj88XC9zY3JpcHQ+L2dpLCAiICIpCiAgICAucmVwbGFjZSgvPHN0eWxlW1xzXFNdKj88XC9zdHlsZT4vZ2ksICIgIikKICAgIC5yZXBsYWNlKC88bm9zY3JpcHRbXHNcU10qPzxcL25vc2NyaXB0Pi9naSwgIiAiKQogICAgLnJlcGxhY2UoLzwhLS1bXHNcU10qPy0tPi9nLCAiICIpCiAgICAucmVwbGFjZSgvPFwvKHB8ZGl2fGxpfGJyfGhbMS02XXx0cik+L2dpLCAiXG4iKQogICAgLnJlcGxhY2UoLzxbXj5dKz4vZywgIiAiKQogICAgLnJlcGxhY2UoLyZuYnNwOy9nLCAiICIpLnJlcGxhY2UoLyZhbXA7L2csICImIikucmVwbGFjZSgvJmx0Oy9nLCAiPCIpLnJlcGxhY2UoLyZndDsvZywgIj4iKS5yZXBsYWNlKC8mIzM5O3wmYXBvczsvZywgIiciKS5yZXBsYWNlKC8mcXVvdDsvZywgJyInKQogICAgLnJlcGxhY2UoL1sgXHTCoF0rL2csICIgIikKICAgIC5yZXBsYWNlKC9cbnszLH0vZywgIlxuXG4iKQogICAgLnNwbGl0KCJcbiIpLm1hcCgobCkgPT4gbC50cmltKCkpLmZpbHRlcihCb29sZWFuKS5qb2luKCJcbiIpCiAgICAudHJpbSgpOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgaWYgKCEoYXdhaXQgYWxsb3dTaGFyZWQoYGZldGNoam9iOiR7Y2xpZW50SXAocmVxKX1gLCAyMCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJUb28gbWFueSByZXF1ZXN0cy4gUGxlYXNlIHdhaXQgYSBtaW51dGUuIiB9LCB7IHN0YXR1czogNDI5IH0pOwogIH0KICBsZXQgYm9keTogeyB1cmw/OiBzdHJpbmcgfTsKICB0cnkgeyBib2R5ID0gYXdhaXQgcmVxLmpzb24oKTsgfSBjYXRjaCB7IHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiSW52YWxpZCBKU09OIGJvZHkuIiB9LCB7IHN0YXR1czogNDAwIH0pOyB9CiAgY29uc3QgcmF3ID0gU3RyaW5nKGJvZHk/LnVybCB8fCAiIikudHJpbSgpOwogIGlmICghcmF3KSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlVSTCByZXF1aXJlZC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CgogIGxldCB1cmw6IFVSTDsKICB0cnkgeyB1cmwgPSBuZXcgVVJMKHJhdyk7IH0gY2F0Y2ggeyByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlRoYXQgZG9lc24ndCBsb29rIGxpa2UgYSB2YWxpZCBsaW5rLiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsgfQogIGlmICh1cmwucHJvdG9jb2wgIT09ICJodHRwOiIgJiYgdXJsLnByb3RvY29sICE9PSAiaHR0cHM6IikgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJPbmx5IGh0dHAocykgbGlua3MgYXJlIHN1cHBvcnRlZC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgfQogIGlmIChpc0Jsb2NrZWRIb3N0KHVybC5ob3N0bmFtZSkpIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiVGhhdCBsaW5rIGNhbid0IGJlIGZldGNoZWQuIiB9LCB7IHN0YXR1czogNDAwIH0pOwogIH0KCiAgdHJ5IHsKICAgIGNvbnN0IGN0cmwgPSBuZXcgQWJvcnRDb250cm9sbGVyKCk7CiAgICBjb25zdCB0aW1lciA9IHNldFRpbWVvdXQoKCkgPT4gY3RybC5hYm9ydCgpLCAxMjAwMCk7CiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaCh1cmwudG9TdHJpbmcoKSwgewogICAgICBzaWduYWw6IGN0cmwuc2lnbmFsLAogICAgICByZWRpcmVjdDogImZvbGxvdyIsCiAgICAgIGhlYWRlcnM6IHsgIlVzZXItQWdlbnQiOiAiTW96aWxsYS81LjAgKGNvbXBhdGlibGU7IFNpcmFCb3QvMS4wKSIsIEFjY2VwdDogInRleHQvaHRtbCxhcHBsaWNhdGlvbi94aHRtbCt4bWwiIH0sCiAgICB9KS5maW5hbGx5KCgpID0+IGNsZWFyVGltZW91dCh0aW1lcikpOwogICAgaWYgKCFyZXMub2spIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiBgQ291bGRuJ3Qgb3BlbiB0aGUgbGluayAoSFRUUCAke3Jlcy5zdGF0dXN9KS4gUGFzdGUgdGhlIHRleHQgaW5zdGVhZC5gIH0sIHsgc3RhdHVzOiA1MDIgfSk7CiAgICBjb25zdCBjdHlwZSA9IHJlcy5oZWFkZXJzLmdldCgiY29udGVudC10eXBlIikgfHwgIiI7CiAgICBpZiAoIWN0eXBlLmluY2x1ZGVzKCJodG1sIikgJiYgIWN0eXBlLmluY2x1ZGVzKCJ0ZXh0IikpIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJUaGF0IGxpbmsgaXNuJ3QgYSByZWFkYWJsZSBqb2IgcGFnZS4gUGFzdGUgdGhlIHRleHQgaW5zdGVhZC4iIH0sIHsgc3RhdHVzOiA0MTUgfSk7CiAgICB9CiAgICBjb25zdCBodG1sID0gKGF3YWl0IHJlcy50ZXh0KCkpLnNsaWNlKDAsIDUwMF8wMDApOwogICAgY29uc3QgdGV4dCA9IGh0bWxUb1RleHQoaHRtbCkuc2xpY2UoMCwgNDAwMCk7CiAgICBpZiAodGV4dC5sZW5ndGggPCA4MCkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkNvdWxkbid0IHJlYWQgZW5vdWdoIHRleHQgZnJvbSB0aGF0IGxpbmsgKHNvbWUgc2l0ZXMgYmxvY2sgYm90cykuIFBhc3RlIHRoZSBwb3N0aW5nIHRleHQgaW5zdGVhZC4iIH0sIHsgc3RhdHVzOiA0MjIgfSk7CiAgICB9CiAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBvazogdHJ1ZSwgdGV4dCB9KTsKICB9IGNhdGNoIHsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiQ291bGRuJ3QgZmV0Y2ggdGhhdCBsaW5rIOKAlCBwYXN0ZSB0aGUgcG9zdGluZyB0ZXh0IGluc3RlYWQuIiB9LCB7IHN0YXR1czogNTAyIH0pOwogIH0KfQo="}
+import { NextRequest, NextResponse } from "next/server";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 20;
+
+/**
+ * Fetch a job-posting URL and return its readable text so mobile users can
+ * paste a link instead of copying a long posting. Strips HTML to plain text.
+ * SSRF-guarded: only public http(s) hosts, no internal/private targets.
+ */
+
+function isBlockedHost(host: string): boolean {
+  const h = host.toLowerCase();
+  if (h === "localhost" || h.endsWith(".localhost") || h.endsWith(".internal") || h.endsWith(".local")) return true;
+  // Raw IPs in private / loopback / link-local / metadata ranges.
+  if (/^127\./.test(h) || /^10\./.test(h) || /^192\.168\./.test(h) || /^169\.254\./.test(h)) return true;
+  if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(h)) return true;
+  if (h === "0.0.0.0" || h === "::1" || h === "[::1]") return true;
+  return false;
+}
+
+function htmlToText(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<\/(p|div|li|br|h[1-6]|tr)>/gi, "\n")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
+    .replace(/[ \t ]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .split("\n").map((l) => l.trim()).filter(Boolean).join("\n")
+    .trim();
+}
+
+export async function POST(req: NextRequest) {
+  if (!(await allowShared(`fetchjob:${clientIp(req)}`, 20, 10 * 60 * 1000))) {
+    return NextResponse.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
+  }
+  let body: { url?: string };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+  const raw = String(body?.url || "").trim();
+  if (!raw) return NextResponse.json({ error: "URL required." }, { status: 400 });
+
+  let url: URL;
+  try { url = new URL(raw); } catch { return NextResponse.json({ error: "That doesn't look like a valid link." }, { status: 400 }); }
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return NextResponse.json({ error: "Only http(s) links are supported." }, { status: 400 });
+  }
+  if (isBlockedHost(url.hostname)) {
+    return NextResponse.json({ error: "That link can't be fetched." }, { status: 400 });
+  }
+
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 12000);
+    const res = await fetch(url.toString(), {
+      signal: ctrl.signal,
+      redirect: "follow",
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; SiraBot/1.0)", Accept: "text/html,application/xhtml+xml" },
+    }).finally(() => clearTimeout(timer));
+    if (!res.ok) return NextResponse.json({ error: `Couldn't open the link (HTTP ${res.status}). Paste the text instead.` }, { status: 502 });
+    const ctype = res.headers.get("content-type") || "";
+    if (!ctype.includes("html") && !ctype.includes("text")) {
+      return NextResponse.json({ error: "That link isn't a readable job page. Paste the text instead." }, { status: 415 });
+    }
+    const html = (await res.text()).slice(0, 500_000);
+    const text = htmlToText(html).slice(0, 4000);
+    if (text.length < 80) {
+      return NextResponse.json({ error: "Couldn't read enough text from that link (some sites block bots). Paste the posting text instead." }, { status: 422 });
+    }
+    return NextResponse.json({ ok: true, text });
+  } catch {
+    return NextResponse.json({ error: "Couldn't fetch that link — paste the posting text instead." }, { status: 502 });
+  }
+}

@@ -1,1 +1,74 @@
-{"data":"IyDYrdiy2YXYqSDYpdi32YTYp9mCIFJlc3VtZUFJIOKAlCDYp9mG2LPYriDZiNin2YTYtdmCICjZo9mgINiv2YLZitmC2KkgPSDYo9mI2YQg2LLZiNmR2KfYsSkKCtin2YTZh9iv2YE6INij2YjZhCDZodmg2aAg2LLYp9im2LEg2Ygg2KPZiNmEINi52YXZitmEINiv2KfZgdi5LiDZg9mEINio2YjYs9iqINis2KfZh9iyIOKAlCDYqNizINin2YbYs9iu2YfYjCDYp9mE2LXZgtmH2Iwg2KfZhti02LHZhy4K2KfZhNix2KfYqNi3INmB2Yog2YPZhCDZhdmD2KfZhjogKipodHRwczovL2N2LnJhYml0LnNhKioKCi0tLQoKIyMgMSkgWCAvINiq2YjZitiq2LEgKNin2YTYo9mC2YjZiSDZhNmE2LPYudmI2K/ZitipKQoKKirYqNmI2LPYqiDZoSDigJQg2KfZhNmC2LXYqSAodGhyZWFkKToqKgo+INmC2LbZitiqINi02YfZiNixINij2LHYs9mEINiz2YrYsdiq2Yog2KfZhNiw2KfYqtmK2Kkg2KjYr9mI2YYg2KPZiiDYsdivLgo+INin2YPYqti02YHYqiDYpdmGINmn2aXZqiDZhdmGINin2YTYs9mK2LEg2KfZhNiw2KfYqtmK2Kkg2YrYsdmB2LbZh9inINmG2LjYp9mFIEFUUyDZgtio2YQg2KPZhiDZitix2KfZh9inINio2LTYsS4KPgo+INmB2KjZhtmK2Kog2KPYr9in2Kkg2KrZgdit2LUg2LPZitix2KrZgyDYqNin2YTYsNmD2KfYoSDYp9mE2KfYtdi32YbYp9i52YrYjCDYqti52LfZitmDINmG2LPYqNipINiq2YjYp9mB2YLZh9inINmF2Lkg2KfZhNmI2LjZitmB2KnYjCDZiNiq2LnZitivINmD2KrYp9io2KrZh9inINmE2KrYudio2LEg2KfZhNmB2YTYqtixLgo+Cj4g2KzYsdio2YfYpyDZhdis2KfZhtin2YsgKNin2YTZgdit2LUg2YPYp9mF2YQg2YXYrNin2YbZiik6IGh0dHBzOi8vY3YucmFiaXQuc2EKCioq2KjZiNiz2Kog2aIg4oCUINmF2KjYp9i02LE6KioKPiDYs9mK2LHYqtmDINin2YTYsNin2KrZitipINmF2Kcg2KrZiNi12YQg2YTZhNmF2LPYpNmI2YTYnyDYp9mE2YXYtNmD2YTYqSDYutin2YTYqNin2Ysg2YbYuNin2YUgQVRTLgo+INin2YHYrdi1INiz2YrYsdiq2YMg2KfZhNii2YYg2YXYrNin2YbYp9mLINmI2LTZiNmBINmG2LPYqNiq2YMg2KjYp9mE2KvZiNin2YbZiiDwn5GHCj4gaHR0cHM6Ly9jdi5yYWJpdC5zYQo+ICPYqtmI2LjZitmBICPZiNi42KfYptmBX9in2YTYs9i52YjYr9mK2KkgI9in2YTZhdmI2KfYsdivX9in2YTYqNi02LHZitipCgoqKtmH2KfYtNiq2KfZgtin2Kog2YHYudmR2KfZhNipOioqIGAj2YjYuNin2KbZgWAgYCPYqtmI2LjZitmBYCBgI9mI2LjYp9im2YFf2KfZhNiz2LnZiNiv2YrYqWAgYCPYp9mE2LPZitix2Klf2KfZhNiw2KfYqtmK2KlgIGAj2KzYr9in2LHYp9iqYCBgI9iu2LHZitis2YrZhmAKCi0tLQoKIyMgMikg2YTZitmG2YPYr9il2YYgKNis2YXZh9mI2LEg2YXZh9mG2YogPSDYudmF2YTYp9ihINij2LnZhNmJINmC2YrZhdipKQoKPiDYqNi52K8g2YXYsdin2KzYudipINi52LTYsdin2Kog2KfZhNiz2YrYsSDYp9mE2LDYp9iq2YrYqdiMINmE2KfYrdi42Kog2KPZhiDYo9i62YTYqCDYp9mE2YXYsdi02K3ZitmGINin2YTYo9mD2YHYp9ihINmK2Y/YsdmB2LbZiNmGINmE2LPYqNioINmI2KfYrdivOiAqKtij2YbYuNmF2KkgQVRTKiouCj4KPiDZhNiw2YTZgyDYo9i32YTZgtiqIFJlc3VtZUFJIOKAlCDYo9iv2KfYqSDYqtmB2K3YtSDYs9mK2LHYqtmDINmF2YLYp9io2YQg2KfZhNmI2LjZitmB2KnYjCDYqtmD2LTZgSDYp9mE2YPZhNmF2KfYqiDYp9mE2YXZgdiq2KfYrdmK2Kkg2KfZhNmG2KfZgti12KnYjCDZiNiq2LnZitivINi12YrYp9i62KrZh9inINio2KfYrdiq2LHYp9mB2YrYqSAo2KjYr9mI2YYg2KfYrtiq2YTYp9mCINij2Yog2YXYudmE2YjZhdipIOKAlCDZgdmC2Lcg2KrYqNix2LIg2K7YqNix2KrZgyDYp9mE2K3ZgtmK2YLZitipKS4KPgo+INin2YTZgdit2LUg2YjYp9mE2KrYrdmE2YrZhCDZhdis2KfZhtmKINio2KfZhNmD2KfZhdmELiDYrNix2ZHYqNmH2Kc6IGh0dHBzOi8vY3YucmFiaXQuc2EKPgo+ICPYp9mE2KrZiNi42YrZgSAj2KfZhNiz2YrYsdipX9in2YTYsNin2KrZitipICPYqti32YjZitixX9in2YTZhdmH2YbYqSAjQVRTCgotLS0KCiMjIDMpIFJlZGRpdCAoci9zYXVkaWFyYWJpYSDCtyByL2pvYnMgwrcgci9yaXlhZGgpCgoqKtin2YTYudmG2YjYp9mGOioqIEkgYnVpbHQgYSBmcmVlIEFUUyByZXN1bWUgc2Nhbm5lciAoQXJhYmljICsgRW5nbGlzaCkg4oCUIGZlZWRiYWNrIHdlbGNvbWUKKirYp9mE2YbYtToqKgo+IEpvYiBodW50aW5nIGluIFNhdWRpL0d1bGYsIEkga2VwdCBnZXR0aW5nIGF1dG8tcmVqZWN0ZWQuIFR1cm5zIG91dCBtb3N0IHJlc3VtZXMgZmFpbCB0aGUgQVRTIGZpbHRlciBiZWZvcmUgYSBodW1hbiBzZWVzIHRoZW0uCj4gSSBidWlsdCBhIGZyZWUgdG9vbCB0aGF0IHNjb3JlcyB5b3VyIHJlc3VtZSBhZ2FpbnN0IGEgam9iIGFuZCBzaG93cyBleGFjdGx5IHdoYXQncyBtaXNzaW5nIOKAlCB3b3JrcyBpbiBBcmFiaWMgYW5kIEVuZ2xpc2guCj4gVGhlIHNjYW4gKyBmdWxsIGFuYWx5c2lzIGlzIDEwMCUgZnJlZS4gV291bGQgbG92ZSBob25lc3QgZmVlZGJhY2s6IGh0dHBzOi8vY3YucmFiaXQuc2EKCi0tLQoKIyMgNCkg2KzYsdmI2KjYp9iqINmI2KfYqtiz2KfYqCAvINiq2YrZhNmK2KzYsdin2YUg2YTZhNmI2LjYp9im2YEgKNin2YTYo9iz2LHYuSDZhNij2YjZhCDYudmF2YrZhCkKCj4g8J+ThCDZhti12YrYrdipINmE2KPZiiDYo9it2K8g2YrYr9mI2ZHYsSDZiNi42YrZgdipOgo+INmn2aXZqiDZhdmGINin2YTYs9mK2LEg2KfZhNiw2KfYqtmK2Kkg2YrYsdmB2LbZh9inINin2YTZhti42KfZhSDZgtio2YQg2YXYpyDZiti02YjZgdmH2Kcg2KPYrdivLgo+INmB2Yog2KPYr9in2Kkg2KrZgdit2LUg2LPZitix2KrZgyDZhdis2KfZhtin2Ysg2YjYqti52LfZitmDINmG2LPYqNipINiq2YjYp9mB2YLZh9inINmF2Lkg2KfZhNmI2LjZitmB2KkgKyDYp9mE2YPZhNmF2KfYqiDYp9mE2YbYp9mC2LXYqToKPiBodHRwczovL2N2LnJhYml0LnNhCj4gKNin2YTZgdit2LUg2YXYrNin2YbZiiDYqNin2YTZg9in2YXZhNiMINis2LHYqNmI2YfYpykKCtin2KjYrdirINmB2Yog2KrZitmE2YrYrNix2KfZhSDYudmGOiAi2YjYuNin2KbZgSDYp9mE2LPYudmI2K/ZitipItiMICLZiNi42KfYptmBINin2YTYsdmK2KfYtiLYjCAi2KrZiNi42YrZgSIuINin2YbYttmFINmI2KfZhti02LEgKNio2KPYr9io2Iwg2YXYsdipKS4KCi0tLQoKIyMgNSkg2KrZg9iq2YrZgyDYo9mI2YQg2aHZoCDYudmF2YTYp9ihICsg2LTZh9in2K/Yp9iqINit2YLZitmC2YrYqQoK2KjYr9mEINin2YTYtNmH2KfYr9in2Kog2KfZhNmF2YHYqNix2YPYqSAo2YbYrdiw2YHZh9inKdiMINin2LXZhti5INi02YfYp9iv2KfYqiAqKtit2YLZitmC2YrYqSoqOgoxLiDYp9i52LHYtiDYudmE2Ykg2KPZiNmEINmh2aAg2KPYtNiu2KfYtSAqKtmB2KrYrSDZhdis2KfZhtmKINmD2KfZhdmEKiog2YXZgtin2KjZhCDYsdij2YrZh9mFINin2YTYtdin2K/Zgi4KMi4g2K7YsCDZhdmG2YfZhSDYp9mC2KrYqNin2LMg2K3ZgtmK2YLZiiArINin2YTYp9iz2YUg2KfZhNij2YjZhCArINin2YTZhdiv2YrZhtipIOKGkiDYp9iz2KrYrtiv2YXZh9inINmB2Yog2KfZhNmF2YjZgti5ICjYqNmF2YjYp9mB2YLYqtmH2YUpLgozLiBzb2NpYWwgcHJvb2Yg2K3ZgtmK2YLZiiA9INiq2K3ZiNmK2YQg2KPYudmE2Ykg2KjZg9ir2YrYsSDZhdmGINij2Yog2KXYudmE2KfZhi4KCi0tLQoKIyMg2KfZhNmC2KfYudiv2Kkg2KfZhNiw2YfYqNmK2Kkg2YTZhNiq2YjYstmK2LkKLSDYp9mG2LTYsSDYrdmK2KsgKirYrNmF2YfZiNix2YMg2YHYudmE2KfZiyDZhdmI2KzZiNivKiogKNio2KfYrdir2YjZhiDYudmGINmI2LjYp9im2YEp2Iwg2YXZiCDZgdmKINmD2YQg2YXZg9in2YYuCi0g2YLYr9mR2YUgKirZgtmK2YXYqSDYo9mI2YTYp9mLKiogKNmG2LXZitit2KkgQVRTKdiMINmI2KfZhNix2KfYqNi3INir2KfZhtmK2KfZiyDigJQg2YXYpyDYo9it2K8g2YrYrdioINin2YTYpdi52YTYp9mG2KfYqiDYp9mE2YXYqNin2LTYsdipLgotINin2YTYp9iq2LPYp9mCOiDZoi3ZoyDYqNmI2LPYqtin2Kog2KjYp9mE2YrZiNmFIMOXINij2LPYqNmI2LnZitmGID4g2KjZiNiz2Kog2YjYp9it2K8gItmB2YrYsdmI2LPZiiIg2KrZhtiq2LjYsdmHLgo="}
+# حزمة إطلاق ResumeAI — انسخ والصق (٣٠ دقيقة = أول زوّار)
+
+الهدف: أول ١٠٠ زائر و أول عميل دافع. كل بوست جاهز — بس انسخه، الصقه، انشره.
+الرابط في كل مكان: **https://cv.rabit.sa**
+
+---
+
+## 1) X / تويتر (الأقوى للسعودية)
+
+**بوست ١ — القصة (thread):**
+> قضيت شهور أرسل سيرتي الذاتية بدون أي رد.
+> اكتشفت إن ٧٥٪ من السير الذاتية يرفضها نظام ATS قبل أن يراها بشر.
+>
+> فبنيت أداة تفحص سيرتك بالذكاء الاصطناعي، تعطيك نسبة توافقها مع الوظيفة، وتعيد كتابتها لتعبر الفلتر.
+>
+> جربها مجاناً (الفحص كامل مجاني): https://cv.rabit.sa
+
+**بوست ٢ — مباشر:**
+> سيرتك الذاتية ما توصل للمسؤول؟ المشكلة غالباً نظام ATS.
+> افحص سيرتك الآن مجاناً وشوف نسبتك بالثواني 👇
+> https://cv.rabit.sa
+> #توظيف #وظائف_السعودية #الموارد_البشرية
+
+**هاشتاقات فعّالة:** `#وظائف` `#توظيف` `#وظائف_السعودية` `#السيرة_الذاتية` `#جدارات` `#خريجين`
+
+---
+
+## 2) لينكدإن (جمهور مهني = عملاء أعلى قيمة)
+
+> بعد مراجعة عشرات السير الذاتية، لاحظت أن أغلب المرشحين الأكفاء يُرفضون لسبب واحد: **أنظمة ATS**.
+>
+> لذلك أطلقت ResumeAI — أداة تفحص سيرتك مقابل الوظيفة، تكشف الكلمات المفتاحية الناقصة، وتعيد صياغتها باحترافية (بدون اختلاق أي معلومة — فقط تبرز خبرتك الحقيقية).
+>
+> الفحص والتحليل مجاني بالكامل. جرّبها: https://cv.rabit.sa
+>
+> #التوظيف #السيرة_الذاتية #تطوير_المهنة #ATS
+
+---
+
+## 3) Reddit (r/saudiarabia · r/jobs · r/riyadh)
+
+**العنوان:** I built a free ATS resume scanner (Arabic + English) — feedback welcome
+**النص:**
+> Job hunting in Saudi/Gulf, I kept getting auto-rejected. Turns out most resumes fail the ATS filter before a human sees them.
+> I built a free tool that scores your resume against a job and shows exactly what's missing — works in Arabic and English.
+> The scan + full analysis is 100% free. Would love honest feedback: https://cv.rabit.sa
+
+---
+
+## 4) جروبات واتساب / تيليجرام للوظائف (الأسرع لأول عميل)
+
+> 📄 نصيحة لأي أحد يدوّر وظيفة:
+> ٧٥٪ من السير الذاتية يرفضها النظام قبل ما يشوفها أحد.
+> في أداة تفحص سيرتك مجاناً وتعطيك نسبة توافقها مع الوظيفة + الكلمات الناقصة:
+> https://cv.rabit.sa
+> (الفحص مجاني بالكامل، جربوها)
+
+ابحث في تيليجرام عن: "وظائف السعودية"، "وظائف الرياض"، "توظيف". انضم وانشر (بأدب، مرة).
+
+---
+
+## 5) تكتيك أول ١٠ عملاء + شهادات حقيقية
+
+بدل الشهادات المفبركة (نحذفها)، اصنع شهادات **حقيقية**:
+1. اعرض على أول ١٠ أشخاص **فتح مجاني كامل** مقابل رأيهم الصادق.
+2. خذ منهم اقتباس حقيقي + الاسم الأول + المدينة → استخدمها في الموقع (بموافقتهم).
+3. social proof حقيقي = تحويل أعلى بكثير من أي إعلان.
+
+---
+
+## القاعدة الذهبية للتوزيع
+- انشر حيث **جمهورك فعلاً موجود** (باحثون عن وظائف)، مو في كل مكان.
+- قدّم **قيمة أولاً** (نصيحة ATS)، والرابط ثانياً — ما أحد يحب الإعلانات المباشرة.
+- الاتساق: ٢-٣ بوستات باليوم × أسبوعين > بوست واحد "فيروسي" تنتظره.

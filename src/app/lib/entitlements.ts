@@ -1,1 +1,108 @@
-{"data":"LyoqCiAqIFBlci1hY2NvdW50IGVudGl0bGVtZW50cyBzdG9yZWQgaW4gVmVyY2VsIEVkZ2UgQ29uZmlnIChwcm92aXNpb25lZCB2aWEgQVBJLAogKiBubyBleHRlcm5hbCBzaWdudXApLiBLZXk6IGBlbnRfPHNhbml0aXplZCBlbWFpbD5gIC0+IGVwb2NoIG1zIHVudGlsIHdoaWNoCiAqIHRoZSBhY2NvdW50IGhhcyB1bmxpbWl0ZWQgYWNjZXNzLgogKgogKiBSZWFkczogZWRnZS1jb25maWcudmVyY2VsLmNvbSB3aXRoIGEgc2NvcGVkIHJlYWQgdG9rZW4gKGZhc3QsIGdsb2JhbCkuCiAqIFdyaXRlczogYXBpLnZlcmNlbC5jb20gd2l0aCBhbiBBUEkgdG9rZW4gKG9uZSB3cml0ZSBwZXIgcHVyY2hhc2Ug4oCUIGxvdyB2b2x1bWUpLgogKiBGYWxscyBiYWNrIHRvIFVwc3Rhc2ggUmVkaXMgaWYgY29uZmlndXJlZCwgZWxzZSBuby1hY2Nlc3MuCiAqLwoKY29uc3QgRUNfSUQgPSBwcm9jZXNzLmVudi5FREdFX0NPTkZJR19JRDsKY29uc3QgRUNfUkVBRCA9IHByb2Nlc3MuZW52LkVER0VfQ09ORklHX1JFQURfVE9LRU47CmNvbnN0IEVDX1RFQU0gPSBwcm9jZXNzLmVudi5FREdFX0NPTkZJR19URUFNX0lEOwpjb25zdCBFQ19XUklURSA9IHByb2Nlc3MuZW52LlZFUkNFTF9BUElfVE9LRU47Cgpjb25zdCBVUF9VUkwgPSBwcm9jZXNzLmVudi5VUFNUQVNIX1JFRElTX1JFU1RfVVJMOwpjb25zdCBVUF9UT0tFTiA9IHByb2Nlc3MuZW52LlVQU1RBU0hfUkVESVNfUkVTVF9UT0tFTjsKCmNvbnN0IGVkZ2VDb25maWd1cmVkID0gKCkgPT4gISEoRUNfSUQgJiYgRUNfUkVBRCAmJiBFQ19XUklURSk7CmNvbnN0IHVwc3Rhc2hDb25maWd1cmVkID0gKCkgPT4gISEoVVBfVVJMICYmIFVQX1RPS0VOKTsKZXhwb3J0IGNvbnN0IHN0b3JlQ29uZmlndXJlZCA9ICgpID0+IGVkZ2VDb25maWd1cmVkKCkgfHwgdXBzdGFzaENvbmZpZ3VyZWQoKTsKCi8vIEVkZ2UgQ29uZmlnIGtleXMgbXVzdCBiZSBhbHBoYW51bWVyaWMvXy0gOyBlbmNvZGUgdGhlIGVtYWlsIHNhZmVseS4KY29uc3Qga2V5ID0gKGVtYWlsOiBzdHJpbmcpID0+CiAgImVudF8iICsgQnVmZmVyLmZyb20oZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCkpLnRvU3RyaW5nKCJiYXNlNjR1cmwiKS5yZXBsYWNlKC8tL2csICJfIik7Cgphc3luYyBmdW5jdGlvbiBlZGdlR2V0KGs6IHN0cmluZyk6IFByb21pc2U8bnVtYmVyPiB7CiAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goYGh0dHBzOi8vZWRnZS1jb25maWcudmVyY2VsLmNvbS8ke0VDX0lEfS9pdGVtLyR7a30/dG9rZW49JHtFQ19SRUFEfWAsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSk7CiAgaWYgKHJlcy5zdGF0dXMgPT09IDQwNCkgcmV0dXJuIDA7CiAgaWYgKCFyZXMub2spIHRocm93IG5ldyBFcnJvcihgZWRnZS1jb25maWcgcmVhZCAke3Jlcy5zdGF0dXN9YCk7CiAgY29uc3QgdiA9IGF3YWl0IHJlcy5qc29uKCk7CiAgcmV0dXJuIHBhcnNlSW50KFN0cmluZyh2KSkgfHwgMDsKfQoKYXN5bmMgZnVuY3Rpb24gZWRnZVNldChrOiBzdHJpbmcsIHZhbHVlOiBzdHJpbmcpOiBQcm9taXNlPHZvaWQ+IHsKICBjb25zdCB0ZWFtID0gRUNfVEVBTSA/IGA/dGVhbUlkPSR7RUNfVEVBTX1gIDogIiI7CiAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goYGh0dHBzOi8vYXBpLnZlcmNlbC5jb20vdjEvZWRnZS1jb25maWcvJHtFQ19JRH0vaXRlbXMke3RlYW19YCwgewogICAgbWV0aG9kOiAiUEFUQ0giLAogICAgaGVhZGVyczogeyBBdXRob3JpemF0aW9uOiBgQmVhcmVyICR7RUNfV1JJVEV9YCwgIkNvbnRlbnQtVHlwZSI6ICJhcHBsaWNhdGlvbi9qc29uIiB9LAogICAgYm9keTogSlNPTi5zdHJpbmdpZnkoeyBpdGVtczogW3sgb3BlcmF0aW9uOiAidXBzZXJ0Iiwga2V5OiBrLCB2YWx1ZSB9XSB9KSwKICB9KTsKICBpZiAoIXJlcy5vaykgdGhyb3cgbmV3IEVycm9yKGBlZGdlLWNvbmZpZyB3cml0ZSAke3Jlcy5zdGF0dXN9OiAkeyhhd2FpdCByZXMudGV4dCgpKS5zbGljZSgwLCAyMDApfWApOwp9Cgphc3luYyBmdW5jdGlvbiB1cHN0YXNoKGFyZ3M6IChzdHJpbmcgfCBudW1iZXIpW10pOiBQcm9taXNlPHVua25vd24+IHsKICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChVUF9VUkwhLCB7CiAgICBtZXRob2Q6ICJQT1NUIiwKICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke1VQX1RPS0VOfWAsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KGFyZ3MpLAogICAgY2FjaGU6ICJuby1zdG9yZSIsCiAgfSk7CiAgaWYgKCFyZXMub2spIHRocm93IG5ldyBFcnJvcihgUmVkaXMgJHtyZXMuc3RhdHVzfWApOwogIHJldHVybiAoYXdhaXQgcmVzLmpzb24oKSkucmVzdWx0Owp9CgovKiogR3JhbnQvZXh0ZW5kIHVubGltaXRlZCBhY2Nlc3MgdG8gYW4gYWNjb3VudCB1bnRpbCBgdW50aWxgIChlcG9jaCBtcykuICovCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBncmFudEVudGl0bGVtZW50KGVtYWlsOiBzdHJpbmcsIHVudGlsOiBudW1iZXIpOiBQcm9taXNlPHZvaWQ+IHsKICBpZiAoZWRnZUNvbmZpZ3VyZWQoKSkgcmV0dXJuIGVkZ2VTZXQoa2V5KGVtYWlsKSwgU3RyaW5nKHVudGlsKSk7CiAgaWYgKHVwc3Rhc2hDb25maWd1cmVkKCkpIHsKICAgIGF3YWl0IHVwc3Rhc2goWyJTRVQiLCBgZW50OiR7ZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCl9YCwgU3RyaW5nKHVudGlsKV0pOwogIH0KfQoKLyoqIFJldHVybnMgdGhlIGVudGl0bGVtZW50IGV4cGlyeSAoZXBvY2ggbXMpIG9yIDAgaWYgbm9uZSAvIG5vdCBjb25maWd1cmVkLiAqLwpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0RW50aXRsZW1lbnQoZW1haWw6IHN0cmluZyk6IFByb21pc2U8bnVtYmVyPiB7CiAgdHJ5IHsKICAgIGlmIChlZGdlQ29uZmlndXJlZCgpKSByZXR1cm4gYXdhaXQgZWRnZUdldChrZXkoZW1haWwpKTsKICAgIGlmICh1cHN0YXNoQ29uZmlndXJlZCgpKSB7CiAgICAgIGNvbnN0IHYgPSBhd2FpdCB1cHN0YXNoKFsiR0VUIiwgYGVudDoke2VtYWlsLnRvTG93ZXJDYXNlKCkudHJpbSgpfWBdKTsKICAgICAgcmV0dXJuIHYgPyBwYXJzZUludChTdHJpbmcodikpIHx8IDAgOiAwOwogICAgfQogIH0gY2F0Y2ggewogICAgLyogZmFsbCB0aHJvdWdoICovCiAgfQogIHJldHVybiAwOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gaGFzQWN0aXZlRW50aXRsZW1lbnQoZW1haWw6IHN0cmluZywgbm93OiBudW1iZXIpOiBQcm9taXNlPGJvb2xlYW4+IHsKICByZXR1cm4gKGF3YWl0IGdldEVudGl0bGVtZW50KGVtYWlsKSkgPiBub3c7Cn0KCi8vIOKUgOKUgCBPcmRlciAtPiBidXllciBlbWFpbCBtYXBwaW5nIChzZXQgYXQgaW52b2ljZSBjcmVhdGlvbiwgcmVhZCBhdCB2ZXJpZnkpIOKUgOKUgApjb25zdCBvcmRlcktleSA9IChvcmRlck51bWJlcjogc3RyaW5nKSA9PiAib3JkXyIgKyBvcmRlck51bWJlci5yZXBsYWNlKC9bXmEtekEtWjAtOV9dL2csICJfIik7CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gc2V0T3JkZXJFbWFpbChvcmRlck51bWJlcjogc3RyaW5nLCBlbWFpbDogc3RyaW5nKTogUHJvbWlzZTx2b2lkPiB7CiAgaWYgKGVkZ2VDb25maWd1cmVkKCkpIHJldHVybiBlZGdlU2V0KG9yZGVyS2V5KG9yZGVyTnVtYmVyKSwgZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCkpOwogIGlmICh1cHN0YXNoQ29uZmlndXJlZCgpKSB7CiAgICBhd2FpdCB1cHN0YXNoKFsiU0VUIiwgYG9yZDoke29yZGVyTnVtYmVyfWAsIGVtYWlsLnRvTG93ZXJDYXNlKCkudHJpbSgpXSk7CiAgfQp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0T3JkZXJFbWFpbChvcmRlck51bWJlcjogc3RyaW5nKTogUHJvbWlzZTxzdHJpbmcgfCBudWxsPiB7CiAgdHJ5IHsKICAgIGlmIChlZGdlQ29uZmlndXJlZCgpKSB7CiAgICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL2VkZ2UtY29uZmlnLnZlcmNlbC5jb20vJHtFQ19JRH0vaXRlbS8ke29yZGVyS2V5KG9yZGVyTnVtYmVyKX0/dG9rZW49JHtFQ19SRUFEfWAsIHsgY2FjaGU6ICJuby1zdG9yZSIgfSk7CiAgICAgIGlmICghcmVzLm9rKSByZXR1cm4gbnVsbDsKICAgICAgY29uc3QgdiA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICAgIHJldHVybiB0eXBlb2YgdiA9PT0gInN0cmluZyIgJiYgdi5pbmNsdWRlcygiQCIpID8gdiA6IG51bGw7CiAgICB9CiAgICBpZiAodXBzdGFzaENvbmZpZ3VyZWQoKSkgewogICAgICBjb25zdCB2ID0gYXdhaXQgdXBzdGFzaChbIkdFVCIsIGBvcmQ6JHtvcmRlck51bWJlcn1gXSk7CiAgICAgIHJldHVybiB2ICYmIFN0cmluZyh2KS5pbmNsdWRlcygiQCIpID8gU3RyaW5nKHYpIDogbnVsbDsKICAgIH0KICB9IGNhdGNoIHsKICAgIC8qIGZhbGwgdGhyb3VnaCAqLwogIH0KICByZXR1cm4gbnVsbDsKfQo="}
+/**
+ * Per-account entitlements stored in Vercel Edge Config (provisioned via API,
+ * no external signup). Key: `ent_<sanitized email>` -> epoch ms until which
+ * the account has unlimited access.
+ *
+ * Reads: edge-config.vercel.com with a scoped read token (fast, global).
+ * Writes: api.vercel.com with an API token (one write per purchase — low volume).
+ * Falls back to Upstash Redis if configured, else no-access.
+ */
+
+const EC_ID = process.env.EDGE_CONFIG_ID;
+const EC_READ = process.env.EDGE_CONFIG_READ_TOKEN;
+const EC_TEAM = process.env.EDGE_CONFIG_TEAM_ID;
+const EC_WRITE = process.env.VERCEL_API_TOKEN;
+
+const UP_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UP_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+const edgeConfigured = () => !!(EC_ID && EC_READ && EC_WRITE);
+const upstashConfigured = () => !!(UP_URL && UP_TOKEN);
+export const storeConfigured = () => edgeConfigured() || upstashConfigured();
+
+// Edge Config keys must be alphanumeric/_- ; encode the email safely.
+const key = (email: string) =>
+  "ent_" + Buffer.from(email.toLowerCase().trim()).toString("base64url").replace(/-/g, "_");
+
+async function edgeGet(k: string): Promise<number> {
+  const res = await fetch(`https://edge-config.vercel.com/${EC_ID}/item/${k}?token=${EC_READ}`, { cache: "no-store" });
+  if (res.status === 404) return 0;
+  if (!res.ok) throw new Error(`edge-config read ${res.status}`);
+  const v = await res.json();
+  return parseInt(String(v)) || 0;
+}
+
+async function edgeSet(k: string, value: string): Promise<void> {
+  const team = EC_TEAM ? `?teamId=${EC_TEAM}` : "";
+  const res = await fetch(`https://api.vercel.com/v1/edge-config/${EC_ID}/items${team}`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${EC_WRITE}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ items: [{ operation: "upsert", key: k, value }] }),
+  });
+  if (!res.ok) throw new Error(`edge-config write ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
+async function upstash(args: (string | number)[]): Promise<unknown> {
+  const res = await fetch(UP_URL!, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${UP_TOKEN}`, "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Redis ${res.status}`);
+  return (await res.json()).result;
+}
+
+/** Grant/extend unlimited access to an account until `until` (epoch ms). */
+export async function grantEntitlement(email: string, until: number): Promise<void> {
+  if (edgeConfigured()) return edgeSet(key(email), String(until));
+  if (upstashConfigured()) {
+    await upstash(["SET", `ent:${email.toLowerCase().trim()}`, String(until)]);
+  }
+}
+
+/** Returns the entitlement expiry (epoch ms) or 0 if none / not configured. */
+export async function getEntitlement(email: string): Promise<number> {
+  try {
+    if (edgeConfigured()) return await edgeGet(key(email));
+    if (upstashConfigured()) {
+      const v = await upstash(["GET", `ent:${email.toLowerCase().trim()}`]);
+      return v ? parseInt(String(v)) || 0 : 0;
+    }
+  } catch {
+    /* fall through */
+  }
+  return 0;
+}
+
+export async function hasActiveEntitlement(email: string, now: number): Promise<boolean> {
+  return (await getEntitlement(email)) > now;
+}
+
+// ── Order -> buyer email mapping (set at invoice creation, read at verify) ──
+const orderKey = (orderNumber: string) => "ord_" + orderNumber.replace(/[^a-zA-Z0-9_]/g, "_");
+
+export async function setOrderEmail(orderNumber: string, email: string): Promise<void> {
+  if (edgeConfigured()) return edgeSet(orderKey(orderNumber), email.toLowerCase().trim());
+  if (upstashConfigured()) {
+    await upstash(["SET", `ord:${orderNumber}`, email.toLowerCase().trim()]);
+  }
+}
+
+export async function getOrderEmail(orderNumber: string): Promise<string | null> {
+  try {
+    if (edgeConfigured()) {
+      const res = await fetch(`https://edge-config.vercel.com/${EC_ID}/item/${orderKey(orderNumber)}?token=${EC_READ}`, { cache: "no-store" });
+      if (!res.ok) return null;
+      const v = await res.json();
+      return typeof v === "string" && v.includes("@") ? v : null;
+    }
+    if (upstashConfigured()) {
+      const v = await upstash(["GET", `ord:${orderNumber}`]);
+      return v && String(v).includes("@") ? String(v) : null;
+    }
+  } catch {
+    /* fall through */
+  }
+  return null;
+}

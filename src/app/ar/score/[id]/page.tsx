@@ -1,1 +1,8 @@
-{"data":"aW1wb3J0IHsgcmVkaXJlY3QgfSBmcm9tICJuZXh0L25hdmlnYXRpb24iOwoKLy8gVGhlIHNoYXJlYWJsZSBzY29yZSBjYXJkIGxpdmVzIG9uIHRoZSBzaGFyZWQgcm91dGU7IC9hci9zY29yZS97aWR9IHNlbmRzIHRoZQovLyBBcmFiaWMgdmlzaXRvciB0aGVyZSB3aXRoIHRoZSBBcmFiaWMgcmVuZGVyaW5nIGZsYWcgaW5zdGVhZCBvZiBhIDQwNC4KZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gQXJTY29yZVJlZGlyZWN0KHsgcGFyYW1zIH06IHsgcGFyYW1zOiBQcm9taXNlPHsgaWQ6IHN0cmluZyB9PiB9KSB7CiAgY29uc3QgeyBpZCB9ID0gYXdhaXQgcGFyYW1zOwogIHJlZGlyZWN0KGAvc2NvcmUvJHtlbmNvZGVVUklDb21wb25lbnQoaWQpfT9sYW5nPWFyYCk7Cn0K"}
+import { redirect } from "next/navigation";
+
+// The shareable score card lives on the shared route; /ar/score/{id} sends the
+// Arabic visitor there with the Arabic rendering flag instead of a 404.
+export default async function ArScoreRedirect({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  redirect(`/score/${encodeURIComponent(id)}?lang=ar`);
+}

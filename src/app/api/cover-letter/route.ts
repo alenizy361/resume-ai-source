@@ -1,1 +1,115 @@
-{"data": "aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gIm5leHQvc2VydmVyIjsKaW1wb3J0IHsgdmVyaWZ5UGFzcywgdmVyaWZ5RW50UGFzcywgQUNDRVNTX0NPT0tJRSwgRU5UX0NPT0tJRSB9IGZyb20gIkAvYXBwL2xpYi9hY2Nlc3MiOwppbXBvcnQgeyByZWFkU2Vzc2lvbiwgU0VTU0lPTl9DT09LSUUgfSBmcm9tICJAL2FwcC9saWIvc2Vzc2lvbiI7CmltcG9ydCB7IGhhc0FjdGl2ZUVudGl0bGVtZW50IH0gZnJvbSAiQC9hcHAvbGliL2VudGl0bGVtZW50cyI7CmltcG9ydCB7IGFsbG93U2hhcmVkLCBjbGllbnRJcCB9IGZyb20gIkAvYXBwL2xpYi9yYXRlbGltaXQiOwoKZXhwb3J0IGNvbnN0IG1heER1cmF0aW9uID0gMzAwOwoKY29uc3QgUFJPVklERVIgPSAocHJvY2Vzcy5lbnYuQUlfUFJPVklERVIgfHwgIm52aWRpYSIpLnRvTG93ZXJDYXNlKCk7Cgpjb25zdCBQUk9NUFQgPSAocmVzdW1lOiBzdHJpbmcsIGpvYkRlc2NyaXB0aW9uOiBzdHJpbmcpID0+CiAgYFdyaXRlIGEgY29uY2lzZSwgY29tcGVsbGluZyBjb3ZlciBsZXR0ZXIgZm9yIHRoZSBjYW5kaWRhdGUgYmVsb3csIHRhaWxvcmVkIHRvIHRoZSBqb2IgZGVzY3JpcHRpb24uCgpSRVNVTUU6CiR7cmVzdW1lfQoKSk9CIERFU0NSSVBUSU9OOgoke2pvYkRlc2NyaXB0aW9ufQoKUnVsZXM6Ci0gM+KAkzQgc2hvcnQgcGFyYWdyYXBocywgdW5kZXIgMzAwIHdvcmRzCi0gT3BlbiB3aXRoIGdlbnVpbmUgZW50aHVzaWFzbSBmb3IgdGhlIHNwZWNpZmljIHJvbGUKLSBIaWdobGlnaHQgMuKAkzMgY29uY3JldGUgYWNoaWV2ZW1lbnRzIGZyb20gdGhlIHJlc3VtZSB0aGF0IG1hdGNoIHRoZSBqb2IncyBuZWVkcwotIE1pcnJvciB0aGUgam9iJ3MgbGFuZ3VhZ2Uva2V5d29yZHMgbmF0dXJhbGx5Ci0gQ2xvc2Ugd2l0aCBhIGNvbmZpZGVudCBjYWxsIHRvIGFjdGlvbgotIE5ldmVyIGludmVudCBmYWN0cyBub3Qgc3VwcG9ydGVkIGJ5IHRoZSByZXN1bWUKLSBVc2UgYSBwcm9mZXNzaW9uYWwsIGh1bWFuIHRvbmUg4oCUIG5vIGNsaWNow6lzIGxpa2UgIkkgYW0gd3JpdGluZyB0byBhcHBseSIKClJldHVybiBPTkxZIHRoZSBjb3ZlciBsZXR0ZXIgdGV4dCwgbm8gcHJlYW1ibGUsIG5vIEpTT04uYDsKCmFzeW5jIGZ1bmN0aW9uIGNhbGxOdmlkaWEocmVzdW1lOiBzdHJpbmcsIGpvYkRlc2NyaXB0aW9uOiBzdHJpbmcpOiBQcm9taXNlPHN0cmluZz4gewogIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52Lk5WSURJQV9BUElfS0VZOwogIGlmICgha2V5KSB0aHJvdyBuZXcgRXJyb3IoIk5WSURJQV9BUElfS0VZIGlzIG5vdCBzZXQiKTsKICBjb25zdCBtb2RlbCA9IHByb2Nlc3MuZW52LkFJX01PREVMIHx8ICJtZXRhL2xsYW1hLTQtbWF2ZXJpY2stMTdiLTEyOGUtaW5zdHJ1Y3QiOwoKICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaCgiaHR0cHM6Ly9pbnRlZ3JhdGUuYXBpLm52aWRpYS5jb20vdjEvY2hhdC9jb21wbGV0aW9ucyIsIHsKICAgIG1ldGhvZDogIlBPU1QiLAogICAgaGVhZGVyczogeyBBdXRob3JpemF0aW9uOiBgQmVhcmVyICR7a2V5fWAsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsKICAgICAgbW9kZWwsCiAgICAgIHRlbXBlcmF0dXJlOiAwLjYsCiAgICAgIHRvcF9wOiAwLjksCiAgICAgIG1heF90b2tlbnM6IDkwMCwKICAgICAgbWVzc2FnZXM6IFsKICAgICAgICB7IHJvbGU6ICJzeXN0ZW0iLCBjb250ZW50OiAiWW91IGFyZSBhbiBleHBlcnQgY2FyZWVyIHdyaXRlciB3aG8gcHJvZHVjZXMgdGFpbG9yZWQsIGh1bWFuLXNvdW5kaW5nIGNvdmVyIGxldHRlcnMuIiB9LAogICAgICAgIHsgcm9sZTogInVzZXIiLCBjb250ZW50OiBQUk9NUFQocmVzdW1lLCBqb2JEZXNjcmlwdGlvbikgfSwKICAgICAgXSwKICAgIH0pLAogIH0pOwogIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYE5WSURJQSBBUEkgJHtyZXMuc3RhdHVzfTogJHsoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKX1gKTsKICBjb25zdCBkYXRhID0gYXdhaXQgcmVzLmpzb24oKTsKICByZXR1cm4gZGF0YT8uY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50ID8/ICIiOwp9Cgphc3luYyBmdW5jdGlvbiBjYWxsQW50aHJvcGljKHJlc3VtZTogc3RyaW5nLCBqb2JEZXNjcmlwdGlvbjogc3RyaW5nKTogUHJvbWlzZTxzdHJpbmc+IHsKICBjb25zdCBrZXkgPSBwcm9jZXNzLmVudi5BTlRIUk9QSUNfQVBJX0tFWTsKICBpZiAoIWtleSkgdGhyb3cgbmV3IEVycm9yKCJBTlRIUk9QSUNfQVBJX0tFWSBpcyBub3Qgc2V0Iik7CiAgY29uc3QgbW9kZWwgPSBwcm9jZXNzLmVudi5BSV9NT0RFTCB8fCAiY2xhdWRlLXNvbm5ldC01IjsKICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaCgiaHR0cHM6Ly9hcGkuYW50aHJvcGljLmNvbS92MS9tZXNzYWdlcyIsIHsKICAgIG1ldGhvZDogIlBPU1QiLAogICAgaGVhZGVyczogeyAieC1hcGkta2V5Ijoga2V5LCAiYW50aHJvcGljLXZlcnNpb24iOiAiMjAyMy0wNi0wMSIsICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfSwKICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgbW9kZWwsIG1heF90b2tlbnM6IDkwMCwgbWVzc2FnZXM6IFt7IHJvbGU6ICJ1c2VyIiwgY29udGVudDogUFJPTVBUKHJlc3VtZSwgam9iRGVzY3JpcHRpb24pIH1dIH0pLAogIH0pOwogIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYEFudGhyb3BpYyBBUEkgJHtyZXMuc3RhdHVzfTogJHsoYXdhaXQgcmVzLnRleHQoKSkuc2xpY2UoMCwgMjAwKX1gKTsKICBjb25zdCBkYXRhID0gYXdhaXQgcmVzLmpzb24oKTsKICByZXR1cm4gZGF0YT8uY29udGVudD8uWzBdPy50ZXh0ID8/ICIiOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gUE9TVChyZXE6IE5leHRSZXF1ZXN0KSB7CiAgdHJ5IHsKICAgIC8vIFBhaWQgZmVhdHVyZSwgYnV0IGEgc2luZ2xlIHBhc3MgY2FuIGhhbW1lciBpdCB3aXRoIG5vIGxlbmd0aCBjYXAg4oCUIHRocm90dGxlLgogICAgaWYgKCEoYXdhaXQgYWxsb3dTaGFyZWQoYGNvdmVyOiR7Y2xpZW50SXAocmVxKX1gLCAxMCwgMTAgKiA2MCAqIDEwMDApKSkgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlRvbyBtYW55IHJlcXVlc3RzLiBQbGVhc2Ugd2FpdCBhIG1pbnV0ZS4iIH0sIHsgc3RhdHVzOiA0MjkgfSk7CiAgICB9CgogICAgbGV0IGJvZHk7CiAgICB0cnkgeyBib2R5ID0gYXdhaXQgcmVxLmpzb24oKTsgfSBjYXRjaCB7IHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiSW52YWxpZCBKU09OIGJvZHkuIiB9LCB7IHN0YXR1czogNDAwIH0pOyB9CiAgICBpZiAoIWJvZHkgfHwgdHlwZW9mIGJvZHkgIT09ICJvYmplY3QiKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIkludmFsaWQgcmVxdWVzdCBib2R5LiIgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICAgIGxldCByZXN1bWUgPSB0eXBlb2YgYm9keS5yZXN1bWUgPT09ICJzdHJpbmciID8gYm9keS5yZXN1bWUgOiAiIjsKICAgIGxldCBqb2JEZXNjcmlwdGlvbiA9IHR5cGVvZiBib2R5LmpvYkRlc2NyaXB0aW9uID09PSAic3RyaW5nIiA/IGJvZHkuam9iRGVzY3JpcHRpb24gOiAiIjsKICAgIGlmICghcmVzdW1lIHx8ICFqb2JEZXNjcmlwdGlvbikgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBlcnJvcjogIlJlc3VtZSBhbmQgam9iIGRlc2NyaXB0aW9uIGFyZSByZXF1aXJlZC4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgICB9CiAgICBpZiAocmVzdW1lLnRyaW0oKS5sZW5ndGggPCA1MCB8fCBqb2JEZXNjcmlwdGlvbi50cmltKCkubGVuZ3RoIDwgMzApIHsKICAgICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICJQbGVhc2UgcHJvdmlkZSBhIGZ1bGxlciByZXN1bWUgYW5kIGpvYiBkZXNjcmlwdGlvbi4iIH0sIHsgc3RhdHVzOiA0MDAgfSk7CiAgICB9CiAgICAvLyBDYXAgaW5wdXRzIGJlZm9yZSB0aGUgbW9kZWwgY2FsbCAobWF0Y2hlcyB0aGUgdG9vbHMgcm91dGUgY2FwcykuCiAgICByZXN1bWUgPSByZXN1bWUuc2xpY2UoMCwgODAwMCk7CiAgICBqb2JEZXNjcmlwdGlvbiA9IGpvYkRlc2NyaXB0aW9uLnNsaWNlKDAsIDQwMDApOwoKICAgIC8vIENvdmVyIGxldHRlcnMgYXJlIGEgcGFpZCBmZWF0dXJlIOKAlCBnYXRlIHRoZW0gbGlrZSB0aGUgcmV3cml0dGVuIHJlc3VtZS4KICAgIGNvbnN0IG5vdyA9IERhdGUubm93KCk7CiAgICBjb25zdCBlbWFpbCA9IHJlYWRTZXNzaW9uKHJlcS5jb29raWVzLmdldChTRVNTSU9OX0NPT0tJRSk/LnZhbHVlLCBub3cpOwogICAgY29uc3QgZW50Q29va2llID0gdmVyaWZ5RW50UGFzcyhyZXEuY29va2llcy5nZXQoRU5UX0NPT0tJRSk/LnZhbHVlLCBub3cpOwogICAgY29uc3QgYWNjb3VudFVubGltaXRlZCA9IGVtYWlsID8gKChhd2FpdCBoYXNBY3RpdmVFbnRpdGxlbWVudChlbWFpbCwgbm93KSkgfHwgZW50Q29va2llPy5lbWFpbCA9PT0gZW1haWwudG9Mb3dlckNhc2UoKS50cmltKCkpIDogZmFsc2U7CiAgICBjb25zdCBoYXNQYXNzID0gYWNjb3VudFVubGltaXRlZCB8fCAhIXZlcmlmeVBhc3MocmVxLmNvb2tpZXMuZ2V0KEFDQ0VTU19DT09LSUUpPy52YWx1ZSwgbm93KTsKICAgIGlmICghaGFzUGFzcykgewogICAgICByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oCiAgICAgICAgeyBlcnJvcjogIkNvdmVyIGxldHRlcnMgYXJlIGEgcGFpZCBmZWF0dXJlLiBVbmxvY2sgYWNjZXNzIHRvIGdlbmVyYXRlIG9uZS4iLCBwYXl3YWxsOiB0cnVlIH0sCiAgICAgICAgeyBzdGF0dXM6IDQwMiB9CiAgICAgICk7CiAgICB9CgogICAgY29uc3QgY292ZXJMZXR0ZXIgPQogICAgICBQUk9WSURFUiA9PT0gImFudGhyb3BpYyIKICAgICAgICA/IGF3YWl0IGNhbGxBbnRocm9waWMocmVzdW1lLCBqb2JEZXNjcmlwdGlvbikKICAgICAgICA6IGF3YWl0IGNhbGxOdmlkaWEocmVzdW1lLCBqb2JEZXNjcmlwdGlvbik7CgogICAgaWYgKCFjb3ZlckxldHRlci50cmltKCkpIHRocm93IG5ldyBFcnJvcigiRW1wdHkgcmVzcG9uc2UiKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGNvdmVyTGV0dGVyOiBjb3ZlckxldHRlci50cmltKCkgfSk7CiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJDb3ZlciBsZXR0ZXIgZXJyb3I6IiwgZXJyKTsKICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGVycm9yOiAiRmFpbGVkIHRvIGdlbmVyYXRlIGNvdmVyIGxldHRlci4gUGxlYXNlIHRyeSBhZ2Fpbi4iIH0sIHsgc3RhdHVzOiA1MDAgfSk7CiAgfQp9Cg=="}
+import { NextRequest, NextResponse } from "next/server";
+import { verifyPass, verifyEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
+import { readSession, SESSION_COOKIE } from "@/app/lib/session";
+import { hasActiveEntitlement } from "@/app/lib/entitlements";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
+
+export const maxDuration = 300;
+
+const PROVIDER = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
+
+const PROMPT = (resume: string, jobDescription: string) =>
+  `Write a concise, compelling cover letter for the candidate below, tailored to the job description.
+
+RESUME:
+${resume}
+
+JOB DESCRIPTION:
+${jobDescription}
+
+Rules:
+- 3–4 short paragraphs, under 300 words
+- Open with genuine enthusiasm for the specific role
+- Highlight 2–3 concrete achievements from the resume that match the job's needs
+- Mirror the job's language/keywords naturally
+- Close with a confident call to action
+- Never invent facts not supported by the resume
+- Use a professional, human tone — no clichés like "I am writing to apply"
+
+Return ONLY the cover letter text, no preamble, no JSON.`;
+
+async function callNvidia(resume: string, jobDescription: string): Promise<string> {
+  const key = process.env.NVIDIA_API_KEY;
+  if (!key) throw new Error("NVIDIA_API_KEY is not set");
+  const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+
+  const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model,
+      temperature: 0.6,
+      top_p: 0.9,
+      max_tokens: 900,
+      messages: [
+        { role: "system", content: "You are an expert career writer who produces tailored, human-sounding cover letters." },
+        { role: "user", content: PROMPT(resume, jobDescription) },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error(`NVIDIA API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return data?.choices?.[0]?.message?.content ?? "";
+}
+
+async function callAnthropic(resume: string, jobDescription: string): Promise<string> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
+  const model = process.env.AI_MODEL || "claude-sonnet-5";
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
+    body: JSON.stringify({ model, max_tokens: 900, messages: [{ role: "user", content: PROMPT(resume, jobDescription) }] }),
+  });
+  if (!res.ok) throw new Error(`Anthropic API ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return data?.content?.[0]?.text ?? "";
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    // Paid feature, but a single pass can hammer it with no length cap — throttle.
+    if (!(await allowShared(`cover:${clientIp(req)}`, 10, 10 * 60 * 1000))) {
+      return NextResponse.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
+    }
+
+    let body;
+    try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+    if (!body || typeof body !== "object") return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+    let resume = typeof body.resume === "string" ? body.resume : "";
+    let jobDescription = typeof body.jobDescription === "string" ? body.jobDescription : "";
+    if (!resume || !jobDescription) {
+      return NextResponse.json({ error: "Resume and job description are required." }, { status: 400 });
+    }
+    if (resume.trim().length < 50 || jobDescription.trim().length < 30) {
+      return NextResponse.json({ error: "Please provide a fuller resume and job description." }, { status: 400 });
+    }
+    // Cap inputs before the model call (matches the tools route caps).
+    resume = resume.slice(0, 8000);
+    jobDescription = jobDescription.slice(0, 4000);
+
+    // Cover letters are a paid feature — gate them like the rewritten resume.
+    const now = Date.now();
+    const email = readSession(req.cookies.get(SESSION_COOKIE)?.value, now);
+    const entCookie = verifyEntPass(req.cookies.get(ENT_COOKIE)?.value, now);
+    const accountUnlimited = email ? ((await hasActiveEntitlement(email, now)) || entCookie?.email === email.toLowerCase().trim()) : false;
+    const hasPass = accountUnlimited || !!verifyPass(req.cookies.get(ACCESS_COOKIE)?.value, now);
+    if (!hasPass) {
+      return NextResponse.json(
+        { error: "Cover letters are a paid feature. Unlock access to generate one.", paywall: true },
+        { status: 402 }
+      );
+    }
+
+    const coverLetter =
+      PROVIDER === "anthropic"
+        ? await callAnthropic(resume, jobDescription)
+        : await callNvidia(resume, jobDescription);
+
+    if (!coverLetter.trim()) throw new Error("Empty response");
+    return NextResponse.json({ coverLetter: coverLetter.trim() });
+  } catch (err) {
+    console.error("Cover letter error:", err);
+    return NextResponse.json({ error: "Failed to generate cover letter. Please try again." }, { status: 500 });
+  }
+}

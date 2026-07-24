@@ -1,1 +1,104 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi8uLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgVEVNUExBVEVTLCBURU1QTEFURV9TTFVHUywgZ2V0VGVtcGxhdGUgfSBmcm9tICIuLi8uLi9saWIvdGVtcGxhdGVzIjsKaW1wb3J0IFRlbXBsYXRlUHJldmlldyBmcm9tICIuLi8uLi9jb21wb25lbnRzL1RlbXBsYXRlUHJldmlldyI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgZnVuY3Rpb24gZ2VuZXJhdGVTdGF0aWNQYXJhbXMoKSB7CiAgcmV0dXJuIFRFTVBMQVRFX1NMVUdTLm1hcCgoc3R5bGUpID0+ICh7IHN0eWxlIH0pKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBzdHlsZTogc3RyaW5nIH0+IH0pOiBQcm9taXNlPE1ldGFkYXRhPiB7CiAgY29uc3QgeyBzdHlsZSB9ID0gYXdhaXQgcGFyYW1zOwogIGNvbnN0IHQgPSBnZXRUZW1wbGF0ZShzdHlsZSk7CiAgaWYgKCF0KSByZXR1cm4ge307CiAgcmV0dXJuIHsKICAgIHRpdGxlOiBgRnJlZSAke3QubmFtZX0gUmVzdW1lIFRlbXBsYXRlICgyMDI2KSDigJQgQVRTLUZyaWVuZGx5YCwKICAgIGRlc2NyaXB0aW9uOiBgJHt0LnRhZ2xpbmV9IEZyZWUgJHt0LmtleXdvcmR9IHlvdSBjYW4gZmlsbCBpbiBhbmQgZG93bmxvYWQgaW4gbWludXRlcy4gQVRTIHNjb3JlOiAke3QuYXRzU2NvcmV9LzEwMC5gLAogICAga2V5d29yZHM6IGAke3Qua2V5d29yZH0sIGZyZWUgJHt0LmtleXdvcmR9LCAke3QubmFtZS50b0xvd2VyQ2FzZSgpfSBjdiB0ZW1wbGF0ZSwgcmVzdW1lIHRlbXBsYXRlICR7dC5uYW1lLnRvTG93ZXJDYXNlKCl9YCwKICAgIGFsdGVybmF0ZXM6IHsgY2Fub25pY2FsOiBgJHtCQVNFfS9yZXN1bWUtdGVtcGxhdGVzLyR7dC5zbHVnfWAgfSwKICAgIG9wZW5HcmFwaDogeyB0aXRsZTogYEZyZWUgJHt0Lm5hbWV9IFJlc3VtZSBUZW1wbGF0ZWAsIGRlc2NyaXB0aW9uOiB0LnRhZ2xpbmUsIHR5cGU6ICJ3ZWJzaXRlIiB9LAogIH07Cn0KCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIFBhZ2UoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBzdHlsZTogc3RyaW5nIH0+IH0pIHsKICBjb25zdCB7IHN0eWxlIH0gPSBhd2FpdCBwYXJhbXM7CiAgY29uc3QgdCA9IGdldFRlbXBsYXRlKHN0eWxlKTsKICBpZiAoIXQpIG5vdEZvdW5kKCk7CiAgY29uc3Qgb3RoZXJzID0gVEVNUExBVEVTLmZpbHRlcigoeCkgPT4geC5zbHVnICE9PSB0LnNsdWcpOwoKICBjb25zdCBmYXFzID0gWwogICAgeyBxOiBgSXMgdGhpcyAke3QubmFtZX0gcmVzdW1lIHRlbXBsYXRlIGZyZWU/YCwgYTogYFllcyDigJQgdGhlICR7dC5uYW1lfSB0ZW1wbGF0ZSBpcyBjb21wbGV0ZWx5IGZyZWUgdG8gdXNlLiBGaWxsIGl0IGluIHdpdGggb3VyIGJ1aWxkZXIgYW5kIGRvd25sb2FkIGl0LCBubyBwYXltZW50IG9yIHNpZ24tdXAgZm9yIHRoZSBmaXJzdCByZXN1bWUuYCB9LAogICAgeyBxOiBgSXMgdGhlICR7dC5uYW1lfSB0ZW1wbGF0ZSBBVFMtZnJpZW5kbHk/YCwgYTogYCR7dC5hdHNOb3RlfSBJdCBzY29yZXMgJHt0LmF0c1Njb3JlfS8xMDAgb24gQVRTLXNhZmV0eS5gIH0sCiAgICB7IHE6IGBDYW4gSSBlZGl0IHRoaXMgdGVtcGxhdGUgaW4gV29yZD9gLCBhOiBgWW91IGJ1aWxkIGFuZCBlZGl0IGl0IHJpZ2h0IGhlcmUsIHRoZW4gZG93bmxvYWQgYXMgcGxhaW4gdGV4dCBvciBhIHByaW50LXJlYWR5IFBERiB5b3UgY2FuIG9wZW4gYW55d2hlcmUuYCB9LAogIF07CiAgY29uc3QgbGQgPSB7ICJAY29udGV4dCI6ICJodHRwczovL3NjaGVtYS5vcmciLCAiQHR5cGUiOiAiRkFRUGFnZSIsIG1haW5FbnRpdHk6IGZhcXMubWFwKChmKSA9PiAoeyAiQHR5cGUiOiAiUXVlc3Rpb24iLCBuYW1lOiBmLnEsIGFjY2VwdGVkQW5zd2VyOiB7ICJAdHlwZSI6ICJBbnN3ZXIiLCB0ZXh0OiBmLmEgfSB9KSkgfTsKCiAgcmV0dXJuICgKICAgIDxtYWluIGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIiBzdHlsZT17eyBiYWNrZ3JvdW5kOiAidmFyKC0tYmcpIiwgY29sb3I6ICJ2YXIoLS1mZykiIH19PgogICAgICA8T3JiU2NlbmVTZXR0ZXIgdmlzaWJsZSBtb29kPSJpZGxlIiB0b3A9IjE0dmgiIGxlZnQ9Ijg2JSIgc2l6ZT17MTAwfSAvPgogICAgICA8bmF2IGNsYXNzTmFtZT0ic3RpY2t5IHRvcC0wIHotNTAiIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJsaW5lYXItZ3JhZGllbnQoMTgwZGVnLCByZ2JhKDUsNywxMywwLjg1KSwgdHJhbnNwYXJlbnQpIiB9fT4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXgtYXV0byBmbGV4IG1heC13LTV4bCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHB4LTYgcHktNCI+CiAgICAgICAgICA8TGluayBocmVmPSIvIiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yLjUiPgogICAgICAgICAgICA8T3JiQnJhbmQgc2l6ZT17MjZ9IC8+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC1bMTVweF0gZm9udC1ib2xkIHRyYWNraW5nLXRpZ2h0Ij5TaXJhPC9zcGFuPgogICAgICAgICAgPC9MaW5rPgogICAgICAgICAgPExpbmsgaHJlZj0iL2J1aWxkIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNCBweS0yIHRleHQtc20iPlVzZSB0aGlzIHRlbXBsYXRlPC9MaW5rPgogICAgICAgIDwvZGl2PgogICAgICA8L25hdj4KCiAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIG1heC13LTV4bCBweC02IHB5LTEwIj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWItNiBmb250LW1vbm8gdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PgogICAgICAgICAgPExpbmsgaHJlZj0iLyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PkhvbWU8L0xpbms+IOKAuiA8TGluayBocmVmPSIvcmVzdW1lLXRlbXBsYXRlcyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PlRlbXBsYXRlczwvTGluaz4g4oC6IHt0Lm5hbWV9CiAgICAgICAgPC9kaXY+CgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJncmlkIGl0ZW1zLWNlbnRlciBnYXAtMTAgbGc6Z3JpZC1jb2xzLTIiPgogICAgICAgICAgPGRpdj4KICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNoaXAgbWItNCI+RnJlZSDCtyBBVFMgc2NvcmUge3QuYXRzU2NvcmV9LzEwMDwvZGl2PgogICAgICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTR4bCBmb250LWV4dHJhYm9sZCBsZWFkaW5nLXRpZ2h0IHRyYWNraW5nLXRpZ2h0Ij5GcmVlIHt0Lm5hbWV9IFJlc3VtZSBUZW1wbGF0ZTwvaDE+CiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtNCB0ZXh0LWxnIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19Pnt0LnRhZ2xpbmV9PC9wPgogICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTMgdGV4dC1zbSIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1tdXRlZCkiIH19PjxzdHJvbmc+QmVzdCBmb3I6PC9zdHJvbmc+IHt0LmJlc3RGb3J9PC9wPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtNiBmbGV4IGZsZXgtd3JhcCBnYXAtMyI+CiAgICAgICAgICAgICAgPExpbmsgaHJlZj0iL2J1aWxkIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNiBweS0zIj5Vc2UgdGhpcyB0ZW1wbGF0ZSBmcmVlIOKGkjwvTGluaz4KICAgICAgICAgICAgICA8TGluayBocmVmPSIvb3B0aW1pemUiIGNsYXNzTmFtZT0iYnRuLWdob3N0IHB4LTYgcHktMyBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZnKSIgfX0+QWxyZWFkeSBoYXZlIGEgcmVzdW1lPyBDaGVjayBpdDwvTGluaz4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjYXJkIG10LTYgcC00IHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT4KICAgICAgICAgICAgICA8c3BhbiBzdHlsZT17eyBjb2xvcjogdC5hdHNTY29yZSA+PSA5MCA/ICJ2YXIoLS1hY2NlbnQpIiA6ICIjZmJiZjI0IiB9fT7il48gQVRTIG5vdGU6PC9zcGFuPiB7dC5hdHNOb3RlfQogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gdy1mdWxsIG1heC13LXhzIj48VGVtcGxhdGVQcmV2aWV3IHQ9e3R9IC8+PC9kaXY+CiAgICAgICAgPC9kaXY+CgogICAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0ibXQtMTYiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LTJ4bCBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPkZBUTwvaDI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ic3BhY2UteS00Ij4KICAgICAgICAgICAge2ZhcXMubWFwKChmKSA9PiAoCiAgICAgICAgICAgICAgPGRpdiBrZXk9e2YucX0gY2xhc3NOYW1lPSJjYXJkIHAtNSI+PGgzIGNsYXNzTmFtZT0iZm9udC1ib2xkIj57Zi5xfTwvaDM+PHAgY2xhc3NOYW1lPSJtdC0yIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAidmFyKC0tbXV0ZWQpIiB9fT57Zi5hfTwvcD48L2Rpdj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L3NlY3Rpb24+CgogICAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0ibXQtMTYiPgogICAgICAgICAgPGgyIGNsYXNzTmFtZT0ibWItNCB0ZXh0LTJ4bCBmb250LWJvbGQgdHJhY2tpbmctdGlnaHQiPk1vcmUgZnJlZSByZXN1bWUgdGVtcGxhdGVzPC9oMj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJncmlkIGdhcC00IHNtOmdyaWQtY29scy0yIGxnOmdyaWQtY29scy00Ij4KICAgICAgICAgICAge290aGVycy5tYXAoKG8pID0+ICgKICAgICAgICAgICAgICA8TGluayBrZXk9e28uc2x1Z30gaHJlZj17YC9yZXN1bWUtdGVtcGxhdGVzLyR7by5zbHVnfWB9IGNsYXNzTmFtZT0iY2FyZCBjYXJkLWhvdmVyIHAtNCI+CiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZm9udC1ib2xkIj57by5uYW1lfTwvZGl2PgogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTEgdGV4dC14cyIgc3R5bGU9e3sgY29sb3I6ICJ2YXIoLS1mYWludCkiIH19PkFUUyB7by5hdHNTY29yZX0vMTAwPC9kaXY+CiAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICApKX0KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvc2VjdGlvbj4KICAgICAgPC9kaXY+CgogICAgICA8Zm9vdGVyIGNsYXNzTmFtZT0icHgtNiBweS0xMCIgc3R5bGU9e3sgYm9yZGVyVG9wOiAiMXB4IHNvbGlkIHZhcigtLWxpbmUpIiB9fT4KICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtY2VudGVyIGZvbnQtbW9ubyB0ZXh0LXhzIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZhaW50KSIgfX0+wqkgMjAyNiBTaXJhIMK3IGEgcmVzdW1lIHNlcnZpY2UgYnkgUmFiaXQ8L3A+CiAgICAgIDwvZm9vdGVyPgogICAgICA8c2NyaXB0IHR5cGU9ImFwcGxpY2F0aW9uL2xkK2pzb24iIGRhbmdlcm91c2x5U2V0SW5uZXJIVE1MPXt7IF9faHRtbDogSlNPTi5zdHJpbmdpZnkobGQpIH19IC8+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import OrbBrand from "../../components/OrbBrand";
+import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { TEMPLATES, TEMPLATE_SLUGS, getTemplate } from "../../lib/templates";
+import TemplatePreview from "../../components/TemplatePreview";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export function generateStaticParams() {
+  return TEMPLATE_SLUGS.map((style) => ({ style }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ style: string }> }): Promise<Metadata> {
+  const { style } = await params;
+  const t = getTemplate(style);
+  if (!t) return {};
+  return {
+    title: `Free ${t.name} Resume Template (2026) — ATS-Friendly`,
+    description: `${t.tagline} Free ${t.keyword} you can fill in and download in minutes. ATS score: ${t.atsScore}/100.`,
+    keywords: `${t.keyword}, free ${t.keyword}, ${t.name.toLowerCase()} cv template, resume template ${t.name.toLowerCase()}`,
+    alternates: { canonical: `${BASE}/resume-templates/${t.slug}` },
+    openGraph: { title: `Free ${t.name} Resume Template`, description: t.tagline, type: "website" },
+  };
+}
+
+export default async function Page({ params }: { params: Promise<{ style: string }> }) {
+  const { style } = await params;
+  const t = getTemplate(style);
+  if (!t) notFound();
+  const others = TEMPLATES.filter((x) => x.slug !== t.slug);
+
+  const faqs = [
+    { q: `Is this ${t.name} resume template free?`, a: `Yes — the ${t.name} template is completely free to use. Fill it in with our builder and download it, no payment or sign-up for the first resume.` },
+    { q: `Is the ${t.name} template ATS-friendly?`, a: `${t.atsNote} It scores ${t.atsScore}/100 on ATS-safety.` },
+    { q: `Can I edit this template in Word?`, a: `You build and edit it right here, then download as plain text or a print-ready PDF you can open anywhere.` },
+  ];
+  const ld = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+
+  return (
+    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/build" className="btn-accent px-4 py-2 text-sm">Use this template</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          <Link href="/" style={{ color: "var(--faint)" }}>Home</Link> › <Link href="/resume-templates" style={{ color: "var(--faint)" }}>Templates</Link> › {t.name}
+        </div>
+
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div>
+            <div className="chip mb-4">Free · ATS score {t.atsScore}/100</div>
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight">Free {t.name} Resume Template</h1>
+            <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.tagline}</p>
+            <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}><strong>Best for:</strong> {t.bestFor}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/build" className="btn-accent px-6 py-3">Use this template free →</Link>
+              <Link href="/optimize" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Already have a resume? Check it</Link>
+            </div>
+            <div className="card mt-6 p-4 text-sm" style={{ color: "var(--muted)" }}>
+              <span style={{ color: t.atsScore >= 90 ? "var(--accent)" : "#fbbf24" }}>● ATS note:</span> {t.atsNote}
+            </div>
+          </div>
+          <div className="mx-auto w-full max-w-xs"><TemplatePreview t={t} /></div>
+        </div>
+
+        <section className="mt-16">
+          <h2 className="mb-4 text-2xl font-bold tracking-tight">FAQ</h2>
+          <div className="space-y-4">
+            {faqs.map((f) => (
+              <div key={f.q} className="card p-5"><h3 className="font-bold">{f.q}</h3><p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{f.a}</p></div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="mb-4 text-2xl font-bold tracking-tight">More free resume templates</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {others.map((o) => (
+              <Link key={o.slug} href={`/resume-templates/${o.slug}`} className="card card-hover p-4">
+                <div className="font-bold">{o.name}</div>
+                <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>ATS {o.atsScore}/100</div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+      </footer>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+    </main>
+  );
+}

@@ -1,1 +1,16 @@
-{"data":"InVzZSBjbGllbnQiOwovKiogUmlzaW5nIGdvbGRlbiBzcGFya3MgYmVoaW5kIHRoZSBnb2xkZW4gb3JiIOKAlCBsdXh1cnkgPSBtb25leSwgYXQgdGhlIHZhdWx0LiAqLwpjb25zdCBTUEFSS1MgPSBBcnJheS5mcm9tKHsgbGVuZ3RoOiAxOCB9LCAoXywgaSkgPT4gKHsKICBsZWZ0OiAoaSAqIDUzKSAlIDEwMCwKICBkZWxheTogKGkgJSA5KSAqIDAuOCwKICBkdXI6IDUgKyAoaSAlIDUpLAp9KSk7CmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEdvbGRGaWVsZCgpIHsKICByZXR1cm4gKAogICAgPGRpdiBjbGFzc05hbWU9ImdvbGQtZmllbGQiIGFyaWEtaGlkZGVuPgogICAgICB7U1BBUktTLm1hcCgocywgaSkgPT4gKAogICAgICAgIDxzcGFuIGtleT17aX0gY2xhc3NOYW1lPSJnb2xkLXNwYXJrIiBzdHlsZT17eyBsZWZ0OiBgJHtzLmxlZnR9JWAsIGJvdHRvbTogMCwgYW5pbWF0aW9uRGVsYXk6IGAke3MuZGVsYXl9c2AsIGFuaW1hdGlvbkR1cmF0aW9uOiBgJHtzLmR1cn1zYCB9fSAvPgogICAgICApKX0KICAgIDwvZGl2PgogICk7Cn0K"}
+"use client";
+/** Rising golden sparks behind the golden orb — luxury = money, at the vault. */
+const SPARKS = Array.from({ length: 18 }, (_, i) => ({
+  left: (i * 53) % 100,
+  delay: (i % 9) * 0.8,
+  dur: 5 + (i % 5),
+}));
+export default function GoldField() {
+  return (
+    <div className="gold-field" aria-hidden>
+      {SPARKS.map((s, i) => (
+        <span key={i} className="gold-spark" style={{ left: `${s.left}%`, bottom: 0, animationDelay: `${s.delay}s`, animationDuration: `${s.dur}s` }} />
+      ))}
+    </div>
+  );
+}

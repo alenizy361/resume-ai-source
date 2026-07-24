@@ -1,1 +1,108 @@
-{"data": "aW1wb3J0IHR5cGUgeyBOZXh0UmVxdWVzdCB9IGZyb20gIm5leHQvc2VydmVyIjsKCi8qKgogKiBSYXRlIGxpbWl0aW5nIHdpdGggdHdvIGJhY2tlbmRzLgogKgogKiBgYWxsb3dTaGFyZWRgIGlzIHRoZSBvbmUgdG8gdXNlLiBXaGVuIFVwc3Rhc2ggaXMgY29uZmlndXJlZCAodGhlIHNhbWUKICogVVBTVEFTSF9SRURJU19SRVNUXyogcGFpciBlbnRpdGxlbWVudHMudHMgYWxyZWFkeSB1c2VzKSB0aGUgY291bnRlciBsaXZlcyBpbgogKiBSZWRpcywgc28gaXQgaG9sZHMgYWNyb3NzIHNlcnZlcmxlc3MgaW5zdGFuY2VzIGFuZCBhY3Jvc3MgY29sZCBzdGFydHMg4oCUIHdoaWNoCiAqIGlzIHdoYXQgbWFrZXMgYSBwZXItSVAgYnVkZ2V0IGFuIGFjdHVhbCBidWRnZXQgcmF0aGVyIHRoYW4gYSBzdWdnZXN0aW9uLiBXaGVuCiAqIGl0IGlzIG5vdCBjb25maWd1cmVkLCBvciBSZWRpcyBpcyB1bnJlYWNoYWJsZSwgaXQgZGVncmFkZXMgdG8gdGhlIGluLW1lbW9yeQogKiBsaW1pdGVyIGJlbG93IHJhdGhlciB0aGFuIGZhaWxpbmcgb3Blbi4KICoKICogYGFsbG93YCBpcyB0aGF0IGluLW1lbW9yeSBsaW1pdGVyOiBwZXItaW5zdGFuY2UgYW5kIHJlc2V0IG9uIGNvbGQgc3RhcnQsIHNvIG9uCiAqIHNlcnZlcmxlc3MgaXQgYmx1bnRzIGNhc3VhbCBhYnVzZSBhbmQgbm90aGluZyBtb3JlLiBJdCBzdGF5cyBleHBvcnRlZCBiZWNhdXNlCiAqIGl0IGlzIHRoZSBmYWxsYmFjayBwYXRoIGFuZCBpcyBzeW5jaHJvbm91cy4KICovCgp0eXBlIEhpdCA9IHsgY291bnQ6IG51bWJlcjsgcmVzZXQ6IG51bWJlciB9Owpjb25zdCBidWNrZXRzID0gbmV3IE1hcDxzdHJpbmcsIEhpdD4oKTsKCmNvbnN0IFVQX1VSTCA9IHByb2Nlc3MuZW52LlVQU1RBU0hfUkVESVNfUkVTVF9VUkw7CmNvbnN0IFVQX1RPS0VOID0gcHJvY2Vzcy5lbnYuVVBTVEFTSF9SRURJU19SRVNUX1RPS0VOOwpjb25zdCBzaGFyZWRDb25maWd1cmVkID0gKCkgPT4gISEoVVBfVVJMICYmIFVQX1RPS0VOKTsKCmV4cG9ydCBmdW5jdGlvbiBjbGllbnRJcChyZXE6IE5leHRSZXF1ZXN0KTogc3RyaW5nIHsKICBjb25zdCB4ZmYgPSByZXEuaGVhZGVycy5nZXQoIngtZm9yd2FyZGVkLWZvciIpOwogIGlmICh4ZmYpIHJldHVybiB4ZmYuc3BsaXQoIiwiKVswXS50cmltKCk7CiAgcmV0dXJuIHJlcS5oZWFkZXJzLmdldCgieC1yZWFsLWlwIikgfHwgInVua25vd24iOwp9CgovKiogQ2hlY2sgd2l0aG91dCBjb25zdW1pbmc6IHRydWUgaWYgYXQgbGVhc3Qgb25lIGFjdGlvbiByZW1haW5zIGluIHRoZSB3aW5kb3cuICovCmV4cG9ydCBmdW5jdGlvbiBwZWVrKGtleTogc3RyaW5nLCBsaW1pdDogbnVtYmVyLCB3aW5kb3dNczogbnVtYmVyKTogYm9vbGVhbiB7CiAgY29uc3QgaGl0ID0gYnVja2V0cy5nZXQoa2V5KTsKICBpZiAoIWhpdCB8fCBEYXRlLm5vdygpID4gaGl0LnJlc2V0KSByZXR1cm4gdHJ1ZTsKICByZXR1cm4gaGl0LmNvdW50IDwgbGltaXQ7Cn0KCi8qKgogKiBSZXR1cm5zIHRydWUgaWYgdGhlIGFjdGlvbiBpcyBhbGxvd2VkLCBmYWxzZSBpZiB0aGUgY2FsbGVyIGlzIG92ZXIgdGhlIGxpbWl0LgogKiBAcGFyYW0ga2V5ICAgIHVuaXF1ZSBidWNrZXQga2V5IChlLmcuIGBvcHRpbWl6ZTo8aXA+YCBvciBgYXV0aDo8ZW1haWw+YCkKICogQHBhcmFtIGxpbWl0ICBtYXggYWN0aW9ucyBwZXIgd2luZG93CiAqIEBwYXJhbSB3aW5kb3dNcyB3aW5kb3cgbGVuZ3RoIGluIG1zCiAqLwpleHBvcnQgZnVuY3Rpb24gYWxsb3coa2V5OiBzdHJpbmcsIGxpbWl0OiBudW1iZXIsIHdpbmRvd01zOiBudW1iZXIpOiBib29sZWFuIHsKICBjb25zdCBub3cgPSBEYXRlLm5vdygpOwogIGNvbnN0IGhpdCA9IGJ1Y2tldHMuZ2V0KGtleSk7CiAgaWYgKCFoaXQgfHwgbm93ID4gaGl0LnJlc2V0KSB7CiAgICBidWNrZXRzLnNldChrZXksIHsgY291bnQ6IDEsIHJlc2V0OiBub3cgKyB3aW5kb3dNcyB9KTsKICAgIC8vIE9wcG9ydHVuaXN0aWMgY2xlYW51cCBzbyB0aGUgbWFwIGNhbid0IGdyb3cgdW5ib3VuZGVkLgogICAgaWYgKGJ1Y2tldHMuc2l6ZSA+IDUwMDApIHsKICAgICAgZm9yIChjb25zdCBbaywgdl0gb2YgYnVja2V0cykgaWYgKG5vdyA+IHYucmVzZXQpIGJ1Y2tldHMuZGVsZXRlKGspOwogICAgfQogICAgcmV0dXJuIHRydWU7CiAgfQogIGlmIChoaXQuY291bnQgPj0gbGltaXQpIHJldHVybiBmYWxzZTsKICBoaXQuY291bnQrKzsKICByZXR1cm4gdHJ1ZTsKfQoKLyoqCiAqIFNFVCBrZXkgMCBFWCA8d2luZG93PiBOWCAg4oaSICBjcmVhdGVzIHRoZSBjb3VudGVyIHdpdGggaXRzIFRUTCBvbmx5IGlmIHRoZQogKiB3aW5kb3cgaXMgbm90IGFscmVhZHkgb3BlbjsgSU5DUiAg4oaSICBjb25zdW1lcyBvbmUuIElOQ1IgbGVhdmVzIHRoZSBUVEwgYWxvbmUsCiAqIHNvIHRoZSB3aW5kb3cgaXMgZml4ZWQgcmF0aGVyIHRoYW4gc2xpZGluZyBhbmQgYSBzdGVhZHkgY2FsbGVyIGlzIG5vdCBsb2NrZWQKICogb3V0IGZvcmV2ZXIuIEJvdGggdHJhdmVsIGluIG9uZSBwaXBlbGluZWQgcmVxdWVzdCwgc28gYSBmYWlsdXJlIGJldHdlZW4gdGhlbQogKiBjYW5ub3QgbGVhdmUgYSBjb3VudGVyIHdpdGhvdXQgYW4gZXhwaXJ5LgogKi8KYXN5bmMgZnVuY3Rpb24gc2hhcmVkSGl0KGtleTogc3RyaW5nLCB3aW5kb3dNczogbnVtYmVyKTogUHJvbWlzZTxudW1iZXI+IHsKICBjb25zdCBzZWNvbmRzID0gTWF0aC5tYXgoMSwgTWF0aC5jZWlsKHdpbmRvd01zIC8gMTAwMCkpOwogIGNvbnN0IGN0cmwgPSBuZXcgQWJvcnRDb250cm9sbGVyKCk7CiAgY29uc3QgdGltZXIgPSBzZXRUaW1lb3V0KCgpID0+IGN0cmwuYWJvcnQoKSwgMTUwMCk7CiAgdHJ5IHsKICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGAke1VQX1VSTH0vcGlwZWxpbmVgLCB7CiAgICAgIG1ldGhvZDogIlBPU1QiLAogICAgICBoZWFkZXJzOiB7IEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHtVUF9UT0tFTn1gLCAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KFsKICAgICAgICBbIlNFVCIsIGBybDoke2tleX1gLCAiMCIsICJFWCIsIFN0cmluZyhzZWNvbmRzKSwgIk5YIl0sCiAgICAgICAgWyJJTkNSIiwgYHJsOiR7a2V5fWBdLAogICAgICBdKSwKICAgICAgY2FjaGU6ICJuby1zdG9yZSIsCiAgICAgIHNpZ25hbDogY3RybC5zaWduYWwsCiAgICB9KTsKICAgIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYFJlZGlzICR7cmVzLnN0YXR1c31gKTsKICAgIGNvbnN0IG91dCA9IGF3YWl0IHJlcy5qc29uKCk7CiAgICBjb25zdCBjb3VudCA9IE51bWJlcihvdXQ/LlsxXT8ucmVzdWx0KTsKICAgIGlmICghTnVtYmVyLmlzRmluaXRlKGNvdW50KSkgdGhyb3cgbmV3IEVycm9yKCJSZWRpcyBtYWxmb3JtZWQgcmVwbHkiKTsKICAgIHJldHVybiBjb3VudDsKICB9IGZpbmFsbHkgewogICAgY2xlYXJUaW1lb3V0KHRpbWVyKTsKICB9Cn0KCi8qKgogKiBUaGUgbGltaXRlciB0byByZWFjaCBmb3IuIFNoYXJlZCBhY3Jvc3MgaW5zdGFuY2VzIHdoZW4gVXBzdGFzaCBpcyBjb25maWd1cmVkLAogKiBpbi1tZW1vcnkgb3RoZXJ3aXNlLiBBIHJhdGUgbGltaXRlciB0aGF0IGlzIGRvd24gbXVzdCBub3QgdGFrZSB0aGUgcHJvZHVjdAogKiBkb3duIHdpdGggaXQsIHNvIGFuIHVucmVhY2hhYmxlIFJlZGlzIGZhbGxzIGJhY2sgcmF0aGVyIHRoYW4gcmVqZWN0aW5nLgogKi8KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGFsbG93U2hhcmVkKGtleTogc3RyaW5nLCBsaW1pdDogbnVtYmVyLCB3aW5kb3dNczogbnVtYmVyKTogUHJvbWlzZTxib29sZWFuPiB7CiAgaWYgKCFzaGFyZWRDb25maWd1cmVkKCkpIHJldHVybiBhbGxvdyhrZXksIGxpbWl0LCB3aW5kb3dNcyk7CiAgdHJ5IHsKICAgIHJldHVybiAoYXdhaXQgc2hhcmVkSGl0KGtleSwgd2luZG93TXMpKSA8PSBsaW1pdDsKICB9IGNhdGNoIChlKSB7CiAgICBjb25zb2xlLmVycm9yKCJyYXRlbGltaXQ6IHNoYXJlZCBzdG9yZSB1bmF2YWlsYWJsZSwgdXNpbmcgaW4tbWVtb3J5IOKAlCIsIGUgaW5zdGFuY2VvZiBFcnJvciA/IGUubWVzc2FnZSA6IGUpOwogICAgcmV0dXJuIGFsbG93KGtleSwgbGltaXQsIHdpbmRvd01zKTsKICB9Cn0KCi8qKiBUcnVlIHdoZW4gdGhlIGNvdW50ZXIgaXMgYmFja2VkIGJ5IHRoZSBzaGFyZWQgc3RvcmUgKGZvciBkaWFnbm9zdGljcykuICovCmV4cG9ydCBjb25zdCByYXRlTGltaXRJc1NoYXJlZCA9IHNoYXJlZENvbmZpZ3VyZWQ7Cg=="}
+import type { NextRequest } from "next/server";
+
+/**
+ * Rate limiting with two backends.
+ *
+ * `allowShared` is the one to use. When Upstash is configured (the same
+ * UPSTASH_REDIS_REST_* pair entitlements.ts already uses) the counter lives in
+ * Redis, so it holds across serverless instances and across cold starts — which
+ * is what makes a per-IP budget an actual budget rather than a suggestion. When
+ * it is not configured, or Redis is unreachable, it degrades to the in-memory
+ * limiter below rather than failing open.
+ *
+ * `allow` is that in-memory limiter: per-instance and reset on cold start, so on
+ * serverless it blunts casual abuse and nothing more. It stays exported because
+ * it is the fallback path and is synchronous.
+ */
+
+type Hit = { count: number; reset: number };
+const buckets = new Map<string, Hit>();
+
+const UP_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UP_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+const sharedConfigured = () => !!(UP_URL && UP_TOKEN);
+
+export function clientIp(req: NextRequest): string {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return req.headers.get("x-real-ip") || "unknown";
+}
+
+/** Check without consuming: true if at least one action remains in the window. */
+export function peek(key: string, limit: number, windowMs: number): boolean {
+  const hit = buckets.get(key);
+  if (!hit || Date.now() > hit.reset) return true;
+  return hit.count < limit;
+}
+
+/**
+ * Returns true if the action is allowed, false if the caller is over the limit.
+ * @param key    unique bucket key (e.g. `optimize:<ip>` or `auth:<email>`)
+ * @param limit  max actions per window
+ * @param windowMs window length in ms
+ */
+export function allow(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const hit = buckets.get(key);
+  if (!hit || now > hit.reset) {
+    buckets.set(key, { count: 1, reset: now + windowMs });
+    // Opportunistic cleanup so the map can't grow unbounded.
+    if (buckets.size > 5000) {
+      for (const [k, v] of buckets) if (now > v.reset) buckets.delete(k);
+    }
+    return true;
+  }
+  if (hit.count >= limit) return false;
+  hit.count++;
+  return true;
+}
+
+/**
+ * SET key 0 EX <window> NX  →  creates the counter with its TTL only if the
+ * window is not already open; INCR  →  consumes one. INCR leaves the TTL alone,
+ * so the window is fixed rather than sliding and a steady caller is not locked
+ * out forever. Both travel in one pipelined request, so a failure between them
+ * cannot leave a counter without an expiry.
+ */
+async function sharedHit(key: string, windowMs: number): Promise<number> {
+  const seconds = Math.max(1, Math.ceil(windowMs / 1000));
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 1500);
+  try {
+    const res = await fetch(`${UP_URL}/pipeline`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${UP_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify([
+        ["SET", `rl:${key}`, "0", "EX", String(seconds), "NX"],
+        ["INCR", `rl:${key}`],
+      ]),
+      cache: "no-store",
+      signal: ctrl.signal,
+    });
+    if (!res.ok) throw new Error(`Redis ${res.status}`);
+    const out = await res.json();
+    const count = Number(out?.[1]?.result);
+    if (!Number.isFinite(count)) throw new Error("Redis malformed reply");
+    return count;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/**
+ * The limiter to reach for. Shared across instances when Upstash is configured,
+ * in-memory otherwise. A rate limiter that is down must not take the product
+ * down with it, so an unreachable Redis falls back rather than rejecting.
+ */
+export async function allowShared(key: string, limit: number, windowMs: number): Promise<boolean> {
+  if (!sharedConfigured()) return allow(key, limit, windowMs);
+  try {
+    return (await sharedHit(key, windowMs)) <= limit;
+  } catch (e) {
+    console.error("ratelimit: shared store unavailable, using in-memory —", e instanceof Error ? e.message : e);
+    return allow(key, limit, windowMs);
+  }
+}
+
+/** True when the counter is backed by the shared store (for diagnostics). */
+export const rateLimitIsShared = sharedConfigured;

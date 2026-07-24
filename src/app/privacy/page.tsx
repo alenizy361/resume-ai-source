@@ -1,1 +1,121 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgT3JiQnJhbmQgZnJvbSAiLi4vY29tcG9uZW50cy9PcmJCcmFuZCI7CmltcG9ydCBPcmJTY2VuZVNldHRlciBmcm9tICIuLi9jb21wb25lbnRzL29yYi9PcmJTY2VuZVNldHRlciI7CmltcG9ydCBMaW5rIGZyb20gIm5leHQvbGluayI7Cgpjb25zdCBCQVNFID0gcHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfQVBQX1VSTCB8fCAiaHR0cHM6Ly9jdi5yYWJpdC5zYSI7CgpleHBvcnQgY29uc3QgbWV0YWRhdGE6IE1ldGFkYXRhID0gewogIHRpdGxlOiAi2LPZitin2LPYqSDYp9mE2K7YtdmI2LXZitipIHwgUHJpdmFjeSBQb2xpY3kg4oCUIFNpcmEiLAogIGRlc2NyaXB0aW9uOiAi2YPZitmBINmG2LnYp9mE2Kwg2LPZitix2KrZgyDYp9mE2LDYp9iq2YrYqSDZiNio2YrYp9mG2KfYqtmDOiDZhNinINmG2K7YstmR2YYg2LPZitix2KrZgyDYudmE2Ykg2K7ZiNin2K/ZhdmG2KfYjCDZhNinINmG2LPYqtiu2K/ZhSDYqNmK2KfZhtin2KrZgyDZhNiq2K/YsdmK2Kgg2KfZhNmG2YXYp9iw2KzYjCDZiNiq2YLYr9ixINiq2K3YsNmBINmD2YQg2LTZitihLiIsCiAgYWx0ZXJuYXRlczogeyBjYW5vbmljYWw6IGAke0JBU0V9L3ByaXZhY3lgIH0sCn07Cgpjb25zdCBTZWN0aW9uID0gKHsgdGl0bGUsIGNoaWxkcmVuIH06IHsgdGl0bGU6IHN0cmluZzsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSA9PiAoCiAgPHNlY3Rpb24gY2xhc3NOYW1lPSJtYi04Ij4KICAgIDxoMiBjbGFzc05hbWU9Im1iLTMgdGV4dC14bCBmb250LWJvbGQiPnt0aXRsZX08L2gyPgogICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktMiB0ZXh0LXNtIGxlYWRpbmctcmVsYXhlZCIgc3R5bGU9e3sgY29sb3I6ICJyZ2JhKDI0NCwyNDUsMjQzLDAuNzUpIiB9fT57Y2hpbGRyZW59PC9kaXY+CiAgPC9zZWN0aW9uPgopOwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHJpdmFjeVBhZ2UoKSB7CiAgcmV0dXJuICgKICAgIDxtYWluIGRpcj0icnRsIiBsYW5nPSJhciIgY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4iIHN0eWxlPXt7IGJhY2tncm91bmQ6ICJ2YXIoLS1iZykiLCBjb2xvcjogInZhcigtLWZnKSIgfX0+CiAgICAgIDxPcmJTY2VuZVNldHRlciB2aXNpYmxlIG1vb2Q9ImlkbGUiIHRvcD0iMTR2aCIgbGVmdD0iODYlIiBzaXplPXsxMDB9IC8+CiAgICAgIDxuYXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCIgc3R5bGU9e3sgYmFja2dyb3VuZDogImxpbmVhci1ncmFkaWVudCgxODBkZWcsIHJnYmEoNSw3LDEzLDAuODUpLCB0cmFuc3BhcmVudCkiIH19PgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJteC1hdXRvIGZsZXggbWF4LXctM3hsIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHgtNiBweS00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii9hciIgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMi41Ij4KICAgICAgICAgICAgPE9yYkJyYW5kIHNpemU9ezI2fSAvPgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtWzE1cHhdIGZvbnQtYm9sZCB0cmFja2luZy10aWdodCI+U2lyYTwvc3Bhbj4KICAgICAgICAgIDwvTGluaz4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii90ZXJtcyIgY2xhc3NOYW1lPSJ0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+2KfZhNi02LHZiNi3INmI2KfZhNij2K3Zg9in2YU8L0xpbms+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvbmF2PgoKICAgICAgPGRpdiBjbGFzc05hbWU9Im14LWF1dG8gbWF4LXctM3hsIHB4LTYgcHktMTQiPgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjaGlwIG1iLTQiPtiz2YrYp9iz2Kkg2KfZhNiu2LXZiNi12YrYqTwvZGl2PgogICAgICAgIDxoMSBjbGFzc05hbWU9Im1iLTIgdGV4dC0zeGwgZm9udC1leHRyYWJvbGQiPtiu2LXZiNi12YrYqtmDINmI2LPZitix2KrZgyDYp9mE2LDYp9iq2YrYqTwvaDE+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJtYi0xMCB0ZXh0LXNtIiBzdHlsZT17eyBjb2xvcjogInZhcigtLW11dGVkKSIgfX0+CiAgICAgICAgICDYotiu2LEg2KrYrdiv2YrYqzog2YrZiNmE2YrZiCDZotmg2aLZpiDCtyDYqtmG2LfYqNmCINi52YTZiSBjdi5yYWJpdC5zYSDigJQg2K7Yr9mF2Kkg2KfZhNiz2YrYsSDYp9mE2LDYp9iq2YrYqSDYp9mE2YXZgtiv2Y7ZkdmF2Kkg2LnYqNixINmG2LfYp9mCIFJhYml0LnNhCiAgICAgICAgICA8c3BhbiBkaXI9Imx0ciI+IChFbmdsaXNoIHN1bW1hcnkgYXQgdGhlIGJvdHRvbSk8L3NwYW4+CiAgICAgICAgPC9wPgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT0i2aEuINmH2YQg2KrZj9iu2LLZjtmR2YYg2LPZitix2KrZgyDYudmG2K/Zhtin2J8g2YTYpy4iPgogICAgICAgICAgPHA+CiAgICAgICAgICAgINmG2LUg2LPZitix2KrZgyDYp9mE2LDYp9iq2YrYqSA8c3Ryb25nPtmE2Kcg2YrZj9it2YHZjti4INi52YTZiSDYrtmI2KfYr9mF2YbYpzwvc3Ryb25nPi4g2LnZhtivINin2YTZgdit2LUg2KPZiCDYp9mE2KjZhtin2KEg2YrZj9ix2LPZjtmEINin2YTZhti1INmE2YXYudin2YTYrNiq2YcKICAgICAgICAgICAg2YHZiNix2KfZiyDYq9mFINmK2Y/Yudin2K8g2KXZhNmK2YMg4oCUINmE2Kcg2KrZiNis2K8g2YLYp9i52K/YqSDYqNmK2KfZhtin2Kog2KrYrdiq2YHYuCDYqNin2YTYs9mK2LEg2KfZhNiw2KfYqtmK2KkuCiAgICAgICAgICA8L3A+CiAgICAgICAgICA8cD4KICAgICAgICAgICAg2KfZhNmF2LPZiNiv2ZHYqSDYp9mE2KrZiiDYqtmD2KrYqNmH2Kcg2KrZj9it2YHZjti4IDxzdHJvbmc+2LnZhNmJINis2YfYp9iy2YMg2KPZhtiqINmB2YLYtzwvc3Ryb25nPiAo2YXYqti12YHYrdmDIOKAlCBsb2NhbFN0b3JhZ2UpINmE2YPZiiDZhNinINiq2LbZiti5CiAgICAgICAgICAgINmD2KrYp9io2KrZgyDYudmG2K8g2KrYrdiv2YrYqyDYp9mE2LXZgdit2KnYjCDZiNiq2YLYr9ixINiq2YXYs9it2YfYpyDYqNiy2LEgwqvYp9io2K/YoyDZhdmGINis2K/Zitivwrsg2KPZiCDYqNmF2LPYrSDYqNmK2KfZhtin2Kog2KfZhNmF2KrYtdmB2K0uCiAgICAgICAgICA8L3A+CiAgICAgICAgICA8cD4KICAgICAgICAgICAg2KfZhNin2LPYqtir2YbYp9ihINin2YTZiNit2YrYrzog2KXYsNinINi22LrYt9iqINij2YbYqiDCq9in2YbYtNixINix2KfYqNi32KfZiyDYudin2YXYp9mLwrsg2YHYs9mK2Y/YrdmB2Y7YuCDYp9mE2YbYtSDYp9mE2LDZiiDYp9iu2KrYsdiqINmG2LTYsdmHINi52YTZiSDYsdin2KjYtyDYudin2YXYjAogICAgICAgICAgICDZiNmF2LnZgyDYstixIMKr2KXZhNi62KfYoSDYp9mE2YbYtNixwrsg2YrYrdiw2YHZhyDZhtmH2KfYptmK2KfZiyDZgdmKINij2Yog2YjZgtiqLgogICAgICAgICAgPC9wPgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9ItmiLiDYo9mK2YYg2KrYqtmFINin2YTZhdi52KfZhNis2KnYnyI+CiAgICAgICAgICA8cD4KICAgICAgICAgICAg2KfZhNmF2LnYp9mE2KzYqSDYqtiq2YUg2LnYqNixINmF2LLZiNmR2K8g2LDZg9in2KEg2KfYtdi32YbYp9i52Yog2LPYrdin2KjZiiAo2K7ZiNin2K/ZhSDYrtin2LHYrCDYp9mE2YXZhdmE2YPYqSDigJQg2KfZhNmI2YTYp9mK2KfYqiDYp9mE2YXYqtit2K/YqSkuINmK2Y/Ysdiz2Y7ZhCDZhti1INin2YTYs9mK2LHYqQogICAgICAgICAgICDZhNi62LHYtiDYqtmI2YTZitivINin2YTZhtiq2YrYrNipINmB2YLYty4gPHN0cm9uZz7ZhNinINmG2LPYqtiu2K/ZhSDYqNmK2KfZhtin2KrZgyDZhNiq2K/YsdmK2Kgg2KPZiiDZhtmF2YjYsNisPC9zdHJvbmc+2Iwg2YjZhNinINmG2KjZiti52YfYpyDYo9mIINmG2LTYp9ix2YPZh9inINmF2LkKICAgICAgICAgICAg2KPZiiDYrNmH2Kkg2KrYs9mI2YrZgtmK2KkuCiAgICAgICAgICA8L3A+CiAgICAgICAgPC9TZWN0aW9uPgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT0i2aMuINmF2Kcg2KfZhNiw2Yog2YbYrdiq2YHYuCDYqNmHINmB2LnZhNin2YvYnyI+CiAgICAgICAgICA8cD7ZgdmC2Lcg2KfZhNit2K8g2KfZhNij2K/ZhtmJINmE2KrYtNi62YrZhCDYrdiz2KfYqNmDOjwvcD4KICAgICAgICAgIDx1bCBjbGFzc05hbWU9Im1yLTUgbGlzdC1kaXNjIHNwYWNlLXktMSI+CiAgICAgICAgICAgIDxsaT7YqNix2YrYr9mDINin2YTYpdmE2YPYqtix2YjZhtmKICjZhNiq2LPYrNmK2YQg2KfZhNiv2K7ZiNmEINmI2LHYqNi3INin2LTYqtix2KfZg9mDKSDigJQg2YrZj9it2YHZjti4INit2KrZiSDYqti32YTYqCDYrdiw2YHZhy48L2xpPgogICAgICAgICAgICA8bGk+2K3Yp9mE2Kkg2KfYtNiq2LHYp9mD2YMg2YjYqtin2LHZitiuINin2YbYqtmH2KfYptmHLjwvbGk+CiAgICAgICAgICAgIDxsaT7YqNmK2KfZhtin2Kog2KfZhNiv2YHYuSDYqtmP2LnYp9mE2Y7YrCDYqNin2YTZg9in2YXZhCDZhNiv2Ykg2KjZiNin2KjYqSDYp9mE2K/Zgdi5INin2YTZhdix2K7Zkdi12KkgwqtQYXlsaW5rwrsg4oCUINmG2K3ZhiDZhNinINmG2LHZiSDZiNmE2Kcg2YbYrtiy2ZHZhiDYsdmC2YUg2KjYt9in2YLYqtmDINil2LfZhNin2YLYp9mLLjwvbGk+CiAgICAgICAgICA8L3VsPgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPFNlY3Rpb24gdGl0bGU9ItmkLiDYqti52YfZkdivINi52K/ZhSDYp9mE2KfYrtiq2YTYp9mCIj4KICAgICAgICAgIDxwPgogICAgICAgICAgICDZhti42KfZhdmG2Kcg2YXZgtmK2Y7ZkdivINio2LHZhdis2YrYp9mLINio2LnYr9mFINil2LbYp9mB2Kkg2KPZiiDYsdmC2YUg2KPZiCDYrtio2LHYqSDYo9mIINi02YfYp9iv2Kkg2YTZhSDYqtiw2YPYsdmH2Kcg2KPZhtiqINmB2Yog2LPZitix2KrZgy4g2KXYsNinINmD2KfZhiDYp9mE2LHZgtmFCiAgICAgICAgICAgINmG2KfZgti12KfZiyDZitmD2KrYqCDYp9mE2YbYuNin2YUg2YXZg9in2YbZhyDCq1vYo9i22YEg2LHZgtmF2YMg2KfZhNmB2LnZhNmKXcK7INio2K/ZhCDYp9iu2KrYsdin2LnZhy4g2LPZitix2KrZgyDYqtio2YLZiSDYs9mK2LHYqtmDIOKAlCDYo9mI2LbYrSDZiNij2YLZiNmJ2Iwg2YTZg9mGINi12KfYr9mC2KkuCiAgICAgICAgICA8L3A+CiAgICAgICAgPC9TZWN0aW9uPgoKICAgICAgICA8U2VjdGlvbiB0aXRsZT0i2aUuINit2YLZiNmC2YMg2YjYt9ix2YrZgtipINin2YTYrdiw2YEiPgogICAgICAgICAgPHVsIGNsYXNzTmFtZT0ibXItNSBsaXN0LWRpc2Mgc3BhY2UteS0xIj4KICAgICAgICAgICAgPGxpPtit2LDZgSDZhdiz2YjYr9mR2KfYqtmDOiDYstixIMKr2KfYqNiv2KMg2YXZhiDYrNiv2YrYr8K7INij2Ygg2YXYs9itINio2YrYp9mG2KfYqiDYp9mE2YXZiNmC2Lkg2YXZhiDZhdiq2LXZgdit2YMgKNmB2YjYsdmK2Iwg2KjZitiv2YMpLjwvbGk+CiAgICAgICAgICAgIDxsaT7Yrdiw2YEg2LHYp9io2Lcg2YXZhti02YjYsTog2LLYsSDCq9il2YTYutin2KEg2KfZhNmG2LTYscK7INio2KzYp9mG2Kgg2KfZhNix2KfYqNi3LjwvbGk+CiAgICAgICAgICAgIDxsaT7Yrdiw2YEg2K3Ys9in2KjZgyDZiNio2LHZitiv2YMg2YbZh9in2KbZitin2Ys6INix2KfYs9mE2YbYpyDZiNiz2YbZhtmB2ZHYsCDYrtmE2KfZhCDZpyDYo9mK2KfZhS48L2xpPgogICAgICAgICAgICA8bGk+2YjZgdmCINmG2LjYp9mFINit2YXYp9mK2Kkg2KfZhNio2YrYp9mG2KfYqiDYp9mE2LTYrti12YrYqSDYp9mE2LPYudmI2K/ZiiAoUERQTCkg2YTZgyDYrdmCINin2YTYp9i32YTYp9i5INmI2KfZhNiq2LXYrdmK2K0g2YjYp9mE2K3YsNmBIOKAlCDYqtmI2KfYtdmEINmF2LnZhtinINmE2KPZiiDZhdmG2YfYpy48L2xpPgogICAgICAgICAgPC91bD4KICAgICAgICA8L1NlY3Rpb24+CgogICAgICAgIDxTZWN0aW9uIHRpdGxlPSLZpi4g2YXZhiDZhtit2YYg2YjZg9mK2YEg2KrYqtmI2KfYtdmEINmF2LnZhtin2J8iPgogICAgICAgICAgPHA+CiAgICAgICAgICAgIMKr2LPZitix2KnCuyDYrtiv2YXYqSDYs9mK2LEg2LDYp9iq2YrYqSDYqti52YXZhCDYudmE2Ykg2YbYt9in2YIgPHNwYW4gZGlyPSJsdHIiPmN2LnJhYml0LnNhPC9zcGFuPiDYp9mE2KrYp9io2Lkg2YTZgMKr2LHYp9io2ZDYqsK7IChSYWJpdCkuCiAgICAgICAgICAgINmE2KPZiiDYp9iz2KrZgdiz2KfYsSDYudmGINio2YrYp9mG2KfYqtmDINij2Ygg2KfZhNiv2YHYuSDYo9mIINin2YTYrdiw2YE6CiAgICAgICAgICA8L3A+CiAgICAgICAgICA8cCBkaXI9Imx0ciI+CiAgICAgICAgICAgIPCfk6cgPGEgaHJlZj0ibWFpbHRvOmFsYW56aWFiZHVsYXppejRAZ21haWwuY29tIiBjbGFzc05hbWU9InRleHQtYWNjZW50IHVuZGVybGluZSI+YWxhbnppYWJkdWxheml6NEBnbWFpbC5jb208L2E+CiAgICAgICAgICA8L3A+CiAgICAgICAgICA8cD7Zhtix2K8g2LnYp9iv2Kkg2K7ZhNin2YQg2aLZpOKAk9mk2agg2LPYp9i52KkuPC9wPgogICAgICAgIDwvU2VjdGlvbj4KCiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNhcmQgbXQtMTAgcC02IiBkaXI9Imx0ciI+CiAgICAgICAgICA8aDIgY2xhc3NOYW1lPSJtYi0zIHRleHQtbGcgZm9udC1ib2xkIj5FbmdsaXNoIHN1bW1hcnk8L2gyPgogICAgICAgICAgPHVsIGNsYXNzTmFtZT0ibWwtNSBsaXN0LWRpc2Mgc3BhY2UteS0xIHRleHQtc20iIHN0eWxlPXt7IGNvbG9yOiAicmdiYSgyNDQsMjQ1LDI0MywwLjc1KSIgfX0+CiAgICAgICAgICAgIDxsaT48c3Ryb25nPllvdXIgcmVzdW1lIHRleHQgaXMgbmV2ZXIgc3RvcmVkIG9uIG91ciBzZXJ2ZXJzLjwvc3Ryb25nPiBJdCBpcyBwcm9jZXNzZWQgYnkgYSBjbG91ZCBBSSBwcm92aWRlciAoVVMtYmFzZWQpIHRvIGdlbmVyYXRlIHlvdXIgcmVzdWx0LCB0aGVuIGRpc2NhcmRlZC4gRHJhZnRzIGxpdmUgb25seSBpbiB5b3VyIGJyb3dzZXImYXBvcztzIGxvY2FsU3RvcmFnZS4gVGhlIHNpbmdsZSBleGNlcHRpb246IGlmIHlvdSBleHBsaWNpdGx5IHB1Ymxpc2ggYSBwdWJsaWMgcmVzdW1lIGxpbmssIHRoYXQgbGluayZhcG9zO3MgY29udGVudCBpcyBzdG9yZWQgc28gaXQgY2FuIGJlIHNlcnZlZCDigJQgYW5kIGl0IGlzIHJlbW92ZWQgd2hlbiB5b3UgZGVsZXRlIGl0LjwvbGk+CiAgICAgICAgICAgIDxsaT5XZSBuZXZlciB1c2UgeW91ciBkYXRhIHRvIHRyYWluIG1vZGVscywgYW5kIG5ldmVyIHNlbGwgb3Igc2hhcmUgaXQuPC9saT4KICAgICAgICAgICAgPGxpPldlIGtlZXAgb25seSB5b3VyIGVtYWlsICsgc3Vic2NyaXB0aW9uIHN0YXR1cy4gQ2FyZCBkZXRhaWxzIGFyZSBoYW5kbGVkIGVudGlyZWx5IGJ5IHRoZSBsaWNlbnNlZCBnYXRld2F5IFBheWxpbmsuPC9saT4KICAgICAgICAgICAgPGxpPlB1YmxpYyByZXN1bWUgbGlua3MgZXhpc3Qgb25seSBpZiB5b3UgcHVibGlzaCBvbmUsIGFuZCB5b3UgY2FuIHVucHVibGlzaCBhbnl0aW1lLjwvbGk+CiAgICAgICAgICAgIDxsaT48c3Ryb25nPk5vLWZhYnJpY2F0aW9uIHBsZWRnZTo8L3N0cm9uZz4gdGhlIEFJIGlzIHRlY2huaWNhbGx5IGNvbnN0cmFpbmVkIGZyb20gaW52ZW50aW5nIG51bWJlcnMsIGVtcGxveWVycywgb3IgY3JlZGVudGlhbHMgeW91IGRpZG4mYXBvczt0IHByb3ZpZGUuPC9saT4KICAgICAgICAgICAgPGxpPkFjY291bnQgZGVsZXRpb246IGVtYWlsIHVzIOKAlCBkb25lIHdpdGhpbiA3IGRheXMuIENvbnRhY3Q6IGFsYW56aWFiZHVsYXppejRAZ21haWwuY29tPC9saT4KICAgICAgICAgIDwvdWw+CiAgICAgICAgPC9kaXY+CgogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC0xMCBmbGV4IGdhcC00Ij4KICAgICAgICAgIDxMaW5rIGhyZWY9Ii90ZXJtcyIgY2xhc3NOYW1lPSJidG4tZ2hvc3QgcHgtNiBweS0yLjUgdGV4dC1zbSBmb250LXNlbWlib2xkIiBzdHlsZT17eyBjb2xvcjogInZhcigtLWZnKSIgfX0+2KfZhNi02LHZiNi3INmI2KfZhNij2K3Zg9in2YUg4oaQPC9MaW5rPgogICAgICAgICAgPExpbmsgaHJlZj0iL2FyIiBjbGFzc05hbWU9ImJ0bi1hY2NlbnQgcHgtNiBweS0yLjUgdGV4dC1zbSI+2KfZhNix2KbZitiz2YrYqTwvTGluaz4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L21haW4+CiAgKTsKfQo="}
+import type { Metadata } from "next";
+import OrbBrand from "../components/OrbBrand";
+import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import Link from "next/link";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "سياسة الخصوصية | Privacy Policy — Sira",
+  description: "كيف نعالج سيرتك الذاتية وبياناتك: لا نخزّن سيرتك على خوادمنا، لا نستخدم بياناتك لتدريب النماذج، وتقدر تحذف كل شيء.",
+  alternates: { canonical: `${BASE}/privacy` },
+};
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section className="mb-8">
+    <h2 className="mb-3 text-xl font-bold">{title}</h2>
+    <div className="space-y-2 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.75)" }}>{children}</div>
+  </section>
+);
+
+export default function PrivacyPage() {
+  return (
+    <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
+      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+          <Link href="/ar" className="flex items-center gap-2.5">
+            <OrbBrand size={26} />
+            <span className="text-[15px] font-bold tracking-tight">Sira</span>
+          </Link>
+          <Link href="/terms" className="text-sm" style={{ color: "var(--muted)" }}>الشروط والأحكام</Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-3xl px-6 py-14">
+        <div className="chip mb-4">سياسة الخصوصية</div>
+        <h1 className="mb-2 text-3xl font-extrabold">خصوصيتك وسيرتك الذاتية</h1>
+        <p className="mb-10 text-sm" style={{ color: "var(--muted)" }}>
+          آخر تحديث: يوليو ٢٠٢٦ · تنطبق على cv.rabit.sa — خدمة السير الذاتية المقدَّمة عبر نطاق Rabit.sa
+          <span dir="ltr"> (English summary at the bottom)</span>
+        </p>
+
+        <Section title="١. هل تُخزَّن سيرتك عندنا؟ لا.">
+          <p>
+            نص سيرتك الذاتية <strong>لا يُحفَظ على خوادمنا</strong>. عند الفحص أو البناء يُرسَل النص لمعالجته
+            فوراً ثم يُعاد إليك — لا توجد قاعدة بيانات تحتفظ بالسير الذاتية.
+          </p>
+          <p>
+            المسودّة التي تكتبها تُحفَظ <strong>على جهازك أنت فقط</strong> (متصفحك — localStorage) لكي لا تضيع
+            كتابتك عند تحديث الصفحة، وتقدر تمسحها بزر «ابدأ من جديد» أو بمسح بيانات المتصفح.
+          </p>
+          <p>
+            الاستثناء الوحيد: إذا ضغطت أنت «انشر رابطاً عاماً» فسيُحفَظ النص الذي اخترت نشره على رابط عام،
+            ومعك زر «إلغاء النشر» يحذفه نهائياً في أي وقت.
+          </p>
+        </Section>
+
+        <Section title="٢. أين تتم المعالجة؟">
+          <p>
+            المعالجة تتم عبر مزوّد ذكاء اصطناعي سحابي (خوادم خارج المملكة — الولايات المتحدة). يُرسَل نص السيرة
+            لغرض توليد النتيجة فقط. <strong>لا نستخدم بياناتك لتدريب أي نموذج</strong>، ولا نبيعها أو نشاركها مع
+            أي جهة تسويقية.
+          </p>
+        </Section>
+
+        <Section title="٣. ما الذي نحتفظ به فعلاً؟">
+          <p>فقط الحد الأدنى لتشغيل حسابك:</p>
+          <ul className="mr-5 list-disc space-y-1">
+            <li>بريدك الإلكتروني (لتسجيل الدخول وربط اشتراكك) — يُحفَظ حتى تطلب حذفه.</li>
+            <li>حالة اشتراكك وتاريخ انتهائه.</li>
+            <li>بيانات الدفع تُعالَج بالكامل لدى بوابة الدفع المرخّصة «Paylink» — نحن لا نرى ولا نخزّن رقم بطاقتك إطلاقاً.</li>
+          </ul>
+        </Section>
+
+        <Section title="٤. تعهّد عدم الاختلاق">
+          <p>
+            نظامنا مقيَّد برمجياً بعدم إضافة أي رقم أو خبرة أو شهادة لم تذكرها أنت في سيرتك. إذا كان الرقم
+            ناقصاً يكتب النظام مكانه «[أضف رقمك الفعلي]» بدل اختراعه. سيرتك تبقى سيرتك — أوضح وأقوى، لكن صادقة.
+          </p>
+        </Section>
+
+        <Section title="٥. حقوقك وطريقة الحذف">
+          <ul className="mr-5 list-disc space-y-1">
+            <li>حذف مسودّاتك: زر «ابدأ من جديد» أو مسح بيانات الموقع من متصفحك (فوري، بيدك).</li>
+            <li>حذف رابط منشور: زر «إلغاء النشر» بجانب الرابط.</li>
+            <li>حذف حسابك وبريدك نهائياً: راسلنا وسننفّذ خلال ٧ أيام.</li>
+            <li>وفق نظام حماية البيانات الشخصية السعودي (PDPL) لك حق الاطلاع والتصحيح والحذف — تواصل معنا لأي منها.</li>
+          </ul>
+        </Section>
+
+        <Section title="٦. من نحن وكيف تتواصل معنا؟">
+          <p>
+            «سيرة» خدمة سير ذاتية تعمل على نطاق <span dir="ltr">cv.rabit.sa</span> التابع لـ«رابِت» (Rabit).
+            لأي استفسار عن بياناتك أو الدفع أو الحذف:
+          </p>
+          <p dir="ltr">
+            📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a>
+          </p>
+          <p>نرد عادة خلال ٢٤–٤٨ ساعة.</p>
+        </Section>
+
+        <div className="card mt-10 p-6" dir="ltr">
+          <h2 className="mb-3 text-lg font-bold">English summary</h2>
+          <ul className="ml-5 list-disc space-y-1 text-sm" style={{ color: "rgba(244,245,243,0.75)" }}>
+            <li><strong>Your resume text is never stored on our servers.</strong> It is processed by a cloud AI provider (US-based) to generate your result, then discarded. Drafts live only in your browser&apos;s localStorage. The single exception: if you explicitly publish a public resume link, that link&apos;s content is stored so it can be served — and it is removed when you delete it.</li>
+            <li>We never use your data to train models, and never sell or share it.</li>
+            <li>We keep only your email + subscription status. Card details are handled entirely by the licensed gateway Paylink.</li>
+            <li>Public resume links exist only if you publish one, and you can unpublish anytime.</li>
+            <li><strong>No-fabrication pledge:</strong> the AI is technically constrained from inventing numbers, employers, or credentials you didn&apos;t provide.</li>
+            <li>Account deletion: email us — done within 7 days. Contact: alanziabdulaziz4@gmail.com</li>
+          </ul>
+        </div>
+
+        <div className="mt-10 flex gap-4">
+          <Link href="/terms" className="btn-ghost px-6 py-2.5 text-sm font-semibold" style={{ color: "var(--fg)" }}>الشروط والأحكام ←</Link>
+          <Link href="/ar" className="btn-accent px-6 py-2.5 text-sm">الرئيسية</Link>
+        </div>
+      </div>
+    </main>
+  );
+}

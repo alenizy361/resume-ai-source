@@ -1,1 +1,13 @@
-{"data":"aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwoKY29uc3QgQkFTRSA9IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0FQUF9VUkwgfHwgImh0dHBzOi8vY3YucmFiaXQuc2EiOwoKZXhwb3J0IGNvbnN0IG1ldGFkYXRhOiBNZXRhZGF0YSA9IHsKICB0aXRsZTogIkZyZWUgTGlua2VkSW4gUHJvZmlsZSBPcHRpbWl6ZXIg4oCUIEhlYWRsaW5lLCBBYm91dCAmIFNraWxscyB8IFNpcmEiLAogIGRlc2NyaXB0aW9uOiAiUGFzdGUgeW91ciByZXN1bWUgYW5kIHRhcmdldCByb2xlIOKAlCBnZXQgYSBrZXl3b3JkLXJpY2ggTGlua2VkSW4gaGVhZGxpbmUsIGEgY29tcGVsbGluZyBBYm91dCBzZWN0aW9uLCBhbmQgdGhlIGV4YWN0IHNraWxscyByZWNydWl0ZXJzIHNlYXJjaCBmb3IuIiwKICBhbHRlcm5hdGVzOiB7IGNhbm9uaWNhbDogYCR7QkFTRX0vbGlua2VkaW5gIH0sCn07CgpleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBMaW5rZWRpbkxheW91dCh7IGNoaWxkcmVuIH06IHsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSB7CiAgcmV0dXJuIGNoaWxkcmVuOwp9Cg=="}
+import type { Metadata } from "next";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "Free LinkedIn Profile Optimizer — Headline, About & Skills | Sira",
+  description: "Paste your resume and target role — get a keyword-rich LinkedIn headline, a compelling About section, and the exact skills recruiters search for.",
+  alternates: { canonical: `${BASE}/linkedin` },
+};
+
+export default function LinkedinLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

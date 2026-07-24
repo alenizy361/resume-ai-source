@@ -1,1 +1,23 @@
-{"data":"InVzZSBjbGllbnQiOwppbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAicmVhY3QiOwoKLyoqCiAqIElzIHRoZSB2aXNpdG9yIEFyYWJpYz8gU3RhcnRzIGZhbHNlIHNvIHNlcnZlciByZW5kZXIgYW5kIGNsaWVudCBoeWRyYXRpb24KICogbWF0Y2ggKG5vIGh5ZHJhdGlvbiBtaXNtYXRjaCksIHRoZW4gcmVzb2x2ZXMgYWZ0ZXIgbW91bnQ6ID9sYW5nPSBVUkwgcGFyYW0KICogKHBlcnNpc3RlZCBzbyB0aGUgY2hvaWNlIHN1cnZpdmVzIG5hdmlnYXRpb24pLCBlbHNlIHRoZSBzdG9yZWQgY2hvaWNlCiAqIChyYV9sYW5nIC8gcmFfbGFuZ19jaG9pY2Ugd3JpdHRlbiBieSB0aGUgbGFuZGluZyB0b2dnbGUpLgogKi8KZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gdXNlTGFuZygpOiBib29sZWFuIHsKICBjb25zdCBbYXIsIHNldEFyXSA9IHVzZVN0YXRlKGZhbHNlKTsKICB1c2VFZmZlY3QoKCkgPT4gewogICAgdHJ5IHsKICAgICAgY29uc3QgcSA9IG5ldyBVUkxTZWFyY2hQYXJhbXMod2luZG93LmxvY2F0aW9uLnNlYXJjaCkuZ2V0KCJsYW5nIik7CiAgICAgIGlmIChxID09PSAiYXIiKSB7IGxvY2FsU3RvcmFnZS5zZXRJdGVtKCJyYV9sYW5nIiwgImFyIik7IHNldEFyKHRydWUpOyByZXR1cm47IH0KICAgICAgaWYgKHEgPT09ICJlbiIpIHsgbG9jYWxTdG9yYWdlLnNldEl0ZW0oInJhX2xhbmciLCAiZW4iKTsgc2V0QXIoZmFsc2UpOyByZXR1cm47IH0KICAgICAgc2V0QXIoKGxvY2FsU3RvcmFnZS5nZXRJdGVtKCJyYV9sYW5nIikgfHwgbG9jYWxTdG9yYWdlLmdldEl0ZW0oInJhX2xhbmdfY2hvaWNlIikgfHwgImVuIikgPT09ICJhciIpOwogICAgfSBjYXRjaCB7CiAgICAgIC8qIG5vb3AgKi8KICAgIH0KICB9LCBbXSk7CiAgcmV0dXJuIGFyOwp9Cg=="}
+"use client";
+import { useEffect, useState } from "react";
+
+/**
+ * Is the visitor Arabic? Starts false so server render and client hydration
+ * match (no hydration mismatch), then resolves after mount: ?lang= URL param
+ * (persisted so the choice survives navigation), else the stored choice
+ * (ra_lang / ra_lang_choice written by the landing toggle).
+ */
+export default function useLang(): boolean {
+  const [ar, setAr] = useState(false);
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get("lang");
+      if (q === "ar") { localStorage.setItem("ra_lang", "ar"); setAr(true); return; }
+      if (q === "en") { localStorage.setItem("ra_lang", "en"); setAr(false); return; }
+      setAr((localStorage.getItem("ra_lang") || localStorage.getItem("ra_lang_choice") || "en") === "ar");
+    } catch {
+      /* noop */
+    }
+  }, []);
+  return ar;
+}
