@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
-import { modelConfig, MAX_OUTPUT, TASK_CLASS } from "@/app/lib/aiModels";
+import { fromAnthropic } from "@/app/lib/usage";
+import { modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, CACHE_FLOOR_TOKENS } from "@/app/lib/aiPrompts";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
@@ -291,12 +292,24 @@ export async function GET(req: NextRequest) {
 }
 
 /** Route a probe to the provider that will actually serve the call being described. */
-function probe(which: string, model: string) {
+function probe(which: string, model: string): Promise<ProbeResult> {
   return which === "anthropic" ? probeAnthropic(model) : probeNvidia(model);
 }
 
 /** One token out, ten-second ceiling. A probe that can hang is not a health check. */
-async function probeNvidia(model: string): Promise<{ ok: boolean; status?: number; error?: string }> {
+/** What a probe reports. The cache fields are Anthropic-only and absent elsewhere. */
+interface ProbeResult {
+  ok: boolean;
+  status?: number;
+  error?: string;
+  promptCached?: boolean;
+  cacheReadTokens?: number;
+  cacheWriteTokens?: number;
+  uncachedInputTokens?: number;
+  estimatedUsd?: number;
+}
+
+async function probeNvidia(model: string): Promise<ProbeResult> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 10_000);
   try {
@@ -324,9 +337,31 @@ async function probeNvidia(model: string): Promise<{ ok: boolean; status?: numbe
   } finally { clearTimeout(timer); }
 }
 
-async function probeAnthropic(model: string): Promise<{ ok: boolean; status?: number; error?: string }> {
+/**
+ * The Anthropic probe sends THE REAL CACHED PREFIX, not a toy prompt.
+ *
+ * It used to ask "reply with the single word: ok" with no system block at all, and that made it
+ * blind to the one thing it most needed to see. Prompt caching fails SILENTLY: `cache_control` on
+ * a prefix under the provider's minimum is accepted and quietly ignored, and so is a prefix that
+ * stopped being byte-identical because someone interpolated a user value into it. Neither produces
+ * an error. A probe whose prompt has a different SHAPE from production cannot detect either, so it
+ * would report a healthy model on a deployment paying full price for every request.
+ *
+ * So the probe carries the same two cached blocks `/api/generate` sends — `CORE_RULES` and one task
+ * schema — and reports the cache token counts the provider returns. That is the difference between
+ * "caching is configured" and "caching happened", and only the second one is evidence.
+ *
+ * ── the cost, stated plainly ──
+ *
+ * This makes the probe ~2300 input tokens instead of ~20. On the fast tier that is roughly
+ * $0.003 for the first call (which WRITES the cache at a 1.25x premium) and about $0.0003 for
+ * every call after it inside the five-minute window. `?live=1` is already opt-in and already
+ * documented as spending money; this is a fraction of a cent buying the only measurement that
+ * can confirm the caching design works at all.
+ */
+async function probeAnthropic(model: string): Promise<ProbeResult> {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 10_000);
+  const timer = setTimeout(() => ctrl.abort(), 15_000);
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -339,6 +374,12 @@ async function probeAnthropic(model: string): Promise<{ ok: boolean; status?: nu
       body: JSON.stringify({
         model,
         max_tokens: 4,
+        /* Byte-identical to what /api/generate sends. If these two ever diverge the probe stops
+           measuring production, which is the failure this whole function exists to avoid. */
+        system: [
+          { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
+          { type: "text", text: TASK_SCHEMA.role_blueprint ?? "", cache_control: { type: "ephemeral" } },
+        ],
         messages: [{ role: "user", content: "Reply with the single word: ok" }],
       }),
     });
@@ -348,6 +389,23 @@ async function probeAnthropic(model: string): Promise<{ ok: boolean; status?: nu
     }
     const data = await res.json().catch(() => null);
     const text = data?.content?.[0]?.text;
-    return { ok: typeof text === "string" && text.length > 0, status: res.status };
+    const u = fromAnthropic(data);
+    return {
+      ok: typeof text === "string" && text.length > 0,
+      status: res.status,
+      /*
+       * `promptCached` is the verdict, and it is `cacheRead > 0` — not `cacheWrite > 0`.
+       *
+       * A write means the prefix was ACCEPTED for caching; a read means it was actually SERVED from
+       * cache, which is the only thing that saves money. The first call of a window writes and does
+       * not read, so a single probe reporting `false` here is not yet a failure — call it twice.
+       * Both numbers are returned so the difference is visible rather than inferred.
+       */
+      promptCached: u.cacheRead > 0,
+      cacheReadTokens: u.cacheRead,
+      cacheWriteTokens: u.cacheWrite,
+      uncachedInputTokens: u.input,
+      estimatedUsd: Number(estimateCallCost(model, u).toFixed(6)),
+    };
   } finally { clearTimeout(timer); }
 }

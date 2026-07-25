@@ -105,10 +105,31 @@ ok("a plain GET does not make a model call",
   /searchParams\.get\("live"\) !== "1"/.test(SRC));
 ok("and says outright that the live probe costs money",
   /spends model credit/i.test(SRC));
+/* Both probes must be bounded. The Anthropic one is allowed longer because it now sends the real
+   ~2300-token cached prefix rather than a one-line toy, and a cache WRITE is slower than a read. */
 ok("both probes have a timeout — a health check that can hang is not one",
-  (SRC.match(/setTimeout\(\(\) => ctrl\.abort\(\), 10_000\)/g) || []).length === 2);
+  (SRC.match(/setTimeout\(\(\) => ctrl\.abort\(\), 1[05]_000\)/g) || []).length === 2);
 ok("the probe asks for almost no output",
   (SRC.match(/max_tokens: 4/g) || []).length === 2);
+
+/*
+ * The probe has to send what production sends.
+ *
+ * Prompt caching fails silently in two ways — a prefix under the provider's minimum, and a prefix
+ * that stopped being byte-identical — and neither produces an error anywhere. A probe with a
+ * different prompt SHAPE from the real route cannot see either, so it would report a healthy model
+ * on a deployment paying full price for every request.
+ */
+ok("the live probe sends the same cached prefix as /api/generate",
+  /text: CORE_RULES, cache_control: \{ type: "ephemeral" \}/.test(SRC));
+ok("and the task schema block with it, as the second breakpoint",
+  /TASK_SCHEMA\.role_blueprint \?\? ""/.test(SRC));
+ok("it reports whether the prefix was actually SERVED from cache, not merely accepted",
+  /promptCached: u\.cacheRead > 0/.test(SRC));
+ok("and returns both counts so the difference is visible rather than inferred",
+  /cacheReadTokens: u\.cacheRead/.test(SRC) && /cacheWriteTokens: u\.cacheWrite/.test(SRC));
+ok("the probe carries its own cost estimate, from the real usage block",
+  /estimateCallCost\(model, u\)/.test(SRC));
 
 /* ── the report is worth reading ── */
 
