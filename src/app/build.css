@@ -152,3 +152,94 @@
   color: var(--faint); letter-spacing: .06em;
 }
 .build-root .bd-save.err { color: #f87171; }
+
+/* ── layout: one step at a time ───────────────────────────────
+ *
+ * Three columns on a desktop — where you are, the one thing you are doing, and what it
+ * is producing. The middle column is capped rather than fluid: a single form field
+ * stretched across 900px is harder to fill than the same field at 640px, and the step
+ * routes exist precisely so that one thing at a time is legible.
+ *
+ * Below 1024px the navigation collapses to a horizontal scroller above the form and the
+ * preview goes behind the Edit/Preview toggle, which is the same rule the long page
+ * already used: on a phone, the CV never sits beside the form.
+ */
+
+.build-root .bd-step-cols { display: grid; gap: 20px; }
+@media (min-width: 1024px) {
+  .build-root .bd-step-cols {
+    grid-template-columns: 208px minmax(0, 1fr) 380px;
+    align-items: start;
+  }
+  .build-root .bd-nav { position: sticky; top: 84px; }
+  .build-root .bd-preview { position: sticky; top: 84px; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  /* The navigation is what yields first: the step list is short enough to read as a
+     scroller, and squeezing the A4 preview below ~340px stops it being a preview. */
+  .build-root .bd-step-cols { grid-template-columns: minmax(0, 1fr) 360px; }
+  .build-root .bd-nav { position: static; grid-column: 1 / -1; }
+}
+
+.build-root .bd-nav ol { display: flex; flex-direction: column; gap: 2px; }
+@media (max-width: 1279px) {
+  .build-root .bd-nav ol {
+    flex-direction: row; gap: 6px;
+    overflow-x: auto; scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .build-root .bd-nav ol::-webkit-scrollbar { display: none; }
+  .build-root .bd-nav li { flex: 0 0 auto; }
+}
+
+.build-root .bd-nav a,
+.build-root .bd-nav span.bd-nav-item {
+  display: flex; align-items: center; gap: 8px;
+  border-radius: 10px; padding: 7px 10px;
+  font-size: .8rem; font-weight: 600; color: var(--muted);
+  white-space: nowrap;
+  transition: background .18s var(--ez), color .18s var(--ez);
+}
+.build-root .bd-nav a:hover { background: var(--surface); color: var(--fg); }
+.build-root .bd-nav .on {
+  background: rgba(139, 92, 246, .14);
+  color: #ddd6fe;
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, .35);
+}
+/* A step nobody has completed yet is still reachable — the rail reports progress, it
+   does not gate it. Someone who wants to fill the summary first is not wrong. */
+.build-root .bd-nav .bd-tick {
+  display: grid; place-items: center;
+  width: 16px; height: 16px; flex: 0 0 auto;
+  border-radius: 999px; font-size: 9px; font-weight: 700;
+  border: 1px solid var(--line); color: var(--faint);
+}
+.build-root .bd-nav .bd-tick.done {
+  background: rgba(52, 211, 153, .14);
+  border-color: rgba(52, 211, 153, .4);
+  color: #6ee7b7;
+}
+
+/* ── step framing ─────────────────────────────────────────── */
+
+.build-root .bd-step {
+  /* No `locked` variant here: a step route renders one step, and a page that dims
+     itself is a page that should not have been navigated to. */
+  padding: 0;
+  border-top: 0;
+}
+.build-root .bd-step-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-top: 28px; padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.build-root .bd-back {
+  border-radius: 12px; padding: 9px 14px;
+  font-size: .82rem; font-weight: 700; color: var(--muted);
+  border: 1px solid var(--line);
+}
+.build-root .bd-back:hover { color: var(--fg); }
+.build-root .bd-step-count {
+  font: 600 11px/1 var(--font-mono, ui-monospace), monospace;
+  color: var(--faint); letter-spacing: .06em;
+}

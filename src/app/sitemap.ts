@@ -13,6 +13,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/cover-letter-examples", "/resume-skills",
     "/ar", "/ar/optimize", "/ar/resume-examples", "/interview-live",
     "/privacy", "/terms",
+    // The builder's two landings. The step pages under them are one visitor's draft and
+    // are noindex; only the entry points belong in a sitemap.
+    "/builder", "/ar/builder",
   ];
   const examplePages = JOB_SLUGS.map((slug) => `/resume-examples/${slug}`);
   const coverPages = JOB_SLUGS.map((slug) => `/cover-letter-examples/${slug}`);

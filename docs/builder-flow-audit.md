@@ -103,3 +103,65 @@ Not a rearrangement. Four things have to change together:
 
 Items 2 and 3 are the load-bearing ones: without them, splitting the page into routes
 loses state on every Continue, which is worse than the long page it replaces.
+
+---
+
+## The restructure, and the bug it uncovered
+
+Items 2 and 3 are done. `/builder` is a start page; `/builder/[resumeId]/[step]` is one
+step per page in both languages; the reducer moved to `builderState.ts` and is now driven
+by a provider mounted in `app/builder/layout.tsx`, which is what lets it outlive a step
+navigation. Every Continue flushes to storage synchronously before it navigates.
+
+### #16 — The route crossfade destroyed all layout-held state — **CONFIRMED · fixed**
+
+| | |
+|---|---|
+| Component | `components/orb/OrbProvider.tsx` → `PageTransition` |
+| Scope | Every route in the application, not just the builder |
+| Reproduce | Type into any step, wait 300 ms |
+| Actual | The field empties. The whole client subtree unmounts and remounts, with no navigation and no error. |
+| Severity | High — it makes layout-hosted state impossible anywhere in the app |
+
+`PageTransition` wrapped `{children}` in `<motion.div key={pathname}>`. That is a React
+key: when it changes, React discards the entire subtree and builds a new one. Correct for
+a crossfade, and fatal for the design above — the provider that holds the resume is *in a
+layout*, and React would otherwise have kept it mounted across the URL change.
+
+Measured, not inferred: probes on mount and unmount showed `BuilderProvider`,
+`BuilderShell`, `BuilderStep` and `TargetFields` all unmounting roughly 250 ms after
+arriving at a step — one exit animation later — and remounting empty. It happened with no
+typing at all, which is what ruled out the reducer, the dispatch and the store.
+
+It is also why the first run of `ops/steps.test.mjs` produced five failures that looked
+like a persistence bug and were not. Two false leads were eliminated on the way: a stale
+`next dev` server hot-reloading a refactor that had moved components between modules, and
+`ops/` living inside the watched root, so editing the test file itself triggered a Fast
+Refresh mid-run.
+
+**Fix:** the crossfade now keys on a route *group*. The builder's eleven steps are one
+surface with eleven addresses, not eleven pages — there was never a reason to fade between
+them, and not fading makes the step change instant as well as safe. Every other route
+keeps its own key and behaves exactly as before.
+
+### Also found and fixed on the way
+
+- `/builder` rendered its step links before hydration, when `resumeId` is still empty, so
+  `stepHref(lang, "", s)` built `/builder//target` — a URL that is not this route and that
+  a fast click would follow. Plain text until the id is known.
+- `ops/i18n.test.mjs` could not parse a doc comment above a key: the comment's words
+  landed in the identifier buffer, so the key after it went unseen. The failure was
+  asymmetric — documenting a key in the English block and not the Arabic one made the
+  checker report that **English** was missing the key that was plainly there, which sends
+  you to the wrong file. The parser now skips comments, verified by injecting a genuinely
+  missing key afterwards.
+
+### Still open from this list
+
+- **#9 / #10** — loading, empty, error and retry states are still uneven across sections,
+  and the AI calls that exist in three of them are not yet behind one orchestration layer.
+  That is the next piece of work, and it is now unblocked: with state above the routes, a
+  suggestion made on one step survives the trip to another.
+- **#1** — `/` is still the long scrolling builder rather than a marketing page. The step
+  routes are additive so far, which is deliberate: nothing that earns money moved until
+  the replacement was driven end to end.

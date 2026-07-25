@@ -1,18 +1,32 @@
-import { permanentRedirect } from "next/navigation";
+import type { Metadata } from "next";
+import BuilderStart from "../../components/build/BuilderStart";
 
-/**
- * Retired: the Arabic-only scripted chat builder.
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+/*
+ * This address used to be a 308 to /ar/build.
  *
- * It was a third builder beside the interview and the form, with its own two
- * endpoints (`/api/build-cv`, `/api/refine`) that nothing else called, and it linked
- * to `/ar/build` under the label "الوضع الكلاسيكي" — a link that now leads to the
- * newest interface in the product, which is the clearest possible sign the page had
- * stopped describing reality.
- *
- * It keeps its address as a permanent redirect rather than 404ing: the URL is in the
- * sitemap Google has already crawled, and a 308 hands that history to the page that
- * replaced it.
+ * It held the retired Arabic-only scripted chat builder, and the redirect existed so the
+ * crawled URL kept its history instead of 404ing. The URL now leads to the thing it always
+ * claimed to be — the Arabic builder — so the redirect has served its purpose and the page
+ * takes the address back.
  */
-export default function ArBuilderRedirect(): never {
-  permanentRedirect("/ar/build");
+export const metadata: Metadata = {
+  title: "ابنِ سيرتك الذاتية خطوة بخطوة | cv.rabit.sa",
+  description:
+    "إحدى عشرة خطوة قصيرة: الوظيفة المستهدفة، خبرتك، شهاداتك، ثم التصميم والتنزيل. الذكاء يقترح المهارات والمهام لمهنتك — وأنت تعتمد كل سطر. مجاناً وبلا تسجيل.",
+  alternates: {
+    canonical: `${BASE}/ar/builder`,
+    languages: { ar: `${BASE}/ar/builder`, en: `${BASE}/builder`, "x-default": `${BASE}/builder` },
+  },
+  openGraph: {
+    title: "ابنِ سيرتك الذاتية خطوة بخطوة",
+    description: "خطوة واحدة كل مرة، وسيرتك تتحدّث أمامك. لا يدخل شيء يكتبه الذكاء في المستند قبل أن تعتمده.",
+    url: `${BASE}/ar/builder`,
+    type: "website",
+  },
+};
+
+export default function ArabicBuilderStartPage() {
+  return <BuilderStart lang="ar" />;
 }

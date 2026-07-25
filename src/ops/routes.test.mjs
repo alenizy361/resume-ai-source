@@ -88,8 +88,17 @@ const ROUTES = [
    * `jadarat` is the Saudi portal template — the most load-bearing one in this market.
    */
   { path: "/resume-templates/jadarat", must: "Jadarat" },
-  // The retired Arabic chat builder must still answer, as a redirect.
-  { path: "/ar/builder", must: "", redirectsTo: "/ar/build" },
+  /*
+   * The step builder's two landings.
+   *
+   * `/ar/builder` used to be a 308 to `/ar/build` — it held the retired Arabic-only
+   * scripted chat, and the redirect kept a crawled URL out of a 404. The address now
+   * leads to the thing it always claimed to be, so it renders rather than forwards.
+   * The individual step pages are not listed: they are one visitor's draft, they are
+   * noindex, and `ops/steps.test.mjs` drives them properly.
+   */
+  { path: "/builder", must: "Build your CV" },
+  { path: "/ar/builder", must: "ابنِ سيرتك" },
 ];
 
 let pass = 0, fail = 0;
