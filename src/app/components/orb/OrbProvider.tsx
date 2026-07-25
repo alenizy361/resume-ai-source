@@ -17,6 +17,31 @@ import AiOrb, { type OrbState } from "../AiOrb";
 import AmbientField from "./AmbientField";
 
 /**
+ * What counts as "a different page" for the crossfade.
+ *
+ * This used to be the pathname itself, and that was quietly destructive. The key on the
+ * wrapper below is a React key: when it changes, React unmounts the ENTIRE page subtree
+ * and mounts a fresh one. That is what a crossfade needs — and it also means no client
+ * state above a page can survive a URL change, including state held by a layout, which
+ * React would otherwise keep mounted.
+ *
+ * It cost the builder its draft. `/builder/<id>/<step>` holds the resume in a provider
+ * mounted by `app/builder/layout.tsx`, precisely so that pressing Continue does not
+ * serialise and reload eleven times. With the pathname as the key, every Continue tore
+ * the provider down and rebuilt it from storage — and any keystroke newer than the last
+ * debounced write was gone. Measured: the whole subtree unmounted ~250 ms after arriving
+ * at a step, one exit animation later.
+ *
+ * So a route GROUP gets one key. The builder's eleven steps are one surface with eleven
+ * addresses, not eleven pages; there was never a reason to crossfade between them, and
+ * not doing so makes the step change instant as well as safe.
+ */
+function transitionKey(pathname: string): string {
+  const builder = /^(\/ar)?\/builder(\/|$)/.exec(pathname);
+  return builder ? `${builder[1] ?? ""}/builder` : pathname;
+}
+
+/**
  * Route crossfade. OPACITY ONLY — never y/scale/transform on this wrapper: a
  * transform on an ancestor collapses `position:fixed` descendants (the global
  * orb, the landing dock) into it. Every route dissolves into the next so the
@@ -28,7 +53,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
-        key={pathname}
+        key={transitionKey(pathname)}
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={reduce ? undefined : { opacity: 0 }}

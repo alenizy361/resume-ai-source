@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import DoorRedirect from "../components/DoorRedirect";
-import Builder from "../components/build/Builder";
+import Landing from "../components/marketing/Landing";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
-/** The Arabic homepage. See app/page.tsx for why this is the builder now. */
+/** The Arabic homepage. See app/page.tsx for why it explains the product rather than being it. */
 export const metadata: Metadata = {
   title: "أنشئ سيرة ذاتية تعبر أنظمة الفرز — أنت تكتب الحقائق والذكاء يصوغها | cv.rabit.sa",
   description:
@@ -28,10 +27,5 @@ export const metadata: Metadata = {
 };
 
 export default function ArabicHome() {
-  return (
-    <>
-      <Builder lang="ar" />
-      <DoorRedirect lang="ar" rendered="form" />
-    </>
-  );
+  return <Landing lang="ar" />;
 }

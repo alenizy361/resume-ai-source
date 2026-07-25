@@ -14,10 +14,11 @@
  * content only ever enters the document through `confirmItem`.
  */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import { type SectionId } from "@/app/lib/builderDoc";
+import { useAiTask } from "./useAiTask";
 
 type Lang = "ar" | "en";
 
@@ -26,20 +27,14 @@ const C = {
     open: "Ask AI about this section",
     close: "Close",
     ph: "e.g. should I list my licence number here?",
-    send: "Ask",
-    busy: "Thinking…",
-    err: "The assistant is busy — try again in a moment.",
-    slow: "You have asked a lot in the last few minutes — try again shortly.",
+    send: "Ask", stop: "Stop",
     note: "Advice only. Nothing here is added to your CV.",
   },
   ar: {
     open: "اسأل الذكاء عن هذا القسم",
     close: "إغلاق",
     ph: "مثال: هل أضع رقم الرخصة هنا؟",
-    send: "اسأل",
-    busy: "يفكّر…",
-    err: "المساعد مشغول — جرّب بعد لحظة.",
-    slow: "سألت كثيراً في الدقائق الماضية — جرّب بعد قليل.",
+    send: "اسأل", stop: "أوقف",
     note: "إجابة استشارية فقط. لا يُضاف منها شيء إلى سيرتك.",
   },
 };
@@ -56,36 +51,21 @@ export default function AskAi({
   const c = C[lang];
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
-  const abort = useRef<AbortController | null>(null);
 
-  const send = useCallback(async () => {
-    const question = q.trim();
-    if (!question || busy) return;
-    setErr(""); setAnswer(""); setBusy(true);
-    abort.current?.abort();
-    abort.current = new AbortController();
-    try {
-      const res = await fetch("/api/suggest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: abort.current.signal,
-        body: JSON.stringify({
-          kind: "ask", lang, question, targetRole,
-          current: (current || "").slice(0, 1200),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 429) { setErr(String(data?.error || "").trim() || c.slow); return; }
-      if (!res.ok) throw new Error(String(data?.error || "failed"));
-      setAnswer(String(data?.text || "").trim());
-      track("builder_ask_ai", { section });
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
-    } finally { setBusy(false); }
-  }, [q, busy, lang, targetRole, current, section, c.err, c.slow]);
+  /*
+   * Everything that used to be five pieces of local state — busy, err, an abort ref, the
+   * 429 branch, the AbortError branch — is the hook now. What this component kept is the
+   * one thing that is genuinely its own: the question text.
+   */
+  const ai = useAiTask(lang);
+  const answer = ai.state === "success" ? String(ai.data ?? "") : "";
+
+  const send = useCallback(() => {
+    if (!q.trim()) return;
+    void ai.run("ask_section", { lang, question: q, targetRole, current }).then((r) => {
+      if (r.state === "success") track("builder_ask_ai", { section });
+    });
+  }, [q, ai, lang, targetRole, current, section]);
 
   if (!open) {
     return (
@@ -108,12 +88,18 @@ export default function AskAi({
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") send(); }}
         />
+        {/* While a question is in flight the button STOPS it rather than being disabled.
+            A disabled button during a 30-second wait leaves the user with no way out but
+            the back button. */}
         <button
-          onClick={send} disabled={busy || !q.trim()}
+          onClick={ai.busy ? ai.cancel : send} disabled={!ai.busy && !q.trim()}
           className="rounded-xl px-3 text-xs font-bold disabled:opacity-40"
-          style={{ background: "var(--accent)", color: "#fff", whiteSpace: "nowrap" }}
+          style={{ background: ai.busy ? "var(--surface)" : "var(--accent)",
+                   color: ai.busy ? "var(--muted)" : "#fff",
+                   border: ai.busy ? "1px solid var(--line)" : undefined,
+                   whiteSpace: "nowrap" }}
         >
-          {busy ? c.busy : c.send}
+          {ai.busy ? c.stop : c.send}
         </button>
       </div>
       {answer && (
@@ -121,11 +107,21 @@ export default function AskAi({
           {answer}
         </p>
       )}
-      {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+      {/* One line for every non-success state — loading, empty, throttled, error — worded
+          by the hook, so this section cannot word a rate limit as an outage. A throttle is
+          amber rather than red: it is not a failure. */}
+      {ai.message && (
+        <p
+          className="mt-2 text-xs leading-relaxed"
+          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : ai.state === "empty" ? "var(--faint)" : "#fca5a5" }}
+        >
+          {ai.message}
+        </p>
+      )}
       <div className="mt-3 flex items-center justify-between gap-2">
         <span className="text-xs" style={{ color: "var(--faint)" }}>{c.note}</span>
         <button
-          onClick={() => setOpen(false)}
+          onClick={() => { ai.reset(); setOpen(false); }}
           className="rounded-full px-3 text-xs"
           style={{ border: "1px solid var(--line)", color: "var(--faint)" }}
         >

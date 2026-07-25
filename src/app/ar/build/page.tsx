@@ -7,12 +7,10 @@ export const metadata: Metadata = {
   title: "أنشئ سيرة ذاتية متوافقة مع ATS خطوة بخطوة | cv.rabit.sa",
   description:
     "أنت تكتب الحقائق، والذكاء يصوغها بلغة مهنية. مهارات ومهام مقترحة لمهنتك، مجمّعة وقابلة للتعديل — ولا يدخل شيء سيرتك قبل أن تعتمده. مجاناً وبلا تسجيل.",
-  // Identical content to /ar since the builder was promoted there. The address stays
-  // — it is linked from the chat door and from /optimize — but it points its ranking at
-  // the homepage instead of splitting it across two URLs.
+  // The long single-page builder in Arabic. See app/build/page.tsx.
   alternates: {
-    canonical: `${BASE}/ar`,
-    languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
+    canonical: `${BASE}/ar/builder`,
+    languages: { en: `${BASE}/builder`, ar: `${BASE}/ar/builder`, "x-default": `${BASE}/builder` },
   },
   robots: { index: false, follow: true },
   openGraph: {

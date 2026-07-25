@@ -46,11 +46,26 @@ function blockAfter(src, label) {
   return null;
 }
 
-/** Top-level `key:` names in a block, ignoring anything nested inside braces. */
+/**
+ * Top-level `key:` names in a block, ignoring anything nested inside braces.
+ *
+ * Comments are skipped, and that is not a nicety — it was a real hole. A `/** … *\/` note
+ * above a key left its words in the identifier buffer, so the key after the comment was
+ * never recognised. The failure was silent and ASYMMETRIC: documenting a key in the
+ * English block and not the Arabic one made the checker report "en is missing" the key
+ * that was plainly there. A parity test that misreports which side is missing something
+ * is worse than one that misses the defect, because it sends you to the wrong file.
+ */
 function topKeys(block) {
   const keys = [];
   let depth = 0, inStr = false, quote = "", esc = false, atKeyPos = true, buf = "";
-  for (const c of block) {
+  let line = false, star = false;
+  for (let i = 0; i < block.length; i++) {
+    const c = block[i];
+    if (line) { if (c === "\n") line = false; continue; }
+    if (star) { if (c === "*" && block[i + 1] === "/") { star = false; i++; } continue; }
+    if (!inStr && c === "/" && block[i + 1] === "/") { line = true; i++; continue; }
+    if (!inStr && c === "/" && block[i + 1] === "*") { star = true; i++; continue; }
     if (esc) { esc = false; continue; }
     if (c === "\\") { esc = true; continue; }
     if (inStr) { if (c === quote) inStr = false; continue; }
