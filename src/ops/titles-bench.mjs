@@ -70,8 +70,7 @@
  */
 
 import { appendFileSync, writeFileSync } from "node:fs";
-import Anthropic from "@anthropic-ai/sdk";
-import { DRAFT_PROMPT, DRAFT_SCHEMA, draftUserMessage } from "../app/lib/prompts.ts";
+import { DRAFT_PROMPT, draftUserMessage } from "../app/lib/prompts.ts";
 import { hasMetric, extractJsonValue } from "../app/lib/suggestShapes.ts";
 import { JOBS } from "../app/lib/jobs.ts";
 import { JOBS_AR } from "../app/lib/jobs-ar.ts";
@@ -148,6 +147,14 @@ function catalogue() {
 const TIMEOUT_MS = 20_000;
 
 /**
+ * The output shape, worded once and sent to both providers.
+ *
+ * Shared on purpose: if one side were handed a JSON schema and the other a sentence, a
+ * difference in the `json` pass rate would measure the API rather than the model.
+ */
+const SHAPE = `Return STRICT JSON ONLY: {"duties":["…"],"skills":["…"]} — 6 to 10 duties, 6 to 12 skills.`;
+
+/**
  * How many times a hung request is re-sent, mirroring `TASKS.duties_draft.timeoutRetries`.
  *
  * This is here to MEASURE the product's retry policy rather than to make the bench look good.
@@ -179,42 +186,55 @@ async function once(job) {
 }
 
 /**
- * Anthropic, with the shape enforced by a real schema instead of a sentence.
+ * Anthropic over plain `fetch`, deliberately — no SDK.
  *
- * `DRAFT_SCHEMA` is the same object `/api/interview` passes, so a response that parses here
- * would parse there. No web search: the product's Anthropic draft path DOES offer search, so
- * this understates what Claude would produce in the product — but search costs seconds and
- * money per title, and the comparison being made is of drafting quality on a bare job title,
- * which is what the NVIDIA side gets too. Turning it on for 111 titles is a separate question.
+ * The first version imported `@anthropic-ai/sdk` and the run died in 12 seconds without
+ * writing a row, because the workflow never installs dependencies: checkout, setup-node, run.
+ * The NVIDIA path had always worked without `node_modules` — `fetch` plus local `.ts` imports —
+ * so the missing install was invisible until something needed a package. Adding `npm ci` would
+ * fix it and cost a minute per run for one HTTP call; this costs nothing and keeps every ops/
+ * script a zero-install script.
  *
- * `maxRetries: 0` because this file owns its own retry policy and measures it.
+ * It also improves the experiment. Both providers now receive the SHAPE AS A SENTENCE — the
+ * same sentence — rather than one getting a JSON schema and the other a instruction. Only the
+ * model differs, which is the variable under test.
  */
 async function onceAnthropic(job) {
   const t0 = Date.now();
-  const client = new Anthropic({ apiKey: KEY, timeout: TIMEOUT_MS, maxRetries: 0 });
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    const res = await client.messages.create({
-      model: MODEL,
-      max_tokens: 2000,
-      system: DRAFT_PROMPT,
-      output_config: { format: { type: "json_schema", schema: DRAFT_SCHEMA } },
-      messages: [{ role: "user", content: draftUserMessage({
-        role: job.title, industry: job.industry, langWord: job.langWord,
-      }) }],
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 2000,
+        system: DRAFT_PROMPT,
+        messages: [{ role: "user", content: `${draftUserMessage({
+          role: job.title, industry: job.industry, langWord: job.langWord,
+        })}\n\n${SHAPE}` }],
+      }),
     });
     const ms = Date.now() - t0;
-    if (res.stop_reason === "refusal") return { ms, error: "refusal" };
-    const block = res.content.find((b) => b.type === "text");
-    return { ms, text: block && block.type === "text" ? block.text : "" };
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      return { ms, error: `http-${res.status}`, detail: body.slice(0, 120) };
+    }
+    const data = await res.json().catch(() => null);
+    if (data?.stop_reason === "refusal") return { ms, error: "refusal" };
+    const block = Array.isArray(data?.content) ? data.content.find((b) => b?.type === "text") : null;
+    return { ms, text: block?.text ?? "" };
   } catch (e) {
     const ms = Date.now() - t0;
-    // The SDK raises its own timeout as APIConnectionTimeoutError; normalise so the retry
-    // logic and the report do not have to know which provider produced the hang.
-    const name = e?.constructor?.name ?? "";
-    if (/Timeout/i.test(name) || e?.name === "AbortError") return { ms, error: "timeout" };
-    const status = e?.status;
-    return { ms, error: status ? `http-${status}` : "network", detail: String(e?.message ?? e).slice(0, 120) };
-  }
+    if (e?.name === "AbortError") return { ms, error: "timeout" };
+    return { ms, error: "network", detail: String(e?.message ?? e).slice(0, 100) };
+  } finally { clearTimeout(timer); }
 }
 
 async function onceNvidia(job) {
@@ -237,7 +257,7 @@ async function onceNvidia(job) {
             role: "user",
             content: `${draftUserMessage({
               role: job.title, industry: job.industry, langWord: job.langWord,
-            })}\n\nReturn STRICT JSON ONLY: {"duties":["…"],"skills":["…"]} — 6 to 10 duties, 6 to 12 skills.`,
+            })}\n\n${SHAPE}`,
           },
         ],
       }),
