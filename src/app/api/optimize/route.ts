@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { beforeAfter } from "@/app/lib/scoreText";
 import { verifyPass, verifyEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
 import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
@@ -102,8 +103,9 @@ COVERAGE GUARANTEE (verify before finishing — dropping content is a FAILED res
 OUTPUT FORMAT — plain text with EXACTLY these section markers, in this order (NO JSON, no markdown):
 ANALYSIS
 <12-18 short bullet lines of genuine, specific reasoning shown live to the user as you "think". Make it feel thorough and coaching, not generic. Cover, in this order: (1) 2-3 lines on what's STRONG in the resume, (2) 3-4 lines on concrete WEAKNESSES ("• Bullet 2 is a duty, not an achievement — no metric"), (3) 3-4 lines on what the JOB needs that is MISSING ("• Job wants Kubernetes — not found"), (4) 2-3 lines on what the CANDIDATE should ADD to score higher ("• Add a real % to the sales bullet"), (5) 1-2 lines on formatting/ATS. Reference the candidate's actual content by name. Each line starts with "• ".>
-SCORE: <number 0-100 from the rubric — the CURRENT resume as submitted>
-AFTER: <number 0-100 — the REALISTIC score the REWRITTEN resume below would get if it were scored fresh from scratch on the SAME rubric (i.e. what a re-scan of the rewrite actually returns — NOT an aspirational target). A rewrite only reorganizes, rewords, and surfaces the candidate's OWN facts more clearly — it CANNOT add skills/tools/experience they lack, so the honest gain is SMALL and bounded: typically SCORE + 4 to 12 points, NEVER more than +15. If the candidate is missing core hard skills the job needs, the after-score must stay modest (the rewrite can't invent them). This number is a PROMISE the user will verify by re-scanning — it must match, so be conservative, not optimistic. Must be >= SCORE.>
+SCORE: <number 0-100 from the rubric — the CURRENT resume as submitted. This is a format
+marker and a sanity check; the score shown to the user is computed from the text itself,
+so do not agonise over it and do not mention it in SUMMARY.>
 SUMMARY: <2-3 honest sentences on one line: score drivers, biggest gap, is it worth pursuing>
 MISSING: <comma-separated keywords absent from the resume>
 PRESENT: <comma-separated keywords genuinely present>
@@ -130,10 +132,19 @@ function parseSections(rawInput: string) {
   const list = (s: string) =>
     s.split(/[,،]/).map((x) => x.trim().replace(/^[-•*]\s*/, "")).filter((x) => x && x.length < 80);
 
-  const score = parseInt(grab("SCORE").replace(/[^0-9]/g, "")) || 0;
-  // Projected score for the rewritten resume (before/after proof). Clamp so it
-  // never drops below the current score or exceeds 100 — a rewrite only helps.
-  const afterRaw = parseInt(grab("AFTER").replace(/[^0-9]/g, ""));
+  /*
+   * The model's SCORE line is read only as a LIVENESS check, never as the score.
+   *
+   * It used to be the score: `parseInt(grab("SCORE"))`, printed on the page as an "ATS
+   * match score" and charged around. A number a language model types is an opinion
+   * wearing a metric's clothes — it is not reproducible, it cannot explain itself, and
+   * nothing stops it drifting between two runs on the same resume. The real score is
+   * computed from the text by lib/scoreText.ts after this function returns.
+   *
+   * It is still parsed because a reply with no SCORE line is a reply that ignored the
+   * format, which is the cheapest signal that the rest of the parse is unreliable.
+   */
+  const modelAnsweredInFormat = /^SCORE:?/im.test(raw);
   const improvementsBlock = raw.match(/IMPROVEMENTS:\s*\n([\s\S]*?)\nRESUME:/i)?.[1] ?? "";
   const improvements = improvementsBlock
     .split("\n")
@@ -151,17 +162,12 @@ function parseSections(rawInput: string) {
   // before writing the RESUME: section (truncated response), treat it as a failure
   // so the retry actually fires — otherwise the user gets a score with a blank resume.
   if (!resume) throw new Error("Model output missing the RESUME section (likely truncated)");
-  if (!score) throw new Error("Could not parse model output");
-  const clampedScore = Math.min(100, Math.max(0, score));
-  // The AFTER score is a PROMISE the user verifies by re-scanning, so keep it
-  // realistic. Cap the model's projection at +15 over the current score, and if
-  // the model omitted it, use a conservative +4..+12 lift (matches a real re-scan).
-  const afterScore = Number.isFinite(afterRaw)
-    ? Math.min(100, Math.min(clampedScore + 15, Math.max(clampedScore, afterRaw)))
-    : Math.min(100, clampedScore + Math.min(12, Math.max(4, Math.round((100 - clampedScore) * 0.2))));
+  if (!modelAnsweredInFormat) throw new Error("Could not parse model output");
   return {
-    matchScore: clampedScore,
-    afterScore,
+    // Filled in by the caller from lib/scoreText.ts — the same deterministic function
+    // the builder's review uses, so one product does not hold two ideas of a score.
+    matchScore: 0,
+    afterScore: 0,
     matchSummary: grab("SUMMARY"),
     missingKeywords: list(grab("MISSING")),
     presentKeywords: list(grab("PRESENT")),
@@ -510,7 +516,23 @@ export async function POST(req: NextRequest) {
               : streamNvidia(resume, jd, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang, extra));
 
             if (!raw.trim()) throw new Error("Empty response from AI provider");
-            const result = parseSections(raw);
+            const parsed = parseSections(raw);
+            /*
+             * The two numbers, computed rather than claimed.
+             *
+             * `before` scores the resume the user gave us; `after` scores the rewrite the
+             * model just produced — the same function, twice, so the pair is measured
+             * evidence instead of a projection. `after` is allowed to come back lower:
+             * the old code clamped it so a rewrite could never look worse, which meant a
+             * rewrite that dropped a section still reported an improvement.
+             *
+             * referenceDate is the request's own date, so a credential expiry is judged
+             * against today while the score stays reproducible for that day.
+             */
+            const { before, after } = beforeAfter(
+              resume, parsed.optimizedResume, jd, new Date(now).toISOString().slice(0, 10),
+            );
+            const result = { ...parsed, matchScore: before, afterScore: after };
             // A resume in the wrong language is unusable — the user picked the
             // language because it is the one the employer's ATS reads. Retry
             // once rather than shipping it.
