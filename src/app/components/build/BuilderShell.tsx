@@ -25,6 +25,7 @@ import OrbBrand from "../OrbBrand";
 import { setBuilderMode } from "@/app/lib/flags";
 import { useBuilder } from "./BuilderProvider";
 import { STEPS, SECTION_COPY, stepFromSlug, stepHref, stepIndex } from "./steps";
+import { toArabicDigits } from "@/app/lib/plans";
 
 const CHROME = {
   en: {
@@ -43,7 +44,7 @@ const CHROME = {
     edit: "تعديل", preview: "معاينة",
     emptyPreview: "ستظهر سيرتك هنا وأنت تكتب.",
     steps: "الخطوات",
-    of: (i: number, n: number) => `الخطوة ${i} من ${n}`,
+    of: (i: number, n: number) => `الخطوة ${toArabicDigits(i)} من ${toArabicDigits(n)}`,
   },
 };
 
@@ -87,6 +88,19 @@ export default function BuilderShell({
    * than by an effect that calls setState on every navigation. Same behaviour, one fewer
    * render, and the invariant is visible in the value instead of living in a hook.
    */
+  /*
+   * Start every step at the top of the page.
+   *
+   * Next scrolls the changed SEGMENT into view, and the changed segment is the step — so
+   * everything this layout renders above it went off-screen on arrival. Measured at 390px:
+   * the Edit/Preview toggle sat at y = -31 and the step navigation at y = 29, underneath a
+   * 52px sticky header. Both present, both unreachable without scrolling up, which reads as
+   * a builder with no navigation at all on a phone.
+   *
+   * The navigations themselves pass `scroll={false}` so Next does not fight this.
+   */
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [pathname]);
+
   const [pane, setPane] = useState({ path: pathname, view: "edit" as "edit" | "preview" });
   const mobileView = pane.path === pathname ? pane.view : "edit";
   const setMobileView = (view: "edit" | "preview") => setPane({ path: pathname, view });
@@ -159,10 +173,11 @@ export default function BuilderShell({
                         <li key={s}>
                           <Link
                             href={stepHref(lang, resumeId || urlId, s)}
+                            scroll={false}
                             className={here ? "on" : undefined}
                             aria-current={here ? "step" : undefined}
                           >
-                            <span className={`bd-tick${done ? " done" : ""}`}>{done ? "✓" : i + 1}</span>
+                            <span className={`bd-tick${done ? " done" : ""}`}>{done ? "✓" : ar ? toArabicDigits(i + 1) : i + 1}</span>
                             {nav[s]}
                           </Link>
                         </li>

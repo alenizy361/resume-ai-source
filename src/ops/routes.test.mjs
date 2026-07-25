@@ -42,7 +42,8 @@ const LOG = process.env.LOG || "";
  * bug that motivated this file lived on pages that were linked from nowhere.
  */
 const ROUTES = [
-  { path: "/", must: "You fill the facts" },
+  // `/` is the marketing page; the long builder's own headline still answers at /build.
+  { path: "/", must: "You provide the facts" },
   { path: "/ar", must: "أنت تكتب الحقائق" },
   { path: "/build", must: "You fill the facts" },
   { path: "/ar/build", must: "أنت تكتب الحقائق" },

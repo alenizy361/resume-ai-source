@@ -166,6 +166,18 @@
  */
 
 .build-root .bd-step-cols { display: grid; gap: 20px; }
+/*
+ * A grid item's default `min-width: auto` means it refuses to shrink below its content —
+ * so the step navigation, which is a horizontal scroller on narrow screens, sized itself
+ * to all eleven labels laid end to end and pushed the PAGE sideways instead. Measured at
+ * 390px: a 1151px-wide nav in a 390px viewport, `overflow-x: auto` on the list inside it
+ * doing nothing because the list was never the constrained box.
+ *
+ * `min-width: 0` on every column is the fix, and it belongs on all of them: the same trap
+ * is waiting for the form column the first time something wide (a long URL, a wide table
+ * in the preview) lands in it.
+ */
+.build-root .bd-step-cols > * { min-width: 0; }
 @media (min-width: 1024px) {
   .build-root .bd-step-cols {
     grid-template-columns: 208px minmax(0, 1fr) 380px;

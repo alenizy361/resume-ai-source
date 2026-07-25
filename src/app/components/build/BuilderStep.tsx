@@ -29,6 +29,7 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 
 import { type SectionId } from "@/app/lib/builderDoc";
+import { toArabicDigits } from "@/app/lib/plans";
 import { useBuilder } from "./BuilderProvider";
 import {
   SECTION_COPY, nextStep, prevStep, stepHref, stepIndex, builderHome,
@@ -58,7 +59,7 @@ export default function BuilderStep({ step }: { step: SectionId }) {
   const goto = (to: SectionId, completing: boolean) => {
     if (completing) markDone(step);
     flush();
-    router.push(stepHref(lang, resumeId, to));
+    router.push(stepHref(lang, resumeId, to), { scroll: false });
   };
 
   const onContinue = () => {
@@ -73,7 +74,8 @@ export default function BuilderStep({ step }: { step: SectionId }) {
     <section className="bd-section bd-step">
       <div className="bd-head">
         <span className={`bd-num${state.sectionsDone.includes(step) ? " done" : ""}`}>
-          {state.sectionsDone.includes(step) ? "✓" : stepIndex(step) + 1}
+          {state.sectionsDone.includes(step) ? "✓"
+            : lang === "ar" ? toArabicDigits(stepIndex(step) + 1) : stepIndex(step) + 1}
         </span>
         <div>
           {/* An h1 per step, not an h2 under a page-level h1: each step IS its own page,
@@ -129,7 +131,7 @@ function StepContent({ step }: { step: SectionId }) {
   const router = useRouter();
 
   /** Review and design findings name a section; this is how "fix it" navigates. */
-  const jump = (to: SectionId) => { flush(); router.push(stepHref(lang, resumeId, to)); };
+  const jump = (to: SectionId) => { flush(); router.push(stepHref(lang, resumeId, to), { scroll: false }); };
 
   switch (step) {
     case "target":

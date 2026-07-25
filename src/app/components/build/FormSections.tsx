@@ -21,6 +21,7 @@ import { track } from "@vercel/analytics";
 
 import { type BuilderState, type Item, pending, cvLang } from "@/app/lib/builderDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
+import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
 import ImportPanel from "./ImportPanel";
 
@@ -112,12 +113,14 @@ export function TargetFields(p: Common) {
     ? { title: "المسمى الوظيفي", level: "مستوى الخبرة", langq: "لغة السيرة", ind: "المجال",
         country: "الدولة", city: "المدينة", emp: "جهة العمل المستهدفة", opt: "اختياري",
         jd: "وصف الوظيفة", jdWhy: "أضف وصف الوظيفة لنطابق سيرتك مع متطلبات صاحب العمل الحقيقية.",
+        jdPh: "الصق نص الإعلان هنا…",
         url: "أو الصق رابط الإعلان", urlPh: "https://…", fetch: "اقرأ الرابط",
-        fetching: "يقرأ…", got: (n: number) => `قرأنا ${n} حرفاً من الإعلان — راجعه أدناه وعدّله إن لزم.`,
+        fetching: "يقرأ…", got: (n: number) => `قرأنا ${toArabicDigits(n)} حرفاً من الإعلان — راجعه أدناه وعدّله إن لزم.`,
         levels: ["مبتدئ", "متوسط", "أول/خبير", "قيادي"] }
     : { title: "Job title", level: "Experience level", langq: "CV language", ind: "Industry",
         country: "Country", city: "City", emp: "Target employer", opt: "optional",
         jd: "Job description", jdWhy: "Add the job description to match your CV to the employer's real requirements.",
+        jdPh: "Paste the advert's text here…",
         url: "Or paste the posting's link", urlPh: "https://…", fetch: "Read the link",
         fetching: "Reading…", got: (n: number) => `Read ${n} characters from the posting — check it below and edit if needed.`,
         levels: ["Entry", "Mid", "Senior", "Lead"] };
@@ -195,7 +198,7 @@ export function TargetFields(p: Common) {
         <textarea
           className="bd-textarea" value={p.state.target.jobAdText}
           onChange={(e) => set({ jobAdText: e.target.value })}
-          placeholder={L.jdWhy}
+          placeholder={L.jdPh}
         />
         <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{L.jdWhy}</p>
 

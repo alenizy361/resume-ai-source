@@ -156,12 +156,42 @@ keeps its own key and behaves exactly as before.
   you to the wrong file. The parser now skips comments, verified by injecting a genuinely
   missing key afterwards.
 
+### #1 — The homepage was the builder — **CONFIRMED · fixed**
+
+`/` and `/ar` now explain the product: the headline, the flow in four steps, a worked
+example built from the same cached role pack the builder seeds from, the four things the
+product will not do, and a pricing summary read from `lib/plans.ts` so it cannot drift
+from the checkout. Three doors: the guided builder, upload-and-improve, and the chat.
+
+A returning visitor with work in progress is offered it by name at the top of the page.
+That is the one part of the page that needs a browser, so it is the one client component —
+and it reads localStorage through `useSyncExternalStore` rather than in an effect, which
+is both correct for an external store and the pattern the rest of this codebase's
+remaining lint errors are made of.
+
+The long single-page builder was not deleted. It still answers at `/build` and `/ar/build`,
+now canonicalised to `/builder`, which makes reverting the homepage a two-file change.
+
+Two defects surfaced only by looking at the rendered page, which is the lesson this
+session already paid for once:
+
+- **The step navigation pushed the page sideways on a phone.** A grid item's default
+  `min-width: auto` means it will not shrink below its content, so the eleven-label
+  horizontal scroller sized itself to 1151px inside a 390px viewport and the
+  `overflow-x: auto` on the list inside it did nothing — the list was never the
+  constrained box. `min-width: 0` on every column.
+- **The whole step chrome was scrolled off on arrival.** Next scrolls the changed
+  *segment* into view, and the changed segment is the step — so the Edit/Preview toggle
+  (measured at y = −31) and the step navigation (y = 29, under a 52px sticky header) were
+  both present and both unreachable. Every step navigation now passes `scroll={false}`
+  and the shell scrolls to the top itself.
+
+Also: the job-description field printed its own caption as its placeholder, so the same
+sentence appeared twice in a row.
+
 ### Still open from this list
 
 - **#9 / #10** — loading, empty, error and retry states are still uneven across sections,
   and the AI calls that exist in three of them are not yet behind one orchestration layer.
   That is the next piece of work, and it is now unblocked: with state above the routes, a
   suggestion made on one step survives the trip to another.
-- **#1** — `/` is still the long scrolling builder rather than a marketing page. The step
-  routes are additive so far, which is deliberate: nothing that earns money moved until
-  the replacement was driven end to end.

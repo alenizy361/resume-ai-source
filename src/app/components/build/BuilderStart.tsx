@@ -20,6 +20,7 @@ import { track } from "@vercel/analytics";
 import { useBuilder } from "./BuilderProvider";
 import { StartCards } from "./FormSections";
 import { STEPS, stepHref, SECTION_COPY } from "./steps";
+import { toArabicDigits } from "@/app/lib/plans";
 
 const T = {
   en: {
@@ -36,7 +37,7 @@ const T = {
     h1: "ابنِ سيرتك الذاتية",
     sub: "إحدى عشرة خطوة قصيرة. كل ما يقترحه الذكاء يظل اقتراحاً حتى تعتمده.",
     resumeHead: "واصل من حيث توقفت",
-    resumeSub: (n: number) => `أكملت ${n} من ${STEPS.length} خطوات`,
+    resumeSub: (n: number) => `أكملت ${toArabicDigits(n)} من ${toArabicDigits(STEPS.length)} خطوات`,
     resumeGo: "واصل ←",
     untitled: "سيرة بلا عنوان",
     fresh: "أو ابدأ من جديد",
@@ -49,6 +50,8 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
   const router = useRouter();
   const t = T[lang];
   const nav = SECTION_COPY[lang].nav;
+  /* An Arabic page counts in Arabic-Indic digits. Same rule the prices already follow. */
+  const num = (n: number) => lang === "ar" ? toArabicDigits(n) : String(n);
 
   const done = state.sectionsDone.filter((s) => (STEPS as string[]).includes(s));
   /* Where "continue" goes: the first step not yet finished, or the last one if all are. */
@@ -57,7 +60,7 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
 
   const enter = (step = STEPS[0]) => {
     flush();
-    router.push(stepHref(lang, resumeId, step));
+    router.push(stepHref(lang, resumeId, step), { scroll: false });
   };
 
   return (
@@ -110,8 +113,8 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
         {STEPS.map((s, i) => (
           <li key={s}>
             {resumeId
-              ? <Link href={stepHref(lang, resumeId, s)} style={{ color: "inherit" }}>{i + 1}. {nav[s]}</Link>
-              : <span>{i + 1}. {nav[s]}</span>}
+              ? <Link href={stepHref(lang, resumeId, s)} scroll={false} style={{ color: "inherit" }}>{num(i + 1)}. {nav[s]}</Link>
+              : <span>{num(i + 1)}. {nav[s]}</span>}
             {i < STEPS.length - 1 && <span aria-hidden> ·</span>}
           </li>
         ))}
