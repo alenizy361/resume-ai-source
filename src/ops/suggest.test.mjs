@@ -207,7 +207,28 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   ok("a missing key is written to the log, not just returned as 503",
     /console\.error\(\s*[`"']\[suggest\] misconfigured/.test(SRC));
   ok("and the log names which variable was empty",
-    /\$\{keyName\}/.test(SRC));
+    /\$\{keyName\(wanted\)\} is empty/.test(SRC));
+
+  /*
+   * The fallback, and why it is asserted rather than trusted.
+   *
+   * A provider switch aimed at a provider with no key answered 503 to every suggestion for
+   * twenty minutes while a valid key for the other provider sat unused in the same process.
+   * A preference must not be able to disable a feature that has a working path.
+   */
+  ok("a keyless preferred provider falls back to the one that has a key",
+    /const other = wanted === "anthropic" \? "nvidia" : "anthropic"/.test(SRC)
+    && /if \(keyOf\(other\)\)/.test(SRC));
+  ok("the fallback is logged, so it cannot quietly become permanent",
+    /falling back from \$\{wanted\} to \$\{other\}/.test(SRC));
+  ok("and the log says how to get the preferred provider back",
+    /remove AI_PROVIDER_SUGGEST/.test(SRC));
+  /* The usage line must name the provider that ANSWERED. `anthropic` is derived after the
+     fallback for exactly this reason — deriving it before would mislabel every fallback call. */
+  ok("the effective provider is derived after the fallback, not before",
+    SRC.indexOf("const anthropic = provider === \"anthropic\"") > SRC.indexOf("key = keyOf(other)"));
+  ok("503 is reserved for neither provider being usable",
+    (SRC.match(/status: 503/g) || []).length === 1);
   ok("and reports which keys the deployment can see, as booleans",
     /ANTHROPIC_API_KEY=\$\{Boolean\(process\.env\.ANTHROPIC_API_KEY\?\.trim\(\)\)\}/.test(SRC)
     && /NVIDIA_API_KEY=\$\{Boolean\(process\.env\.NVIDIA_API_KEY\?\.trim\(\)\)\}/.test(SRC));
@@ -228,7 +249,8 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
 
   /* A key pasted with a trailing newline is truthy and fails at the provider as a 401 —
      a longer walk to the same answer, so it is rejected here. */
-  ok("an all-whitespace key is treated as absent", /!key\?\.trim\(\)/.test(SRC));
+  ok("an all-whitespace key is treated as absent",
+    /process\.env\[keyName\(p\)\]\?\.trim\(\) \|\| ""/.test(SRC));
 
   /* The parser must be reading the real route, or the six checks above pass vacuously. */
   ok("the route source was actually read", SRC.length > 4000, `${SRC.length} chars`);

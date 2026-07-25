@@ -154,38 +154,57 @@ export async function POST(req: NextRequest) {
      * provider because they share one variable is a decision nobody made — it just happened to
      * be how the env was shaped.
      */
-    const provider = (process.env.AI_PROVIDER_SUGGEST || process.env.AI_PROVIDER || "nvidia").toLowerCase();
-    const anthropic = provider === "anthropic";
-    const keyName = anthropic ? "ANTHROPIC_API_KEY" : "NVIDIA_API_KEY";
-    const key = process.env[keyName];
-    if (!key?.trim()) {
-      /*
-       * The 503 that taught us to log this.
-       *
-       * `AI_PROVIDER_SUGGEST=anthropic` was set on a deployment whose Anthropic key was not,
-       * and this line returned 503 five times in a row with NOTHING written anywhere. The only
-       * way to tell it apart from a provider outage was the ABSENCE of the `[usage]` line below
-       * — diagnosis by negative evidence, over several messages, for a two-word configuration
-       * fault.
-       *
-       * So it says so, once, in the operator's log: which provider was asked for, which
-       * variable was empty, and which keys the process can actually see. Booleans and names
-       * only — never a value, never a length, never a fragment. That is enough to separate
-       * "the name is spelled differently", "it is on the wrong environment", and "it was added
-       * after this build" without opening anything else.
-       *
-       * `.trim()` and not just falsiness, because a variable pasted with a trailing newline is
-       * truthy here and a 401 at the provider, which is a longer walk to the same answer.
-       */
-      console.error(
-        `[suggest] misconfigured: provider=${provider} but ${keyName} is empty. `
-        + `Keys visible to this deployment: `
-        + `ANTHROPIC_API_KEY=${Boolean(process.env.ANTHROPIC_API_KEY?.trim())} `
-        + `NVIDIA_API_KEY=${Boolean(process.env.NVIDIA_API_KEY?.trim())}. `
-        + `Env vars are snapshotted at build time — a value added after this build needs a redeploy.`,
-      );
-      return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+    const wanted = (process.env.AI_PROVIDER_SUGGEST || process.env.AI_PROVIDER || "nvidia").toLowerCase();
+    const keyName = (p: string) => (p === "anthropic" ? "ANTHROPIC_API_KEY" : "NVIDIA_API_KEY");
+    const keyOf = (p: string) => process.env[keyName(p)]?.trim() || "";
+
+    /*
+     * A provider switch pointing at a provider with no key must not kill the feature.
+     *
+     * This is not hypothetical tidying. `AI_PROVIDER_SUGGEST=anthropic` was set on a deployment
+     * whose Anthropic key lived in a DIFFERENT Vercel project, and the route answered 503 to
+     * every suggestion for twenty minutes. Nothing about that situation makes the free provider
+     * — sitting right there with a valid key — the wrong thing to use.
+     *
+     * The switch stays a preference, not a suicide pact. If the preferred provider has no key
+     * and the other one does, the other one serves the request. The operator's log says so
+     * loudly on every call so this cannot quietly become the permanent state, and the usage
+     * line records the provider that actually answered rather than the one that was asked for.
+     *
+     * `.trim()` throughout, because a key pasted with a trailing newline is truthy and then a
+     * 401 at the provider — a longer walk to the same answer.
+     */
+    let provider = wanted;
+    let key = keyOf(wanted);
+    if (!key) {
+      const other = wanted === "anthropic" ? "nvidia" : "anthropic";
+      if (keyOf(other)) {
+        console.error(
+          `[suggest] ${keyName(wanted)} is empty — falling back from ${wanted} to ${other}. `
+          + `Set ${keyName(wanted)} on this project, or remove AI_PROVIDER_SUGGEST to make ${other} the choice.`,
+        );
+        provider = other;
+        key = keyOf(other);
+      } else {
+        /*
+         * Neither provider is usable — the only case that is genuinely a 503. It used to return
+         * with NOTHING written anywhere, so the cause had to be inferred from the ABSENCE of the
+         * `[usage]` line below: diagnosis by negative evidence, over several messages, for a
+         * fault whose whole content is "this variable is empty".
+         *
+         * Names and booleans only. Never a value, never a length, never a fragment.
+         */
+        console.error(
+          `[suggest] misconfigured: provider=${wanted} but ${keyName(wanted)} is empty. `
+          + `Keys visible to this deployment: `
+          + `ANTHROPIC_API_KEY=${Boolean(process.env.ANTHROPIC_API_KEY?.trim())} `
+          + `NVIDIA_API_KEY=${Boolean(process.env.NVIDIA_API_KEY?.trim())}. `
+          + `Env vars are snapshotted at build time — a value added after this build needs a redeploy.`,
+        );
+        return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+      }
     }
+    const anthropic = provider === "anthropic";
     /*
      * One AI_MODEL is shared by every route, so a value valid for one provider is a 404 on the
      * other — the same trap `modelFor` in /api/interview exists for. Resolved per provider
