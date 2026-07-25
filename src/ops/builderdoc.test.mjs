@@ -17,7 +17,7 @@
 import {
   EMPTY_BUILDER, newItem, confirmItem, rejectItem, editItem, pending, rejected,
   hasUnconfirmed, filterFresh, bulletRoom, normalizeLabel, summaryBasis,
-  cvLang, levelWord, validToWord, SCHEMA_VERSION,
+  cvLang, levelWord, validToWord, SCHEMA_VERSION, migrateBuilder,
 } from "../app/lib/builderDoc.ts";
 import { assembleResume } from "../app/lib/mergeProfile.ts";
 import { upsertRole, rolesToLines } from "../app/lib/resumeDoc.ts";
@@ -28,7 +28,56 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
 
 const base = () => ({ ...EMPTY_BUILDER, profile: { ...EMPTY_BUILDER.profile, roles: [] } });
 
-eq("the schema is versioned", SCHEMA_VERSION, 2);
+eq("the schema is versioned", SCHEMA_VERSION, 3);
+
+/* ────────────────── bringing a stored resume forward ────────────────── */
+
+/*
+ * The provider used to spread `{ ...EMPTY_BUILDER, ...saved }` inline, which is correct only while
+ * every schema change is a new optional field. The first change that is not — a renamed key, a
+ * moved shape — would be applied in one shell and not the other, and a user's stored CV would
+ * quietly lose a section. One function, called by both.
+ */
+{
+  /* A v2 draft: everything the old schema had, nothing the new one added. */
+  const v2 = {
+    schemaVersion: 2,
+    profile: { ...EMPTY_BUILDER.profile, name: "عبدالعزيز", skills: "CT، MRI" },
+    suggestions: [newItem({ section: "skills", type: "skill", text: "PACS" })],
+    entry: "new",
+    target: { ...EMPTY_BUILDER.target, title: "Radiology Technologist", country: "SA", language: "en" },
+    personal: { ...EMPTY_BUILDER.personal, fullName: "عبدالعزيز" },
+    credentials: [], languages: [], template: "azure", sectionsDone: ["target"], updatedAt: 5,
+  };
+
+  const up = migrateBuilder(v2);
+  ok("a v2 draft is recognised as older", up.migrated === true);
+  eq("and stamped at the current version", up.state.schemaVersion, SCHEMA_VERSION);
+  eq("the name survives", up.state.profile.name, "عبدالعزيز");
+  eq("so do the suggestions", up.state.suggestions.length, 1);
+  eq("and the chosen template", up.state.template, "azure");
+  ok("the new fields are absent rather than invented",
+    up.state.userId === undefined && up.state.status === undefined);
+
+  /* A current draft is not reported as migrated — the UI would otherwise claim an upgrade on
+     every single load. */
+  const same = migrateBuilder({ ...v2, schemaVersion: SCHEMA_VERSION });
+  ok("a current draft is not a migration", same.migrated === false);
+
+  /*
+   * A draft from a NEWER build — a second tab left open across a deploy — is left alone. Older
+   * code cannot know what it would be dropping, and dropping it is not recoverable.
+   */
+  const newer = migrateBuilder({ ...v2, schemaVersion: SCHEMA_VERSION + 1, template: "executive" });
+  eq("a newer draft keeps its version", newer.state.schemaVersion, SCHEMA_VERSION + 1);
+  ok("and is not treated as a migration", newer.migrated === false);
+  eq("and its content is untouched", newer.state.template, "executive");
+
+  /* Nothing stored at all is a fresh document, not a migration. */
+  const none = migrateBuilder(null);
+  ok("no stored draft is not a migration", none.migrated === false);
+  eq("and produces an empty builder", none.state.schemaVersion, SCHEMA_VERSION);
+}
 
 /* ── a suggestion is not content ── */
 {

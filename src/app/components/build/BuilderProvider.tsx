@@ -39,7 +39,7 @@ import { computeProgress } from "@/app/lib/interviewGuards";
 import { readBuilder, writeBuilder, readDraft } from "@/app/lib/draftStore";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
-  type BuilderState, type SectionId, EMPTY_BUILDER, SCHEMA_VERSION, cvLang,
+  type BuilderState, type SectionId, EMPTY_BUILDER, migrateBuilder, cvLang,
 } from "@/app/lib/builderDoc";
 import { EMPTY_LEDGER } from "@/app/lib/aiBudget";
 import { findRolePack } from "@/app/lib/rolePacks";
@@ -190,10 +190,12 @@ export default function BuilderProvider({
        */
       dispatch({ t: "hydrate", state: fresh });
     } else if (saved) {
-      /* An older schema is brought forward here, and the state records that it happened — a jump
-         from "loading" to "saved" past a migration is a claim that no upgrade took place. */
-      upgraded = (saved.schemaVersion ?? 0) < SCHEMA_VERSION;
-      dispatch({ t: "hydrate", state: { ...EMPTY_BUILDER, ...saved } });
+      /* One migration function, so a schema change is applied in one place rather than at each
+         call site that happens to spread a stored object. The state records that it happened — a
+         jump from "loading" to "saved" past an upgrade claims none took place. */
+      const brought = migrateBuilder(saved);
+      upgraded = brought.migrated;
+      dispatch({ t: "hydrate", state: brought.state });
     } else if (fromChat) {
       // A draft started in the chat: carry the confirmed resume across, which is the
       // entire point of the two doors sharing a key. Only `profile` crosses, because

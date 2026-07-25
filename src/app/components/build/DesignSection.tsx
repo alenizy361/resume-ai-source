@@ -34,11 +34,11 @@ import DocxExport from "../DocxExport";
 import PublishLink from "../PublishLink";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { saveResume } from "@/app/lib/localdata";
+import { computeProgress } from "@/app/lib/interviewGuards";
 import { type BuilderState, type SectionId } from "@/app/lib/builderDoc";
 import { review } from "@/app/lib/reviewChecks";
 import { shouldShowWatermark } from "@/app/lib/entitlement";
 import { useEntitlement } from "@/app/lib/useEntitlement";
-import { useBuilder } from "./BuilderProvider";
 
 type Lang = "ar" | "en";
 
@@ -128,17 +128,28 @@ const C = {
 };
 
 export default function DesignSection({
-  lang, state, cv, referenceDate, onTemplate, onJump, onTailorCopy,
+  lang, state, cv, viewLang, referenceDate, onTemplate, onJump, onTailorCopy, onRecord,
 }: {
   lang: Lang;
   state: BuilderState;
   /** The assembled resume text — the same string every export path already takes. */
   cv: string;
+  /**
+   * Which language version is on screen, passed in rather than read from the provider.
+   *
+   * This component is rendered by BOTH shells, and only one of them has a provider: the long
+   * `/build` page owns its own reducer. Reading context here worked only for as long as the long
+   * page never unlocked this section, which is not a guarantee — it is a bug waiting for a user
+   * who finishes a CV on that route.
+   */
+  viewLang: Lang;
   referenceDate: string;
   onTemplate: (slug: string) => void;
   onJump: (section: SectionId) => void;
   /** Keep the career facts, clear what was aimed at this advert. */
   onTailorCopy: () => void;
+  /** Record a fact about the document itself — that it was exported, and whose it is. */
+  onRecord: (patch: { status?: "draft" | "ready" | "exported"; userId?: string }) => void;
 }) {
   const c = C[lang];
   const ar = lang === "ar";
@@ -151,7 +162,6 @@ export default function DesignSection({
    * right-to-left — a document that is factually correct and unreadable. `previewText` already
    * follows the active version, so this is the last place the two could disagree.
    */
-  const { viewLang } = useBuilder();
   const arabicCv = viewLang === "ar";
 
   const [showAll, setShowAll] = useState(false);
@@ -162,7 +172,7 @@ export default function DesignSection({
    * answer arrived at privately — and four other components arrived at it differently.
    * `shouldShowWatermark` is now the only place that sentence exists.
    */
-  const { entitlement, loading: entLoading } = useEntitlement();
+  const { entitlement, loading: entLoading, userId } = useEntitlement();
   const [cover, setCover] = useState("");
   const [coverBusy, setCoverBusy] = useState(false);
   const [coverErr, setCoverErr] = useState("");
@@ -201,7 +211,26 @@ export default function DesignSection({
     try {
       const title = [state.profile.name || "CV", state.target.title || state.profile.role]
         .filter(Boolean).join(" — ");
-      saveResume({ title, source: "built", text: cv });
+
+      /*
+       * The record carries what this CV WAS, measured now.
+       *
+       * The list showed a title and a date, which answers neither question a person has in front
+       * of four saved CVs: which one is finished, and which one scored better. Everything stamped
+       * here describes the exact text stored beside it, so it can never drift out of date — the
+       * "stale score" problem does not arise for a number attached to a frozen document.
+       */
+      const report = review(state, referenceDate);
+      saveResume({
+        title, source: "built", text: cv,
+        sourceType: state.entry || "new",
+        status: critical.length ? "draft" : "ready",
+        qualityScore: Math.round(report.score),
+        matchScore: report.kind === "match" ? Math.round(report.score) : undefined,
+        completion: computeProgress(state.profile),
+        lang: viewLang,
+        userId: state.userId || userId || undefined,
+      });
       setKeptText(cv);
       track("builder_resume_saved", {});
     } catch { /* storage full or blocked — the file itself is still downloadable */ }
@@ -286,6 +315,9 @@ export default function DesignSection({
           className="flex flex-wrap items-center gap-2"
           onClickCapture={() => {
             track("builder_download_clicked", { arabic: arabicCv, watermark });
+            /* A download is the one thing about this resume that cannot be worked out later from
+               the resume itself, so it is the one thing recorded. */
+            onRecord({ status: "exported", userId: userId || undefined });
             // Downloading is the moment the user commits to a version. Saving it here
             // means the list is never missing the one CV they actually sent.
             if (!kept) keep();

@@ -54,6 +54,7 @@ const STRINGS = {
     scanHistory: "Scan history", scanHint: "Your last 10 scans will appear here with one-click reopen.",
     savedResumes: "Saved resumes", savedHint: "Resumes you build or unlock are saved here automatically (on this device).",
     open: "Open", builder: "CV Builder", optimizer: "Optimizer",
+    ready: "ready to send", draftLbl: "draft", scoreLbl: "score", doneLbl: "filled in",
   },
   ar: {
     optimizeCta: "حسّن سيرتك ←", welcome: "سجّلت دخولك — أهلاً بعودتك!",
@@ -68,6 +69,7 @@ const STRINGS = {
     scanHistory: "سجل الفحوصات", scanHint: "آخر ١٠ فحوصات تظهر هنا مع إعادة فتح بضغطة.",
     savedResumes: "السير المحفوظة", savedHint: "السير التي تبنيها أو تفتحها تُحفظ هنا تلقائياً (على هذا الجهاز).",
     open: "فتح", builder: "منشئ السيرة", optimizer: "المحسّن",
+    ready: "جاهزة للإرسال", draftLbl: "مسوّدة", scoreLbl: "التقييم", doneLbl: "مكتملة",
   },
 };
 
@@ -394,6 +396,16 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                     <div className="truncate font-semibold">{r.title}</div>
                     <div className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>
                       {r.source === "built" ? t.builder : t.optimizer} · {new Date(r.ts).toLocaleDateString()}
+                      {/*
+                        Measured when this CV was saved, and describing the exact text stored with
+                        it — so it is safe to show without a "this may be out of date" caveat.
+                        Records written before these fields existed simply show what they always
+                        showed; hiding them to keep the column tidy would lose the user's work to a
+                        layout.
+                      */}
+                      {typeof r.qualityScore === "number" && ` · ${t.scoreLbl} ${r.qualityScore}`}
+                      {typeof r.completion === "number" && ` · ${r.completion}% ${t.doneLbl}`}
+                      {r.status && ` · ${r.status === "draft" ? t.draftLbl : t.ready}`}
                     </div>
                   </div>
                   <button onClick={() => loadResume(r)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>Optimize</button>

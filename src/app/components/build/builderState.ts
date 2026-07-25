@@ -63,6 +63,14 @@ export type Action =
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId }
   /**
+   * How far this resume has got, and who it belongs to.
+   *
+   * Separate from `done`, which is about a STEP the user pressed Continue on. This is about the
+   * document: "exported" in particular is an event — a file left the browser — and it is the one
+   * fact here that cannot be recomputed from the CV later, which is why it is recorded at all.
+   */
+  | { t: "record"; status?: BuilderState["status"]; userId?: string }
+  /**
    * Commit a generation and its cost together.
    *
    * One action for both because they must never diverge: a stored result whose call was not
@@ -461,6 +469,14 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
 
     case "reject":
       return rejectItem(s, a.id);
+    case "record": {
+      const next = { ...s };
+      if (a.status) next.status = a.status;
+      /* Stamped once. A signed-in id that overwrote itself on every render would rewrite the draft
+         — and a draft rewritten for no reason is a draft the autosave keeps re-saving. */
+      if (a.userId && !s.userId) next.userId = a.userId;
+      return next.status === s.status && next.userId === s.userId ? s : next;
+    }
     case "done":
       return s.sectionsDone.includes(a.section)
         ? s

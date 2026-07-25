@@ -26,6 +26,32 @@ export interface SavedResume {
   title: string;
   source: "built" | "optimized";
   text: string;
+
+  /*
+   * What this CV was, and what it was worth, at the moment it was saved.
+   *
+   * The list used to show a title and a date, which answers neither question a person actually has
+   * in front of four saved CVs: which one is finished, and which one scored better. Everything here
+   * is a MEASUREMENT TAKEN THEN — not a live value — because the text is stored beside it and
+   * cannot change afterwards. A number that describes this exact text is safe to show forever.
+   *
+   * All optional: records written before this existed are still perfectly good records, and a list
+   * that hid them to keep its columns tidy would be losing the user's work to a layout.
+   */
+  /** "new" | "upload" | "saved" — how the CV started, which `source` only half answers. */
+  sourceType?: string;
+  /** "draft" | "ready" | "exported". `ready` means the review found nothing critical. */
+  status?: string;
+  /** 0-100, the product's own quality score for this text. */
+  qualityScore?: number;
+  /** 0-100, only when a job advert was pasted — there is no match score without something to match. */
+  matchScore?: number;
+  /** 0-100, how much of the CV was filled in. */
+  completion?: number;
+  /** The document's language, which is not necessarily the interface's. */
+  lang?: "ar" | "en";
+  /** Present only when someone was signed in; the privacy pledge keeps the CV local either way. */
+  userId?: string;
 }
 
 export type JobStatus = "saved" | "applied" | "interview" | "offer" | "rejected";

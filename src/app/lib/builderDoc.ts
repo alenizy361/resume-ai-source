@@ -28,7 +28,7 @@ import type { GenerationStore } from "./aiCache.ts";
 import type { ResumeLedger } from "./aiBudget.ts";
 import type { TranslatedVersion } from "./translate.ts";
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export type SectionId =
   | "start" | "target" | "blueprint" | "personal" | "experience"
@@ -204,6 +204,64 @@ export interface BuilderState {
   activeVersion?: string;
 
   updatedAt: number;
+
+  /* ────────────────────── the canonical record fields ──────────────────────
+   *
+   * The brief names seven things a resume record should carry. Three of them already existed here
+   * under other names, and duplicating those would have created two fields that can disagree about
+   * the same fact — which is the failure this file spends most of its length preventing. So the
+   * mapping is written down rather than the fields being copied:
+   *
+   *   aiResults   → `generations`, above. Same thing: everything the model has produced for this
+   *                 resume, keyed so a revisit reads instead of buying.
+   *   sourceType  → `entry`, above. "new" | "upload" | "saved" is exactly the source of this CV.
+   *   completion  → `computeProgress(profile)`, derived. Storing it would let a stored number
+   *                 contradict the document it describes.
+   *
+   * What follows is the rest — the ones that genuinely did not exist.
+   */
+
+  /**
+   * Who this resume belongs to, when anyone is signed in.
+   *
+   * Empty for the ordinary case, which is a person building a CV without an account: the privacy
+   * pledge is that a resume lives in this browser, and that stays true. It is stamped only when
+   * `/api/auth/me` already says who the user is, so that a saved CV can later be told apart from
+   * another account's on a shared device — the one thing the local-only store cannot otherwise do.
+   */
+  userId?: string;
+
+  /**
+   * How far this resume has got, as a fact about the DOCUMENT rather than about the session.
+   *
+   * "draft" is the default and needs no explanation. "ready" means the review found nothing
+   * critical, which is a claim the review makes and this field only records. "exported" means a
+   * file was actually downloaded — an event, and the only one of the three that cannot be
+   * recomputed later, which is precisely why it is stored.
+   */
+  status?: "draft" | "ready" | "exported";
+
+  /**
+   * What the CV scored, and WHEN — with the digest of the text it scored.
+   *
+   * A score without the text it belongs to is the "stale ATS score" problem: a number sitting
+   * beside a document it no longer describes, quietly contradicting the preview next to it. The
+   * digest is what lets a reader be told "this is for an earlier version" instead of being shown a
+   * number that is simply wrong.
+   *
+   * Written when the user saves or exports, not on every keystroke: it is a measurement of a
+   * moment, and a measurement that updates itself is not a measurement.
+   */
+  snapshot?: {
+    qualityScore: number;
+    /** Only when a job advert was pasted — there is no match score without something to match. */
+    matchScore?: number;
+    /** 0-100, from `computeProgress` at the moment of the snapshot. */
+    completion: number;
+    /** Of the assembled CV text, so a later reader knows whether this still applies. */
+    digest: string;
+    at: number;
+  };
 }
 
 export const EMPTY_TARGET: TargetJob = {
@@ -227,6 +285,40 @@ export const EMPTY_BUILDER: BuilderState = {
   sectionsDone: [],
   updatedAt: 0,
 };
+
+/**
+ * Bring a stored resume forward to the current schema.
+ *
+ * ── why this is a function and not a spread ──
+ *
+ * The provider used to write `{ ...EMPTY_BUILDER, ...saved }` inline, which works only for as long
+ * as every change to the schema is a NEW OPTIONAL FIELD. The first change that is not — a renamed
+ * key, a shape that moved, a default that stopped being safe — would be applied in two places or in
+ * none, and the failure would be a user's stored CV quietly losing a section.
+ *
+ * Named versions, so the history is legible:
+ *
+ *   v1 → v2  the suggestion bag: unconfirmed content moved out of `profile`, which is what makes
+ *            "nothing reaches the CV unconfirmed" true by construction rather than by filtering.
+ *   v2 → v3  the record fields — `userId`, `status`, `snapshot` — all optional, so a v2 draft
+ *            needs nothing done to it beyond being stamped.
+ *
+ * Unknown future versions are left alone rather than downgraded. A draft written by a NEWER build
+ * (a second tab after a deploy) must not be rewritten by an older one — the older code cannot know
+ * what it would be dropping.
+ */
+export function migrateBuilder(saved: Partial<BuilderState> | null | undefined): {
+  state: BuilderState;
+  /** True when the stored copy was genuinely older, so the UI can say an upgrade happened. */
+  migrated: boolean;
+} {
+  if (!saved || !saved.schemaVersion) {
+    return { state: { ...EMPTY_BUILDER }, migrated: false };
+  }
+  const from = saved.schemaVersion;
+  const state: BuilderState = { ...EMPTY_BUILDER, ...saved, schemaVersion: Math.max(from, SCHEMA_VERSION) };
+  return { state, migrated: from < SCHEMA_VERSION };
+}
 
 /**
  * The language the DOCUMENT is written in — not the language of the interface.

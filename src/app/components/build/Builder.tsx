@@ -26,7 +26,7 @@ import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft, writeDraft } from "@/app/lib/draftStore";
 import {
   type BuilderState, type SectionId,
-  EMPTY_BUILDER, cvLang,
+  EMPTY_BUILDER, migrateBuilder, cvLang,
 } from "@/app/lib/builderDoc";
 import { reducer } from "./builderState";
 import { useOnline } from "./useOnline";
@@ -179,7 +179,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
     const d = readDraft(lang);
     const saved = (d as unknown as { builder?: BuilderState }).builder;
     if (saved?.schemaVersion) {
-      dispatch({ t: "hydrate", state: { ...EMPTY_BUILDER, ...saved } });
+      dispatch({ t: "hydrate", state: migrateBuilder(saved).state });
       cinema.restore(Math.max(0, saved.sectionsDone.length));
     } else if (d.profile?.role || d.profile?.name) {
       // A draft started in the chat: carry the confirmed resume across, which is
@@ -428,7 +428,8 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   return (
                     <SectionShell key={id} {...props}>
                       <DesignSection
-                        lang={lang} state={state} cv={previewText} referenceDate={today}
+                        lang={lang} state={state} cv={previewText} viewLang={cv} referenceDate={today}
+                        onRecord={(patch) => dispatch({ t: "record", ...patch })}
                         onTemplate={(slug) => dispatch({ t: "template", slug })}
                         onJump={jump}
                         onTailorCopy={() => { dispatch({ t: "tailorCopy" }); jump("target"); }}
