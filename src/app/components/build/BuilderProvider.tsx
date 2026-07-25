@@ -45,6 +45,7 @@ import { EMPTY_LEDGER } from "@/app/lib/aiBudget";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { type Action, reducer, careerContext } from "./builderState";
 import { type UseGenerate, useGenerate } from "./useGenerate";
+import { useOnline } from "./useOnline";
 
 export type SaveState = "" | "saving" | "saved" | "failed";
 
@@ -55,6 +56,14 @@ interface BuilderContextValue {
   state: BuilderState;
   dispatch: React.Dispatch<Action>;
   save: SaveState;
+  /**
+   * Whether the browser currently has a connection.
+   *
+   * The draft itself does not need one — every write is local — but a suggestion does, and
+   * "the assistant is unavailable" is the wrong sentence for a train going through a tunnel. It
+   * blames the product for the user's signal and invites another tap that will also fail.
+   */
+  online: boolean;
   /** Write now, synchronously. Call before any navigation away from a step. */
   flush: () => void;
   /** False until the stored draft has been read, so nothing renders over real work. */
@@ -206,6 +215,8 @@ export default function BuilderProvider({
     return () => clearTimeout(id);
   }, [state, lang, resumeId, hydrated]);
 
+  const online = useOnline();
+
   const save: SaveState = failed ? "failed"
     : written === null ? ""
     : written === state ? "saved"
@@ -313,9 +324,9 @@ export default function BuilderProvider({
   }, []);
 
   const value = useMemo<BuilderContextValue>(() => ({
-    lang, resumeId, state, dispatch, save, flush, hydrated,
+    lang, resumeId, state, dispatch, save, online, flush, hydrated,
     previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, state, save, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
+  }), [lang, resumeId, state, save, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

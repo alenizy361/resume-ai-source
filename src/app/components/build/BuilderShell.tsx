@@ -32,6 +32,7 @@ const CHROME = {
     brand: "Sira",
     chat: "Talk to the AI instead",
     saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
+    offline: "Offline — your work is saved on this device",
     edit: "Edit", preview: "Preview",
     emptyPreview: "Your CV appears here as you fill it in.",
     steps: "Steps",
@@ -41,6 +42,7 @@ const CHROME = {
     brand: "سيرة",
     chat: "أفضّل المحادثة",
     saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
+    offline: "بلا اتصال — عملك محفوظ على جهازك",
     edit: "تعديل", preview: "معاينة",
     emptyPreview: "ستظهر سيرتك هنا وأنت تكتب.",
     steps: "الخطوات",
@@ -56,7 +58,7 @@ export default function BuilderShell({
 }) {
   const t = CHROME[lang];
   const ar = lang === "ar";
-  const { state, save, resumeId, hydrated, previewText, cv, template, progress } = useBuilder();
+  const { state, save, online, resumeId, hydrated, previewText, cv, template, progress } = useBuilder();
   const pathname = usePathname() || "";
   const router = useRouter();
 
@@ -142,8 +144,12 @@ export default function BuilderShell({
                 <span className="text-sm font-extrabold">{t.brand}</span>
               </Link>
               <div className="flex items-center gap-3">
+                {/* Offline outranks the save label: both are about whether the work is safe, and
+                    "Saved" beside a dead connection reads as a promise about the wrong thing. The
+                    draft IS safe — every write is local — so the sentence says where it is. */}
                 <span className={`bd-save${save === "failed" ? " err" : ""}`}>
-                  {save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
+                  {!online ? t.offline
+                    : save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
                 </span>
               </div>
             </div>

@@ -56,6 +56,7 @@ const MSG = {
       // not hypothetical: a 500 with an empty body printed "http-500" to a jobseeker.
       timeout: "That took too long. Keep typing — every field works without it.",
       network: "The connection dropped. Keep typing — every field works without it.",
+      offline: "You are offline. Everything you type is saved on this device — suggestions come back with the connection.",
     } as Record<string, string>,
   },
   ar: {
@@ -75,6 +76,7 @@ const MSG = {
       "cv-too-short": "لا توجد سيرة كافية للتقييم بعد.",
       timeout: "استغرق وقتاً أطول من اللازم. واصل الكتابة — كل حقل يعمل بدونه.",
       network: "انقطع الاتصال. واصل الكتابة — كل حقل يعمل بدونه.",
+      offline: "لا يوجد اتصال. كل ما تكتبه محفوظ على جهازك — والاقتراحات تعود مع عودة الاتصال.",
     } as Record<string, string>,
   },
 };
@@ -110,6 +112,22 @@ export function useAiTask(lang: "ar" | "en"): AiTask {
   }, []);
 
   const run = useCallback(async (name: TaskName, input: TaskInput) => {
+    /*
+     * No connection, no request.
+     *
+     * Not an optimisation — a request with nowhere to go fails as "the assistant is unavailable",
+     * which blames the product for the user's signal and invites another tap that will also fail.
+     * `offline` is a code like any other, so it becomes a sentence through the same table; nothing
+     * here BLOCKS, because `navigator.onLine` is optimistic enough that trusting it to gate work
+     * would be worse than the message it fixes.
+     */
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      const out = { state: "error" as const, code: "offline" };
+      setTask(name);
+      if (alive.current) setRes(out);
+      return out;
+    }
+
     // Single-flight: the newest request is the one the user meant.
     inflight.current?.abort();
     const ctrl = new AbortController();

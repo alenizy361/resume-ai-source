@@ -58,6 +58,9 @@ export interface GenOutcome {
 const MSG = {
   en: {
     unavailable: "Suggestions are temporarily unavailable. You can continue manually or try again.",
+    /* Said about the CONNECTION, not about us. The form works offline and the sentence says so
+       rather than implying the product is broken. */
+    offline: "You are offline. Everything you type is saved on this device — suggestions come back with the connection.",
     /* A ceiling is not a fault and must not be worded like one — the honest sentence says the
        form works and does not invite another tap that will also be refused. */
     "auto-stop": "That is enough automatic suggesting for this resume. Use the buttons when you want more.",
@@ -66,6 +69,7 @@ const MSG = {
   },
   ar: {
     unavailable: "الاقتراحات غير متاحة الآن. أكمل يدوياً أو جرّب مرة أخرى.",
+    offline: "لا يوجد اتصال. كل ما تكتبه محفوظ على جهازك — والاقتراحات تعود مع عودة الاتصال.",
     "auto-stop": "هذا كافٍ من الاقتراح التلقائي لهذه السيرة. استخدم الأزرار إن أردت المزيد.",
     "hard-stop": "استُنفد رصيد الاقتراحات لهذه السيرة. واصل التعبئة بيدك — كل حقل يعمل بدون الذكاء.",
     disabled: "الاقتراحات مطفأة حالياً. النموذج يعمل بدونها.",
@@ -141,6 +145,21 @@ export function useGenerate(opts: {
       const out: GenOutcome = { state: "ready", data: cached.result, source: "resume-cache" };
       setRes(out);
       onCommit({ store: store ?? {}, ledger: recordHit(ledger) });
+      return out;
+    }
+
+    /*
+     * ── 1b. the connection ──
+     *
+     * Checked AFTER the cache, deliberately: a cached blueprint is readable on a train and
+     * refusing it because the signal dropped would take away the one thing that still works.
+     * Checked BEFORE the budget and the request because a call that cannot leave the device should
+     * not spend an allowance, and because "the assistant is unavailable" is the wrong sentence — it
+     * blames the product for the user's signal and invites another tap that will also fail.
+     */
+    if (typeof navigator !== "undefined" && navigator.onLine === false) {
+      const out: GenOutcome = { state: "error", message: MSG[lang].offline };
+      setRes(out);
       return out;
     }
 

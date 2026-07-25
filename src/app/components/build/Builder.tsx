@@ -29,6 +29,7 @@ import {
   EMPTY_BUILDER, cvLang,
 } from "@/app/lib/builderDoc";
 import { reducer } from "./builderState";
+import { useOnline } from "./useOnline";
 import {
   StartCards, TargetFields, PersonalFields, BlueprintBody, SkillsBody,
 } from "./FormSections";
@@ -52,6 +53,7 @@ const T = {
       "Free, no signup, works with the AI switched off",
     ],
     saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
+    offline: "Offline — your work is saved on this device",
     cont: "Save & continue", edit: "Edit", preview: "Preview",
     sections: {
       start: "Where do you want to start?",
@@ -96,6 +98,7 @@ const T = {
       "مجاناً، بلا تسجيل، ويعمل والذكاء مطفأ",
     ],
     saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
+    offline: "بلا اتصال — عملك محفوظ على جهازك",
     cont: "احفظ وواصل", edit: "تعديل", preview: "معاينة",
     sections: {
       start: "من أين تبدأ؟",
@@ -155,6 +158,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
   const ar = lang === "ar";
   const [state, dispatch] = useReducer(reducer, EMPTY_BUILDER);
   const [save, setSave] = useState<"" | "saving" | "saved" | "failed">("");
+  const online = useOnline();
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
   const hydrated = useRef(false);
 
@@ -274,8 +278,12 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 <span className="text-sm font-extrabold">{t.brand}</span>
               </Link>
               <div className="flex items-center gap-3">
+                {/* Offline outranks the save label: both are about whether the work is safe, and
+                    "Saved" beside a dead connection reads as a promise about the wrong thing. The
+                    draft IS safe — every write is local — so the sentence says where it is. */}
                 <span className={`bd-save${save === "failed" ? " err" : ""}`}>
-                  {save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
+                  {!online ? t.offline
+                    : save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
                 </span>
               </div>
             </div>
