@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
-import { logUsage, fromOpenAI } from "@/app/lib/usage";
+import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 import { DRAFTING_DOCTRINE, METRIC_QUESTION_DOCTRINE } from "@/app/lib/prompts";
 import {
   cleanGroups, cleanItems, flattenGroups, hasMetric, parseGroups, parseItems,
@@ -136,9 +136,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: lang === "ar" ? "اكتب المسمى الوظيفي أولاً عشان أقدر أقترح." : "Fill in the role first so I have something to work from." }, { status: 400 });
     }
 
-    const key = process.env.NVIDIA_API_KEY;
+    /*
+     * Which provider drafts. `/api/interview` has resolved this per-provider for a while and
+     * this route did not, so setting AI_PROVIDER=anthropic used to move the interview brain and
+     * leave every builder suggestion on NVIDIA — one env var, two behaviours.
+     *
+     * Anthropic's default here is claude-haiku-4-5 deliberately, and the choice is measured:
+     * `ops/titles-bench.mjs` ran claude-opus-5 over 56 occupations and it was ~19 s at the
+     * median with 24 of 56 hanging past 60 s. Opus is the wrong shape for a form field the user
+     * is watching — Haiku is the cheapest and fastest of the family, which is what an
+     * interactive suggestion needs.
+     */
+    const provider = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
+    const anthropic = provider === "anthropic";
+    const key = anthropic ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
     if (!key) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
-    const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+    /*
+     * One AI_MODEL is shared by every route, so a value valid for one provider is a 404 on the
+     * other — the same trap `modelFor` in /api/interview exists for. Resolved per provider
+     * rather than trusted blindly.
+     */
+    const shared = process.env.AI_MODEL || "";
+    const model = anthropic
+      ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-haiku-4-5"))
+      : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
     const t0 = Date.now();
 
     // Structured kinds must come back parseable; the free-text ones must not be
@@ -189,19 +210,40 @@ ${shapeRule}`;
       const timer = setTimeout(() => ctrl.abort(), 30000);
       let res: Response;
       try {
-        res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          signal: ctrl.signal,
-          body: JSON.stringify({
-            model,
-            temperature: 0.6,
-            top_p: 0.9,
-            max_tokens: json ? 700 : 400,
-            messages: [{ role: "user", content: prompt }],
-            ...(json && attempt === 0 ? { response_format: { type: "json_object" } } : {}),
-          }),
-        });
+        /*
+         * Two wire formats, one prompt. Anthropic takes the instruction in `system` and the
+         * shape in the user turn exactly as NVIDIA does — the prompt is not rewritten per
+         * provider, because then a difference in output would be a difference in prompting.
+         */
+        res = anthropic
+          ? await fetch("https://api.anthropic.com/v1/messages", {
+              method: "POST",
+              headers: {
+                "x-api-key": key,
+                "anthropic-version": "2023-06-01",
+                "Content-Type": "application/json",
+              },
+              signal: ctrl.signal,
+              body: JSON.stringify({
+                model,
+                max_tokens: json ? 900 : 500,
+                temperature: 0.6,
+                messages: [{ role: "user", content: prompt }],
+              }),
+            })
+          : await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+              signal: ctrl.signal,
+              body: JSON.stringify({
+                model,
+                temperature: 0.6,
+                top_p: 0.9,
+                max_tokens: json ? 700 : 400,
+                messages: [{ role: "user", content: prompt }],
+                ...(json && attempt === 0 ? { response_format: { type: "json_object" } } : {}),
+              }),
+            });
       } catch (e) {
         if (!json) throw e;   // legacy: an abort or network failure is the outer catch's 502, as before
         console.error(`suggest upstream error (attempt ${attempt + 1}):`, e instanceof Error ? e.message : e);
@@ -215,8 +257,19 @@ ${shapeRule}`;
         continue;
       }
       const data = await res.json();
-      logUsage({ route: "suggest", op: mode ? `${kind}:${mode}` : kind, provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
-      raw = String(data?.choices?.[0]?.message?.content || "").replace(/\*\*/g, "").trim();
+      if (anthropic) {
+        // `fromAnthropic` already exists for exactly this — including the cache counts, which a
+        // hand-rolled version here would have silently dropped.
+        logUsage({
+          route: "suggest", op: mode ? `${kind}:${mode}` : kind, provider: "anthropic", model,
+          ...fromAnthropic(data), ms: Date.now() - t0,
+        });
+        const blocks = (data as { content?: Array<{ type?: string; text?: string }> })?.content ?? [];
+        raw = String(blocks.find((b) => b?.type === "text")?.text || "").replace(/\*\*/g, "").trim();
+      } else {
+        logUsage({ route: "suggest", op: mode ? `${kind}:${mode}` : kind, provider: "nvidia", model, ...fromOpenAI(data), ms: Date.now() - t0 });
+        raw = String(data?.choices?.[0]?.message?.content || "").replace(/\*\*/g, "").trim();
+      }
     }
     if (!raw) return NextResponse.json({ error: busy }, { status: 502 });
 

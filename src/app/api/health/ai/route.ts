@@ -62,9 +62,20 @@ export async function GET(req: NextRequest) {
   }
 
   const provider = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
+  /*
+   * The same resolution the routes do, not a paraphrase of it.
+   *
+   * `/api/interview` defaults Anthropic to claude-opus-5 (a reasoning turn) and `/api/suggest`
+   * to claude-haiku-4-5 (a form field the user is watching). Reporting one number would be
+   * wrong for the other, so both are reported.
+   */
+  const shared = process.env.AI_MODEL || "";
   const model = provider === "anthropic"
-    ? (process.env.ANTHROPIC_MODEL || process.env.AI_MODEL || "claude-opus-5")
-    : (process.env.NVIDIA_MODEL || process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct");
+    ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-opus-5"))
+    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
+  const suggestModel = provider === "anthropic"
+    ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-haiku-4-5"))
+    : model;
 
   const keyPresent = provider === "anthropic" ? redact("ANTHROPIC_API_KEY") : redact("NVIDIA_API_KEY");
   const upstash = redact("UPSTASH_REDIS_REST_URL") && redact("UPSTASH_REDIS_REST_TOKEN");
@@ -73,6 +84,8 @@ export async function GET(req: NextRequest) {
     ok: keyPresent,
     provider,
     model,
+    /** What the builder's suggestions actually run on — the model most users meet. */
+    suggestModel,
     /** The one that turns "the assistant is unavailable" into a five-second diagnosis. */
     apiKeyPresent: keyPresent,
 

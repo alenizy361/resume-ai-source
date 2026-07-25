@@ -99,7 +99,9 @@ const ANTHROPIC = PROVIDER === "anthropic";
 const KEY = ANTHROPIC ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
 const BASE = "https://integrate.api.nvidia.com/v1";
 const MODEL = ANTHROPIC
-  ? (process.env.ANTHROPIC_MODEL || process.env.AI_MODEL || "claude-opus-5")
+  // Matches /api/suggest's default, so the bench measures what the product would send. Opus was
+  // measured here first and rejected: ~19 s median, 24 of 56 titles hanging past 60 s.
+  ? (process.env.ANTHROPIC_MODEL || process.env.AI_MODEL || "claude-haiku-4-5")
   : (process.env.NVIDIA_MODEL || process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct");
 
 if (!KEY) {
