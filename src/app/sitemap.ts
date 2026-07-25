@@ -7,11 +7,11 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
-    "", "/optimize", "/build", "/linkedin", "/interview", "/pricing", "/templates",
+    "", "/optimize", "/linkedin", "/interview", "/pricing", "/templates",
     "/ats-resume-checker", "/jobscan-alternative", "/free-resume-checker",
     "/resume-examples", "/resume-templates",
     "/cover-letter-examples", "/resume-skills",
-    "/ar", "/ar/build", "/ar/optimize", "/ar/resume-examples", "/interview-live",
+    "/ar", "/ar/optimize", "/ar/resume-examples", "/interview-live",
     "/privacy", "/terms",
   ];
   const examplePages = JOB_SLUGS.map((slug) => `/resume-examples/${slug}`);

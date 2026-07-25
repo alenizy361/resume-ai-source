@@ -48,7 +48,13 @@ import DesignSection from "./DesignSection";
 const T = {
   en: {
     brand: "Sira", chat: "Talk to the AI instead",
-    promise: "You fill the facts. AI completes the professional wording.",
+    h1a: "You fill the facts.", h1b: "AI completes the professional wording.",
+    promise: "Suggested skills and responsibilities for your profession — grouped, editable, and never added until you approve them.",
+    trust: [
+      "Never invents an employer, a date, a certification or a number",
+      "ATS-ready structure — single column, standard headings",
+      "Free, no signup, works with the AI switched off",
+    ],
     saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
     cont: "Save & continue", edit: "Edit", preview: "Preview",
     sections: {
@@ -84,7 +90,13 @@ const T = {
   },
   ar: {
     brand: "سيرة", chat: "أفضّل المحادثة",
-    promise: "أنت تكتب الحقائق. والذكاء يصوغها بلغة مهنية.",
+    h1a: "أنت تكتب الحقائق.", h1b: "والذكاء يصوغها بلغة مهنية.",
+    promise: "مهارات ومهام مقترحة لمهنتك — مجمّعة، قابلة للتعديل، ولا تُضاف قبل أن تعتمدها.",
+    trust: [
+      "لا يختلق جهة عمل ولا تاريخاً ولا شهادة ولا رقماً",
+      "بنية تعبر أنظمة الفرز — عمود واحد وعناوين قياسية",
+      "مجاناً، بلا تسجيل، ويعمل والذكاء مطفأ",
+    ],
     saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
     cont: "احفظ وواصل", edit: "تعديل", preview: "معاينة",
     sections: {
@@ -665,7 +677,19 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
         </header>
 
         <div className="mx-auto max-w-6xl px-5 pb-24 pt-6">
-          <p className="mb-5 text-xs" style={{ color: "var(--faint)" }}>{t.promise}</p>
+          {/* The page's claim, as a heading rather than as decoration. This is also the
+              homepage now, and a homepage with no h1 leaves the strongest on-page signal
+              in the product unused. */}
+          <header className="mb-6">
+            <h1 className="text-xl font-extrabold leading-snug sm:text-2xl" style={{ letterSpacing: "-0.02em" }}>
+              {t.h1a}{" "}
+              <span style={{ color: "var(--accent)" }}>{t.h1b}</span>
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm" style={{ color: "var(--muted)" }}>{t.promise}</p>
+            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs" style={{ color: "var(--faint)" }}>
+              {t.trust.map((x) => <li key={x}>✓ {x}</li>)}
+            </ul>
+          </header>
 
           {/* Mobile: never show the CV beside the form — neither would be usable. */}
           <div className="mb-4 flex gap-2 lg:hidden">

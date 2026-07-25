@@ -918,7 +918,7 @@ export default function Journey({ lang }: { lang: Lang }) {
                   a user who does not want to be interviewed should not have to guess
                   that a form exists. `setBuilderMode` makes the choice stick. */}
               <Link
-                href={rtl ? "/ar/build" : "/build"}
+                href={rtl ? "/ar" : "/"}
                 onClick={() => { setBuilderMode("form"); track("journey_chose_form_door", { lang }); }}
                 className="jn-pill-btn"
               >{t.formDoor}</Link>

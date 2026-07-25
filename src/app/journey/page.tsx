@@ -6,20 +6,21 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 /**
  * The chat door, at its own address.
  *
- * `/` still renders this same component, so nothing about the live homepage moves.
- * What this route adds is a stable URL for the conversation — the form builder links
- * to it as "talk to the AI instead", and that link was pointing at a 404.
+ * `/` used to render this same component. Now that the homepage is the form builder,
+ * this is where the conversation lives — reachable in one tap from the builder's header,
+ * and sticky for anyone who picks it, so choosing the chat once is a choice that holds.
  *
- * `robots: noindex` because this is the same content as `/`. An application door
- * deserves an address, not a second entry in the index competing with the homepage
- * it duplicates.
+ * `robots: noindex` because the marketing weight belongs on one page and that page is
+ * now the form builder at `/`. The chat is a door, not a landing page — but it is its
+ * own content, so it canonicalises to itself rather than pointing at a homepage that no
+ * longer shows a conversation.
  */
 export const metadata: Metadata = {
   title: "Build Your Resume by Interview | cv.rabit.sa",
   description:
     "Talk to the AI Advisor for two minutes: it interviews you, rephrases your casual words into professional ATS-ready lines, and hands you a downloadable resume.",
   alternates: {
-    canonical: `${BASE}/`,
+    canonical: `${BASE}/journey`,
     languages: { en: `${BASE}/journey`, ar: `${BASE}/ar/journey`, "x-default": `${BASE}/` },
   },
   robots: { index: false, follow: true },

@@ -1,38 +1,37 @@
 import type { Metadata } from "next";
 import DoorRedirect from "../components/DoorRedirect";
-import Journey from "../components/Journey";
+import Builder from "../components/build/Builder";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
+/** The Arabic homepage. See app/page.tsx for why this is the builder now. */
 export const metadata: Metadata = {
-  title: "سيرتك بمقابلة — الذكاء الاصطناعي يبنيها معك | cv.rabit.sa",
+  title: "أنشئ سيرة ذاتية تعبر أنظمة الفرز — أنت تكتب الحقائق والذكاء يصوغها | cv.rabit.sa",
   description:
-    "كلم المستشار دقيقتين: يسألك، يعيد صياغة كلامك العادي لصياغة احترافية تعبر أنظمة التوظيف (ATS)، ويسلمك سيرة جاهزة للتنزيل — مجاناً وبدون تسجيل. عربي وإنجليزي.",
+    "منشئ سيرة ذاتية خطوة بخطوة للسوق السعودي والخليجي. الذكاء يقترح مهارات ومهام مهنتك، وأنت تعتمد كل سطر. لا يختلق جهة عمل ولا تاريخاً ولا شهادة ولا رقماً. مجاناً، بلا تسجيل، بالعربية والإنجليزية.",
   alternates: {
     canonical: `${BASE}/ar`,
     languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
   },
   openGraph: {
-    title: "سيرتك بالمقابلة — الذكاء يبنيها معك | سيرة",
+    title: "أنت تكتب الحقائق. والذكاء يصوغها بلغة مهنية.",
     description:
-      "تحدّث مع المستشار دقيقتين: يقابلك، يعيد صياغة كلامك العفوي إلى أسطر احترافية متوافقة مع أنظمة الفرز ATS، ويسلّمك سيرة جاهزة للتحميل — مجاناً وبدون تسجيل.",
+      "منشئ سيرة ذاتية خطوة بخطوة. مهارات ومهام مقترحة لمهنتك، مجمّعة وقابلة للتعديل — ولا يدخل شيء سيرتك قبل أن تعتمده.",
     url: `${BASE}/ar`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "سيرتك بالمقابلة — الذكاء يبنيها معك | سيرة",
-    description: "مقابلة دقيقتين ← سيرة احترافية بدرجة توافق ATS. مجاناً وبدون تسجيل.",
+    title: "أنت تكتب الحقائق. والذكاء يصوغها | سيرة",
+    description: "منشئ سيرة متوافقة مع أنظمة الفرز، خطوة بخطوة. مجاناً وبدون تسجيل.",
   },
 };
 
 export default function ArabicHome() {
   return (
     <>
-      <Journey lang="ar" />
-      {/* The homepage still opens the chat for everyone by default. This only moves a
-          visitor who explicitly chose the form builder before. */}
-      <DoorRedirect lang="ar" />
+      <Builder lang="ar" />
+      <DoorRedirect lang="ar" rendered="form" />
     </>
   );
 }

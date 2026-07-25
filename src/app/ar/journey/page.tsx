@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "تحدّث مع المستشار دقيقتين: يقابلك، يعيد صياغة كلامك العفوي إلى أسطر احترافية متوافقة مع أنظمة الفرز، ويسلّمك سيرة جاهزة للتنزيل.",
   alternates: {
-    canonical: `${BASE}/ar`,
+    canonical: `${BASE}/ar/journey`,
     languages: { ar: `${BASE}/ar/journey`, en: `${BASE}/journey`, "x-default": `${BASE}/` },
   },
   robots: { index: false, follow: true },

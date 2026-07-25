@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
 import DoorRedirect from "./components/DoorRedirect";
-import Journey from "./components/Journey";
+import Builder from "./components/build/Builder";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
+/*
+ * The homepage is the form-first builder.
+ *
+ * It was the conversation, and three live end-to-end builds showed why that could not
+ * stay the only way in: a chat is a single path, so every model slip is a dead end with
+ * no field to correct. The chat still exists at /journey and is one tap away from here.
+ *
+ * Reverting is this file and app/ar/page.tsx — render <Journey lang="en" /> again and the
+ * previous homepage is back, because nothing was deleted to make room for this.
+ */
 export const metadata: Metadata = {
-  title: "Your Resume, By Interview — AI Builds It With You | cv.rabit.sa",
+  title: "Build an ATS-Ready CV — You Fill the Facts, AI Writes It | cv.rabit.sa",
   description:
-    "Talk to the AI Advisor for two minutes: it interviews you, rephrases your casual words into professional ATS-ready lines, and hands you a downloadable resume — free, no signup. Arabic & English.",
+    "A step-by-step CV builder for the Saudi and Gulf market. AI suggests the skills and responsibilities for your profession; you approve every line. It never invents an employer, a date, a certification or a number. Free, no signup, Arabic and English.",
   alternates: {
     canonical: `${BASE}/`,
     languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
   },
   openGraph: {
-    title: "Your Resume, By Interview — AI Builds It With You",
+    title: "You fill the facts. AI completes the professional wording.",
     description:
-      "Talk to the AI Advisor for two minutes: it interviews you, rephrases your words into professional ATS-ready lines, and hands you a downloadable resume — free, no signup.",
+      "Step-by-step ATS-ready CV builder. Suggested skills and duties for your profession, grouped and editable — nothing reaches your CV until you approve it.",
     url: `${BASE}/`,
     type: "website",
   },
@@ -24,10 +34,9 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Journey lang="en" />
-      {/* The homepage still opens the chat for everyone by default. This only moves a
-          visitor who explicitly chose the form builder before. */}
-      <DoorRedirect lang="en" />
+      <Builder lang="en" />
+      {/* Honours a visitor who explicitly chose the chat door before. */}
+      <DoorRedirect lang="en" rendered="form" />
     </>
   );
 }

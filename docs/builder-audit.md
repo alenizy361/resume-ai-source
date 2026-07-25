@@ -178,9 +178,9 @@ build new, read a CV you already have, or upload it to `/optimize`. `/build` and
 `/ar/build` are live; `/journey` and `/ar/journey` are the chat's own addresses; the
 Arabic-only `/ar/builder` and its two private endpoints are retired.
 
-The homepage still opens the chat for everyone by default. Promoting the form builder
-to `/` is a product decision, not an engineering one, and it stays a deliberate act —
-two small files. A visitor who explicitly picks the form door keeps it.
+The form builder is the homepage. `/` and `/ar` render it; the chat lives at `/journey`
+and `/ar/journey`, one tap from the builder’s header, and sticky for anyone who picks
+it. Reverting is two files: render `<Journey/>` again — nothing was deleted to allow it.
 
 ## Baseline now held
 

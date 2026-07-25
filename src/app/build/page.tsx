@@ -10,10 +10,14 @@ export const metadata: Metadata = {
   title: "Build an ATS-Ready CV, Step by Step | cv.rabit.sa",
   description:
     "Fill in the facts; the AI writes the professional wording. Suggested skills and responsibilities for your profession, grouped and editable — nothing enters your CV until you approve it. Free, no signup.",
+  // Identical content to / since the builder was promoted there. The address stays
+  // — it is linked from the chat door and from /optimize — but it points its ranking at
+  // the homepage instead of splitting it across two URLs.
   alternates: {
-    canonical: `${BASE}/build`,
-    languages: { en: `${BASE}/build`, ar: `${BASE}/ar/build`, "x-default": `${BASE}/build` },
+    canonical: `${BASE}/`,
+    languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
   },
+  robots: { index: false, follow: true },
   openGraph: {
     title: "Build an ATS-Ready CV, Step by Step",
     description:
