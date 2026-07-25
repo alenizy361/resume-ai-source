@@ -36,6 +36,7 @@ import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
 import SummarySection from "./SummarySection";
 import ReviewSection from "./ReviewSection";
+import DesignSection from "./DesignSection";
 
 /* ───────────────────────── copy ───────────────────────── */
 
@@ -75,7 +76,6 @@ const T = {
     newCvSub: "Step by step. AI suggests skills and responsibilities for your profession — you approve everything.",
     upCv: "Upload and improve my CV",
     upCvSub: "We read your file, score it, and rewrite it without inventing anything.",
-    soon: "Being built — this section arrives next.",
   },
   ar: {
     brand: "سيرة", chat: "أفضّل المحادثة",
@@ -112,7 +112,6 @@ const T = {
     newCvSub: "خطوة بخطوة. الذكاء يقترح المهارات والمهام لمهنتك — وأنت تعتمد كل شيء.",
     upCv: "ارفع سيرتي وحسّنها",
     upCvSub: "نقرأ ملفك، نقيّمه، ونعيد صياغته دون اختلاق أي شيء.",
-    soon: "قيد البناء — هذا القسم يأتي تالياً.",
   },
 };
 
@@ -545,6 +544,17 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                     </SectionShell>
                   );
                 }
+                if (id === "design") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <DesignSection
+                        lang={lang} state={state} cv={previewText} referenceDate={today}
+                        onTemplate={(slug) => dispatch({ t: "template", slug })}
+                        onJump={jump}
+                      />
+                    </SectionShell>
+                  );
+                }
                 if (id === "languages") {
                   return (
                     <SectionShell key={id} {...props}>
@@ -553,7 +563,8 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                     </SectionShell>
                   );
                 }
-                return <Placeholder key={id} {...props} note={t.soon} />;
+                // Every id in ORDER is handled above; this is the exhaustiveness tail.
+                return null;
               })}
             </div>
 
@@ -792,14 +803,6 @@ function PersonalSection(p: ShellProps & { state: BuilderState; dispatch: React.
         </div>
       )}
       <ContinueButton onClick={p.onDone} label={p.contLabel} />
-    </SectionShell>
-  );
-}
-
-function Placeholder(p: ShellProps & { note: string }) {
-  return (
-    <SectionShell {...p}>
-      <p className="text-xs" style={{ color: "var(--faint)" }}>{p.note}</p>
     </SectionShell>
   );
 }
