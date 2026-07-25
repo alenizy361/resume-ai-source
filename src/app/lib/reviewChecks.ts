@@ -41,6 +41,7 @@ import {
   hasUnconfirmed, normalizeLabel,
 } from "./builderDoc.ts";
 import { assembleResume } from "./mergeProfile.ts";
+import { languageSet, languageMismatch } from "./languages.ts";
 import { type Role, saysTheSame, rolesFromProfile } from "./resumeDoc.ts";
 
 /* ───────────────────────── shape of a review ───────────────────────── */
@@ -686,6 +687,47 @@ function checklist(state: BuilderState, f: Facts, referenceDate: string): Findin
         title: `${c.title} expired on ${c.expiryDate}`,
         detail: "An expired licence or certification on a live CV reads as a lapsed one, and in regulated roles it can end the application. Renew it, or move it to a dated history line.",
         fixHint: "Update the expiry date, or remove it until it is renewed.",
+      });
+    }
+  }
+
+  /*
+   * The CV is written in a language the user did not choose for it.
+   *
+   * Critical, and it is the one finding here that nothing else in the product can surface: the
+   * preview renders exactly what was typed, so a document written half in Arabic and half in
+   * English looks perfectly correct on screen, and the score is computed over that same text. It
+   * only becomes visible to the applicant when a recruiter's filter reads it as noise.
+   *
+   * The name and the contact line are excluded from the measurement — a name is in whatever script
+   * the person's name is in, and flagging "عبدالعزيز العنزي" on an English CV would be flagging the
+   * most correct thing on the page. See `authoredText` in `lib/languages.ts`.
+   */
+  {
+    const set = languageSet(state);
+    const mismatch = languageMismatch(set);
+    if (mismatch) {
+      const wanted = mismatch.expected === "ar" ? "Arabic" : "English";
+      const wrote = mismatch.found === "ar" ? "Arabic" : mismatch.found === "en" ? "English" : "both languages";
+      add({
+        /*
+         * Fatal when the whole document is in the other language; a strong recommendation when it
+         * is split. The costs genuinely differ — an English-language employer searching an Arabic
+         * CV finds nothing at all, while a split one still matches half its own keywords — and
+         * severity is what the review uses to order what a person reads first.
+         */
+        id: `language-mismatch:${mismatch.code}`,
+        severity: mismatch.code === "input-mixed" ? "recommended" : "critical",
+        section: "target",
+        title: mismatch.code === "input-mixed"
+          ? "This CV is written in two languages"
+          : `This CV is set to ${wanted} but is written in ${wrote}`,
+        detail: mismatch.code === "input-mixed"
+          ? `Your responsibilities and skills are written in ${wrote}. A parser indexes one document in one language; a split one matches neither search, and a human reader has to switch direction mid-page.`
+          : `The document language is ${wanted}, and what you have written is ${wrote}. Whichever is right, they have to agree — an employer searching in ${wanted} will not find text written in ${wrote}.`,
+        fixHint: mismatch.code === "input-mixed"
+          ? "Pick the language the employer reads, and move the rest into the other version."
+          : `Either change the CV language on the target step, or rewrite these lines in ${wanted}.`,
       });
     }
   }

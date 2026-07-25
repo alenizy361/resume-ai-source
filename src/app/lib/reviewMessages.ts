@@ -41,6 +41,21 @@ export interface LocalizedFinding {
  */
 const AR: Record<string, LocalizedFinding> = {
   /* ── errors: things that are missing ── */
+  /*
+   * The language mismatch, in the language of the person reading it.
+   *
+   * Both sentences deliberately avoid blaming: choosing English and typing Arabic is a thing a
+   * bilingual person does without noticing, and the finding's job is to make it visible before an
+   * employer's filter does — not to imply a mistake was made.
+   */
+  "language-mismatch:input-not-authoring": {
+    title: "لغة السيرة لا تطابق ما كُتب فيها",
+    detail: "اخترتَ لغةً للسيرة وكتبتَ محتواها بلغة أخرى. أياً كانت الصحيحة، لا بد أن تتفقا — فالبحث بلغةٍ لا يجد نصاً مكتوباً بغيرها.",
+  },
+  "language-mismatch:input-mixed": {
+    title: "السيرة مكتوبة بلغتين",
+    detail: "مهامك ومهاراتك مكتوبة بالعربية والإنجليزية معاً. نظام الفرز يفهرس مستنداً واحداً بلغة واحدة، والمستند المقسوم لا يطابق أي بحث، والقارئ البشري يضطر لتغيير اتجاه القراءة في منتصف الصفحة.",
+  },
   "missing-contact": {
     title: "لا توجد وسيلة للتواصل",
     detail: "لا يوجد بريد ولا رقم هاتف. صاحب العمل الذي أعجبته سيرتك لن يجد طريقة يصل بها إليك.",
