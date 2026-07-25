@@ -17,6 +17,7 @@
  *   node --experimental-strip-types ops/suggest.test.mjs
  */
 
+import { readFileSync } from "node:fs";
 import {
   hasMetric, stripNumbers, scrubSuggestion, cleanItems, cleanGroups, flattenGroups,
   extractJsonValue, parseItems, parseGroups, parseVariants, parseMetricAsk, VARIANT_LABELS,
@@ -187,6 +188,50 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
     "Prepared and positioned patients for imaging",
   ]);
   ok("nothing that survived carries a figure", items.every((i) => !hasMetric(i)));
+}
+
+/* ── the misconfiguration log: useful to the operator, silent about the secret ── */
+
+/**
+ * The 503 that produced this block returned with nothing written anywhere, so the cause —
+ * a provider switch pointing at a provider whose key was absent — had to be inferred from
+ * the ABSENCE of the usage line. A log line fixes that, and immediately becomes a place a
+ * credential could leak, so both halves are asserted against the source.
+ *
+ * Read as text rather than imported: the route pulls in `next/server` and `@/…` aliases,
+ * neither of which resolves under `--experimental-strip-types`.
+ */
+{
+  const SRC = readFileSync("app/api/suggest/route.ts", "utf8");
+
+  ok("a missing key is written to the log, not just returned as 503",
+    /console\.error\(\s*[`"']\[suggest\] misconfigured/.test(SRC));
+  ok("and the log names which variable was empty",
+    /\$\{keyName\}/.test(SRC));
+  ok("and reports which keys the deployment can see, as booleans",
+    /ANTHROPIC_API_KEY=\$\{Boolean\(process\.env\.ANTHROPIC_API_KEY\?\.trim\(\)\)\}/.test(SRC)
+    && /NVIDIA_API_KEY=\$\{Boolean\(process\.env\.NVIDIA_API_KEY\?\.trim\(\)\)\}/.test(SRC));
+  ok("and says that env vars are snapshotted at build time, which is the likeliest cause",
+    /snapshotted at build time/.test(SRC));
+
+  /*
+   * The leak this guards. `Boolean(process.env.X?.trim())` is safe; the same expression
+   * without `Boolean(` prints the key. Asserted by counting every interpolation of a key
+   * and requiring each one to be wrapped — a narrower check would pass on
+   * `${process.env.ANTHROPIC_API_KEY}` sitting one line below a correct usage.
+   */
+  const interpolations = [...SRC.matchAll(/\$\{[^}]*process\.env\.(?:ANTHROPIC|NVIDIA)_API_KEY[^}]*\}/g)]
+    .map((m) => m[0]);
+  ok("every key interpolated into a string is wrapped in Boolean()",
+    interpolations.length >= 2 && interpolations.every((s) => s.startsWith("${Boolean(")),
+    interpolations.filter((s) => !s.startsWith("${Boolean(")).join(" · "));
+
+  /* A key pasted with a trailing newline is truthy and fails at the provider as a 401 —
+     a longer walk to the same answer, so it is rejected here. */
+  ok("an all-whitespace key is treated as absent", /!key\?\.trim\(\)/.test(SRC));
+
+  /* The parser must be reading the real route, or the six checks above pass vacuously. */
+  ok("the route source was actually read", SRC.length > 4000, `${SRC.length} chars`);
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

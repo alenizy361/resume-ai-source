@@ -156,8 +156,36 @@ export async function POST(req: NextRequest) {
      */
     const provider = (process.env.AI_PROVIDER_SUGGEST || process.env.AI_PROVIDER || "nvidia").toLowerCase();
     const anthropic = provider === "anthropic";
-    const key = anthropic ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
-    if (!key) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+    const keyName = anthropic ? "ANTHROPIC_API_KEY" : "NVIDIA_API_KEY";
+    const key = process.env[keyName];
+    if (!key?.trim()) {
+      /*
+       * The 503 that taught us to log this.
+       *
+       * `AI_PROVIDER_SUGGEST=anthropic` was set on a deployment whose Anthropic key was not,
+       * and this line returned 503 five times in a row with NOTHING written anywhere. The only
+       * way to tell it apart from a provider outage was the ABSENCE of the `[usage]` line below
+       * — diagnosis by negative evidence, over several messages, for a two-word configuration
+       * fault.
+       *
+       * So it says so, once, in the operator's log: which provider was asked for, which
+       * variable was empty, and which keys the process can actually see. Booleans and names
+       * only — never a value, never a length, never a fragment. That is enough to separate
+       * "the name is spelled differently", "it is on the wrong environment", and "it was added
+       * after this build" without opening anything else.
+       *
+       * `.trim()` and not just falsiness, because a variable pasted with a trailing newline is
+       * truthy here and a 401 at the provider, which is a longer walk to the same answer.
+       */
+      console.error(
+        `[suggest] misconfigured: provider=${provider} but ${keyName} is empty. `
+        + `Keys visible to this deployment: `
+        + `ANTHROPIC_API_KEY=${Boolean(process.env.ANTHROPIC_API_KEY?.trim())} `
+        + `NVIDIA_API_KEY=${Boolean(process.env.NVIDIA_API_KEY?.trim())}. `
+        + `Env vars are snapshotted at build time — a value added after this build needs a redeploy.`,
+      );
+      return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
+    }
     /*
      * One AI_MODEL is shared by every route, so a value valid for one provider is a 404 on the
      * other — the same trap `modelFor` in /api/interview exists for. Resolved per provider
