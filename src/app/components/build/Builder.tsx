@@ -26,12 +26,14 @@ import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft, writeDraft, contactLine } from "@/app/lib/draftStore";
 import { setBuilderMode } from "@/app/lib/flags";
 import {
-  type BuilderState, type SectionId, type Item, EMPTY_BUILDER,
+  type BuilderState, type SectionId, type Item, type Credential, type LanguageEntry,
+  EMPTY_BUILDER,
   newItem, confirmItem, rejectItem, pending, editItem, newId,
 } from "@/app/lib/builderDoc";
 import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
 import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
 import ExperienceSection from "./ExperienceSection";
+import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
 
 /* ───────────────────────── copy ───────────────────────── */
 
@@ -134,9 +136,40 @@ type Action =
   | { t: "removeBullet"; roleId: string; index: number }
   | { t: "offer"; items: Item[] }
   | { t: "editItem"; id: string; text: string }
+  | { t: "education"; text: string }
+  | { t: "credAdd"; cred: Credential }
+  | { t: "cred"; id: string; patch: Partial<Credential> }
+  | { t: "credRemove"; id: string }
+  | { t: "langAdd"; entry: LanguageEntry }
+  | { t: "lang"; id: string; patch: Partial<LanguageEntry> }
+  | { t: "langRemove"; id: string }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId };
+
+/** Rebuild the certifications block from the confirmed credentials only. */
+function withCreds(s: BuilderState, credentials: Credential[]): BuilderState {
+  const text = credentials
+    .filter((c) => c.status === "confirmed" && c.title.trim())
+    .map((c) => [
+      c.title.trim(),
+      c.issuer.trim(),
+      c.issueDate.trim(),
+      c.expiryDate.trim() && `valid to ${c.expiryDate.trim()}`,
+      c.credentialNumber?.trim(),
+    ].filter(Boolean).join(" — "))
+    .join("\n");
+  return { ...s, credentials, profile: { ...s.profile, certifications: text } };
+}
+
+/** Rebuild the languages line. An entry with no level is not published. */
+function withLangs(s: BuilderState, languages: LanguageEntry[]): BuilderState {
+  const text = languages
+    .filter((l) => l.status === "confirmed" && l.name.trim() && l.level)
+    .map((l) => `${l.name.trim()} (${l.level})`)
+    .join(", ");
+  return { ...s, languages, profile: { ...s.profile, languages: text } };
+}
 
 function reducer(s: BuilderState, a: Action): BuilderState {
   switch (a.t) {
@@ -239,6 +272,32 @@ function reducer(s: BuilderState, a: Action): BuilderState {
     case "editItem":
       return editItem(s, a.id, a.text);
 
+    case "education":
+      return { ...s, profile: { ...s.profile, education: a.text } };
+
+    /* ── credentials ──
+     * A credential reaches the CV only once it is `confirmed` AND has a title. The
+     * derived string is rebuilt from scratch each time rather than appended to, so
+     * un-confirming one actually removes it from the document.
+     */
+    case "credAdd":
+      return withCreds(s, [...s.credentials, a.cred]);
+    case "cred":
+      return withCreds(s, s.credentials.map((x) => x.id === a.id ? { ...x, ...a.patch } : x));
+    case "credRemove":
+      return withCreds(s, s.credentials.filter((x) => x.id !== a.id));
+
+    /* ── languages ──
+     * Level is required, never defaulted: an entry without one is held back rather
+     * than published as a guess. Nothing may quietly assert "fluent English".
+     */
+    case "langAdd":
+      return withLangs(s, [...s.languages, a.entry]);
+    case "lang":
+      return withLangs(s, s.languages.map((x) => x.id === a.id ? { ...x, ...a.patch } : x));
+    case "langRemove":
+      return withLangs(s, s.languages.filter((x) => x.id !== a.id));
+
     case "confirm":
       return confirmItem(s, a.id).state;
 
@@ -264,6 +323,9 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
   const hydrated = useRef(false);
 
   const cinema = useSectionCinemaSafe(ORDER.length);
+  // Read once per mount and passed down: an expiry check that re-reads the clock on
+  // every render makes the same draft render differently for no reason.
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   /* hydrate once — a refresh must not cost the user their work */
   useEffect(() => {
@@ -407,6 +469,30 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   );
                 }
                 if (id === "skills") return <SkillsSection key={id} {...props} state={state} dispatch={dispatch} />;
+                if (id === "education") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <EducationBlock lang={lang} state={state} dispatch={dispatch as never} targetRole={state.target.title} />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
+                if (id === "credentials") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <CredentialsBlock lang={lang} state={state} dispatch={dispatch as never} referenceDate={today} />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
+                if (id === "languages") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <LanguagesBlock lang={lang} state={state} dispatch={dispatch as never} />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
                 return <Placeholder key={id} {...props} note={t.soon} />;
               })}
             </div>
