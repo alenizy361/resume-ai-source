@@ -37,6 +37,7 @@ import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
 import { type ParsedCv } from "@/app/lib/importCv";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
+import AskAi from "./AskAi";
 import ImportPanel from "./ImportPanel";
 import SummarySection from "./SummarySection";
 import ReviewSection from "./ReviewSection";
@@ -49,7 +50,7 @@ const T = {
     brand: "Sira", chat: "Talk to the AI instead",
     promise: "You fill the facts. AI completes the professional wording.",
     saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
-    back: "Back", cont: "Save & continue", edit: "Edit", preview: "Preview",
+    cont: "Save & continue", edit: "Edit", preview: "Preview",
     sections: {
       start: "Where do you want to start?",
       target: "The job you are aiming for",
@@ -85,7 +86,7 @@ const T = {
     brand: "سيرة", chat: "أفضّل المحادثة",
     promise: "أنت تكتب الحقائق. والذكاء يصوغها بلغة مهنية.",
     saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
-    back: "رجوع", cont: "احفظ وواصل", edit: "تعديل", preview: "معاينة",
+    cont: "احفظ وواصل", edit: "تعديل", preview: "معاينة",
     sections: {
       start: "من أين تبدأ؟",
       target: "الوظيفة التي تستهدفها",
@@ -697,6 +698,8 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                         lang={lang} cv={cv} state={state} target={state.target}
                         dispatch={dispatch as unknown as React.Dispatch<{ t: string; [k: string]: unknown }>}
                       />
+                      <AskAi lang={lang} section="experience" targetRole={state.target.title}
+                        current={(state.profile.wovenLines || []).join("\n")} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );
@@ -706,6 +709,8 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   return (
                     <SectionShell key={id} {...props}>
                       <EducationBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} targetRole={state.target.title} />
+                      <AskAi lang={lang} section="education" targetRole={state.target.title}
+                        current={state.profile.education} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );
@@ -714,6 +719,11 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   return (
                     <SectionShell key={id} {...props}>
                       <CredentialsBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} referenceDate={today} />
+                      {/* The question this section actually gets asked is "do I put my
+                          licence number on a CV?" — which a form cannot answer and a
+                          one-line AI answer can. */}
+                      <AskAi lang={lang} section="credentials" targetRole={state.target.title}
+                        current={state.profile.certifications} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );

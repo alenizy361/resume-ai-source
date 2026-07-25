@@ -3,7 +3,7 @@
  *
  *   node --experimental-strip-types src/ops/flags.test.mjs
  */
-import { builderMode, setBuilderMode, clearBuilderMode } from "../app/lib/flags.ts";
+import { builderMode, storedBuilderMode, setBuilderMode, clearBuilderMode } from "../app/lib/flags.ts";
 
 let pass = 0, fail = 0;
 const eq = (n, g, w) => { const ok = g === w; ok ? pass++ : fail++; console.log(`${ok ? "✅" : "❌"} ${n}${ok ? "" : ` — got ${g}, want ${w}`}`); };
@@ -36,6 +36,25 @@ setBuilderMode("form");
 eq("setBuilderMode persists", builderMode(""), "form");
 clearBuilderMode();
 eq("clearing falls back to the dial", builderMode(""), "chat");
+
+/*
+ * storedBuilderMode: the VISITOR's choice, with no environment fallback.
+ *
+ * The homepage redirect reads this rather than builderMode, and the difference is the
+ * whole point — a rollout dial must not be able to move someone who never chose the
+ * form. If these two ever collapse into one function, the dial silently starts
+ * redirecting every visitor away from the page that earns the money.
+ */
+eq("nothing chosen → null, not a default", storedBuilderMode(""), null);
+process.env.NEXT_PUBLIC_BUILDER_DEFAULT = "form";
+eq("the dial does NOT count as the visitor's choice", storedBuilderMode(""), null);
+delete process.env.NEXT_PUBLIC_BUILDER_DEFAULT;
+eq("an explicit ?builder=form is a choice", storedBuilderMode("?builder=form"), "form");
+eq("and it sticks", storedBuilderMode(""), "form");
+eq("choosing chat is also a choice", storedBuilderMode("?builder=chat"), "chat");
+eq("a nonsense value is not a choice", storedBuilderMode("?builder=banana"), "chat");
+clearBuilderMode();
+eq("clearing removes the choice entirely", storedBuilderMode(""), null);
 process.env.NEXT_PUBLIC_BUILDER_DEFAULT = "form";
 eq("cleared choice follows the dial, not the last choice", builderMode(""), "form");
 delete process.env.NEXT_PUBLIC_BUILDER_DEFAULT;

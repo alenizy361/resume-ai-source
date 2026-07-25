@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import DoorRedirect from "../components/DoorRedirect";
 import Journey from "../components/Journey";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -26,5 +27,12 @@ export const metadata: Metadata = {
 };
 
 export default function ArabicHome() {
-  return <Journey lang="ar" />;
+  return (
+    <>
+      <Journey lang="ar" />
+      {/* The homepage still opens the chat for everyone by default. This only moves a
+          visitor who explicitly chose the form builder before. */}
+      <DoorRedirect lang="ar" />
+    </>
+  );
 }

@@ -133,3 +133,58 @@ bubbles, input footer, `sendTurn`), all of `ar/builder/page.tsx`, `/api/refine`,
 `npx tsc --noEmit` clean · `npm run build` generates 402 pages · `npm run test` =
 guards 61, ratelimit 11, merge 32, language 12, resumedoc 25, draftstore 15 = **156
 assertions**.
+
+---
+
+# Outcome — what shipped against this audit
+
+Written after the fact, in the same file as the audit, so the two can be read
+together. Every numbered risk in §6 either became a fix or is still named honestly.
+
+## The eight risks
+
+| # | Risk found in the audit | What happened |
+|---|---|---|
+| 1 | `Journey.persist()` rebuilds the whole record and would wipe the form's draft | `persist()` now reads the stored record first and merges |
+| 2 | `upsertRole` drops a new `Role.id` | Fixed in **both** branches — the test found the insert branch after the merge branch was fixed |
+| 3 | The bullet cap silently eats the newest bullet | `confirmItem` returns `blocked: "bullet-cap"` and the UI says the role is full. Import shows the overflow count before you commit and offers the extras rather than dropping them |
+| 4 | A licence number in the contact line | Credentials are their own block; the number lives on the credential |
+| 5 | `rtl` follows the UI language, not the resume's | `cvLang(target)` is now the single answer, and `dir` is passed explicitly. A browser test found the same conflation in five more places — pack duties, pack skills, credential titles, language names, and every `/api/suggest` call from the experience section |
+| 6 | The preview re-lays out A4 per keystroke | 250 ms debounce; unreached sections do not mount at all |
+| 7 | `/api/suggest` asked for `[bracketed placeholders]` while the doctrine forbids them | The route imports `DRAFTING_DOCTRINE` and dropped its own rules |
+| 8 | `PdfExport` refuses Arabic | Still true, and now said out loud where the choice is made: an Arabic CV is offered Word plus the rasterised designed PDF. Embedding an Arabic font in jsPDF remains the largest open hole |
+
+## Beyond the audit
+
+Three problems the audit did not predict, each found by running the thing:
+
+- **`.gitignore`'s unanchored `build/`** swallowed `src/app/build/`,
+  `src/app/ar/build/` and `src/app/components/build/`. `git status` was clean and
+  `npm run build` passed, so a commit claiming to ship the builder shipped none of
+  it. Now anchored, and commits are verified with `git ls-files`.
+- **A truncated prompt.** The interview sent a JSON memory cut off mid-document, so
+  the model answered about a CV it had not finished reading. The same class of bug was
+  waiting in the summary path — `/api/suggest`'s `current` is capped at 1200
+  characters and a five-role digest blows past it — so summaries send `facts`, capped
+  at 4000, instead.
+- **Arabic on an English CV.** Found on the first Arabic run of the browser smoke
+  test: 56 Arabic characters on a CV the user had asked for in English. See risk 5.
+
+## What the builder is now
+
+Twelve sections — start · target · blueprint · personal · experience · education ·
+credentials · skills · languages · summary · review · design — plus three ways in:
+build new, read a CV you already have, or upload it to `/optimize`. `/build` and
+`/ar/build` are live; `/journey` and `/ar/journey` are the chat's own addresses; the
+Arabic-only `/ar/builder` and its two private endpoints are retired.
+
+The homepage still opens the chat for everyone by default. Promoting the form builder
+to `/` is a product decision, not an engineering one, and it stays a deliberate act —
+two small files. A visitor who explicitly picks the form door keeps it.
+
+## Baseline now held
+
+`npx tsc --noEmit` clean · ESLint clean on everything this work touched ·
+`npm run build` generates **404** pages · `npm run test` = **twelve suites** ·
+`npm run smoke` drives the real page in Chromium with `/api/suggest` blocked:
+21 assertions per interface, 23 with a job advert, 9 for the import path.

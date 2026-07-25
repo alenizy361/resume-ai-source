@@ -55,6 +55,31 @@ export function builderMode(search?: string): BuilderMode {
   return fromEnv();
 }
 
+/**
+ * The choice this VISITOR made, or null if they have not made one.
+ *
+ * Deliberately without the env fallback that `builderMode` applies. The homepage uses
+ * this to honour a door someone explicitly picked while leaving everyone else exactly
+ * where they were — a rollout dial and a user's own preference are different questions,
+ * and answering them with one function is how a flag ends up moving people who never
+ * asked to be moved.
+ */
+export function storedBuilderMode(search?: string): BuilderMode | null {
+  if (typeof window === "undefined") return null;
+
+  const qs = new URLSearchParams(search ?? window.location.search);
+  const asked = qs.get("builder");
+  if (isMode(asked)) {
+    try { window.localStorage.setItem(STORAGE_KEY, asked); } catch { /* private mode */ }
+    return asked;
+  }
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (isMode(saved)) return saved;
+  } catch { /* localStorage can throw before it can be read */ }
+  return null;
+}
+
 /** Let the user switch doors from the UI, and remember it. */
 export function setBuilderMode(mode: BuilderMode): void {
   try { window.localStorage.setItem(STORAGE_KEY, mode); } catch { /* noop */ }
