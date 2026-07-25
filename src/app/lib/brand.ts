@@ -64,3 +64,30 @@ export function copyright(lang: "ar" | "en", year = 2026): string {
 export function supportEmailIsPersonal(): boolean {
   return /@gmail\.com$|@hotmail\.|@outlook\.|@yahoo\./i.test(BRAND.supportEmail);
 }
+
+/* ─────────────────── salary ranges ─────────────────── */
+
+/**
+ * What a salary range on this site is, and is not.
+ *
+ * The SEO pages publish a range for every occupation — 62 in Arabic, 55 in English —
+ * presented as "Typical salary" / "نطاق الراتب التقريبي" with nothing behind it. No
+ * survey, no dataset, no year. Read as a Saudi market fact, which is how a jobseeker
+ * deciding what to ask for will read it, that is a claim the product cannot support, and
+ * a wrong one costs the reader money in a negotiation.
+ *
+ * These figures are not removed, because a labelled estimate is genuinely useful and
+ * every job board publishes one. They are labelled. This is the label, in one place, so
+ * a page cannot print the number without it — asserted in `ops/brand.test.mjs`.
+ *
+ * If a sourced dataset is ever licensed, this string becomes the citation and nothing
+ * else changes.
+ */
+export const SALARY_BASIS = {
+  en: "Indicative range only — a rough guide compiled from public job postings, not a verified salary survey. Check current listings before you negotiate.",
+  ar: "نطاق استرشادي فقط — تقدير عام مجمَّع من إعلانات وظائف منشورة، وليس مسحاً موثّقاً للرواتب. راجع الإعلانات الحالية قبل التفاوض.",
+} as const;
+
+export function salaryBasis(lang: "ar" | "en"): string {
+  return SALARY_BASIS[lang];
+}

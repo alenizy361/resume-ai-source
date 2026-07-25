@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -60,7 +60,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
           {j.title} skills <span className="accent-underline text-accent">for your resume</span>
         </h1>
         <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          {j.demand} Typical range: {j.salary}. Below: the exact terms applicant tracking software scans for in {j.title} resumes, and the skills recruiters actually shortlist on.
+          {j.demand} Typical range: {j.salary} <span style={{ opacity: 0.7 }}>({salaryBasis("en")})</span>. Below: the exact terms applicant tracking software scans for in {j.title} resumes, and the skills recruiters actually shortlist on.
         </p>
 
         {/* ATS keywords */}

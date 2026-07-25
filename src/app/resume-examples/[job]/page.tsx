@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -82,7 +82,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         <div className="chip mb-4">{j.category} · ATS-optimized</div>
         <h1 className="text-4xl font-extrabold leading-tight tracking-tight">{j.title} Resume Example &amp; ATS Keywords (2026)</h1>
         <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          {j.demand} Typical salary: {j.salary}. Below is a complete {j.title} resume example plus the exact keywords applicant tracking systems (ATS) scan for — then build yours free in 60 seconds.
+          {j.demand} Typical salary: {j.salary} <span style={{ opacity: 0.7 }}>({salaryBasis("en")})</span>. Below is a complete {j.title} resume example plus the exact keywords applicant tracking systems (ATS) scan for — then build yours free in 60 seconds.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/optimize" className="btn-accent px-6 py-3">Check my {j.title} resume free →</Link>

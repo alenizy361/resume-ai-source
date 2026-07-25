@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../../components/OrbBrand";
 import OrbSceneSetter from "../../../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -89,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         <div className="chip mb-4">{j.category} · متوافقة مع ATS</div>
         <h1 className="text-4xl font-extrabold leading-tight tracking-tight">مثال سيرة ذاتية {j.title} + كلمات ATS (2026)</h1>
         <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          {j.demand} نطاق الراتب التقريبي: {j.salary}. تجد أدناه نموذج سيرة {j.title} كاملاً مع الكلمات المفتاحية التي تفحصها أنظمة التوظيف (ATS) — ثم ابنِ سيرتك مجاناً بالثواني.
+          {j.demand} نطاق الراتب التقريبي: {j.salary} <span style={{ opacity: 0.7 }}>({salaryBasis("ar")})</span>. تجد أدناه نموذج سيرة {j.title} كاملاً مع الكلمات المفتاحية التي تفحصها أنظمة التوظيف (ATS) — ثم ابنِ سيرتك مجاناً بالثواني.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/ar/optimize" className="btn-accent px-6 py-3">افحص سيرة {j.title} مجاناً ←</Link>

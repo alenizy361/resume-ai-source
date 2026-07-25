@@ -12,7 +12,7 @@
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { BRAND, brandName, copyright, supportEmailIsPersonal } from "../app/lib/brand.ts";
+import { BRAND, brandName, copyright, salaryBasis, supportEmailIsPersonal } from "../app/lib/brand.ts";
 
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
@@ -90,6 +90,30 @@ const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/
     rel !== "lib/brand.ts" && /alanziabdulaziz4@gmail\.com/.test(code(src))).map(([rel]) => rel);
   // The seven inline copies are the debt this documents. The number must not grow.
   ok("the personal address is not spreading", inline.length <= 7, `${inline.length}: ${inline.join(", ")}`);
+}
+
+/* ── a published salary figure must say what it is ── */
+{
+  for (const lang of ["en", "ar"]) {
+    const b = salaryBasis(lang);
+    ok(`the ${lang} salary basis exists and is specific`, b.length > 60, b.slice(0, 40));
+    ok(`the ${lang} basis does not claim a survey`, !/verified salary survey|مسحاً موثّقاً للرواتب/.test(b.replace(/not a verified salary survey|وليس مسحاً موثّقاً للرواتب/, "")));
+  }
+  ok("the Arabic basis is in Arabic", /[؀-ۿ]/.test(salaryBasis("ar")));
+
+  /*
+   * Every page that prints a range prints the qualifier beside it.
+   *
+   * 62 Arabic occupations and 55 English ones carry a salary range with no survey, no
+   * dataset and no year behind it, labelled "Typical salary". A jobseeker deciding what
+   * to ask for reads that as a Saudi market fact, and a wrong one costs them money in a
+   * negotiation. The figures stay — a labelled estimate is genuinely useful — but a page
+   * cannot print the number without the label.
+   */
+  const printsSalary = FILES.filter(([, src]) => /\{j\.salary\}/.test(src));
+  ok("some page still publishes ranges", printsSalary.length >= 3, `${printsSalary.length} pages`);
+  const unlabelled = printsSalary.filter(([, src]) => !/salaryBasis\(/.test(src)).map(([rel]) => rel);
+  ok("no page prints a salary range without its basis", unlabelled.length === 0, unlabelled.join(", "));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
