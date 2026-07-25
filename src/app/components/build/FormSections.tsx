@@ -27,6 +27,7 @@ import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
 import ImportPanel from "./ImportPanel";
 import BlueprintStrip from "./BlueprintStrip";
+import OccupationClarify from "./OccupationClarify";
 
 /** What every section needs and nothing more: who is reading, and the document. */
 export interface Common {
@@ -180,6 +181,9 @@ export function TargetFields(p: Common) {
       <div className="bd-grid two">
         <Field label={L.title} value={p.state.target.title} onChange={(v) => set({ title: v })}
           placeholder={ar ? "أخصائي أشعة" : "Radiology Technologist"} optLabel={L.opt} />
+        {/* Directly under the title, because that is the field it is about. A question that appears
+            at the bottom of a form reads as being about the form. */}
+        <div className="sm:col-span-2"><OccupationClarify /></div>
         <label>
           <span className="bd-label">{L.level}</span>
           <select className="bd-input" value={p.state.target.level} onChange={(e) => set({ level: e.target.value })}>

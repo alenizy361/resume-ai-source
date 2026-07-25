@@ -27,6 +27,7 @@ import {
   type CareerContext, type GenerationStore, invalidate, tasksToInvalidate,
 } from "@/app/lib/aiCache";
 import type { ResumeLedger } from "@/app/lib/aiBudget";
+import type { TranslatedVersion } from "@/app/lib/translate";
 import { type RolePack } from "@/app/lib/rolePacks";
 import { type ParsedCv } from "@/app/lib/importCv";
 
@@ -69,7 +70,24 @@ export type Action =
    * answer again on the next visit. Two dispatches could interleave with anything else in the
    * queue; one cannot.
    */
-  | { t: "ai"; store: GenerationStore; ledger: ResumeLedger };
+  | { t: "ai"; store: GenerationStore; ledger: ResumeLedger }
+  /**
+   * Record the answer to the occupation question, or clear it.
+   *
+   * `"none"` is a real answer, not an absence: it means "I saw the question and none of the options
+   * fit". Stored so the question stops being asked, which an empty string could not express — an empty
+   * string is "never answered" and would make the prompt reappear on every visit.
+   */
+  | { t: "occupation"; id: string }
+  /**
+   * Store a localized version. WORDING ONLY.
+   *
+   * It cannot touch `profile`, and that is structural rather than a rule: the action carries a
+   * `TranslatedVersion`, which holds translated strings by source item id and has nowhere to put a
+   * career fact. So there is exactly one set of facts and no way for the English CV to claim something
+   * the Arabic one does not.
+   */
+  | { t: "version"; lang: string; version: TranslatedVersion };
 
 /**
  * Rebuild the certifications block from the confirmed credentials only.
@@ -464,7 +482,15 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
  */
 export function careerContext(s: BuilderState): CareerContext {
   return {
-    occupation: s.target.title,
+    /*
+     * The CONFIRMED occupation wins over the typed title when there is one.
+     *
+     * Without this the clarification would be theatre: the user answers "معلم رياضيات", the context
+     * hash still says "معلم", and the cache serves the blended suggestions the question existed to
+     * prevent. `"none"` falls back to the raw title, which is exactly right — it means the options did
+     * not fit, so their own words are the best description available.
+     */
+    occupation: s.occupationId && s.occupationId !== "none" ? s.occupationId : s.target.title,
     specialization: s.target.industry,
     seniority: s.target.level,
     country: s.target.country || s.personal.country,

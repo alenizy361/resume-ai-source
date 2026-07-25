@@ -30,6 +30,7 @@ import { track } from "@vercel/analytics";
 import ScoreRing from "../ScoreRing";
 import { type BuilderState, type SectionId, hasUnconfirmed } from "@/app/lib/builderDoc";
 import { type Dimension, type Finding, review } from "@/app/lib/reviewChecks";
+import EnglishVersion from "./EnglishVersion";
 
 type Lang = "ar" | "en";
 
@@ -174,6 +175,15 @@ export default function ReviewSection({
           <p className="mt-3 text-xs" style={{ color: "var(--faint)" }}>{c.recount}</p>
         </div>
       )}
+
+      {/*
+        Last on the page, deliberately.
+
+        The English version is a thing you do to a FINISHED CV, so it sits after the score and the
+        findings rather than competing with them. It renders nothing at all on an English CV — there is
+        nothing to translate from — so it costs an English-authoring user no screen space.
+      */}
+      <EnglishVersion />
     </div>
   );
 }

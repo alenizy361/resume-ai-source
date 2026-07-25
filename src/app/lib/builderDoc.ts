@@ -26,6 +26,7 @@ import {
 } from "./resumeDoc.ts";
 import type { GenerationStore } from "./aiCache.ts";
 import type { ResumeLedger } from "./aiBudget.ts";
+import type { TranslatedVersion } from "./translate.ts";
 
 export const SCHEMA_VERSION = 2;
 
@@ -168,6 +169,29 @@ export interface BuilderState {
    * accept; the resume has moved twice, so this says no.
    */
   revision?: number;
+
+  /**
+   * The occupation the user CONFIRMED, when a broad title was clarified.
+   *
+   * Stored separately from `target.title` because they answer different questions. The title is what
+   * the user typed and what appears on their CV; this is what the suggestion engine reasons about. A
+   * user who typed "معلم" and answered "معلم لغة إنجليزية" keeps their own words on the document and
+   * gets English-teaching suggestions — conflating the two would silently rewrite their CV headline
+   * to match a dropdown they touched once.
+   *
+   * Empty when the title resolved on its own or resolved to nothing. Neither case blocks anything.
+   */
+  occupationId?: string;
+
+  /**
+   * Other language versions of the SAME confirmed facts.
+   *
+   * Keyed by target language. Wording only: a version holds translated strings by source item id and
+   * nothing else, so there is exactly one set of career facts and no way for the English CV to claim
+   * something the Arabic one does not. Editing English wording is local; editing a FACT happens in
+   * the shared document and marks the affected section stale.
+   */
+  versions?: Record<string, TranslatedVersion>;
 
   updatedAt: number;
 }
