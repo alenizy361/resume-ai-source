@@ -222,6 +222,62 @@ const run = async () => {
         return !!el && getComputedStyle(el).display !== "none";
       });
       ok(`${prof.name}: the next step opens on the form, not the preview`, backToEdit);
+
+      /*
+       * ── the rail has to follow the user ──
+       *
+       * Eleven steps in a 390px viewport fits about three. Pressing Continue moves to a step that is
+       * off-screen to the right, so without intervention the rail keeps showing the steps already
+       * finished — and the one piece of orientation it exists to give is the one thing it stops
+       * giving. Invisible on a desktop, where all eleven sit in a visible column, which is exactly why
+       * it survived until someone photographed a phone.
+       *
+       * Measured rather than asserted structurally: the active item's centre against the scroller's
+       * centre. A class name would prove the code ran; this proves the pixel moved.
+       */
+      const rail = async () => page.evaluate(() => {
+        const nav = document.querySelector(".bd-nav ol");
+        const active = document.querySelector('.bd-nav a[aria-current="step"]');
+        if (!nav || !active) return null;
+        const n = nav.getBoundingClientRect();
+        const a = active.getBoundingClientRect();
+        return {
+          /* Is it inside the scroller's visible box at all? */
+          visible: a.left >= n.left - 1 && a.right <= n.right + 1,
+          /* How far its centre is from the scroller's, as a share of the scroller's width. */
+          offCentre: Math.abs((a.left + a.width / 2) - (n.left + n.width / 2)) / n.width,
+          scrollable: nav.scrollWidth > nav.clientWidth + 4,
+        };
+      });
+
+      /* Walk far enough that the active step is genuinely past the fold. */
+      for (let i = 0; i < 4; i++) {
+        await page.locator(".bd-step-foot button.btn-accent").click();
+        await page.waitForTimeout(500);
+      }
+      const r = await rail();
+      ok(`${prof.name}: the step rail is a real horizontal scroller`, r?.scrollable === true, JSON.stringify(r));
+      ok(`${prof.name}: the active step is scrolled into view after four Continues`,
+        r?.visible === true, JSON.stringify(r));
+      /* Centred, not merely on screen. "Just inside the right edge" is where it would sit with no
+         intervention at all, so a visibility check alone would pass on the broken behaviour. */
+      ok(`${prof.name}: and it is near the centre of the rail, not clinging to an edge`,
+        (r?.offCentre ?? 1) < 0.3, `offCentre=${r?.offCentre?.toFixed(3)}`);
+
+      /*
+       * ── the step controls clear the browser's own chrome ──
+       *
+       * iOS Safari draws its bottom bar over whatever the page put there, and Back/Continue are the
+       * two controls a step exists to reach. `env(safe-area-inset-bottom)` is 0 in a headless
+       * Chromium, so what is checked here is that the RULE is applied and resolves — a typo'd
+       * `env()` computes to nothing and would leave the padding at 0 with no error anywhere.
+       */
+      const footPad = await page.evaluate(() => {
+        const el = document.querySelector(".bd-step-foot");
+        return el ? getComputedStyle(el).paddingBottom : "";
+      });
+      ok(`${prof.name}: the step footer reserves space below the buttons`,
+        parseFloat(footPad) >= 8, footPad);
     }
 
     ok(`${prof.name}: no page errors across all eleven steps`, errors.length === 0, errors[0] ?? "");
