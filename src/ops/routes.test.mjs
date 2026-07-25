@@ -193,33 +193,39 @@ const run = async () => {
     ok(`${r.path} logs no page errors`, errors.length === 0, errors.slice(0, 1).join(""));
 
     /*
-     * Structured data must be in the page's own language.
+     * ALL the ld+json blocks, not the first one.
      *
-     * One English JSON-LD object used to be rendered on every route, so an Arabic page
-     * told Google its FAQ answers were in English and quoted "SAR 35" — a mismatch
-     * between the markup and the visible page, which is what suppresses a rich result.
-     * Checked per route because it is emitted by the layout, so one mistake affects all
-     * of them at once.
+     * The first version used `querySelector`, which picked whichever block came first —
+     * and six pages emit their own page-level schema ahead of the layout's, so the check
+     * read a block with no FAQPage in it and reported an empty question. The pages were
+     * fine; the assertion was looking in one place on a document that has several.
+     *
+     * Every FAQ question on the page must be in the page's own script, wherever it was
+     * emitted from.
      */
-    const ld = await page.evaluate(() => {
-      const el = document.querySelector('script[type="application/ld+json"]');
-      if (!el) return null;
-      try { return JSON.parse(el.textContent || ""); } catch { return "unparseable"; }
+    const questions = await page.evaluate(() => {
+      const out = [];
+      for (const el of document.querySelectorAll('script[type="application/ld+json"]')) {
+        let d;
+        try { d = JSON.parse(el.textContent || ""); } catch { return "unparseable"; }
+        const graph = Array.isArray(d) ? d : d["@graph"] || [d];
+        for (const node of graph) {
+          if (node?.["@type"] !== "FAQPage") continue;
+          for (const q of node.mainEntity || []) if (q?.name) out.push(q.name);
+        }
+      }
+      return out;
     });
-    if (ld === null) {
-      ok(`${r.path} emits structured data`, false, "no ld+json");
-    } else if (ld === "unparseable") {
+
+    if (questions === "unparseable") {
       ok(`${r.path} structured data is valid JSON`, false, "parse failed");
     } else {
-      const faq = (ld["@graph"] || []).find((g) => g["@type"] === "FAQPage");
-      const first = faq?.mainEntity?.[0]?.name ?? "";
       const isArabicPage = r.path === "/ar" || r.path.startsWith("/ar/");
-      const isArabicText = /[؀-ۿ]/.test(first);
-      ok(`${r.path} structured data matches the page language`,
-        Boolean(first) && isArabicText === isArabicPage,
-        `first question: ${first.slice(0, 40)}`);
+      const wrong = questions.filter((q) => /[؀-ۿ]/.test(q) !== isArabicPage);
+      ok(`${r.path} every FAQ question is in the page's language`,
+        questions.length > 0 && wrong.length === 0,
+        questions.length === 0 ? "no FAQ found" : `${wrong.length} wrong: ${wrong[0]?.slice(0, 40)}`);
     }
-
     await page.close();
   }
 
