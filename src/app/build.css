@@ -1,0 +1,154 @@
+/*
+ * The form builder's stylesheet, scoped to .build-root.
+ *
+ * It deliberately does NOT reuse journey.css. That file is scoped to .journey-root
+ * and, more importantly, REDEFINES global variable names with different values
+ * (its --accent is #7c3aed against the global #8b5cf6, plus --muted and --faint).
+ * Wrapping a form in it would silently re-theme every var(--accent) inside, on top
+ * of dragging in 400 lines of chat rules. So: the global palette from globals.css,
+ * and only the motion *values* borrowed from journey.css — the easing curve, the
+ * blur-in reveal, and the scroll offset that keeps a revealed section clear of the
+ * sticky nav.
+ */
+
+.build-root {
+  --ez: cubic-bezier(.16, 1, .3, 1);
+  --rail: 3px;
+}
+
+/* ── section rhythm ───────────────────────────────────────── */
+
+.build-root .bd-section {
+  /* A revealed section must not land under the sticky header. */
+  scroll-margin-top: 70px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+.build-root .bd-section:first-of-type { border-top: 0; }
+
+/* Sections the user has not reached yet stay visible but inert, so the journey is
+   legible as a whole — a form that hides its own length feels longer. */
+.build-root .bd-section.locked { opacity: .38; pointer-events: none; }
+.build-root .bd-section.locked .bd-body { display: none; }
+
+@keyframes bdReveal {
+  from { opacity: 0; transform: translateY(10px); filter: blur(6px); }
+  to   { opacity: 1; transform: none;             filter: blur(0); }
+}
+.build-root .bd-section.just-opened { animation: bdReveal 1.1s var(--ez) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .build-root .bd-section.just-opened { animation: none; }
+  .build-root * { scroll-behavior: auto !important; }
+}
+
+.build-root .bd-head { display: flex; align-items: center; gap: 10px; }
+.build-root .bd-num {
+  display: grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 999px;
+  font: 700 12px/1 var(--font-mono, ui-monospace), monospace;
+  background: rgba(139, 92, 246, .12);
+  border: 1px solid rgba(139, 92, 246, .35);
+  color: #c4b5fd; flex: 0 0 auto;
+}
+.build-root .bd-num.done {
+  background: rgba(52, 211, 153, .12);
+  border-color: rgba(52, 211, 153, .4);
+  color: #6ee7b7;
+}
+.build-root .bd-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em; }
+.build-root .bd-sub { margin-top: 2px; font-size: .8rem; color: var(--muted); }
+.build-root .bd-body { margin-top: 16px; }
+
+/* ── fields ───────────────────────────────────────────────── */
+
+.build-root .bd-grid { display: grid; gap: 12px; }
+@media (min-width: 640px) { .build-root .bd-grid.two { grid-template-columns: 1fr 1fr; } }
+
+.build-root .bd-label {
+  display: block; margin-bottom: 5px;
+  font-size: .78rem; font-weight: 600; color: var(--muted);
+}
+.build-root .bd-opt { font-weight: 400; color: var(--faint); }
+
+.build-root .bd-input,
+.build-root .bd-textarea {
+  width: 100%; border-radius: 12px; padding: 11px 14px;
+  font-size: .9rem; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line);
+  /* 16px on mobile prevents iOS Safari zooming the whole page on focus. */
+  transition: border-color .18s var(--ez);
+}
+@media (max-width: 640px) {
+  .build-root .bd-input, .build-root .bd-textarea { font-size: 16px; }
+}
+.build-root .bd-input:focus,
+.build-root .bd-textarea:focus { outline: none; border-color: rgba(139, 92, 246, .55); }
+.build-root .bd-textarea { resize: vertical; min-height: 96px; line-height: 1.6; }
+
+/* Touch targets: 44px is the smallest reliably tappable control. */
+.build-root button { min-height: 44px; }
+
+/* ── suggestion cards: the honesty promise, made visible ──── */
+
+.build-root .bd-sug {
+  display: flex; gap: 10px; align-items: flex-start;
+  border-radius: 12px; padding: 11px 12px;
+  background: rgba(139, 92, 246, .06);
+  border: 1px dashed rgba(139, 92, 246, .45);
+}
+.build-root .bd-sug + .bd-sug { margin-top: 8px; }
+.build-root .bd-sug-badge {
+  font: 700 10px/1 var(--font-mono, ui-monospace), monospace;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: #c4b5fd; white-space: nowrap; padding-top: 3px;
+}
+/* Confirmed content is plain text — the visual difference IS the contract. */
+.build-root .bd-confirmed {
+  display: flex; gap: 10px; align-items: flex-start;
+  border-radius: 12px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.build-root .bd-confirmed + .bd-confirmed { margin-top: 6px; }
+.build-root .bd-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 6px 12px; border-radius: 999px;
+  font-size: .82rem; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); color: var(--muted);
+  transition: all .16s var(--ez);
+}
+.build-root .bd-chip.on {
+  background: rgba(139, 92, 246, .14);
+  border-color: rgba(139, 92, 246, .5);
+  color: #ddd6fe;
+}
+.build-root .bd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ── progress rail ────────────────────────────────────────── */
+
+.build-root .bd-rail { display: flex; gap: 4px; }
+.build-root .bd-rail i {
+  height: var(--rail); flex: 1; border-radius: 999px;
+  background: var(--line); transition: background .3s var(--ez);
+}
+.build-root .bd-rail i.on { background: var(--accent); }
+
+/* ── layout: form left, sticky preview right ──────────────── */
+
+.build-root .bd-cols { display: grid; gap: 24px; }
+@media (min-width: 1024px) {
+  .build-root .bd-cols { grid-template-columns: minmax(0, 1fr) 400px; align-items: start; }
+  .build-root .bd-preview { position: sticky; top: 76px; }
+}
+/* On a phone the CV never sits beside the form — there is no room for either to be
+   usable. It goes behind a toggle instead. */
+@media (max-width: 1023px) {
+  .build-root .bd-preview.hide { display: none; }
+  .build-root .bd-form.hide { display: none; }
+}
+
+.build-root .bd-save {
+  font: 600 11px/1 var(--font-mono, ui-monospace), monospace;
+  color: var(--faint); letter-spacing: .06em;
+}
+.build-root .bd-save.err { color: #f87171; }

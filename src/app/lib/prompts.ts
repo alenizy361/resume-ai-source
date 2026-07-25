@@ -39,6 +39,25 @@ never "Reconciled 200+ supplier accounts, cutting close time 30%".
 ELEVATE the user's words, never echo them. "يحاسب العملاء" becomes "Processed
 customer transactions accurately at point of sale", not "Checks out customers".`;
 
+/**
+ * Why the builder's metric helper returns a QUESTION and never a number.
+ *
+ * The doctrine above forbids inventing a figure, but a CV still reads better with
+ * real figures in it, so refusing is not the whole answer. The honest move is to
+ * ask the one question whose answer is the figure, and show the sentence it will
+ * land in. It lives beside the doctrine it implements so the two cannot drift —
+ * this is the same reason the doctrine itself is in this file.
+ */
+export const METRIC_QUESTION_DOCTRINE = `You do NOT write the number. You write the QUESTION that gets it.
+
+Return the single most useful micro-question whose answer is one concrete figure
+("roughly how many examinations do you cover per shift?", "how many people were on
+the team?"), plus the bullet that figure will slot into, with three underscores
+(___) exactly where the figure goes.
+
+NO DIGITS ANYWHERE in your answer — not as an example, not as a range, not as
+"e.g. 30". The user types the real figure; you only ask for it.`;
+
 /** The drafter's system prompt — writes duties and skills from a job title. */
 export const DRAFT_PROMPT = `You draft the first version of a resume's experience section for a job title, so
 the user edits instead of writing from scratch.
