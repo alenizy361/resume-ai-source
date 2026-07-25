@@ -14,6 +14,7 @@
  * the traveling orb keyframes — all DOM writes via refs, zero re-renders.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { formatPrice } from "@/app/lib/plans";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import { track } from "@vercel/analytics";
@@ -101,7 +102,7 @@ const T = {
     p2a: "كل مزايا اليوم الكامل", p2b: "وصول مفتوح ٩٠ يوماً", p2c: "مثالي لموسم توظيف نشط", p2d: "ضمان استرداد ٧ أيام",
     bestVal: "الأفضل قيمة", choose: "اختر", chooseB: "اختر الحزمة",
     freeLink: "أكمل مجاناً — بالعلامة المائية",
-    planDay: "يوم كامل — ٣٥ ريالاً", plan90: "٩٠ يوماً — ٩٩ ريالاً", freePlan: "مجاني — بالعلامة مائية",
+    planDay: `يوم كامل — ${formatPrice("single", "ar")}`, plan90: `٩٠ يوماً — ${formatPrice("complete", "ar")}`, freePlan: "مجاني — بالعلامة مائية",
     finTa: "سيرتك", finTb: "بين يديك",
     finS: "بنيتها وأنت تشرب قهوتك — وهذا ملخص رحلتك:",
     sumTplP: "قالب", sumScoreP: "درجة",
@@ -178,7 +179,7 @@ const T = {
     p2a: "Everything in Full Day", p2b: "90-day open access", p2c: "Ideal for an active job hunt", p2d: "7-day money-back guarantee",
     bestVal: "Best value", choose: "Choose", chooseB: "Get it",
     freeLink: "Continue free — with watermark",
-    planDay: "Full Day — SAR 35", plan90: "90 Days — SAR 99", freePlan: "Free — with watermark",
+    planDay: `Full Day — ${formatPrice("single", "en")}`, plan90: `90 Days — ${formatPrice("complete", "en")}`, freePlan: "Free — with watermark",
     finTa: "Your resume is", finTb: "yours",
     finS: "You built it over a coffee — here's your journey:",
     sumTplP: "Template", sumScoreP: "Score",

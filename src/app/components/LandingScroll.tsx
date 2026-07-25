@@ -12,6 +12,7 @@
  * framed honestly), inputs are 16px+ and touch targets 44px+.
  */
 import { useEffect, useRef, useState } from "react";
+import { formatPrice } from "@/app/lib/plans";
 import Link from "next/link";
 import {
   motion,
@@ -88,7 +89,7 @@ const T = {
       ["هل المعلومات تنحفظ عندكم؟", "الفحص يتم بدون تسجيل، وسيرتك ما تُنشر إلا إذا أنت اخترت مشاركتها برابط."],
       ["هل السيرة العربية فعلاً RTL؟", "ملف Word العربي يتنزّل بتنسيق RTL صحيح — مو نص مقلوب."],
       ["هل تخترقون أنظمة الشركات؟", "لا. نفحص سيرتك بمعايير أنظمة ATS المعروفة ونحسّن صياغتها — بدون أي اختلاق."],
-      ["ليش أدفع ٣٥ ريالاً؟", "المدفوع يفك التنزيل النظيف بدون علامة مائية — مرة وحدة، مو اشتراك."],
+      [`ليش أدفع ${formatPrice("single", "ar")}؟`, "المدفوع يفك التنزيل النظيف بدون علامة مائية — مرة وحدة، مو اشتراك."],
     ],
     fin_h2: "خلصت القراءة عن سيرة أفضل.",
     fin_sub: "خطوتك الأولى تبدأ الآن ↓",
@@ -144,7 +145,7 @@ const T = {
       ["Is my data stored?", "Scanning needs no signup, and your resume is never published unless you choose to share it with a link."],
       ["Is the Arabic resume really RTL?", "The Arabic Word file downloads with correct RTL formatting — not flipped text."],
       ["Do you hack company systems?", "No. We score your resume against known ATS criteria and improve the wording — never fabricating anything."],
-      ["Why pay SAR 35?", "Paying unlocks the clean, watermark-free download — one time, not a subscription."],
+      [`Why pay ${formatPrice("single", "en")}?`, "Paying unlocks the clean, watermark-free download — one time, not a subscription."],
     ],
     fin_h2: "Reading about a better resume is over.",
     fin_sub: "Your first step starts now ↓",

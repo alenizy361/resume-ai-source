@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { formatPrice } from "@/app/lib/plans";
 import OrbBrand from "../components/OrbBrand";
 import OrbSceneSetter from "../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -39,7 +40,7 @@ const STR = {
     gradeFailed: "تعذّر التقييم",
     interviewerShort: "المُقابِل", lockChip: "🔒 ميزة الحزمة الكاملة",
     paywallDesc: "المقابلة التفاعلية بالفيديو: مُقابِل ذكي يسألك، تجاوب على الكاميرا، وتقييم فوري لكل إجابة — ضمن الحزمة الكاملة (السيرة + خطاب التعريف + لينكدإن + المقابلة).",
-    unlockComplete: "افتح الحزمة الكاملة — ٩٩ ريالاً", unlockSingle: "أو تحسين سيرة واحدة — ٣٥ ريالاً",
+    unlockComplete: `افتح الحزمة الكاملة — ${formatPrice("complete", "ar")}`, unlockSingle: `أو تحسين سيرة واحدة — ${formatPrice("single", "ar")}`,
     guarantee: "ضمان استرجاع خلال ٧ أيام", replayInterviewer: "🔊 أعد سماع المُقابِل",
     qOf: (i: number, n: number) => `السؤال ${i} من ${n}`, avgLabel: "متوسط تقييمك:",
     you: "أنت", recording: "تسجيل", askLabel: "🎤 المُقابِل يسأل",
@@ -73,7 +74,7 @@ const STR = {
     gradeFailed: "Couldn't score the answer",
     interviewerShort: "The interviewer", lockChip: "🔒 Complete Pack feature",
     paywallDesc: "The interactive video interview: an AI interviewer asks, you answer on camera, and get instant feedback on every answer — part of the Complete Pack (resume + cover letter + LinkedIn + interview).",
-    unlockComplete: "Unlock the Complete Pack — SAR 99", unlockSingle: "Or improve one resume — SAR 35",
+    unlockComplete: `Unlock the Complete Pack — ${formatPrice("complete", "en")}`, unlockSingle: `Or improve one resume — ${formatPrice("single", "en")}`,
     guarantee: "7-day money-back guarantee", replayInterviewer: "🔊 Hear the interviewer again",
     qOf: (i: number, n: number) => `Question ${i} of ${n}`, avgLabel: "Your average:",
     you: "You", recording: "REC", askLabel: "🎤 The interviewer asks",

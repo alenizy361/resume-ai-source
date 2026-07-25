@@ -21,6 +21,16 @@ import {
   toArabicDigits,
 } from "../app/lib/plans.ts";
 
+/** Every .ts/.tsx under a directory. Shared by the two file-scanning checks below. */
+const walk = (dir, out = []) => {
+  for (const e of readdirSync(dir)) {
+    const full = join(dir, e);
+    if (statSync(full).isDirectory()) walk(full, out);
+    else if (/\.tsx?$/.test(e)) out.push(full);
+  }
+  return out;
+};
+
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
 const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JSON.stringify(g)}, want ${JSON.stringify(w)}`);
@@ -92,34 +102,25 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
    * and the pricing pages — are deliberately NOT on this list. They were migrated first
    * because they are where a wrong number costs money rather than credibility.
    */
-  const ALLOWED = new Set([
-    "components/AdvisorLanding.tsx",
-    "components/Journey.tsx",
-    "components/LandingScroll.tsx",
-    "ats-resume-checker/page.tsx",
-    "interview-live/page.tsx",
-    "free-resume-checker/page.tsx",
-    "jobscan-alternative/page.tsx",
-    "templates/TemplatesGallery.tsx",
-    "pay/callback/page.tsx",
-    "ar/optimize/page.tsx",
-    "optimize/page.tsx",
-  ]);
+  /*
+   * Empty, and it should stay that way.
+   *
+   * This was a list of eleven files carrying prices in prose while the pricing module was
+   * restructured — a ratchet, so a NEW hardcoded price would fail while the existing ones
+   * were migrated one at a time. They have all been migrated: every price a customer can
+   * read now comes from `formatPrice()`, including the USD hints, which read
+   * `PLANS.*.priceUsd` so a promotion moves those too.
+   *
+   * Two of the original eleven turned out to contain no price at all — they were caught by
+   * a looser first draft of the pattern below.
+   */
+  const ALLOWED = new Set([]);
 
   const PRICE = new RegExp(
     "SAR\\s*(?:35|99|75)\\b"                       // "SAR 35"
     + "|\\b(?:35|99|75)\\s*(?:SAR|ريال)"            // "35 SAR"
     + "|(?<![٠-٩])(?:٣٥|٩٩|٧٥)(?![٠-٩])\\s*ريال",    // "٣٥ ريالاً", never inside ٩٩.٩٪
   );
-  const walk = (dir, out = []) => {
-    for (const e of readdirSync(dir)) {
-      const full = join(dir, e);
-      if (statSync(full).isDirectory()) walk(full, out);
-      else if (/\.tsx?$/.test(e)) out.push(full);
-    }
-    return out;
-  };
-
   const offenders = [];
   for (const file of walk("app")) {
     const rel = file.replace(/^app\//, "");
@@ -133,8 +134,38 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   ok("no file outside the migration list hardcodes a price",
     offenders.length === 0, offenders.join(", "));
 
-  // And the list itself must shrink over time, never silently grow.
-  ok("the migration list is documented and bounded", ALLOWED.size <= 11, `${ALLOWED.size} files`);
+  // It reached zero. Anything added back is a regression, not a plan.
+  ok("the migration list is empty", ALLOWED.size === 0, `${ALLOWED.size} files still listed`);
+}
+
+/* ── an interpolation must be in a context that interpolates ── */
+{
+  /*
+   * `${formatPrice(...)}` inside JSX TEXT renders those characters literally.
+   *
+   * Migrating the last eleven files replaced price tokens across whole files, and five of
+   * the sites turned out to be plain JSX text rather than string literals — so a user at
+   * the paywall would have read "${formatPrice(\"single\", \"en\")}" where the price
+   * belongs. A page fetch could not see it: those blocks only render after a scan
+   * completes, which is exactly the kind of state a static check reaches and a smoke test
+   * does not.
+   *
+   * A line holding `${...}` must also open a template literal or a string. If it has the
+   * interpolation and no backtick and no quote, it is JSX text and the syntax is wrong.
+   */
+  const broken = [];
+  for (const file of walk("app")) {
+    for (const [i, line] of readFileSync(file, "utf8").split("\n").entries()) {
+      if (!/\$\{formatPrice|\$\{PLANS\./.test(line)) continue;
+      // Strip the interpolations before looking for a quote: `formatPrice("single","en")`
+      // contains quotes of its own, and testing the raw line let every broken site through
+      // — the first version of this check passed on the very lines it was written for.
+      const outside = line.replace(/\$\{[^}]*\}/g, "");
+      if (/[`"']/.test(outside)) continue;
+      broken.push(`${file.replace(/^app\//, "")}:${i + 1}`);
+    }
+  }
+  ok("no price interpolation sits in JSX text", broken.length === 0, broken.join(", "));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

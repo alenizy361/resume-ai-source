@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PLANS, formatPrice } from "@/app/lib/plans";
 import SeoLanding from "../components/SeoLanding";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -27,7 +28,7 @@ export default function Page() {
       ]}
       faqs={[
         { q: "What is an ATS resume checker?", a: "An ATS (applicant tracking system) resume checker analyzes your resume the way employer software does — scanning for keywords, formatting, and relevance to a specific job — and gives you a score plus fixes so your resume gets past the automated filter." },
-        { q: "Is the ATS resume checker free?", a: "Yes — your first resume scan is completely free, no account or card required. For unlimited scans and cover letters, plans start at SAR 35 (~$9) one-time or SAR 99 one-time." },
+        { q: "Is the ATS resume checker free?", a: `Yes — your first resume scan is completely free, no account or card required. For unlimited scans and cover letters, plans start at ${formatPrice("single", "en")} (${PLANS.single.priceUsd}) one-time or ${formatPrice("complete", "en")} one-time.` },
         { q: "How do I improve my ATS score?", a: "Mirror the exact keywords from the job description, use standard section headings, quantify your achievements, and avoid tables or graphics that confuse parsers. Our checker does all of this automatically in the rewrite." },
         { q: "Will an ATS reject my resume for formatting?", a: "It can. Complex tables, columns, images, and unusual fonts often break ATS parsing. Our tool outputs clean, ATS-safe text you can paste into any application." },
       ]}

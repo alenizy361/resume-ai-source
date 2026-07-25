@@ -1,5 +1,6 @@
 "use client";
 import AiOrb from "../../components/AiOrb";
+import { formatPrice } from "@/app/lib/plans";
 import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import OrbBrand from "../../components/OrbBrand";
@@ -507,11 +508,11 @@ export default function ArOptimizePage() {
                     : "حمّل نسخة نظيفة بدون علامة مائية"}
                 </h3>
                 <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>
-                  تنزيلك المجاني (PDF/Word) عليه علامة صغيرة «cv.rabit.sa». أزلها — وافتح خطاب التعريف ولينكدإن وتحضير المقابلة — بـ٣٥ ريال مرة واحدة، أو الحزمة الكاملة ٩٩ ريال. بدون اشتراك.
+                  تنزيلك المجاني (PDF/Word) عليه علامة صغيرة «cv.rabit.sa». أزلها — وافتح خطاب التعريف ولينكدإن وتحضير المقابلة — بـ{formatPrice("single", "ar")} مرة واحدة، أو الحزمة الكاملة {formatPrice("complete", "ar")}. بدون اشتراك.
                 </p>
                 <div className="mx-auto mt-5 max-w-xs space-y-3">
-                  <CheckoutButton ar plan="single" label="أزل العلامة — ٣٥ ريالاً" variant="accent" />
-                  <CheckoutButton ar plan="complete" label="الحزمة الكاملة (٩٩ ريالاً)" variant="ghost" />
+                  <CheckoutButton ar plan="single" label={`أزل العلامة — ${formatPrice("single", "ar")}`} variant="accent" />
+                  <CheckoutButton ar plan="complete" label={`الحزمة الكاملة (${formatPrice("complete", "ar")})`} variant="ghost" />
                 </div>
                 <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>
                   <a href="/terms" className="underline underline-offset-2">ضمان استرجاع خلال ٧ أيام</a>
@@ -566,7 +567,7 @@ export default function ArOptimizePage() {
 
             <div className="card mt-8 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
               <h3 className="text-2xl font-bold">تقدّم على أكثر من وظيفة؟</h3>
-              <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>الحزمة الكاملة بـ ٩٩ ريال دفعة واحدة — خطاب تعريف ولينكدإن وتحضير مقابلة، بدون اشتراك.</p>
+              <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>الحزمة الكاملة بـ {formatPrice("complete", "ar")} دفعة واحدة — خطاب تعريف ولينكدإن وتحضير مقابلة، بدون اشتراك.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <a href="/ar#pricing" className="btn-accent px-8 py-3">اشترك الآن ←</a>
                 <button onClick={() => { setResult(null); setResume(""); setJobDescription(""); setCoverLetter(""); try { localStorage.removeItem("ra_ar_optimize_draft"); } catch { /* تجاهل */ } }}

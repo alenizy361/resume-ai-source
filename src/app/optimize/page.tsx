@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { formatPrice } from "@/app/lib/plans";
 import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
@@ -730,11 +731,11 @@ export default function OptimizePage() {
                         : "Download a clean, watermark-free version"}
                     </h3>
                     <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>
-                      Your free PDF/Word download carries a small “cv.rabit.sa” mark. Remove it — and unlock cover letters, LinkedIn &amp; interview prep — for a one-time SAR 35, or the SAR 99 Complete Pack. No subscription.
+                      Your free PDF/Word download carries a small “cv.rabit.sa” mark. Remove it — and unlock cover letters, LinkedIn &amp; interview prep — for a one-time {formatPrice("single", "en")}, or the {formatPrice("complete", "en")} Complete Pack. No subscription.
                     </p>
                     <div className="mx-auto mt-5 max-w-xs space-y-3">
-                      <CheckoutButton plan="single" label="Remove watermark — SAR 35" variant="accent" />
-                      <CheckoutButton plan="complete" label="Complete Pack (SAR 99)" variant="ghost" />
+                      <CheckoutButton plan="single" label={`Remove watermark — ${formatPrice("single", "en")}`} variant="accent" />
+                      <CheckoutButton plan="complete" label={`Complete Pack (${formatPrice("complete", "en")})`} variant="ghost" />
                     </div>
                     <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>
                       <a href="/terms" className="underline underline-offset-2">7-day money-back guarantee</a>
@@ -877,9 +878,9 @@ export default function OptimizePage() {
             {/* Bottom CTA */}
             <div className="card mt-10 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
               <h3 className="text-2xl font-bold">Applying to more than one job?</h3>
-              <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>Get the Complete Pack — SAR 99 once, no subscription: cover letters, LinkedIn, and interview prep included.</p>
+              <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>Get the Complete Pack — {formatPrice("complete", "en")} once, no subscription: cover letters, LinkedIn, and interview prep included.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <a href="/#pricing" className="btn-accent px-8 py-3">Get the Complete Pack — SAR 99 →</a>
+                <a href="/#pricing" className="btn-accent px-8 py-3">Get the Complete Pack — {formatPrice("complete", "en")} →</a>
                 <button
                   onClick={() => {
                     setResult(null); setResume(""); setJobDescription(""); setCoverLetter("");

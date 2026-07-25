@@ -20,6 +20,7 @@
  * inputs, 44px targets, prefers-reduced-motion.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { formatPrice } from "@/app/lib/plans";
 import { BRAND } from "@/app/lib/brand";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
@@ -104,7 +105,7 @@ const T = {
     lang_pick: "لغة السيرة:",
     lang_opts: { en: "English", ar: "العربية", both: "الاثنين" },
     lang_err: "تعذّر التحويل — حاول مرة أخرى.",
-    unlock: "إزالة العلامة المائية — ٣٥ ريالاً، دفعة واحدة",
+    unlock: `إزالة العلامة المائية — ${formatPrice("single", "ar")}، دفعة واحدة`,
     edit_save: "حفظ",
     paste_ph: "الصق سيرتك الحالية هنا، أو ارفع ملف…",
     upload: "إرفاق ملف",
@@ -174,7 +175,7 @@ const T = {
     lang_pick: "CV language:",
     lang_opts: { en: "English", ar: "العربية", both: "Both" },
     lang_err: "Conversion failed — please try again.",
-    unlock: "Remove the watermark — SAR 35, one time",
+    unlock: `Remove the watermark — ${formatPrice("single", "en")}, one time`,
     edit_save: "Save",
     paste_ph: "Paste your current resume here, or upload a file…",
     upload: "Attach file",
