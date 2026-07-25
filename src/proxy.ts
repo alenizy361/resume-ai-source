@@ -16,6 +16,7 @@ const AR_TWINS: RegExp[] = [
   /^\/account$/,
   /^\/build$/,
   /^\/builder$/,
+  /^\/journey$/,
   /^\/linkedin$/,
   /^\/login$/,
   /^\/pricing$/,

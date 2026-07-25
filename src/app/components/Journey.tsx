@@ -31,6 +31,7 @@ import {
   type Profile, EMPTY_PROFILE, mergePatch, weaveLoose,
   assembleResume as sharedAssemble,
 } from "@/app/lib/mergeProfile";
+import { setBuilderMode } from "@/app/lib/flags";
 
 type Lang = "ar" | "en";
 type OutLang = "en" | "ar" | "both";
@@ -56,6 +57,7 @@ const T = {
     dpSk: "IFRS · SAP · التقارير المالية · قيادة الفريق",
     cap3: "سيرة احترافية بدرجة توافق ATS — خلال دقيقتين",
     brand: "سيرة", login: "حسابي", journey: "رحلتك",
+    formDoor: "أفضّل تعبئة نموذج",
     step: "الخطوة", of5: "من ٥",
     st0t: "دورك — العقل جاهز", st0s: "أجب عن أسئلة المستشار، وسيرتك تُبنى أمامك.",
     advisor: "المستشار", online: "متصل",
@@ -132,6 +134,7 @@ const T = {
     dpSk: "IFRS · SAP · Financial Reporting · Team Leadership",
     cap3: "A professional resume with an ATS score — in two minutes",
     brand: "Sira", login: "My resumes", journey: "Journey",
+    formDoor: "I'd rather fill a form",
     step: "Step", of5: "of 5",
     st0t: "Your turn — the mind is ready", st0s: "Answer the Advisor's questions, and the resume builds in front of you.",
     advisor: "Advisor", online: "online",
@@ -911,6 +914,14 @@ export default function Journey({ lang }: { lang: Lang }) {
           <header className="jn-topbar">
             <div className="jn-brand"><div className="jn-orb-mini" /><span>{t.brand}</span></div>
             <div className="jn-top-actions">
+              {/* The other door. The conversation is not the only way in any more, and
+                  a user who does not want to be interviewed should not have to guess
+                  that a form exists. `setBuilderMode` makes the choice stick. */}
+              <Link
+                href={rtl ? "/ar/build" : "/build"}
+                onClick={() => { setBuilderMode("form"); track("journey_chose_form_door", { lang }); }}
+                className="jn-pill-btn"
+              >{t.formDoor}</Link>
               <Link
                 href={rtl ? "/" : "/ar"}
                 onClick={() => { try { localStorage.setItem("ra_lang_choice", rtl ? "en" : "ar"); localStorage.setItem("ra_lang", rtl ? "en" : "ar"); } catch { /* noop */ } }}
