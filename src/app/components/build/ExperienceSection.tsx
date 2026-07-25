@@ -17,12 +17,13 @@
  *    user would watch their click do nothing.
  */
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import { type Role } from "@/app/lib/resumeDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { useAiTask } from "./useAiTask";
+import { useBuilder } from "./BuilderProvider";
 import {
   type BuilderState, type Item, newItem, pending, rejected, filterFresh, bulletRoom,
 } from "@/app/lib/builderDoc";
@@ -138,6 +139,40 @@ function RoleCard({
    * button gets the spinner.
    */
   const ai = useAiTask(lang);
+
+  /*
+   * The combined generation, replacing four separate ones.
+   *
+   * This role used to cost `duties_draft`, then `duty_metric_ask` for every achievement, then
+   * `duty_improve` or `duty_shorter` per line — four kinds of question about one job, each
+   * re-sending the same context and re-deriving the same occupation. `experience_package`
+   * answers all four at once and the answer is stored on the resume, so the achievement
+   * questions and the improvements are already here when the user reaches for them.
+   *
+   * `instance: role.id` is what keeps two jobs from overwriting each other's package — a bug
+   * `ops/callflow.test.mjs` caught before this was wired to anything.
+   */
+  const { gen } = useBuilder();
+  const pkgInput = useMemo(() => ({
+    title: role.title, department: role.department ?? "", company: role.company,
+    tools: role.bullets.length, bullets: role.bullets, target: target.title,
+  }), [role.title, role.department, role.company, role.bullets, target.title]);
+  const pkg = gen.peek("experience_package", pkgInput, role.id);
+  /* Memoised because a fresh `[]` on every render would change the identity of every callback
+     that depends on it, which is a re-render loop wearing a helpful disguise. */
+  const pkgQuestions = useMemo(
+    () => (Array.isArray(pkg?.achievementQuestions) ? pkg.achievementQuestions as string[] : []),
+    [pkg],
+  );
+  const pkgImproved = useMemo(
+    () => (Array.isArray(pkg?.improvedUserBullets)
+      ? pkg.improvedUserBullets as Array<{ original: string; improved: string }>
+      : []),
+    [pkg],
+  );
+  /* Which achievement question to ask next. Walking the list rather than re-asking the model is
+     the whole point of getting five of them in one response. */
+  const [askedCount, setAskedCount] = useState(0);
   /*
    * "The model answered, and every line it gave is already here."
    *
@@ -178,12 +213,26 @@ function RoleCard({
       return;
     }
 
-    const r = await ai.run("duties_draft", {
-      cvLang: cv, targetRole: target.title || role.title,
-      role: role.title, company: role.company,
-      jobAd: target.jobAdText,
-      current: role.bullets.join("\n"),
+    const out = await gen.run({
+      task: "experience_package",
+      instance: role.id,
+      input: pkgInput,
+      payload: {
+        experience: {
+          title: role.title, department: role.department, industry: target.industry,
+          userBullets: role.bullets,
+          /* "Currently working here" is expressed as an empty end date, not as a flag — that is
+             how `Role` has always modelled it and how `rolesToLines` renders it. */
+          current: !role.end.trim(),
+        },
+        themes: [],
+      },
     });
+    const duties = Array.isArray(out.data?.responsibilitySuggestions)
+      ? out.data.responsibilitySuggestions as string[]
+      : null;
+    if (!duties) return;
+    const r = { state: "success" as const, data: duties };
     if (r.state !== "success" || !Array.isArray(r.data)) return;
     // Everything the model returned may already be on the CV, pending, or previously
     // rejected — in which case there is nothing new to offer, which is `empty` and not a
@@ -199,10 +248,23 @@ function RoleCard({
       })),
     });
     track("builder_suggestions_shown", { section: "experience", n: fresh.length });
-  }, [ai, role, offered, state, lang, cv, target, dispatch]);
+  }, [gen, pkgInput, role, offered, state, lang, cv, target, dispatch]);
 
   /** Rewrite one pending suggestion in place. */
   const rewrite = useCallback(async (it: Item, task: "duty_improve" | "duty_shorter") => {
+    /*
+     * The package already improved every line the user WROTE, so Improve on one of those is free.
+     *
+     * Only "improve" — not "shorter". A shorter version is a different request with a different
+     * constraint, and serving the package's improvement for it would answer a question nobody
+     * asked. Refinements the package cannot cover still go to /api/suggest, which is correct:
+     * they are explicit single-line actions on content that did not exist when the package was
+     * generated.
+     */
+    if (task === "duty_improve") {
+      const hit = pkgImproved.find((p) => p.original.trim().toLowerCase() === it.text.trim().toLowerCase());
+      if (hit) { dispatch({ t: "editItem", id: it.id, text: hit.improved }); return; }
+    }
     const r = await ai.run(task, {
       cvLang: cv, targetRole: target.title || role.title,
       role: role.title, company: role.company, current: it.text, jobAd: target.jobAdText,
@@ -210,7 +272,7 @@ function RoleCard({
     if (r.state === "success" && typeof r.data === "string") {
       dispatch({ t: "editItem", id: it.id, text: r.data });
     }
-  }, [ai, role, cv, target, dispatch]);
+  }, [ai, pkgImproved, role, cv, target, dispatch]);
 
   /**
    * The metric path. The model returns the QUESTION and the sentence shape — never
@@ -244,6 +306,24 @@ function RoleCard({
    * `id: ""` marks the answer as a NEW bullet rather than an edit of an existing one.
    */
   const askForAchievement = useCallback(async () => {
+    /*
+     * Five achievement questions arrived with the package. Ask them one at a time, for free.
+     *
+     * This is Part 5 of the cost brief expressed as an interaction: collect the answers first,
+     * generate later. The old shape called the model once per achievement — five questions, five
+     * paid calls, all about the same job — and the questions it produced were no better for
+     * having been asked separately.
+     *
+     * The fallback below still exists for a role whose package has no questions left, which is
+     * the case after the user has worked through all five.
+     */
+    const next = pkgQuestions[askedCount];
+    if (next) {
+      setAskedCount((n) => n + 1);
+      setAsk({ id: "", question: next, shape: "", value: "" });
+      track("builder_achievement_asked", { source: "package" });
+      return;
+    }
     const r = await ai.run("duty_metric_ask", {
       cvLang: cv, targetRole: target.title || role.title,
       role: role.title, company: role.company,
@@ -253,9 +333,9 @@ function RoleCard({
     if (r.state === "success" && r.data) {
       const d = r.data as { question: string; rewritten: string };
       setAsk({ id: "", question: d.question, shape: d.rewritten || "", value: "" });
-      track("builder_achievement_asked", {});
+      track("builder_achievement_asked", { source: "model" });
     }
-  }, [ai, role, cv, target]);
+  }, [ai, askedCount, pkgQuestions, role, cv, target]);
 
   const applyFigure = () => {
     if (!ask) return;

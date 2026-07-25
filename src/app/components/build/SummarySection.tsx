@@ -22,6 +22,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useAiTask } from "./useAiTask";
+import { useBuilder } from "./BuilderProvider";
 import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import AskAi from "./AskAi";
@@ -142,25 +143,39 @@ export default function SummarySection({
    */
   const ai = useAiTask(lang);
 
+  /*
+   * The final pass, which is a summary AND four other things.
+   *
+   * `summary_variants` asked for three summaries and nothing else, then the review stage asked
+   * separately about duplicate lines, over-long bullets and section order — questions about the
+   * same confirmed document, sent one at a time. `final_content` answers all of them in one
+   * response, and the summaries are simply the part this section renders.
+   *
+   * The others are not wasted: they are stored on the resume, so the review stage reads them
+   * instead of asking. That is why this is worth combining rather than merely batching.
+   */
+  const { gen } = useBuilder();
+  const digest = useMemo(() => confirmedDigest(state), [state]);
+  const finalInput = useMemo(() => ({ digest, target: state.target.title }), [digest, state.target.title]);
+
   const write = useCallback(async () => {
-    const r = await ai.run("summary_variants", {
-      lang,
-      // The DOCUMENT's language. Reading the interface language here is exactly how
-      // Arabic summaries reached English CVs.
-      cvLang: state.target.language === "ar" ? "ar" : "en",
-      targetRole: state.target.title,
-      role: state.profile.roles?.[0]?.title || "",
-      company: state.profile.roles?.[0]?.company || "",
-      jobAd: state.target.jobAdText,
-      // `current` is this field only — the summary they already have, if any. The rest of
-      // the CV goes in `facts`, which the route allows four thousand characters for;
-      // folding it into `current` would have it cut off at 1200, mid-role, and a model
-      // that cannot see the last two jobs summarises the first three as the whole career.
-      current: confirmed,
-      facts: confirmedDigest(state),
+    const out = await gen.run({
+      task: "final_content",
+      input: finalInput,
+      payload: {
+        facts: digest,
+        jobAd: state.target.jobAdText,
+        sections: ["summary", "experience", "education", "skills", "credentials", "languages"],
+      },
     });
-    if (r.state !== "success" || !Array.isArray(r.data)) return;
-    const variants = r.data as { label: VariantLabel; text: string }[];
+    const raw = Array.isArray(out.data?.summaries)
+      ? out.data.summaries as Array<{ label: string; text: string }>
+      : null;
+    if (!raw) return;
+    /* The route caps this at three and labels them by ANGLE, not by the fixed
+       concise/professional/achievement triple the old variants endpoint returned. The label is
+       display text either way, so it is passed through rather than coerced into that union. */
+    const variants = raw as { label: VariantLabel; text: string }[];
     const items: Item[] = variants.map((v) => newItem({
       section: "summary", type: "summary", text: v.text,
       source: "ai", group: v.label,
@@ -169,7 +184,7 @@ export default function SummarySection({
     dispatch({ t: "offerSummary", items });
     setPicked(items[0].id);
     track("builder_summary_variants", { n: items.length });
-  }, [ai, state, confirmed, lang, dispatch]);
+  }, [gen, finalInput, digest, state.target.jobAdText, lang, dispatch]);
 
   if (!ready) {
     return (
