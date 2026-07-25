@@ -133,7 +133,34 @@ function catalogue() {
  */
 const TIMEOUT_MS = 20_000;
 
+/**
+ * How many times a hung request is re-sent, mirroring `TASKS.duties_draft.timeoutRetries`.
+ *
+ * This is here to MEASURE the product's retry policy rather than to make the bench look good.
+ * The first run left 17 of 111 titles hung at the ceiling, which is what justified retrying at
+ * all; the honest way to check that decision is to re-send and count how many recover. So the
+ * report distinguishes three outcomes, not two: succeeded first time, RECOVERED ON RETRY, and
+ * hung on every attempt.
+ *
+ * `--retries=0` reproduces the original single-attempt measurement.
+ */
+const TIMEOUT_RETRIES = Number(arg("retries", "2"));
+
 async function draft(job) {
+  let attempts = 0;
+  const t0 = Date.now();
+  for (;;) {
+    attempts++;
+    const out = await once(job);
+    // Only a hang is retried here — a 4xx or 5xx is reported as it came, exactly as the
+    // product does, so the bench cannot flatter the provider by hiding real refusals.
+    if (out.error !== "timeout" || attempts > TIMEOUT_RETRIES) {
+      return { ...out, attempts, ms: Date.now() - t0 };
+    }
+  }
+}
+
+async function once(job) {
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
@@ -341,6 +368,23 @@ for (const p of perCheck) {
 }
 say();
 say(`latency: median ${median}ms · p95 ${p95}ms · slowest ${times.at(-1)}ms`);
+
+/*
+ * The retry policy, measured rather than assumed.
+ *
+ * `recovered` is the number of titles that hung at least once and then answered — the whole
+ * justification for `timeoutRetries` in `lib/aiTasks.ts`. If it is near zero, that policy is
+ * wrong and should be reverted; if it is most of the hangs, the product just got 15% of its
+ * catalogue back.
+ */
+{
+  const retried = results.filter((r) => (r.out.attempts ?? 1) > 1);
+  const recovered = retried.filter((r) => !r.out.error);
+  say();
+  say(`timeout retries (${TIMEOUT_RETRIES} allowed): ${retried.length} titles hung at least once, `
+    + `${recovered.length} then answered, ${retried.length - recovered.length} never did`);
+  if (recovered.length) say(`recovered: ${recovered.map((r) => r.job.id).join(", ")}`);
+}
 if (broken.length) say(`\nunparseable (${broken.length}): ${broken.map((r) => r.job.id).join(", ")}`);
 
 for (const lang of ["ar", "en"]) {

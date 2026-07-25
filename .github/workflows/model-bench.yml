@@ -36,6 +36,10 @@ on:
         description: "titles suite only — sample this many titles, spread across categories. 0 = all."
         type: string
         default: "0"
+      retries:
+        description: "titles suite only — re-send a HUNG request this many times. 0 reproduces the original single-attempt measurement."
+        type: string
+        default: "2"
       models:
         description: "Comma-separated model ids. Empty = every chat model in the NVIDIA catalogue."
         type: string
@@ -115,7 +119,8 @@ jobs:
           OUT: ${{ github.workspace }}/titles-bench.md
         run: |
           node --experimental-strip-types ops/titles-bench.mjs \
-            --lang=${{ inputs.lang }} --limit=${{ inputs.limit }} --concurrency=4
+            --lang=${{ inputs.lang }} --limit=${{ inputs.limit }} \
+            --retries=${{ inputs.retries }} --concurrency=4
 
       - name: Put the titles report in the job summary
         if: always() && inputs.suite == 'titles'
