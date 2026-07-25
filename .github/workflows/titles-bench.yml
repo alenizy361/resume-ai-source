@@ -1,0 +1,91 @@
+name: Titles bench
+
+# How good is the drafter across the whole occupation catalogue?
+#
+# The product publishes a page for 111 job titles — 61 Arabic, 50 English — and every one of
+# those pages invites someone into the builder. This runs the product's OWN drafting prompt
+# against each title and scores what comes back with the product's OWN honesty helpers, so the
+# answer is about this product rather than about a leaderboard.
+#
+# Needs the NVIDIA_API_KEY repository secret. Costs one model call per title.
+#
+# It runs here rather than locally because that is the only place the secret exists — GitHub
+# never hands Actions secrets to anything outside a workflow run — and because a sandbox
+# without egress to integrate.api.nvidia.com cannot reach the provider at all.
+
+on:
+  workflow_dispatch:
+    inputs:
+      lang:
+        description: "Which half of the catalogue"
+        type: choice
+        options: ["both", "ar", "en"]
+        default: "both"
+      limit:
+        description: "Sample this many titles, spread across categories. 0 = all of them."
+        type: string
+        default: "0"
+      model:
+        description: "Model id. Empty = the product's default."
+        type: string
+        default: ""
+      concurrency:
+        description: "Calls in flight at once"
+        type: string
+        default: "4"
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    # 111 sequential-ish calls at four in flight; generous so a slow provider does not lose the
+    # whole run's results, which are the point.
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Confirm the key reached the runner
+        env:
+          NV: ${{ secrets.NVIDIA_API_KEY }}
+        run: |
+          # Length only, never a value — and GitHub masks it anyway.
+          echo "NVIDIA_API_KEY: ${#NV} chars"
+          [ -n "$NV" ] || {
+            echo "::error::NVIDIA_API_KEY did not reach the runner. If it is set for Codespaces or Dependabot rather than Actions, Actions cannot read it."
+            exit 1
+          }
+
+      - name: Bench every title
+        working-directory: src
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          AI_MODEL: ${{ inputs.model }}
+          OUT: ${{ github.workspace }}/titles-bench.md
+        run: |
+          node --experimental-strip-types ops/titles-bench.mjs \
+            --lang=${{ inputs.lang }} \
+            --limit=${{ inputs.limit }} \
+            --concurrency=${{ inputs.concurrency }}
+
+      - name: Put the report in the job summary
+        if: always()
+        run: |
+          # The summary is where this gets read. The log has the per-title lines; this has the
+          # rates, the latencies and the list of titles with findings.
+          if [ -f "${{ github.workspace }}/titles-bench.md" ]; then
+            cat "${{ github.workspace }}/titles-bench.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "The bench produced no report — see the step log." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: titles-bench
+          path: titles-bench.md
+          if-no-files-found: warn

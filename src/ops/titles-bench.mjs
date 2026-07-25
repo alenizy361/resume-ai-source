@@ -1,0 +1,322 @@
+/**
+ * Does the model actually understand the 111 occupations this product sells pages for?
+ *
+ * `ops/model-bench.mjs` answers "which model" using three cases. This answers a different and
+ * larger question: given the catalogue we publish — 50 English occupations and 61 Arabic ones,
+ * from Software Engineer to أخصائي أشعة to كاشير — how often does the chosen model produce a
+ * usable, honest first draft, and which titles does it fail?
+ *
+ * That matters because the SEO surface promises coverage. A page exists for every one of these
+ * titles, and each of those pages invites someone into the builder. If the drafter is strong on
+ * software engineering and weak on the trades, the product is quietly worse for exactly the
+ * users who most need the blank page filled in.
+ *
+ * ── WHAT IS SCORED, AND WHY EACH ONE ──
+ *
+ * Every check below is the product's own rule, using the product's own helper where one exists
+ * (`hasMetric`, `hasDigits`, `extractJsonValue` — imported, not reimplemented, so the bench
+ * cannot drift from the route it is measuring):
+ *
+ *   json          The route parses strict JSON. A model that writes prose here fails closed and
+ *                 the user sees an empty section, so this is pass/fail before anything else.
+ *   duties        6–10. Fewer than six is not a draft; the route caps at ten.
+ *   skills        6 or more, because the skills step renders them as grouped chips.
+ *   language      The CV's language, not the prompt's. This is the failure that shipped: an
+ *                 Arabic-speaking applicant asking for an English CV and getting Arabic duties.
+ *                 Scored in both directions.
+ *   no-numbers    DRAFTING_DOCTRINE forbids inventing figures. The user gave a job title and
+ *                 nothing else, so ANY metric in a duty is fabricated — "reduced wait times by
+ *                 30%" is a lie with a number in it, which is worse than a vague sentence.
+ *                 Uses `hasMetric`, which is deliberately blunt: it flags "ISO 9001" and
+ *                 "CT 128-slice" too. That is not noise in this bench — it is the product's
+ *                 own rule, so a failure here means "the route would have stripped this line",
+ *                 which is exactly what is worth knowing.
+ *   no-brackets   No "[insert X]" placeholders. The route strips them; a model that needs
+ *                 stripping is a model doing the wrong thing.
+ *   no-echo       A duty that is just the job title back is filler that costs a call.
+ *   distinct      Ten ways of saying the same duty is one duty and nine wasted lines.
+ *
+ * ── COST ──
+ *
+ * One call per title. The full run is 111 calls on a free NVIDIA model. `--limit` and `--lang`
+ * exist so a smaller sample can be taken first.
+ *
+ *   node --experimental-strip-types ops/titles-bench.mjs                  # all 111
+ *   node --experimental-strip-types ops/titles-bench.mjs --lang=ar        # the 61 Arabic
+ *   node --experimental-strip-types ops/titles-bench.mjs --limit=12       # a sample
+ *   OUT=bench.md node ... ops/titles-bench.mjs                            # also write markdown
+ *
+ * Needs NVIDIA_API_KEY. Prints a table and, with OUT set, writes the same as markdown.
+ */
+
+import { writeFileSync } from "node:fs";
+import { DRAFT_PROMPT, draftUserMessage } from "../app/lib/prompts.ts";
+import { hasMetric, extractJsonValue } from "../app/lib/suggestShapes.ts";
+import { JOBS } from "../app/lib/jobs.ts";
+import { JOBS_AR } from "../app/lib/jobs-ar.ts";
+
+const KEY = process.env.NVIDIA_API_KEY;
+const BASE = "https://integrate.api.nvidia.com/v1";
+const MODEL = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+
+const arg = (name, dflt) => {
+  const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+  return hit ? hit.split("=").slice(1).join("=") : dflt;
+};
+
+const LANG = arg("lang", "both");
+const LIMIT = Number(arg("limit", "0")) || 0;
+/** Four at a time: enough to finish 111 titles in a few minutes, gentle enough not to 429. */
+const CONCURRENCY = Number(arg("concurrency", "4"));
+
+if (!KEY) {
+  console.error("NVIDIA_API_KEY is not set — this bench calls the real model and cannot run without it.");
+  process.exit(1);
+}
+
+/* ─────────────────────────── the catalogue ─────────────────────────── */
+
+/**
+ * Every title, with the language its CV should come back in.
+ *
+ * The Arabic list carries `titleEn`, which is deliberately NOT used here: the point is to ask
+ * in Arabic and require Arabic out, because that is what an Arabic page's visitor will do.
+ */
+function catalogue() {
+  const en = JOBS.map((j) => ({
+    id: `en/${j.slug}`, title: j.title, industry: j.category,
+    lang: "en", langWord: "English",
+  }));
+  const ar = JOBS_AR.map((j) => ({
+    id: `ar/${j.slug}`, title: j.title, industry: j.category,
+    lang: "ar", langWord: "Arabic",
+  }));
+  let list = LANG === "en" ? en : LANG === "ar" ? ar : [...ar, ...en];
+  if (LIMIT) {
+    // Take a spread rather than the first N, so a sample is not all one category — the lists are
+    // grouped by category, and the first twelve English titles are all Technology.
+    const step = Math.max(1, Math.floor(list.length / LIMIT));
+    list = list.filter((_, i) => i % step === 0).slice(0, LIMIT);
+  }
+  return list;
+}
+
+/* ─────────────────────────── the call ─────────────────────────── */
+
+async function draft(job) {
+  const t0 = Date.now();
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 90_000);
+  try {
+    const res = await fetch(`${BASE}/chat/completions`, {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
+      body: JSON.stringify({
+        model: MODEL,
+        temperature: 0.4,
+        max_tokens: 1200,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: DRAFT_PROMPT },
+          {
+            role: "user",
+            content: `${draftUserMessage({
+              role: job.title, industry: job.industry, langWord: job.langWord,
+            })}\n\nReturn STRICT JSON ONLY: {"duties":["…"],"skills":["…"]} — 6 to 10 duties, 6 to 12 skills.`,
+          },
+        ],
+      }),
+    });
+    const ms = Date.now() - t0;
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      return { ms, error: `http-${res.status}`, detail: body.slice(0, 120) };
+    }
+    const data = await res.json().catch(() => null);
+    const text = data?.choices?.[0]?.message?.content ?? "";
+    return { ms, text };
+  } catch (e) {
+    return { ms: Date.now() - t0, error: e.name === "AbortError" ? "timeout" : "network", detail: String(e).slice(0, 100) };
+  } finally { clearTimeout(timer); }
+}
+
+/* ─────────────────────────── the scoring ─────────────────────────── */
+
+const ARABIC = /[؀-ۿ]/;
+const BRACKET = /\[[^\]]{2,}\]|_{3,}|\{\{|xx+\s*(years|سنة|سنوات)/i;
+
+/**
+ * Two duties that say the same thing.
+ *
+ * Deliberately crude — three or more shared content words of five letters or more. A precise
+ * semantic comparison is a different project, and the failure being looked for here is a model
+ * padding to ten lines by rewording line three, which is not subtle.
+ */
+function nearDuplicate(a, b) {
+  const words = (s) => new Set(String(s).toLowerCase().match(/[\p{L}]{5,}/gu) ?? []);
+  const A = words(a), B = words(b);
+  if (A.size < 3 || B.size < 3) return false;
+  let shared = 0;
+  for (const w of A) if (B.has(w)) shared++;
+  return shared >= 3;
+}
+
+function score(job, out) {
+  const checks = {};
+  const notes = [];
+
+  if (out.error) {
+    return { checks: { json: false }, notes: [`${out.error}${out.detail ? `: ${out.detail}` : ""}`], duties: 0, skills: 0 };
+  }
+
+  const parsed = extractJsonValue(out.text);
+  const duties = Array.isArray(parsed?.duties) ? parsed.duties.filter((x) => typeof x === "string" && x.trim()) : null;
+  const skills = Array.isArray(parsed?.skills) ? parsed.skills.filter((x) => typeof x === "string" && x.trim()) : null;
+
+  checks.json = Boolean(duties && skills);
+  if (!checks.json) {
+    notes.push(`unparseable: ${String(out.text).slice(0, 70).replace(/\s+/g, " ")}`);
+    return { checks, notes, duties: 0, skills: 0 };
+  }
+
+  checks.duties = duties.length >= 6 && duties.length <= 10;
+  if (!checks.duties) notes.push(`${duties.length} duties`);
+
+  checks.skills = skills.length >= 6;
+  if (!checks.skills) notes.push(`${skills.length} skills`);
+
+  const all = [...duties, ...skills].join("\n");
+
+  if (job.lang === "ar") {
+    // Arabic asked for, Arabic required. A stray English tool name is fine; English SENTENCES
+    // are the failure — so the test is "does every duty contain Arabic".
+    const latinOnly = duties.filter((d) => !ARABIC.test(d));
+    checks.language = latinOnly.length === 0;
+    if (!checks.language) notes.push(`${latinOnly.length} duties not in Arabic: "${latinOnly[0].slice(0, 40)}"`);
+  } else {
+    const arabicIn = duties.filter((d) => ARABIC.test(d));
+    checks.language = arabicIn.length === 0;
+    if (!checks.language) notes.push(`Arabic on an English CV: "${arabicIn[0].slice(0, 40)}"`);
+  }
+
+  /*
+   * The no-fabrication rule, applied where it bites hardest.
+   *
+   * The only input was a job title. So every figure in a duty was invented by the model, and
+   * `hasMetric` is the product's own definition of what counts as one.
+   */
+  const withNumbers = duties.filter((d) => hasMetric(d));
+  checks["no-numbers"] = withNumbers.length === 0;
+  if (!checks["no-numbers"]) notes.push(`invented figure: "${withNumbers[0].slice(0, 50)}"`);
+
+  checks["no-brackets"] = !BRACKET.test(all);
+  if (!checks["no-brackets"]) notes.push(`placeholder: "${(all.match(BRACKET) ?? [""])[0].slice(0, 30)}"`);
+
+  const echo = duties.filter((d) => d.trim().toLowerCase() === job.title.trim().toLowerCase());
+  checks["no-echo"] = echo.length === 0;
+  if (!checks["no-echo"]) notes.push("a duty is just the job title");
+
+  let dupes = 0;
+  for (let i = 0; i < duties.length; i++) {
+    for (let k = i + 1; k < duties.length; k++) if (nearDuplicate(duties[i], duties[k])) dupes++;
+  }
+  checks.distinct = dupes === 0;
+  if (!checks.distinct) notes.push(`${dupes} near-duplicate duty pair(s)`);
+
+  return { checks, notes, duties: duties.length, skills: skills.length, sample: duties[0] };
+}
+
+/* ─────────────────────────── the run ─────────────────────────── */
+
+const CHECK_NAMES = ["json", "duties", "skills", "language", "no-numbers", "no-brackets", "no-echo", "distinct"];
+
+async function pool(items, n, worker) {
+  const out = new Array(items.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      out[i] = await worker(items[i], i);
+    }
+  }));
+  return out;
+}
+
+const jobs = catalogue();
+console.log(`model: ${MODEL}`);
+console.log(`titles: ${jobs.length} (${jobs.filter((j) => j.lang === "ar").length} ar, ${jobs.filter((j) => j.lang === "en").length} en) · ${CONCURRENCY} at a time\n`);
+
+const results = await pool(jobs, CONCURRENCY, async (job, i) => {
+  const out = await draft(job);
+  const s = score(job, out);
+  const failed = CHECK_NAMES.filter((c) => s.checks[c] === false);
+  const mark = failed.length === 0 ? "✅" : failed.includes("json") ? "🛑" : "⚠️ ";
+  console.log(
+    `${mark} ${String(i + 1).padStart(3)}/${jobs.length} ${job.id.padEnd(34)} ` +
+    `${String(out.ms).padStart(6)}ms  ${s.duties}d/${s.skills}s  ` +
+    (failed.length ? `FAIL ${failed.join(",")} — ${s.notes[0] ?? ""}` : ""),
+  );
+  return { job, out, s, failed };
+});
+
+/* ─────────────────────────── the report ─────────────────────────── */
+
+const clean = results.filter((r) => r.failed.length === 0);
+const broken = results.filter((r) => r.failed.includes("json"));
+const perCheck = CHECK_NAMES.map((c) => {
+  const ran = results.filter((r) => r.s.checks[c] !== undefined);
+  const passed = ran.filter((r) => r.s.checks[c]);
+  return { c, passed: passed.length, ran: ran.length };
+});
+const times = results.map((r) => r.out.ms).sort((a, b) => a - b);
+const median = times[Math.floor(times.length / 2)] ?? 0;
+const p95 = times[Math.floor(times.length * 0.95)] ?? 0;
+
+const lines = [];
+const say = (s = "") => { lines.push(s); console.log(s); };
+
+say();
+say(`── ${clean.length}/${results.length} titles produced a clean, honest draft ──`);
+say();
+say("| check | pass | rate |");
+say("|---|---|---|");
+for (const p of perCheck) {
+  say(`| ${p.c} | ${p.passed}/${p.ran} | ${p.ran ? Math.round((p.passed / p.ran) * 100) : 0}% |`);
+}
+say();
+say(`latency: median ${median}ms · p95 ${p95}ms · slowest ${times.at(-1)}ms`);
+if (broken.length) say(`\nunparseable (${broken.length}): ${broken.map((r) => r.job.id).join(", ")}`);
+
+for (const lang of ["ar", "en"]) {
+  const set = results.filter((r) => r.job.lang === lang);
+  if (!set.length) continue;
+  const good = set.filter((r) => r.failed.length === 0).length;
+  say(`\n${lang}: ${good}/${set.length} clean (${Math.round((good / set.length) * 100)}%)`);
+}
+
+const worst = results.filter((r) => r.failed.length > 0);
+if (worst.length) {
+  say(`\n── every title with a finding (${worst.length}) ──`);
+  say();
+  say("| title | failed | detail |");
+  say("|---|---|---|");
+  for (const r of worst) {
+    say(`| ${r.job.id} | ${r.failed.join(", ")} | ${(r.s.notes[0] ?? "").replace(/\|/g, "/").slice(0, 90)} |`);
+  }
+}
+
+if (process.env.OUT) {
+  writeFileSync(process.env.OUT, `# Titles bench — ${MODEL}\n\n${lines.join("\n")}\n`);
+  console.log(`\nwrote ${process.env.OUT}`);
+}
+
+/*
+ * Exit code is a measurement, not a gate.
+ *
+ * This run tells us how good the model is across the catalogue; it is not a build check, and
+ * failing CI because a model phrased one duty badly would train everyone to ignore it. Only a
+ * total inability to reach the provider is an error.
+ */
+process.exit(results.every((r) => r.out.error) ? 1 : 0);
