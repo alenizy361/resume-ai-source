@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { copyright } from "@/app/lib/brand";
 import OrbBrand from "./OrbBrand";
 import OrbSceneSetter from "./orb/OrbSceneSetter";
 import HubLinks from "./HubLinks";
@@ -121,7 +122,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
             <OrbBrand size={20} />
             <span className="text-sm font-bold">Sira</span>
           </div>
-          <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+          <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
         </div>
       </footer>
 

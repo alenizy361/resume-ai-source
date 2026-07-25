@@ -21,14 +21,19 @@
  */
 
 export const BRAND = {
-  /** Customer-facing product name. Used in titles, invoices, exports, emails. */
+  /**
+   * Customer-facing product name. Titles, invoices, exports, emails — and the
+   * assistant's own name. It used to introduce itself as "I'm Rabit", which is the
+   * COMPANY: a user who is told three names across four screens cannot tell which one
+   * charged their card.
+   */
   name: "Sira",
   nameAr: "سيرة",
   /** The company behind it. Attribution only — never the product name. */
   company: "Rabit",
   /** Shown as "Sira · a resume service by Rabit". One string, one place. */
   attribution: "Sira · a resume service by Rabit",
-  attributionAr: "سيرة · خدمة سيرة ذاتية من رابِط",
+  attributionAr: "سيرة · خدمة سير ذاتية من رابِط",
   domain: "cv.rabit.sa",
   url: process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa",
   /**

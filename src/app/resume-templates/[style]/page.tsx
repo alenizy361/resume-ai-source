@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { copyright } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -96,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
       </div>
 
       <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 Sira · a resume service by Rabit</p>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
       </footer>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
     </main>

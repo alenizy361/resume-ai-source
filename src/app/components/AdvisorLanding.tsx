@@ -20,6 +20,7 @@
  * inputs, 44px targets, prefers-reduced-motion.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BRAND } from "@/app/lib/brand";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
@@ -58,7 +59,7 @@ const T = {
     greet: "ما مهنتك؟",
     greet_sub: "دقيقتان من الحوار — وسيرة احترافية جاهزة. مجاناً وبدون تسجيل",
     boot_hi: "أهلاً",
-    boot_me: "أنا رابط",
+    boot_me: `أنا ${BRAND.nameAr}`,
     land_scroll: "انزل",
     land_problem_num: "٪",
     land_problem: "من السير الذاتية ترفضها أنظمة التتبع الآلي — قبل أن يقرأها إنسان",
@@ -128,7 +129,7 @@ const T = {
     greet: "What is your profession?",
     greet_sub: "Two minutes of conversation — a professional resume. Free, no signup",
     boot_hi: "Hello",
-    boot_me: "I'm Rabit",
+    boot_me: `I'm ${BRAND.name}`,
     land_scroll: "scroll",
     land_problem_num: "%",
     land_problem: "of resumes are filtered out by applicant tracking systems — before a human reads them",
@@ -249,7 +250,7 @@ export default function AdvisorLanding({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion();
 
   const [stage, setStage] = useState<Stage>("boot");
-  const [bootLine, setBootLine] = useState(0); // 0 dark · 1 أهلاً · 2 أنا رابط
+  const [bootLine, setBootLine] = useState(0); // 0 dark · 1 أهلاً · 2 أنا سيرة
   const [landSec, setLandSec] = useState(0);   // active landing section (0..4)
   const [profile, setProfile] = useState<Profile>(EMPTY);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -312,7 +313,7 @@ export default function AdvisorLanding({ lang }: { lang: Lang }) {
     const id = setInterval(() => { i += 1; setTypedGreet(t.greet.slice(0, i)); if (i >= t.greet.length) clearInterval(id); }, 45);
   }
 
-  /* ── BOOT (Windows-style opening): أهلاً يظهر ويتلاشى ← أنا رابط ← العالم ينفتح ── */
+  /* ── BOOT (Windows-style opening): أهلاً يظهر ويتلاشى ← أنا سيرة ← العالم ينفتح ── */
   useEffect(() => {
     if (stage !== "boot") return;
     // Skip the cinematic boot for reduced-motion users, and show it only once

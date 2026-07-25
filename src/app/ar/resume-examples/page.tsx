@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { copyright } from "@/app/lib/brand";
 import HubLinks from "../../components/HubLinks";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
@@ -54,7 +55,7 @@ export default function Hub() {
       </div>
 
       <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>© 2026 سيرة · خدمة سير ذاتية من Rabit</p>
+        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("ar")}</p>
       </footer>
           <HubLinks ar current="/ar/resume-examples" />
     </main>
