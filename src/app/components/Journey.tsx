@@ -437,8 +437,26 @@ export default function Journey({ lang }: { lang: Lang }) {
   /* ═══ persistence ═══ */
   const persist = useCallback((next: Partial<{ profile: Profile; msgs: Msg[]; mode: string; cvBase: string; progress: number; cv: string; score: { value: number; watermark: boolean } | null; stage: number }>) => {
     try {
+      /*
+       * MERGE, never replace.
+       *
+       * This used to build the record from its own eight-key snapshot and write it
+       * straight over the stored draft — so every key written by anything else was
+       * destroyed on the next turn. The form builder shares this key deliberately
+       * (so a user can switch doors without losing work), which turned a latent
+       * bug into a data-loss one: opening the chat after using the form would wipe
+       * the confirmed roles, the pending suggestions and the chosen template.
+       *
+       * Reading the existing record first preserves keys this component has never
+       * heard of, which is exactly what a shared store requires.
+       */
+      let stored: Record<string, unknown> = {};
+      try { stored = JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}") || {}; } catch { stored = {}; }
       const cur = { profile, msgs: msgs.slice(-30), mode, cvBase, progress, cv, score, stage: stageRef.current };
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...cur, ...next, msgs: (next.msgs ?? msgs).slice(-30).map((m) => ({ who: m.who, text: m.text })) }));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({
+        ...stored, ...cur, ...next,
+        msgs: (next.msgs ?? msgs).slice(-30).map((m) => ({ who: m.who, text: m.text })),
+      }));
     } catch { /* noop */ }
   }, [profile, msgs, mode, cvBase, progress, cv, score, DRAFT_KEY]);
 

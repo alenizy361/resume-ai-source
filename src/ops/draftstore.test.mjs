@@ -86,5 +86,36 @@ eq("empty strings never leave a dangling separator",
   globalThis.localStorage = real;
 }
 
+
+/* ── the two doors must not destroy each other's work ──
+ * Journey.persist() used to rebuild the stored record from its own eight-key
+ * snapshot and write it straight over the draft. Once the form shares this key,
+ * that turns from a latent bug into data loss: opening the chat after using the
+ * form wiped the confirmed roles, the pending suggestions and the template. This
+ * asserts the merge semantics that fix requires, at the store level.
+ */
+{
+  // The form writes keys the chat has never heard of.
+  writeDraft("en", {
+    profile: { ...EMPTY_PROFILE, role: "Radiographer" },
+    suggestions: [{ id: "it_1", text: "Performed CT", status: "suggested" }],
+    template: "ats-pro",
+    target: { title: "Radiology Technologist" },
+    credentials: [{ id: "c1", title: "BLS", status: "confirmed" }],
+  });
+
+  // The chat then persists its own snapshot — which must MERGE, not replace.
+  const before = readDraft("en");
+  writeDraft("en", { profile: { ...before.profile, name: "Abdulaziz" }, stage: 2 });
+
+  const after = readDraft("en");
+  ok("the chat's own write lands", after.profile.name === "Abdulaziz");
+  ok("the role the form captured survives", after.profile.role === "Radiographer");
+  eq("pending suggestions survive the chat", after.suggestions?.length, 1);
+  eq("the chosen template survives", after.template, "ats-pro");
+  eq("the target job survives", after.target?.title, "Radiology Technologist");
+  eq("confirmed credentials survive", after.credentials?.length, 1);
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
