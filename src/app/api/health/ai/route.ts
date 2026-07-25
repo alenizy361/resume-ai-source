@@ -63,6 +63,12 @@ export async function GET(req: NextRequest) {
 
   const provider = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
   /*
+   * The builder's suggestions can run on a different provider from everything else — a fast
+   * cheap model behind a form field, a stronger one for whole-document work. Reporting only the
+   * global would make this endpoint lie about the call most users actually make.
+   */
+  const suggestProvider = (process.env.AI_PROVIDER_SUGGEST || process.env.AI_PROVIDER || "nvidia").toLowerCase();
+  /*
    * The same resolution the routes do, not a paraphrase of it.
    *
    * `/api/interview` defaults Anthropic to claude-opus-5 (a reasoning turn) and `/api/suggest`
@@ -73,19 +79,24 @@ export async function GET(req: NextRequest) {
   const model = provider === "anthropic"
     ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-opus-5"))
     : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
-  const suggestModel = provider === "anthropic"
-    ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-haiku-4-5"))
-    : model;
+  const suggestModel = suggestProvider === "anthropic"
+    ? (process.env.ANTHROPIC_MODEL_SUGGEST || "claude-haiku-4-5")
+    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
 
   const keyPresent = provider === "anthropic" ? redact("ANTHROPIC_API_KEY") : redact("NVIDIA_API_KEY");
+  /* The failure this catches: AI_PROVIDER_SUGGEST set to anthropic with no Anthropic key, which
+     is a 503 on every suggestion and nothing else. */
+  const suggestKeyPresent = suggestProvider === "anthropic" ? redact("ANTHROPIC_API_KEY") : redact("NVIDIA_API_KEY");
   const upstash = redact("UPSTASH_REDIS_REST_URL") && redact("UPSTASH_REDIS_REST_TOKEN");
 
   const report: Record<string, unknown> = {
-    ok: keyPresent,
+    ok: keyPresent && suggestKeyPresent,
     provider,
     model,
-    /** What the builder's suggestions actually run on — the model most users meet. */
+    /** What the builder's suggestions actually run on — the call most users meet. */
+    suggestProvider,
     suggestModel,
+    suggestKeyPresent,
     /** The one that turns "the assistant is unavailable" into a five-second diagnosis. */
     apiKeyPresent: keyPresent,
 

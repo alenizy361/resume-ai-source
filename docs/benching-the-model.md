@@ -1,5 +1,13 @@
 # Benching the model
 
+> **Which provider serves what.** `AI_PROVIDER_SUGGEST` selects the provider for the builder's
+> suggestions alone; `AI_PROVIDER` selects it for everything else (`/api/optimize`,
+> `/api/interview`). Both default to `nvidia`. They are separate because the two calls are not
+> the same kind of work: a suggestion is a form field somebody is watching — fast and cheap —
+> while an ATS review is a whole-document analysis costing ~2,900 input tokens that users wait
+> for willingly. `/api/health/ai` reports `provider` and `suggestProvider` separately for the
+> same reason.
+
 Two questions, two suites, one workflow. Both live in `.github/workflows/model-bench.yml` and
 both are dispatch-only.
 

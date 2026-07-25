@@ -146,8 +146,15 @@ export async function POST(req: NextRequest) {
      * median with 24 of 56 hanging past 60 s. Opus is the wrong shape for a form field the user
      * is watching — Haiku is the cheapest and fastest of the family, which is what an
      * interactive suggestion needs.
+     *
+     * `AI_PROVIDER_SUGGEST` overrides `AI_PROVIDER` for THIS route only, and it exists because
+     * the two calls are not the same kind of work. A suggestion is a form field somebody is
+     * watching: it must be fast and it is cheap. An ATS review is a whole-document analysis
+     * costing ~2900 input tokens, and users wait for it willingly. Sending both to the same
+     * provider because they share one variable is a decision nobody made — it just happened to
+     * be how the env was shaped.
      */
-    const provider = (process.env.AI_PROVIDER || "nvidia").toLowerCase();
+    const provider = (process.env.AI_PROVIDER_SUGGEST || process.env.AI_PROVIDER || "nvidia").toLowerCase();
     const anthropic = provider === "anthropic";
     const key = anthropic ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
     if (!key) return NextResponse.json({ error: "Service unavailable." }, { status: 503 });
@@ -157,8 +164,16 @@ export async function POST(req: NextRequest) {
      * rather than trusted blindly.
      */
     const shared = process.env.AI_MODEL || "";
+    /*
+     * Deliberately NOT inheriting `ANTHROPIC_MODEL`.
+     *
+     * That variable is set for the routes that want a strong reasoning model, and inheriting it
+     * here would silently put Opus on a form field — measured at ~19 s median with a 43% hang
+     * rate, which is unusable behind a button. A suggestion-specific override exists for anyone
+     * who genuinely wants to change it.
+     */
     const model = anthropic
-      ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-haiku-4-5"))
+      ? (process.env.ANTHROPIC_MODEL_SUGGEST || "claude-haiku-4-5")
       : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
     const t0 = Date.now();
 
