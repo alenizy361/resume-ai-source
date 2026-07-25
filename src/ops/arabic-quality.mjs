@@ -28,11 +28,26 @@
  *   7. COST         from the route's own `_meta.estimatedUsd`, printed per call and totalled, so
  *                   the price of running this again is known before it is run.
  *
- * ── the measured result ──
+ * ── what the first run measured ──
  *
- * Run 2026-07-25 against production (commit 24925b5), model claude-haiku-4-5.
- * Result is printed at the bottom of this file's last run — see the commit message for the numbers
- * rather than trusting a comment that can go stale.
+ * 2026-07-25, production, commit 24925b5, claude-haiku-4-5. Twelve checks passed and one call
+ * failed:
+ *
+ *   role_blueprint   $0.009189 · every skill and theme Arabic · no figures · no placeholders ·
+ *                    credentials limited to sa-scfhs-registration and sa-bls · the envelope
+ *                    resolved "أخصائي أشعة" → radiology-technologist and "السعودية" → sa
+ *   final_content    $0.006394 · three Arabic summaries · none named an employer outside the
+ *                    facts · none claimed a number of years, so the "٧ سنوات" invention class did
+ *                    not recur
+ *   experience_pkg   HTTP 400. The fast model answered twice, the route escalated to
+ *                    claude-sonnet-5, and the provider refused the request — `temperature: 0.3`,
+ *                    which a model that reasons by default does not accept. Both paid answers
+ *                    were then discarded and the user was told suggestions were unavailable.
+ *                    Fixed in the same commit as this note: `acceptsTemperature` in aiModels.ts,
+ *                    and the route now serves the earlier answer when an escalation fails.
+ *
+ * Numbers, not adjectives — and the third line is the reason this file exists. Nothing in the
+ * local suites could have found it.
  *
  * It is NOT part of `npm run test`: it spends real money on every run.
  *
