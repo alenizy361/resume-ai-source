@@ -35,6 +35,7 @@ import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
 import SummarySection from "./SummarySection";
+import ReviewSection from "./ReviewSection";
 
 /* ───────────────────────── copy ───────────────────────── */
 
@@ -422,6 +423,13 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
      
   }, [cinema]);
 
+  /** Review findings name the section they belong to; this is how "go there" works. */
+  const jump = useCallback((section: SectionId) => {
+    const i = ORDER.indexOf(section);
+    if (i >= 0) cinema.scrollTo(i);
+     
+  }, [cinema]);
+
   const sectionProps = (id: SectionId, i: number) => ({
     id, index: i, lang,
     title: t.sections[id], sub: t.subs[id],
@@ -529,6 +537,14 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                     </SectionShell>
                   );
                 }
+                if (id === "review") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <ReviewSection lang={lang} state={state} referenceDate={today} onJump={jump} />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
                 if (id === "languages") {
                   return (
                     <SectionShell key={id} {...props}>
@@ -598,7 +614,14 @@ function SectionShell({
           <p className="bd-sub">{sub}</p>
         </div>
       </div>
-      <div className="bd-body">{children}</div>
+      {/*
+        Children of a section the user has not reached are not rendered at all, not
+        merely hidden. The review section recomputes the whole report from `profile`,
+        so mounting it early would run a full CV analysis on every keystroke typed
+        eight sections above it, invisibly. Safe because `reached` is monotonic — a
+        section never goes back to locked, so nothing mounted is ever torn down.
+      */}
+      <div className="bd-body">{locked ? null : children}</div>
     </section>
   );
 }
