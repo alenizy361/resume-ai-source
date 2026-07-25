@@ -20,7 +20,8 @@
  * did — enforced server-side in /api/suggest, not requested here.
  */
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useAiTask } from "./useAiTask";
 import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import AskAi from "./AskAi";
@@ -38,7 +39,7 @@ const C = {
     thin: "You have no responsibilities confirmed yet. The summary will be thinner than it needs to be — going back to add a few makes it much stronger.",
     write: "Write three versions",
     rewrite: "Write three new versions",
-    busy: "Writing…",
+    stop: "Stop",
     labels: { concise: "Concise", professional: "Professional", achievement: "Achievement-led" } as Record<VariantLabel, string>,
     hints: {
       concise: "Two tight lines. Best when the CV is already two pages.",
@@ -50,8 +51,6 @@ const C = {
     change: "Rewrite", clear: "Remove from CV",
     stale: "Your experience changed after this summary was written — it may no longer describe your CV.",
     staleAct: "Write three new versions",
-    err: "The assistant is busy. You can also write the summary yourself — the field below is yours.",
-    slow: "You have asked the AI a lot in the last few minutes. Write the summary yourself below, or come back to this in a minute.",
     own: "Or write your own",
     ownPh: "Two or three lines: what you do, at what level, and what you are aiming for.",
   },
@@ -61,7 +60,7 @@ const C = {
     thin: "لم تؤكّد أي مهام بعد. سيكون الملخص أضعف مما يمكن أن يكون — الرجوع لإضافة بعضها يقوّيه كثيراً.",
     write: "اكتب ثلاث نسخ",
     rewrite: "اكتب ثلاث نسخ جديدة",
-    busy: "يكتب…",
+    stop: "أوقف",
     labels: { concise: "مختصر", professional: "مهني", achievement: "يبدأ بالإنجاز" } as Record<VariantLabel, string>,
     hints: {
       concise: "سطران محكمان. الأفضل إن كانت سيرتك صفحتين أصلاً.",
@@ -73,8 +72,6 @@ const C = {
     change: "أعد الكتابة", clear: "احذفه من السيرة",
     stale: "تغيّرت خبرتك بعد كتابة هذا الملخص — قد لا يصف سيرتك الآن.",
     staleAct: "اكتب ثلاث نسخ جديدة",
-    err: "المساعد مشغول. وتستطيع كتابة الملخص بنفسك — الحقل أدناه لك.",
-    slow: "طلبت من الذكاء كثيراً في الدقائق الماضية. اكتب الملخص بنفسك أدناه، أو ارجع لهذا بعد دقيقة.",
     own: "أو اكتبه بنفسك",
     ownPh: "سطران أو ثلاثة: ماذا تعمل، بأي مستوى، وما تستهدفه.",
   },
@@ -117,13 +114,10 @@ export default function SummarySection({
   dispatch: React.Dispatch<{ t: string; [k: string]: unknown }>;
 }) {
   const c = C[lang];
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
   const [picked, setPicked] = useState<string>("");
   const [editing, setEditing] = useState<{ id: string; text: string } | null>(null);
   const [editingOwn, setEditingOwn] = useState(false);
   const [own, setOwn] = useState("");
-  const abort = useRef<AbortController | null>(null);
 
   const roles = state.profile.roles || [];
   const hasRole = roles.some((r) => r.title.trim() && r.company.trim());
@@ -137,49 +131,45 @@ export default function SummarySection({
   // cannot be out of date.
   const stale = Boolean(confirmed) && Boolean(state.summaryBasis) && state.summaryBasis !== basis;
 
+  /*
+   * Three summaries of the same career, through the shared layer.
+   *
+   * What this used to own itself: a busy flag, an error string, an abort ref, the 429
+   * branch, the AbortError branch, and the "no variants came back" branch. All six are
+   * `useAiTask` now, and the last one is the interesting one — zero variants was being
+   * reported with the generic failure sentence, when it is the `empty` state and deserves
+   * "nothing to add here" rather than "the assistant is busy".
+   */
+  const ai = useAiTask(lang);
+
   const write = useCallback(async () => {
-    setErr(""); setBusy(true);
-    abort.current?.abort();
-    abort.current = new AbortController();
-    try {
-      const res = await fetch("/api/suggest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: abort.current.signal,
-        body: JSON.stringify({
-          kind: "summary", mode: "variants", lang: state.target.language === "ar" ? "ar" : "en",
-          targetRole: state.target.title,
-          role: state.profile.roles?.[0]?.title || "",
-          company: state.profile.roles?.[0]?.company || "",
-          jobAd: state.target.jobAdText,
-          // `current` is this field only — the summary they already have, if any.
-          // The rest of the CV goes in `facts`, which the route allows four thousand
-          // characters for; folding it into `current` would have it cut off at 1200,
-          // mid-role, and a model that cannot see the last two jobs summarises the
-          // first three as if they were the whole career.
-          current: confirmed,
-          facts: confirmedDigest(state),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      // A throttle is not an outage: it says "come back", and the field below is still
-      // the user's to type into either way.
-      if (res.status === 429) { setErr(String(data?.error || "").trim() || c.slow); return; }
-      if (!res.ok) throw new Error(String(data?.error || "failed"));
-      const variants = (data?.variants ?? []) as { label: VariantLabel; text: string }[];
-      if (!variants.length) { setErr(c.err); return; }
-      const items: Item[] = variants.map((v) => newItem({
-        section: "summary", type: "summary", text: v.text,
-        source: "ai", group: v.label,
-        reason: lang === "ar" ? "مبني على ما أكّدته أعلاه" : "written from what you confirmed above",
-      }));
-      dispatch({ t: "offerSummary", items });
-      setPicked(items[0].id);
-      track("builder_summary_variants", { n: items.length });
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
-    } finally { setBusy(false); }
-  }, [state, confirmed, lang, dispatch, c]);
+    const r = await ai.run("summary_variants", {
+      lang,
+      // The DOCUMENT's language. Reading the interface language here is exactly how
+      // Arabic summaries reached English CVs.
+      cvLang: state.target.language === "ar" ? "ar" : "en",
+      targetRole: state.target.title,
+      role: state.profile.roles?.[0]?.title || "",
+      company: state.profile.roles?.[0]?.company || "",
+      jobAd: state.target.jobAdText,
+      // `current` is this field only — the summary they already have, if any. The rest of
+      // the CV goes in `facts`, which the route allows four thousand characters for;
+      // folding it into `current` would have it cut off at 1200, mid-role, and a model
+      // that cannot see the last two jobs summarises the first three as the whole career.
+      current: confirmed,
+      facts: confirmedDigest(state),
+    });
+    if (r.state !== "success" || !Array.isArray(r.data)) return;
+    const variants = r.data as { label: VariantLabel; text: string }[];
+    const items: Item[] = variants.map((v) => newItem({
+      section: "summary", type: "summary", text: v.text,
+      source: "ai", group: v.label,
+      reason: lang === "ar" ? "مبني على ما أكّدته أعلاه" : "written from what you confirmed above",
+    }));
+    dispatch({ t: "offerSummary", items });
+    setPicked(items[0].id);
+    track("builder_summary_variants", { n: items.length });
+  }, [ai, state, confirmed, lang, dispatch]);
 
   if (!ready) {
     return (
@@ -230,11 +220,11 @@ export default function SummarySection({
             >
               <p className="text-xs" style={{ color: "#fcd34d" }}>{c.stale}</p>
               <button
-                onClick={write} disabled={busy}
+                onClick={ai.busy ? ai.cancel : write}
                 className="mt-2 rounded-full px-3 text-xs font-bold"
                 style={{ border: "1px solid rgba(251,191,36,0.45)", color: "#fcd34d" }}
               >
-                {busy ? c.busy : c.staleAct}
+                {ai.busy ? c.stop : c.staleAct}
               </button>
             </div>
           )}
@@ -299,14 +289,23 @@ export default function SummarySection({
       )}
 
       <button
-        onClick={write} disabled={busy}
+        onClick={ai.busy ? ai.cancel : write}
         className="flex items-center gap-2 rounded-full px-3 text-xs font-bold"
         style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
       >
-        <AiOrb size={20} thinking={busy} />
-        {busy ? c.busy : offered.length || confirmed ? c.rewrite : c.write}
+        <AiOrb size={20} thinking={ai.busy} />
+        {ai.busy ? c.stop : offered.length || confirmed ? c.rewrite : c.write}
       </button>
-      {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+      {/* Every non-success state, worded once by the hook — so a rate limit here reads the
+          same as a rate limit three sections away, and `empty` finally has its own line. */}
+      {ai.message && (
+        <p
+          className="mt-2 text-xs leading-relaxed"
+          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : ai.state === "empty" ? "var(--faint)" : "#fca5a5" }}
+        >
+          {ai.message}
+        </p>
+      )}
 
       {/* The form must work with the AI switched off. This is that promise, kept in
           the one section where a user is most likely to already know what to say. */}

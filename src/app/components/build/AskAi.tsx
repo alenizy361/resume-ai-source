@@ -57,12 +57,12 @@ export default function AskAi({
    * 429 branch, the AbortError branch — is the hook now. What this component kept is the
    * one thing that is genuinely its own: the question text.
    */
-  const ai = useAiTask("ask_section", lang);
+  const ai = useAiTask(lang);
   const answer = ai.state === "success" ? String(ai.data ?? "") : "";
 
   const send = useCallback(() => {
     if (!q.trim()) return;
-    void ai.run({ lang, question: q, targetRole, current }).then((r) => {
+    void ai.run("ask_section", { lang, question: q, targetRole, current }).then((r) => {
       if (r.state === "success") track("builder_ask_ai", { section });
     });
   }, [q, ai, lang, targetRole, current, section]);

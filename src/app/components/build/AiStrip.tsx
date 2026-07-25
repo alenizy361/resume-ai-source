@@ -40,7 +40,7 @@ export default function AiStrip({
   note?: string;
 }) {
   const c = C[lang];
-  const ai = useAiTask(task, lang);
+  const ai = useAiTask(lang);
   const items: string[] = ai.state === "success" && Array.isArray(ai.data)
     ? (ai.data as unknown[]).filter((x): x is string => typeof x === "string")
     : [];
@@ -48,7 +48,7 @@ export default function AiStrip({
   return (
     <div className="mt-3">
       <button
-        onClick={ai.busy ? ai.cancel : () => void ai.run(input)}
+        onClick={ai.busy ? ai.cancel : () => void ai.run(task, input)}
         className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >

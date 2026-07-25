@@ -20,6 +20,14 @@
  * `data` is deliberately `unknown`. The task registry knows each task's output shape and
  * the caller knows which task it asked for; a generic parameter here would only be a cast
  * written in a different place.
+ *
+ * The task name is an argument to `run`, not to the hook. That is not a stylistic choice:
+ * the experience section runs FOUR tasks — draft duties, improve one, shorten one, ask for
+ * a figure — and shows one status line, because the user did one thing at a time. Binding
+ * the name at mount would mean four hooks and four states to merge, and merging them means
+ * deciding which of four messages to show, which is the bug this file exists to remove.
+ * `task` reports which one the current state belongs to, for a component with several
+ * buttons that each need their own spinner.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -74,18 +82,21 @@ const MSG = {
 export interface AiTask {
   state: TaskState;
   data: unknown;
+  /** Which task the current state describes, or null while idle. */
+  task: TaskName | null;
   /** Ready to render, in the reader's language. Empty string when there is nothing to say. */
   message: string;
   busy: boolean;
   throttled: boolean;
-  run: (input: TaskInput) => Promise<TaskResult<unknown>>;
+  run: (name: TaskName, input: TaskInput) => Promise<TaskResult<unknown>>;
   cancel: () => void;
   /** Back to idle — for closing a panel without leaving its last error behind. */
   reset: () => void;
 }
 
-export function useAiTask(name: TaskName, lang: "ar" | "en"): AiTask {
+export function useAiTask(lang: "ar" | "en"): AiTask {
   const [res, setRes] = useState<TaskResult<unknown>>({ state: "idle" });
+  const [task, setTask] = useState<TaskName | null>(null);
   const inflight = useRef<AbortController | null>(null);
   const alive = useRef(true);
 
@@ -98,11 +109,12 @@ export function useAiTask(name: TaskName, lang: "ar" | "en"): AiTask {
     };
   }, []);
 
-  const run = useCallback(async (input: TaskInput) => {
+  const run = useCallback(async (name: TaskName, input: TaskInput) => {
     // Single-flight: the newest request is the one the user meant.
     inflight.current?.abort();
     const ctrl = new AbortController();
     inflight.current = ctrl;
+    setTask(name);
     setRes({ state: "loading" });
 
     const out = await runTask(name, input, { signal: ctrl.signal });
@@ -112,7 +124,7 @@ export function useAiTask(name: TaskName, lang: "ar" | "en"): AiTask {
     if (alive.current && inflight.current === ctrl) setRes(out);
     if (inflight.current === ctrl) inflight.current = null;
     return out;
-  }, [name]);
+  }, []);
 
   const cancel = useCallback(() => {
     inflight.current?.abort();
@@ -146,6 +158,7 @@ export function useAiTask(name: TaskName, lang: "ar" | "en"): AiTask {
   return {
     state: res.state,
     data: res.data,
+    task,
     message,
     busy: res.state === "loading",
     throttled: res.throttled === true,

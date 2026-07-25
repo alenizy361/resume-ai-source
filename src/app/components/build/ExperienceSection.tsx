@@ -17,11 +17,12 @@
  *    user would watch their click do nothing.
  */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import { type Role } from "@/app/lib/resumeDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
+import { useAiTask } from "./useAiTask";
 import {
   type BuilderState, type Item, newItem, pending, rejected, filterFresh, bulletRoom,
 } from "@/app/lib/builderDoc";
@@ -47,9 +48,8 @@ const C = {
     askTitle: "One question, and the figure is yours — not ours",
     askHint: "Type the real number. Skip it and we write a strong line without one.",
     skip: "Skip — no figure",
-    busy: "Writing…",
-    err: "The assistant is busy. Keep typing — you can add responsibilities by hand.",
-    slow: "You have asked the AI a lot in the last few minutes. Carry on filling this in by hand — it works with the AI switched off — and it will answer again shortly.",
+    stop: "Stop",
+    allKnown: "Everything it suggested is already on this job. Add an achievement below, or move on.",
   },
   ar: {
     addRole: "+ أضف وظيفة", remove: "حذف",
@@ -69,38 +69,21 @@ const C = {
     askTitle: "سؤال واحد، والرقم رقمك — لا رقمنا",
     askHint: "اكتب الرقم الحقيقي. وإن تجاوزت، نكتب سطراً قوياً بلا رقم.",
     skip: "تجاوز — بلا رقم",
-    busy: "يكتب…",
-    err: "المساعد مشغول. واصل الكتابة — تستطيع إضافة المهام بيدك.",
-    slow: "طلبت من الذكاء كثيراً في الدقائق الماضية. واصل التعبئة بيدك — النموذج يعمل والذكاء مطفأ — وسيجيبك بعد قليل.",
+    stop: "أوقف",
+    allKnown: "كل ما اقترحه موجود في هذه الوظيفة أصلاً. أضف إنجازاً أدناه، أو واصل.",
   },
 };
 
-/**
- * One call, cancellable, so a stale reply cannot overwrite a newer one.
+/*
+ * The transport used to live here: a `Throttled` error class, an `askSuggest` wrapper, a
+ * `reason()` helper choosing between two sentences, and an abort ref rebuilt at four call
+ * sites. All of it is `lib/aiTasks.ts` and `useAiTask` now — including the distinction this
+ * section got right and the others did not, that a 429 is not an outage.
  *
- * A 429 is marked, because it is not the same event as a failure. "The assistant is
- * busy" tells a rate-limited user to keep clicking; "you have used this a lot in the
- * last few minutes" tells them to carry on typing and come back — and the form works
- * either way, which is the whole thesis. The route's own message is the useful text, so
- * it is passed through rather than replaced.
+ * What it gains by moving: a timeout (there was none, so a hung request span forever), a
+ * cancel button, an `empty` state that no longer borrows the failure sentence, and the same
+ * wording as every other section.
  */
-class Throttled extends Error {}
-
-async function askSuggest(body: Record<string, unknown>, signal: AbortSignal) {
-  const res = await fetch("/api/suggest", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    signal, body: JSON.stringify(body),
-  });
-  const data = await res.json().catch(() => ({}));
-  if (res.status === 429) throw new Throttled(String(data?.error || "").trim());
-  if (!res.ok) throw new Error(String(data?.error || "failed"));
-  return data as { text?: string; items?: string[]; question?: string; rewritten?: string };
-}
-
-/** Which sentence this failure deserves. A throttle is not an outage. */
-function reason(e: unknown, c: (typeof C)["en"]): string {
-  return e instanceof Throttled ? (e.message || c.slow) : c.err;
-}
 
 export default function ExperienceSection({
   lang, cv, state, dispatch, target,
@@ -145,14 +128,26 @@ function RoleCard({
   target: BuilderState["target"];
 }) {
   const c = C[lang];
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [editing, setEditing] = useState<{ id: string; text: string } | null>(null);
   const [ask, setAsk] = useState<{ id: string; question: string; shape: string; value: string } | null>(null);
-  // A ref, not a memo: this box is meant to be mutated, and a stale reply must
-  // never overwrite a newer one.
-  const abort = useRef<AbortController | null>(null);
+
+  /*
+   * One hook for four tasks, because the user does one thing at a time and this section
+   * shows one status line. `ai.task` says which of the four the line is about, so the right
+   * button gets the spinner.
+   */
+  const ai = useAiTask(lang);
+  /*
+   * "The model answered, and every line it gave is already here."
+   *
+   * The old code reported this with the generic failure sentence, so a user whose CV was
+   * simply complete for this job was told the assistant was busy. It is not a failure and
+   * not the layer's `empty` either — the CALL succeeded and returned content; the dedupe
+   * against confirmed, pending and rejected lines is what emptied it. So it is this
+   * section's own state, with its own sentence.
+   */
+  const [deduped, setDeduped] = useState(false);
 
   const set = (patch: Partial<Role>) => dispatch({ t: "role", id: role.id!, patch });
   const offered = pending(state, "experience", role.id);
@@ -161,7 +156,6 @@ function RoleCard({
 
   /** Seed instantly from the cached pack, then top up from the model on demand. */
   const suggest = useCallback(async (fromModel: boolean) => {
-    setErr("");
     const seen = {
       confirmed: role.bullets,
       pending: offered,
@@ -184,47 +178,39 @@ function RoleCard({
       return;
     }
 
-    abort.current?.abort();
-    abort.current = new AbortController();
-    setBusy(true);
-    try {
-      const d = await askSuggest({
-        kind: "duties", mode: "items", lang: cv, targetRole: target.title || role.title,
-        role: role.title, company: role.company,
-        jobAd: target.jobAdText,
-        current: role.bullets.join("\n"),
-      }, abort.current.signal);
-      const fresh = filterFresh(d.items ?? (d.text ? [d.text] : []), seen);
-      if (!fresh.length) { setErr(c.err); return; }
-      dispatch({
-        t: "offer",
-        items: fresh.map((text) => newItem({
-          section: "experience", type: "duty", text, roleId: role.id,
-          source: "ai", reason: lang === "ar" ? "مبني على مسماك وجهة عملك" : "based on your title and employer",
-        })),
-      });
-      track("builder_suggestions_shown", { section: "experience", n: fresh.length });
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
-    } finally { setBusy(false); }
-     
-  }, [role, offered, state, lang, cv, target, dispatch, c]);
+    const r = await ai.run("duties_draft", {
+      cvLang: cv, targetRole: target.title || role.title,
+      role: role.title, company: role.company,
+      jobAd: target.jobAdText,
+      current: role.bullets.join("\n"),
+    });
+    if (r.state !== "success" || !Array.isArray(r.data)) return;
+    // Everything the model returned may already be on the CV, pending, or previously
+    // rejected — in which case there is nothing new to offer, which is `empty` and not a
+    // failure. `setDeduped` records that so the line below can say so.
+    const fresh = filterFresh(r.data as string[], seen);
+    if (!fresh.length) { setDeduped(true); return; }
+    setDeduped(false);
+    dispatch({
+      t: "offer",
+      items: fresh.map((text) => newItem({
+        section: "experience", type: "duty", text, roleId: role.id,
+        source: "ai", reason: lang === "ar" ? "مبني على مسماك وجهة عملك" : "based on your title and employer",
+      })),
+    });
+    track("builder_suggestions_shown", { section: "experience", n: fresh.length });
+  }, [ai, role, offered, state, lang, cv, target, dispatch]);
 
   /** Rewrite one pending suggestion in place. */
-  const rewrite = useCallback(async (it: Item, kind: "bullet_improve" | "bullet_shorter") => {
-    setErr(""); setBusy(true);
-    abort.current?.abort(); abort.current = new AbortController();
-    try {
-      const d = await askSuggest({
-        kind, lang: cv, targetRole: target.title || role.title,
-        role: role.title, company: role.company, current: it.text, jobAd: target.jobAdText,
-      }, abort.current.signal);
-      if (d.text?.trim()) dispatch({ t: "editItem", id: it.id, text: d.text.trim() });
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
-    } finally { setBusy(false); }
-     
-  }, [role, cv, target, dispatch, c]);
+  const rewrite = useCallback(async (it: Item, task: "duty_improve" | "duty_shorter") => {
+    const r = await ai.run(task, {
+      cvLang: cv, targetRole: target.title || role.title,
+      role: role.title, company: role.company, current: it.text, jobAd: target.jobAdText,
+    });
+    if (r.state === "success" && typeof r.data === "string") {
+      dispatch({ t: "editItem", id: it.id, text: r.data });
+    }
+  }, [ai, role, cv, target, dispatch]);
 
   /**
    * The metric path. The model returns the QUESTION and the sentence shape — never
@@ -232,22 +218,18 @@ function RoleCard({
    * rule expressed as an interaction rather than as a refusal.
    */
   const askForFigure = useCallback(async (it: Item) => {
-    setErr(""); setBusy(true);
-    abort.current?.abort(); abort.current = new AbortController();
-    try {
-      const d = await askSuggest({
-        kind: "bullet_metric", lang: cv, targetRole: target.title || role.title,
-        role: role.title, company: role.company, current: it.text,
-      }, abort.current.signal);
-      if (d.question) {
-        setAsk({ id: it.id, question: d.question, shape: d.rewritten || it.text, value: "" });
-        track("builder_metric_asked", {});
-      }
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
-    } finally { setBusy(false); }
-     
-  }, [role, cv, target, c]);
+    const r = await ai.run("duty_metric_ask", {
+      cvLang: cv, targetRole: target.title || role.title,
+      role: role.title, company: role.company, current: it.text,
+    });
+    // The parser refuses an answer with no question — a rewritten line and no question is
+    // the model supplying the number itself — so reaching here means there IS one.
+    if (r.state === "success" && r.data) {
+      const d = r.data as { question: string; rewritten: string };
+      setAsk({ id: it.id, question: d.question, shape: d.rewritten || it.text, value: "" });
+      track("builder_metric_asked", {});
+    }
+  }, [ai, role, cv, target]);
 
   /**
    * The achievement extractor — the same machinery, aimed at the role instead of at
@@ -262,24 +244,18 @@ function RoleCard({
    * `id: ""` marks the answer as a NEW bullet rather than an edit of an existing one.
    */
   const askForAchievement = useCallback(async () => {
-    setErr(""); setBusy(true);
-    abort.current?.abort(); abort.current = new AbortController();
-    try {
-      const d = await askSuggest({
-        kind: "bullet_metric", lang: cv, targetRole: target.title || role.title,
-        role: role.title, company: role.company,
-        current: role.bullets.join("\n") || role.title,
-        jobAd: target.jobAdText,
-      }, abort.current.signal);
-      if (d.question) {
-        setAsk({ id: "", question: d.question, shape: d.rewritten || "", value: "" });
-        track("builder_achievement_asked", {});
-      }
-    } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
-    } finally { setBusy(false); }
-     
-  }, [role, cv, target, c]);
+    const r = await ai.run("duty_metric_ask", {
+      cvLang: cv, targetRole: target.title || role.title,
+      role: role.title, company: role.company,
+      current: role.bullets.join("\n") || role.title,
+      jobAd: target.jobAdText,
+    });
+    if (r.state === "success" && r.data) {
+      const d = r.data as { question: string; rewritten: string };
+      setAsk({ id: "", question: d.question, shape: d.rewritten || "", value: "" });
+      track("builder_achievement_asked", {});
+    }
+  }, [ai, role, cv, target]);
 
   const applyFigure = () => {
     if (!ask) return;
@@ -386,8 +362,8 @@ function RoleCard({
                       }}
                     />
                     <Pill label={c.edit} onClick={() => setEditing({ id: it.id, text: it.text })} />
-                    <Pill label={c.improve} onClick={() => rewrite(it, "bullet_improve")} />
-                    <Pill label={c.shorter} onClick={() => rewrite(it, "bullet_shorter")} />
+                    <Pill label={c.improve} onClick={() => rewrite(it, "duty_improve")} />
+                    <Pill label={c.shorter} onClick={() => rewrite(it, "duty_shorter")} />
                     <Pill label={c.metric} onClick={() => askForFigure(it)} />
                     <Pill label={c.drop} onClick={() => {
                       dispatch({ t: "reject", id: it.id });
@@ -411,18 +387,18 @@ function RoleCard({
 
         {ready && (
           <button
-            onClick={() => suggest(true)} disabled={busy}
+            onClick={ai.busy ? ai.cancel : () => suggest(true)}
             className="mt-3 flex items-center gap-2 rounded-full px-3 text-xs font-bold"
             style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
           >
-            <AiOrb size={20} thinking={busy} />
-            {busy ? c.busy : c.more}
+            <AiOrb size={20} thinking={ai.busy && ai.task === "duties_draft"} />
+            {ai.busy ? c.stop : c.more}
           </button>
         )}
         {ready && (
           <>
             <button
-              onClick={askForAchievement} disabled={busy}
+              onClick={askForAchievement} disabled={ai.busy}
               className="ms-2 mt-3 rounded-full px-3 text-xs font-bold"
               style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
             >
@@ -431,7 +407,17 @@ function RoleCard({
             <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{c.achieveHint}</p>
           </>
         )}
-        {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+        {/* One line for all four tasks and all five states, worded by the hook — plus the
+            one state only this section has, where the answer arrived and was entirely
+            duplicates. */}
+        {(ai.message || deduped) && (
+          <p
+            className="mt-2 text-xs leading-relaxed"
+            style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : (deduped || ai.state === "empty") ? "var(--faint)" : "#fca5a5" }}
+          >
+            {ai.message || c.allKnown}
+          </p>
+        )}
       </div>
 
       {/* ── the figure question ── */}
