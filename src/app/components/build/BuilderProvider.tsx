@@ -124,13 +124,36 @@ export default function BuilderProvider({
     if (started.current) return;
     started.current = true;
     const { id, state: saved, fromChat } = readBuilder(lang);
+
+    /*
+     * A FRESH draft's CV language follows the interface language.
+     *
+     * `EMPTY_TARGET.language` is "en", and that default was the root of a reported bug: a user on
+     * the Arabic interface who never opened the language dropdown got an English CV and English AI
+     * suggestions throughout — skills, duties, credentials, summary. Nobody chose that. It was
+     * chosen for them by a constant, and the only signal that they wanted Arabic (they were reading
+     * Arabic) was being ignored.
+     *
+     * The interface language is not a perfect proxy — an Arabic speaker may well want an English CV,
+     * and plenty do — which is why the dropdown stays and is one tap. But a default has to be
+     * SOMETHING, and "the language this person is reading" is a far better guess than "English,
+     * always". Applied only to a genuinely new draft, so it can never overwrite a choice already
+     * made and stored.
+     */
+    const fresh: BuilderState = {
+      ...EMPTY_BUILDER,
+      target: { ...EMPTY_BUILDER.target, language: lang },
+    };
+
     if (saved) {
       dispatch({ t: "hydrate", state: { ...EMPTY_BUILDER, ...saved } });
     } else if (fromChat) {
       // A draft started in the chat: carry the confirmed resume across, which is the
       // entire point of the two doors sharing a key. Only `profile` crosses, because
       // only `profile` is confirmed content — the chat has no suggestion bag.
-      dispatch({ t: "hydrate", state: { ...EMPTY_BUILDER, profile: readDraft(lang).profile } });
+      dispatch({ t: "hydrate", state: { ...fresh, profile: readDraft(lang).profile } });
+    } else {
+      dispatch({ t: "hydrate", state: fresh });
     }
     setResumeId(urlId || id);
     setHydrated(true);

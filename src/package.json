@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow",
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow && npm run test:stepready",
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "smoke": "node ops/form-smoke.mjs",
     "test:importcv": "node --experimental-strip-types ops/importcv.test.mjs",
@@ -37,7 +37,8 @@
     "test:e2e": "node ops/radiology-e2e.test.mjs",
     "test:devices": "node ops/devices.test.mjs",
     "test:aicache": "node --experimental-strip-types ops/aicache.test.mjs",
-    "test:callflow": "node --experimental-strip-types ops/callflow.test.mjs"
+    "test:callflow": "node --experimental-strip-types ops/callflow.test.mjs",
+    "test:stepready": "node --experimental-strip-types ops/stepready.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

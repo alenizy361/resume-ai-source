@@ -22,6 +22,7 @@ import { track } from "@vercel/analytics";
 
 import ResumeTemplate from "../ResumeTemplate";
 import OrbBrand from "../OrbBrand";
+import { stepMark } from "@/app/lib/stepReady";
 import { setBuilderMode } from "@/app/lib/flags";
 import { useBuilder } from "./BuilderProvider";
 import { STEPS, SECTION_COPY, stepFromSlug, stepHref, stepIndex } from "./steps";
@@ -137,10 +138,14 @@ export default function BuilderShell({
             {/* The rail reports how much of the CV exists, which is not the same as how
                 many steps have been visited — a visited step with nothing typed into it
                 has produced nothing, and the rail should not claim otherwise. */}
+            {/* A visited step whose data does not validate gets a WARNING segment, not a filled
+                one. Drawing both from `sectionsDone` alone is half of the contradiction a user
+                photographed: Target Job ticked, and Skills saying the job title was missing. */}
             <div className="bd-rail mt-2.5" aria-label={`${progress}%`}>
-              {STEPS.map((s) => (
-                <i key={s} className={state.sectionsDone.includes(s) ? "on" : ""} />
-              ))}
+              {STEPS.map((s) => {
+                const mark = stepMark(s, state, step ?? "start");
+                return <i key={s} className={mark === "done" ? "on" : mark === "warn" ? "warn" : ""} />;
+              })}
             </div>
           </div>
         </header>
@@ -167,7 +172,17 @@ export default function BuilderShell({
                 <nav className={`bd-nav${mobileView === "preview" ? " hide" : ""}`} aria-label={t.steps}>
                   <ol>
                     {STEPS.map((s, i) => {
-                      const done = state.sectionsDone.includes(s);
+                      /*
+                       * `done` is now DERIVED, and that is the fix rather than a refinement.
+                       *
+                       * `sectionsDone` records that the user pressed Continue. It never checked
+                       * whether the step's data could support the claim, so pressing Continue on an
+                       * empty form earned a tick — and a later step that genuinely needed that data
+                       * had to contradict the tick out loud. One validator now answers both.
+                       */
+                      const mark = stepMark(s, state, step ?? "start");
+                      const done = mark === "done";
+                      const warn = mark === "warn";
                       const here = s === step;
                       return (
                         <li key={s}>
@@ -177,7 +192,9 @@ export default function BuilderShell({
                             className={here ? "on" : undefined}
                             aria-current={here ? "step" : undefined}
                           >
-                            <span className={`bd-tick${done ? " done" : ""}`}>{done ? "✓" : ar ? toArabicDigits(i + 1) : i + 1}</span>
+                            <span className={`bd-tick${done ? " done" : warn ? " warn" : ""}`}>
+                              {done ? "✓" : warn ? "!" : ar ? toArabicDigits(i + 1) : i + 1}
+                            </span>
                             {nav[s]}
                           </Link>
                         </li>

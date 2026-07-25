@@ -34,6 +34,7 @@ import { useBuilder } from "./BuilderProvider";
 import {
   SECTION_COPY, nextStep, prevStep, stepHref, stepIndex, builderHome,
 } from "./steps";
+import { stepReady } from "@/app/lib/stepReady";
 import { TargetFields, PersonalFields, BlueprintBody, SkillsBody } from "./FormSections";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
@@ -73,8 +74,9 @@ export default function BuilderStep({ step }: { step: SectionId }) {
   return (
     <section className="bd-section bd-step">
       <div className="bd-head">
-        <span className={`bd-num${state.sectionsDone.includes(step) ? " done" : ""}`}>
-          {state.sectionsDone.includes(step) ? "✓"
+        {/* Validated, not merely visited — see `stepReady.ts`. */}
+        <span className={`bd-num${stepReady(step, state).ready && state.sectionsDone.includes(step) ? " done" : ""}`}>
+          {stepReady(step, state).ready && state.sectionsDone.includes(step) ? "✓"
             : lang === "ar" ? toArabicDigits(stepIndex(step) + 1) : stepIndex(step) + 1}
         </span>
         <div>
@@ -172,7 +174,9 @@ function StepContent({ step }: { step: SectionId }) {
         </>
       );
     case "skills":
-      return <SkillsBody lang={lang} state={state} dispatch={dispatch} />;
+      /* `targetHref` is the way BACK to the missing field. A dead "#" would be worse than no
+         link at all — it looks like a fix and does nothing. */
+      return <SkillsBody lang={lang} state={state} dispatch={dispatch} targetHref={stepHref(lang, resumeId, "target")} />;
     case "languages":
       return <LanguagesBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} />;
     case "summary":

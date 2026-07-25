@@ -20,6 +20,8 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 
 import { type BuilderState, type Item, newItem, pending } from "@/app/lib/builderDoc";
+import { skillsReady } from "@/app/lib/stepReady";
+import { missingLabel } from "@/app/lib/stepMessages";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
@@ -31,6 +33,14 @@ export interface Common {
   lang: "ar" | "en";
   state: BuilderState;
   dispatch: React.Dispatch<Action>;
+  /**
+   * Where "go back and fix it" points.
+   *
+   * Passed in rather than built here because only the router layer knows the resume id and the
+   * locale prefix. Optional so the long-page `Builder.tsx`, which has no routes, still compiles —
+   * there the sections are all mounted at once and there is nowhere to navigate to.
+   */
+  targetHref?: string;
 }
 
 /** The entry-point copy. Lives here because `StartCards` is the only thing that uses it. */
@@ -183,10 +193,21 @@ export function TargetFields(p: Common) {
             className="bd-input" value={p.state.target.language}
             onChange={(e) => set({ language: e.target.value as "en" | "ar" | "both" })}
           >
-            {/* Labelled honestly: the PDF export cannot shape Arabic script, so an
-                Arabic CV downloads as Word plus a rendered PDF, not a text PDF. */}
-            <option value="en">English — PDF + Word</option>
-            <option value="ar">{ar ? "العربية — Word + PDF مصمّم" : "Arabic — Word + designed PDF"}</option>
+            {/*
+              The reader's own language is listed FIRST, because it is now also the default for a new
+              draft — a list whose first option is not the selected one reads as if the default were
+              chosen at random.
+
+              Labelled honestly either way: the PDF export cannot shape Arabic script, so an Arabic
+              CV downloads as Word plus a rendered PDF rather than a text PDF.
+            */}
+            {(ar ? ["ar", "en"] : ["en", "ar"]).map((code) => (
+              <option key={code} value={code}>
+                {code === "en"
+                  ? (ar ? "الإنجليزية — PDF + Word" : "English — PDF + Word")
+                  : (ar ? "العربية — Word + PDF مصمّم" : "Arabic — Word + designed PDF")}
+              </option>
+            ))}
             <option value="both">{ar ? "كلاهما" : "Both"}</option>
           </select>
         </label>
@@ -384,9 +405,32 @@ export function BlueprintBody(p: Common) {
  */
 export function SkillsBody(p: Common) {
   const ar = p.lang === "ar";
+  /*
+   * THREE messages where there used to be one, and that conflation was the production bug.
+   *
+   * `none` was shown whenever this step had no suggestions and no confirmed skills — and it said
+   * "Enter a job title first", which is a claim about a DIFFERENT thing. Suggestions are seeded from
+   * `findRolePack`, and there are seven role packs, so every job title outside those seven produced
+   * zero suggestions and this step told the user to enter the title they had already entered while
+   * Target Job displayed a tick beside it.
+   *
+   *   missingTarget  the target genuinely is not there — the only case that may say so
+   *   nothingYet     the target is fine and no suggestions exist yet, which is not an error
+   *   failed         a generation was attempted and did not work
+   */
   const L = ar
-    ? { none: "اكتب المسمى الوظيفي أولاً.", chosen: "في سيرتك", tapToAdd: "انقر لإضافتها لسيرتك", why: "لماذا اقتُرحت؟" }
-    : { none: "Enter a job title first.", chosen: "In your CV", tapToAdd: "Tap to add to your CV", why: "Why suggested?" };
+    ? {
+      missingTarget: "لا يمكن اقتراح مهارات قبل معرفة الوظيفة المستهدفة.",
+      backToTarget: "ارجع إلى الوظيفة المستهدفة",
+      nothingYet: "لا توجد مهارات مقترحة بعد. اطلبها بالذكاء أو أضِفها بنفسك.",
+      chosen: "في سيرتك", tapToAdd: "انقر لإضافتها لسيرتك", why: "لماذا اقتُرحت؟",
+    }
+    : {
+      missingTarget: "Skills cannot be suggested until the target job is known.",
+      backToTarget: "Back to Target job",
+      nothingYet: "No suggested skills yet. Ask the AI, or add your own.",
+      chosen: "In your CV", tapToAdd: "Tap to add to your CV", why: "Why suggested?",
+    };
 
   const offered = pending(p.state, "skills");
   const chosen = String(p.state.profile.skills || "").split(/[,،]/).map((x) => x.trim()).filter(Boolean);
@@ -434,10 +478,36 @@ export function SkillsBody(p: Common) {
     />
   );
 
+  /*
+   * The prerequisite is asked of the SHARED validator, not inferred from whether this step happens
+   * to have content. `skillsReady` is the same function the rail uses to decide whether to draw a
+   * tick, so the two cannot disagree — which is the whole point, because their disagreement is what
+   * the user saw.
+   */
+  const gate = skillsReady(p.state);
+
+  if (!gate.ready) {
+    return (
+      <>
+        <p className="text-xs" style={{ color: "#fcd34d" }}>{L.missingTarget}</p>
+        {/* Named field by named field, so the user is sent to one input rather than a form to hunt. */}
+        <ul className="mt-2 space-y-1 text-xs" style={{ color: "var(--faint)" }}>
+          {gate.missing.map((m) => <li key={m.code}>· {missingLabel(m.code, p.lang)}</li>)}
+        </ul>
+        <Link
+          href={p.targetHref ?? "#"}
+          className="btn-ghost mt-3 inline-block rounded-xl px-4 py-2 text-sm font-semibold"
+        >
+          ← {L.backToTarget}
+        </Link>
+      </>
+    );
+  }
+
   if (!offered.length && !chosen.length) {
     return (
       <>
-        <p className="text-xs" style={{ color: "var(--faint)" }}>{L.none}</p>
+        <p className="text-xs" style={{ color: "var(--faint)" }}>{L.nothingYet}</p>
         {gap}
       </>
     );

@@ -132,6 +132,9 @@
   background: var(--line); transition: background .3s var(--ez);
 }
 .build-root .bd-rail i.on { background: var(--accent); }
+/* A visited step whose data does not validate. Amber, not red: nothing is broken, something is
+   missing — and colouring a missing field like a failure teaches the reader to ignore failures. */
+.build-root .bd-rail i.warn { background: #fcd34d; }
 
 /* ── layout: form left, sticky preview right ──────────────── */
 
@@ -246,6 +249,13 @@
   background: rgba(52, 211, 153, .14);
   border-color: rgba(52, 211, 153, .4);
   color: #6ee7b7;
+}
+/* Visited, not valid. The state that had no visual before, which is why a step could show a green
+   tick while a later step said its data was missing. */
+.build-root .bd-nav .bd-tick.warn {
+  background: rgba(252, 211, 77, .14);
+  border-color: rgba(252, 211, 77, .45);
+  color: #fcd34d;
 }
 
 /* ── step framing ─────────────────────────────────────────── */
