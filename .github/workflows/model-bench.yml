@@ -6,10 +6,36 @@ name: Model bench
 #
 # Needs the NVIDIA_API_KEY repository secret (and ANTHROPIC_API_KEY to include
 # Claude in the comparison). Each model costs 3 calls.
+#
+# Two suites, because there are two versions of the question:
+#
+#   models  WHICH model. Three hard cases against every candidate — cheap, and the way to
+#           choose. 3 calls per model.
+#   titles  How good the CHOSEN model is across the whole catalogue: all 111 occupations the
+#           product publishes a page for, scored with the product's own honesty helpers.
+#           1 call per title.
+#
+# They live in one workflow because a workflow_dispatch workflow is only dispatchable when its
+# file is on the DEFAULT branch, and this one already is. A second file would sit undispatchable
+# on a feature branch until it merged — and the two suites are the same question anyway.
 
 on:
   workflow_dispatch:
     inputs:
+      suite:
+        description: "models = pick a model (3 calls each) · titles = score the chosen model across all 111 occupations (1 call each)"
+        type: choice
+        options: ["models", "titles"]
+        default: "models"
+      lang:
+        description: "titles suite only — which half of the catalogue"
+        type: choice
+        options: ["both", "ar", "en"]
+        default: "both"
+      limit:
+        description: "titles suite only — sample this many titles, spread across categories. 0 = all."
+        type: string
+        default: "0"
       models:
         description: "Comma-separated model ids. Empty = every chat model in the NVIDIA catalogue."
         type: string
@@ -25,6 +51,9 @@ permissions:
 jobs:
   bench:
     runs-on: ubuntu-latest
+    # 111 calls at four in flight. Generous, so a slow provider does not cost the whole run's
+    # results — which are the only output that matters.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -65,7 +94,8 @@ jobs:
             exit 1
           }
 
-      - name: Bench
+      - name: Bench the models
+        if: inputs.suite == 'models'
         working-directory: src
         env:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
@@ -74,3 +104,33 @@ jobs:
         run: |
           node --experimental-strip-types ops/model-bench.mjs \
             ${{ inputs.list_only && '--list' || '' }}
+
+      - name: Bench every title
+        if: inputs.suite == 'titles'
+        working-directory: src
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          # Empty means the product's own default, which is the model to measure.
+          AI_MODEL: ${{ inputs.models }}
+          OUT: ${{ github.workspace }}/titles-bench.md
+        run: |
+          node --experimental-strip-types ops/titles-bench.mjs \
+            --lang=${{ inputs.lang }} --limit=${{ inputs.limit }} --concurrency=4
+
+      - name: Put the titles report in the job summary
+        if: always() && inputs.suite == 'titles'
+        run: |
+          # The summary is where this gets read: the log carries the per-title lines, this
+          # carries the pass rates, the latencies and every title with a finding.
+          if [ -f "${{ github.workspace }}/titles-bench.md" ]; then
+            cat "${{ github.workspace }}/titles-bench.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "The bench produced no report — see the step log." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always() && inputs.suite == 'titles'
+        with:
+          name: titles-bench
+          path: titles-bench.md
+          if-no-files-found: warn
