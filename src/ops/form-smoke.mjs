@@ -42,6 +42,16 @@ const UI = process.env.UI === "ar" ? "ar" : "en";
  * never produce anything else.
  */
 const WITH_JD = process.env.JD === "1";
+/**
+ * IMPORT=1 exercises the third door: read a CV the user already has.
+ *
+ * /api/extract is stubbed with plain text, because what is under test is the parse and
+ * the landing — a real PDF would only add unpdf to the surface being measured, and that
+ * has its own coverage. The assertions are the ones that matter for an import: the
+ * user's own jobs and dates arrive as facts, the overflow past a job's bullet budget is
+ * OFFERED rather than dropped, and a language arrives with no level attached.
+ */
+const IMPORT = process.env.IMPORT === "1";
 
 /**
  * The visible strings this script clicks on, in both interfaces.
@@ -61,6 +71,7 @@ const L = {
     quality: "CV Quality Score", match: "Job Match Score",
     url: "Or paste the posting's link", read: "Read the link",
     supported: "Asked for, and on your CV",
+    pickFile: "Choose a file", useTicked: "Use what is ticked", inCv: "In your CV",
   },
   ar: {
     promise: "أنت تكتب الحقائق", newCv: "أنشئ سيرة جديدة", title: "المسمى الوظيفي",
@@ -70,6 +81,7 @@ const L = {
     quality: "تقييم جودة السيرة", match: "تقييم المطابقة",
     url: "أو الصق رابط الإعلان", read: "اقرأ الرابط",
     supported: "مطلوب، وموجود في سيرتك",
+    pickFile: "اختر ملفاً", useTicked: "استخدم ما حدّدته", inCv: "في سيرتك",
   },
 }[UI];
 
@@ -117,6 +129,29 @@ const run = async () => {
    * could have typed, review switches to a match report. Reaching a real job board
    * would make this script fail on their bot policy rather than on our code.
    */
+  const UPLOADED_CV = [
+    "Abdulaziz Alanazi",
+    "Riyadh | +966 581 453 234 | a@example.com",
+    "WORK EXPERIENCE",
+    "Radiographer — Dallah Hospital, Riyadh | Sep 2024 - Present",
+    "- Performed CT examinations following departmental protocols",
+    "- Operated PACS to store and retrieve diagnostic images",
+    "- Positioned patients and applied shielding to ALARA standards",
+    "- Prepared and administered contrast under supervision",
+    "- Maintained equipment quality-assurance logs",
+    "- Escorted patients between the ward and the imaging suite",
+    "- Reported equipment faults to biomedical engineering",
+    "EDUCATION",
+    "Bachelor of Radiologic Technology — King Saud University, 2020",
+    "SKILLS",
+    "Computed Tomography, PACS, Radiation Protection",
+    "LANGUAGES",
+    "Arabic, English (Fluent)",
+  ].join("\n");
+  await page.route("**/api/extract", (route) => route.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify({ text: UPLOADED_CV }),
+  }));
+
   const AD = [
     "Senior Radiographer — required: CT, PACS, radiation protection.",
     "Preferred: MRI experience. Must hold SCFHS registration.",
@@ -160,6 +195,37 @@ const run = async () => {
   ok("the page loads", await page.locator(`text=${L.promise}`).first().isVisible());
 
   /* ── entry ── */
+  if (IMPORT) {
+    const [chooser] = await Promise.all([
+      page.waitForEvent("filechooser"),
+      sec(S.start).locator("button", { hasText: L.pickFile }).first().click(),
+    ]);
+    await chooser.setFiles({ name: "cv.txt", mimeType: "text/plain", buffer: Buffer.from(UPLOADED_CV) });
+    await page.waitForTimeout(700);
+
+    const panel = await sec(S.start).textContent();
+    ok("the import shows what it read before using any of it",
+      panel.includes("Radiographer") && panel.includes("Dallah Hospital"));
+    ok("and warns that duties past the budget will be offered, not added",
+      /1\s*(extra|مهمة)/.test(panel), panel.slice(0, 0) || "no budget notice");
+
+    await sec(S.start).locator("button", { hasText: L.useTicked }).first().click();
+    await settle();
+
+    const cv0 = await preview();
+    ok("the imported employer is on the CV", cv0.includes("Dallah Hospital"));
+    ok("so are the user's own dates", /Sep 2024/.test(cv0));
+    ok("six duties land and the seventh does not",
+      (cv0.match(/Performed CT|Operated PACS|Positioned patients|Prepared and administered|Maintained equipment|Escorted patients/g) || []).length === 6
+      && !cv0.includes("biomedical engineering"), "bullet budget");
+    ok("the imported education is on the CV", cv0.includes("King Saud University"));
+    ok("an imported skill is NOT on the CV until it is picked", !cv0.includes("Radiation Protection"));
+    ok("an imported language brings no level with it", !/\((native|fluent)\)/i.test(cv0));
+    await browser.close();
+    console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
+    process.exit(fail === 0 ? 0 : 1);
+  }
+
   await sec(S.start).locator(`text=${L.newCv}`).click();
 
   /* ── target: everything downstream is suggested from this title.

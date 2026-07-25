@@ -26,15 +26,18 @@ import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft, writeDraft, contactLine } from "@/app/lib/draftStore";
 import { setBuilderMode } from "@/app/lib/flags";
 import {
-  type BuilderState, type SectionId, type Item, type Credential, type LanguageEntry,
+  type BuilderState, type SectionId, type Item, type Credential, type CredentialKind,
+  type LanguageEntry,
   EMPTY_BUILDER,
   newItem, confirmItem, rejectItem, pending, editItem, newId, summaryBasis,
   cvLang, levelWord, validToWord,
 } from "@/app/lib/builderDoc";
 import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
 import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
+import { type ParsedCv } from "@/app/lib/importCv";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
+import ImportPanel from "./ImportPanel";
 import SummarySection from "./SummarySection";
 import ReviewSection from "./ReviewSection";
 import DesignSection from "./DesignSection";
@@ -148,6 +151,8 @@ type Action =
   | { t: "offerSummary"; items: Item[] }
   | { t: "pickSummary"; id: string }
   | { t: "summaryText"; text: string }
+  | { t: "import"; cv: ParsedCv; lang: "ar" | "en" }
+  | { t: "removeSkill"; text: string }
   | { t: "tailorCopy" }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
@@ -384,6 +389,119 @@ function reducer(s: BuilderState, a: Action): BuilderState {
         suggestions: s.suggestions.filter((i) => i.section !== "summary"),
         sectionsDone: s.sectionsDone.filter((x) => !stale.includes(x)),
       };
+    }
+
+    /*
+     * A CV the user already has, brought into the form.
+     *
+     * Three rules decide what lands where, and each one is about not losing or not
+     * over-claiming the user's own words:
+     *
+     * 1. Their FACTS go straight in — name, contact, jobs with dates, education, their
+     *    own summary. This is transcription, not suggestion: the document is theirs and
+     *    a form that made them re-approve their own employer would be insulting.
+     * 2. Duties land up to the role's budget, and the OVERFLOW becomes suggestions.
+     *    `capBullets` keeps the earliest six, so importing ten silently would delete
+     *    four of their lines with no trace. Offered, they are one tap from returning.
+     * 3. Skills, credentials and languages arrive UNCONFIRMED. Not because they are
+     *    doubted, but because each needs something the parse cannot supply: a skill
+     *    needs to fit the target job, a credential needs its issuer and expiry, and a
+     *    language needs a level this product refuses to guess.
+     *
+     * Existing input is never overwritten. Someone who typed their phone number and
+     * then imported a file keeps what they typed.
+     */
+    case "import": {
+      const cv = a.cv;
+      const keep = (mine: string, theirs: string) => mine.trim() || theirs.trim();
+      const personal = {
+        ...s.personal,
+        fullName: keep(s.personal.fullName, cv.name),
+        phone: keep(s.personal.phone, cv.phone),
+        email: keep(s.personal.email, cv.email),
+        linkedin: keep(s.personal.linkedin, cv.linkedin),
+      };
+
+      const roles: Role[] = [...(s.profile.roles || [])];
+      const offered: Item[] = [];
+      for (const r of cv.roles) {
+        const id = newId("r");
+        const current = /present|now|الآن|حالي/i.test(r.end) || !r.end;
+        const cap = current ? 6 : 4;
+        roles.push({
+          id, title: r.title, company: r.company, location: r.location,
+          department: "", start: r.start, end: r.end,
+          bullets: r.bullets.slice(0, cap),
+        });
+        for (const extra of r.bullets.slice(cap)) {
+          offered.push(newItem({
+            section: "experience", type: "duty", text: extra, roleId: id,
+            source: "imported", sourceRef: "cv-upload",
+            reason: a.lang === "ar" ? "من سيرتك المرفوعة — تجاوزت حد المهام" : "from your uploaded CV — over this job's bullet limit",
+          }));
+        }
+      }
+
+      for (const skill of cv.skills) {
+        offered.push(newItem({
+          section: "skills", type: "skill", text: skill,
+          source: "imported", sourceRef: "cv-upload",
+          reason: a.lang === "ar" ? "من سيرتك المرفوعة" : "from your uploaded CV",
+        }));
+      }
+
+      const credentials: Credential[] = [
+        ...s.credentials,
+        ...cv.certifications.map((title) => ({
+          id: newId("cr"), kind: "certification" as CredentialKind, title,
+          issuer: "", issueDate: "", expiryDate: "",
+          status: "suggested" as const, source: "imported" as const,
+        })),
+      ];
+
+      const languages: LanguageEntry[] = [
+        ...s.languages,
+        ...cv.languages
+          // A parsed "English (Fluent)" carries a level we did not ask for; the name is
+          // kept and the level is not, because a level has to be the user's own claim.
+          .map((raw) => raw.replace(/\s*[([].*$/, "").trim())
+          .filter((name) => name && !s.languages.some((l) => l.name === name))
+          .map((name) => ({
+            id: newId("lg"), name, level: "" as const,
+            status: "suggested" as const, source: "imported" as const,
+          })),
+      ];
+
+      const education = [s.profile.education, ...cv.education].filter((x) => x && x.trim()).join("\n");
+
+      const next: BuilderState = {
+        ...s,
+        entry: "upload",
+        personal,
+        suggestions: [...s.suggestions, ...offered],
+        profile: {
+          ...s.profile,
+          name: personal.fullName,
+          contact: contactLine(
+            { phone: personal.phone, email: personal.email },
+            { city: [personal.city, personal.country].filter(Boolean).join(", ") },
+          ),
+          roles,
+          wovenLines: rolesToLines(roles),
+          education,
+          summary: s.profile.summary || cv.summary,
+        },
+      };
+      return withLangs(withCreds({ ...next, credentials, languages }, credentials), languages);
+    }
+
+    /* A confirmed skill had no way off the CV. Importing twelve of them made that
+       impossible to ignore. */
+    case "removeSkill": {
+      const kept = String(s.profile.skills || "")
+        .split(/[,،]/).map((x) => x.trim()).filter(Boolean)
+        .filter((x) => x !== a.text);
+      return { ...s, profile: { ...s.profile, skills: kept.join("، ") } };
     }
 
     case "confirm":
@@ -766,6 +884,16 @@ function StartSection(p: ShellProps & {
           <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{p.copy.upCvSub}</div>
         </Link>
       </div>
+      {/* The third way in, and the one most people with a CV actually want: read it and
+          carry on building here, rather than being sent to a different product. */}
+      <ImportPanel
+        lang={p.lang}
+        onImport={(cv) => {
+          p.dispatch({ t: "import", cv, lang: p.lang });
+          p.dispatch({ t: "entry", v: "upload" });
+          p.onDone();
+        }}
+      />
     </SectionShell>
   );
 }
@@ -1071,7 +1199,20 @@ function SkillsSection(p: ShellProps & { state: BuilderState; dispatch: React.Di
         <div className="mb-4">
           <div className="bd-label">{L.chosen}</div>
           <div className="bd-chips">
-            {chosen.map((c) => <span key={c} className="bd-chip on">{c}</span>)}
+            {chosen.map((x) => (
+              <span key={x} className="bd-chip on">
+                {x}
+                {/* Confirmed skills had no way off the CV. Importing a dozen at once made
+                    that impossible to ignore. */}
+                <button
+                  onClick={() => p.dispatch({ t: "removeSkill", text: x })}
+                  aria-label={`remove ${x}`}
+                  style={{ minHeight: 0, lineHeight: 1, color: "var(--faint)", fontSize: 12 }}
+                >
+                  ✕
+                </button>
+              </span>
+            ))}
           </div>
         </div>
       )}
