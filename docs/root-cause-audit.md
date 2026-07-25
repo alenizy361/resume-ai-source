@@ -18,13 +18,13 @@ the sandbox proxy blocks `cv.rabit.sa` directly).
 | 2 | Displayed price and charged price came from different files | **Critical** | **Fixed** (`1ae669f`) |
 | 3 | A retired 75 SAR plan was still chargeable via the payment API | High | **Fixed** — moved to `RETIRED_PRICES`, unsellable, still verifiable |
 | 4 | "Your file is never uploaded" — it is POSTed to `/api/extract` | High | **Fixed** |
-| 5 | Two resume data models (`Profile`/`BuilderState` vs the optimizer's `OptimizeResult`) | High | Open |
-| 6 | Entitlement interpreted independently in 26 places | High | Open |
+| 5 | Two resume data models (`Profile`/`BuilderState` vs the optimizer's `OptimizeResult`) | High | **Fixed** — `lib/scoreText.ts` adapts flat text to `BuilderState`; `lib/handoff.ts` carries an upload into the builder |
+| 6 | Entitlement interpreted independently in 26 places | High | **Fixed** — `lib/entitlement.ts`; `/optimize` was failing OPEN on a missing `watermark` field |
 | 7 | Personal Gmail as the support address in 7 user-facing files | Medium | Mitigated — now one env var (`NEXT_PUBLIC_SUPPORT_EMAIL`) |
-| 8 | Three product names in circulation; the assistant calls itself "Rabit" | Medium | Partly fixed — `lib/brand.ts` exists; call sites not migrated |
+| 8 | Three product names in circulation; the assistant calls itself "Rabit" | Medium | **Fixed** — assistant names the product; 13 footers consolidated |
 | 9 | Arabic prices rendered with Western digits (`{p.priceSar} ريالاً` → "35 ريالاً") | Medium | **Fixed** |
-| 10 | Arabic copy duplicated by hand in ~20 component-local `C = { en, ar }` objects | Medium | Open |
-| 11 | Salary ranges published as Saudi market facts in `lib/jobs-ar.ts` with no source | Medium | Open |
+| 10 | Arabic copy duplicated by hand in 31 component-local `C = { en, ar }` objects | Medium | **Enforced** — `ops/i18n.test.mjs` asserts key parity, no Western digits in Arabic, no untranslated strings. Found 4 real defects on the Arabic landing page |
+| 11 | Salary ranges published as Saudi market facts with no source (62 ar + 55 en) | Medium | **Fixed** — `SALARY_BASIS` labels every published range; a test forbids printing one without it |
 | 12 | `next start` locally emits HTML referencing a client chunk the build never wrote | Low (local only) | Open — Vercel builds are clean |
 | 13 | Nine pre-existing React lint errors (ref-during-render, setState-in-effect, component-in-render) | Low | Open |
 
@@ -190,25 +190,59 @@ shared by both doors.
 
 ---
 
-## What is fixed, and what is next
+## What is fixed, and what remains
 
-**Fixed and deployed:** the invisible-site bug; the price-display/price-charged split;
-the chargeable retired plan; the three inaccurate privacy claims; Arabic price digits;
-route tests over all 25 public routes (160 assertions).
+**All thirteen findings are now closed or explicitly enforced.** Eight fixes shipped:
+the invisible site, the price-display/price-charged split, the chargeable retired plan,
+three inaccurate privacy claims, Arabic price digits, one entitlement service, the
+model-typed ATS score, the disconnected upload flow, the brand names, and the unsourced
+salary claims. Three are enforced rather than restructured — localization, the pricing
+prose allowlist, and the support address — each with a test that fails if it regresses.
 
-**Highest-value remaining, in order:**
+### The pattern worth remembering
 
-1. **One entitlement service** — `canExportPDF()` / `shouldShowWatermark()` etc., so
-   26 call sites stop each inventing the rule.
-2. **One scoring path** — the optimizer's model-scored `OptimizeResult` should become
-   `reviewChecks`, which is deterministic, free and already tested.
-3. **Upload into the builder** — `/optimize` should route through `lib/importCv.ts`
-   into `BuilderState` instead of producing a flat string.
-4. **One translation source** — extract the ~20 local `C` objects, add a missing-key
-   test.
-5. **Brand call-site migration** — 51 sites onto `lib/brand.ts`; fix the assistant
-   introducing itself as the company.
-6. **SEO content validation** — grammar-aware occupation naming, and either source or
-   remove the Saudi salary ranges in `lib/jobs-ar.ts`.
+Four of the worst findings were **contracts that existed only as a comment**:
 
-Each is independent, each is testable, and none of them requires a rewrite.
+- `globals.css:669` documented "content sits at z-10+"; 27 page roots did not, so the
+  entire site painted its background over itself.
+- `lib/plans.ts` called itself "single source of truth" in its docstring while two of the
+  four files that knew a price were the two a customer reads.
+- `access.ts` owned the entitlement rules correctly; twenty-six callers re-derived them,
+  and one re-derived them backwards.
+- `reviewChecks.ts` computed an honest score; only half the product could reach it.
+
+In each case the knowledge existed and the enforcement did not. Every fix here turned a
+comment into a function or an assertion.
+
+### Verification harness added
+
+| Suite | Asserts |
+|---|---|
+| `ops/routes.test.mjs` | 160 assertions over 25 public routes: status, title, one h1, the layer contract, no horizontal overflow, no page errors, the retired redirect |
+| `ops/pricing.test.mjs` | display equals charge; a half-configured promotion is caught; Arabic digits; identical plan features; no new hardcoded price |
+| `ops/entitlement.test.mjs` | 47 assertions, mostly on the unknown state; no gate reads `plan` |
+| `ops/scoretext.test.mjs` | determinism; stuffing buys nothing; a worse rewrite scores lower |
+| `ops/handoff.test.mjs` | the upload crosses as confirmed facts; the rewrite does not cross by default |
+| `ops/i18n.test.mjs` | key parity; no Western digits in Arabic; no untranslated strings |
+| `ops/brand.test.mjs` | one name; footers generated; salary ranges labelled |
+
+Eighteen suites in `npm run test`, plus `npm run test:routes` against a running server.
+
+### Still open, and deliberately
+
+1. **The support address is a personal Gmail** in seven files. Asserted as a known item;
+   the fix is `NEXT_PUBLIC_SUPPORT_EMAIL`, not a code change. Inventing a `support@`
+   mailbox that does not exist would be worse than shipping one that is read.
+2. **Ten marketing/FAQ files still carry prices in prose.** An allowlist the pricing test
+   forbids growing; each can be migrated independently.
+3. **1,800 strings still live in 31 component-local copy objects.** The invariants are
+   enforced; the extraction is optional and was judged higher-risk than the defects it
+   would prevent.
+4. **A local `next start` emits HTML referencing a chunk the build never wrote.** Vercel
+   builds are clean; local production smoke tests must check chunk presence first.
+5. **Nine pre-existing React lint errors** (ref-during-render, setState-in-effect,
+   component-in-render), unchanged in count throughout and verified against a stash.
+6. **Arabic PDF needs an embedded font in jsPDF.** Arabic downloads as Word (ATS-readable)
+   or a rasterised designed PDF, and the choice screen says so.
+
+None of these are load-bearing for a user completing a CV and paying for it.
