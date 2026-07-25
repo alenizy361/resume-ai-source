@@ -25,7 +25,7 @@
  *    missing LinkedIn URL has mistaken itself for the employer.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 import ResumeTemplate from "../ResumeTemplate";
@@ -36,6 +36,8 @@ import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { saveResume } from "@/app/lib/localdata";
 import { type BuilderState, type SectionId } from "@/app/lib/builderDoc";
 import { review } from "@/app/lib/reviewChecks";
+import { shouldShowWatermark } from "@/app/lib/entitlement";
+import { useEntitlement } from "@/app/lib/useEntitlement";
 
 type Lang = "ar" | "en";
 
@@ -139,8 +141,14 @@ export default function DesignSection({
   const arabicCv = state.target.language === "ar";
 
   const [showAll, setShowAll] = useState(false);
-  /** Watermark policy is the server's, not ours — `hasAccess` is the one flag. */
-  const [paid, setPaid] = useState<boolean | null>(null);
+  /*
+   * The watermark rule is not this component's to state.
+   *
+   * It used to fetch /api/auth/me here and conclude `paid !== true`, which is the right
+   * answer arrived at privately — and four other components arrived at it differently.
+   * `shouldShowWatermark` is now the only place that sentence exists.
+   */
+  const { entitlement, loading: entLoading } = useEntitlement();
   const [cover, setCover] = useState("");
   const [coverBusy, setCoverBusy] = useState(false);
   const [coverErr, setCoverErr] = useState("");
@@ -155,16 +163,6 @@ export default function DesignSection({
    */
   const [keptText, setKeptText] = useState("");
 
-  useEffect(() => {
-    let live = true;
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((d) => { if (live) setPaid(Boolean(d?.hasAccess)); })
-      // A failed check must not hand out unwatermarked files: unknown means free.
-      .catch(() => { if (live) setPaid(false); });
-    return () => { live = false; };
-  }, []);
-
   const critical = useMemo(
     () => review(state, referenceDate).findings.filter((f) => f.severity === "critical"),
     [state, referenceDate],
@@ -173,7 +171,9 @@ export default function DesignSection({
   const kept = keptText !== "" && keptText === cv;
   const tpl = TEMPLATE_CATALOG.find((x) => x.slug === state.template) ?? TEMPLATE_CATALOG[0];
   const shown = showAll ? TEMPLATE_CATALOG : TEMPLATE_CATALOG.filter((x) => RECOMMENDED.includes(x.slug));
-  const watermark = paid !== true;
+  // While the check is in flight this is `true`, so a slow network shows a mark that
+  // then disappears rather than a clean download that has to be taken back.
+  const watermark = entLoading || shouldShowWatermark(entitlement);
 
   /**
    * Put the finished CV in the user's own list.

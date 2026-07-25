@@ -20,6 +20,7 @@
  * inputs, 44px targets, prefers-reduced-motion.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
 import { track } from "@vercel/analytics";
@@ -543,7 +544,7 @@ export default function AdvisorLanding({ lang }: { lang: Lang }) {
       const { text: opt, score: sc, watermark } = await readNdjson(res, "optimizedResume");
       if (!opt) throw new Error("empty");
       setCv(opt);
-      if (typeof sc === "number") { setScore({ value: sc, watermark: watermark !== false }); setScorePhase("done"); } else setScorePhase("failed");
+      if (typeof sc === "number") { setScore({ value: sc, watermark: watermarkFromResponse({ watermark }) }); setScorePhase("done"); } else setScorePhase("failed");
       track("cv_completed", { lang, mode });
       try { saveResume({ title: `${p.name || "CV"} — ${p.role || "advisor"}`, source: "built", text: opt }); } catch { /* noop */ }
     } catch { setBuildFail(true); setScorePhase("failed"); }
@@ -562,7 +563,7 @@ export default function AdvisorLanding({ lang }: { lang: Lang }) {
       const { text: opt, score: sc, watermark } = await readNdjson(res, "optimizedResume");
       if (!opt) throw new Error("empty");
       setCv(opt);
-      if (typeof sc === "number") { setScore({ value: sc, watermark: watermark !== false }); setScorePhase("done"); } else setScorePhase("failed");
+      if (typeof sc === "number") { setScore({ value: sc, watermark: watermarkFromResponse({ watermark }) }); setScorePhase("done"); } else setScorePhase("failed");
       track("cv_completed", { lang, mode: "update" });
       try { saveResume({ title: `${p.name || "CV"} — ${rtl ? "محدثة" : "updated"}`, source: "optimized", text: opt }); } catch { /* noop */ }
     } catch { setBuildFail(true); setScorePhase("failed"); }
@@ -962,8 +963,8 @@ export default function AdvisorLanding({ lang }: { lang: Lang }) {
                     {langErr && <button onClick={() => { setLangErr(false); switchLang(outChoice, true); }} className="mt-2 text-xs font-semibold" style={{ color: "#f87171" }}>{t.lang_err}</button>}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <PdfExport text={cv} watermark={score?.watermark !== false} lang={lang} label="↓ PDF" />
-                    <DocxExport text={cv} watermark={score?.watermark !== false} lang={lang} filename={lang === "ar" ? "resume-ar.docx" : "resume.docx"} label="↓ Word" />
+                    <PdfExport text={cv} watermark={watermarkFromResponse(score)} lang={lang} label="↓ PDF" />
+                    <DocxExport text={cv} watermark={watermarkFromResponse(score)} lang={lang} filename={lang === "ar" ? "resume-ar.docx" : "resume.docx"} label="↓ Word" />
                   </div>
                   <PublishLink ar={rtl} text={cv} name={profile.name} role={profile.role} />
                   <div className="mt-4">

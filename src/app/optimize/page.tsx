@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
 import PdfExport from "../components/PdfExport";
 import DocxExport from "../components/DocxExport";
@@ -632,13 +633,13 @@ export default function OptimizePage() {
                         {copied ? "Copied" : "Copy"}
                       </button>
                       <button
-                        onClick={() => download("optimized-resume.txt", result.watermark ? wmTxt(result.optimizedResume) : result.optimizedResume)}
+                        onClick={() => download("optimized-resume.txt", watermarkFromResponse(result) ? wmTxt(result.optimizedResume) : result.optimizedResume)}
                         className="rounded-lg px-4 py-2 text-sm font-semibold"
                         style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
                         ↓ .txt
                       </button>
-                      <PdfExport text={result.optimizedResume} watermark={result.watermark} />
-                      <DocxExport text={result.optimizedResume} watermark={result.watermark} />
+                      <PdfExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
+                      <DocxExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
                       {/* The builder can read a saved CV back now, so "keep editing this
                           in the form" is a real offer rather than a dead end at the
                           download button. */}
@@ -702,7 +703,7 @@ export default function OptimizePage() {
                     {result.optimizedResume}
                   </div>
                 )}
-                {result.watermark && (
+                {watermarkFromResponse(result) && (
                   <div className="card mt-4 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
                     <div className="chip mb-3">Your resume is ready — free</div>
                     <h3 className="text-xl font-bold">
@@ -729,14 +730,14 @@ export default function OptimizePage() {
                     <div>
                       <h3 className="font-bold">Matching cover letter</h3>
                       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                        {result.watermark
+                        {watermarkFromResponse(result)
                           ? "Part of the Complete Pack — unlock to generate a tailored cover letter from this job."
                           : jobDescription.trim().length < 30
                             ? "Click ‘← New scan’, add the job posting, then re-scan to generate a matching cover letter."
                             : "Generate a tailored cover letter from the same job post."}
                       </p>
                     </div>
-                    {result.watermark ? (
+                    {watermarkFromResponse(result) ? (
                       <a href="/#pricing" className="btn-accent px-5 py-2.5 text-sm">Unlock to generate</a>
                     ) : !coverLetter ? (
                       <button

@@ -32,6 +32,7 @@ import {
   assembleResume as sharedAssemble,
 } from "@/app/lib/mergeProfile";
 import { setBuilderMode } from "@/app/lib/flags";
+import { watermarkFromResponse } from "@/app/lib/entitlement";
 
 type Lang = "ar" | "en";
 type OutLang = "en" | "ar" | "both";
@@ -473,7 +474,7 @@ export default function Journey({ lang }: { lang: Lang }) {
       // a finished build resumes AT the result, not at the interview
       if (typeof d?.cv === "string" && d.cv && d.score && typeof d.score.value === "number") {
         setCv(d.cv);
-        setScore({ value: d.score.value, watermark: d.score.watermark !== false });
+        setScore({ value: d.score.value, watermark: watermarkFromResponse(d.score) });
         setScorePhase("done");
         const st = Math.max(1, Math.min(5, Number(d.stage) || 1));
         stageRef.current = st;
@@ -637,7 +638,7 @@ export default function Journey({ lang }: { lang: Lang }) {
       if (!opt) throw new Error("empty");
       setCv(opt);
       if (typeof sc === "number") {
-        const sc2 = { value: sc, watermark: watermark !== false };
+        const sc2 = { value: sc, watermark: watermarkFromResponse({ watermark }) };
         setScore(sc2); setScorePhase("done");
         persist({ cv: opt, score: sc2, stage: 1 });
       } else setScorePhase("failed");
@@ -658,7 +659,7 @@ export default function Journey({ lang }: { lang: Lang }) {
       if (!opt) throw new Error("empty");
       setCv(opt);
       if (typeof sc === "number") {
-        const sc2 = { value: sc, watermark: watermark !== false };
+        const sc2 = { value: sc, watermark: watermarkFromResponse({ watermark }) };
         setScore(sc2); setScorePhase("done");
         persist({ cv: opt, score: sc2, stage: 1 });
       } else setScorePhase("failed");
@@ -1108,7 +1109,7 @@ export default function Journey({ lang }: { lang: Lang }) {
                 {scorePhase === "done" && verdict && (
                   <>
                     <div className={`jn-score-verdict${verdict.cls}`}>{verdict.txt}</div>
-                    <div className="jn-score-note">{t.score_note}{score?.watermark !== false ? ` · ${t.wm_note}` : ""}</div>
+                    <div className="jn-score-note">{t.score_note}{watermarkFromResponse(score) ? ` · ${t.wm_note}` : ""}</div>
                   </>
                 )}
                 {scorePhase === "failed" && (
@@ -1184,8 +1185,8 @@ export default function Journey({ lang }: { lang: Lang }) {
                 {cv && (
                   <>
                     <div className="jn-btn-row">
-                      <PdfExport text={cv} watermark={score?.watermark !== false} lang={lang} label="↓ PDF" />
-                      <DocxExport text={cv} watermark={score?.watermark !== false} lang={lang} filename={lang === "ar" ? "resume-ar.docx" : "resume.docx"} label="↓ Word" />
+                      <PdfExport text={cv} watermark={watermarkFromResponse(score)} lang={lang} label="↓ PDF" />
+                      <DocxExport text={cv} watermark={watermarkFromResponse(score)} lang={lang} filename={lang === "ar" ? "resume-ar.docx" : "resume.docx"} label="↓ Word" />
                     </div>
                     <div style={{ marginTop: 14 }}>
                       <PublishLink ar={rtl} text={cv} name={profile.name} role={profile.role} />
@@ -1242,7 +1243,7 @@ export default function Journey({ lang }: { lang: Lang }) {
                   {plan && <span className="jn-sum-chip"><i /><span>{plan}</span></span>}
                 </div>
                 <div className="jn-fin-actions">
-                  {cv && <PdfExport text={cv} watermark={score?.watermark !== false} lang={lang} label={t.dlAgain} />}
+                  {cv && <PdfExport text={cv} watermark={watermarkFromResponse(score)} lang={lang} label={t.dlAgain} />}
                   <button className="jn-btn jn-btn-ghost" style={{ flex: "0 1 auto", padding: "14px 30px" }} onClick={hardRestart}>{t.restart}</button>
                 </div>
               </div>

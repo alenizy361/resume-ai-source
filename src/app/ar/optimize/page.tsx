@@ -1,5 +1,6 @@
 "use client";
 import AiOrb from "../../components/AiOrb";
+import { watermarkFromResponse } from "@/app/lib/entitlement";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import { useState, useEffect, useRef } from "react";
@@ -435,12 +436,12 @@ export default function ArOptimizePage() {
                     className="rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
                     {copied ? "نُسخت" : "نسخ"}
                   </button>
-                  <button onClick={() => download("optimized-resume.txt", result.watermark ? wmTxt(result.optimizedResume) : result.optimizedResume)}
+                  <button onClick={() => download("optimized-resume.txt", watermarkFromResponse(result) ? wmTxt(result.optimizedResume) : result.optimizedResume)}
                     className="rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
                     ↓ نص
                   </button>
-                  <PdfExport text={result.optimizedResume} label="↓ تنزيل PDF" watermark={result.watermark} lang="ar" />
-                  <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" watermark={result.watermark} lang="ar" />
+                  <PdfExport text={result.optimizedResume} label="↓ تنزيل PDF" watermark={watermarkFromResponse(result)} lang="ar" />
+                  <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" watermark={watermarkFromResponse(result)} lang="ar" />
                 </div>
               )}
             </div>
@@ -477,7 +478,7 @@ export default function ArOptimizePage() {
                 {result.optimizedResume}
               </div>
             )}
-            {result.watermark && (
+            {watermarkFromResponse(result) && (
               <div className="card mt-4 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
                 <div className="chip mb-3">سيرتك جاهزة — مجاناً</div>
                 <h3 className="text-xl font-bold">
@@ -509,7 +510,7 @@ export default function ArOptimizePage() {
                       : "خطاب تعريف مفصّل على نفس إعلان الوظيفة."}
                   </p>
                 </div>
-                {result.watermark ? (
+                {watermarkFromResponse(result) ? (
                   <a href="/ar#pricing" className="btn-accent px-5 py-2.5 text-sm">🔒 افتح الوصول لإنشائه</a>
                 ) : !coverLetter ? (
                   <button onClick={generateCoverLetter} disabled={coverLoading || jobDescription.trim().length < 30} className="btn-accent px-5 py-2.5 text-sm disabled:opacity-50">
