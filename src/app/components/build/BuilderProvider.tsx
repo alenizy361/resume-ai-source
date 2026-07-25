@@ -40,8 +40,10 @@ import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
   type BuilderState, type SectionId, EMPTY_BUILDER, cvLang,
 } from "@/app/lib/builderDoc";
+import { EMPTY_LEDGER } from "@/app/lib/aiBudget";
 import { findRolePack } from "@/app/lib/rolePacks";
-import { type Action, reducer } from "./builderState";
+import { type Action, reducer, careerContext } from "./builderState";
+import { type UseGenerate, useGenerate } from "./useGenerate";
 
 export type SaveState = "" | "saving" | "saved" | "failed";
 
@@ -65,6 +67,17 @@ interface BuilderContextValue {
   /** Today, read once per mount: an expiry check that re-reads the clock renders differently for no reason. */
   today: string;
   markDone: (step: SectionId) => void;
+  /**
+   * The one path to a paid generation, shared by every section.
+   *
+   * In the context rather than called per section, and that is the point: two sections each
+   * calling `useGenerate` would each hold their own idea of the ledger, so the second one to
+   * commit would overwrite the first one's count. The blueprint feeds skills, credentials,
+   * languages and the review — four readers, one result, one meter.
+   */
+  gen: UseGenerate;
+  /** The five facts that decide what a suggestion says. Nothing personal is in it. */
+  career: ReturnType<typeof careerContext>;
 }
 
 const Ctx = createContext<BuilderContextValue | null>(null);
@@ -230,6 +243,22 @@ export default function BuilderProvider({
   );
   const progress = useMemo(() => computeProgress(state.profile), [state.profile]);
 
+  const career = useMemo(() => careerContext(state), [state]);
+  const commitAi = useCallback(
+    (next: { store: Parameters<typeof reducer>[0]["generations"]; ledger: BuilderState["ledger"] }) => {
+      dispatch({ t: "ai", store: next.store ?? {}, ledger: next.ledger ?? { ...EMPTY_LEDGER } });
+    },
+    [],
+  );
+  const gen = useGenerate({
+    lang,
+    context: career,
+    store: state.generations,
+    ledger: state.ledger,
+    revision: state.revision ?? 0,
+    onCommit: commitAi,
+  });
+
   const markDone = useCallback((step: SectionId) => {
     dispatch({ t: "done", section: step });
     track("builder_section_completed", { section: step });
@@ -237,8 +266,8 @@ export default function BuilderProvider({
 
   const value = useMemo<BuilderContextValue>(() => ({
     lang, resumeId, state, dispatch, save, flush, hydrated,
-    previewText, cv, progress, template, today, markDone,
-  }), [lang, resumeId, state, save, flush, hydrated, previewText, cv, progress, template, today, markDone]);
+    previewText, cv, progress, template, today, markDone, gen, career,
+  }), [lang, resumeId, state, save, flush, hydrated, previewText, cv, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

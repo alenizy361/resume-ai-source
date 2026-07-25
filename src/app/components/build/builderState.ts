@@ -23,6 +23,10 @@ import {
   cvLang, levelWord, validToWord,
 } from "@/app/lib/builderDoc";
 import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
+import {
+  type CareerContext, type GenerationStore, invalidate, tasksToInvalidate,
+} from "@/app/lib/aiCache";
+import type { ResumeLedger } from "@/app/lib/aiBudget";
 import { type RolePack } from "@/app/lib/rolePacks";
 import { type ParsedCv } from "@/app/lib/importCv";
 
@@ -56,7 +60,16 @@ export type Action =
   | { t: "tailorCopy" }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
-  | { t: "done"; section: SectionId };
+  | { t: "done"; section: SectionId }
+  /**
+   * Commit a generation and its cost together.
+   *
+   * One action for both because they must never diverge: a stored result whose call was not
+   * counted under-reports the spend, and a counted call with no stored result buys the same
+   * answer again on the next visit. Two dispatches could interleave with anything else in the
+   * queue; one cannot.
+   */
+  | { t: "ai"; store: GenerationStore; ledger: ResumeLedger };
 
 /**
  * Rebuild the certifications block from the confirmed credentials only.
@@ -109,7 +122,26 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       const profile = a.patch.title !== undefined
         ? { ...s.profile, role: a.patch.title }
         : s.profile;
-      const next = { ...s, target, profile };
+      /*
+       * A target edit is the one change that can retire paid work, so it is also the one that
+       * bumps `revision` and invalidates.
+       *
+       * Which fields count is NOT decided here — `tasksToInvalidate` compares two career contexts
+       * and answers from a dependency table. That is what makes "changing the employer must not
+       * invalidate skills" true: `employer` is not part of a career context, so it cannot appear
+       * in the diff. A branch here that tried to remember which fields matter is precisely the
+       * thing that drifts when a field is added.
+       */
+      const dead = tasksToInvalidate(careerContext(s), careerContext({ ...s, target }));
+      const next: BuilderState = {
+        ...s, target, profile,
+        ...(dead.length
+          ? {
+            generations: invalidate(s.generations, dead, Date.now()),
+            revision: (s.revision ?? 0) + 1,
+          }
+          : {}),
+      };
       // Switching the CV's language changes strings already published from structured
       // data — "valid to" and every proficiency word. Rebuilding them here is what
       // makes the language field retroactive instead of applying only to what comes
@@ -416,4 +448,26 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
     default:
       return s;
   }
+}
+
+/**
+ * The five facts that decide what a suggestion should say, lifted out of the builder's state.
+ *
+ * Narrow on purpose, and the omissions are the design: no name, no employer, no template, no
+ * contact details. Everything Part 11 of the cost brief says must NOT invalidate an AI result is
+ * absent from this function, so it cannot appear in a context diff and cannot invalidate anything.
+ * That is a stronger guarantee than a rule someone has to remember.
+ *
+ * `country` prefers the TARGET country over the personal one: a Riyadh-based applicant aiming at
+ * Dubai should be offered UAE credentials, and the market they are applying INTO is the one whose
+ * regulator matters.
+ */
+export function careerContext(s: BuilderState): CareerContext {
+  return {
+    occupation: s.target.title,
+    specialization: s.target.industry,
+    seniority: s.target.level,
+    country: s.target.country || s.personal.country,
+    cvLang: cvLang(s.target),
+  };
 }

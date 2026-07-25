@@ -19,11 +19,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 
-import { type BuilderState, type Item, pending } from "@/app/lib/builderDoc";
+import { type BuilderState, type Item, newItem, pending } from "@/app/lib/builderDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
 import ImportPanel from "./ImportPanel";
+import BlueprintStrip from "./BlueprintStrip";
 
 /** What every section needs and nothing more: who is reading, and the document. */
 export interface Common {
@@ -400,8 +401,46 @@ export function SkillsBody(p: Common) {
     return [...m.entries()];
   }, [offered]);
 
+  /*
+   * The occupations `rolePacks.ts` does not have.
+   *
+   * A recognised title fills this stage instantly, offline and free — that is what the hand-written
+   * packs are for and it is why this section has never made a model call. An UNRECOGNISED title got
+   * nothing at all, which is most titles, and "Enter a job title first" was shown to someone who
+   * had entered one.
+   *
+   * The blueprint fills that gap and costs nothing extra: credentials and languages already read
+   * it, so by the time a user reaches skills it usually exists. Offered here as `source: "ai"` so
+   * the provenance stays honest about which suggestions a person wrote and which a model did.
+   */
+  const gap = (
+    <BlueprintStrip
+      field="skillGroups"
+      onPick={(text) => {
+        /*
+         * Offered then confirmed, in two dispatches, rather than written straight in as confirmed.
+         *
+         * Not ceremony. `confirm` is the audited path into `profile` — it is where the skill is
+         * normalised, de-duplicated against what is already there, and where the invariant that
+         * `profile` holds only confirmed content is actually maintained. A "confirmed" item created
+         * directly in the suggestion bag would be a second path into the document, which is the one
+         * thing `builderDoc.ts` exists to prevent.
+         */
+        const item = newItem({ section: "skills", type: "skill", text, source: "ai" });
+        p.dispatch({ t: "offer", items: [item] });
+        p.dispatch({ t: "confirm", id: item.id });
+        track("builder_suggestion_accepted", { section: "skills", source: "ai" });
+      }}
+    />
+  );
+
   if (!offered.length && !chosen.length) {
-    return <><p className="text-xs" style={{ color: "var(--faint)" }}>{L.none}</p></>;
+    return (
+      <>
+        <p className="text-xs" style={{ color: "var(--faint)" }}>{L.none}</p>
+        {gap}
+      </>
+    );
   }
 
   return (
@@ -448,6 +487,7 @@ export function SkillsBody(p: Common) {
           </div>
         </div>
       ))}
+      {gap}
     </>
   );
 }

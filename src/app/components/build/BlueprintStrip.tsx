@@ -1,0 +1,240 @@
+"use client";
+
+/**
+ * One blueprint, four readers, one paid call.
+ *
+ * `AiStrip` is the per-section version: it renders a Suggest button and, on every tap, buys its
+ * own request. That was already an improvement on two sections having no AI at all, and it is
+ * also the shape that made a one-experience CV cost four paid calls — credentials asked for
+ * credentials, languages asked for languages, and skills would have asked for skills, each one
+ * re-deriving the same occupation from scratch.
+ *
+ * This renders from a slice of a SHARED role blueprint. The first section to need it generates it;
+ * every section after that reads. Revisiting a section reads. Refreshing reads. Going back and
+ * forward reads. The button only ever buys a call when there is genuinely nothing to read.
+ *
+ * ── what it deliberately keeps from AiStrip ──
+ *
+ * Everything about how a suggestion behaves once it exists: chips are unticked, nothing reaches
+ * the document until tapped, `onPick` hands the text back and the SECTION decides what a
+ * credential or a language made of that text is. A component that could write into `profile`
+ * would be a second path into the confirmed document, and the whole no-fabrication guarantee
+ * rests on there being exactly one.
+ *
+ * ── and the one thing it adds ──
+ *
+ * The button says whether tapping it will spend a request. "Suggest with AI" and "Show
+ * suggestions" are different promises, and a user who has been told which is which does not feel
+ * misled when a tap is instant — or when it is not.
+ */
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import AiOrb from "../AiOrb";
+import { credentialsFor } from "@/app/lib/countryRules";
+import { useBuilder } from "./BuilderProvider";
+
+const C = {
+  en: {
+    ask: "Suggest with AI",
+    read: "Show suggestions",
+    more: "Suggest more",
+    stop: "Stop",
+    unchecked: "Nothing is added until you tap it.",
+    /* Said before the tap, not after. A cost the user learns about afterwards is a surprise. */
+    willCall: "Uses one AI request",
+    fromCache: "Already generated — no request",
+    thinking: "Working out what this profession involves…",
+    needTitle: "Add the job title first, so a suggestion has something to be about.",
+  },
+  ar: {
+    ask: "اقترح بالذكاء",
+    read: "اعرض الاقتراحات",
+    more: "اقترح المزيد",
+    stop: "أوقف",
+    unchecked: "لا يُضاف شيء قبل أن تنقره.",
+    willCall: "يستخدم طلباً واحداً",
+    fromCache: "مُولَّد مسبقاً — بلا طلب",
+    thinking: "أستخلص ما تتضمنه هذه المهنة…",
+    needTitle: "اكتب المسمى الوظيفي أولاً ليكون للاقتراح موضوع.",
+  },
+};
+
+/** Which slice of the blueprint a section wants. */
+export type BlueprintField =
+  | "skillGroups" | "commonTools" | "commonSystems"
+  | "credentialSuggestions" | "achievementQuestions" | "importantKeywords"
+  | "alternativeTitles" | "responsibilityThemes";
+
+export default function BlueprintStrip({
+  field, onPick, note, auto = false,
+}: {
+  field: BlueprintField;
+  onPick: (text: string) => void;
+  note?: string;
+  /**
+   * Generate on mount if nothing is stored yet.
+   *
+   * Only ONE section in the whole builder should pass this — the blueprint step, which is the
+   * stage whose entire purpose is "here is what we know about your profession". Everywhere else
+   * an automatic generation on mount is exactly the per-stage call this refactor removes, and the
+   * budget's `auto` ceiling is the backstop if someone adds a second one anyway.
+   */
+  auto?: boolean;
+}) {
+  const { lang, state, gen, career } = useBuilder();
+  const c = C[lang];
+
+  /*
+   * The input hash's ingredients, and why `confirmedSkills` is in it.
+   *
+   * A blueprint generated before the user ticked six skills is stale in a way that matters: the
+   * prompt asks the model not to re-offer what is already confirmed, so the answer genuinely
+   * differs. Including it means "Suggest more" after confirming some skills is a real second
+   * question rather than a re-run — and excluding it would have made that button a no-op that
+   * silently served the old answer.
+   */
+  const confirmed = useMemo(
+    () => state.suggestions.filter((i) => i.status === "confirmed" && i.type === "skill").map((i) => i.text),
+    [state.suggestions],
+  );
+  const input = useMemo(() => ({ confirmedSkills: confirmed.slice(0, 30) }), [confirmed]);
+
+  /*
+   * The chips are DERIVED, not copied into state.
+   *
+   * The first version mirrored the stored blueprint into a `useState` from an effect, which the
+   * React lint rule rejects — correctly. Copying server data into local state gives you two
+   * sources of truth for the same thing and a render where they disagree; here that render would
+   * show the previous occupation's skills for one frame after a target change.
+   *
+   * `fresh` is not a copy of the store. It is the one case the store cannot cover: a FOLLOWER of a
+   * de-duplicated request gets the answer without writing it (only the leader writes), so without
+   * this it would render nothing while the leader's copy renders fine.
+   */
+  const stored = gen.peek("role_blueprint", input);
+  const [fresh, setFresh] = useState<Record<string, unknown> | null>(null);
+  const blueprint = stored ?? fresh;
+  const items = useMemo(() => {
+    if (!blueprint) return [];
+    const raw = slice(blueprint, field);
+    if (field !== "credentialSuggestions") return raw;
+    /*
+     * The blueprint returns credential IDS and the chip has to show a title.
+     *
+     * Resolved from `countryRules.ts` rather than from a title the model wrote, and that is not
+     * pedantry: a model asked for the Saudi health registration has written "SCAFACH" before now.
+     * An id either matches a verified rule or it is dropped, so the only credential names that can
+     * reach a chip are ones a person wrote down.
+     */
+    const byId = new Map(credentialsFor(career.occupation, career.country).map((r) => [r.id, r]));
+    return raw.map((id) => byId.get(id)?.title[career.cvLang] ?? "").filter(Boolean);
+  }, [blueprint, field, career.occupation, career.country, career.cvLang]);
+
+  /*
+   * The one automatic generation, fired at most once per mount and only when there is nothing to
+   * read. The ref is what stops a re-render — a preview debounce, a keystroke elsewhere — from
+   * firing a second one; `mayCall`'s `auto` ceiling is the backstop for the case the ref cannot
+   * see, which is a remount.
+   */
+  const fired = useRef(false);
+  useEffect(() => {
+    if (!auto || fired.current || stored || !career.occupation.trim()) return;
+    fired.current = true;
+    void gen.run({ task: "role_blueprint", input, payload: { confirmedSkills: input.confirmedSkills }, trigger: "auto" })
+      .then((out) => { if (out.data) setFresh(out.data); });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, stored, career.occupation]);
+
+  const ask = async () => {
+    const out = await gen.run({
+      task: "role_blueprint", input,
+      payload: { confirmedSkills: input.confirmedSkills },
+      trigger: "explicit",
+    });
+    if (out.data) setFresh(out.data);
+  };
+
+  const busy = gen.busy && gen.task === "role_blueprint";
+  const noTitle = !career.occupation.trim();
+  const label = busy ? c.stop : items.length ? c.more : stored ? c.read : c.ask;
+
+  return (
+    <div className="mt-3">
+      <button
+        onClick={busy ? gen.cancel : () => void ask()}
+        disabled={noTitle}
+        className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+        style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+      >
+        <AiOrb size={16} />
+        {label}
+      </button>
+
+      {/* The cost affordance. Part 19: each button must say whether it may use a request. */}
+      {!busy && !noTitle && (
+        <span className="ms-2 text-xs" style={{ color: "var(--faint)" }}>
+          {stored ? c.fromCache : c.willCall}
+        </span>
+      )}
+
+      {noTitle && <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{c.needTitle}</p>}
+
+      {busy && <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{c.thinking}</p>}
+
+      {/* A refusal is amber, not red: a budget ceiling is not a fault, and colouring it like one
+          teaches the user to distrust real errors. */}
+      {!busy && gen.message && (
+        <p
+          className="mt-2 text-xs leading-relaxed"
+          style={{ color: gen.state === "refused" ? "#fcd34d" : "#fca5a5" }}
+        >
+          {gen.message}
+        </p>
+      )}
+
+      {items.length > 0 && (
+        <>
+          <div className="bd-chips mt-3">
+            {items.map((text) => (
+              <button key={text} className="bd-chip" onClick={() => onPick(text)}>+ {text}</button>
+            ))}
+          </div>
+          <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{note || c.unchecked}</p>
+        </>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Pull one field out of a blueprint as flat strings.
+ *
+ * Tolerant of a missing or wrong-shaped field rather than throwing: the response has already been
+ * validated server-side, and a client that crashes on an unexpected shape turns a thin answer into
+ * a blank screen. An unreadable field renders as no chips, which is the honest outcome.
+ */
+function slice(bp: Record<string, unknown>, field: BlueprintField): string[] {
+  const v = bp[field];
+  if (!Array.isArray(v)) return [];
+
+  if (field === "skillGroups") {
+    return v.flatMap((g) => {
+      const items = (g as { items?: unknown })?.items;
+      return Array.isArray(items) ? items.filter((x): x is string => typeof x === "string") : [];
+    });
+  }
+
+  if (field === "credentialSuggestions") {
+    /*
+     * The blueprint returns credential IDS, because the server filters them against the verified
+     * country rules and an id is what survives that filter. The user needs a title, so the id is
+     * resolved here rather than trusting a title the model wrote — which is how "SCAFACH" would
+     * have reached a CV.
+     */
+    return v
+      .map((cred) => String((cred as { id?: unknown })?.id ?? ""))
+      .filter(Boolean);
+  }
+
+  return v.filter((x): x is string => typeof x === "string");
+}

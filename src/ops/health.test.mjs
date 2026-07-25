@@ -168,6 +168,25 @@ ok("which is skipped only when provider AND model both match",
   /suggestProvider === provider && suggestModel === model/.test(SRC));
 ok("the live status code follows the combined verdict, not one probe",
   /status: report\.ok \? 200 : 502/.test(SRC));
+/* ── the cost machinery, which fails silently everywhere ── */
+
+/**
+ * Every part of the cost design has a failure mode that produces no error: a prompt prefix under
+ * the cache floor is accepted and not cached, an unset Upstash misses forever, an unverified
+ * country rule is still shown. The endpoint has to report them or nobody finds out.
+ */
+for (const field of ["cachedPrefixTokens", "cacheFloorTokens", "cacheablePrefix", "sharedPackCache", "promptVersion", "rulesVersion"]) {
+  ok(`the report includes ${field}`, new RegExp(`${field}[,:]`).test(SRC));
+}
+ok("the cached prefix is measured against the floor, not assumed",
+  /estimateTokens\(CORE_RULES\) >= CACHE_FLOOR_TOKENS/.test(SRC));
+ok("the shared pack cache reports absent rather than pretending",
+  /packCacheConfigured\(\) \? "upstash" : "absent"/.test(SRC));
+ok("the country rules report their own provenance",
+  /ruleProvenance\(\)/.test(SRC) && /staleRules\(/.test(SRC));
+ok("the budgets are reportable, so a ceiling is never a mystery",
+  /budgets: budgets\(\)/.test(SRC));
+
 ok("it names the in-memory rate-limit fallback as the problem it is",
   /per-instance/.test(SRC));
 ok("it is never cached — the point is the state right now",

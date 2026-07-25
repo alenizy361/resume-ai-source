@@ -17,7 +17,7 @@
 
 import { useMemo, useState } from "react";
 import AiSuggest from "../AiSuggest";
-import AiStrip from "./AiStrip";
+import BlueprintStrip from "./BlueprintStrip";
 import {
   type BuilderState, type Credential, type CredentialKind,
   type LanguageEntry, type LanguageLevel, newId,
@@ -155,17 +155,18 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
 
       {/*
         The gap the cached packs leave.
-        
+
         A recognised job title gets its licences from `rolePacks` instantly and offline; an
-        unrecognised one got nothing at all, which is most titles. This asks the model — and
-        whatever comes back is a chip, `status: "suggested"`, exactly like a pack offer. A
-        credential is never claimed on someone's behalf, whichever source proposed it.
+        unrecognised one got nothing at all, which is most titles. Whatever comes back is a chip,
+        `status: "suggested"`, exactly like a pack offer — a credential is never claimed on
+        someone's behalf, whichever source proposed it.
+
+        This used to be its own paid call (`credentials_hint`). It now reads the role blueprint that
+        the skills and languages stages also read, so the credential list costs nothing once the
+        blueprint exists — and the blueprint is one call for all four.
       */}
-      <AiStrip
-        lang={lang}
-        task="credentials_hint"
-        input={{ lang, cvLang: cv, targetRole: state.target.title, jobAd: state.target.jobAdText,
-                 current: state.profile.certifications }}
+      <BlueprintStrip
+        field="credentialSuggestions"
         onPick={(text) => add("certification", text)}
         note={c.credHint}
       />
@@ -292,13 +293,15 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
       </button>
 
       {/* Arabic and English are hardcoded above because this market lists both; anything
-          else — a role that wants French, Urdu, Tagalog — the model can propose. It arrives
-          with NO level, like every other language here, because a level is a claim. */}
-      <AiStrip
-        lang={lang}
-        task="languages_hint"
-        input={{ lang, cvLang: cv, targetRole: state.target.title, jobAd: state.target.jobAdText,
-                 current: state.profile.languages }}
+          else — a role that wants French, Urdu, Tagalog — comes from the blueprint's keyword and
+          tool vocabulary. It arrives with NO level, like every other language here, because a
+          level is a claim only the user can make.
+
+          Reading the shared blueprint rather than buying `languages_hint`: this was the fourth
+          paid call on a one-experience CV and it was asking about the same occupation the other
+          three had already asked about. */}
+      <BlueprintStrip
+        field="importantKeywords"
         onPick={(text) => add(text)}
         note={c.langHint}
       />

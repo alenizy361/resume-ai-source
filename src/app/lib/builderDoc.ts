@@ -24,6 +24,8 @@ import {
   type Role, upsertRole, rolesToLines, dedupeBullets, saysTheSame,
   BULLET_CAP_CURRENT, BULLET_CAP_PAST,
 } from "./resumeDoc.ts";
+import type { GenerationStore } from "./aiCache.ts";
+import type { ResumeLedger } from "./aiBudget.ts";
 
 export const SCHEMA_VERSION = 2;
 
@@ -136,6 +138,37 @@ export interface BuilderState {
    * this?" instead of leaving a stale paragraph at the top of the CV.
    */
   summaryBasis?: string;
+
+  /**
+   * Everything the AI has already produced for this resume, so a revisit reads instead of buys.
+   *
+   * Before this field, every section that offered a Suggest button offered a fresh PAID CALL on
+   * every visit, forever. Nothing remembered the last answer, so going back to credentials and
+   * forward again cost two calls to see the same six chips. Keyed by task + context + instance;
+   * `lib/aiCache.ts` owns the reading and the invalidating.
+   *
+   * Optional so a v2 draft written before this existed still loads.
+   */
+  generations?: GenerationStore;
+
+  /**
+   * What this resume has SPENT. Counts and an estimate, never content.
+   *
+   * In the resume rather than in memory on purpose: a per-process counter is per-lambda and a
+   * per-tab counter is per-tab, and two tabs on one draft is one of the listed ways a cost
+   * ceiling gets bypassed. Surviving a refresh is the whole point.
+   */
+  ledger?: ResumeLedger;
+
+  /**
+   * Monotonic edit counter, for refusing a reply that arrived after the resume moved.
+   *
+   * Needed because the hashes alone miss one case: the user edits, a request goes out, they edit
+   * BACK, and the context hash equals what the in-flight request carried. Hash equality says
+   * accept; the resume has moved twice, so this says no.
+   */
+  revision?: number;
+
   updatedAt: number;
 }
 

@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
+import { modelConfig, MAX_OUTPUT, TASK_CLASS } from "@/app/lib/aiModels";
+import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
+import { CORE_RULES, TASK_SCHEMA, estimateTokens, CACHE_FLOOR_TOKENS } from "@/app/lib/aiPrompts";
+import { packCacheConfigured } from "@/app/lib/packCache";
+import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
+import { budgets } from "@/app/lib/aiBudget";
 import { priceMismatch } from "@/app/lib/plans";
 import { supportEmailIsPersonal } from "@/app/lib/brand";
 
@@ -99,6 +105,48 @@ export async function GET(req: NextRequest) {
     suggestKeyPresent,
     /** The one that turns "the assistant is unavailable" into a five-second diagnosis. */
     apiKeyPresent: keyPresent,
+
+    /*
+     * The cost machinery, reported because every part of it fails SILENTLY.
+     *
+     * A prompt prefix under the cache floor is accepted by the API and simply not cached. An unset
+     * Upstash means the shared pack cache misses forever. An unverified country rule still gets
+     * shown. None of those produce an error anywhere, so the only way to know is to ask.
+     */
+    cost: {
+      models: modelConfig(),
+      taskClasses: TASK_CLASS,
+      maxOutput: MAX_OUTPUT,
+      budgets: budgets(),
+      promptVersion: PROMPT_VERSION,
+      rulesVersion: RULES_VERSION,
+      /*
+       * The measurement Part 13 insists on. `cachedPrefixTokens` under `cacheFloorTokens` means
+       * the `cache_control` markers are decoration — the request is longer and nothing is cached.
+       * Estimated here; the authoritative numbers come from each response's usage block and are
+       * reported per call in /api/generate's `_meta`.
+       */
+      cachedPrefixTokens: estimateTokens(CORE_RULES),
+      cacheFloorTokens: CACHE_FLOOR_TOKENS,
+      cacheablePrefix: estimateTokens(CORE_RULES) >= CACHE_FLOOR_TOKENS,
+      schemaTokens: Object.fromEntries(
+        Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(v ?? "")]),
+      ),
+      /** Absent means the between-users pack cache misses every time. Not an error; a cost. */
+      sharedPackCache: packCacheConfigured() ? "upstash" : "absent",
+    },
+
+    /*
+     * Where the credential data comes from, and how much of it nobody has checked.
+     *
+     * Reported rather than assumed because `encoded` rules are shipped deliberately — the
+     * confirmation step makes them safe — and the honest position is that the count is visible
+     * instead of implied.
+     */
+    countryRules: {
+      ...ruleProvenance(),
+      overdue: staleRules(new Date().toISOString().slice(0, 10)),
+    },
 
     /*
      * `allowShared` falls back to an in-memory counter when Upstash is unset, which works
