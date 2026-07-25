@@ -442,5 +442,79 @@ const track = (r) => { allReports.push(r); return r; };
     findings.every((f) => ["critical", "recommended", "optional"].includes(f.severity)));
 }
 
+
+/* ─────────────────── the Arabic review ─────────────────── */
+
+/**
+ * The review was the one stage that switched language on an Arabic user — at the exact moment they are
+ * deciding whether their CV is finished. `reviewChecks.ts` builds its titles inline in English, so the
+ * fix is a table keyed by finding id rather than two strings per check: a reworded English title
+ * cannot orphan its Arabic, and a NEW check that forgets its Arabic is caught here rather than on a
+ * screenshot.
+ */
+{
+  const { localizeFinding, localizeDimension, LOCALIZED_FINDING_IDS, LOCALIZED_DIMENSION_IDS } =
+    await import("../app/lib/reviewMessages.ts");
+
+  /*
+   * Walk real reports and collect every id that actually fires. Asserting against a hand-written list
+   * would only prove the list matches itself; these are the findings a user can really be shown.
+   */
+  const seen = new Set();
+  const dims = new Set();
+  const states = [
+    base(),
+    complete(),
+    { ...complete(), target: { ...complete().target, jobAdText: "Seeking a CT radiographer with PACS and SCFHS registration, 3 years experience." } },
+  ];
+  for (const st of states) {
+    const r = review(st, TODAY);
+    for (const f of r.findings) seen.add(f.id);
+    for (const d of r.dimensions) dims.add(d.id);
+  }
+
+  ok("the sample states fire a real spread of findings", seen.size >= 4, String(seen.size));
+
+  const orphanFindings = [...seen].filter((id) => !LOCALIZED_FINDING_IDS.includes(id));
+  ok("every finding a user can be shown has Arabic", orphanFindings.length === 0, orphanFindings.join(", "));
+
+  const orphanDims = [...dims].filter((id) => !LOCALIZED_DIMENSION_IDS.includes(id));
+  ok("every score dimension has an Arabic label", orphanDims.length === 0, orphanDims.join(", "));
+
+  /* Arabic must actually be Arabic, and English must stay untouched. */
+  for (const id of LOCALIZED_FINDING_IDS) {
+    const f = { id, title: "English title", detail: "English detail" };
+    const ar = localizeFinding(f, "ar");
+    if (!/[؀-ۿ]/.test(ar.title) || !/[؀-ۿ]/.test(ar.detail)) {
+      ok(`${id} has real Arabic`, false, `${ar.title} / ${ar.detail}`);
+    }
+  }
+  ok("every Arabic finding is written in Arabic", true);
+
+  ok("English passes through untouched",
+    localizeFinding({ id: "long-bullets", title: "Long bullets", detail: "d" }, "en").title === "Long bullets");
+
+  /*
+   * The fallback is the English string, never an empty one. A finding shown in English is imperfect
+   * and legible; an empty one hides a real problem with someone's CV to keep a screen consistent.
+   */
+  const unknown = localizeFinding({ id: "some-future-check", title: "Future check", detail: "Why" }, "ar");
+  ok("an unlocalized finding falls back to English rather than vanishing",
+    unknown.title === "Future check" && unknown.detail === "Why");
+  ok("and never prints its own id", !unknown.title.includes("some-future-check"));
+
+  /* Counts are written the way Arabic writes them, and the placeholder never reaches a screen. */
+  const counted = localizeFinding({ id: "long-bullets", title: "t", detail: "d" }, "ar", 4);
+  ok("a count is rendered in Arabic-Indic digits", counted.detail.includes("٤"), counted.detail);
+  ok("and the placeholder is gone", !counted.detail.includes("{n}"));
+  const uncounted = localizeFinding({ id: "long-bullets", title: "t", detail: "d" }, "ar");
+  ok("with no count the placeholder is removed, not left visible",
+    !uncounted.detail.includes("{n}"), uncounted.detail);
+
+  ok("a dimension label is localized", localizeDimension("readability", "Readability", "ar") === "سهولة القراءة");
+  ok("an unknown dimension keeps its English label",
+    localizeDimension("future-dim", "Future", "ar") === "Future");
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

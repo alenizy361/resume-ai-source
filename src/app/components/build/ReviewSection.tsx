@@ -31,6 +31,7 @@ import ScoreRing from "../ScoreRing";
 import { type BuilderState, type SectionId, hasUnconfirmed } from "@/app/lib/builderDoc";
 import { type Dimension, type Finding, review } from "@/app/lib/reviewChecks";
 import EnglishVersion from "./EnglishVersion";
+import { localizeFinding, localizeDimension } from "@/app/lib/reviewMessages";
 
 type Lang = "ar" | "en";
 
@@ -102,6 +103,15 @@ export default function ReviewSection({
   const c = C[lang];
   const [openWhy, setOpenWhy] = useState(false);
 
+  /*
+   * The findings follow the CV's language, not the interface's.
+   *
+   * The review is a statement about the DOCUMENT — "this bullet is too long", "this claim has no
+   * evidence" — so it belongs in the language the document is written in. An Arabic-interface user
+   * building an English CV wants English findings, because the lines being criticised are English.
+   */
+  const cv: "ar" | "en" = state.target.language === "ar" ? "ar" : "en";
+
   const report = useMemo(() => review(state, referenceDate), [state, referenceDate]);
   const critical = report.findings.filter((f) => f.severity === "critical");
   const advice = report.findings.filter((f) => f.severity !== "critical");
@@ -127,7 +137,7 @@ export default function ReviewSection({
         {critical.length > 0 ? (
           <>
             <div className="bd-label" style={{ color: "#fca5a5" }}>{c.fixFirst}</div>
-            {critical.map((f) => <FindingRow key={f.id} f={f} tone="critical" jump={c.jump} onJump={onJump} />)}
+            {critical.map((f) => <FindingRow key={f.id} f={f} tone="critical" jump={c.jump} onJump={onJump} cv={cv} />)}
           </>
         ) : (
           <p
@@ -142,7 +152,7 @@ export default function ReviewSection({
       {advice.length > 0 && (
         <div className="mt-5">
           <div className="bd-label">{c.better}</div>
-          {advice.map((f) => <FindingRow key={f.id} f={f} tone="advice" jump={c.jump} onJump={onJump} />)}
+          {advice.map((f) => <FindingRow key={f.id} f={f} tone="advice" jump={c.jump} onJump={onJump} cv={cv} />)}
         </div>
       )}
 
@@ -171,7 +181,7 @@ export default function ReviewSection({
       {openWhy && (
         <div className="mt-3">
           <div className="bd-label">{c.breakdown}</div>
-          {report.dimensions.map((d) => <DimensionRow key={d.id} d={d} weightLabel={c.weight} />)}
+          {report.dimensions.map((d) => <DimensionRow key={d.id} d={d} weightLabel={c.weight} cv={cv} />)}
           <p className="mt-3 text-xs" style={{ color: "var(--faint)" }}>{c.recount}</p>
         </div>
       )}
@@ -189,11 +199,22 @@ export default function ReviewSection({
 }
 
 function FindingRow({
-  f, tone, jump, onJump,
+  f, tone, jump, onJump, cv,
 }: {
   f: Finding; tone: "critical" | "advice"; jump: string; onJump: (s: SectionId) => void;
+  /** The CV's language, not the interface's — the review is about the document. */
+  cv: "ar" | "en";
 }) {
   const red = tone === "critical";
+  /*
+   * Localized by ID, with the English the check produced as the fallback.
+   *
+   * The review was the one stage that switched language on an Arabic user — at the exact moment they
+   * are deciding whether their CV is finished. The checks themselves are untouched: they are
+   * deterministic, already covered by 91 assertions, and doubling their strings would double the
+   * surface of the file whose correctness matters most.
+   */
+  const t = localizeFinding(f, cv);
   return (
     <div
       className="mt-2 rounded-xl p-3"
@@ -204,8 +225,8 @@ function FindingRow({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <div className="text-xs font-bold" style={{ color: red ? "#fca5a5" : "var(--fg)" }}>{f.title}</div>
-          <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--muted)" }}>{f.detail}</p>
+          <div className="text-xs font-bold" style={{ color: red ? "#fca5a5" : "var(--fg)" }}>{t.title}</div>
+          <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--muted)" }}>{t.detail}</p>
           {f.fixHint && (
             <p className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{f.fixHint}</p>
           )}
@@ -229,11 +250,11 @@ function FindingRow({
  * verdicts. "Specificity 40" tells the user nothing; "4 of 10 bullets name a number,
  * a system or a named tool" tells them what to do this afternoon.
  */
-function DimensionRow({ d, weightLabel }: { d: Dimension; weightLabel: string }) {
+function DimensionRow({ d, weightLabel, cv }: { d: Dimension; weightLabel: string; cv: "ar" | "en" }) {
   return (
     <div className="mt-2">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-xs font-semibold">{d.label}</span>
+        <span className="text-xs font-semibold">{localizeDimension(d.id, d.label, cv)}</span>
         <span className="font-mono text-xs tabular-nums" style={{ color: band(d.score) }}>
           {Math.round(d.score)}
           <span style={{ color: "var(--faint)" }}> · {weightLabel} {Math.round(d.weight * 100)}%</span>
