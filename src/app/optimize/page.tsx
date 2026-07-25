@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
 import PdfExport from "../components/PdfExport";
@@ -227,6 +228,23 @@ export default function OptimizePage() {
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Send this scan into the structured builder.
+   *
+   * The ORIGINAL upload is handed over, not the AI rewrite. The rewrite is the model's
+   * wording of the user's facts, and the builder's contract is that model wording arrives
+   * as a suggestion to accept — installing it as confirmed content would launder it into
+   * fact. The rewrite is still on this page to read, copy and download.
+   */
+  function continueInBuilder() {
+    const text = resume.trim() || result?.optimizedResume || "";
+    if (!text) return;
+    if (builderDraftExists("en")
+      && !window.confirm("You already have work in the builder. Replace it with this resume?")) return;
+    const to = sendToBuilder("en", text, { jobAd: jobDescription });
+    window.location.href = to;
   }
 
   const [coverError, setCoverError] = useState("");
@@ -640,12 +658,12 @@ export default function OptimizePage() {
                       </button>
                       <PdfExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
                       <DocxExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
-                      {/* The builder can read a saved CV back now, so "keep editing this
-                          in the form" is a real offer rather than a dead end at the
-                          download button. */}
-                      <Link href="/build" className="btn-ghost px-5 py-2.5 text-sm font-semibold">
+                      {/* Carries the resume across rather than just navigating. This flow
+                          used to end here, at two download buttons, with nothing editable
+                          section by section — the audit's "two resume data models". */}
+                      <button onClick={continueInBuilder} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
                         Keep editing in the builder →
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>

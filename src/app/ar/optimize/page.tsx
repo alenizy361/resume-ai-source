@@ -1,5 +1,6 @@
 "use client";
 import AiOrb from "../../components/AiOrb";
+import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
@@ -278,6 +279,20 @@ export default function ArOptimizePage() {
     ? (score >= 75 ? "تطابق قوي ✓" : score >= 55 ? "على الحد" : "تحتاج تقوية")
     : (score >= 75 ? "سيرة قوية ✓" : score >= 55 ? "بداية جيدة" : "تحتاج تقوية");
 
+  /**
+   * تسليم السيرة للبناء المنظّم.
+   *
+   * يُسلَّم الملف الأصلي لا إعادة الصياغة: إعادة الصياغة هي صياغة النموذج لحقائق المستخدم،
+   * وعقد البناء أن صياغة النموذج تصل كاقتراح يُعتمد — لا كمحتوى مؤكَّد.
+   */
+  function continueInBuilder() {
+    const text = resume.trim() || result?.optimizedResume || "";
+    if (!text) return;
+    if (builderDraftExists("ar")
+      && !window.confirm("لديك عمل في البناء بالفعل. أستبدله بهذه السيرة؟")) return;
+    window.location.href = sendToBuilder("ar", text, { jobAd: jobDescription });
+  }
+
   return (
     <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
       <OrbSceneSetter visible mood="idle" top="14vh" left="14%" size={100} />
@@ -442,6 +457,11 @@ export default function ArOptimizePage() {
                   </button>
                   <PdfExport text={result.optimizedResume} label="↓ تنزيل PDF" watermark={watermarkFromResponse(result)} lang="ar" />
                   <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" watermark={watermarkFromResponse(result)} lang="ar" />
+                  {/* نفس الاستمرارية المتاحة في الإنجليزية: تحويل السيرة إلى البناء المنظّم
+                      بدل الانتهاء عند زر التنزيل. تبديل اللغة لا يجوز أن يغيّر ما يقدر عليه المنتج. */}
+                  <button onClick={continueInBuilder} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
+                    واصل التعديل في البناء ←
+                  </button>
                 </div>
               )}
             </div>

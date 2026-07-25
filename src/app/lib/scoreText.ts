@@ -22,6 +22,7 @@
  */
 
 import { type BuilderState, EMPTY_BUILDER, newId } from "./builderDoc.ts";
+import { rolesToLines } from "./resumeDoc.ts";
 import { parseCv } from "./importCv.ts";
 import { type QualityReport, type MatchReport, review } from "./reviewChecks.ts";
 
@@ -75,7 +76,17 @@ export function stateFromText(text: string, jobAd = ""): BuilderState {
       languages: p.languages.join(", "),
       skills: p.skills.join(", "),
       roles,
-      wovenLines: [],
+      /*
+       * `wovenLines` is not optional bookkeeping.
+       *
+       * `assembleResume` renders the experience section from wovenLines, not from
+       * `roles` — so leaving this empty produced a CV with no jobs on it. The score
+       * survived (reviewChecks reads `roles` directly) but `cvTokens` is built from the
+       * assembled text, which means every keyword that lived only in a bullet counted as
+       * MISSING. The builder's reducer calls rolesToLines on every role change for
+       * exactly this reason; an adapter that skips it is not producing the same document.
+       */
+      wovenLines: rolesToLines(roles),
       jobAd,
     },
   };
