@@ -29,6 +29,7 @@ import {
   type BuilderState, type SectionId, type Item, type Credential, type LanguageEntry,
   EMPTY_BUILDER,
   newItem, confirmItem, rejectItem, pending, editItem, newId, summaryBasis,
+  cvLang, levelWord, validToWord,
 } from "@/app/lib/builderDoc";
 import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
 import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
@@ -129,7 +130,7 @@ type Action =
   | { t: "target"; patch: Partial<BuilderState["target"]> }
   | { t: "personal"; patch: Partial<BuilderState["personal"]> }
   | { t: "template"; slug: string }
-  | { t: "seed"; pack: RolePack; lang: "ar" | "en" }
+  | { t: "seed"; pack: RolePack; ui: "ar" | "en"; cv: "ar" | "en" }
   | { t: "addRole" }
   | { t: "role"; id: string; patch: Partial<Role> }
   | { t: "removeRole"; id: string }
@@ -152,27 +153,41 @@ type Action =
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId };
 
-/** Rebuild the certifications block from the confirmed credentials only. */
+/**
+ * Rebuild the certifications block from the confirmed credentials only.
+ *
+ * "valid to" is chosen by the CV's language, not the interface's. An Arabic CV that
+ * says "الرخصة — valid to 2027" was written by a tool that could not tell the two
+ * apart, and a recruiter can see that at a glance.
+ */
 function withCreds(s: BuilderState, credentials: Credential[]): BuilderState {
+  const cv = cvLang(s.target);
   const text = credentials
     .filter((c) => c.status === "confirmed" && c.title.trim())
     .map((c) => [
       c.title.trim(),
       c.issuer.trim(),
       c.issueDate.trim(),
-      c.expiryDate.trim() && `valid to ${c.expiryDate.trim()}`,
+      c.expiryDate.trim() && `${validToWord(cv)} ${c.expiryDate.trim()}`,
       c.credentialNumber?.trim(),
     ].filter(Boolean).join(" — "))
     .join("\n");
   return { ...s, credentials, profile: { ...s.profile, certifications: text } };
 }
 
-/** Rebuild the languages line. An entry with no level is not published. */
+/**
+ * Rebuild the languages line. An entry with no level is not published.
+ *
+ * The level is STORED as an English key and PUBLISHED as a word in the CV's language.
+ * Storing the word would make the data un-comparable across languages; publishing the
+ * key would print "العربية (native)" on an Arabic resume.
+ */
 function withLangs(s: BuilderState, languages: LanguageEntry[]): BuilderState {
+  const cv = cvLang(s.target);
   const text = languages
     .filter((l) => l.status === "confirmed" && l.name.trim() && l.level)
-    .map((l) => `${l.name.trim()} (${l.level})`)
-    .join(", ");
+    .map((l) => `${l.name.trim()} (${levelWord(l.level as Exclude<LanguageEntry["level"], "">, cv)})`)
+    .join(cv === "ar" ? "، " : ", ");
   return { ...s, languages, profile: { ...s.profile, languages: text } };
 }
 
@@ -189,7 +204,14 @@ function reducer(s: BuilderState, a: Action): BuilderState {
       const profile = a.patch.title !== undefined
         ? { ...s.profile, role: a.patch.title }
         : s.profile;
-      return { ...s, target, profile };
+      const next = { ...s, target, profile };
+      // Switching the CV's language changes strings already published from structured
+      // data — "valid to" and every proficiency word. Rebuilding them here is what
+      // makes the language field retroactive instead of applying only to what comes
+      // after it.
+      return a.patch.language !== undefined && a.patch.language !== s.target.language
+        ? withLangs(withCreds(next, next.credentials), next.languages)
+        : next;
     }
     case "personal": {
       const personal = { ...s.personal, ...a.patch };
@@ -219,15 +241,19 @@ function reducer(s: BuilderState, a: Action): BuilderState {
      * assert that they do.
      */
     case "seed": {
-      const L = a.lang;
+      // Item TEXT is CV content, so it follows the document's language. `group` is a
+      // heading in the form and follows the interface. Same pack, two languages, and
+      // the distinction is the whole reason the seeded duties were coming out Arabic
+      // on an English CV.
+      const L = a.cv;
       const already = new Set(s.suggestions.map((i) => i.normalized));
       const fresh: Item[] = [];
       for (const g of a.pack.groups) {
         for (const it of g.items) {
           const item = newItem({
             section: "skills", type: "skill", text: it[L],
-            source: "occupation", sourceRef: a.pack.slug, group: g.label[L],
-            reason: L === "ar" ? "شائع في هذا المسمى" : "common for this job title",
+            source: "occupation", sourceRef: a.pack.slug, group: g.label[a.ui],
+            reason: a.ui === "ar" ? "شائع في هذا المسمى" : "common for this job title",
           });
           if (!already.has(item.normalized)) { already.add(item.normalized); fresh.push(item); }
         }
@@ -429,7 +455,9 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
   /* The preview is expensive: ResumeTemplate re-parses and re-measures on every
    * text change, so binding it to raw keystrokes re-lays out an A4 page per letter. */
   const [previewText, setPreviewText] = useState("");
-  const resumeRtl = state.target.language === "ar";
+  /** The document's language. Everything written INTO the CV is chosen by this. */
+  const cv = cvLang(state.target);
+  const resumeRtl = cv === "ar";
   useEffect(() => {
     const id = setTimeout(() => setPreviewText(assembleResume(state.profile, resumeRtl)), 250);
     return () => clearTimeout(id);
@@ -548,7 +576,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   return (
                     <SectionShell key={id} {...props}>
                       <ExperienceSection
-                        lang={lang} state={state} target={state.target}
+                        lang={lang} cv={cv} state={state} target={state.target}
                         dispatch={dispatch as unknown as React.Dispatch<{ t: string; [k: string]: unknown }>}
                       />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
@@ -559,7 +587,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 if (id === "education") {
                   return (
                     <SectionShell key={id} {...props}>
-                      <EducationBlock lang={lang} state={state} dispatch={dispatch as never} targetRole={state.target.title} />
+                      <EducationBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} targetRole={state.target.title} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );
@@ -567,7 +595,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 if (id === "credentials") {
                   return (
                     <SectionShell key={id} {...props}>
-                      <CredentialsBlock lang={lang} state={state} dispatch={dispatch as never} referenceDate={today} />
+                      <CredentialsBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} referenceDate={today} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );
@@ -603,7 +631,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 if (id === "languages") {
                   return (
                     <SectionShell key={id} {...props}>
-                      <LanguagesBlock lang={lang} state={state} dispatch={dispatch as never} />
+                      <LanguagesBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );
@@ -893,11 +921,11 @@ function BlueprintSection(p: ShellProps & { state: BuilderState; dispatch: React
   useEffect(() => {
     if (pack && seeded.current !== pack.slug) {
       seeded.current = pack.slug;
-      p.dispatch({ t: "seed", pack, lang: p.lang });
+      p.dispatch({ t: "seed", pack, ui: p.lang, cv: cvLang(p.state.target) });
       track("builder_blueprint_shown", { pack: pack.slug });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pack, p.lang]);
+  }, [pack, p.lang, p.state.target.language]);
 
   if (!p.state.target.title.trim()) {
     return <SectionShell {...p}><p className="text-xs" style={{ color: "var(--faint)" }}>{L.none}</p></SectionShell>;

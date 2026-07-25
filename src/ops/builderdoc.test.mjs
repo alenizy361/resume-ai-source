@@ -16,7 +16,8 @@
 
 import {
   EMPTY_BUILDER, newItem, confirmItem, rejectItem, editItem, pending, rejected,
-  hasUnconfirmed, filterFresh, bulletRoom, normalizeLabel, summaryBasis, SCHEMA_VERSION,
+  hasUnconfirmed, filterFresh, bulletRoom, normalizeLabel, summaryBasis,
+  cvLang, levelWord, validToWord, SCHEMA_VERSION,
 } from "../app/lib/builderDoc.ts";
 import { assembleResume } from "../app/lib/mergeProfile.ts";
 import { upsertRole, rolesToLines } from "../app/lib/resumeDoc.ts";
@@ -248,6 +249,25 @@ eq("the schema is versioned", SCHEMA_VERSION, 2);
 
   const skilled = { ...first.profile, skills: "CT، PACS" };
   ok("adding skills moves the basis", summaryBasis(skilled) !== written);
+}
+
+
+/* ── the document's language is not the interface's ── */
+{
+  // The bug this pins was found by driving the Arabic interface in a real browser:
+  // an English CV came back with 56 Arabic characters on it, because the role pack,
+  // the credential titles and the proficiency words were all being chosen by the
+  // language of the UI. cvLang() is the single answer to "which language is the
+  // DOCUMENT in", and every string bound for the resume has to ask it.
+  eq("an Arabic CV is Arabic", cvLang({ language: "ar" }), "ar");
+  eq("an English CV is English", cvLang({ language: "en" }), "en");
+  eq("both means English, matching the preview's direction", cvLang({ language: "both" }), "en");
+
+  ok("a level is published as a word, not as the stored key",
+    levelWord("native", "en") === "Native" && levelWord("native", "ar") === "اللغة الأم");
+  ok("and never as the English key on an Arabic CV", !/native/i.test(levelWord("native", "ar")));
+  ok("expiry is phrased in the CV's language",
+    validToWord("en") === "valid to" && !/valid/i.test(validToWord("ar")));
 }
 
 

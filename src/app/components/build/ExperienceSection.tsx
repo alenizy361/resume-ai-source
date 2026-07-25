@@ -85,9 +85,18 @@ async function askSuggest(body: Record<string, unknown>, signal: AbortSignal) {
 }
 
 export default function ExperienceSection({
-  lang, state, dispatch, target,
+  lang, cv, state, dispatch, target,
 }: {
+  /** The interface language — labels, buttons, hints. */
   lang: Lang;
+  /**
+   * The DOCUMENT's language — every duty, whether it comes from the pack or the model.
+   *
+   * Separate from `lang` because they are separate facts. An Arabic-speaking applicant
+   * writing an English CV is the normal case in this market, and reading the interface
+   * language here is exactly how Arabic duties ended up on English resumes.
+   */
+  cv: Lang;
   state: BuilderState;
   dispatch: React.Dispatch<{ t: string; [k: string]: unknown }>;
   target: BuilderState["target"];
@@ -98,7 +107,7 @@ export default function ExperienceSection({
   return (
     <div>
       {roles.map((r) => (
-        <RoleCard key={r.id} role={r} lang={lang} state={state} dispatch={dispatch} target={target} />
+        <RoleCard key={r.id} role={r} lang={lang} cv={cv} state={state} dispatch={dispatch} target={target} />
       ))}
       <button
         onClick={() => dispatch({ t: "addRole" })}
@@ -111,9 +120,9 @@ export default function ExperienceSection({
 }
 
 function RoleCard({
-  role, lang, state, dispatch, target,
+  role, lang, cv, state, dispatch, target,
 }: {
-  role: Role; lang: Lang; state: BuilderState;
+  role: Role; lang: Lang; cv: Lang; state: BuilderState;
   dispatch: React.Dispatch<{ t: string; [k: string]: unknown }>;
   target: BuilderState["target"];
 }) {
@@ -144,14 +153,14 @@ function RoleCard({
     if (!fromModel) {
       const pack = findRolePack(role.title);
       if (!pack) return;
-      const fresh = filterFresh(pack.duties.map((d) => d[lang]), seen);
+      const fresh = filterFresh(pack.duties.map((d) => d[cv]), seen);
       if (!fresh.length) return;
       dispatch({
         t: "offer",
         items: fresh.map((text) => newItem({
           section: "experience", type: "duty", text, roleId: role.id,
           source: "occupation", sourceRef: pack.slug,
-          reason: lang === "ar" ? "شائع في هذا المسمى" : "common for this job title",
+          reason: lang === "ar" ? "شائع في هذا المسمى" : "common for this job title",  // a hint the user reads
         })),
       });
       return;
@@ -162,7 +171,7 @@ function RoleCard({
     setBusy(true);
     try {
       const d = await askSuggest({
-        kind: "duties", mode: "items", lang, targetRole: target.title || role.title,
+        kind: "duties", mode: "items", lang: cv, targetRole: target.title || role.title,
         role: role.title, company: role.company,
         jobAd: target.jobAdText,
         current: role.bullets.join("\n"),
@@ -181,7 +190,7 @@ function RoleCard({
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
      
-  }, [role, offered, state, lang, target, dispatch, c.err]);
+  }, [role, offered, state, lang, cv, target, dispatch, c.err]);
 
   /** Rewrite one pending suggestion in place. */
   const rewrite = useCallback(async (it: Item, kind: "bullet_improve" | "bullet_shorter") => {
@@ -189,7 +198,7 @@ function RoleCard({
     abort.current?.abort(); abort.current = new AbortController();
     try {
       const d = await askSuggest({
-        kind, lang, targetRole: target.title || role.title,
+        kind, lang: cv, targetRole: target.title || role.title,
         role: role.title, company: role.company, current: it.text, jobAd: target.jobAdText,
       }, abort.current.signal);
       if (d.text?.trim()) dispatch({ t: "editItem", id: it.id, text: d.text.trim() });
@@ -197,7 +206,7 @@ function RoleCard({
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
      
-  }, [role, lang, target, dispatch, c.err]);
+  }, [role, cv, target, dispatch, c.err]);
 
   /**
    * The metric path. The model returns the QUESTION and the sentence shape — never
@@ -209,7 +218,7 @@ function RoleCard({
     abort.current?.abort(); abort.current = new AbortController();
     try {
       const d = await askSuggest({
-        kind: "bullet_metric", lang, targetRole: target.title || role.title,
+        kind: "bullet_metric", lang: cv, targetRole: target.title || role.title,
         role: role.title, company: role.company, current: it.text,
       }, abort.current.signal);
       if (d.question) {
@@ -220,7 +229,7 @@ function RoleCard({
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
      
-  }, [role, lang, target, c.err]);
+  }, [role, cv, target, c.err]);
 
   /**
    * The achievement extractor — the same machinery, aimed at the role instead of at
@@ -239,7 +248,7 @@ function RoleCard({
     abort.current?.abort(); abort.current = new AbortController();
     try {
       const d = await askSuggest({
-        kind: "bullet_metric", lang, targetRole: target.title || role.title,
+        kind: "bullet_metric", lang: cv, targetRole: target.title || role.title,
         role: role.title, company: role.company,
         current: role.bullets.join("\n") || role.title,
         jobAd: target.jobAdText,
@@ -252,7 +261,7 @@ function RoleCard({
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
      
-  }, [role, lang, target, c.err]);
+  }, [role, cv, target, c.err]);
 
   const applyFigure = () => {
     if (!ask) return;

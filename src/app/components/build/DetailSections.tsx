@@ -75,8 +75,9 @@ const C = {
 
 /* ───────────────────────── education ───────────────────────── */
 
-export function EducationBlock({ lang, state, dispatch, targetRole }: {
-  lang: Lang; state: BuilderState; dispatch: Dispatch; targetRole: string;
+export function EducationBlock({ lang, cv, state, dispatch, targetRole }: {
+  /** Interface language for labels; `cv` is the document's language for content. */
+  lang: Lang; cv: Lang; state: BuilderState; dispatch: Dispatch; targetRole: string;
 }) {
   const c = C[lang];
   return (
@@ -91,7 +92,7 @@ export function EducationBlock({ lang, state, dispatch, targetRole }: {
           interaction. It cannot express per-item accept/reject, so it is not used
           for duties or skills. */}
       <AiSuggest
-        kind="education" lang={lang} targetRole={targetRole}
+        kind="education" lang={lang} outLang={cv} targetRole={targetRole}
         value={state.profile.education}
         jobAd={state.target.jobAdText}
         onWrite={(text) => dispatch({ t: "education", text })}
@@ -103,8 +104,8 @@ export function EducationBlock({ lang, state, dispatch, targetRole }: {
 
 /* ──────────────────────── credentials ──────────────────────── */
 
-export function CredentialsBlock({ lang, state, dispatch, referenceDate }: {
-  lang: Lang; state: BuilderState; dispatch: Dispatch; referenceDate: string;
+export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
+  lang: Lang; cv: Lang; state: BuilderState; dispatch: Dispatch; referenceDate: string;
 }) {
   const c = C[lang];
   const pack = useMemo(() => findRolePack(state.target.title), [state.target.title]);
@@ -113,8 +114,8 @@ export function CredentialsBlock({ lang, state, dispatch, referenceDate }: {
   const offers = useMemo(() => {
     if (!pack) return [];
     const have = new Set(state.credentials.map((x) => x.title.trim().toLowerCase()));
-    return pack.credentials.filter((p) => !have.has(p.title[lang].trim().toLowerCase()));
-  }, [pack, state.credentials, lang]);
+    return pack.credentials.filter((p) => !have.has(p.title[cv].trim().toLowerCase()));
+  }, [pack, state.credentials, cv]);
 
   const add = (kind: CredentialKind, title = "", issuer = "") => {
     dispatch({
@@ -135,8 +136,8 @@ export function CredentialsBlock({ lang, state, dispatch, referenceDate }: {
       {offers.length > 0 && (
         <div className="bd-chips mb-4">
           {offers.map((o) => (
-            <button key={o.title.en} className="bd-chip" onClick={() => add(o.kind, o.title[lang], o.issuer ?? "")}>
-              + {o.title[lang]}
+            <button key={o.title.en} className="bd-chip" onClick={() => add(o.kind, o.title[cv], o.issuer ?? "")}>
+              + {o.title[cv]}
               <span className="bd-opt"> · {KIND_LABEL[o.kind][lang]}</span>
             </button>
           ))}
@@ -206,8 +207,8 @@ function CredentialCard({ cred, lang, dispatch, referenceDate }: {
 
 /* ───────────────────────── languages ───────────────────────── */
 
-export function LanguagesBlock({ lang, state, dispatch }: {
-  lang: Lang; state: BuilderState; dispatch: Dispatch;
+export function LanguagesBlock({ lang, cv, state, dispatch }: {
+  lang: Lang; cv: Lang; state: BuilderState; dispatch: Dispatch;
 }) {
   const c = C[lang];
   // Arabic and English are offered because this market's CVs almost always list
@@ -227,7 +228,7 @@ export function LanguagesBlock({ lang, state, dispatch }: {
       {suggestions.length > 0 && (
         <div className="bd-chips mb-4">
           {suggestions.map((n) => (
-            <button key={n} className="bd-chip" onClick={() => add(n.includes("Arabic") ? (lang === "ar" ? "العربية" : "Arabic") : "English")}>
+            <button key={n} className="bd-chip" onClick={() => add(n.includes("Arabic") ? (cv === "ar" ? "العربية" : "Arabic") : "English")}>
               + {n}
             </button>
           ))}

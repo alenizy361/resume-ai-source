@@ -161,6 +161,40 @@ export const EMPTY_BUILDER: BuilderState = {
   updatedAt: 0,
 };
 
+/**
+ * The language the DOCUMENT is written in — not the language of the interface.
+ *
+ * These are two different things and conflating them is the single most damaging bug
+ * this product has had: a Saudi applicant using the Arabic interface to build an
+ * English CV, and getting Arabic duties, Arabic credential names and Arabic language
+ * levels on it. Every string destined for the resume must be chosen with this
+ * function; every string the user merely reads follows the interface.
+ *
+ * "both" resolves to English because English is the primary document in that mode —
+ * the same rule the preview's direction already follows.
+ */
+export function cvLang(target: { language: "en" | "ar" | "both" }): "ar" | "en" {
+  return target.language === "ar" ? "ar" : "en";
+}
+
+/** Proficiency words, in the language of the CV. Levels are stored as English keys. */
+const LEVEL_WORD: Record<LanguageLevel, { en: string; ar: string }> = {
+  native: { en: "Native", ar: "اللغة الأم" },
+  fluent: { en: "Fluent", ar: "طليق" },
+  professional: { en: "Professional", ar: "احترافي" },
+  intermediate: { en: "Intermediate", ar: "متوسط" },
+  basic: { en: "Basic", ar: "مبتدئ" },
+};
+
+export function levelWord(level: LanguageLevel, lang: "ar" | "en"): string {
+  return LEVEL_WORD[level][lang];
+}
+
+/** "valid to 2027-03" — the CV's own phrasing, not the interface's. */
+export function validToWord(lang: "ar" | "en"): string {
+  return lang === "ar" ? "سارية حتى" : "valid to";
+}
+
 /* ───────────────────────── ids ───────────────────────── */
 
 let seq = 0;

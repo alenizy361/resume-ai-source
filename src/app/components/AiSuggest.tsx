@@ -12,6 +12,7 @@ import AiOrb from "./AiOrb";
 export default function AiSuggest({
   kind,
   lang,
+  outLang,
   targetRole,
   role,
   company,
@@ -20,7 +21,17 @@ export default function AiSuggest({
   onWrite,
 }: {
   kind: "duties" | "summary" | "skills" | "extras" | "education";
+  /** The interface language: this control's own button, hint and error text. */
   lang: "ar" | "en";
+  /**
+   * The language the CONTENT should be written in. Defaults to `lang`, so callers
+   * that never distinguished the two behave exactly as before.
+   *
+   * They are different questions. An Arabic-speaking applicant writing an English CV
+   * wants an Arabic button and an English sentence, and a single `lang` cannot express
+   * that — which is how Arabic lines reached English resumes.
+   */
+  outLang?: "ar" | "en";
   targetRole: string;
   role?: string;
   company?: string;
@@ -45,7 +56,7 @@ export default function AiSuggest({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: ctrl.signal,
-        body: JSON.stringify({ kind, lang, targetRole, role, company, current: value, jobAd }),
+        body: JSON.stringify({ kind, lang: outLang ?? lang, targetRole, role, company, current: value, jobAd }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "failed");
