@@ -228,6 +228,32 @@ export interface Route {
  * The signature takes reasons rather than booleans-with-comments so that an escalation cannot
  * happen without one, and so the log line writes itself.
  */
+/**
+ * May this model be given a `temperature`?
+ *
+ * ── measured, on production ──
+ *
+ * An Arabic `experience_package` escalated to `claude-sonnet-5` and the provider answered HTTP 400.
+ * The same request body was accepted by `claude-haiku-4-5` twice in the same second. The only
+ * per-model difference in that body is `temperature: 0.3`, and the 4.6-and-later models reason by
+ * default — extended thinking requires temperature 1, so any other value is rejected outright.
+ *
+ * So the parameter is sent only where it is both valid and useful: to the fast models, where it
+ * keeps schema-shaped JSON stable. Omitting it elsewhere costs nothing — the output is constrained
+ * by a schema and validated on arrival, not by sampling.
+ *
+ * Named as a family test rather than a list of exact ids, because the ids are configurable through
+ * environment variables and a list would silently stop covering an override.
+ */
+export function acceptsTemperature(model: string): boolean {
+  const m = model.toLowerCase();
+  /* Haiku 4.5 and everything older: no default thinking, temperature honoured. */
+  if (m.includes("haiku")) return true;
+  if (/-(4-5|4-0|3-7|3-5)/.test(m)) return true;
+  /* Sonnet 5, Opus 5, Fable 5, and the 4.6+ line: reasoning is on by default. */
+  return false;
+}
+
 export function routeModel(
   task: AiTaskType,
   opts: { escalate?: EscalationReason | null; config?: ModelConfig } = {},

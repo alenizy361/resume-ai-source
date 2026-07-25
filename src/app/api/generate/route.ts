@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromAnthropic } from "@/app/lib/usage";
 import {
-  type AiTaskType, routeModel, qualityFloor, estimateCallCost, modelConfig,
+  type AiTaskType, routeModel, qualityFloor, estimateCallCost, modelConfig, acceptsTemperature,
   type EscalationReason,
 } from "@/app/lib/aiModels";
 import {
@@ -404,7 +404,9 @@ async function callAnthropic(
       body: JSON.stringify({
         model,
         max_tokens: maxTokens,
-        temperature: 0.3,
+        /* Only where it is valid: a reasoning model rejects any temperature but 1, and the
+           escalation path was returning HTTP 400 for exactly that reason. See `acceptsTemperature`. */
+        ...(acceptsTemperature(model) ? { temperature: 0.3 } : {}),
         system: [
           { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
           { type: "text", text: TASK_SCHEMA[task] ?? "", cache_control: { type: "ephemeral" } },
@@ -585,6 +587,18 @@ export async function POST(req: NextRequest) {
   let attempts = 0;
   let lastError = "";
   let lastStatus = 502;
+  /*
+   * The best USABLE answer produced so far, kept across the escalation.
+   *
+   * Measured on production: an Arabic `experience_package` was answered twice by the fast model,
+   * escalated for quality, and the reasoning model returned HTTP 400 — at which point this route
+   * threw away both paid answers and told the user suggestions were unavailable. Two calls' worth
+   * of the owner's money for an error message, when a shaped, valid answer was already in hand.
+   *
+   * Escalation is an attempt to do BETTER. Failing to do better is not a reason to do nothing.
+   */
+  let best: Record<string, unknown> | null = null;
+  let bestModel = "";
 
   for (let step = 0; step < 3; step++) {
     const route = routeModel(task, { escalate: escalation, config: cfg });
@@ -593,9 +607,12 @@ export async function POST(req: NextRequest) {
 
     if (!out.ok) {
       lastError = out.error; lastStatus = out.status;
+      /* The provider's own words, truncated. Without them a 400 is a number: this exact failure
+         was invisible in the logs until it had to be diagnosed from the outside. */
       logUsage({
         route: "generate", op: `${task}:http-${out.status}`, provider: "anthropic", model: route.model,
-        input: 0, output: 0, ms: Date.now() - t0, note: `attempt ${attempts}`,
+        input: 0, output: 0, ms: Date.now() - t0,
+        note: `req=${requestId} attempt=${attempts} err=${out.error.replace(/\s+/g, " ").slice(0, 160)}`,
       });
       break;
     }
@@ -631,6 +648,9 @@ export async function POST(req: NextRequest) {
       if (step === 1 && !escalation) { escalation = "schema-invalid-retry"; continue; }
       break;
     }
+
+    /* Remember it BEFORE deciding whether to try for better. */
+    if (!best) { best = shaped; bestModel = route.model; }
 
     const needsBetter = escalationFor(task, shaped);
     if (needsBetter && !escalation && step < 2) {
@@ -675,6 +695,28 @@ export async function POST(req: NextRequest) {
         estimatedUsd: Number(usd.toFixed(6)),
         ms: Date.now() - t0,
         sharedCache: packCacheConfigured() ? "configured" : "absent",
+      },
+    });
+  }
+
+  /*
+   * The escalation failed, but an earlier attempt succeeded. Return that.
+   *
+   * The alternative — which is what this route did — is to charge for a usable answer and then
+   * refuse to hand it over because a second, more expensive attempt fell over. The user sees
+   * "suggestions are unavailable" while a perfectly good set of responsibilities sits in memory.
+   */
+  if (best) {
+    console.error(`[generate] escalation failed (${lastStatus}); serving the earlier ${bestModel} answer`);
+    return NextResponse.json({
+      ...best,
+      _meta: {
+        ...envelope,
+        model: bestModel,
+        escalated: false,
+        escalationFailed: true,
+        attempts,
+        ms: Date.now() - t0,
       },
     });
   }

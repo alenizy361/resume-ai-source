@@ -513,5 +513,32 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
     prefix >= cacheFloorFor("claude-sonnet-5"));
 }
 
+/* ────────── the parameter a reasoning model rejects ────────── */
+
+/*
+ * Measured on production, 2026-07-25: an Arabic `experience_package` was answered twice by
+ * claude-haiku-4-5 and then escalated to claude-sonnet-5, which returned HTTP 400. The only
+ * per-model difference in the request body was `temperature: 0.3` — the 4.6-and-later models
+ * reason by default, and extended thinking requires temperature 1, so any other value is refused.
+ *
+ * The user paid for two usable answers and was told suggestions were unavailable.
+ */
+{
+  const { acceptsTemperature } = await import("../app/lib/aiModels.ts");
+
+  ok("Haiku 4.5 takes a temperature", acceptsTemperature("claude-haiku-4-5"));
+  ok("and so do the older families", acceptsTemperature("claude-sonnet-4-5") && acceptsTemperature("claude-3-7-sonnet"));
+
+  ok("Sonnet 5 does not", !acceptsTemperature("claude-sonnet-5"));
+  ok("nor Opus 5", !acceptsTemperature("claude-opus-5"));
+  ok("nor Fable 5", !acceptsTemperature("claude-fable-5"));
+  ok("nor the 4.6 line", !acceptsTemperature("claude-opus-4-6") && !acceptsTemperature("claude-sonnet-4-6"));
+
+  /* The check is on the FAMILY, not on a list of ids: the model names come from environment
+     variables, so a hard-coded list would stop covering an override without saying so. */
+  ok("an unknown model is treated as a reasoning one — the safe direction",
+    !acceptsTemperature("claude-something-new"));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
