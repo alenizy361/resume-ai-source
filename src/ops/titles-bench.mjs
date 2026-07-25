@@ -11,6 +11,26 @@
  * software engineering and weak on the trades, the product is quietly worse for exactly the
  * users who most need the blank page filled in.
  *
+ * ── WHAT THIS MEASURES, AND WHAT IT DOES NOT ──
+ *
+ * The RAW MODEL, not the product. It calls the provider directly, so nothing here has passed
+ * through `filterFresh`, `cleanItems`, `scrubSuggestion` or `stripPlaceholders` — the four
+ * things the route applies before a suggestion is ever shown.
+ *
+ * That distinction changes how two of the numbers should be read, and reading them wrong is a
+ * mistake already made once with this file's own output:
+ *
+ *   `distinct`     Largely ABSORBED by the product. `filterFresh` already compares incoming
+ *                  suggestions against each other with `saysTheSame`, so near-duplicates are
+ *                  dropped before display. A low rate here means the model WASTES lines, not
+ *                  that users see repeats — the real symptom is being offered six suggestions
+ *                  after asking for eight.
+ *   `no-numbers`   Also absorbed: the route strips figures. A hit means "this line would have
+ *                  been rewritten", not "a fabricated number reached a CV".
+ *
+ * The other checks are not absorbed and DO reach the user: a timeout is a dead end, unparseable
+ * JSON renders an empty section, and a CV in the wrong language is shipped as-is.
+ *
  * ── WHAT IS SCORED, AND WHY EACH ONE ──
  *
  * Every check below is the product's own rule, using the product's own helper where one exists
@@ -103,10 +123,20 @@ function catalogue() {
 
 /* ─────────────────────────── the call ─────────────────────────── */
 
+/**
+ * 20 s, down from 90 s.
+ *
+ * The first full run set this at 90 s and spent roughly 25 of its 33 minutes waiting on 17
+ * hung requests. It also proved the ceiling was pointless: across 94 successful calls the
+ * slowest returned in 3.6 s, and not one returned between 4 s and 90 s. A hang is a hang.
+ * Lowering it loses no information and makes the run four times faster.
+ */
+const TIMEOUT_MS = 20_000;
+
 async function draft(job) {
   const t0 = Date.now();
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 90_000);
+  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
     const res = await fetch(`${BASE}/chat/completions`, {
       method: "POST",

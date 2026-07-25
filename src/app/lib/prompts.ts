@@ -89,7 +89,9 @@ export function draftUserMessage(opts: {
 ${opts.years ? `YEARS OF EXPERIENCE: ${opts.years} (pitch the seniority of the duties to this)` : ""}
 ${opts.industry ? `INDUSTRY: ${opts.industry}` : ""}
 ${opts.jobAd ? `TARGET JOB AD — mirror its vocabulary where it genuinely applies:\n${opts.jobAd}` : ""}
-OUTPUT LANGUAGE: ${opts.langWord}.
 
-Draft the duties and skills for this title.`;
+Draft the duties and skills for this title.
+
+OUTPUT LANGUAGE: ${opts.langWord}. Every duty and every skill must be written in ${opts.langWord}.
+This is the language of the RESUME TEXT. It is NOT the language the person works in, translates between, or writes for a living. A translator, a content writer, an English teacher and an Arabic copywriter all get a CV in ${opts.langWord} when ${opts.langWord} is what is asked for here — their profession is the SUBJECT of the lines, never the language of the lines.`;
 }

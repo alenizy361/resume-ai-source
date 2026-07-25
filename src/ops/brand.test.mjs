@@ -58,12 +58,32 @@ const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/
     .map(([rel]) => rel);
   ok("nothing introduces itself as the company", offenders.length === 0, offenders.join(", "));
 
-  // And the assistant's greeting specifically, since that is where it happened.
-  const advisor = FILES.find(([rel]) => rel === "components/AdvisorLanding.tsx")?.[1] ?? "";
-  ok("the assistant names the product, not the company",
-    /boot_me:\s*`?[^`"]*\$\{BRAND\.(?:name|nameAr)\}/.test(advisor)
-    || /boot_me:\s*`I'm \$\{BRAND\.name\}`/.test(advisor),
-    "boot_me should interpolate BRAND.name");
+  /*
+   * The greeting itself — wherever it lives, or nowhere.
+   *
+   * This used to name `components/AdvisorLanding.tsx` and read its `boot_me` string, because
+   * that file is where the defect happened. Then AdvisorLanding was deleted as dead code and
+   * this assertion started failing against an empty string: the proxy had gone while the rule
+   * it stood for had not.
+   *
+   * So it is now the rule. ANY self-introduction anywhere must interpolate the brand rather
+   * than hardcode a name, and zero self-introductions passes — which is the current state,
+   * since the only one the product had went with the file.
+   */
+  const GREETS = /\b(?:boot_me|greeting|selfIntro)\s*:\s*(?:`|")([^`"]*)/g;
+  const badGreetings = [];
+  for (const [rel, src] of FILES) {
+    if (rel === "lib/brand.ts") continue;
+    for (const m of code(src).matchAll(GREETS)) {
+      const text = m[1];
+      // A greeting that says a name must say it via BRAND; one that names nobody is fine.
+      if (/\b(?:I'?m|I am)\b|أنا\b/.test(text) && !/\$\{BRAND\.(?:name|nameAr)\}|brandName\(/.test(text)) {
+        badGreetings.push(`${rel}: "${text.slice(0, 40)}"`);
+      }
+    }
+  }
+  ok("any assistant greeting names the product through BRAND, or names nobody",
+    badGreetings.length === 0, badGreetings.join(" · "));
 }
 
 /* ── the footer exists once ── */

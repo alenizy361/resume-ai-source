@@ -56,7 +56,7 @@ ok("there are fourteen task types", TASK_NAMES.length === 14, String(TASK_NAMES.
     const s = TASKS[n];
     return !s.endpoint.startsWith("/api/") || s.name !== n
       || typeof s.validate !== "function" || typeof s.body !== "function" || typeof s.parse !== "function"
-      || !(s.timeoutMs > 0) || !(s.retries >= 0);
+      || !(s.timeoutMs > 0) || !(s.retries >= 0) || !(s.timeoutRetries >= 0);
   });
   ok("every task declares an endpoint, a schema pair, a timeout and a retry count",
     bad.length === 0, bad.join(" · "));
@@ -83,6 +83,31 @@ ok("there are fourteen task types", TASK_NAMES.length === 14, String(TASK_NAMES.
   ok("no token-spending task retries by default", suggestRetries.length === 0, suggestRetries.join(" · "));
   ok("the job-link fetch does retry, because it costs no tokens", TASKS.job_ad_fetch.retries === 2);
   ok("the upload does not retry, because the upload is the expensive part", TASKS.cv_extract.retries === 0);
+}
+
+/* ── the timeout budget is separate from the 5xx budget ──
+ *
+ * Measured by `ops/titles-bench.mjs` against all 111 occupations: successful calls returned in
+ * 1.2–3.6 s, and NOTHING returned between 4 s and the 90 s ceiling. 17 of 111 hit the ceiling.
+ * So a timeout is a hung connection and the same request usually succeeds immediately, while a
+ * 5xx is the provider answering "no" and repeating it just pays twice. The two budgets exist
+ * because the two events mean opposite things.
+ */
+{
+  const noTimeoutRetry = TASK_NAMES
+    .filter((n) => TASKS[n].bucket === "suggest")
+    .filter((n) => TASKS[n].timeoutRetries < 2);
+  ok("every suggest task retries a TIMEOUT, because a hang is not an answer",
+    noTimeoutRetry.length === 0, noTimeoutRetry.join(" · "));
+
+  const longWait = TASK_NAMES
+    .filter((n) => TASKS[n].bucket === "suggest")
+    .filter((n) => TASKS[n].timeoutMs > 20_000);
+  ok("and none waits longer than 20s, since the slowest success ever seen was 3.6s",
+    longWait.length === 0, longWait.map((n) => `${n}:${TASKS[n].timeoutMs}`).join(" · "));
+
+  ok("the upload still does not retry a timeout — re-uploading costs the user the wait twice",
+    TASKS.cv_extract.timeoutRetries === 0);
 }
 
 {
@@ -263,6 +288,41 @@ ok("there are fourteen task types", TASK_NAMES.length === 14, String(TASK_NAMES.
   spec.timeoutMs = original;
   ok("a timeout is an ERROR, because nobody chose it", r.state === "error", r.state);
   ok("and it says so", r.code === "timeout", r.code);
+}
+
+{
+  /*
+   * The behaviour the measurement bought: a hung first attempt, then a normal answer.
+   *
+   * Driven rather than asserted from the spec, because the interesting part is that the
+   * timeout path retries at all — it used to share the 5xx budget, which was zero here, so a
+   * hang was a dead end after 30 seconds.
+   */
+  const spec = TASKS.duties_draft;
+  const original = spec.timeoutMs;
+  spec.timeoutMs = 20;
+  let n = 0;
+  const f = stub(async (_u, init) => {
+    n++;
+    if (n === 1) {
+      return new Promise((_res, rej) => {
+        init.signal.addEventListener("abort", () => rej(Object.assign(new Error("aborted"), { name: "AbortError" })));
+      });
+    }
+    return { ok: true, status: 200, json: async () => ({ items: ["Operated CT scanners"] }) };
+  });
+  const r = await runTask("duties_draft", { role: "Radiographer" }, { fetchImpl: f, sleep: noSleep });
+  spec.timeoutMs = original;
+  ok("a hung first attempt is retried and the second one succeeds",
+    r.state === "success" && f.calls.length === 2, `${r.state} after ${f.calls.length} calls`);
+}
+
+{
+  // And the 5xx budget is still zero on the same task, so the two cannot be conflated.
+  const f = stub({ status: 500, json: {} });
+  await runTask("duties_draft", { role: "x" }, { fetchImpl: f, sleep: noSleep });
+  ok("while a 5xx on that same task is still asked exactly once", f.calls.length === 1,
+    `${f.calls.length} calls`);
 }
 
 /* ── machine codes must never be mistaken for prose ──

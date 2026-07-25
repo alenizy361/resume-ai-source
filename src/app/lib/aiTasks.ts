@@ -93,10 +93,25 @@ export interface TaskSpec {
    */
   timeoutMs: number;
   /**
-   * How many times to try AGAIN — so 0 means one attempt. Only network faults and 5xx are
-   * retried; see `runTask`. Zero for anything the user is watching a cursor blink on.
+   * How many times to try AGAIN after a NETWORK FAULT OR 5xx — so 0 means one attempt.
+   *
+   * Zero on the token-spending endpoints: a 5xx is the provider saying it failed, and on a
+   * metered model an immediate repeat pays twice for the same refusal.
    */
   retries: number;
+  /**
+   * How many times to try again after a TIMEOUT, which is a different event.
+   *
+   * Measured, not assumed. `ops/titles-bench.mjs` ran the drafting prompt against all 111
+   * occupations: successful calls returned in 1.2–3.6 s, median 2.2 s, and NOTHING returned
+   * between 4 s and the 90 s ceiling. 17 of 111 hit the ceiling — a hung connection, not a
+   * slow answer. So the same request, sent again, is very likely to succeed in two seconds,
+   * and the old behaviour spent 30 seconds to show an error instead.
+   *
+   * Kept separate from `retries` because the two failures mean opposite things: a 5xx is a
+   * provider that answered "no", a timeout is a provider that never answered at all.
+   */
+  timeoutRetries: number;
   /** A reason to refuse, or null to proceed. Refusing here costs nothing; asking does. */
   validate: (input: TaskInput) => string | null;
   body: (input: TaskInput) => Record<string, unknown> | FormData;
@@ -222,13 +237,22 @@ const suggest = (
   kind: string,
   mode: "items" | "groups" | "variants" | null,
   parse: (raw: unknown) => unknown,
-  opts: { timeoutMs?: number; retries?: number; validate?: (i: TaskInput) => string | null } = {},
+  opts: {
+    timeoutMs?: number; retries?: number; timeoutRetries?: number;
+    validate?: (i: TaskInput) => string | null;
+  } = {},
 ): TaskSpec => ({
   name,
   endpoint: "/api/suggest",
   bucket: "suggest",
-  timeoutMs: opts.timeoutMs ?? 30_000,
+  /*
+   * 15 s, down from 30 s, on the same measurement that justifies the timeout retry: the
+   * slowest call that ever SUCCEEDED took 3.6 s. Waiting 30 s only ever bought a longer wait
+   * before the same error, and 15 s is still four times the slowest observed success.
+   */
+  timeoutMs: opts.timeoutMs ?? 15_000,
   retries: opts.retries ?? 0,
+  timeoutRetries: opts.timeoutRetries ?? 2,
   validate: opts.validate ?? needSomething,
   parse,
   body: (i) => ({
@@ -257,8 +281,16 @@ export const TASKS: Record<TaskName, TaskSpec> = {
   /* ── the sections that had no AI at all ── */
   skills_groups: suggest("skills_groups", "skills", "groups", parseGroups, { validate: needTarget }),
   summary_variants: suggest("summary_variants", "summary", "variants", parseVariants, {
-    // Three summaries of a whole CV is the longest suggest call there is.
-    timeoutMs: 45_000, validate: needTarget,
+    /*
+     * Longer than a bullet rewrite, and nowhere near the 45 s it used to have.
+     *
+     * That 45 s was a guess, and the guess did not survive the measurement: the drafting call
+     * emits MORE text than this one — eight to ten duties plus ten to fifteen skills against
+     * three short paragraphs — and it completed in 3.6 s at its slowest across 94 successful
+     * runs. So 20 s is generous for the larger job and lavish for this one. With two timeout
+     * retries, a hang now costs ~20 s instead of 45 s and usually resolves on the second try.
+     */
+    timeoutMs: 20_000, validate: needTarget,
   }),
   education_format: suggest("education_format", "education", "items", parseItems, { validate: needCurrent }),
   credentials_hint: suggest("credentials_hint", "extras", "items", parseItems, { validate: needTarget }),
@@ -285,6 +317,7 @@ export const TASKS: Record<TaskName, TaskSpec> = {
     bucket: "fetch",
     timeoutMs: 20_000,
     retries: 2,
+    timeoutRetries: 2,
     validate: (i) => /^https?:\/\/\S+$/i.test(str(i.url)) ? null : "not-a-url",
     body: (i) => ({ url: str(i.url) }),
     parse: (raw) => str((raw as { text?: unknown })?.text) || null,
@@ -303,6 +336,9 @@ export const TASKS: Record<TaskName, TaskSpec> = {
     bucket: "extract",
     timeoutMs: 60_000,
     retries: 0,
+    // Re-uploading a file on a flaky connection makes a phone user wait twice for the same
+    // failure. The upload is the expensive part, so a hang here is surfaced, not repeated.
+    timeoutRetries: 0,
     validate: (i) => i.file ? null : "no-file",
     body: (i) => { const fd = new FormData(); fd.append("file", i.file as File); return fd; },
     parse: (raw) => str((raw as { text?: unknown })?.text) || null,
@@ -320,6 +356,7 @@ export const TASKS: Record<TaskName, TaskSpec> = {
     bucket: "optimize",
     timeoutMs: 90_000,
     retries: 1,
+    timeoutRetries: 1,
     validate: (i) => str(i.resume).length > 40 ? null : "cv-too-short",
     body: (i) => ({ resume: str(i.resume), jobDescription: str(i.jobAd), lang: i.lang ?? "en" }),
     // The optimize route returns a whole result object; the caller reads its fields.
@@ -447,7 +484,8 @@ export async function runTask(
       // retry, no error message, nothing for them to read about a thing they stopped.
       if (opts.signal?.aborted && !timedOut) { emit("cancelled", attempt); return { state: "cancelled" }; }
       if (timedOut) {
-        if (attempt < spec.retries) { await sleep(BACKOFF[Math.min(attempt, BACKOFF.length - 1)]); continue; }
+        // The timeout budget, not the 5xx one. See `timeoutRetries`.
+        if (attempt < spec.timeoutRetries) { await sleep(BACKOFF[Math.min(attempt, BACKOFF.length - 1)]); continue; }
         emit("error", attempt);
         return { state: "error", code: "timeout" };
       }

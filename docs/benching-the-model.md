@@ -31,6 +31,24 @@ the script.
                        (0 = all; anything else samples that many, spread across categories
                        rather than taking the first N, which would all be Technology).
 
+## It measures the model, not the product
+
+The bench calls the provider directly, so nothing it reports has passed through
+`filterFresh`, `cleanItems`, `scrubSuggestion` or `stripPlaceholders` — the four things the
+route applies before any suggestion is displayed.
+
+Two of the numbers therefore overstate the user-visible problem, and reading them the wrong way
+is a mistake already made once with this file's own output:
+
+- **`distinct`** is largely absorbed. `filterFresh` already compares incoming suggestions
+  against each other with `saysTheSame`. A low rate means the model wastes lines; the symptom
+  users get is being offered six suggestions after asking for eight, not seeing repeats.
+- **`no-numbers`** is absorbed too — the route strips figures. A hit means "this line would
+  have been rewritten", not "a fabricated number reached a CV".
+
+`json`, `language` and the timeouts are **not** absorbed and do reach the user: a hang is a
+dead end, unparseable JSON renders an empty section, and a CV in the wrong language ships.
+
 ## What the titles suite scores
 
 Every check is the product's own rule, run through the product's own helper. `hasMetric`,
