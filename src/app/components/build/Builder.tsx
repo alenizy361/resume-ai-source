@@ -776,12 +776,54 @@ function TargetSection(p: ShellProps & { state: BuilderState; dispatch: React.Di
     ? { title: "المسمى الوظيفي", level: "مستوى الخبرة", langq: "لغة السيرة", ind: "المجال",
         country: "الدولة", city: "المدينة", emp: "جهة العمل المستهدفة", opt: "اختياري",
         jd: "وصف الوظيفة", jdWhy: "أضف وصف الوظيفة لنطابق سيرتك مع متطلبات صاحب العمل الحقيقية.",
+        url: "أو الصق رابط الإعلان", urlPh: "https://…", fetch: "اقرأ الرابط",
+        fetching: "يقرأ…", got: (n: number) => `قرأنا ${n} حرفاً من الإعلان — راجعه أدناه وعدّله إن لزم.`,
         levels: ["مبتدئ", "متوسط", "أول/خبير", "قيادي"] }
     : { title: "Job title", level: "Experience level", langq: "CV language", ind: "Industry",
         country: "Country", city: "City", emp: "Target employer", opt: "optional",
         jd: "Job description", jdWhy: "Add the job description to match your CV to the employer's real requirements.",
+        url: "Or paste the posting's link", urlPh: "https://…", fetch: "Read the link",
+        fetching: "Reading…", got: (n: number) => `Read ${n} characters from the posting — check it below and edit if needed.`,
         levels: ["Entry", "Mid", "Senior", "Lead"] };
   const set = (patch: Partial<BuilderState["target"]>) => p.dispatch({ t: "target", patch });
+
+  /*
+   * Paste a link instead of a posting.
+   *
+   * On a phone, copying a whole advert out of a job board is the step where people
+   * give up — and without the advert there is no match score, so the most valuable
+   * part of the review is gated behind the most annoying piece of typing. /api/fetch-job
+   * already existed for the upload flow, SSRF-guarded and rate-limited; this just gives
+   * the builder the same door.
+   *
+   * The fetched text lands in the SAME textarea the user could have typed into, visible
+   * and editable. A job page carries navigation and boilerplate along with the advert,
+   * and the honest handling of that is to show what was read rather than to hide it and
+   * quietly score against menu items.
+   */
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const [got, setGot] = useState(0);
+  const readLink = async () => {
+    const url = p.state.target.jobAdUrl.trim();
+    if (!url || busy) return;
+    setErr(""); setGot(0); setBusy(true);
+    try {
+      const res = await fetch("/api/fetch-job", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json().catch(() => ({}));
+      // The route's own message is the useful one — it distinguishes "the site blocks
+      // bots" from "that is not a link", and both have different next actions.
+      if (!res.ok || !data?.text) throw new Error(String(data?.error || "Couldn't read that link."));
+      set({ jobAdText: String(data.text) });
+      setGot(String(data.text).length);
+      track("builder_jd_fetched", { chars: String(data.text).length });
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Couldn't read that link.");
+    } finally { setBusy(false); }
+  };
 
   return (
     <SectionShell {...p}>
@@ -820,6 +862,33 @@ function TargetSection(p: ShellProps & { state: BuilderState; dispatch: React.Di
           placeholder={L.jdWhy}
         />
         <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{L.jdWhy}</p>
+
+        <div className="mt-3">
+          {/* A real label bound by htmlFor, not a styled span: the input sits beside a
+              button, so it cannot be wrapped, and an unassociated caption is invisible
+              to a screen reader. */}
+          <label className="bd-label" htmlFor="bd-jd-url">
+            {L.url} <span className="bd-opt">— {L.opt}</span>
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="bd-jd-url"
+              className="bd-input" type="url" inputMode="url" dir="ltr"
+              value={p.state.target.jobAdUrl} placeholder={L.urlPh}
+              onChange={(e) => set({ jobAdUrl: e.target.value })}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); readLink(); } }}
+            />
+            <button
+              onClick={readLink} disabled={busy || !p.state.target.jobAdUrl.trim()}
+              className="rounded-xl px-3 text-xs font-bold disabled:opacity-40"
+              style={{ border: "1px solid var(--line)", color: "var(--muted)", whiteSpace: "nowrap" }}
+            >
+              {busy ? L.fetching : L.fetch}
+            </button>
+          </div>
+          {got > 0 && <p className="mt-1.5 text-xs" style={{ color: "#6ee7b7" }}>{L.got(got)}</p>}
+          {err && <p className="mt-1.5 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+        </div>
       </div>
       <ContinueButton onClick={p.onDone} label={p.contLabel} />
     </SectionShell>

@@ -35,6 +35,13 @@ import { chromium } from "playwright";
 const BASE = process.env.BASE || "http://localhost:3000";
 /** Which interface language to drive. The CV language stays English either way. */
 const UI = process.env.UI === "ar" ? "ar" : "en";
+/**
+ * JD=1 pastes a job advert by URL instead of by hand, and then asserts the review
+ * becomes a MATCH report. Two runs are needed because the two rules are mutually
+ * exclusive by design: no advert must never produce a match score, and an advert must
+ * never produce anything else.
+ */
+const WITH_JD = process.env.JD === "1";
 
 /**
  * The visible strings this script clicks on, in both interfaces.
@@ -52,6 +59,8 @@ const L = {
     name: "Full name", city: "City", phone: "Mobile", email: "Email",
     addRole: "Add a position", employer: "Employer", add: "Add", drop: "Dismiss",
     quality: "CV Quality Score", match: "Job Match Score",
+    url: "Or paste the posting's link", read: "Read the link",
+    supported: "Asked for, and on your CV",
   },
   ar: {
     promise: "أنت تكتب الحقائق", newCv: "أنشئ سيرة جديدة", title: "المسمى الوظيفي",
@@ -59,6 +68,8 @@ const L = {
     name: "الاسم الكامل", city: "المدينة", phone: "الجوال", email: "البريد",
     addRole: "أضف وظيفة", employer: "جهة العمل", add: "أضف", drop: "استبعد",
     quality: "تقييم جودة السيرة", match: "تقييم المطابقة",
+    url: "أو الصق رابط الإعلان", read: "اقرأ الرابط",
+    supported: "مطلوب، وموجود في سيرتك",
   },
 }[UI];
 
@@ -98,6 +109,21 @@ const run = async () => {
   // Every model call fails, for the whole run.
   let suggestCalls = 0;
   await page.route("**/api/suggest", (route) => { suggestCalls++; return route.abort(); });
+
+  /*
+   * The advert is served by the test, not fetched from the internet.
+   *
+   * What is under test is the wiring — link in, text into the same textarea the user
+   * could have typed, review switches to a match report. Reaching a real job board
+   * would make this script fail on their bot policy rather than on our code.
+   */
+  const AD = [
+    "Senior Radiographer — required: CT, PACS, radiation protection.",
+    "Preferred: MRI experience. Must hold SCFHS registration.",
+  ].join("\n");
+  await page.route("**/api/fetch-job", (route) => route.fulfill({
+    status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, text: AD }),
+  }));
 
   /*
    * Console noise is not all equal. Blocking /api/suggest makes the browser log a
@@ -140,6 +166,18 @@ const run = async () => {
      Typed in English on purpose — a Saudi applicant writes an English CV and the role
      pack has to match the English title from the Arabic interface. ── */
   await type(S.target, L.title, "Radiology Technologist");
+
+  if (WITH_JD) {
+    // Addressed by id: this field is labelled with htmlFor rather than wrapped, because
+    // it shares its row with the fetch button.
+    await page.fill("#bd-jd-url", "https://example.com/jobs/1");
+    await sec(S.target).locator("button", { hasText: L.read }).first().click();
+    await page.waitForTimeout(600);
+    const box = await sec(S.target).locator("textarea").first().inputValue();
+    ok("a pasted link fills the job-description box the user can edit",
+      box.includes("PACS") && box.includes("SCFHS"), box.slice(0, 60));
+  }
+
   await cont(S.target);
 
   /* The blueprint is served from the cached role pack, so it must render with the
@@ -226,9 +264,18 @@ const run = async () => {
   await cont(S.languages);
   await cont(S.summary);
   const review = await sec(S.review).textContent();
-  ok("with no job description the headline is a QUALITY score",
-    review.toUpperCase().includes(L.quality.toUpperCase()));
-  ok("and it never claims a match", !review.includes(L.match));
+  if (WITH_JD) {
+    // The mirror rule: WITH an advert the headline must name what it is comparing to.
+    ok("with a job description the headline IS a match score",
+      review.toUpperCase().includes(L.match.toUpperCase()));
+    ok("the three honest groups are shown", review.includes(L.supported));
+    ok("a requirement the CV cannot evidence is never offered as an add",
+      !/add anyway/i.test(review) && !/أضفها على أي حال/.test(review));
+  } else {
+    ok("with no job description the headline is a QUALITY score",
+      review.toUpperCase().includes(L.quality.toUpperCase()));
+    ok("and it never claims a match", !review.includes(L.match));
+  }
   ok("the score is a real number", /\b\d{1,3}\b/.test(review));
 
   ok("every model call failed and the CV was still built", suggestCalls >= 0);
