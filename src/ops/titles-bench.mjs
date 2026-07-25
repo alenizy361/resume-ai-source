@@ -49,7 +49,7 @@
  * Needs NVIDIA_API_KEY. Prints a table and, with OUT set, writes the same as markdown.
  */
 
-import { writeFileSync } from "node:fs";
+import { appendFileSync, writeFileSync } from "node:fs";
 import { DRAFT_PROMPT, draftUserMessage } from "../app/lib/prompts.ts";
 import { hasMetric, extractJsonValue } from "../app/lib/suggestShapes.ts";
 import { JOBS } from "../app/lib/jobs.ts";
@@ -248,6 +248,23 @@ const jobs = catalogue();
 console.log(`model: ${MODEL}`);
 console.log(`titles: ${jobs.length} (${jobs.filter((j) => j.lang === "ar").length} ar, ${jobs.filter((j) => j.lang === "en").length} en) · ${CONCURRENCY} at a time\n`);
 
+/*
+ * Every result is written the moment it exists, not at the end.
+ *
+ * 111 calls against a slow provider is a long job, and a job that is killed at its timeout
+ * after collecting a hundred usable results and reporting none of them has wasted every one of
+ * those calls. The same mistake cost this project a full route-suite run earlier: the summary
+ * lived in a buffer and the buffer died with the process.
+ *
+ * So `OUT` is opened now and appended to per title. A timeout then costs the aggregate table
+ * and nothing else, and the aggregate can be recomputed from the lines.
+ */
+if (process.env.OUT) {
+  writeFileSync(process.env.OUT,
+    `# Titles bench — ${MODEL}\n\n${jobs.length} titles · started before any aggregate existed, so a killed run still leaves the rows below.\n\n`
+    + `| # | title | ms | duties | skills | failed | detail |\n|---|---|---|---|---|---|---|\n`);
+}
+
 const results = await pool(jobs, CONCURRENCY, async (job, i) => {
   const out = await draft(job);
   const s = score(job, out);
@@ -258,6 +275,13 @@ const results = await pool(jobs, CONCURRENCY, async (job, i) => {
     `${String(out.ms).padStart(6)}ms  ${s.duties}d/${s.skills}s  ` +
     (failed.length ? `FAIL ${failed.join(",")} — ${s.notes[0] ?? ""}` : ""),
   );
+  if (process.env.OUT) {
+    try {
+      appendFileSync(process.env.OUT,
+        `| ${i + 1} | ${job.id} | ${out.ms} | ${s.duties} | ${s.skills} | ${failed.join(", ") || "—"} | `
+        + `${(s.notes[0] ?? "").replace(/\|/g, "/").slice(0, 90)} |\n`);
+    } catch { /* a full disk must not lose the calls already made */ }
+  }
   return { job, out, s, failed };
 });
 
@@ -308,7 +332,8 @@ if (worst.length) {
 }
 
 if (process.env.OUT) {
-  writeFileSync(process.env.OUT, `# Titles bench — ${MODEL}\n\n${lines.join("\n")}\n`);
+  // The per-title rows are already there; this appends the aggregate under them.
+  appendFileSync(process.env.OUT, `\n${lines.join("\n")}\n`);
   console.log(`\nwrote ${process.env.OUT}`);
 }
 
