@@ -17,6 +17,7 @@
 
 import { useMemo, useState } from "react";
 import AiSuggest from "../AiSuggest";
+import AiStrip from "./AiStrip";
 import {
   type BuilderState, type Credential, type CredentialKind,
   type LanguageEntry, type LanguageLevel, newId,
@@ -151,6 +152,23 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
       <button onClick={() => add("certification")} className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold">
         {c.credAdd}
       </button>
+
+      {/*
+        The gap the cached packs leave.
+        
+        A recognised job title gets its licences from `rolePacks` instantly and offline; an
+        unrecognised one got nothing at all, which is most titles. This asks the model — and
+        whatever comes back is a chip, `status: "suggested"`, exactly like a pack offer. A
+        credential is never claimed on someone's behalf, whichever source proposed it.
+      */}
+      <AiStrip
+        lang={lang}
+        task="credentials_hint"
+        input={{ lang, cvLang: cv, targetRole: state.target.title, jobAd: state.target.jobAdText,
+                 current: state.profile.certifications }}
+        onPick={(text) => add("certification", text)}
+        note={c.credHint}
+      />
     </div>
   );
 }
@@ -272,6 +290,18 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
       <button onClick={() => add()} className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold">
         {c.langAdd}
       </button>
+
+      {/* Arabic and English are hardcoded above because this market lists both; anything
+          else — a role that wants French, Urdu, Tagalog — the model can propose. It arrives
+          with NO level, like every other language here, because a level is a claim. */}
+      <AiStrip
+        lang={lang}
+        task="languages_hint"
+        input={{ lang, cvLang: cv, targetRole: state.target.title, jobAd: state.target.jobAdText,
+                 current: state.profile.languages }}
+        onPick={(text) => add(text)}
+        note={c.langHint}
+      />
     </div>
   );
 }
