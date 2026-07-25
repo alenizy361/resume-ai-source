@@ -33,6 +33,7 @@ import PdfExport from "../PdfExport";
 import DocxExport from "../DocxExport";
 import PublishLink from "../PublishLink";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
+import { saveResume } from "@/app/lib/localdata";
 import { type BuilderState, type SectionId } from "@/app/lib/builderDoc";
 import { review } from "@/app/lib/reviewChecks";
 
@@ -70,6 +71,15 @@ const C = {
     prep: "Interview preparation",
     prepSub: "Likely questions for this role, and how to answer them from your own CV.",
     prepGo: "Open interview prep",
+    keep: "Keep this version",
+    keepSub: "Saved on this device only — it is never uploaded. Find it under My resumes.",
+    keepGo: "Save to my resumes",
+    kept: "Saved",
+    mine: "My resumes",
+    again: "Applying somewhere else?",
+    againSub: "Your jobs, dates, duties and credentials are true whatever you apply to — only the advert and the summary answer a particular employer. Tailoring a copy keeps the first and asks again for the second.",
+    againGo: "Tailor a copy to another job",
+    againNote: "This version is saved first, so nothing is lost.",
   },
   ar: {
     pick: "القالب",
@@ -99,11 +109,20 @@ const C = {
     prep: "التحضير للمقابلة",
     prepSub: "الأسئلة المتوقعة لهذا الدور، وكيف تجيبها من سيرتك نفسها.",
     prepGo: "افتح التحضير للمقابلة",
+    keep: "احفظ هذه النسخة",
+    keepSub: "تُحفظ على جهازك فقط — لا تُرفع إلى أي مكان. تجدها في «سيرَبي المحفوظة».",
+    keepGo: "احفظ في سيري",
+    kept: "محفوظة",
+    mine: "سيري المحفوظة",
+    again: "تقدّم على وظيفة أخرى؟",
+    againSub: "وظائفك وتواريخك ومهامك وشهاداتك صحيحة أينما تقدّمت — الذي يخص صاحب عمل بعينه هو الإعلان والملخص فقط. تخصيص نسخة يُبقي الأول ويسألك عن الثاني من جديد.",
+    againGo: "خصّص نسخة لوظيفة أخرى",
+    againNote: "تُحفظ هذه النسخة أولاً، فلا يضيع شيء.",
   },
 };
 
 export default function DesignSection({
-  lang, state, cv, referenceDate, onTemplate, onJump,
+  lang, state, cv, referenceDate, onTemplate, onJump, onTailorCopy,
 }: {
   lang: Lang;
   state: BuilderState;
@@ -112,6 +131,8 @@ export default function DesignSection({
   referenceDate: string;
   onTemplate: (slug: string) => void;
   onJump: (section: SectionId) => void;
+  /** Keep the career facts, clear what was aimed at this advert. */
+  onTailorCopy: () => void;
 }) {
   const c = C[lang];
   const ar = lang === "ar";
@@ -125,6 +146,14 @@ export default function DesignSection({
   const [coverErr, setCoverErr] = useState("");
   const [coverPaywall, setCoverPaywall] = useState(false);
   const [copied, setCopied] = useState(false);
+  /*
+   * Which text was saved, not whether a save happened.
+   *
+   * A boolean goes stale the moment the CV changes — tailor a copy, edit it, download
+   * it, and a `kept: true` from the previous version would silently skip saving the
+   * one actually sent. Comparing the saved text to the current text is self-correcting.
+   */
+  const [keptText, setKeptText] = useState("");
 
   useEffect(() => {
     let live = true;
@@ -141,9 +170,28 @@ export default function DesignSection({
     [state, referenceDate],
   );
 
+  const kept = keptText !== "" && keptText === cv;
   const tpl = TEMPLATE_CATALOG.find((x) => x.slug === state.template) ?? TEMPLATE_CATALOG[0];
   const shown = showAll ? TEMPLATE_CATALOG : TEMPLATE_CATALOG.filter((x) => RECOMMENDED.includes(x.slug));
   const watermark = paid !== true;
+
+  /**
+   * Put the finished CV in the user's own list.
+   *
+   * The chat door has always done this and the form door did not, which meant a CV
+   * built here never appeared under "My resumes" — the same work, invisible in the
+   * place the product tells people to look for it. localStorage only: the privacy
+   * pledge says the resume is never stored on our servers, and this keeps it.
+   */
+  function keep() {
+    try {
+      const title = [state.profile.name || "CV", state.target.title || state.profile.role]
+        .filter(Boolean).join(" — ");
+      saveResume({ title, source: "built", text: cv });
+      setKeptText(cv);
+      track("builder_resume_saved", {});
+    } catch { /* storage full or blocked — the file itself is still downloadable */ }
+  }
 
   async function writeCover() {
     setCoverBusy(true); setCoverErr(""); setCoverPaywall(false);
@@ -222,7 +270,12 @@ export default function DesignSection({
             components and wrapping them beats forking them for one event. */}
         <div
           className="flex flex-wrap items-center gap-2"
-          onClickCapture={() => track("builder_download_clicked", { arabic: arabicCv, watermark })}
+          onClickCapture={() => {
+            track("builder_download_clicked", { arabic: arabicCv, watermark });
+            // Downloading is the moment the user commits to a version. Saving it here
+            // means the list is never missing the one CV they actually sent.
+            if (!kept) keep();
+          }}
         >
           {/* Arabic is offered Word rather than a PDF that would arrive as mojibake. */}
           {!arabicCv && (
@@ -305,6 +358,40 @@ export default function DesignSection({
             </button>
           </div>
         )}
+      </div>
+
+      {/* ── keep it ── */}
+      <div className="mt-6">
+        <div className="bd-label">{c.keep}</div>
+        <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.keepSub}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={keep} disabled={kept}
+            className="btn-ghost rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+          >
+            {kept ? c.kept : c.keepGo}
+          </button>
+          <Link
+            href={ar ? "/ar/account" : "/account"}
+            className="rounded-full px-3 text-xs font-semibold"
+            style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+          >
+            {c.mine}
+          </Link>
+        </div>
+      </div>
+
+      {/* ── apply somewhere else without rebuilding a career ── */}
+      <div className="mt-6">
+        <div className="bd-label">{c.again}</div>
+        <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.againSub}</p>
+        <button
+          onClick={() => { keep(); onTailorCopy(); track("builder_tailor_copy", {}); }}
+          className="btn-ghost rounded-xl px-4 text-sm font-semibold"
+        >
+          {c.againGo}
+        </button>
+        <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{c.againNote}</p>
       </div>
 
       {/* ── interview prep: an existing page, linked rather than rebuilt ── */}

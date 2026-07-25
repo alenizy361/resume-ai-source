@@ -147,6 +147,7 @@ type Action =
   | { t: "offerSummary"; items: Item[] }
   | { t: "pickSummary"; id: string }
   | { t: "summaryText"; text: string }
+  | { t: "tailorCopy" }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId };
@@ -331,6 +332,31 @@ function reducer(s: BuilderState, a: Action): BuilderState {
         // Recomputed from the result, not passed in: the stale notice is only honest
         // if the stored basis is the state the summary was actually written against.
         summaryBasis: text ? summaryBasis(profile) : undefined,
+      };
+    }
+
+    /*
+     * Apply to a second job without rebuilding a career.
+     *
+     * The profile IS the master career record — employers, dates, duties, credentials
+     * are true regardless of which advert they are being sent to. What is target-bound
+     * is exactly two things: the advert itself, and the summary that was written to
+     * answer it. So those are cleared and nothing else is, which is what makes this a
+     * tailored copy rather than a fresh start.
+     *
+     * `sectionsDone` loses its target-side ticks so the journey asks again rather than
+     * showing a green check over a step that now describes the previous application.
+     * `reached` is monotonic, so nothing re-locks — the user is asked, not blocked.
+     */
+    case "tailorCopy": {
+      const stale: SectionId[] = ["target", "summary", "review", "design"];
+      return {
+        ...s,
+        target: { ...s.target, jobAdText: "", jobAdUrl: "", employer: "" },
+        profile: { ...s.profile, summary: "", jobAd: "" },
+        summaryBasis: undefined,
+        suggestions: s.suggestions.filter((i) => i.section !== "summary"),
+        sectionsDone: s.sectionsDone.filter((x) => !stale.includes(x)),
       };
     }
 
@@ -569,6 +595,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                         lang={lang} state={state} cv={previewText} referenceDate={today}
                         onTemplate={(slug) => dispatch({ t: "template", slug })}
                         onJump={jump}
+                        onTailorCopy={() => { dispatch({ t: "tailorCopy" }); jump("target"); }}
                       />
                     </SectionShell>
                   );
