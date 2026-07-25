@@ -152,6 +152,29 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
     readCache(writeCache({}, { ...entry, promptVersion: "p0" }), "role_blueprint", ctx, "i1") === null);
   ok("an invalidated entry is not served",
     readCache(writeCache({}, { ...entry, invalidatedAt: 2 }), "role_blueprint", ctx, "i1") === null);
+  /*
+   * The per-instance slot, added after callflow.test.mjs caught the overwrite: with the slot keyed
+   * on task and context alone, experience 2's package replaced experience 1's and a second job
+   * advert threw away the first — cache bugs whose symptom is a fresh paid call on every revisit.
+   */
+  ok("two instances of a task occupy different slots",
+    slotOf("experience_package", ctx, "exp1") !== slotOf("experience_package", ctx, "exp2"));
+  ok("and an instance-less task keeps the plain slot",
+    slotOf("role_blueprint", ctx) === `role_blueprint@${ctx}`);
+  {
+    const two = writeCache(
+      writeCache({}, { ...entry, task: "experience_package", instance: "exp1", inputHash: "e1" }),
+      { ...entry, task: "experience_package", instance: "exp2", inputHash: "e2" });
+    ok("writing the second instance does not evict the first",
+      readCache(two, "experience_package", ctx, "e1", "exp1") !== null
+      && readCache(two, "experience_package", ctx, "e2", "exp2") !== null);
+    /* An occupation change must kill every instance at once, not only the open one. */
+    const dead = invalidate(two, ["experience_package"], 7);
+    ok("invalidating a task retires all of its instances",
+      readCache(dead, "experience_package", ctx, "e1", "exp1") === null
+      && readCache(dead, "experience_package", ctx, "e2", "exp2") === null);
+  }
+
   ok("writing does not mutate the store it was given",
     Object.keys(writeCache(store, { ...entry, task: "final_content" })).length === 2
     && Object.keys(store).length === 1);
@@ -259,7 +282,18 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   /* Ten rapid clicks on the same task with the same input. */
   const results = await Promise.all(Array.from({ length: 10 }, () => dedupe("role_blueprint", "i1", slow)));
   ok("ten simultaneous identical requests cost one call", calls === 1, String(calls));
-  ok("and every caller gets the answer", results.every((r) => r === "done"));
+  ok("and every caller gets the answer", results.every((r) => r.result === "done"));
+
+  /*
+   * The half that was missing until callflow.test.mjs found it. Sharing the REQUEST is not enough:
+   * if every caller then records the result, the cost ledger reports ten calls where one was made
+   * and the budget ceiling trips after three honest clicks. Exactly one caller is the leader.
+   */
+  ok("exactly one caller is told it owns the result",
+    results.filter((r) => r.leader).length === 1,
+    String(results.filter((r) => r.leader).length));
+  ok("and the rest are told they are followers",
+    results.filter((r) => !r.leader).length === 9);
   ok("the map empties when the request settles", inflightCount() === 0);
 
   /* Different inputs are different questions and must not be collapsed. */

@@ -173,6 +173,18 @@ export function jdDeltaKey(pack: string, jobAd: string): string {
 export interface CachedGeneration<T = unknown> {
   task: string;
   contextHash: string;
+  /**
+   * WHICH one, for a task that has more than one per context.
+   *
+   * Found by `ops/callflow.test.mjs` rather than by design: with the slot keyed on task and
+   * context alone, generating a package for experience 2 OVERWROTE experience 1's, and analysing
+   * a second job advert threw away the first. Both then looked like cache misses and bought a
+   * fresh call each time the user went back — a caching bug whose symptom is spending money.
+   *
+   * `role_blueprint` and `final_content` have exactly one per context and leave this empty. The
+   * per-instance tasks set it to the experience id or the advert hash.
+   */
+  instance?: string;
   inputHash: string;
   promptVersion: string;
   /** Which model produced it — needed to compare quality per model without re-generating. */
@@ -187,9 +199,16 @@ export interface CachedGeneration<T = unknown> {
 
 export type GenerationStore = Record<string, CachedGeneration>;
 
-/** The slot a task's result occupies. One per task per context — not per visit. */
-export function slotOf(task: string, contextHash: string): string {
-  return `${task}@${contextHash}`;
+/**
+ * The slot a task's result occupies. One per task per context per INSTANCE — not per visit.
+ *
+ * The instance suffix uses `#` so `invalidate`'s `startsWith(`${task}@`)` still matches every
+ * instance of a task at once, which is what an occupation change needs: all experiences die
+ * together, not just the one that happens to be open.
+ */
+export function slotOf(task: string, contextHash: string, instance?: string): string {
+  const base = `${task}@${contextHash}`;
+  return instance ? `${base}#${instance}` : base;
 }
 
 /**
@@ -205,8 +224,9 @@ export function readCache<T>(
   task: string,
   contextHash: string,
   inputHash: string,
+  instance?: string,
 ): CachedGeneration<T> | null {
-  const hit = store?.[slotOf(task, contextHash)];
+  const hit = store?.[slotOf(task, contextHash, instance)];
   if (!hit) return null;
   if (hit.invalidatedAt) return null;
   if (hit.inputHash !== inputHash) return null;
@@ -218,7 +238,10 @@ export function writeCache<T>(
   store: GenerationStore | undefined,
   entry: CachedGeneration<T>,
 ): GenerationStore {
-  return { ...(store ?? {}), [slotOf(entry.task, entry.contextHash)]: entry as CachedGeneration };
+  return {
+    ...(store ?? {}),
+    [slotOf(entry.task, entry.contextHash, entry.instance)]: entry as CachedGeneration,
+  };
 }
 
 /* ─────────────────────────── invalidation ─────────────────────────── */
@@ -364,13 +387,32 @@ export function acceptReply(
  */
 const inflight = new Map<string, Promise<unknown>>();
 
-export function dedupe<T>(task: string, inputHash: string, run: () => Promise<T>): Promise<T> {
+/**
+ * The result, plus whether THIS caller is the one that caused the request.
+ *
+ * `leader` is not a nicety and it was not in the first version of this function. `ops/callflow.test.mjs`
+ * pressed Generate eight times and found one request and EIGHT ledger entries: the de-duplication
+ * shared the request correctly and then every follower independently wrote the result and charged
+ * the resume for it. So the cost ledger reported eight calls where one was made, the budget ceiling
+ * would trip after three honest clicks, and the "no duplicate billing" claim was false in the only
+ * place that counts — the number the product reports.
+ *
+ * De-duplicating a request means de-duplicating its CONSEQUENCES. Followers get the answer to
+ * render; only the leader records it.
+ */
+export interface DedupeResult<T> { result: T; leader: boolean }
+
+export function dedupe<T>(
+  task: string,
+  inputHash: string,
+  run: () => Promise<T>,
+): Promise<DedupeResult<T>> {
   const key = `${task}:${inputHash}`;
   const existing = inflight.get(key);
-  if (existing) return existing as Promise<T>;
+  if (existing) return (existing as Promise<T>).then((result) => ({ result, leader: false }));
   const p = run().finally(() => { inflight.delete(key); });
   inflight.set(key, p);
-  return p;
+  return p.then((result) => ({ result, leader: true }));
 }
 
 /** How many distinct requests are open. For assertions and for the cost dashboard. */

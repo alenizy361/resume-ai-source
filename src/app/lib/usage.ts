@@ -14,7 +14,16 @@ export interface UsageLine {
   route: string;
   /** Which sub-operation — turn, draft, gaps, rephrase, optimize. */
   op: string;
-  provider: "nvidia" | "anthropic";
+  /**
+   * `"cache"` is not a provider and that is the point of recording it as one.
+   *
+   * A line that says `provider: "cache"` is a call that DID NOT HAPPEN — served from the shared
+   * occupation pack instead of bought. Without it the ledger cannot tell the two zero-cost cases
+   * apart: NVIDIA is free because the plan makes it free, and a cache hit is free because we
+   * already paid for it once. Only the second one is evidence that the caching works, which is
+   * the number the whole optimisation is judged on.
+   */
+  provider: "nvidia" | "anthropic" | "cache";
   model: string;
   input: number;
   output: number;
