@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest",
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks",
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "test:merge": "node --experimental-strip-types ops/merge.test.mjs",
     "test:language": "node --experimental-strip-types ops/language.test.mjs",
@@ -18,7 +18,8 @@
     "test:flags": "node --experimental-strip-types ops/flags.test.mjs",
     "test:builderdoc": "node --experimental-strip-types ops/builderdoc.test.mjs",
     "test:rolepacks": "node --experimental-strip-types ops/rolepacks.test.mjs",
-    "test:suggest": "node --experimental-strip-types ops/suggest.test.mjs"
+    "test:suggest": "node --experimental-strip-types ops/suggest.test.mjs",
+    "test:reviewchecks": "node --experimental-strip-types ops/reviewchecks.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",
