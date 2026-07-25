@@ -66,6 +66,19 @@ const ROUTES = [
   { path: "/cover-letter-examples", must: "" },
   { path: "/resume-skills", must: "" },
   { path: "/ar/resume-examples", must: "" },
+  /*
+   * The dynamic SEO pages, sampled.
+   *
+   * The index pages were covered from the start and the DETAIL pages were not — which is
+   * where the occupation copy, the salary range and its qualifier actually render. Three
+   * of them changed in this pass and the suite would not have noticed. One slug per
+   * template is enough: they share a component, so a break is a break for all 55.
+   */
+  { path: "/resume-examples/software-engineer", must: "Indicative range only" },
+  { path: "/ar/resume-examples/software-engineer", must: "نطاق استرشادي فقط" },
+  { path: "/resume-skills/software-engineer", must: "Indicative range only" },
+  { path: "/cover-letter-examples/software-engineer", must: "" },
+  { path: "/resume-templates/ats-pro", must: "" },
   // The retired Arabic chat builder must still answer, as a redirect.
   { path: "/ar/builder", must: "", redirectsTo: "/ar/build" },
 ];
