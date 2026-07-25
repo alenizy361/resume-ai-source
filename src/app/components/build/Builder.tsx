@@ -24,7 +24,6 @@ import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { assembleResume } from "@/app/lib/mergeProfile";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft, writeDraft } from "@/app/lib/draftStore";
-import { setBuilderMode } from "@/app/lib/flags";
 import {
   type BuilderState, type SectionId,
   EMPTY_BUILDER, cvLang,
@@ -278,14 +277,6 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 <span className={`bd-save${save === "failed" ? " err" : ""}`}>
                   {save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
                 </span>
-                <Link
-                  href={ar ? "/ar/journey" : "/journey"}
-                  onClick={() => { setBuilderMode("chat"); track("builder_chose_chat_door", {}); }}
-                  className="rounded-full px-3 py-1.5 text-xs font-semibold"
-                  style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
-                >
-                  {t.chat}
-                </Link>
               </div>
             </div>
             <div className="bd-rail mt-2.5" aria-label={`${progress}%`}>

@@ -18,13 +18,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { track } from "@vercel/analytics";
 
 import ResumeTemplate from "../ResumeTemplate";
 import OrbBrand from "../OrbBrand";
 import { stepMark } from "@/app/lib/stepReady";
 import VersionSwitch from "./VersionSwitch";
-import { setBuilderMode } from "@/app/lib/flags";
 import { useBuilder } from "./BuilderProvider";
 import { STEPS, SECTION_COPY, stepFromSlug, stepHref, stepIndex } from "./steps";
 import { toArabicDigits } from "@/app/lib/plans";
@@ -147,14 +145,6 @@ export default function BuilderShell({
                 <span className={`bd-save${save === "failed" ? " err" : ""}`}>
                   {save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
                 </span>
-                <Link
-                  href={ar ? "/ar/journey" : "/journey"}
-                  onClick={() => { setBuilderMode("chat"); track("builder_chose_chat_door", {}); }}
-                  className="rounded-full px-3 py-1.5 text-xs font-semibold"
-                  style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
-                >
-                  {t.chat}
-                </Link>
               </div>
             </div>
             {/* The rail reports how much of the CV exists, which is not the same as how

@@ -217,10 +217,6 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <div className="text-base font-bold">{t.ctaUpload} →</div>
             <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaUploadSub}</div>
           </Link>
-          <Link href={`${p}/journey`} className="card card-hover p-5">
-            <div className="text-base font-bold">{t.ctaChat} →</div>
-            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaChatSub}</div>
-          </Link>
         </div>
       </section>
 
