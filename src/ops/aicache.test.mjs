@@ -28,6 +28,7 @@ import {
 import {
   EMPTY_LEDGER, mayCall, record, recordHit, perCompletedCv, budgets,
 } from "../app/lib/aiBudget.ts";
+import { cacheFloorFor, CORE_RULES, TASK_SCHEMA, estimateTokens } from "../app/lib/aiPrompts.ts";
 
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
@@ -476,6 +477,40 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
     perCompletedCv([{ ledger: EMPTY_LEDGER, completed: false }]) === null);
   ok("a per-CV cost of $0.004 does not round to zero",
     perCompletedCv([{ ledger: { ...EMPTY_LEDGER, estimatedUsd: 0.004 }, completed: true }]).usd === 0.004);
+}
+
+/* ─────────────────────────── the prompt-cache floor ─────────────────────────── */
+
+/**
+ * Measured, not assumed — and the measurement contradicted the assumption.
+ *
+ * The floor was written as a single constant of 1024. Production's `?live=1` probe returned
+ * `cache_creation_input_tokens: 0` on a 2127-token prefix, because claude-haiku-4-5's floor is
+ * 4096. The marker is accepted and silently ignored below the floor, so nothing anywhere errors and
+ * the only symptom is a bill.
+ */
+{
+  ok("Haiku 4.5 needs four thousand, not one", cacheFloorFor("claude-haiku-4-5") === 4096);
+  ok("Sonnet 5 needs one thousand", cacheFloorFor("claude-sonnet-5") === 1024);
+  ok("Opus 5 needs five hundred", cacheFloorFor("claude-opus-5") === 512);
+
+  /* The property that makes a single constant indefensible: the cheap model needs EIGHT TIMES the
+     prefix the expensive one does. No ordering intuition produces that. */
+  ok("the floor is not monotonic — the cheap model needs the most",
+    cacheFloorFor("claude-haiku-4-5") > cacheFloorFor("claude-opus-5") * 4);
+
+  /* An unknown model must be assumed UNCACHEABLE. Guessing the other way reports a saving that is
+     not happening, which is the whole failure being corrected here. */
+  ok("an unknown model gets the highest floor, never the lowest",
+    cacheFloorFor("claude-something-new-9") === 4096);
+
+  /* And the honest current state, asserted so a future prefix change is visible in a diff. */
+  const prefix = estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? "");
+  ok("the real prefix is measured, not guessed", prefix > 2000 && prefix < 3000, String(prefix));
+  ok("and it does NOT reach Haiku 4.5's floor — which is the measured truth today",
+    prefix < cacheFloorFor("claude-haiku-4-5"), `${prefix} < 4096`);
+  ok("but it would cache on the reasoning tier, which is why the markers stay",
+    prefix >= cacheFloorFor("claude-sonnet-5"));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

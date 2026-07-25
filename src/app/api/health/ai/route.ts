@@ -3,7 +3,7 @@ import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
 import { fromAnthropic } from "@/app/lib/usage";
 import { modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
-import { CORE_RULES, TASK_SCHEMA, estimateTokens, CACHE_FLOOR_TOKENS } from "@/app/lib/aiPrompts";
+import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
@@ -141,9 +141,21 @@ export async function GET(req: NextRequest) {
        * Estimated here; the authoritative numbers come from each response's usage block and are
        * reported per call in /api/generate's `_meta`.
        */
-      cachedPrefixTokens: estimateTokens(CORE_RULES),
-      cacheFloorTokens: CACHE_FLOOR_TOKENS,
-      cacheablePrefix: estimateTokens(CORE_RULES) >= CACHE_FLOOR_TOKENS,
+      /*
+       * Measured against the floor for the model THIS deployment uses, not against a constant.
+       *
+       * The constant was 1024 and the suggestion model's floor is 4096, so this reported
+       * `cacheablePrefix: true` while every call paid full price. The `?live=1` probe is what
+       * caught it — `cacheWriteTokens: 0` on a request whose markers were accepted.
+       */
+      cachedPrefixTokens: estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? ""),
+      cacheFloorTokens: cacheFloorFor(suggestModel),
+      cacheablePrefix:
+        estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? "")
+        >= cacheFloorFor(suggestModel),
+      cacheFloorNote:
+        "Model-dependent and not monotonic: 512 on Opus 5, 4096 on Haiku 4.5. Below it the "
+        + "cache_control marker is accepted and silently ignored.",
       schemaTokens: Object.fromEntries(
         Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(v ?? "")]),
       ),

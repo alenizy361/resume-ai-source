@@ -199,8 +199,20 @@ ok("the live status code follows the combined verdict, not one probe",
 for (const field of ["cachedPrefixTokens", "cacheFloorTokens", "cacheablePrefix", "sharedPackCache", "promptVersion", "rulesVersion"]) {
   ok(`the report includes ${field}`, new RegExp(`${field}[,:]`).test(SRC));
 }
-ok("the cached prefix is measured against the floor, not assumed",
-  /estimateTokens\(CORE_RULES\) >= CACHE_FLOOR_TOKENS/.test(SRC));
+/*
+ * The floor is per MODEL and is not monotonic — 512 on Opus 5, 4096 on Haiku 4.5. A single
+ * constant reported `cacheablePrefix: true` on a deployment where every call paid full price, and
+ * the `?live=1` probe caught it with `cacheWriteTokens: 0`. Measuring against the configured
+ * model is the fix, and the constant being gone is the assertion.
+ */
+ok("the prefix is measured against the floor for the CONFIGURED model",
+  /cacheFloorFor\(suggestModel\)/.test(SRC));
+ok("and not against a single constant",
+  !/CACHE_FLOOR_TOKENS/.test(SRC));
+ok("the prefix counted includes the task schema, not only the core rules",
+  /estimateTokens\(CORE_RULES\) \+ estimateTokens\(TASK_SCHEMA\.role_blueprint/.test(SRC));
+ok("and the non-monotonic floor is stated, so nobody infers it",
+  /not monotonic/.test(SRC));
 /* Three states, not two. "absent" and "live" are the easy ones; the third is the whole point. */
 ok("the shared pack cache reports absent rather than pretending",
   /sharedPackCache: !upstash \? "absent" : redis\.ok \? "live" : "configured but unreachable"/.test(SRC));

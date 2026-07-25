@@ -21,15 +21,26 @@
  *   cached     1.25 × S        (the write)  +  (N−1) × 0.1 × S  (the reads)
  *
  * Break-even is at N = 2 (2S against 1.35S), so caching pays from the second call of a session
- * onward. But there is a floor: Anthropic will not cache a prefix shorter than its minimum
- * (1024 tokens for the Haiku tier at time of writing). Below that the `cache_control` marker is
- * accepted and silently does nothing, and you have paid for a longer prompt to buy no discount.
+ * onward. But there is a floor, it is MODEL-DEPENDENT, and it is not monotonic: 512 tokens on
+ * Opus 5, 4096 on Haiku 4.5. Below the floor the `cache_control` marker is accepted and silently
+ * does nothing — no error, just `cache_creation_input_tokens: 0`.
  *
- * So `CORE_RULES` has to clear the floor with content that is worth its tokens on its own
- * merits, not with padding. It does, because the brief's own list of what belongs in a stable
- * block — truthfulness rules, country relevance, credential classification, CV writing rules,
- * occupation taxonomy guidance — is genuinely that long. `estimateTokens` and
- * `ops/aiprompts.test.mjs` assert the floor is cleared rather than hoping.
+ * ── measured on production, and the answer is no ──
+ *
+ * `CORE_RULES` plus a task schema is 2127 real tokens. On claude-haiku-4-5, which is what the
+ * suggestions run on, the floor is 4096, so NOTHING IS CACHED TODAY. The probe proved it rather
+ * than the code claiming it.
+ *
+ * Reaching 4096 would mean adding two thousand tokens of instructions. The arithmetic says not to:
+ * three calls at 2127 uncached tokens is $0.0064 per CV, and the same three with a 4096-token
+ * cached prefix is $0.0060 — four tenths of a cent saved, in exchange for making every uncached
+ * call twice as expensive and every prompt twice as long to read. Padding a prompt to win a cache
+ * discount is the exact trap this comment block warned about before it was measured.
+ *
+ * So the markers stay — they cost nothing and start working by themselves if the prefix grows for
+ * real reasons or the model changes — and the health report tells the truth about the floor for the
+ * model actually configured. What is NOT acceptable is a report saying `cacheablePrefix: true` next
+ * to a call paying full price, which is what it said before this was measured.
  *
  * Part 13's last instruction is the important one: DO NOT ASSUME CACHING IS ACTIVE. The route
  * reads `cache_creation_input_tokens` and `cache_read_input_tokens` off every real response and
@@ -62,8 +73,44 @@ export function estimateTokens(s: string): number {
   return Math.ceil(latin / 3.6 + arabic / 2.2);
 }
 
-/** Anthropic's minimum cacheable prefix on the fast tier. Below this, caching is a no-op. */
-export const CACHE_FLOOR_TOKENS = 1024;
+/**
+ * The minimum cacheable prefix, WHICH DEPENDS ON THE MODEL and is not monotonic across
+ * generations.
+ *
+ * This was a single constant of 1024 and that was wrong for the model this product actually runs.
+ * The health probe measured it: a 2127-token prefix on claude-haiku-4-5 returned
+ * `cache_creation_input_tokens: 0` — the marker accepted and silently ignored, exactly as
+ * documented. Haiku 4.5 needs 4096 tokens; Opus 5 needs 512. Eight times the difference, in the
+ * direction nobody would guess, between the cheap model and the expensive one.
+ *
+ * A single number here is not a simplification, it is a wrong answer that reports itself as a
+ * right one — `cacheablePrefix: true` next to a call paying full price.
+ */
+const CACHE_FLOORS: Array<[RegExp, number]> = [
+  [/^claude-(opus-5|fable-5|mythos-5)/i, 512],
+  [/^claude-(opus-4-8|sonnet-5|sonnet-4-6|sonnet-4-5|opus-4-1|opus-4|sonnet-4)/i, 1024],
+  [/^claude-(opus-4-7|haiku-3-5)/i, 2048],
+  [/^claude-(opus-4-6|opus-4-5|haiku-4-5)/i, 4096],
+];
+
+/**
+ * The floor for one model. Unknown models get the HIGHEST floor, deliberately.
+ *
+ * An unknown model that is assumed cacheable reports a saving that is not happening, which is the
+ * failure this function exists to prevent. Assuming it is NOT cacheable understates the benefit and
+ * costs nothing — the `cache_control` markers stay on the request either way, so if the real floor
+ * turns out to be lower the caching simply works and the report catches up when the model is added.
+ */
+export function cacheFloorFor(model: string): number {
+  for (const [re, floor] of CACHE_FLOORS) if (re.test(model)) return floor;
+  return 4096;
+}
+
+/**
+ * Kept for the tests and for a rough default. NOT the number to report to an operator — use
+ * `cacheFloorFor(model)` with the model the deployment is actually configured to use.
+ */
+export const CACHE_FLOOR_TOKENS = 4096;
 
 /* ─────────────────────────── the stable prefix ─────────────────────────── */
 
