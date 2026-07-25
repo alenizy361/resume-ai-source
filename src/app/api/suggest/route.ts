@@ -4,7 +4,7 @@ import { logUsage, fromOpenAI } from "@/app/lib/usage";
 import { DRAFTING_DOCTRINE, METRIC_QUESTION_DOCTRINE } from "@/app/lib/prompts";
 import {
   cleanGroups, cleanItems, flattenGroups, hasMetric, parseGroups, parseItems,
-  parseMetricAsk, parseVariants, scrubSuggestion, VARIANT_LABELS,
+  parseMetricAsk, parseVariants, scrubSuggestion,
 } from "@/app/lib/suggestShapes";
 
 export const maxDuration = 60;
@@ -187,7 +187,7 @@ ${shapeRule}`;
           }),
         });
       } catch (e) {
-        if (!json) throw e;   // the legacy path's abort/network failure路 is the outer catch
+        if (!json) throw e;   // legacy: an abort or network failure is the outer catch's 502, as before
         console.error(`suggest upstream error (attempt ${attempt + 1}):`, e instanceof Error ? e.message : e);
         continue;
       } finally {
@@ -267,7 +267,3 @@ ${shapeRule}`;
     return NextResponse.json({ error: BUSY_EN }, { status: 502 });
   }
 }
-
-// VARIANT_LABELS is imported for the prompt contract above; referenced here so the
-// dependency is explicit to a reader who greps for the labels.
-void VARIANT_LABELS;

@@ -37,7 +37,7 @@ export function hasMetric(s: string): boolean {
 /** Replace every figure with the slot marker. Used where a number must never appear. */
 export function stripNumbers(s: string): string {
   return s
-    .replace(/[0-9٠-٩۰-۹]+(?:[.,٫٬][0-9٠-٩۰-۹]+)?\s*[%٪]?/g, "___")
+    .replace(/[0-9٠-٩۰-۹]+(?:[.,٫٬][0-9٠-٩۰-۹]+)?(?:\s*[%٪])?/g, "___")
     .replace(/[%٪]/g, "")
     .replace(/(?:___[\s,،]*)+___/g, "___")
     .replace(/\s{2,}/g, " ")
