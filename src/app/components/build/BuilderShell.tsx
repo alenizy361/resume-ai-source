@@ -15,7 +15,7 @@
  * rather than either 404ing or silently building a resume the user cannot find again.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { track } from "@vercel/analytics";
@@ -105,6 +105,27 @@ export default function BuilderShell({
 
   const [pane, setPane] = useState({ path: pathname, view: "edit" as "edit" | "preview" });
   const mobileView = pane.path === pathname ? pane.view : "edit";
+
+  /*
+   * Scroll the active step into view when it changes.
+   *
+   * On a phone the rail is a horizontal scroller holding eleven steps in a viewport that fits about
+   * three. Pressing Continue moves to a step that is off-screen to the right, so the rail keeps
+   * showing the steps already finished and the user loses the one piece of orientation it exists to
+   * give. Nothing hints at this on a desktop, where all eleven sit visible in a column.
+   *
+   * `block: "nearest"` is what keeps it from being annoying — a step already on screen does not move,
+   * so the rail scrolls only when it would otherwise be showing the wrong thing. Guarded on reduced
+   * motion, because an involuntary horizontal scroll is precisely the movement that setting exists to
+   * stop.
+   */
+  const navRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = navRef.current?.querySelector<HTMLElement>('a[aria-current="step"]');
+    if (!el) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", inline: "center", block: "nearest" });
+  }, [step]);
   const setMobileView = (view: "edit" | "preview") => setPane({ path: pathname, view });
 
   const nav = SECTION_COPY[lang].nav;
@@ -170,7 +191,7 @@ export default function BuilderShell({
               </div>
 
               <div className="bd-step-cols">
-                <nav className={`bd-nav${mobileView === "preview" ? " hide" : ""}`} aria-label={t.steps}>
+                <nav className={`bd-nav${mobileView === "preview" ? " hide" : ""}`} aria-label={t.steps} ref={navRef}>
                   <ol>
                     {STEPS.map((s, i) => {
                       /*

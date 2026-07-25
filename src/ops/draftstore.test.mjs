@@ -117,5 +117,66 @@ eq("empty strings never leave a dangling separator",
   eq("confirmed credentials survive", after.credentials?.length, 1);
 }
 
+
+/* ─────────────────── nothing outside the builder may erase the draft ─────────────────── */
+
+/**
+ * The resume must survive payment, export and every other flow that clears caches.
+ *
+ * This is a static check on the SOURCE of the pages that clear browser storage, not a behavioural one,
+ * and that is deliberate: the failure it guards against is somebody adding a tidy-up line months from
+ * now. "Clear the stale results after payment" is a reasonable-sounding change that becomes a
+ * catastrophe one key name later — the user pays, comes back, and the CV they paid to download is
+ * gone. No test that exercises today's code can catch tomorrow's extra line; a check on which keys are
+ * allowed to be removed can.
+ *
+ * The keys payment legitimately clears are the OPTIMIZER's cached scan results, which were generated
+ * locked and would otherwise show a stale preview to someone who just paid to unlock it.
+ */
+{
+  const { readFileSync, existsSync } = await import("node:fs");
+
+  /** Every key that holds work the user would lose. */
+  const SACRED = [draftKey("ar"), draftKey("en")];
+
+  /** Pages that clear storage, and what each is allowed to clear. */
+  const CLEARERS = ["app/pay/callback/page.tsx", "app/optimize/page.tsx"];
+
+  const violations = [];
+  let scanned = 0;
+  for (const file of CLEARERS) {
+    if (!existsSync(file)) continue;
+    scanned++;
+    const src = readFileSync(file, "utf8");
+    for (const key of SACRED) {
+      /* Removing it by name, or by a template that builds it. Both are how it would really happen. */
+      if (src.includes(`removeItem("${key}")`) || src.includes(`removeItem(\`${key}\`)`)) {
+        violations.push(`${file} removes ${key}`);
+      }
+    }
+    /* `localStorage.clear()` takes everything, including the draft. There is never a reason for it in
+       a product that stores one person's unfinished CV in the same origin. */
+    if (/localStorage\s*\.\s*clear\s*\(/.test(src)) violations.push(`${file} calls localStorage.clear()`);
+    /* A removal built from a variable cannot be checked by name, so it is refused outright — the
+       check must not be defeatable by indirection it cannot see. */
+    if (/removeItem\((?!["\`])/.test(src)) violations.push(`${file} removes a computed key`);
+  }
+
+  ok("the files that clear storage were actually read", scanned >= 1, `${scanned} files`);
+  ok("no flow removes the builder draft", violations.length === 0, violations.join(" · "));
+
+  /* And the guard must be checking the right names, or it passes vacuously. */
+  ok("the draft keys are the ones the builder really uses",
+    draftKey("ar") === "ra_journey_ar" && draftKey("en") === "ra_journey_en");
+
+  /* Payment DOES legitimately clear the optimizer's locked results — asserted so that removing that
+     behaviour is also a visible decision rather than an accident. */
+  if (existsSync("app/pay/callback/page.tsx")) {
+    const pay = readFileSync("app/pay/callback/page.tsx", "utf8");
+    ok("payment still clears the stale locked scan results",
+      pay.includes('removeItem("ra_optimize_result")'));
+  }
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

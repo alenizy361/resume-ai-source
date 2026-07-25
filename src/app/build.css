@@ -270,6 +270,15 @@
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   margin-top: 28px; padding-top: 18px;
   border-top: 1px solid var(--line);
+  /*
+   * Clear of the browser's own chrome.
+   *
+   * Back and Continue are the two controls a step exists to reach, and on iOS Safari the bottom bar
+   * sits on top of whatever the page put there. `env(safe-area-inset-bottom)` is zero on every device
+   * that does not need it, so this costs nothing anywhere else — and `max()` keeps the ordinary
+   * breathing room on the devices that report nothing.
+   */
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
 }
 .build-root .bd-back {
   /* A primary action, so it gets a primary action's target — 44px at every size. It measured

@@ -80,6 +80,7 @@ export function Field({
 /* ───────────────────────── sections ───────────────────────── */
 
 export function StartCards(p: Common & { onPicked: () => void }) {
+  const [showImport, setShowImport] = useState(false);
   const ar = p.lang === "ar";
   const C = ar ? C_AR : C_EN;
   return (
@@ -96,25 +97,44 @@ export function StartCards(p: Common & { onPicked: () => void }) {
           <div className="text-sm font-bold">{C.newCv}</div>
           <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{C.newCvSub}</div>
         </button>
-        <Link
-          href={ar ? "/ar/optimize" : "/optimize"}
-          onClick={() => track("builder_entry_selected", { entry: "upload" })}
+        {/*
+          Upload used to be a LINK to /optimize — a different engine, a different state, a different
+          export path — while a working in-builder importer sat directly underneath it. So the card
+          most people with a CV would press was the one that took them out of the product they had
+          just chosen, and the correct path was the third thing on the page.
+
+          It now opens the importer that was already there. `/optimize` still exists and still has its
+          own traffic; it is simply no longer the builder's front door for a file.
+        */}
+        <button
           className="card card-hover p-4 text-start"
+          onClick={() => {
+            setShowImport(true);
+            track("builder_entry_selected", { entry: "upload" });
+          }}
         >
           <div className="text-sm font-bold">{C.upCv}</div>
           <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{C.upCvSub}</div>
-        </Link>
+        </button>
       </div>
-      {/* The third way in, and the one most people with a CV actually want: read it and
-          carry on building here, rather than being sent to a different product. */}
-      <ImportPanel
-        lang={p.lang}
-        onImport={(cv) => {
-          p.dispatch({ t: "import", cv, lang: p.lang });
-          p.dispatch({ t: "entry", v: "upload" });
-          p.onPicked();
-        }}
-      />
+
+      {/*
+        Revealed by the card rather than always visible.
+
+        Three entry points competing on one screen is why the good one was being missed — a file
+        picker sitting under two large choices reads as a footnote to them. One decision first, then
+        the thing that decision needs.
+      */}
+      {showImport && (
+        <ImportPanel
+          lang={p.lang}
+          onImport={(cv) => {
+            p.dispatch({ t: "import", cv, lang: p.lang });
+            p.dispatch({ t: "entry", v: "upload" });
+            p.onPicked();
+          }}
+        />
+      )}
     </>
   );
 }
