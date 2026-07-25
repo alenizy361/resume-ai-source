@@ -1,0 +1,35 @@
+name: Arabic quality
+
+# Measures what the model actually WRITES in Arabic, rather than what the prompt
+# tells it to write. Every Arabic guarantee in this codebase has been argued from
+# the doctrine and proved against local fixtures; this is the part that needs the
+# live model and therefore real money — three calls, the same three a real CV buys.
+#
+# It runs here rather than from a developer's machine for a practical reason: the
+# sandbox those changes are written in cannot reach cv.rabit.sa at all (the network
+# policy denies it at the CONNECT gateway), and a GitHub runner can.
+#
+# The script prints the route's own cost accounting per call and a total.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Where to measure"
+        type: string
+        default: "https://cv.rabit.sa"
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Ask the live model for Arabic and check what comes back
+        working-directory: src
+        run: node --experimental-strip-types ops/arabic-quality.mjs "${{ inputs.base_url }}"
