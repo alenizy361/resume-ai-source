@@ -355,7 +355,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 if (id === "skills") {
                   return (
                     <SectionShell key={id} {...props}>
-                      <SkillsBody lang={lang} state={state} dispatch={dispatch} targetHref="#target" />
+                      <SkillsBody lang={lang} state={state} dispatch={dispatch} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );

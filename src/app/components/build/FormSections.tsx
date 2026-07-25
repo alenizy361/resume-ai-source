@@ -16,32 +16,22 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { track } from "@vercel/analytics";
 
 import { type BuilderState, type Item, newItem, pending } from "@/app/lib/builderDoc";
-import { skillsReady } from "@/app/lib/stepReady";
-import { missingLabel } from "@/app/lib/stepMessages";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
 import ImportPanel from "./ImportPanel";
 import BlueprintStrip from "./BlueprintStrip";
 import OccupationClarify from "./OccupationClarify";
+import SuggestionChip from "./SuggestionChip";
 
 /** What every section needs and nothing more: who is reading, and the document. */
 export interface Common {
   lang: "ar" | "en";
   state: BuilderState;
   dispatch: React.Dispatch<Action>;
-  /**
-   * Where "go back and fix it" points.
-   *
-   * Passed in rather than built here because only the router layer knows the resume id and the
-   * locale prefix. Optional so the long-page `Builder.tsx`, which has no routes, still compiles —
-   * there the sections are all mounted at once and there is nowhere to navigate to.
-   */
-  targetHref?: string;
 }
 
 /** The entry-point copy. Lives here because `StartCards` is the only thing that uses it. */
@@ -444,16 +434,12 @@ export function SkillsBody(p: Common) {
    */
   const L = ar
     ? {
-      missingTarget: "لا يمكن اقتراح مهارات قبل معرفة الوظيفة المستهدفة.",
-      backToTarget: "ارجع إلى الوظيفة المستهدفة",
       nothingYet: "لا توجد مهارات مقترحة بعد. اطلبها بالذكاء أو أضِفها بنفسك.",
-      chosen: "في سيرتك", tapToAdd: "انقر لإضافتها لسيرتك", why: "لماذا اقتُرحت؟",
+      chosen: "في سيرتك", tapToAdd: "انقر لإضافتها لسيرتك",
     }
     : {
-      missingTarget: "Skills cannot be suggested until the target job is known.",
-      backToTarget: "Back to Target job",
       nothingYet: "No suggested skills yet. Ask the AI, or add your own.",
-      chosen: "In your CV", tapToAdd: "Tap to add to your CV", why: "Why suggested?",
+      chosen: "In your CV", tapToAdd: "Tap to add to your CV",
     };
 
   const offered = pending(p.state, "skills");
@@ -484,6 +470,7 @@ export function SkillsBody(p: Common) {
   const gap = (
     <BlueprintStrip
       field="skillGroups"
+      section="skills"
       onPick={(text) => {
         /*
          * Offered then confirmed, in two dispatches, rather than written straight in as confirmed.
@@ -503,31 +490,14 @@ export function SkillsBody(p: Common) {
   );
 
   /*
-   * The prerequisite is asked of the SHARED validator, not inferred from whether this step happens
-   * to have content. `skillsReady` is the same function the rail uses to decide whether to draw a
-   * tick, so the two cannot disagree — which is the whole point, because their disagreement is what
-   * the user saw.
+   * The missing-prerequisite banner used to live here, as a special case for this one section.
+   *
+   * It has moved to `StepGate`, above every step's content. Fixing it only here fixed one screen and
+   * left the other ten to solve the same problem their own way — which is how this product ended up
+   * with one section saying "the assistant is busy" for an empty answer and another saying nothing at
+   * all. What is left in this file is the honest EMPTY state, which is a different thing entirely:
+   * the step has what it needs and has nothing to show yet.
    */
-  const gate = skillsReady(p.state);
-
-  if (!gate.ready) {
-    return (
-      <>
-        <p className="text-xs" style={{ color: "#fcd34d" }}>{L.missingTarget}</p>
-        {/* Named field by named field, so the user is sent to one input rather than a form to hunt. */}
-        <ul className="mt-2 space-y-1 text-xs" style={{ color: "var(--faint)" }}>
-          {gate.missing.map((m) => <li key={m.code}>· {missingLabel(m.code, p.lang)}</li>)}
-        </ul>
-        <Link
-          href={p.targetHref ?? "#"}
-          className="btn-ghost mt-3 inline-block rounded-xl px-4 py-2 text-sm font-semibold"
-        >
-          ← {L.backToTarget}
-        </Link>
-      </>
-    );
-  }
-
   if (!offered.length && !chosen.length) {
     return (
       <>
@@ -566,17 +536,26 @@ export function SkillsBody(p: Common) {
           {label && <div className="bd-label">{label}</div>}
           <div className="bd-chips">
             {items.map((it) => (
-              <button
+              <SuggestionChip
                 key={it.id}
-                className="bd-chip"
-                title={it.reason ? `${L.why} ${it.reason}` : undefined}
-                onClick={() => {
+                text={it.text}
+                lang={p.lang}
+                source={it.source}
+                reason={it.reason}
+                onAdd={() => {
                   p.dispatch({ t: "confirm", id: it.id });
                   track("builder_suggestion_accepted", { section: "skills", source: it.source });
                 }}
-              >
-                + {it.text}
-              </button>
+                /*
+                 * A real rejection, not a hide. `rejectItem` keeps the item as `rejected` and
+                 * `filterFresh` reads that list, so a skill someone declined does not come back
+                 * reworded the next time the blueprint is asked for more.
+                 */
+                onReject={() => {
+                  p.dispatch({ t: "reject", id: it.id });
+                  track("builder_suggestion_rejected", { section: "skills", source: it.source });
+                }}
+              />
             ))}
           </div>
         </div>

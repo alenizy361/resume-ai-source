@@ -29,9 +29,12 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { track } from "@vercel/analytics";
 import AiOrb from "../AiOrb";
 import { credentialsFor } from "@/app/lib/countryRules";
+import { filterFresh, newItem, rejected, type SectionId } from "@/app/lib/builderDoc";
 import { useBuilder } from "./BuilderProvider";
+import SuggestionChip from "./SuggestionChip";
 
 const C = {
   en: {
@@ -66,9 +69,18 @@ export type BlueprintField =
   | "alternativeTitles" | "responsibilityThemes";
 
 export default function BlueprintStrip({
-  field, onPick, note, auto = false,
+  field, section, onPick, note, auto = false,
 }: {
   field: BlueprintField;
+  /**
+   * Which step these chips belong to.
+   *
+   * Only used to remember a rejection. A "not for me" has to be stored somewhere the next
+   * generation will read, and the suggestion bag is keyed by section — without this the strip could
+   * only hide a chip until the next reload, which is the "the tool isn't listening" behaviour that
+   * `rejectItem` exists to avoid.
+   */
+  section: SectionId;
   onPick: (text: string) => void;
   note?: string;
   /**
@@ -81,7 +93,7 @@ export default function BlueprintStrip({
    */
   auto?: boolean;
 }) {
-  const { lang, state, gen, career } = useBuilder();
+  const { lang, state, dispatch, gen, career } = useBuilder();
   const c = C[lang];
 
   /*
@@ -131,6 +143,39 @@ export default function BlueprintStrip({
   }, [blueprint, field, career.occupation, career.country, career.cvLang]);
 
   /*
+   * The chips minus what the user has already said no to.
+   *
+   * The blueprint is CACHED — the same answer is read on every visit — so without this a dismissed
+   * chip reappears the moment the step is reopened, which reads as the product not listening.
+   *
+   * `filterFresh` and not a plain set lookup, because the same skill does not come back spelled the
+   * same way: it compares normalized labels and, for short ones, by containment either way, so
+   * declining "Mammography" also declines "Mammography imaging". That is the behaviour the
+   * experience step already has for duties, and having two different ideas of "the same suggestion"
+   * in one builder is how a rejection starts feeling unreliable.
+   */
+  const visible = useMemo(
+    () => filterFresh(items, { confirmed: [], pending: [], rejected: rejected(state, section) }),
+    [items, state, section],
+  );
+
+  /*
+   * A rejection is written as an item, offered and immediately rejected, rather than kept in local
+   * state.
+   *
+   * Two dispatches instead of one because `offer` is the only way an item enters the bag and
+   * `reject` is the only way one leaves it — the same two-step the skills section uses to confirm.
+   * The result is that `filterFresh` sees it: the next "Suggest more" will not re-offer a reworded
+   * version of something already declined.
+   */
+  const drop = (text: string) => {
+    const item = newItem({ section, type: field, text, source: "ai" });
+    dispatch({ t: "offer", items: [item] });
+    dispatch({ t: "reject", id: item.id });
+    track("builder_suggestion_rejected", { section, source: "ai" });
+  };
+
+  /*
    * The one automatic generation, fired at most once per mount and only when there is nothing to
    * read. The ref is what stops a re-render — a preview debounce, a keystroke elsewhere — from
    * firing a second one; `mayCall`'s `auto` ceiling is the backstop for the case the ref cannot
@@ -156,7 +201,9 @@ export default function BlueprintStrip({
 
   const busy = gen.busy && gen.task === "role_blueprint";
   const noTitle = !career.occupation.trim();
-  const label = busy ? c.stop : items.length ? c.more : stored ? c.read : c.ask;
+  /* "Suggest more" once something is on screen — counted on what is VISIBLE, so a user who
+     dismissed every chip is offered a fresh attempt rather than "more" of an empty list. */
+  const label = busy ? c.stop : visible.length ? c.more : stored ? c.read : c.ask;
 
   return (
     <div className="mt-3">
@@ -192,11 +239,18 @@ export default function BlueprintStrip({
         </p>
       )}
 
-      {items.length > 0 && (
+      {visible.length > 0 && (
         <>
           <div className="bd-chips mt-3">
-            {items.map((text) => (
-              <button key={text} className="bd-chip" onClick={() => onPick(text)}>+ {text}</button>
+            {visible.map((text) => (
+              <SuggestionChip
+                key={text}
+                text={text}
+                lang={lang}
+                source="ai"
+                onAdd={() => onPick(text)}
+                onReject={() => drop(text)}
+              />
             ))}
           </div>
           <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{note || c.unchecked}</p>

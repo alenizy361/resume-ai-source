@@ -35,6 +35,7 @@ import {
   SECTION_COPY, nextStep, prevStep, stepHref, stepIndex, builderHome,
 } from "./steps";
 import { stepReady } from "@/app/lib/stepReady";
+import StepGate from "./StepGate";
 import { TargetFields, PersonalFields, BlueprintBody, SkillsBody } from "./FormSections";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
@@ -91,7 +92,14 @@ export default function BuilderStep({ step }: { step: SectionId }) {
         {/* Nothing renders over an unhydrated draft. A form that mounted empty and filled
             in 40 ms later invites the user to type into a field that is about to be
             replaced by their own saved answer. */}
-        {!hydrated ? <Skeleton /> : <StepContent step={step} />}
+        {!hydrated ? <Skeleton /> : (
+          <>
+            {/* Above the content, never instead of it — see StepGate for why refusing to render
+                would repeat the bug rather than fix it. */}
+            <StepGate step={step} />
+            <StepContent step={step} />
+          </>
+        )}
       </div>
 
       <div className="bd-step-foot">
@@ -174,9 +182,7 @@ function StepContent({ step }: { step: SectionId }) {
         </>
       );
     case "skills":
-      /* `targetHref` is the way BACK to the missing field. A dead "#" would be worse than no
-         link at all — it looks like a fix and does nothing. */
-      return <SkillsBody lang={lang} state={state} dispatch={dispatch} targetHref={stepHref(lang, resumeId, "target")} />;
+      return <SkillsBody lang={lang} state={state} dispatch={dispatch} />;
     case "languages":
       return <LanguagesBlock lang={lang} cv={cv} state={state} dispatch={dispatch as never} />;
     case "summary":

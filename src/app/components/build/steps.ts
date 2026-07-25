@@ -114,7 +114,7 @@ export const SECTION_COPY = {
     nav: {
       start: "Start",
       target: "Target job",
-      blueprint: "This job",
+      blueprint: "Job profile",
       personal: "Contact",
       experience: "Experience",
       education: "Education",
@@ -158,7 +158,7 @@ export const SECTION_COPY = {
     nav: {
       start: "البداية",
       target: "الوظيفة",
-      blueprint: "عن الوظيفة",
+      blueprint: "ملف المهنة",
       personal: "التواصل",
       experience: "الخبرة",
       education: "التعليم",

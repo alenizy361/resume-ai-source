@@ -124,6 +124,33 @@
 }
 .build-root .bd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
+/* ── a suggestion chip and its two small decisions ─────────── */
+
+/* The group is a column so the explanation can open UNDER its own chip rather than pushing the
+   whole row apart; `flex-wrap` on `.bd-chips` then treats chip+explanation as one item. */
+.build-root .bd-chip-group { display: inline-flex; flex-direction: column; gap: 4px; max-width: 100%; }
+.build-root .bd-chip-row { display: inline-flex; align-items: center; gap: 4px; }
+.build-root .bd-chip-row .bd-chip { max-width: 100%; }
+
+/* Quieter than the chip on purpose: adding is the action, "why" and "no" are asides. The HEIGHT is
+   not quieter — 36px, the same as the chip beside it, so the row lines up and neither aside is a
+   target a thumb can miss. Weight carries the hierarchy; size does not have to. */
+.build-root .bd-chip-aux {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; min-height: 36px; border-radius: 999px;
+  font-size: .75rem; line-height: 1; cursor: pointer;
+  background: transparent; border: 1px solid var(--line); color: var(--faint);
+  transition: color .16s var(--ez), border-color .16s var(--ez);
+}
+.build-root .bd-chip-aux:hover { color: var(--muted); border-color: rgba(139, 92, 246, .45); }
+.build-root .bd-chip-aux[aria-expanded="true"] { color: #ddd6fe; border-color: rgba(139, 92, 246, .5); }
+
+.build-root .bd-chip-why {
+  max-width: 34ch; padding: 6px 10px; border-radius: 10px;
+  font-size: .72rem; line-height: 1.5; color: var(--muted);
+  background: rgba(139, 92, 246, .06); border: 1px solid rgba(139, 92, 246, .28);
+}
+
 /* ── progress rail ────────────────────────────────────────── */
 
 .build-root .bd-rail { display: flex; gap: 4px; }

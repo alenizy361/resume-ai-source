@@ -16,11 +16,13 @@
  */
 
 import { useMemo, useState } from "react";
+import { track } from "@vercel/analytics";
 import AiSuggest from "../AiSuggest";
 import BlueprintStrip from "./BlueprintStrip";
+import SuggestionChip from "./SuggestionChip";
 import {
-  type BuilderState, type Credential, type CredentialKind,
-  type LanguageEntry, type LanguageLevel, newId,
+  type BuilderState, type Credential, type CredentialKind, type SectionId,
+  type LanguageEntry, type LanguageLevel, newId, newItem, normalizeLabel, rejected,
 } from "@/app/lib/builderDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
 
@@ -35,6 +37,34 @@ const KIND_LABEL: Record<CredentialKind, { en: string; ar: string }> = {
   training: { en: "Training course", ar: "دورة تدريبية" },
   membership: { en: "Membership", ar: "عضوية" },
 };
+
+/**
+ * Remembering a "not for me" on chips that are DERIVED rather than stored.
+ *
+ * The credential offers are `pack.credentials` minus what is already on the list, and the language
+ * offers are two constants minus the same — neither has an item behind it that could carry a
+ * status. Hiding one in local state would forget the decision on the next mount, so the dismissal is
+ * written into the suggestion bag the same way every other rejection is: offered, then rejected —
+ * the bag is what survives a reload, and `BlueprintStrip` reads the same list.
+ *
+ * The match here is exact-normalized, deliberately narrower than the containment matching
+ * `filterFresh` does. A credential list is precisely where containment would do damage: SCFHS
+ * registration and SCFHS classification are different documents with different requirements, and
+ * declining one must not silently withdraw the other.
+ */
+function useDismissals(section: SectionId, state: BuilderState, dispatch: Dispatch) {
+  const hidden = useMemo(
+    () => new Set(rejected(state, section).map((i) => i.normalized)),
+    [state, section],
+  );
+  const drop = (type: string, text: string) => {
+    const item = newItem({ section, type, text, source: "occupation" });
+    dispatch({ t: "offer", items: [item] });
+    dispatch({ t: "reject", id: item.id });
+    track("builder_suggestion_rejected", { section, source: "occupation" });
+  };
+  return { hidden, drop };
+}
 
 const LEVELS: LanguageLevel[] = ["native", "fluent", "professional", "intermediate", "basic"];
 const LEVEL_LABEL: Record<LanguageLevel, { en: string; ar: string }> = {
@@ -111,12 +141,15 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
   const c = C[lang];
   const pack = useMemo(() => findRolePack(state.target.title), [state.target.title]);
 
-  /** What the pack offers that is not already on the list. */
+  const { hidden, drop } = useDismissals("credentials", state, dispatch);
+
+  /** What the pack offers that is not already on the list — and not already declined. */
   const offers = useMemo(() => {
     if (!pack) return [];
     const have = new Set(state.credentials.map((x) => x.title.trim().toLowerCase()));
-    return pack.credentials.filter((p) => !have.has(p.title[cv].trim().toLowerCase()));
-  }, [pack, state.credentials, cv]);
+    return pack.credentials.filter((p) =>
+      !have.has(p.title[cv].trim().toLowerCase()) && !hidden.has(normalizeLabel(p.title[cv])));
+  }, [pack, state.credentials, cv, hidden]);
 
   const add = (kind: CredentialKind, title = "", issuer = "") => {
     dispatch({
@@ -137,10 +170,15 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
       {offers.length > 0 && (
         <div className="bd-chips mb-4">
           {offers.map((o) => (
-            <button key={o.title.en} className="bd-chip" onClick={() => add(o.kind, o.title[cv], o.issuer ?? "")}>
-              + {o.title[cv]}
-              <span className="bd-opt"> · {KIND_LABEL[o.kind][lang]}</span>
-            </button>
+            <SuggestionChip
+              key={o.title.en}
+              text={o.title[cv]}
+              lang={lang}
+              source="occupation"
+              suffix={<span className="bd-opt"> · {KIND_LABEL[o.kind][lang]}</span>}
+              onAdd={() => add(o.kind, o.title[cv], o.issuer ?? "")}
+              onReject={() => drop("credential", o.title[cv])}
+            />
           ))}
         </div>
       )}
@@ -167,6 +205,7 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
       */}
       <BlueprintStrip
         field="credentialSuggestions"
+        section="credentials"
         onPick={(text) => add("certification", text)}
         note={c.credHint}
       />
@@ -237,8 +276,11 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
     entry: { id: newId("lg"), name, level: "", status: "suggested", source: name ? "occupation" : "user" } as LanguageEntry,
   });
 
+  const { hidden, drop } = useDismissals("languages", state, dispatch);
+
   const suggestions = ["العربية / Arabic", "English"]
-    .filter((n) => !state.languages.some((l) => l.name.toLowerCase().includes(n.split(" / ")[0].toLowerCase())));
+    .filter((n) => !state.languages.some((l) => l.name.toLowerCase().includes(n.split(" / ")[0].toLowerCase())))
+    .filter((n) => !hidden.has(normalizeLabel(n)));
 
   return (
     <div>
@@ -247,9 +289,14 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
       {suggestions.length > 0 && (
         <div className="bd-chips mb-4">
           {suggestions.map((n) => (
-            <button key={n} className="bd-chip" onClick={() => add(n.includes("Arabic") ? (cv === "ar" ? "العربية" : "Arabic") : "English")}>
-              + {n}
-            </button>
+            <SuggestionChip
+              key={n}
+              text={n}
+              lang={lang}
+              source="occupation"
+              onAdd={() => add(n.includes("Arabic") ? (cv === "ar" ? "العربية" : "Arabic") : "English")}
+              onReject={() => drop("language", n)}
+            />
           ))}
         </div>
       )}
@@ -302,6 +349,7 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
           three had already asked about. */}
       <BlueprintStrip
         field="importantKeywords"
+        section="languages"
         onPick={(text) => add(text)}
         note={c.langHint}
       />
