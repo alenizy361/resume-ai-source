@@ -130,8 +130,12 @@ ok("forbids calling the user's date future", /future unless it is after 2026/.te
 const ctx2 = todayContext(new Date("2031-01-05T00:00:00Z"));
 ok("rolls forward with the clock, not hardcoded", ctx2.includes("2031") && !ctx2.includes("2026"));
 
-console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed\n`);
-process.exit(fail ? 1 : 0);
+/*
+ * The summary used to be printed HERE, followed by `process.exit` — which made every assertion
+ * below it unreachable. The invented-"7 سنوات" section, the whole reason `yearsAreGrounded` exists,
+ * had never once run. Found while adding the wiring checks below, by noticing the pass count did
+ * not move when a new assertion was appended. The report is at the bottom now, where it belongs.
+ */
 
 console.log("\n── a number the user never said: the live \"7 سنوات\" invention ──");
 // The exact turn from the run at commit 1008af5: the user gave a start date and
@@ -155,3 +159,40 @@ ok("a figure already established survives a restatement",
 ok("off-by-one is tolerated, not off-by-five",
   yearsAreGrounded(5, "من ٢٠٢٠ الى ٢٠٢٤") && !yearsAreGrounded(9, "من ٢٠٢٠ الى ٢٠٢٤"));
 
+
+/* ────────────── the guard has to be WIRED, not merely correct ────────────── */
+
+/*
+ * Every assertion above proves `scrubPii` works. None of them proved anything ran it.
+ *
+ * That distinction was not academic: these guards lived inside `/api/interview` and nowhere else,
+ * so when the builder replaced the chat, a national ID typed into a form field travelled to the
+ * provider untouched — the functions were perfect and unreachable. `/api/interview` is now deleted
+ * and the guard sits at the top of the two routes that spend money.
+ *
+ * Reading the source is a blunt check and it is the honest one available here: there is no server
+ * harness in this repo, and the alternative — a live call — costs a model invocation per run. It
+ * catches the failure that actually happened, which is the call being removed or never added.
+ */
+{
+  const { readFileSync } = await import("node:fs");
+  for (const route of ["app/api/generate/route.ts", "app/api/suggest/route.ts"]) {
+    const src = readFileSync(new URL(`../${route}`, import.meta.url), "utf8");
+    ok(`${route} imports the scrubber`, /import \{[^}]*scrubDeep[^}]*\} from "@\/app\/lib\/interviewGuards"/.test(src));
+
+    /*
+     * And it has to happen before anything is sent. Ordering is checked inside the HANDLER, not
+     * across the file: both routes define their provider call as a helper ABOVE the handler, so a
+     * naive whole-file index says "sends first" while the running code scrubs first. Measuring the
+     * wrong thing is how a test starts lying, so this slices the handler out and looks in there.
+     */
+    const handler = src.slice(src.indexOf("export async function POST"));
+    const scrubAt = handler.indexOf("scrubDeep(");
+    const sendAt = handler.search(/callAnthropic\(|await fetch\(|api\.anthropic\.com/);
+    ok(`${route} scrubs the request`, scrubAt > -1);
+    ok(`${route} scrubs before it sends`, scrubAt > -1 && (sendAt === -1 || scrubAt < sendAt));
+  }
+}
+
+console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
+process.exit(fail === 0 ? 0 : 1);

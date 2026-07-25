@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 import { DRAFTING_DOCTRINE, METRIC_QUESTION_DOCTRINE } from "@/app/lib/prompts";
+import { scrubDeep } from "@/app/lib/interviewGuards";
 import {
   cleanGroups, cleanItems, flattenGroups, hasMetric, parseGroups, parseItems,
   parseMetricAsk, parseVariants, scrubSuggestion,
@@ -93,8 +94,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Slow down a little — try again in a minute." }, { status: 429 });
     }
 
-    let body;
-    try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+    let payload;
+    try { payload = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
+
+    /*
+     * Identifiers are removed before any of this is read, let alone sent.
+     *
+     * `/api/interview` was the only route that ever did this, and it is gone. A user pasting a
+     * national ID or an IBAN into a bullet — which happens, it was scenario 45 of the live run —
+     * would otherwise have it travel to the provider and come back inside an improved line headed
+     * for a PDF. `scrubDeep` walks every string in the body, so a field added later is covered
+     * without anyone remembering to cover it. Only the RULE NAMES are logged, never the values.
+     */
+    const piiIn: string[] = [];
+    const body = scrubDeep(payload, piiIn);
+    if (piiIn.length) console.error(`[suggest] scrubbed ${[...new Set(piiIn)].join(",")} from the request`);
     const kind: Kind = KINDS.includes(body?.kind) ? body.kind : "duties";
     const mode: Mode | null = ["items", "groups", "variants"].includes(body?.mode) ? body.mode : null;
     const lang = body?.lang === "ar" ? "ar" : "en";
@@ -380,8 +394,8 @@ ${shapeRule}`;
     }
 
     // Free text. Scrubbed line by line so the "- " bullet marker survives: the
-    // clients read its presence to tell a duty line from a header (Journey.tsx,
-    // ResumeTemplate), so it is protocol, not decoration.
+    // clients read its presence to tell a duty line from a header (ResumeTemplate
+    // and the builder's own parsing), so it is protocol, not decoration.
     const text = raw
       .split("\n")
       .map((l) => {

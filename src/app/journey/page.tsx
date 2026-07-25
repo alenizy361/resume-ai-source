@@ -21,13 +21,17 @@ import { permanentRedirect } from "next/navigation";
  * crosses into the builder as the resume it already was. Only unconfirmed conversational state is
  * gone, which is the correct semantic — it was never a fact.
  *
- * ── what is deliberately still here ──
+ * ── what is gone now ──
  *
- * `Journey.tsx` itself. Thirteen hundred lines with its own stylesheet, its own tests and its own API
- * route; removing a route is reversible in one line and removing all of that is not. The component is
- * now unreachable, which is what was asked for. Deleting it is a separate change with its own
- * verification — the last time a large file was deleted here it broke a test that referenced it, and
- * that was caught only because the suite was run afterwards.
+ * `Journey.tsx`, `journey.css` and `/api/interview` — thirteen hundred lines of component, its
+ * stylesheet, and the route that fed it. They were kept for one commit while the redirect was
+ * verified, then deleted together. The two CI harnesses that drove that route were rewritten
+ * against `/api/generate`, which is what the builder actually spends money on, rather than left
+ * pointing at a 404 where they would have gone on "passing" while measuring nothing.
+ *
+ * The guard the route carried came with it: `scrubDeep` now runs at the top of `/api/generate` and
+ * `/api/suggest`, so a national ID typed into a form field is removed before anything is sent —
+ * which is more than the old arrangement managed, since the builder never had that guard at all.
  */
 export default function JourneyPage(): never {
   permanentRedirect("/builder");

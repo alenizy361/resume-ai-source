@@ -13,6 +13,7 @@ import { packKey, jdDeltaKey, normalizeContext } from "@/app/lib/aiCache";
 import { readPack, writePack, packCacheConfigured } from "@/app/lib/packCache";
 import { extractJsonValue, hasMetric, scrubSuggestion } from "@/app/lib/suggestShapes";
 import { credentialsFor } from "@/app/lib/countryRules";
+import { scrubDeep } from "@/app/lib/interviewGuards";
 
 /**
  * The three combined generations that replace one call per section.
@@ -374,8 +375,26 @@ async function callAnthropic(
 /* ─────────────────────────── the handler ─────────────────────────── */
 
 export async function POST(req: NextRequest) {
-  let body: Body;
-  try { body = await req.json(); } catch { return bad("Malformed request."); }
+  let raw: Body;
+  try { raw = await req.json(); } catch { return bad("Malformed request."); }
+
+  /*
+   * Strip identifiers BEFORE anything reads the request — including the cache key.
+   *
+   * This guard used to live inside `/api/interview`, which was the only route that had it. That
+   * route is deleted and the builder never had it, so until now a national ID or an IBAN typed
+   * into a form field travelled to Anthropic inside `facts` and could come back inside a summary
+   * headed for a PDF. Scrubbing at the boundary, in the foundation, is the fix the route-bound
+   * version was always missing: `scrubDeep` walks every string in the body, so a field added later
+   * is covered without anyone remembering to cover it.
+   *
+   * The hits are logged as NAMES ("national-id", "iban") and never as values — knowing that a
+   * scrub fired is operationally useful; recording what it caught would recreate the leak in the
+   * log.
+   */
+  const piiHits: string[] = [];
+  const body: Body = scrubDeep(raw, piiHits);
+  if (piiHits.length) console.error(`[generate] scrubbed ${[...new Set(piiHits)].join(",")} from the request`);
 
   const task = TASKS.find((t) => t === body.task);
   if (!task) return bad("Unknown task.");
@@ -510,7 +529,20 @@ export async function POST(req: NextRequest) {
       note: `attempt=${attempts} usd=${usd.toFixed(6)} cached=${usage.cacheRead > 0}`,
     });
 
-    const shaped = shapeFor(task, extractJsonValue(out.text), body);
+    /*
+     * The response is scrubbed too, not only the request.
+     *
+     * Belt and braces on purpose. The input scrub is the one that matters — an identifier should
+     * never reach the provider at all — but a model that was shown a document containing one can
+     * repeat it, and this is the last point before the text becomes a suggestion the user taps into
+     * a PDF. Scrubbing before `shapeFor` means the shaped result, the cached pack and the response
+     * all carry the same clean text.
+     */
+    const outHits: string[] = [];
+    const cleanText = scrubDeep(out.text, outHits);
+    if (outHits.length) console.error(`[generate] scrubbed ${[...new Set(outHits)].join(",")} from the response`);
+
+    const shaped = shapeFor(task, extractJsonValue(cleanText), body);
 
     if (!shaped) {
       /* Schema failure. One safe retry on the cheap model, then escalate — never loop. */

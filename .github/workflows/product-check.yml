@@ -1,8 +1,17 @@
 name: Product check
 
-# Replays the scenarios that failed in the 100-scenario run against the LIVE
-# endpoint, so a claim about the product is backed by the product's own answer
-# rather than by reading the prompt. Each scenario costs one model call.
+# Asks the LIVE product the questions its prompts claim to have answered, so a
+# claim about behaviour is backed by the product's own reply rather than by
+# reading its instructions.
+#
+# It used to replay chat turns against /api/interview. The chat is retired — every
+# door into it is gone and the route is deleted — so the same questions are now put
+# to /api/generate, which is what the builder actually spends money on. The checks
+# are the ones that caught real defects: bracketed placeholders reaching a printed
+# CV, invented figures, a credential from the wrong market, and an English answer
+# arriving where Arabic was asked for.
+#
+# Roughly four model calls.
 
 on:
   workflow_dispatch:
@@ -19,58 +28,46 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Replay the failing scenarios
+      - name: Ask the live product
         env:
           BASE: ${{ inputs.base_url }}
         run: |
           cat > cases.json <<'JSON'
           [
             {
-              "id": "7 · cashier",
-              "was": "asked \"كم عدد العمليات التي تتعامل معها يومياً؟\" and left bullets []",
-              "want": "drafts the cashier's duties instead of asking for a number",
-              "body": {"action":"turn","lang":"ar","answer":"أشتغل كاشير في سوبرماركت وابغى اطور نفسي","profile":{},"history":[]}
+              "id": "blueprint · cashier (Arabic)",
+              "want": "skills and themes written for the title, in Arabic, with no invented figures",
+              "body": {"task":"role_blueprint","context":{"occupation":"كاشير","country":"السعودية","cvLang":"ar"}}
             },
             {
-              "id": "user's example · radiographer",
-              "was": "n/a — the case the product owner raised",
-              "want": "drafts radiography duties from the title alone",
-              "body": {"action":"turn","lang":"ar","answer":"انا اخصائي اشعة في مستشفى","profile":{},"history":[]}
+              "id": "blueprint · radiographer in Saudi Arabia",
+              "want": "Saudi credentials only — SCFHS, never ARRT",
+              "body": {"task":"role_blueprint","context":{"occupation":"Radiology Technologist","country":"Saudi Arabia","cvLang":"en"}}
             },
             {
-              "id": "date · hired in 2025",
-              "was": "told the user their own hire year was in the future",
-              "want": "treats 2025 as the past",
-              "body": {"action":"turn","lang":"ar","answer":"توظفت سنة ٢٠٢٥ في مستشفى الملك فهد","profile":{"role":"اخصائي اشعة"},"history":[]}
+              "id": "experience · civil engineer",
+              "want": "responsibilities, no bracketed placeholder, no figure the user did not give",
+              "body": {"task":"experience_package","context":{"occupation":"Civil Engineer","country":"Saudi Arabia","cvLang":"ar"},"experience":{"title":"مهندس مدني","industry":"مقاولات","userBullets":[],"current":true}}
             },
             {
-              "id": "1 · civil engineer",
-              "was": "summary contained \"متخصص في [أضف التخصص]\" — printed on the PDF",
-              "want": "no bracketed placeholder anywhere",
-              "body": {"action":"turn","lang":"ar","answer":"أنا مهندس مدني وشتغلت ٤ سنوات في شركة مقاولات بالرياض","profile":{},"history":[]}
-            },
-            {
-              "id": "draft endpoint · cashier",
-              "was": "did not exist",
-              "want": "duties + skills written for the title",
-              "body": {"action":"draft","lang":"ar","targetRole":"كاشير","profile":{"industry":"تجزئة"}}
+              "id": "final · summary from confirmed facts",
+              "want": "up to three summaries, nothing asserted that is not in the facts",
+              "body": {"task":"final_content","context":{"occupation":"Radiology Technologist","country":"Saudi Arabia","cvLang":"en"},"facts":"WORK EXPERIENCE\nDallah Hospital — Radiology Technologist (2024-09 – present)\n- Operated CT and MRI scanners on the day and night rota\n\nEDUCATION\nBSc Radiologic Science — KSAU-HS, 2022"}
             }
           ]
           JSON
 
           fail=0
-          for i in $(seq 0 4); do
+          for i in $(seq 0 3); do
             id=$(jq -r ".[$i].id" cases.json)
-            was=$(jq -r ".[$i].was" cases.json)
             want=$(jq -r ".[$i].want" cases.json)
             echo "════════════════════════════════════════════════════════"
             echo "SCENARIO: $id"
-            echo "  before: $was"
             echo "  expect: $want"
             echo "────────────────────────────────────────────────────────"
             jq -c ".[$i].body" cases.json > body.json
-            code=$(curl -sS -o out.json -w '%{http_code}' --max-time 60 \
-              -X POST "$BASE/api/interview" \
+            code=$(curl -sS -o out.json -w '%{http_code}' --max-time 90 \
+              -X POST "$BASE/api/generate" \
               -H "Content-Type: application/json" --data @body.json || echo 000)
             echo "HTTP $code"
             jq '.' out.json 2>/dev/null || cat out.json
@@ -85,31 +82,41 @@ jobs:
               echo "  ✓ no bracketed placeholder"
             fi
 
-            # think must never reach the browser.
-            if jq -e 'has("think")' out.json >/dev/null 2>&1; then
-              echo "  ✗ think leaked"; fail=1
+            # The route drops a suggestion carrying a figure. A digit inside a
+            # responsibility, a skill or a tool means that drop failed.
+            digits=$(jq -r '[.skillGroups[]?.items[]?, .responsibilityThemes[]?, .responsibilitySuggestions[]?, .relevantTools[]?] | map(select(test("[0-9٠-٩]"))) | length' out.json 2>/dev/null || echo 0)
+            if [ "$digits" = "0" ]; then
+              echo "  ✓ no invented figures in resume lines"
             else
-              echo "  ✓ think absent"
+              echo "  ✗ $digits line(s) carry a figure"; fail=1
             fi
 
             case "$id" in
-              *cashier|*radiographer)
-                n=$(jq '[.profile_patch.experiences[]?.bullets[]?, .resume_lines[]?, .duties[]?] | length' out.json)
-                echo "  drafted lines: $n"
-                [ "$n" -ge 3 ] && echo "  ✓ drafted instead of interrogating" \
-                               || { echo "  ✗ still not drafting"; fail=1; }
-                say=$(jq -r '.say // ""' out.json)
-                if echo "$say" | grep -qE 'كم عدد|كم نسبة|ما هي مهامك|مهامك اليومية'; then
-                  echo "  ✗ still chasing duties/numbers: $say"; fail=1
+              *radiographer*)
+                # The ARRT-on-a-Saudi-CV bug: an id outside countryRules is dropped
+                # server-side, so a US credential here means the filter failed.
+                if jq -e '[.credentialSuggestions[]?.id] | map(select(test("arrt|nclex|us-cpa";"i"))) | length > 0' out.json >/dev/null 2>&1; then
+                  echo "  ✗ a credential from the wrong market was offered"; fail=1
                 else
-                  echo "  ✓ no duty/number interrogation"
+                  echo "  ✓ no credential from the wrong market"
                 fi ;;
-              date*)
-                say=$(jq -r '.say // ""' out.json)
-                if echo "$say" | grep -qE 'المستقبل|مستقبلي|future|لم تحن'; then
-                  echo "  ✗ still calls a past year the future"; fail=1
+              *cashier*)
+                # Arabic asked for, Arabic returned. The failure mode is an English
+                # answer reaching an Arabic CV through a silent fallback.
+                if jq -r '[.skillGroups[]?.items[]?] | join(" ")' out.json | grep -qE '[؀-ۿ]'; then
+                  echo "  ✓ answered in Arabic"
                 else
-                  echo "  ✓ 2025 not treated as future"
+                  echo "  ✗ Arabic was requested and not returned"; fail=1
+                fi ;;
+              final*)
+                n=$(jq '[.summaries[]?] | length' out.json)
+                echo "  summaries: $n"
+                if [ "$n" -ge 1 ]; then echo "  ✓ wrote a summary"; else echo "  ✗ no summary"; fail=1; fi
+                # The facts name one employer; a second one is invention.
+                if jq -r '[.summaries[]?.text] | join(" ")' out.json | grep -qiE 'king fahd|aramco|ministry'; then
+                  echo "  ✗ named an employer that is not in the facts"; fail=1
+                else
+                  echo "  ✓ named no employer outside the facts"
                 fi ;;
             esac
           done
