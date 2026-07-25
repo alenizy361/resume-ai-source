@@ -12,7 +12,8 @@ import {
 import { packKey, jdDeltaKey, normalizeContext } from "@/app/lib/aiCache";
 import { readPack, writePack, packCacheConfigured } from "@/app/lib/packCache";
 import { extractJsonValue, hasMetric, scrubSuggestion } from "@/app/lib/suggestShapes";
-import { credentialsFor } from "@/app/lib/countryRules";
+import { credentialsFor, countryCode } from "@/app/lib/countryRules";
+import { resolveOccupation } from "@/app/lib/occupations";
 import { scrubDeep } from "@/app/lib/interviewGuards";
 
 /**
@@ -157,6 +158,25 @@ function cleanImprovements(v: unknown, originals: string[]): Array<{ original: s
   return out;
 }
 
+/**
+ * Has the user themselves already mentioned this credential?
+ *
+ * Matched on the issuer's initials and on the title's distinctive words, in both languages, because
+ * that is how people write it: "SCFHS", "الهيئة", "تصنيف هيئة التخصصات". Deliberately generous —
+ * a false positive here only means a suggestion is phrased as a reminder rather than as a
+ * recommendation, while a false negative means someone is told about a licence they already hold.
+ */
+function evidenceFor(rule: { id: string; title: { en: string; ar: string } }, written: string): boolean {
+  if (!written.trim()) return false;
+  const needles = [
+    /* The id's own distinctive middle part: "sa-scfhs-registration" → "scfhs". */
+    ...rule.id.split("-").filter((p) => p.length >= 4),
+    ...rule.title.en.toLowerCase().split(/[^a-z]+/).filter((w) => w.length >= 5),
+    ...rule.title.ar.split(/[^؀-ۿ]+/).filter((w) => w.length >= 5),
+  ];
+  return needles.some((n) => written.includes(n));
+}
+
 /* ─────────────────────────── per-task validation ─────────────────────────── */
 
 /**
@@ -183,14 +203,46 @@ function shapeFor(task: AiTaskType, raw: unknown, body: Body): Record<string, un
      * "SCFHS" invented for a market where it does not apply is precisely the failure the rules
      * file exists to prevent. A model cannot add a credential by returning an unknown id.
      */
-    const allowed = new Set(credentialsFor(body.context?.occupation ?? "", body.context?.country ?? "").map((r) => r.id));
+    const rules = credentialsFor(body.context?.occupation ?? "", body.context?.country ?? "");
+    const byId = new Map(rules.map((r) => [r.id, r]));
+    /*
+     * What the user has already written, for `supportedByEvidence`.
+     *
+     * The distinction the brief asks for is the one that decides how a suggestion may be phrased:
+     * a credential the user has ALREADY mentioned can be presented as "you said you hold this",
+     * and one nobody has mentioned may only ever be "this is commonly required". Conflating them is
+     * how a product ends up printing a licence somebody does not have.
+     */
+    const written = [
+      body.facts ?? "",
+      ...(body.experience?.userBullets ?? []),
+      ...(body.confirmedSkills ?? []),
+    ].join(" ").toLowerCase();
+
     const creds = Array.isArray(o.credentialSuggestions)
       ? (o.credentialSuggestions as unknown[])
         .map((c) => ({
           id: String((c as { id?: unknown })?.id ?? ""),
           why: String((c as { why?: unknown })?.why ?? "").trim().slice(0, 120),
         }))
-        .filter((c) => allowed.has(c.id))
+        .filter((c) => byId.has(c.id))
+        .map((c) => {
+          const rule = byId.get(c.id)!;
+          return {
+            ...c,
+            /*
+             * Where the requirement comes from — the RULES file, never the model.
+             *
+             * "mandatory" is a claim about the law of a jurisdiction, and a model that has been
+             * asked about Saudi radiography has written "SCAFACH" before now. The model chooses
+             * WHICH of the allowed ids to offer; what each one means is read from the encoded rule,
+             * including how well that rule itself is attested.
+             */
+            regulatoryStatus: rule.mandatory ? "required" : "optional",
+            ruleStatus: rule.status,
+            supportedByEvidence: evidenceFor(rule, written),
+          };
+        })
         .slice(0, 6)
       : [];
 
@@ -444,6 +496,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Suggestions are temporarily unavailable.", fallback: "local" }, { status: 503 });
   }
 
+  /*
+   * The envelope every answer carries, computed once.
+   *
+   * ── why the id is minted here ──
+   *
+   * A user's report is "it suggested the wrong licence", and the only way to join that to a server
+   * log is an id that appears in both. The client already stamps its own, but a client counter
+   * resets on reload and collides between tabs, so it cannot be the one written to the log line.
+   *
+   * ── why the other two are in every response ──
+   *
+   * `occupationId` and `countryCode` are what the answer was actually computed FOR. Free text goes
+   * into this route — "Senior Radiology Technologist — CT", "المملكة العربية السعودية" — and comes
+   * out as suggestions whose correctness depends entirely on how those resolved. Without them a
+   * wrong credential is unexplainable; with them the first question has an answer.
+   */
+  const requestId = crypto.randomUUID().slice(0, 8);
+  const envelope = {
+    requestId,
+    occupationId: resolveOccupation(promptCtx.occupation, { cvLang: ctx.cvLang }).occupationId,
+    countryCode: countryCode(promptCtx.country),
+  };
+
   /* ── the shared pack cache, for the two tasks that are about an occupation ── */
 
   const shareable = task === "role_blueprint";
@@ -458,9 +533,15 @@ export async function POST(req: NextRequest) {
     if (hit) {
       logUsage({
         route: "generate", op: `${task}:cache-hit`, provider: "cache", model: hit.model,
-        input: 0, output: 0, ms: 0,
+        input: 0, output: 0, ms: 0, note: `req=${requestId}`,
       });
-      return NextResponse.json({ ...hit.result, _cache: { hit: true, ageMs: Date.now() - hit.createdAt } });
+      /* The envelope rides on a cache hit too. A field that appears only on paid answers is a
+         field no client can rely on, and the whole point of it is to be in every log. */
+      return NextResponse.json({
+        ...hit.result,
+        _meta: { ...envelope, model: hit.model, cached: true },
+        _cache: { hit: true, ageMs: Date.now() - hit.createdAt },
+      });
     }
   }
 
@@ -526,7 +607,7 @@ export async function POST(req: NextRequest) {
       op: `${task}${route.escalated ? `:escalated:${route.reason}` : ""}`,
       provider: "anthropic", model: route.model,
       ...usage, ms: Date.now() - t0,
-      note: `attempt=${attempts} usd=${usd.toFixed(6)} cached=${usage.cacheRead > 0}`,
+      note: `req=${requestId} attempt=${attempts} usd=${usd.toFixed(6)} cached=${usage.cacheRead > 0}`,
     });
 
     /*
@@ -569,6 +650,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ...shaped,
       _meta: {
+        /*
+         * The envelope: what this answer is ABOUT, not only how much it cost.
+         *
+         * `requestId` is generated here rather than echoed from the client, because the point of it
+         * is to join a user's report ("it suggested the wrong licence") to a server log. A client
+         * counter resets on every reload and collides between tabs; this one is stamped on the log
+         * line and on the response by the same code path.
+         *
+         * `occupationId` and `countryCode` say which occupation and which JURISDICTION the answer
+         * was computed for — the two facts that decide whether a credential suggestion is right,
+         * and the two that are otherwise invisible once free text has been through a resolver.
+         */
+        ...envelope,
         model: route.model,
         escalated: route.escalated,
         reason: route.reason,

@@ -49,6 +49,8 @@ const C = {
     fromCache: "Already generated — no request",
     thinking: "Working out what this profession involves…",
     needTitle: "Add the job title first, so a suggestion has something to be about.",
+    /* Said on the chip itself: a licence you cannot practise without is not a suggestion. */
+    required: "required to practise",
   },
   ar: {
     ask: "اقترح بالذكاء",
@@ -60,6 +62,7 @@ const C = {
     fromCache: "مُولَّد مسبقاً — بلا طلب",
     thinking: "أستخلص ما تتضمنه هذه المهنة…",
     needTitle: "اكتب المسمى الوظيفي أولاً ليكون للاقتراح موضوع.",
+    required: "مطلوب نظاماً لمزاولة المهنة",
   },
 };
 
@@ -130,7 +133,7 @@ export default function BlueprintStrip({
   const items = useMemo(() => {
     if (!blueprint) return [];
     const raw = slice(blueprint, field);
-    if (field !== "credentialSuggestions") return raw;
+    if (field !== "credentialSuggestions") return raw.map((text) => ({ text, note: "" }));
     /*
      * The blueprint returns credential IDS and the chip has to show a title.
      *
@@ -140,8 +143,26 @@ export default function BlueprintStrip({
      * reach a chip are ones a person wrote down.
      */
     const byId = new Map(credentialsFor(career.occupation, career.country).map((r) => [r.id, r]));
-    return raw.map((id) => byId.get(id)?.title[career.cvLang] ?? "").filter(Boolean);
-  }, [blueprint, field, career.occupation, career.country, career.cvLang]);
+    /*
+     * The title, and whether the thing is legally REQUIRED.
+     *
+     * "SCFHS registration" and "SCFHS registration — required to practise" are different offers,
+     * and the difference is not decoration: one is a suggestion the user may reasonably skip, the
+     * other is the reason their application would be rejected. The word comes from the encoded
+     * rule, never from the model — `mandatory` is a claim about a jurisdiction's law.
+     */
+    return raw
+      .map((id) => byId.get(id))
+      .filter((r): r is NonNullable<typeof r> => Boolean(r))
+      /*
+       * The note is kept BESIDE the title, never folded into it.
+       *
+       * `onPick` hands this text to the section, which makes a credential out of it — so a title
+       * carrying "— required to practise" would print that phrase on the CV as part of the
+       * credential's name. The chip shows both; only one of them is the document.
+       */
+      .map((rule) => ({ text: rule.title[career.cvLang], note: rule.mandatory ? c.required : "" }));
+  }, [blueprint, field, career.occupation, career.country, career.cvLang, c.required]);
 
   /*
    * The chips minus what the user has already said no to.
@@ -155,10 +176,12 @@ export default function BlueprintStrip({
    * experience step already has for duties, and having two different ideas of "the same suggestion"
    * in one builder is how a rejection starts feeling unreliable.
    */
-  const visible = useMemo(
-    () => filterFresh(items, { confirmed: [], pending: [], rejected: rejected(state, section) }),
-    [items, state, section],
-  );
+  const visible = useMemo(() => {
+    const fresh = new Set(
+      filterFresh(items.map((i) => i.text), { confirmed: [], pending: [], rejected: rejected(state, section) }),
+    );
+    return items.filter((i) => fresh.has(i.text));
+  }, [items, state, section]);
 
   /*
    * A rejection is written as an item, offered and immediately rejected, rather than kept in local
@@ -247,15 +270,16 @@ export default function BlueprintStrip({
               reason — see `sharedWhy` in `lib/provenance.ts`. */}
           <p className="bd-why-note mt-3 text-xs">{whySentence(lang, "ai")}</p>
           <div className="bd-chips mt-2">
-            {visible.map((text) => (
+            {visible.map((item) => (
               <SuggestionChip
-                key={text}
-                text={text}
+                key={item.text}
+                text={item.text}
                 lang={lang}
                 source="ai"
                 showWhy={false}
-                onAdd={() => onPick(text)}
-                onReject={() => drop(text)}
+                suffix={item.note ? <span className="bd-opt"> · {item.note}</span> : undefined}
+                onAdd={() => onPick(item.text)}
+                onReject={() => drop(item.text)}
               />
             ))}
           </div>

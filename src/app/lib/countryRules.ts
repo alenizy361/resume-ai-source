@@ -224,6 +224,76 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
 /* ─────────────────────────── lookup ─────────────────────────── */
 
 /**
+ * A country as the rules key them: ISO-3166 alpha-2, lower case.
+ *
+ * ── the bug this exists to fix ──
+ *
+ * The rules are keyed `"sa"`. The country FIELD is free text, and what people type into it is
+ * "Saudi Arabia", "السعودية", "KSA" — so `r.country === c` matched nothing, and the consequences
+ * were silent and exactly backwards:
+ *
+ *   · `credentialsFor` returned [], so every credential id the blueprint produced was filtered out
+ *     and the credentials step offered nothing
+ *   · `exclusionsFor` returned [], so the ARRT-on-a-Saudi-CV guard — the reason this file exists —
+ *     never fired for anyone who wrote their country in words
+ *
+ * Measured, not assumed: `credentialsFor("radiology technologist", "Saudi Arabia")` returned zero
+ * rules while `"sa"` returned two.
+ *
+ * ── what it covers, and what it deliberately does not ──
+ *
+ * The markets this product has rules or exclusions for, under the names its users actually write,
+ * in both languages. It is not a world atlas: an unrecognised country returns "", every lookup then
+ * finds nothing, and the product behaves exactly as it does today for a market it has not encoded —
+ * which is the honest outcome, and better than guessing a jurisdiction for someone's licence.
+ */
+const COUNTRY_NAMES: Record<string, string[]> = {
+  sa: [
+    "sa", "ksa", "sau", "saudi", "saudi arabia", "kingdom of saudi arabia",
+    "السعودية", "السعوديه", "المملكة العربية السعودية", "المملكه العربيه السعوديه", "المملكة",
+  ],
+  ae: [
+    "ae", "uae", "are", "emirates", "united arab emirates", "dubai", "abu dhabi",
+    "الإمارات", "الامارات", "الإمارات العربية المتحدة", "دبي", "أبوظبي", "ابوظبي",
+  ],
+  qa: ["qa", "qat", "qatar", "قطر", "دولة قطر"],
+  kw: ["kw", "kwt", "kuwait", "الكويت", "دولة الكويت"],
+  bh: ["bh", "bhr", "bahrain", "البحرين", "مملكة البحرين"],
+  om: ["om", "omn", "oman", "عمان", "سلطنة عمان", "عُمان"],
+  eg: ["eg", "egy", "egypt", "مصر", "جمهورية مصر العربية"],
+  jo: ["jo", "jor", "jordan", "الأردن", "الاردن", "المملكة الأردنية الهاشمية"],
+  us: ["us", "usa", "united states", "united states of america", "america", "أمريكا", "امريكا", "الولايات المتحدة"],
+  gb: ["gb", "uk", "gbr", "united kingdom", "britain", "great britain", "england", "بريطانيا", "المملكة المتحدة", "إنجلترا"],
+};
+
+/** Built once: every spelling above, pointing at its code. */
+const COUNTRY_INDEX: Map<string, string> = new Map(
+  Object.entries(COUNTRY_NAMES).flatMap(([code, names]) => names.map((n) => [n, code] as const)),
+);
+
+export function countryCode(raw: string): string {
+  const c = String(raw ?? "").trim().toLowerCase()
+    /* Arabic orthography varies where it does not change the word: أ/إ/آ for ا, ة for ه, and the
+       diacritics people's keyboards insert. Folding them means "السعوديه" and "السعودية" are one
+       country rather than two, which is how they are written in practice. */
+    .replace(/[\u064B-\u0652\u0640]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+  if (!c) return "";
+
+  const direct = COUNTRY_INDEX.get(c);
+  if (direct) return direct;
+
+  /* "Riyadh, Saudi Arabia" and "based in the UAE" are things people type into a country field.
+     Longest match first, so "united arab emirates" is not shadowed by a shorter entry. */
+  const hit = [...COUNTRY_INDEX.keys()]
+    .filter((name) => name.length >= 4 && c.includes(name))
+    .sort((a, b) => b.length - a.length)[0];
+  return hit ? COUNTRY_INDEX.get(hit)! : "";
+}
+
+/**
  * Substring matching in BOTH directions, and that is not sloppiness.
  *
  * A user types "Senior Radiology Technologist — CT" and the rule says "radiology technologist";
@@ -247,7 +317,8 @@ export function credentialsFor(
   country: string,
   today = ENCODED,
 ): CredentialRule[] {
-  const c = country.trim().toLowerCase();
+  const c = countryCode(country);
+  if (!c) return [];
   return CREDENTIAL_RULES.filter((r) =>
     r.country === c
     && r.status !== "retired"
@@ -256,7 +327,8 @@ export function credentialsFor(
 }
 
 export function exclusionsFor(occupation: string, country: string): ExclusionRule[] {
-  const c = country.trim().toLowerCase();
+  const c = countryCode(country);
+  if (!c) return [];
   return EXCLUSION_RULES.filter((r) =>
     r.status !== "retired"
     && r.excludedIn.includes(c)
