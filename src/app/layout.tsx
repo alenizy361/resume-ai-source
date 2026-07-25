@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PLANS, planPrice, formatPrice } from "./lib/plans";
-import { BRAND } from "./lib/brand";
+import { BRAND, brandName } from "./lib/brand";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import OrbProvider from "./components/orb/OrbProvider";
@@ -24,46 +24,91 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Sira — Honest AI Resume Optimization", description: "Free ATS score + a no-fabrication rewrite in 10 seconds." },
 };
 
-// Rich structured data — Organization + SoftwareApplication (with real SAR
-// offers) + FAQPage. No aggregateRating/review is emitted because we have no
-// verified ratings yet, and the brand promise is zero fabrication.
-const structuredData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${BASE}/#org`,
-      name: "Sira",
-      url: BASE,
-      description: "Honest AI resume optimizer for the Saudi, Gulf, and global job markets.",
-    },
-    {
-      "@type": "SoftwareApplication",
-      name: BRAND.name,
-      applicationCategory: "BusinessApplication",
-      operatingSystem: "Web",
-      publisher: { "@id": `${BASE}/#org` },
-      description: "AI resume optimizer that scores your resume against a job description, finds missing ATS keywords, and rewrites it to pass applicant tracking systems — without inventing facts you didn't provide.",
-      // Built from lib/plans.ts: a rich result quoting a price the checkout does not
-      // charge is a Google policy problem as well as a customer-trust one.
-      offers: (["single", "complete"] as const).map((id) => ({
-        "@type": "Offer",
-        price: String(planPrice(id)),
-        priceCurrency: BRAND.currency,
-        name: `${PLANS[id].name} — ${PLANS[id].accessLabel}`,
-      })),
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        { "@type": "Question", name: "Is the resume scan free?", acceptedAnswer: { "@type": "Answer", text: "Yes. The ATS match score, missing keywords, skills-gap analysis, and a preview of improvements are free. The full rewritten resume and downloads unlock with a one-time payment." } },
-        { "@type": "Question", name: "Does it invent experience or skills?", acceptedAnswer: { "@type": "Answer", text: "It never invents a number, employer, date, degree, or certification — those come from you alone. To save you the blank page it drafts the duties and skills typical of your job title, which you then edit and prune; only what you keep goes into your resume." } },
-        { "@type": "Question", name: "Is it a subscription?", acceptedAnswer: { "@type": "Answer", text: `No subscription. Pay once — ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. There is a 7-day money-back guarantee.` } },
-        { "@type": "Question", name: "Does it support Arabic?", acceptedAnswer: { "@type": "Answer", text: "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back." } },
-      ],
-    },
-  ],
-};
+
+/**
+ * The FAQ answers Google may quote. Both languages, side by side.
+ *
+ * Prices are interpolated from lib/plans.ts — an answer quoting a price the checkout does
+ * not charge is a Google policy problem on top of a trust one.
+ */
+const FAQ_EN: [string, string][] = [
+  ["Is the resume scan free?",
+   "Yes. The ATS match score, missing keywords, skills-gap analysis, and a preview of improvements are free. The full rewritten resume and downloads unlock with a one-time payment."],
+  ["Does it invent experience or skills?",
+   "It never invents a number, employer, date, degree, or certification — those come from you alone. To save you the blank page it drafts the duties and skills typical of your job title, which you then edit and prune; only what you keep goes into your resume."],
+  ["Is it a subscription?",
+   `No subscription. Pay once — ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. There is a 7-day money-back guarantee.`],
+  ["Does it support Arabic?",
+   "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back."],
+];
+
+const FAQ_AR: [string, string][] = [
+  ["هل فحص السيرة مجاني؟",
+   "نعم. تقييم التوافق مع أنظمة التتبّع، والكلمات المفتاحية الناقصة، وتحليل فجوة المهارات، ومعاينة التحسينات — كلها مجانية. السيرة المُعاد كتابتها كاملةً والتنزيلات تُفتح بدفعة واحدة."],
+  ["هل يختلق خبرة أو مهارات؟",
+   "لا يختلق رقماً ولا جهة عمل ولا تاريخاً ولا شهادة — هذه منك وحدك. ولتوفير عناء الصفحة البيضاء يكتب المهام والمهارات المعتادة لمسمّاك الوظيفي، فتعدّلها وتحذف ما لا ينطبق؛ ولا يدخل سيرتك إلا ما أبقيته."],
+  ["هل هو اشتراك؟",
+   `لا اشتراك. ادفع مرة واحدة — ${formatPrice("single", "ar")} لوصول كامل ٢٤ ساعة أو ${formatPrice("complete", "ar")} لتسعين يوماً. وهناك ضمان استرداد خلال ٧ أيام.`],
+  ["هل يدعم العربية؟",
+   "نعم. واجهة عربية كاملة من اليمين إلى اليسار، وحقول السيرة المعتادة في السعودية والخليج، وتستطيع الكتابة بالعربية والحصول على سيرة إنجليزية مصقولة."],
+];
+
+/*
+ * Rich structured data — Organization + SoftwareApplication (with real SAR offers) +
+ * FAQPage. No aggregateRating/review is emitted because we have no verified ratings yet,
+ * and the brand promise is zero fabrication.
+ *
+ * Built per locale. It used to be one English object rendered on every route, so an
+ * Arabic page emitted English answers and "SAR 35" to Google — which reads it as the
+ * page's own content, and is the kind of mismatch that suppresses a rich result. The
+ * prices come from lib/plans.ts and the copy from the same `formatPrice` the visible
+ * pages use, so the two cannot drift.
+ */
+function structuredDataFor(lang: "ar" | "en") {
+  const ar = lang === "ar";
+  const url = ar ? `${BASE}/ar` : BASE;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${BASE}/#org`,
+        name: brandName(lang),
+        url,
+        description: ar
+          ? "منشئ ومحسّن سير ذاتية بالذكاء الاصطناعي، أمين ولا يختلق، للسوق السعودي والخليجي."
+          : "Honest AI resume optimizer for the Saudi, Gulf, and global job markets.",
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: brandName(lang),
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        publisher: { "@id": `${BASE}/#org` },
+        inLanguage: ar ? "ar-SA" : "en",
+        description: ar
+          ? "يقيّم سيرتك مقابل وصف الوظيفة، ويجد الكلمات المفتاحية الناقصة لأنظمة التتبّع، ويعيد صياغتها لتعبرها — دون اختلاق أي حقيقة لم تقدّمها."
+          : "AI resume optimizer that scores your resume against a job description, finds missing ATS keywords, and rewrites it to pass applicant tracking systems — without inventing facts you didn't provide.",
+        offers: (["single", "complete"] as const).map((id) => ({
+          "@type": "Offer",
+          price: String(planPrice(id)),
+          priceCurrency: BRAND.currency,
+          name: ar
+            ? `${PLANS[id].nameAr} — ${PLANS[id].accessLabelAr}`
+            : `${PLANS[id].name} — ${PLANS[id].accessLabel}`,
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: (ar ? FAQ_AR : FAQ_EN).map(([q, a]) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a },
+        })),
+      },
+    ],
+  };
+}
 
 // Meta (Facebook/Instagram) Pixel — measures ad-driven visits and, via the
 // Purchase event on the pay callback, real revenue from paid campaigns. Fully
@@ -94,7 +139,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <OrbProvider>{children}</OrbProvider>
         <div className="grain-overlay" aria-hidden="true" />
         <Analytics />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataFor(isArabic ? "ar" : "en")) }} />
         {META_PIXEL_ID && (
           <script
             dangerouslySetInnerHTML={{

@@ -192,6 +192,34 @@ const run = async () => {
 
     ok(`${r.path} logs no page errors`, errors.length === 0, errors.slice(0, 1).join(""));
 
+    /*
+     * Structured data must be in the page's own language.
+     *
+     * One English JSON-LD object used to be rendered on every route, so an Arabic page
+     * told Google its FAQ answers were in English and quoted "SAR 35" — a mismatch
+     * between the markup and the visible page, which is what suppresses a rich result.
+     * Checked per route because it is emitted by the layout, so one mistake affects all
+     * of them at once.
+     */
+    const ld = await page.evaluate(() => {
+      const el = document.querySelector('script[type="application/ld+json"]');
+      if (!el) return null;
+      try { return JSON.parse(el.textContent || ""); } catch { return "unparseable"; }
+    });
+    if (ld === null) {
+      ok(`${r.path} emits structured data`, false, "no ld+json");
+    } else if (ld === "unparseable") {
+      ok(`${r.path} structured data is valid JSON`, false, "parse failed");
+    } else {
+      const faq = (ld["@graph"] || []).find((g) => g["@type"] === "FAQPage");
+      const first = faq?.mainEntity?.[0]?.name ?? "";
+      const isArabicPage = r.path === "/ar" || r.path.startsWith("/ar/");
+      const isArabicText = /[؀-ۿ]/.test(first);
+      ok(`${r.path} structured data matches the page language`,
+        Boolean(first) && isArabicText === isArabicPage,
+        `first question: ${first.slice(0, 40)}`);
+    }
+
     await page.close();
   }
 
