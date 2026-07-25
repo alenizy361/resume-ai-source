@@ -100,6 +100,13 @@ const ROUTES = [
    */
   { path: "/builder", must: "Build your CV" },
   { path: "/ar/builder", must: "ابنِ سيرتك" },
+  /*
+   * The retired v1 landing. It held a third landing page nothing linked to, and its 308 is
+   * asserted rather than assumed: a redirect that silently becomes a 404 is invisible until
+   * someone follows an old link.
+   */
+  { path: "/v1", must: "", redirectsTo: "/" },
+  { path: "/ar/v1", must: "", redirectsTo: "/ar" },
 ];
 
 let pass = 0, fail = 0;

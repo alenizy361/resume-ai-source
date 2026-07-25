@@ -213,6 +213,22 @@
   transition: background .18s var(--ez), color .18s var(--ez);
 }
 .build-root .bd-nav a:hover { background: var(--surface); color: var(--fg); }
+
+/*
+ * 44px where the navigation is TAPPED, not everywhere.
+ *
+ * The rows measure 33px, which is right for a mouse — eleven of them share a 208px sidebar and
+ * padding them all to 44 would push the last steps below the fold for no benefit. On a touch
+ * device the same list is a horizontal scroller people put a thumb on, and 33px is too small.
+ *
+ * `pointer: coarse` is the precise signal: it asks whether the input device is imprecise,
+ * which is the actual reason for the rule. Keying on viewport width instead would enlarge the
+ * rows on a small laptop and leave them small on a touchscreen monitor.
+ */
+@media (pointer: coarse) {
+  .build-root .bd-nav a,
+  .build-root .bd-nav span.bd-nav-item { min-height: 44px; }
+}
 .build-root .bd-nav .on {
   background: rgba(139, 92, 246, .14);
   color: #ddd6fe;
@@ -246,6 +262,10 @@
   border-top: 1px solid var(--line);
 }
 .build-root .bd-back {
+  /* A primary action, so it gets a primary action's target — 44px at every size. It measured
+     40px, which is fine for a mouse and short for a thumb, and it costs nothing to fix. */
+  display: inline-flex; align-items: center;
+  min-height: 44px;
   border-radius: 12px; padding: 9px 14px;
   font-size: .82rem; font-weight: 700; color: var(--muted);
   border: 1px solid var(--line);
