@@ -138,3 +138,37 @@ export async function popularPacks(limit = 25): Promise<Array<{ key: string; hit
     return [];
   }
 }
+
+/**
+ * Does the store actually answer?
+ *
+ * A presence check on the environment variables cannot tell you this, and the difference is the
+ * whole question. A wrong URL, a revoked token, a database deleted from the Upstash console, a
+ * region that no longer resolves — every one of those reads as "configured" to anything that only
+ * looks at `process.env`, and then behaves exactly like "absent" at runtime: the rate limiter
+ * silently counts in memory and every shared-cache lookup misses.
+ *
+ * So this sends a real PING. It costs no model tokens and one Redis command, and it is the only
+ * evidence that the store works rather than merely existing.
+ *
+ * Never throws. Returns the round-trip time when it answered, and the provider's own words when it
+ * did not — those distinguish a bad token (401) from a wrong URL (DNS) from a cold region (timeout),
+ * which is the entire diagnostic value.
+ */
+export async function redisPing(): Promise<
+  { ok: true; ms: number } | { ok: false; error: string }
+> {
+  if (!packCacheConfigured()) return { ok: false, error: "not configured" };
+  const t0 = Date.now();
+  try {
+    const out = await redis(["PING"]);
+    /* Upstash answers "PONG". Anything else means something is on the other end that is not the
+       database we think it is, which is worth reporting as a failure rather than as success. */
+    if (typeof out !== "string" || out.toUpperCase() !== "PONG") {
+      return { ok: false, error: `unexpected reply: ${String(out).slice(0, 40)}` };
+    }
+    return { ok: true, ms: Date.now() - t0 };
+  } catch (e) {
+    return { ok: false, error: (e instanceof Error ? e.message : "unreachable").slice(0, 120) };
+  }
+}

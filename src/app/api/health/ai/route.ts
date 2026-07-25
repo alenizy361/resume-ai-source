@@ -3,7 +3,7 @@ import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
 import { modelConfig, MAX_OUTPUT, TASK_CLASS } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, CACHE_FLOOR_TOKENS } from "@/app/lib/aiPrompts";
-import { packCacheConfigured } from "@/app/lib/packCache";
+import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
 import { budgets } from "@/app/lib/aiBudget";
@@ -94,7 +94,20 @@ export async function GET(req: NextRequest) {
   /* The failure this catches: AI_PROVIDER_SUGGEST set to anthropic with no Anthropic key, which
      is a 503 on every suggestion and nothing else. */
   const suggestKeyPresent = suggestProvider === "anthropic" ? redact("ANTHROPIC_API_KEY") : redact("NVIDIA_API_KEY");
-  const upstash = redact("UPSTASH_REDIS_REST_URL") && redact("UPSTASH_REDIS_REST_TOKEN");
+  const upstash = packCacheConfigured();
+
+  /*
+   * A real PING, not a presence check.
+   *
+   * Free — no model tokens, one Redis command — and it is the only thing that distinguishes a
+   * working store from a wrong URL, a revoked token or a database that was deleted from the
+   * console. All three of those read as "configured" to anything that inspects `process.env`, and
+   * all three behave exactly like "absent" at runtime.
+   *
+   * Unlike the model probe below, this is NOT gated behind `?live=1`, because the reason that gate
+   * exists is cost and this has none.
+   */
+  const redis = await redisPing();
 
   const report: Record<string, unknown> = {
     ok: keyPresent && suggestKeyPresent,
@@ -141,7 +154,7 @@ export async function GET(req: NextRequest) {
        * through Vercel's Storage tab) and `"half"` is the case worth seeing: one of the pair set
        * and not the other, which behaves like absent and reads like configured.
        */
-      sharedPackCache: packCacheConfigured() ? "configured" : "absent",
+      sharedPackCache: !upstash ? "absent" : redis.ok ? "live" : "configured but unreachable",
       redisCredentials: redisSource(),
     },
 
@@ -164,8 +177,11 @@ export async function GET(req: NextRequest) {
      * plainly rather than discovering during an incident.
      */
     rateLimit: {
-      backing: upstash ? "upstash" : "in-memory",
-      shared: upstash,
+      /* `configured-but-unreachable` is its own state and the most misleading one to omit: the
+         operator sees a database in their dashboard and the app is counting in memory. */
+      backing: !upstash ? "in-memory" : redis.ok ? "redis" : "in-memory (redis unreachable)",
+      shared: upstash && redis.ok,
+      redis: redis.ok ? { ok: true, ms: redis.ms } : { ok: false, error: redis.error },
       note: upstash
         ? "Counts are shared across instances."
         : "Counts are per-instance — the effective limit is higher than configured.",
@@ -193,6 +209,27 @@ export async function GET(req: NextRequest) {
     support: {
       isPersonalMailbox: supportEmailIsPersonal(),
       ok: !supportEmailIsPersonal(),
+    },
+
+    /*
+     * Email needs TWO things and an integration can only supply one.
+     *
+     * `RESEND_API_KEY` arrives with the Vercel integration; `EMAIL_FROM` is a verified sender on
+     * the operator's own domain and no integration can know it. With the key and no sender,
+     * `sendEmail` returns false without throwing — so magic-link sign-in, payment receipts and
+     * "email my results" are all dead, quietly, and the dashboard shows Resend connected.
+     *
+     * Reported as `ok` only when both halves are present, for exactly the reason the AI `ok` needed
+     * both keys: a half-configured service that reports healthy is worse than one that reports
+     * nothing.
+     */
+    email: {
+      keyPresent: redact("RESEND_API_KEY"),
+      senderPresent: redact("EMAIL_FROM"),
+      ok: redact("RESEND_API_KEY") && redact("EMAIL_FROM"),
+      note: redact("RESEND_API_KEY") && !redact("EMAIL_FROM")
+        ? "RESEND_API_KEY is set and EMAIL_FROM is not — every email is refused before it is sent."
+        : undefined,
     },
 
     live: null as unknown,

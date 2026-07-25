@@ -180,12 +180,36 @@ for (const field of ["cachedPrefixTokens", "cacheFloorTokens", "cacheablePrefix"
 }
 ok("the cached prefix is measured against the floor, not assumed",
   /estimateTokens\(CORE_RULES\) >= CACHE_FLOOR_TOKENS/.test(SRC));
+/* Three states, not two. "absent" and "live" are the easy ones; the third is the whole point. */
 ok("the shared pack cache reports absent rather than pretending",
-  /packCacheConfigured\(\) \? "configured" : "absent"/.test(SRC));
+  /sharedPackCache: !upstash \? "absent" : redis\.ok \? "live" : "configured but unreachable"/.test(SRC));
 /* Two env spellings are in circulation and reading only one is a silent downgrade to in-memory
    counting next to a Redis the operator can see in the same browser. */
 ok("and names which credential spelling was found, including the half-set case",
   /redisCredentials: redisSource\(\)/.test(SRC));
+
+/*
+ * A presence check cannot tell a working store from a revoked token, a wrong URL, or a database
+ * deleted from the console. All three read as "configured" and all three behave as "absent".
+ */
+ok("the store is PINGED, not merely detected", /await redisPing\(\)/.test(SRC));
+ok("the ping is not behind the cost gate — it costs nothing",
+  SRC.indexOf("await redisPing()") < SRC.indexOf('searchParams.get("live")'));
+ok("configured-but-unreachable is its own reported state, not folded into either",
+  /configured but unreachable/.test(SRC));
+ok("and the rate limiter reports the same distinction",
+  /redis unreachable/.test(SRC));
+ok("`shared` requires the store to actually answer",
+  /shared: upstash && redis\.ok/.test(SRC));
+
+/*
+ * Email needs two things and an integration supplies one. With the key and no sender every send is
+ * refused before it leaves, silently, while the dashboard shows Resend connected.
+ */
+ok("email health requires BOTH the key and the sender",
+  /ok: redact\("RESEND_API_KEY"\) && redact\("EMAIL_FROM"\)/.test(SRC));
+ok("and says so outright when only the key is set",
+  /EMAIL_FROM is not — every email is refused/.test(SRC));
 ok("the country rules report their own provenance",
   /ruleProvenance\(\)/.test(SRC) && /staleRules\(/.test(SRC));
 ok("the budgets are reportable, so a ceiling is never a mystery",
