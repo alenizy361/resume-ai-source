@@ -1,0 +1,141 @@
+/**
+ * The number a customer READS must be the number their card is CHARGED.
+ *
+ * Before this suite existed, four files independently knew the price: lib/plans.ts (35 /
+ * 99, hardcoded), /api/pay (`process.env.PRICE_SINGLE || 35` — the amount actually
+ * invoiced), CheckoutButton ("SAR 35" as a literal, in the modal shown immediately
+ * before paying), and layout.tsx's JSON-LD offers (35 / 99 again, quoted to Google).
+ * Only one of them was authoritative, and it was not any of the three a customer sees.
+ * Setting PRICE_SINGLE for a promotion would have displayed 35 everywhere while billing
+ * the new amount.
+ *
+ * So: one function prices a plan, and these tests assert nothing can diverge from it.
+ *
+ *   node --experimental-strip-types src/ops/pricing.test.mjs
+ */
+
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
+import {
+  PLANS, RETIRED_PRICES, planPrice, chargeableAmount, priceMismatch, formatPrice,
+  toArabicDigits,
+} from "../app/lib/plans.ts";
+
+let pass = 0, fail = 0;
+const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
+const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JSON.stringify(g)}, want ${JSON.stringify(w)}`);
+
+/* ── the display price and the charged price are one number ── */
+{
+  for (const id of ["single", "complete"]) {
+    eq(`${id}: what the page shows is what the invoice charges`,
+      planPrice(id), chargeableAmount(id));
+  }
+  eq("single is the approved 35", planPrice("single"), 35);
+  eq("complete is the approved 99", planPrice("complete"), 99);
+  eq("no promotion is configured, so nothing can mismatch", priceMismatch(), []);
+}
+
+/* ── an env promotion moves BOTH sides or the test catches it ── */
+{
+  process.env.PRICE_SINGLE = "19";
+  eq("a server-side override is honoured", planPrice("single"), 19);
+  eq("and the invoice follows it", chargeableAmount("single"), 19);
+  // The client bundle only ever sees NEXT_PUBLIC_*, so a half-configured promotion is
+  // exactly how a customer ends up reading one number and paying another.
+  eq("a server-only override is reported as a mismatch", priceMismatch(), ["single"]);
+  process.env.NEXT_PUBLIC_PRICE_SINGLE = "19";
+  eq("configuring both clears it", priceMismatch(), []);
+  process.env.NEXT_PUBLIC_PRICE_SINGLE = "25";
+  eq("disagreeing values are still a mismatch", priceMismatch(), ["single"]);
+  delete process.env.PRICE_SINGLE;
+  delete process.env.NEXT_PUBLIC_PRICE_SINGLE;
+  eq("and the approved price returns when the promotion ends", planPrice("single"), 35);
+}
+
+/* ── retired plans stay chargeable, but unsellable ── */
+{
+  ok("monthly is not offered for sale", !("monthly" in PLANS));
+  eq("but an old monthly invoice can still be priced", chargeableAmount("monthly"), RETIRED_PRICES.monthly);
+  eq("an unknown plan cannot be charged at all", chargeableAmount("banana"), null);
+}
+
+/* ── both languages state the same rule ── */
+{
+  eq("English prints Western digits", formatPrice("single", "en"), "SAR 35");
+  eq("Arabic prints Arabic-Indic digits", formatPrice("single", "ar"), "٣٥ ريالاً");
+  ok("an Arabic price contains no Western digit", !/[0-9]/.test(formatPrice("complete", "ar")));
+  eq("the digit converter is exact", toArabicDigits(99), "٩٩");
+
+  // The honest differentiator between plans is DURATION, not features. If these lists
+  // ever differ, the pricing page starts selling a feature that is not gated.
+  eq("both plans grant the same features", PLANS.single.features, PLANS.complete.features);
+  eq("and the same in Arabic", PLANS.single.featuresAr, PLANS.complete.featuresAr);
+  ok("the feature lists are translated, not duplicated English",
+    PLANS.single.featuresAr.every((f) => /[؀-ۿ]/.test(f)));
+  ok("access labels differ, because duration is the difference",
+    PLANS.single.accessLabel !== PLANS.complete.accessLabel);
+}
+
+/* ── nothing new may hardcode a price ── */
+{
+  /*
+   * A ratchet, not a clean sweep.
+   *
+   * Ten marketing and FAQ files still carry prices inside prose sentences, and rewriting
+   * every one of them in the same change that restructured the pricing module would mix
+   * a mechanical edit into a behavioural one. So they are listed, and the assertion is
+   * that the list does not GROW: a new hardcoded price fails this test, and each listed
+   * file can be migrated on its own afterwards.
+   *
+   * Files at the moment of decision — the checkout modal, the terms, the structured data
+   * and the pricing pages — are deliberately NOT on this list. They were migrated first
+   * because they are where a wrong number costs money rather than credibility.
+   */
+  const ALLOWED = new Set([
+    "components/AdvisorLanding.tsx",
+    "components/Journey.tsx",
+    "components/LandingScroll.tsx",
+    "ats-resume-checker/page.tsx",
+    "interview-live/page.tsx",
+    "free-resume-checker/page.tsx",
+    "jobscan-alternative/page.tsx",
+    "templates/TemplatesGallery.tsx",
+    "pay/callback/page.tsx",
+    "ar/optimize/page.tsx",
+    "optimize/page.tsx",
+  ]);
+
+  const PRICE = new RegExp(
+    "SAR\\s*(?:35|99|75)\\b"                       // "SAR 35"
+    + "|\\b(?:35|99|75)\\s*(?:SAR|ريال)"            // "35 SAR"
+    + "|(?<![٠-٩])(?:٣٥|٩٩|٧٥)(?![٠-٩])\\s*ريال",    // "٣٥ ريالاً", never inside ٩٩.٩٪
+  );
+  const walk = (dir, out = []) => {
+    for (const e of readdirSync(dir)) {
+      const full = join(dir, e);
+      if (statSync(full).isDirectory()) walk(full, out);
+      else if (/\.tsx?$/.test(e)) out.push(full);
+    }
+    return out;
+  };
+
+  const offenders = [];
+  for (const file of walk("app")) {
+    const rel = file.replace(/^app\//, "");
+    if (rel === "lib/plans.ts" || rel.startsWith("api/")) continue;
+    if (ALLOWED.has(rel)) continue;
+    const src = readFileSync(file, "utf8");
+    // Strip comments: a comment explaining the old hardcoding is not hardcoding.
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    if (PRICE.test(code)) offenders.push(rel);
+  }
+  ok("no file outside the migration list hardcodes a price",
+    offenders.length === 0, offenders.join(", "));
+
+  // And the list itself must shrink over time, never silently grow.
+  ok("the migration list is documented and bounded", ALLOWED.size <= 11, `${ALLOWED.size} files`);
+}
+
+console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
+process.exit(fail === 0 ? 0 : 1);

@@ -15,6 +15,12 @@
  *
  * Provenance is preserved: everything that arrives is `source: "imported"`, a value the
  * schema declared from the start and nothing had used until now.
+ *
+ * The copy says the file is sent to our server, because it is: /api/extract is a server
+ * route and the bytes leave the device to be parsed by unpdf/mammoth. The first version
+ * of this panel said "never uploaded anywhere else", which was written about the PARSE
+ * (local, no model involved) and read as a claim about the FILE. A privacy sentence that
+ * is true about the author's intent and false about the network is still false.
  */
 
 import { useRef, useState } from "react";
@@ -27,7 +33,7 @@ type Lang = "ar" | "en";
 const C = {
   en: {
     have: "I already have a CV",
-    haveSub: "PDF, Word or text. We read it, show you what we understood, and you keep what is right — it is never uploaded anywhere else.",
+    haveSub: "PDF, Word or text. Your file is sent to our server only to read its text — no AI provider sees the file, and it is not saved. We then show you what we understood, and you keep what is right.",
     pick: "Choose a file",
     reading: "Reading…",
     tooLittle: "We could not read enough from that file. It may be a scan rather than text — paste the content into the job description box, or fill the form and we will suggest as you go.",
@@ -52,7 +58,7 @@ const C = {
   },
   ar: {
     have: "لديّ سيرة ذاتية بالفعل",
-    haveSub: "PDF أو Word أو نص. نقرأها، ونعرض لك ما فهمناه، وتُبقي أنت الصحيح — ولا تُرفع إلى أي مكان آخر.",
+    haveSub: "PDF أو Word أو نص. يُرسَل ملفك إلى سيرفرنا لقراءة نصه فقط — لا يراه أي مزوّد ذكاء اصطناعي، ولا يُحفَظ. ثم نعرض لك ما فهمناه، وتُبقي أنت الصحيح.",
     pick: "اختر ملفاً",
     reading: "يقرأ…",
     tooLittle: "لم نستطع قراءة ما يكفي من هذا الملف. قد يكون صورة ممسوحة لا نصاً — الصق المحتوى في مربع وصف الوظيفة، أو اكمل النموذج وسنقترح عليك أثناء التعبئة.",

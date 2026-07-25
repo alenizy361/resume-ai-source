@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { PLANS, planPrice, formatPrice } from "./lib/plans";
+import { BRAND } from "./lib/brand";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import OrbProvider from "./components/orb/OrbProvider";
@@ -37,22 +39,26 @@ const structuredData = {
     },
     {
       "@type": "SoftwareApplication",
-      name: "Sira",
+      name: BRAND.name,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       publisher: { "@id": `${BASE}/#org` },
       description: "AI resume optimizer that scores your resume against a job description, finds missing ATS keywords, and rewrites it to pass applicant tracking systems — without inventing facts you didn't provide.",
-      offers: [
-        { "@type": "Offer", price: "35", priceCurrency: "SAR", name: "One-time optimization — 24-hour full access" },
-        { "@type": "Offer", price: "99", priceCurrency: "SAR", name: "Complete Pack — 90-day full access (one-time)" },
-      ],
+      // Built from lib/plans.ts: a rich result quoting a price the checkout does not
+      // charge is a Google policy problem as well as a customer-trust one.
+      offers: (["single", "complete"] as const).map((id) => ({
+        "@type": "Offer",
+        price: String(planPrice(id)),
+        priceCurrency: BRAND.currency,
+        name: `${PLANS[id].name} — ${PLANS[id].accessLabel}`,
+      })),
     },
     {
       "@type": "FAQPage",
       mainEntity: [
         { "@type": "Question", name: "Is the resume scan free?", acceptedAnswer: { "@type": "Answer", text: "Yes. The ATS match score, missing keywords, skills-gap analysis, and a preview of improvements are free. The full rewritten resume and downloads unlock with a one-time payment." } },
         { "@type": "Question", name: "Does it invent experience or skills?", acceptedAnswer: { "@type": "Answer", text: "It never invents a number, employer, date, degree, or certification — those come from you alone. To save you the blank page it drafts the duties and skills typical of your job title, which you then edit and prune; only what you keep goes into your resume." } },
-        { "@type": "Question", name: "Is it a subscription?", acceptedAnswer: { "@type": "Answer", text: "No subscription. Pay once — SAR 35 for 24-hour full access or SAR 99 for 90 days. There is a 7-day money-back guarantee." } },
+        { "@type": "Question", name: "Is it a subscription?", acceptedAnswer: { "@type": "Answer", text: `No subscription. Pay once — ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. There is a 7-day money-back guarantee.` } },
         { "@type": "Question", name: "Does it support Arabic?", acceptedAnswer: { "@type": "Answer", text: "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back." } },
       ],
     },

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { chargeableAmount } from "@/app/lib/plans";
+import { BRAND } from "@/app/lib/brand";
 import { setOrderEmail } from "@/app/lib/entitlements";
 import { signTx, PAY_BIND_COOKIE } from "@/app/lib/paybind";
 
@@ -13,13 +15,19 @@ export const maxDuration = 30;
 const BASE = process.env.PAYLINK_BASE_URL || "https://restapi.paylink.sa";
 const CURRENCY = process.env.PAY_CURRENCY || "SAR";
 
-const PLANS: Record<string, { title: string; amount: number }> = {
-  single: { title: "Sira — Single Optimization", amount: Number(process.env.PRICE_SINGLE || 35) },
-  // One-time "complete pack" — replaces the old monthly subscription (the Saudi
-  // market pays once for an episodic need; see MARKET_RESEARCH.md).
-  complete: { title: "Sira — Complete Pack", amount: Number(process.env.PRICE_COMPLETE || 99) },
-  // Kept for backward-compat with any invoice created before the switch; not offered in the UI.
-  monthly: { title: "Sira — Unlimited (1 month)", amount: Number(process.env.PRICE_MONTHLY || 75) },
+/*
+ * The amount comes from lib/plans.ts, not from here.
+ *
+ * This route used to own its own PLANS map — meaning the number a customer READ on the
+ * pricing page and the number they were CHARGED were computed in different files, and a
+ * PRICE_SINGLE env change would have moved only the second one. `chargeableAmount`
+ * still honours the env override and still prices retired plan ids so old invoices
+ * verify, but it is now the same function the pricing page calls.
+ */
+const TITLES: Record<string, string> = {
+  single: `${BRAND.name} — Single Optimization`,
+  complete: `${BRAND.name} — Complete Pack`,
+  monthly: `${BRAND.name} — Unlimited (1 month)`,
 };
 
 async function authenticate(): Promise<string> {
@@ -43,8 +51,10 @@ export async function POST(req: NextRequest) {
     const { plan, name, email, mobile, locale } = await req.json();
     const lang = locale === "ar" ? "ar" : "en";
 
-    const chosen = PLANS[plan];
-    if (!chosen) return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
+    const amount = chargeableAmount(String(plan));
+    const title = TITLES[String(plan)];
+    if (amount === null || !title) return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
+    const chosen = { title, amount };
     if (!name || String(name).trim().length < 2) {
       return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
     }

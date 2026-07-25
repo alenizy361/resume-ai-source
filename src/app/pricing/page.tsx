@@ -3,19 +3,19 @@ import OrbBrand from "../components/OrbBrand";
 import OrbSceneSetter from "../components/orb/OrbSceneSetter";
 import Link from "next/link";
 import CheckoutButton from "../components/CheckoutButton";
-import { PLANS } from "../lib/plans";
+import { PLANS, formatPrice } from "../lib/plans";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
   title: "Pricing — One-time, No Subscription | Sira",
   description:
-    "Simple one-time pricing: SAR 35 for 24-hour full access or SAR 99 for 90 days. Every feature is included in both — the only difference is how long access lasts. No subscription; 7-day money-back guarantee on the 90-day pack.",
+    `Simple one-time pricing: ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. Every feature is included in both — the only difference is how long access lasts. No subscription; 7-day money-back guarantee on the 90-day pack.`,
   alternates: {
     canonical: `${BASE}/pricing`,
     languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },
   },
-  openGraph: { title: "Sira Pricing — Pay once, no subscription", description: "SAR 35 (24h) or SAR 99 (90 days). Every feature in both.", url: `${BASE}/pricing` },
+  openGraph: { title: "Sira Pricing — Pay once, no subscription", description: `${formatPrice("single", "en")} (24h) or ${formatPrice("complete", "en")} (90 days). Every feature in both.`, url: `${BASE}/pricing` },
 };
 
 function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: boolean }) {
@@ -90,8 +90,8 @@ export default function PricingPage() {
           <div className="space-y-4">
             {[
               ["Is the scan free?", "Yes — the ATS score, missing keywords, skills-gap, and a preview of improvements are free. The full rewrite and downloads unlock with a one-time payment."],
-              ["Is this a subscription?", "No. Pay once. SAR 35 gives 24-hour full access; SAR 99 gives 90 days. Nothing recurs."],
-              ["What's the difference between the two plans?", "Nothing in features — both unlock everything. SAR 99 simply keeps your access open for 90 days, ideal for an active job hunt."],
+              ["Is this a subscription?", `No. Pay once. ${formatPrice("single", "en")} gives 24-hour full access; ${formatPrice("complete", "en")} gives 90 days. Nothing recurs.`],
+              ["What's the difference between the two plans?", `Nothing in features — both unlock everything. ${formatPrice("complete", "en")} simply keeps your access open for 90 days, ideal for an active job hunt.`],
               ["Can I get a refund?", "Yes — the Complete Pack (90 days) carries a 7-day money-back guarantee."],
             ].map(([q, a]) => (
               <div key={q} className="card p-5">

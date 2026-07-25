@@ -3,19 +3,19 @@ import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
 import CheckoutButton from "../../components/CheckoutButton";
-import { PLANS } from "../../lib/plans";
+import { PLANS, formatPrice } from "../../lib/plans";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
   title: "الأسعار — دفعة واحدة، بدون اشتراك | سيرة",
   description:
-    "أسعار بسيطة بدفعة واحدة: ٣٥ ريالاً لوصول كامل ٢٤ ساعة أو ٩٩ ريالاً لـ ٩٠ يوماً. كل المزايا في الباقتين — الفرق الوحيد مدة الوصول. بدون اشتراك، وضمان استرداد ٧ أيام على الحزمة الكاملة.",
+    `أسعار بسيطة بدفعة واحدة: ${formatPrice("single", "ar")} لوصول كامل ٢٤ ساعة أو ${formatPrice("complete", "ar")} لـ ٩٠ يوماً. كل المزايا في الباقتين — الفرق الوحيد مدة الوصول. بدون اشتراك، وضمان استرداد ٧ أيام على الحزمة الكاملة.`,
   alternates: {
     canonical: `${BASE}/ar/pricing`,
     languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },
   },
-  openGraph: { title: "أسعار سيرة — ادفع مرة، بدون اشتراك", description: "٣٥ ريالاً (٢٤ ساعة) أو ٩٩ ريالاً (٩٠ يوماً). كل المزايا في الباقتين.", url: `${BASE}/ar/pricing` },
+  openGraph: { title: "أسعار سيرة — ادفع مرة، بدون اشتراك", description: `${formatPrice("single", "ar")} (٢٤ ساعة) أو ${formatPrice("complete", "ar")} (٩٠ يوماً). كل المزايا في الباقتين.`, url: `${BASE}/ar/pricing` },
 };
 
 function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: boolean }) {
@@ -27,7 +27,9 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
       )}
       <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.nameAr} · دفعة واحدة</div>
       <div className="mt-4 flex items-baseline gap-1">
-        <span className="text-5xl font-extrabold">{p.priceSar} ريالاً</span>
+        {/* formatPrice, not p.priceSar: the raw number renders as "35 ريالاً" — Western
+            digits on an Arabic page — and it bypasses any configured promotion. */}
+        <span className="text-5xl font-extrabold">{formatPrice(p.id, "ar")}</span>
         <span className="text-sm" style={{ color: "var(--muted)" }}>مرة واحدة ({p.priceUsd})</span>
       </div>
       <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>{p.accessLabelAr}</p>
@@ -90,8 +92,8 @@ export default function ArabicPricingPage() {
           <div className="space-y-4">
             {[
               ["هل الفحص مجاني؟", "نعم — درجة التوافق مع ATS والكلمات الناقصة وفجوة المهارات ومعاينة التحسينات كلها مجانية. إعادة الكتابة الكاملة والتنزيل تنفتح بدفعة واحدة."],
-              ["هل هو اشتراك؟", "لا. ادفع مرة واحدة. ٣٥ ريالاً تفتح وصولاً كاملاً ٢٤ ساعة، و٩٩ ريالاً تفتح ٩٠ يوماً. لا شيء يتكرر."],
-              ["ما الفرق بين الباقتين؟", "لا فرق في المزايا — كلتاهما تفتح كل شيء. الـ ٩٩ ريالاً تُبقي وصولك مفتوحاً ٩٠ يوماً، مثالية لموسم توظيف نشط."],
+              ["هل هو اشتراك؟", `لا. ادفع مرة واحدة. ${formatPrice("single", "ar")} تفتح وصولاً كاملاً ٢٤ ساعة، و${formatPrice("complete", "ar")} تفتح ٩٠ يوماً. لا شيء يتكرر.`],
+              ["ما الفرق بين الباقتين؟", `لا فرق في المزايا — كلتاهما تفتح كل شيء. الـ ${formatPrice("complete", "ar")} تُبقي وصولك مفتوحاً ٩٠ يوماً، مثالية لموسم توظيف نشط.`],
               ["هل يمكنني الاسترداد؟", "نعم — الحزمة الكاملة (٩٠ يوماً) عليها ضمان استرداد ٧ أيام."],
             ].map(([q, a]) => (
               <div key={q} className="card p-5">

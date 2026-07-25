@@ -456,7 +456,10 @@ export default function OptimizePage() {
                 )}
                 <button disabled={resume.trim().length < 50} onClick={() => setStep(2)}
                   className="btn-accent mt-5 w-full py-3.5 text-base disabled:cursor-not-allowed disabled:opacity-40">Continue →</button>
-                <p className="mt-3 text-center text-[11px]" style={{ color: "var(--faint)" }}>Processed instantly — never stored on our servers</p>
+                <p className="mt-3 text-center text-[11px]" style={{ color: "var(--faint)" }}>
+                  Processed by a cloud AI provider, then discarded — not stored on our servers.{" "}
+                  <Link href="/privacy" style={{ textDecoration: "underline" }}>How we handle your data</Link>
+                </p>
               </div>
             ) : step === 2 ? (
               /* ── Step 2: target job ── */

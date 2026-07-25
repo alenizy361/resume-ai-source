@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { PLANS, formatPrice } from "@/app/lib/plans";
 import AiOrb from "./AiOrb";
 import GoldField from "./orb/GoldField";
 
@@ -77,7 +78,11 @@ export default function CheckoutButton({
   }, [phase]);
 
   const t = ar
-    ? { planLine: plan === "single" ? "مرة واحدة · ٣٥ ريالاً" : "الحزمة الكاملة · ٩٩ ريالاً · دفعة واحدة",
+    // The amount comes from the same function /api/pay invoices with, so the modal
+    // cannot show one number while the card is charged another.
+    ? { planLine: plan === "single"
+          ? `مرة واحدة · ${formatPrice("single", "ar")}`
+          : `${PLANS.complete.nameAr} · ${formatPrice("complete", "ar")} · دفعة واحدة`,
         title: "إتمام الشراء", sub: "دفع آمن. أدخل بياناتك للمتابعة.", name: "الاسم الكامل",
         email: "البريد الإلكتروني (يُفعَّل عليه وصولك)", mobile: "رقم الجوال", pay: "المتابعة ←",
         starting: "جارٍ التحضير…", cancel: "إلغاء", failed: "تعذّر بدء الدفع، حاول مرة أخرى.",
@@ -85,7 +90,9 @@ export default function CheckoutButton({
         mm: "شهر", yy: "سنة", cvv: "CVV", payNow: "ادفع الآن", processing: "جارٍ الدفع…",
         other: "طرق أخرى: تمارا · تابي · Apple Pay · STC ←", secure: "🔒 دفع آمن عبر Paylink · ضمان استرجاع ٧ أيام",
         cardErr: "تحقّق من بيانات البطاقة وحاول مرة أخرى." }
-    : { planLine: plan === "single" ? "One-time · SAR 35 (~$9)" : "Complete Pack · SAR 99 · one-time (~$26)",
+    : { planLine: plan === "single"
+          ? `One-time · ${formatPrice("single", "en")} (${PLANS.single.priceUsd})`
+          : `${PLANS.complete.name} · ${formatPrice("complete", "en")} · one-time (${PLANS.complete.priceUsd})`,
         title: "Checkout", sub: "Secure payment. Enter your details to continue.", name: "Full name",
         email: "Email (unlocks your access)", mobile: "Mobile number", pay: "Continue →",
         starting: "Preparing…", cancel: "Cancel", failed: "Checkout failed. Please try again.",

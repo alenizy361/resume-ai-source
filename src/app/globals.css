@@ -661,6 +661,27 @@ body {
 .advisor-prompt { animation: prompt-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .cv-line-in { animation: prompt-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+/* ══ THE LAYER CONTRACT ══
+   ambient field 1 · page content 10 · the orb 30.
+
+   This used to be a comment on the rule below and nothing more, which meant every
+   page had to remember to opt in with `relative z-10`. Twenty-seven of them did not,
+   and CSS paints a positioned element (the ambient field, z-index 1) above ALL
+   non-positioned content in the same stacking context — so /, /optimize, /pricing,
+   /templates and every other static-rooted page rendered as an empty purple cosmos
+   with only the sticky header visible. The field is `pointer-events: none`, so every
+   button still worked and every automated check still passed while nothing could be
+   seen. The bug was invisible to tests precisely because it was only visible.
+
+   So the contract is enforced here, once, instead of being remembered 27 times. A
+   page that wants a different stacking order inside itself still can — `main` only
+   establishes the floor, and `.journey-root`'s own z-index:3 keeps working because it
+   is scoped inside this one. */
+main {
+  position: relative;
+  z-index: 10;
+}
+
 /* ══ AMBIENT FIELD — the living background (cursor light, click ripples,
    mood tint, scroll parallax) ══ */
 .ambient-field {
