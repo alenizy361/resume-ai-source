@@ -46,8 +46,23 @@
  *                    Fixed in the same commit as this note: `acceptsTemperature` in aiModels.ts,
  *                    and the route now serves the earlier answer when an escalation fails.
  *
- * Numbers, not adjectives — and the third line is the reason this file exists. Nothing in the
- * local suites could have found it.
+ * ── the second run, after the fix ──
+ *
+ * Same day, commit 58924b4: 16/16, all three calls served.
+ *
+ *   role_blueprint   $0.000000 — served from the shared pack cache, which is the saving the whole
+ *                    /api/generate design exists for, measured rather than asserted
+ *   experience_pkg   $0.007123 · Arabic · no invented figures · one improvement to the user's own
+ *                    line, and it invented nothing
+ *   final_content    $0.006299 · three Arabic summaries · no employer outside the facts
+ *
+ * Stated precisely: the HTTP 400 did not recur, and the escalation path that produced it was not
+ * entered on this run either — the second fast attempt satisfied the quality check. So production
+ * evidence says "no failure"; `acceptsTemperature` is covered by `ops/aicache.test.mjs` rather
+ * than by having watched Sonnet 5 accept a request.
+ *
+ * Numbers, not adjectives — and the failed line above is the reason this file exists. Nothing in
+ * the local suites could have found it.
  *
  * It is NOT part of `npm run test`: it spends real money on every run.
  *
