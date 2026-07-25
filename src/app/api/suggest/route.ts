@@ -44,6 +44,16 @@ export async function POST(req: NextRequest) {
     const role = String(body?.role || "").slice(0, 100);
     const company = String(body?.company || "").slice(0, 100);
     const current = String(body?.current || "").slice(0, 1200);
+    /*
+     * The live job posting, fetched from the internet by /api/fetch-job.
+     *
+     * This is what makes a suggestion current rather than remembered. The model
+     * here has no search tool of its own — on NVIDIA there is none to give it —
+     * so the internet arrives as the actual text of the actual advert the user is
+     * applying to, which is better grounding than a search would be anyway: it is
+     * THE posting, not a page about the role.
+     */
+    const jobAd = String(body?.jobAd || "").slice(0, 3000);
 
     if (!targetRole && !role && !current) {
       return NextResponse.json({ error: lang === "ar" ? "اكتب المسمى الوظيفي أولاً عشان أقدر أقترح." : "Fill in the role first so I have something to work from." }, { status: 400 });
@@ -63,6 +73,12 @@ KNOWN FACTS (use ONLY these — never invent employers, dates, numbers, degrees,
 - This job's title: ${role || "not given"}
 - Company: ${company || "not given"}
 - What the candidate already wrote in this field: ${current || "nothing yet"}
+
+${jobAd ? `THE LIVE JOB POSTING they are applying to — fetched today, so this is the
+vocabulary the employer's ATS is actually scanning for. Mirror its wording where it
+genuinely applies to this candidate, and never claim anything from it they have not
+told you they have:
+${jobAd}` : ""}
 
 Output ONLY the field content itself — no intro, no explanation, no markdown bold, no quotes.`;
 

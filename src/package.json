@@ -9,11 +9,12 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc",
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore",
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "test:merge": "node --experimental-strip-types ops/merge.test.mjs",
     "test:language": "node --experimental-strip-types ops/language.test.mjs",
-    "test:resumedoc": "node --experimental-strip-types ops/resumedoc.test.mjs"
+    "test:resumedoc": "node --experimental-strip-types ops/resumedoc.test.mjs",
+    "test:draftstore": "node --experimental-strip-types ops/draftstore.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

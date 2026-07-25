@@ -16,6 +16,7 @@ export default function AiSuggest({
   role,
   company,
   value,
+  jobAd,
   onWrite,
 }: {
   kind: "duties" | "summary" | "skills" | "extras" | "education";
@@ -24,6 +25,8 @@ export default function AiSuggest({
   role?: string;
   company?: string;
   value: string;
+  /** The live posting text, so a suggestion mirrors today's advert not the model's memory. */
+  jobAd?: string;
   onWrite: (text: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -42,7 +45,7 @@ export default function AiSuggest({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: ctrl.signal,
-        body: JSON.stringify({ kind, lang, targetRole, role, company, current: value }),
+        body: JSON.stringify({ kind, lang, targetRole, role, company, current: value, jobAd }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "failed");
