@@ -20,6 +20,7 @@ import { track } from "@vercel/analytics";
 import AiSuggest from "../AiSuggest";
 import BlueprintStrip from "./BlueprintStrip";
 import SuggestionChip from "./SuggestionChip";
+import { whySentence } from "@/app/lib/provenance";
 import {
   type BuilderState, type Credential, type CredentialKind, type SectionId,
   type LanguageEntry, type LanguageLevel, newId, newItem, normalizeLabel, rejected,
@@ -168,6 +169,10 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
       <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>{c.credHint}</p>
 
       {offers.length > 0 && (
+        <>
+        {/* Stated once for the group: every one of these came from the same role pack, so a "why"
+            button on each chip would open the same sentence n times. See `sharedWhy`. */}
+        <p className="bd-why-note mb-1.5 text-xs">{whySentence(lang, "occupation")}</p>
         <div className="bd-chips mb-4">
           {offers.map((o) => (
             <SuggestionChip
@@ -175,12 +180,14 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
               text={o.title[cv]}
               lang={lang}
               source="occupation"
+              showWhy={false}
               suffix={<span className="bd-opt"> · {KIND_LABEL[o.kind][lang]}</span>}
               onAdd={() => add(o.kind, o.title[cv], o.issuer ?? "")}
               onReject={() => drop("credential", o.title[cv])}
             />
           ))}
         </div>
+        </>
       )}
 
       {state.credentials.map((cr) => (
@@ -287,6 +294,8 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
       <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>{c.langHint}</p>
 
       {suggestions.length > 0 && (
+        <>
+        <p className="bd-why-note mb-1.5 text-xs">{whySentence(lang, "occupation")}</p>
         <div className="bd-chips mb-4">
           {suggestions.map((n) => (
             <SuggestionChip
@@ -294,11 +303,13 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
               text={n}
               lang={lang}
               source="occupation"
+              showWhy={false}
               onAdd={() => add(n.includes("Arabic") ? (cv === "ar" ? "العربية" : "Arabic") : "English")}
               onReject={() => drop("language", n)}
             />
           ))}
         </div>
+        </>
       )}
 
       {state.languages.map((l) => {

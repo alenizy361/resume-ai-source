@@ -119,12 +119,31 @@ export function experienceReady(s: BuilderState): Readiness {
  * knows.
  */
 export function skillsReady(s: BuilderState): Readiness {
-  return targetReady(s);
+  const missing: Missing[] = [];
+  if (!str(s.target.title)) missing.push({ code: "no-title", step: "target", field: "title" });
+  if (!str(s.target.language)) missing.push({ code: "no-cv-language", step: "target", field: "language" });
+  return missing.length ? { ready: false, missing } : READY;
 }
 
-/** Credentials and languages have the same dependency, for the same reason. */
-export const credentialsReady = skillsReady;
+/**
+ * Languages, same requirement — and deliberately NOT the country.
+ *
+ * A phone screenshot of the Arabic skills step is what found this. The banner said "the country you
+ * are applying in is not set — it is what decides which credentials are required", on the SKILLS
+ * step, where no credential is involved and the country changes nothing. That is the original bug
+ * wearing different words: a step telling a user something is missing when the step works fine
+ * without it. So the country requirement lives where the sentence is true.
+ */
 export const languagesReady = skillsReady;
+
+/**
+ * Credentials is the step the country genuinely gates.
+ *
+ * Which licence a radiographer needs is a fact about a jurisdiction — SCFHS in Saudi Arabia, ARRT in
+ * the United States — and offering the wrong one is the ARRT-on-a-Saudi-CV bug that `countryRules.ts`
+ * exists to prevent. Without a market there is no correct answer to give.
+ */
+export const credentialsReady = targetReady;
 
 /**
  * The summary describes the whole document, so it needs one confirmed role to describe.
@@ -133,7 +152,9 @@ export const languagesReady = skillsReady;
  * before any experience exists is a paragraph about nobody.
  */
 export function summaryReady(s: BuilderState): Readiness {
-  const t = targetReady(s);
+  /* Built on the skills gate, not the target one: a professional summary is written from a title
+     and a history, and no sentence in it depends on which country the user is applying in. */
+  const t = skillsReady(s);
   if (!t.ready) return t;
   return (s.profile.roles ?? []).length
     ? READY

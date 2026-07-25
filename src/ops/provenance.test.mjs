@@ -22,7 +22,7 @@
  *   node --experimental-strip-types ops/provenance.test.mjs
  */
 
-import { SOURCE_SENTENCE, WHY_LABEL, whySentence } from "../app/lib/provenance.ts";
+import { SOURCE_SENTENCE, WHY_LABEL, whySentence, sharedWhy } from "../app/lib/provenance.ts";
 import { EMPTY_BUILDER, newItem, rejectItem, rejected, filterFresh, normalizeLabel } from "../app/lib/builderDoc.ts";
 
 let pass = 0, fail = 0;
@@ -66,6 +66,44 @@ ok("and answers in the reader's language", hasArabic(whySentence("ar", undefined
     whySentence("ar", "occupation", specific) === specific);
   ok("whitespace is not a reason",
     whySentence("en", "occupation", "   ") === SOURCE_SENTENCE.en.occupation);
+}
+
+/* ────────────────── one sentence, or one button per chip ────────────────── */
+
+/*
+ * A phone screenshot of the Arabic skills step decided this: twenty-five chips, each with its own
+ * "why" button, each opening the SAME sentence, because a single role pack produced all of them.
+ * Twenty-five controls carrying one fact is clutter, and clutter is what makes someone stop reading
+ * the thing you wanted them to read. So a uniform group says it once and a mixed group does not.
+ */
+{
+  const pack = [
+    { source: "occupation", reason: "شائع في هذا المسمى" },
+    { source: "occupation", reason: "شائع في هذا المسمى" },
+  ];
+  ok("a group that would say one thing says it once", sharedWhy(pack, "ar") === "شائع في هذا المسمى");
+
+  /* The mixed case is not hypothetical: after a CV import some skills are the user's own and some
+     are the pack's, and there the per-chip button is the only way to tell them apart. */
+  const mixed = [
+    { source: "imported", reason: "" },
+    { source: "occupation", reason: "شائع في هذا المسمى" },
+  ];
+  ok("a mixed group keeps its per-chip buttons", sharedWhy(mixed, "ar") === null);
+
+  /* Same source, different specific reasons — still mixed, because the sentences differ. */
+  const sameSource = [
+    { source: "ai", reason: "مطلوب في الإعلان" },
+    { source: "ai", reason: "شائع في هذه المهنة" },
+  ];
+  ok("differing reasons under one source count as mixed", sharedWhy(sameSource, "ar") === null);
+
+  /* No reasons at all: the source sentence is shared, so the group is uniform. That is the blueprint
+     strip, which is where most of the twenty-five came from. */
+  ok("a group with no written reasons shares its source's sentence",
+    sharedWhy([{ source: "ai" }, { source: "ai" }], "en") === SOURCE_SENTENCE.en.ai);
+
+  ok("an empty group has nothing to say", sharedWhy([], "en") === null);
 }
 
 /* ─────────────────────────── the dismissal ─────────────────────────── */

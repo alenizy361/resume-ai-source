@@ -26,6 +26,7 @@ import ImportPanel from "./ImportPanel";
 import BlueprintStrip from "./BlueprintStrip";
 import OccupationClarify from "./OccupationClarify";
 import SuggestionChip from "./SuggestionChip";
+import { sharedWhy } from "@/app/lib/provenance";
 
 /** What every section needs and nothing more: who is reading, and the document. */
 export interface Common {
@@ -531,9 +532,21 @@ export function SkillsBody(p: Common) {
         </div>
       )}
       <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{L.tapToAdd}</p>
-      {groups.map(([label, items]) => (
+      {groups.map(([label, items]) => {
+        /*
+         * One provenance line for the group when every chip in it would say the same thing, and
+         * per-chip buttons only when they would not.
+         *
+         * A group is uniform in the ordinary case — a role pack fills it, or the blueprint does —
+         * and twenty-five identical "why" buttons was what that looked like on a phone. It stops
+         * being uniform exactly when it matters: after a CV import, some skills are the user's own
+         * and some are suggestions, and then each chip answers for itself.
+         */
+        const shared = sharedWhy(items, p.lang);
+        return (
         <div key={label} className="mt-3">
           {label && <div className="bd-label">{label}</div>}
+          {shared && <p className="bd-why-note mb-1.5 text-xs">{shared}</p>}
           <div className="bd-chips">
             {items.map((it) => (
               <SuggestionChip
@@ -542,6 +555,7 @@ export function SkillsBody(p: Common) {
                 lang={p.lang}
                 source={it.source}
                 reason={it.reason}
+                showWhy={!shared}
                 onAdd={() => {
                   p.dispatch({ t: "confirm", id: it.id });
                   track("builder_suggestion_accepted", { section: "skills", source: it.source });
@@ -559,7 +573,8 @@ export function SkillsBody(p: Common) {
             ))}
           </div>
         </div>
-      ))}
+        );
+      })}
       {gap}
     </>
   );

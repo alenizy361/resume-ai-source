@@ -62,3 +62,27 @@ export function whySentence(lang: "ar" | "en", source?: ItemSource, reason?: str
   if (specific) return specific;
   return SOURCE_SENTENCE[lang][source ?? "ai"] ?? SOURCE_SENTENCE[lang].ai;
 }
+
+/**
+ * The one sentence a whole group of suggestions shares — or `null` when they do not share one.
+ *
+ * ── why a group needs this ──
+ *
+ * A phone screenshot of the Arabic skills step settled it: twenty-five chips, each with its own
+ * "why" button, each opening the SAME sentence, because every one of them came from the same role
+ * pack. Twenty-five controls carrying one fact is not provenance, it is clutter — and clutter is
+ * what makes a person stop reading the thing you wanted them to read.
+ *
+ * So the section asks first. A uniform group states its provenance once, above the chips, and the
+ * chips keep only the decision that is genuinely theirs — "not for me". A MIXED group (a CV was
+ * imported, so some skills are the user's own and some are the pack's) keeps the per-chip button,
+ * because there the sentence differs per chip and that difference is the whole point.
+ */
+export function sharedWhy(
+  items: Array<{ source?: ItemSource; reason?: string }>,
+  lang: "ar" | "en",
+): string | null {
+  if (!items.length) return null;
+  const first = whySentence(lang, items[0].source, items[0].reason);
+  return items.every((i) => whySentence(lang, i.source, i.reason) === first) ? first : null;
+}

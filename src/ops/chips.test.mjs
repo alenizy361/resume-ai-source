@@ -10,10 +10,11 @@
  * So this is the browser half, on the two sizes that matter:
  *
  *   · the chips render at all — the check that would have caught a component nobody wired up
- *   · "why this?" answers with a real sentence, in place, rather than a `title` a phone never shows
- *   · opening it does not make the page scroll sideways (the failure mode of a wide note in a
- *     flex row, and the exact bug class `devices.test.mjs` exists for)
- *   · both small controls are as tall as the chip beside them — a thumb target, not a decoration
+ *   · the provenance is on the screen — as a group line when every chip would say the same thing,
+ *     which is the ordinary case and was twenty-five identical buttons before
+ *   · the chips do not make the page scroll sideways (the exact bug class `devices.test.mjs` exists
+ *     for, and the reason the controls moved inside the pill)
+ *   · the pill is a thumb target and the control inside it has not vanished
  *   · rejecting removes the chip AND the rejection survives a reload, which is the whole
  *     difference between a decision and a dismissal
  *
@@ -72,21 +73,33 @@ for (const prof of [
 
   const firstText = (await groups.first().locator(".bd-chip").innerText()).trim();
 
-  await groups.first().locator(".bd-chip-aux").first().click();
-  await page.waitForTimeout(200);
-  const why = await page.locator(".bd-chip-why").first().innerText().catch(() => "");
-  ok(`${prof.name}: "why" answers with a sentence`, why.trim().length > 10, JSON.stringify(why));
+  /*
+   * The skills groups here are uniform — one role pack filled them — so the provenance is stated
+   * once above the chips and no chip carries its own "why" button. That is the arrangement
+   * `sharedWhy` decides; what this checks is that the sentence is actually on the screen, because a
+   * group note that renders empty would be strictly worse than the buttons it replaced.
+   */
+  const note = await page.locator(".bd-why-note").first().innerText().catch(() => "");
+  ok(`${prof.name}: the group says where its suggestions came from`, note.trim().length > 10, JSON.stringify(note));
+  const auxPerChip = await groups.first().locator(".bd-chip-aux").count();
+  ok(`${prof.name}: and a uniform group carries no per-chip "why"`, auxPerChip === 1, `${auxPerChip} controls`);
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  ok(`${prof.name}: the open explanation does not push the page sideways`, overflow <= 1, `${overflow}px`);
+  ok(`${prof.name}: the chips do not push the page sideways`, overflow <= 1, `${overflow}px`);
 
+  /* The pill is the thumb target — 36px, the builder's floor. The aside inside it is the same
+     24px this codebase already ships for removing a confirmed skill, deliberately: holding an
+     inline control to 44px is what makes a row of chips unusable. */
   const tap = await page.evaluate(() => {
-    const els = [...document.querySelectorAll(".bd-chip-aux")];
-    return Math.min(...els.map((e) => Math.round(e.getBoundingClientRect().height)));
+    const pill = [...document.querySelectorAll(".bd-chip-group > .bd-chip")];
+    const aux = [...document.querySelectorAll(".bd-chip-aux")];
+    const h = (els) => Math.min(...els.map((e) => Math.round(e.getBoundingClientRect().height)));
+    return { pill: h(pill), aux: h(aux) };
   });
-  ok(`${prof.name}: the small controls are at least 36px tall`, tap >= 36, `${tap}px`);
+  ok(`${prof.name}: the chip itself is a thumb target`, tap.pill >= 36, `${tap.pill}px`);
+  ok(`${prof.name}: and its inline control is not vanishing`, tap.aux >= 24, `${tap.aux}px`);
 
-  await groups.first().locator(".bd-chip-aux").nth(1).click();
+  await groups.first().locator(".bd-chip-aux").last().click();
   await page.waitForTimeout(400);
   const after = await groups.count();
   ok(`${prof.name}: rejecting removes that chip`, after === before - 1, `${before} → ${after}`);

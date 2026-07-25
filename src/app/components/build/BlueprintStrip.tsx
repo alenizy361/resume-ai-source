@@ -35,6 +35,7 @@ import { credentialsFor } from "@/app/lib/countryRules";
 import { filterFresh, newItem, rejected, type SectionId } from "@/app/lib/builderDoc";
 import { useBuilder } from "./BuilderProvider";
 import SuggestionChip from "./SuggestionChip";
+import { whySentence } from "@/app/lib/provenance";
 
 const C = {
   en: {
@@ -241,13 +242,18 @@ export default function BlueprintStrip({
 
       {visible.length > 0 && (
         <>
-          <div className="bd-chips mt-3">
+          {/* Every chip here came from the same blueprint, so the provenance is stated once rather
+              than as a button on each of twenty-five of them. `showWhy={false}` for the same
+              reason — see `sharedWhy` in `lib/provenance.ts`. */}
+          <p className="bd-why-note mt-3 text-xs">{whySentence(lang, "ai")}</p>
+          <div className="bd-chips mt-2">
             {visible.map((text) => (
               <SuggestionChip
                 key={text}
                 text={text}
                 lang={lang}
                 source="ai"
+                showWhy={false}
                 onAdd={() => onPick(text)}
                 onReject={() => drop(text)}
               />

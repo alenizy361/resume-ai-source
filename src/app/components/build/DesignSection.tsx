@@ -92,7 +92,10 @@ const C = {
     downloads: "التنزيل",
     ats: "للتقديم — مقروء من أنظمة التتبّع",
     designed: "للإرسال لشخص — مصمّم",
-    pdf: "↓ PDF", word: "↓ Word (.docx)",
+    /* "Word" stays Latin — it is the product's name and what the file will be called on disk — but
+       the sentence around it is Arabic, because for an Arabic CV this button is the only download
+       and an all-English label is the least helpful place to leave one. */
+    pdf: "↓ PDF", word: "↓ ملف Word ‏(.docx)",
     arabicPdf: "الـ PDF النصي لا يستطيع تشكيل الحرف العربي — السيرة العربية تُنزّل كـ Word (وكل أنظمة التتبّع تقرأه) أو كـ PDF المصمّم أدناه (ويُظهر العربية صحيحة).",
     mark: "التنزيل المجاني يحمل علامة صغيرة cv.rabit.sa.",
     unlock: "أزلها",

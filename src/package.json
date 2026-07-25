@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow && npm run test:stepready && npm run test:occupations && npm run test:translate && npm run test:provenance",
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow && npm run test:stepready && npm run test:occupations && npm run test:translate && npm run test:provenance && npm run test:export",
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "smoke": "node ops/form-smoke.mjs",
     "test:importcv": "node --experimental-strip-types ops/importcv.test.mjs",
@@ -41,7 +41,8 @@
     "test:stepready": "node --experimental-strip-types ops/stepready.test.mjs",
     "test:occupations": "node --experimental-strip-types ops/occupations.test.mjs",
     "test:translate": "node --experimental-strip-types ops/translate.test.mjs",
-    "test:provenance": "node --experimental-strip-types ops/provenance.test.mjs"
+    "test:provenance": "node --experimental-strip-types ops/provenance.test.mjs",
+    "test:export": "node --experimental-strip-types ops/export.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

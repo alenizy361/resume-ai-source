@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { docxPlan } from "@/app/lib/docxPlan";
+import { hasArabic } from "@/app/lib/cvHeadings";
 
 /**
  * Real .docx (Microsoft Word) export from the plain-text CV — a competitive
@@ -15,37 +17,27 @@ export default function DocxExport({ text, label = "↓ Word (.docx)", filename 
     setBusy(true);
     try {
       const { Document, Packer, Paragraph, TextRun, AlignmentType, Footer } = await import("docx");
-      const hasArabic = /[؀-ۿ]/.test(text);
-      const lines = text.replace(/\r/g, "").split("\n");
+      const arabicDoc = hasArabic(text);
 
-      // Heuristic: the first non-empty line is the name; ALL-CAPS or short
-      // colon-free lines that look like section headings get bolded/larger.
-      let nameUsed = false;
-      const paragraphs = lines.map((raw) => {
-        const line = raw.trimEnd();
-        if (!line.trim()) return new Paragraph({ text: "" });
-
-        const bidi = /[؀-ۿ]/.test(line);
-        const align = bidi ? AlignmentType.RIGHT : AlignmentType.LEFT;
-
-        if (!nameUsed && line.trim()) {
-          nameUsed = true;
-          return new Paragraph({
-            alignment: align, bidirectional: bidi,
-            children: [new TextRun({ text: line.trim(), bold: true, size: 32 })],
-          });
-        }
-        // Section heading: a short line, no bullet, mostly heading-like.
-        const isHeading = line.length < 40 && !/^[-•*]/.test(line.trim()) && !line.includes("@") && /[A-Za-z؀-ۿ]/.test(line) && line === line.toUpperCase() && line.length > 2;
-        if (isHeading) {
-          return new Paragraph({
-            alignment: align, bidirectional: bidi, spacing: { before: 200, after: 80 },
-            children: [new TextRun({ text: line.trim(), bold: true, size: 24 })],
-          });
-        }
+      /*
+       * Every judgement about the document is made by `docxPlan` — what the name is, what a heading
+       * is, which way each line runs. This maps it, and nothing more.
+       *
+       * It used to decide those things here, and could not be tested behind a click handler: the
+       * heading test was `line === line.toUpperCase()`, which is true of ALL Arabic, so an Arabic CV
+       * came out of Word with its city and half its skills set as bold section headings. That file
+       * is the only download an Arabic CV gets.
+       */
+      const paragraphs = docxPlan(text).map((l) => {
+        if (l.role === "blank") return new Paragraph({ text: "" });
         return new Paragraph({
-          alignment: align, bidirectional: bidi,
-          children: [new TextRun({ text: line, size: 22 })],
+          alignment: l.align === "right" ? AlignmentType.RIGHT : AlignmentType.LEFT,
+          // Both, always together: `bidirectional` sets the paragraph's direction and `rightToLeft`
+          // the run's. Setting only the first is what leaves a trailing "(CT)" or a phone number on
+          // the wrong end of an Arabic line.
+          bidirectional: l.rtl,
+          ...(l.role === "heading" ? { spacing: { before: 200, after: 80 } } : {}),
+          children: [new TextRun({ text: l.text, bold: l.bold, size: l.size, rightToLeft: l.rtl })],
         });
       });
 
@@ -62,7 +54,7 @@ export default function DocxExport({ text, label = "↓ Word (.docx)", filename 
         : undefined;
 
       const doc = new Document({
-        styles: { default: { document: { run: { font: hasArabic ? "Arial" : "Calibri" } } } },
+        styles: { default: { document: { run: { font: arabicDoc ? "Arial" : "Calibri" } } } },
         sections: [{ properties: {}, children: paragraphs, ...(footers ? { footers } : {}) }],
       });
 

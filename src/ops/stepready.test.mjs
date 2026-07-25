@@ -104,6 +104,42 @@ const withTarget = (patch = {}) => ({
     stepMark("target", s, "skills") === "warn");
 }
 
+/* ───────────── the country belongs to the step that uses it ───────────── */
+
+/*
+ * Found in a phone screenshot of the Arabic skills step: the banner read "the country you are
+ * applying in is not set — it is what decides which credentials are required", printed above a
+ * skills list, where no credential is involved. The sentence was true; the place was wrong.
+ *
+ * A missing country stops credentials from being correct — SCFHS or ARRT depends entirely on the
+ * market — and stops nothing else. Skills, languages and the summary work without one, and telling
+ * a user otherwise is the original bug in different words.
+ */
+{
+  const noCountry = {
+    ...EMPTY_BUILDER,
+    target: { ...EMPTY_TARGET, title: "أخصائي أشعة", country: "", language: "ar" },
+    personal: { ...EMPTY_BUILDER.personal, country: "" },
+  };
+
+  ok("Skills does not demand a country", skillsReady(noCountry).ready === true);
+  ok("nor do languages", stepReady("languages", noCountry).ready === true);
+  ok("credentials DOES — it is the step whose answer changes with the market",
+    stepReady("credentials", noCountry).ready === false);
+  ok("and it says so by naming the country",
+    stepReady("credentials", noCountry).missing.some((m) => m.code === "no-country"));
+
+  /* The summary is about a person's work, not their jurisdiction. */
+  const withRole = {
+    ...noCountry,
+    profile: { ...EMPTY_BUILDER.profile, roles: [{ id: "r1", title: "أخصائي أشعة", company: "مستشفى", location: "", start: "2020", end: "", bullets: [] }] },
+  };
+  ok("the summary does not demand a country either", stepReady("summary", withRole).ready === true);
+
+  /* And the target step still asks for it — that is where the field lives. */
+  ok("the target step still wants the country", targetReady(noCountry).ready === false);
+}
+
 /* ─────────────────── the target gate ─────────────────── */
 
 {

@@ -42,13 +42,21 @@ import type { ItemSource } from "@/app/lib/builderDoc";
 import { WHY_LABEL, whySentence } from "@/app/lib/provenance";
 
 export default function SuggestionChip({
-  text, lang, source, reason, suffix, onAdd, onReject,
+  text, lang, source, reason, suffix, showWhy = true, onAdd, onReject,
 }: {
   text: string;
   lang: "ar" | "en";
   source?: ItemSource;
   /** The item's own explanation, when it has one. Falls back to the source sentence. */
   reason?: string;
+  /**
+   * Whether this chip carries its own "why".
+   *
+   * Sections pass `false` when every chip in the group would say the same sentence — the section
+   * then states it once, above them. See `sharedWhy` in `lib/provenance.ts`: twenty-five buttons
+   * opening one identical fact is not provenance, it is noise, and it was visible on a phone.
+   */
+  showWhy?: boolean;
   /** Small trailing note inside the add button — a credential's kind, a language's script. */
   suffix?: React.ReactNode;
   onAdd: () => void;
@@ -61,24 +69,29 @@ export default function SuggestionChip({
 
   return (
     <span className="bd-chip-group">
-      <span className="bd-chip-row">
-        <button className="bd-chip" onClick={onAdd}>
+      {/* The controls live INSIDE the pill, the way a confirmed skill's remove already does. Two
+          circles floating beside every chip read as separate objects and cost a row each on a
+          390px screen — a phone screenshot is what settled it. */}
+      <span className="bd-chip">
+        <button type="button" className="bd-chip-add" onClick={onAdd}>
           + {text}
           {suffix}
         </button>
 
-        {/* Two small controls, deliberately quiet: the primary action is adding, and a chip with
-            three equally loud buttons is a decision three times over. */}
-        <button
-          type="button"
-          className="bd-chip-aux"
-          onClick={() => setOpenWhy((v) => !v)}
-          aria-expanded={openWhy}
-          aria-label={`${c.why} ${text}`}
-          title={c.why}
-        >
-          ?
-        </button>
+        {/* Small and quiet, deliberately: the primary action is adding, and a chip with three
+            equally loud buttons is a decision three times over. */}
+        {showWhy && (
+          <button
+            type="button"
+            className="bd-chip-aux"
+            onClick={() => setOpenWhy((v) => !v)}
+            aria-expanded={openWhy}
+            aria-label={`${c.why} ${text}`}
+            title={c.why}
+          >
+            ?
+          </button>
+        )}
         {onReject && (
           <button
             type="button"
@@ -94,7 +107,7 @@ export default function SuggestionChip({
 
       {/* Opened in place rather than as a tooltip: a `title` attribute does not exist on a phone,
           which is where most of this builder is used. */}
-      {openWhy && <span className="bd-chip-why" role="note">{why}</span>}
+      {showWhy && openWhy && <span className="bd-chip-why" role="note">{why}</span>}
     </span>
   );
 }

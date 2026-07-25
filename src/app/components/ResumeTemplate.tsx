@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { isHeading } from "@/app/lib/cvHeadings";
 
 /**
  * Visual, designed resume template with a live preview + a one-click designed
@@ -18,39 +19,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 interface Section { heading: string; lines: string[] }
 interface Parsed { name: string; contact: string; sections: Section[] }
 
-const HEADINGS = [
-  "PROFESSIONAL SUMMARY", "SUMMARY", "PROFILE", "OBJECTIVE",
-  "SKILLS", "CORE SKILLS", "TECHNICAL SKILLS",
-  "EXPERIENCE", "WORK EXPERIENCE", "PROFESSIONAL EXPERIENCE", "EMPLOYMENT HISTORY",
-  "EDUCATION", "CERTIFICATIONS", "CERTIFICATES", "LANGUAGES", "PROJECTS",
-  "PERSONAL DETAILS", "PERSONAL INFORMATION", "ACHIEVEMENTS", "AWARDS", "REFERENCES",
-];
-
-// Arabic section headings (Modern Standard Arabic) so RTL and bilingual resumes
-// parse into the same sections as English ones.
-const HEADINGS_AR = [
-  "الملخص المهني", "الملخص", "نبذة", "الهدف الوظيفي",
-  "المهارات", "المهارات الأساسية", "المهارات التقنية",
-  "الخبرة", "الخبرة العملية", "الخبرات", "التاريخ الوظيفي",
-  "التعليم", "المؤهلات", "الشهادات", "اللغات", "المشاريع",
-  "البيانات الشخصية", "المعلومات الشخصية", "الإنجازات", "الجوائز", "المراجع",
-];
-
-function isHeading(line: string): boolean {
-  // Bilingual headings look like "EXPERIENCE · الخبرة" — test each side.
-  const parts = line.split(/[·|/–—-]/).map((p) => p.trim()).filter(Boolean);
-  const candidates = parts.length > 1 ? [line.trim(), ...parts] : [line.trim()];
-  for (const c of candidates) {
-    const t = c.replace(/:$/, "").trim();
-    if (t.length > 42) continue;
-    if (HEADINGS.includes(t.toUpperCase())) return true;
-    if (HEADINGS_AR.includes(t)) return true;
-    // A short ALL-CAPS Latin line with no bullet/email is a heading.
-    if (/^[A-Z][A-Z &/]{2,38}$/.test(t) && !t.includes("@")) return true;
-  }
-  return false;
-}
-
+/*
+ * Heading detection is shared with the Word export via `lib/cvHeadings.ts`.
+ *
+ * It used to be a copy here and a different rule there, and the two disagreed about Arabic: this
+ * file recognised Arabic headings by name, Word decided by letter case — which Arabic does not
+ * have — so the same CV came out with different sections depending on which button was pressed.
+ */
 function parse(text: string): Parsed {
   const raw = text.replace(/\r/g, "").split("\n");
   const nonEmpty = raw.map((l) => l.trimEnd());
