@@ -70,14 +70,11 @@
  */
 
 import { appendFileSync, writeFileSync } from "node:fs";
-import { DRAFT_PROMPT, draftUserMessage } from "../app/lib/prompts.ts";
+import Anthropic from "@anthropic-ai/sdk";
+import { DRAFT_PROMPT, DRAFT_SCHEMA, draftUserMessage } from "../app/lib/prompts.ts";
 import { hasMetric, extractJsonValue } from "../app/lib/suggestShapes.ts";
 import { JOBS } from "../app/lib/jobs.ts";
 import { JOBS_AR } from "../app/lib/jobs-ar.ts";
-
-const KEY = process.env.NVIDIA_API_KEY;
-const BASE = "https://integrate.api.nvidia.com/v1";
-const MODEL = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
 
 const arg = (name, dflt) => {
   const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
@@ -89,8 +86,25 @@ const LIMIT = Number(arg("limit", "0")) || 0;
 /** Four at a time: enough to finish 111 titles in a few minutes, gentle enough not to 429. */
 const CONCURRENCY = Number(arg("concurrency", "4"));
 
+/**
+ * Which provider is under test.
+ *
+ * Both get the SAME system prompt, the SAME user message and the SAME scoring, because the
+ * question is which one drafts a Saudi CV better — not which one is easier to prompt. The only
+ * differences are the ones the APIs force: NVIDIA takes `response_format: json_object` and a
+ * shape sentence appended to the user turn, Anthropic takes a real JSON schema.
+ */
+const PROVIDER = (arg("provider", process.env.AI_PROVIDER || "nvidia")).toLowerCase();
+const ANTHROPIC = PROVIDER === "anthropic";
+
+const KEY = ANTHROPIC ? process.env.ANTHROPIC_API_KEY : process.env.NVIDIA_API_KEY;
+const BASE = "https://integrate.api.nvidia.com/v1";
+const MODEL = ANTHROPIC
+  ? (process.env.ANTHROPIC_MODEL || process.env.AI_MODEL || "claude-opus-5")
+  : (process.env.NVIDIA_MODEL || process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct");
+
 if (!KEY) {
-  console.error("NVIDIA_API_KEY is not set — this bench calls the real model and cannot run without it.");
+  console.error(`${ANTHROPIC ? "ANTHROPIC_API_KEY" : "NVIDIA_API_KEY"} is not set — this bench calls the real model and cannot run without it.`);
   process.exit(1);
 }
 
@@ -161,6 +175,49 @@ async function draft(job) {
 }
 
 async function once(job) {
+  return ANTHROPIC ? onceAnthropic(job) : onceNvidia(job);
+}
+
+/**
+ * Anthropic, with the shape enforced by a real schema instead of a sentence.
+ *
+ * `DRAFT_SCHEMA` is the same object `/api/interview` passes, so a response that parses here
+ * would parse there. No web search: the product's Anthropic draft path DOES offer search, so
+ * this understates what Claude would produce in the product — but search costs seconds and
+ * money per title, and the comparison being made is of drafting quality on a bare job title,
+ * which is what the NVIDIA side gets too. Turning it on for 111 titles is a separate question.
+ *
+ * `maxRetries: 0` because this file owns its own retry policy and measures it.
+ */
+async function onceAnthropic(job) {
+  const t0 = Date.now();
+  const client = new Anthropic({ apiKey: KEY, timeout: TIMEOUT_MS, maxRetries: 0 });
+  try {
+    const res = await client.messages.create({
+      model: MODEL,
+      max_tokens: 2000,
+      system: DRAFT_PROMPT,
+      output_config: { format: { type: "json_schema", schema: DRAFT_SCHEMA } },
+      messages: [{ role: "user", content: draftUserMessage({
+        role: job.title, industry: job.industry, langWord: job.langWord,
+      }) }],
+    });
+    const ms = Date.now() - t0;
+    if (res.stop_reason === "refusal") return { ms, error: "refusal" };
+    const block = res.content.find((b) => b.type === "text");
+    return { ms, text: block && block.type === "text" ? block.text : "" };
+  } catch (e) {
+    const ms = Date.now() - t0;
+    // The SDK raises its own timeout as APIConnectionTimeoutError; normalise so the retry
+    // logic and the report do not have to know which provider produced the hang.
+    const name = e?.constructor?.name ?? "";
+    if (/Timeout/i.test(name) || e?.name === "AbortError") return { ms, error: "timeout" };
+    const status = e?.status;
+    return { ms, error: status ? `http-${status}` : "network", detail: String(e?.message ?? e).slice(0, 120) };
+  }
+}
+
+async function onceNvidia(job) {
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
@@ -302,7 +359,7 @@ async function pool(items, n, worker) {
 }
 
 const jobs = catalogue();
-console.log(`model: ${MODEL}`);
+console.log(`provider: ${PROVIDER} · model: ${MODEL}`);
 console.log(`titles: ${jobs.length} (${jobs.filter((j) => j.lang === "ar").length} ar, ${jobs.filter((j) => j.lang === "en").length} en) · ${CONCURRENCY} at a time\n`);
 
 /*
@@ -318,7 +375,7 @@ console.log(`titles: ${jobs.length} (${jobs.filter((j) => j.lang === "ar").lengt
  */
 if (process.env.OUT) {
   writeFileSync(process.env.OUT,
-    `# Titles bench — ${MODEL}\n\n${jobs.length} titles · started before any aggregate existed, so a killed run still leaves the rows below.\n\n`
+    `# Titles bench — ${PROVIDER} · ${MODEL}\n\n${jobs.length} titles · started before any aggregate existed, so a killed run still leaves the rows below.\n\n`
     + `| # | title | ms | duties | skills | failed | detail |\n|---|---|---|---|---|---|---|\n`);
 }
 

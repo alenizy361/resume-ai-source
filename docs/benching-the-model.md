@@ -31,6 +31,24 @@ the script.
                        (0 = all; anything else samples that many, spread across categories
                        rather than taking the first N, which would all be Technology).
 
+## Comparing providers
+
+`suite=titles` takes a `provider` input — `nvidia` (default) or `anthropic`. Both sides get the
+**same** system prompt, the **same** user message and the **same** scoring, because the question
+is which one drafts a Saudi CV better, not which one is easier to prompt. The only differences
+are the ones the APIs force: NVIDIA takes `response_format: json_object` plus a shape sentence
+appended to the user turn, Anthropic takes `DRAFT_SCHEMA` as a real JSON schema.
+
+`anthropic` needs `ANTHROPIC_API_KEY` as a repository secret. The workflow checks for it up
+front and says which key is missing rather than reporting a generic failure — with two
+providers, "no key reached the runner" is the wrong message when one of them is set.
+
+One caveat worth stating: the product's Anthropic drafting path offers the model **web search**,
+and the bench does not. So an Anthropic run here understates what the product would produce.
+Search costs seconds and money per title, and the comparison being made is drafting quality
+from a bare job title, which is what the NVIDIA side gets too. Turning it on across 111 titles
+is a separate question.
+
 ## It measures the model, not the product
 
 The bench calls the provider directly, so nothing it reports has passed through

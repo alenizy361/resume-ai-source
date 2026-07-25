@@ -40,6 +40,11 @@ on:
         description: "titles suite only — re-send a HUNG request this many times. 0 reproduces the original single-attempt measurement."
         type: string
         default: "2"
+      provider:
+        description: "titles suite only — which provider drafts. Same prompt and same scoring either way; anthropic needs ANTHROPIC_API_KEY."
+        type: choice
+        options: ["nvidia", "anthropic"]
+        default: "nvidia"
       models:
         description: "Comma-separated model ids. Empty = every chat model in the NVIDIA catalogue."
         type: string
@@ -69,6 +74,7 @@ jobs:
         env:
           NV: ${{ secrets.NVIDIA_API_KEY }}
           AN: ${{ secrets.ANTHROPIC_API_KEY }}
+          WANT: ${{ inputs.provider }}
           # A key put in the wrong store or under a near-miss name reads to the
           # owner as "it's there" and to the runner as absent. Naming the exact
           # variants tells us which mistake it was instead of guessing.
@@ -93,6 +99,12 @@ jobs:
           echo "CLAUDE_API_KEY    : ${#AN_ALT2}"
           echo "── Variables tab (not Secrets) ──"
           echo "vars.NVIDIA_API_KEY: ${#NV_VAR}"
+          # The titles suite needs the key for the provider it was asked to test; naming which
+          # one is missing beats "no key reached the runner" when only one of two is set.
+          if [ "${{ inputs.suite }}" = "titles" ] && [ "$WANT" = "anthropic" ] && [ -z "$AN" ]; then
+            echo "::error::provider=anthropic but ANTHROPIC_API_KEY is empty. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
           [ -n "$NV" ] || [ -n "$AN" ] || {
             echo "::error::No key reached the runner. If a length above is non-zero, the key exists under that name — tell me which and I will use it. If every length is 0, the key is in a store Actions cannot read (Codespaces or Dependabot secrets), or in another repo."
             exit 1
@@ -114,11 +126,13 @@ jobs:
         working-directory: src
         env:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # Empty means the product's own default, which is the model to measure.
           AI_MODEL: ${{ inputs.models }}
           OUT: ${{ github.workspace }}/titles-bench.md
         run: |
           node --experimental-strip-types ops/titles-bench.mjs \
+            --provider=${{ inputs.provider }} \
             --lang=${{ inputs.lang }} --limit=${{ inputs.limit }} \
             --retries=${{ inputs.retries }} --concurrency=4
 
