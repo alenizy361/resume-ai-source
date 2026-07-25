@@ -118,6 +118,42 @@ ok("and the header stops claiming to be offline", !/Offline|بلا اتصال/.t
 
 ok("no page errors", errors.length === 0, errors.join(" · "));
 
+/* ── a draft that cannot be read is HELD, not overwritten ── */
+
+/*
+ * The other way a user loses work, and until now the silent one: a truncated draft — an iOS tab
+ * killed mid-write — parsed as nothing, looked like a new visitor, and was overwritten by the
+ * autosave 450ms after arrival. `ops/lifecycle.test.mjs` proves the store keeps the bytes; this
+ * proves the running builder does not write over them.
+ */
+/*
+ * Damaged from a page that has no builder mounted.
+ *
+ * Injecting it into a live builder tab proves nothing: leaving that page fires `pagehide`, the
+ * provider flushes its perfectly valid in-memory state, and the truncation is overwritten by the
+ * harness's own doing before the next load ever reads it. A real truncation — a tab killed
+ * mid-write — has no live provider behind it, which is what this reproduces.
+ */
+await page.goto(`${BASE}/pricing`, { waitUntil: "networkidle" });
+await page.evaluate(() => {
+  window.localStorage.setItem("ra_journey_en", '{"resumeId":"rTRUNC","profile":{"role":"Radiog');
+});
+await page.goto(`${BASE}/builder/rTRUNC/target`, { waitUntil: "networkidle" });
+await page.waitForTimeout(600);
+await page.fill(".bd-form input.bd-input >> nth=0", "Something new");
+await page.waitForTimeout(1500); // well past the 450ms autosave
+
+const after = await page.evaluate(() => ({
+  live: window.localStorage.getItem("ra_journey_en"),
+  kept: window.localStorage.getItem("ra_journey_en_damaged"),
+  label: (document.querySelector(".bd-save") || {}).textContent || "",
+}));
+
+ok("the unreadable draft was copied aside", (after.kept || "").includes("Radiog"), JSON.stringify(after.kept));
+ok("and nothing wrote over the live key", (after.live || "").includes("Radiog"), JSON.stringify(after.live || "").slice(0, 120));
+ok("the header says the draft could not be read",
+  /could not be read|تعذّرت قراءة/.test(after.label), JSON.stringify(after.label));
+
 await browser.close();
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

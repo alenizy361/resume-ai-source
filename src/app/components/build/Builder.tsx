@@ -30,6 +30,7 @@ import {
 } from "@/app/lib/builderDoc";
 import { reducer } from "./builderState";
 import { useOnline } from "./useOnline";
+import { type Lifecycle, lifecycleLabel, lifecycleTone, mayWrite } from "@/app/lib/lifecycle";
 import {
   StartCards, TargetFields, PersonalFields, BlueprintBody, SkillsBody,
 } from "./FormSections";
@@ -52,7 +53,6 @@ const T = {
       "ATS-ready structure — single column, standard headings",
       "Free, no signup, works with the AI switched off",
     ],
-    saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
     offline: "Offline — your work is saved on this device",
     cont: "Save & continue", edit: "Edit", preview: "Preview",
     sections: {
@@ -97,7 +97,6 @@ const T = {
       "بنية تعبر أنظمة الفرز — عمود واحد وعناوين قياسية",
       "مجاناً، بلا تسجيل، ويعمل والذكاء مطفأ",
     ],
-    saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
     offline: "بلا اتصال — عملك محفوظ على جهازك",
     cont: "احفظ وواصل", edit: "تعديل", preview: "معاينة",
     sections: {
@@ -157,7 +156,15 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
   const t = T[lang];
   const ar = lang === "ar";
   const [state, dispatch] = useReducer(reducer, EMPTY_BUILDER);
-  const [save, setSave] = useState<"" | "saving" | "saved" | "failed">("");
+  /*
+   * The same lifecycle the step routes use, in the long-page shell.
+   *
+   * Two vocabularies for one situation is how a product ends up telling a user "Saved" on one
+   * surface and nothing at all on the other for the identical state.
+   */
+  const [life, setLife] = useState<Lifecycle>("loading");
+  /** Set once at hydration: the stored draft could not be parsed, so nothing may overwrite it. */
+  const damaged = useRef(false);
   const online = useOnline();
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
   const hydrated = useRef(false);
@@ -181,24 +188,33 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
       cinema.restore(1);
     }
     hydrated.current = true;
+    /* A stored draft that would not parse. Recorded in a ref and acted on by the autosave effect
+       below rather than set from here: this effect runs once on mount, and a `setState` in it is a
+       cascading render for a fact the very next effect is about to read anyway. */
+    damaged.current = d.damaged === true;
     track("builder_started", { lang });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
-  /* autosave — debounced, local-first, never blocking */
+  /* autosave — debounced, local-first, never blocking, and never over an unreadable draft */
   useEffect(() => {
     if (!hydrated.current) return;
-    setSave("saving");
+    /* The first run of this effect is also where a damaged draft becomes visible — it fires
+       immediately after hydration, and holding the write is exactly what this state means. */
+    setLife((l) => (damaged.current ? "invalidResume" : mayWrite(l) ? "saving" : l));
     const id = setTimeout(() => {
-      try {
-        writeDraft(lang, {
-          profile: state.profile,
-          door: "form",
-          // Nested so the chat's own keys and the builder's cannot collide.
-          ...({ builder: state } as unknown as Record<string, unknown>),
-        });
-        setSave("saved");
-      } catch { setSave("failed"); }
+      setLife((l) => {
+        if (damaged.current || !mayWrite(l)) return l;
+        try {
+          writeDraft(lang, {
+            profile: state.profile,
+            door: "form",
+            // Nested so the chat's own keys and the builder's cannot collide.
+            ...({ builder: state } as unknown as Record<string, unknown>),
+          });
+          return "saved";
+        } catch { return "saveError"; }
+      });
     }, 450);
     return () => clearTimeout(id);
      
@@ -281,9 +297,10 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                 {/* Offline outranks the save label: both are about whether the work is safe, and
                     "Saved" beside a dead connection reads as a promise about the wrong thing. The
                     draft IS safe — every write is local — so the sentence says where it is. */}
-                <span className={`bd-save${save === "failed" ? " err" : ""}`}>
-                  {!online ? t.offline
-                    : save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
+                <span className={`bd-save${lifecycleTone(life) !== "quiet" ? " err" : ""}`}>
+                  {life === "invalidResume" ? lifecycleLabel(life, lang)
+                    : !online ? t.offline
+                    : lifecycleLabel(life, lang)}
                 </span>
               </div>
             </div>

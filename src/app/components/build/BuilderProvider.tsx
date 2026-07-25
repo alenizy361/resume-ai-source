@@ -39,14 +39,22 @@ import { computeProgress } from "@/app/lib/interviewGuards";
 import { readBuilder, writeBuilder, readDraft } from "@/app/lib/draftStore";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
-  type BuilderState, type SectionId, EMPTY_BUILDER, cvLang,
+  type BuilderState, type SectionId, EMPTY_BUILDER, SCHEMA_VERSION, cvLang,
 } from "@/app/lib/builderDoc";
 import { EMPTY_LEDGER } from "@/app/lib/aiBudget";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { type Action, reducer, careerContext } from "./builderState";
 import { type UseGenerate, useGenerate } from "./useGenerate";
 import { useOnline } from "./useOnline";
+import { type Lifecycle, mayWrite } from "@/app/lib/lifecycle";
 
+/**
+ * The old four-value save indicator, kept as a NARROWING of the lifecycle.
+ *
+ * Two shells and their tests read it. Deriving it from the one lifecycle value rather than
+ * computing it separately is the whole point — two independently computed labels for the same
+ * situation is how "Saved" ends up printed beside an unwritten draft.
+ */
 export type SaveState = "" | "saving" | "saved" | "failed";
 
 interface BuilderContextValue {
@@ -56,6 +64,8 @@ interface BuilderContextValue {
   state: BuilderState;
   dispatch: React.Dispatch<Action>;
   save: SaveState;
+  /** What the builder is actually doing — the full set, of which `save` is a summary. */
+  lifecycle: Lifecycle;
   /**
    * Whether the browser currently has a connection.
    *
@@ -121,8 +131,19 @@ export default function BuilderProvider({
   children: React.ReactNode;
 }) {
   const [state, dispatch] = useReducer(reducer, EMPTY_BUILDER);
-  const [resumeId, setResumeId] = useState("");
-  const [hydrated, setHydrated] = useState(false);
+  /**
+   * Everything the one read of storage established, written once.
+   *
+   * `damaged` is a stored draft that would not parse — it blocks every write, because the autosave
+   * would otherwise overwrite the only copy. `migrated` is an older schema brought forward.
+   */
+  const [boot, setBoot] = useState<{
+    id: string; hydrated: boolean; damaged: boolean; migrated: boolean;
+  }>({ id: "", hydrated: false, damaged: false, migrated: false });
+  const resumeId = boot.id;
+  const hydrated = boot.hydrated;
+  const damagedDraft = boot.damaged;
+  const migrated = boot.migrated;
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   /*
@@ -137,7 +158,7 @@ export default function BuilderProvider({
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    const { id, state: saved, fromChat } = readBuilder(lang);
+    const { id, state: saved, fromChat, damaged } = readBuilder(lang);
 
     /*
      * A FRESH draft's CV language follows the interface language.
@@ -158,8 +179,20 @@ export default function BuilderProvider({
       ...EMPTY_BUILDER,
       target: { ...EMPTY_BUILDER.target, language: lang },
     };
+    let upgraded = false;
 
-    if (saved) {
+    if (damaged) {
+      /*
+       * Something is stored and cannot be read. The draft has been copied aside by `readDraft`;
+       * what must not happen now is the autosave writing over it 450ms later, which is what used
+       * to happen — silently, to the only copy of someone's CV. `mayWrite` holds every write while
+       * this state is set, and the header says so instead of claiming "Saved".
+       */
+      dispatch({ t: "hydrate", state: fresh });
+    } else if (saved) {
+      /* An older schema is brought forward here, and the state records that it happened — a jump
+         from "loading" to "saved" past a migration is a claim that no upgrade took place. */
+      upgraded = (saved.schemaVersion ?? 0) < SCHEMA_VERSION;
       dispatch({ t: "hydrate", state: { ...EMPTY_BUILDER, ...saved } });
     } else if (fromChat) {
       // A draft started in the chat: carry the confirmed resume across, which is the
@@ -169,8 +202,10 @@ export default function BuilderProvider({
     } else {
       dispatch({ t: "hydrate", state: fresh });
     }
-    setResumeId(urlId || id);
-    setHydrated(true);
+    /* One write, at the end, carrying every fact this read established.
+       Three separate `setState` calls for one event is three renders and three chances for the
+       screen to show a half-read draft. */
+    setBoot({ id: urlId || id, hydrated: true, damaged, migrated: upgraded });
     track("builder_started", { lang, surface: "steps" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
@@ -197,30 +232,50 @@ export default function BuilderProvider({
   const [written, setWritten] = useState<BuilderState | null>(null);
   const [failed, setFailed] = useState(false);
 
+  /*
+   * The lifecycle, derived — never assigned alongside the thing it describes.
+   *
+   * Order is the meaning here. `invalidResume` outranks everything because a draft that could not
+   * be read is the only state in which writing is FORBIDDEN, and a label saying "Saving…" over a
+   * held write would be a lie about the user's data. `saveError` outranks the rest for the same
+   * reason: it is the one remaining state where the work is not where the user thinks it is.
+   */
+  const lifecycle: Lifecycle =
+    damagedDraft ? "invalidResume"
+    : !hydrated ? (migrated ? "migrating" : "loading")
+    : failed ? "saveError"
+    : written === null ? "hydrated"
+    : written === state ? "saved"
+    : "saving";
+
+  /* Held while `invalidResume`, which is the whole point of having that state: the autosave used
+     to overwrite an unparseable draft 450ms after arrival, and that draft was the only copy. */
   const flush = useCallback(() => {
-    if (!hydrated || !resumeId) return;
+    if (!resumeId || !mayWrite(lifecycle)) return;
     try {
       writeBuilder(lang, resumeId, live.current);
       setWritten(live.current);
       setFailed(false);
     } catch { setFailed(true); }
-  }, [hydrated, resumeId, lang]);
+  }, [resumeId, lang, lifecycle]);
 
   useEffect(() => {
-    if (!hydrated || !resumeId) return;
+    if (!hydrated || !resumeId || damagedDraft) return;
     const id = setTimeout(() => {
       try { writeBuilder(lang, resumeId, state); setWritten(state); setFailed(false); }
       catch { setFailed(true); }
     }, 450);
     return () => clearTimeout(id);
-  }, [state, lang, resumeId, hydrated]);
+  }, [state, lang, resumeId, hydrated, damagedDraft]);
 
   const online = useOnline();
 
-  const save: SaveState = failed ? "failed"
-    : written === null ? ""
-    : written === state ? "saved"
-    : "saving";
+  /* The old four-value indicator, as a narrowing of the one above. */
+  const save: SaveState =
+    lifecycle === "saveError" || lifecycle === "invalidResume" ? "failed"
+    : lifecycle === "saved" ? "saved"
+    : lifecycle === "saving" ? "saving"
+    : "";
 
   /*
    * The two ways a mobile session ends without a Continue.
@@ -324,9 +379,9 @@ export default function BuilderProvider({
   }, []);
 
   const value = useMemo<BuilderContextValue>(() => ({
-    lang, resumeId, state, dispatch, save, online, flush, hydrated,
+    lang, resumeId, state, dispatch, save, lifecycle, online, flush, hydrated,
     previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, state, save, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
+  }), [lang, resumeId, state, save, lifecycle, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

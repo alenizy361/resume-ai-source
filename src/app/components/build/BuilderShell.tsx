@@ -24,6 +24,7 @@ import OrbBrand from "../OrbBrand";
 import { stepMark } from "@/app/lib/stepReady";
 import VersionSwitch from "./VersionSwitch";
 import { useBuilder } from "./BuilderProvider";
+import { lifecycleLabel, lifecycleTone } from "@/app/lib/lifecycle";
 import { STEPS, SECTION_COPY, stepFromSlug, stepHref, stepIndex } from "./steps";
 import { toArabicDigits } from "@/app/lib/plans";
 
@@ -31,7 +32,6 @@ const CHROME = {
   en: {
     brand: "Sira",
     chat: "Talk to the AI instead",
-    saving: "Saving…", saved: "Saved", failed: "Save failed — your work is still on screen",
     offline: "Offline — your work is saved on this device",
     edit: "Edit", preview: "Preview",
     emptyPreview: "Your CV appears here as you fill it in.",
@@ -41,7 +41,6 @@ const CHROME = {
   ar: {
     brand: "سيرة",
     chat: "أفضّل المحادثة",
-    saving: "يحفظ…", saved: "محفوظ", failed: "تعذّر الحفظ — عملك لا يزال أمامك",
     offline: "بلا اتصال — عملك محفوظ على جهازك",
     edit: "تعديل", preview: "معاينة",
     emptyPreview: "ستظهر سيرتك هنا وأنت تكتب.",
@@ -58,7 +57,8 @@ export default function BuilderShell({
 }) {
   const t = CHROME[lang];
   const ar = lang === "ar";
-  const { state, save, online, resumeId, hydrated, previewText, cv, template, progress } = useBuilder();
+  const { state, lifecycle, online, resumeId, hydrated, previewText, cv, template, progress } = useBuilder();
+  const tone = lifecycleTone(lifecycle);
   const pathname = usePathname() || "";
   const router = useRouter();
 
@@ -144,12 +144,18 @@ export default function BuilderShell({
                 <span className="text-sm font-extrabold">{t.brand}</span>
               </Link>
               <div className="flex items-center gap-3">
-                {/* Offline outranks the save label: both are about whether the work is safe, and
-                    "Saved" beside a dead connection reads as a promise about the wrong thing. The
-                    draft IS safe — every write is local — so the sentence says where it is. */}
-                <span className={`bd-save${save === "failed" ? " err" : ""}`}>
-                  {!online ? t.offline
-                    : save === "saving" ? t.saving : save === "saved" ? t.saved : save === "failed" ? t.failed : ""}
+                {/*
+                  One label, two questions, in the order that matters.
+
+                  A draft that could not be READ outranks a connection that dropped, which outranks
+                  the ordinary save state: each of those is a different answer to "is my work safe",
+                  and the most serious true one is the one to print. The draft is safe offline —
+                  every write is local — so that sentence says where it is rather than apologising.
+                */}
+                <span className={`bd-save${tone !== "quiet" ? " err" : ""}`}>
+                  {lifecycle === "invalidResume" ? lifecycleLabel(lifecycle, lang)
+                    : !online ? t.offline
+                    : lifecycleLabel(lifecycle, lang)}
                 </span>
               </div>
             </div>

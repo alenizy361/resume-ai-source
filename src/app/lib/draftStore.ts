@@ -69,11 +69,37 @@ export function newResumeId(now = Date.now()): string {
   return `r${now.toString(36)}`;
 }
 
-/** Read the draft, tolerating anything a previous version wrote. */
-export function readDraft(lang: "ar" | "en"): Draft {
+/** Where an unparseable draft is put before anything is allowed to overwrite it. */
+export function damagedKey(lang: "ar" | "en"): string {
+  return `${draftKey(lang)}_damaged`;
+}
+
+/**
+ * Read the draft, tolerating anything a previous version wrote.
+ *
+ * ── the failure this now reports ──
+ *
+ * The `catch` used to return an empty profile and say nothing. A draft that would not parse was
+ * therefore indistinguishable from a new visitor, and the next autosave — 450ms later — wrote over
+ * the damaged blob, which was the only copy of the user's CV. Silent, unrecoverable, and the exact
+ * shape of failure this product spends the rest of its code avoiding.
+ *
+ * So a parse failure now says so, and keeps what it could not read: `damaged` travels up to the
+ * provider, which refuses to write while it is set, and the raw text is copied to a sibling key
+ * first. Recovering it is then a support conversation rather than an apology.
+ */
+export function readDraft(lang: "ar" | "en"): Draft & { damaged?: true } {
+  let raw: string | null = null;
   try {
-    const raw = localStorage.getItem(draftKey(lang));
-    if (!raw) return { profile: { ...EMPTY_PROFILE } };
+    raw = localStorage.getItem(draftKey(lang));
+  } catch {
+    /* Storage itself is blocked — private mode, or a browser policy. Nothing was damaged; there
+       is simply nothing to read, and the builder works perfectly well in memory. */
+    return { profile: { ...EMPTY_PROFILE } };
+  }
+  if (!raw) return { profile: { ...EMPTY_PROFILE } };
+
+  try {
     const d = JSON.parse(raw) as Partial<Draft>;
     return {
       ...d,
@@ -82,7 +108,11 @@ export function readDraft(lang: "ar" | "en"): Draft {
       profile: { ...EMPTY_PROFILE, ...(d.profile ?? {}) },
     };
   } catch {
-    return { profile: { ...EMPTY_PROFILE } };
+    /* Keep the wreckage. Written under a separate key and never read back automatically: an
+       automatic recovery would be guessing at the shape of something that already failed to
+       parse, and guessing is what put a user in this position in the first place. */
+    try { localStorage.setItem(damagedKey(lang), raw); } catch { /* nothing more can be done */ }
+    return { profile: { ...EMPTY_PROFILE }, damaged: true };
   }
 }
 
@@ -114,11 +144,13 @@ export function readBuilder(lang: "ar" | "en", now = Date.now()): {
   state: BuilderState | null;
   /** True when a chat draft exists but the form has never run — carry the profile over. */
   fromChat: boolean;
+  /** True when something was stored and could not be parsed. The caller must NOT overwrite it. */
+  damaged: boolean;
 } {
   const d = readDraft(lang);
   const state = d.builder?.schemaVersion ? d.builder : null;
   const fromChat = !state && Boolean(d.profile?.role || d.profile?.name);
-  return { id: d.resumeId || newResumeId(now), state, fromChat };
+  return { id: d.resumeId || newResumeId(now), state, fromChat, damaged: d.damaged === true };
 }
 
 /**
