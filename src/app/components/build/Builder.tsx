@@ -422,6 +422,24 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
      
   }, [cinema]);
 
+  /*
+   * The drop-off signal.
+   *
+   * `builder_section_completed` alone cannot say where a build died — it only fires
+   * for the steps someone finished. Pairing it with "reached" turns the funnel into
+   * arithmetic: reached(experience) minus completed(experience) is the number of
+   * people the experience section lost. Fired once per section, guarded by a ref so
+   * a re-render or a restored draft cannot inflate the count.
+   */
+  const reported = useRef(-1);
+  useEffect(() => {
+    if (cinema.reached <= reported.current) return;
+    for (let i = reported.current + 1; i <= cinema.reached; i++) {
+      track("builder_section_reached", { section: ORDER[i], index: i });
+    }
+    reported.current = cinema.reached;
+  }, [cinema.reached]);
+
   /** Review findings name the section they belong to; this is how "go there" works. */
   const jump = useCallback((section: SectionId) => {
     const i = ORDER.indexOf(section);

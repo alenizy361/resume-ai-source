@@ -38,6 +38,8 @@ const C = {
     aiBadge: "AI suggested", packBadge: "Common for this role",
     add: "Add", edit: "Edit", drop: "Dismiss", improve: "Improve", shorter: "Shorter",
     metric: "Add a figure", more: "Suggest more", showMore: "Show more",
+    achieve: "Add an achievement", achieveAgain: "Ask me another",
+    achieveHint: "One question at a time. Nothing is written until you answer it.",
     onCv: "On your CV", full: "This position is at its bullet limit — remove one to add another.",
     room: (n: number) => `${n} more can be added`,
     needBoth: "Add the job title and employer, and suggestions appear here.",
@@ -57,6 +59,8 @@ const C = {
     aiBadge: "اقتراح ذكاء", packBadge: "شائع في هذا المسمى",
     add: "أضف", edit: "عدّل", drop: "استبعد", improve: "حسّن", shorter: "اختصر",
     metric: "أضف رقماً", more: "اقترح المزيد", showMore: "المزيد",
+    achieve: "أضف إنجازاً", achieveAgain: "اسألني سؤالاً آخر",
+    achieveHint: "سؤال واحد كل مرة. لا يُكتب شيء قبل أن تجيبه.",
     onCv: "في سيرتك", full: "هذه الوظيفة بلغت حد المهام — احذف واحدة لتضيف أخرى.",
     room: (n: number) => `يمكن إضافة ${n} أخرى`,
     needBoth: "أضف المسمى وجهة العمل، وتظهر الاقتراحات هنا.",
@@ -218,12 +222,58 @@ function RoleCard({
      
   }, [role, lang, target, c.err]);
 
+  /**
+   * The achievement extractor — the same machinery, aimed at the role instead of at
+   * one bullet.
+   *
+   * A CV gets its strength from achievements, and an achievement needs a figure only
+   * the user has. The chat asked for those in prose and got prose back. Here the model
+   * is asked for the QUESTION (bullet_metric, which is forbidden digits at the server)
+   * seeded from everything already confirmed on this job, so it asks about work the
+   * user actually does. One question, one number, one new line — repeatable.
+   *
+   * `id: ""` marks the answer as a NEW bullet rather than an edit of an existing one.
+   */
+  const askForAchievement = useCallback(async () => {
+    setErr(""); setBusy(true);
+    abort.current?.abort(); abort.current = new AbortController();
+    try {
+      const d = await askSuggest({
+        kind: "bullet_metric", lang, targetRole: target.title || role.title,
+        role: role.title, company: role.company,
+        current: role.bullets.join("\n") || role.title,
+        jobAd: target.jobAdText,
+      }, abort.current.signal);
+      if (d.question) {
+        setAsk({ id: "", question: d.question, shape: d.rewritten || "", value: "" });
+        track("builder_achievement_asked", {});
+      }
+    } catch (e) {
+      if ((e as Error).name !== "AbortError") setErr(c.err);
+    } finally { setBusy(false); }
+     
+  }, [role, lang, target, c.err]);
+
   const applyFigure = () => {
     if (!ask) return;
     const v = ask.value.trim();
     // No figure given ⇒ keep the strong non-quantified line. Never pressure.
     const text = v ? ask.shape.replace(/_{2,}/, v) : ask.shape.replace(/\s*_{2,}\s*/, " ").replace(/\s{2,}/g, " ").trim();
-    dispatch({ t: "editItem", id: ask.id, text });
+    if (!text.trim()) { setAsk(null); return; }
+    if (ask.id) {
+      dispatch({ t: "editItem", id: ask.id, text });
+    } else {
+      // A brand new line, offered rather than added: the figure is the user's, but the
+      // wording around it is still the model's, so it goes through the same accept step
+      // as every other suggestion.
+      dispatch({
+        t: "offer",
+        items: [newItem({
+          section: "experience", type: "duty", text, roleId: role.id,
+          source: "ai", reason: lang === "ar" ? "من إجابتك عن السؤال" : "from the figure you gave",
+        })],
+      });
+    }
     setAsk(null);
   };
 
@@ -312,7 +362,13 @@ function RoleCard({
                     <Pill label={c.improve} onClick={() => rewrite(it, "bullet_improve")} />
                     <Pill label={c.shorter} onClick={() => rewrite(it, "bullet_shorter")} />
                     <Pill label={c.metric} onClick={() => askForFigure(it)} />
-                    <Pill label={c.drop} onClick={() => dispatch({ t: "reject", id: it.id })} />
+                    <Pill label={c.drop} onClick={() => {
+                      dispatch({ t: "reject", id: it.id });
+                      // Dismissals are the honest half of the acceptance rate: a
+                      // section where nine in ten suggestions are dropped is a
+                      // section whose prompt is wrong, and nothing else reports that.
+                      track("builder_suggestion_rejected", { section: "experience", source: it.source });
+                    }} />
                   </div>
                 </>
               )}
@@ -336,6 +392,18 @@ function RoleCard({
             {busy ? c.busy : c.more}
           </button>
         )}
+        {ready && (
+          <>
+            <button
+              onClick={askForAchievement} disabled={busy}
+              className="ms-2 mt-3 rounded-full px-3 text-xs font-bold"
+              style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
+            >
+              {c.achieve}
+            </button>
+            <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{c.achieveHint}</p>
+          </>
+        )}
         {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
       </div>
 
@@ -352,6 +420,7 @@ function RoleCard({
           <div className="mt-2 flex gap-2">
             <Pill label={c.save} primary onClick={applyFigure} />
             <Pill label={c.skip} onClick={() => { setAsk({ ...ask, value: "" }); applyFigure(); }} />
+            {!ask.id && <Pill label={c.achieveAgain} onClick={askForAchievement} />}
           </div>
         </div>
       )}

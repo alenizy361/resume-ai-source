@@ -218,7 +218,12 @@ export default function DesignSection({
       <div className="mt-6">
         <div className="bd-label">{c.downloads}</div>
         <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.ats}</p>
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Capture-phase, because the download buttons belong to the shipped export
+            components and wrapping them beats forking them for one event. */}
+        <div
+          className="flex flex-wrap items-center gap-2"
+          onClickCapture={() => track("builder_download_clicked", { arabic: arabicCv, watermark })}
+        >
           {/* Arabic is offered Word rather than a PDF that would arrive as mojibake. */}
           {!arabicCv && (
             <PdfExport text={cv} watermark={watermark} lang={lang} label={c.pdf} />
