@@ -40,6 +40,7 @@ import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
   type BuilderState, type SectionId, EMPTY_BUILDER, cvLang,
 } from "@/app/lib/builderDoc";
+import { findRolePack } from "@/app/lib/rolePacks";
 import { type Action, reducer } from "./builderState";
 
 export type SaveState = "" | "saving" | "saved" | "failed";
@@ -186,6 +187,32 @@ export default function BuilderProvider({
       document.removeEventListener("visibilitychange", onVis);
     };
   }, [flush]);
+
+  /*
+   * Seed the suggestion bag from the cached role pack, as a consequence of the TITLE
+   * changing — not as a side effect of rendering one particular step.
+   *
+   * This is a bug the step routes introduced and the end-to-end run caught. Seeding used to
+   * live in `BlueprintBody`'s effect, which was fine while every section was mounted on one
+   * long page: whatever order the user worked in, the blueprint had rendered. Split into
+   * routes, `BlueprintBody` only mounts at `/builder/<id>/blueprint` — so anyone who went
+   * straight from the target job to skills, or jumped there from the navigation, found the
+   * skills step empty and the product looking like it knew nothing about their profession.
+   *
+   * It belongs here because it is a state transition, not a view: the pack is a function of
+   * the title, and the title is state. The ref keys on the slug AND the CV language, because
+   * switching the document to Arabic has to re-seed — the item TEXT is CV content.
+   */
+  const seeded = useRef("");
+  useEffect(() => {
+    if (!hydrated) return;
+    const pack = findRolePack(state.target.title);
+    if (!pack) return;
+    const key = `${pack.slug}:${cvLang(state.target)}`;
+    if (seeded.current === key) return;
+    seeded.current = key;
+    dispatch({ t: "seed", pack, ui: lang, cv: cvLang(state.target) });
+  }, [hydrated, state.target, lang]);
 
   /* The preview is expensive: ResumeTemplate re-parses and re-measures on every text
      change, so binding it to raw keystrokes re-lays out an A4 page per letter. */

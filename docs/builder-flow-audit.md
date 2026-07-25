@@ -189,9 +189,59 @@ session already paid for once:
 Also: the job-description field printed its own caption as its placeholder, so the same
 sentence appeared twice in a row.
 
-### Still open from this list
+### #9 / #10 — Uneven AI states, and two sections with no AI — **CONFIRMED · fixed**
 
-- **#9 / #10** — loading, empty, error and retry states are still uneven across sections,
-  and the AI calls that exist in three of them are not yet behind one orchestration layer.
-  That is the next piece of work, and it is now unblocked: with state above the routes, a
-  suggestion made on one step survives the trip to another.
+`lib/aiTasks.ts` holds fourteen task types, each declaring its validation, request shape,
+output parse, timeout and retry budget. `useAiTask` gives every section the same
+idle→loading→success|empty|error|cancelled lifecycle and the same wording, and
+`/api/health/ai` answers the question "is the AI wired up, and how" that used to have one
+symptom for four different causes.
+
+The policies worth restating, because each could have gone the other way:
+
+- A **429 is never retried** — retrying a rate limit spends metered credit to be refused
+  again, and turns a throttle into a block.
+- **Token-spending tasks get zero retries.** The job-link fetch gets two (costs nothing);
+  the upload gets none (the upload *is* the expensive part).
+- **A timeout is an error, not a cancellation** — nobody chose it.
+- **`empty` is a first-class outcome.** A 200 with nothing usable *worked*.
+
+Credentials and languages now offer suggestions, which closes a real gap rather than adding
+a button: a recognised job title gets its licences from the cached packs instantly and
+offline, and an unrecognised one — most titles — got nothing at all.
+
+Two defects found on the way, both by tests rather than by reading:
+
+- **A 500 with an empty body printed `http-500` to the user.** `error` carried both the
+  server's words and our internal token, so every token was one missing lookup from the
+  screen. They are separate fields now, and a sweep over all fourteen tasks asserts no code
+  can leak.
+- **The skills step was empty unless the user visited the blueprint step.** Seeding from the
+  cached role pack lived in `BlueprintBody`'s effect, which was fine while one page mounted
+  every section and wrong the moment each step became a route. It is a state transition, not
+  a view concern, so it moved to the provider. Caught by the probe written to find selectors
+  for the end-to-end test — before that test existed.
+
+### The acceptance run
+
+`ops/radiology-e2e.test.mjs` — a Radiology Technologist in Riyadh builds a CV from nothing
+and downloads it, in both languages: 45 assertions, all passing. Every AI response is
+stubbed, and every stubbed suggestion the test does not tap carries a marker, so "nothing
+unapproved reached the document" is checked against a string that cannot occur by accident.
+
+It also asserts the failures this rebuild existed to fix: one employer yields one job entry,
+an English CV contains no Arabic, an Arabic CV's language level is an Arabic word rather than
+an English key, a language with no level is not published, a credential is not on the CV
+until "I hold this" is ticked, and a cold reload of the last step restores the whole
+document.
+
+Three of its own assertions were wrong on the first run and the product was right — worth
+recording, because each is a way a test lies:
+
+1. Duties are offered on the job fields losing focus, and `fill` never blurs. Zero
+   suggestions, reported as a product failure.
+2. The templates upper-case certification lines, so a case-sensitive check failed in English
+   and passed in Arabic. Arabic having no case is what gave it away.
+3. The duty text was hardcoded, which passed in English by coincidentally matching the
+   cached pack and failed in Arabic, where the pack words the same duty differently. It now
+   records what the user actually approved and asserts on that.

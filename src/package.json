@@ -33,7 +33,8 @@
     "test:steps": "node ops/steps.test.mjs",
     "test:aitasks": "node --experimental-strip-types ops/aitasks.test.mjs",
     "test:aistates": "node ops/aistates.test.mjs",
-    "test:health": "node ops/health.test.mjs"
+    "test:health": "node ops/health.test.mjs",
+    "test:e2e": "node ops/radiology-e2e.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

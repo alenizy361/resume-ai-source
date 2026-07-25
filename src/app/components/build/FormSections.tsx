@@ -19,7 +19,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 
-import { type BuilderState, type Item, pending, cvLang } from "@/app/lib/builderDoc";
+import { type BuilderState, type Item, pending } from "@/app/lib/builderDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { toArabicDigits } from "@/app/lib/plans";
 import { type Action } from "./builderState";
@@ -322,16 +322,20 @@ export function BlueprintBody(p: Common) {
 
   const pack = useMemo(() => findRolePack(p.state.target.title), [p.state.target.title]);
 
-  // Seeding is a side effect of a title arriving, so it must not run on every render.
-  const seeded = useRef("");
+  /*
+   * Seeding moved to `BuilderProvider`. It was here, and here only runs when THIS step is on
+   * screen — which on a long page meant always and on a route means only if the user visits
+   * `/builder/<id>/blueprint`. Anyone who skipped it found the skills step empty.
+   *
+   * What stays is the analytics event, which genuinely is about this view being seen.
+   */
+  const seen = useRef("");
   useEffect(() => {
-    if (pack && seeded.current !== pack.slug) {
-      seeded.current = pack.slug;
-      p.dispatch({ t: "seed", pack, ui: p.lang, cv: cvLang(p.state.target) });
+    if (pack && seen.current !== pack.slug) {
+      seen.current = pack.slug;
       track("builder_blueprint_shown", { pack: pack.slug });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pack, p.lang, p.state.target.language]);
+  }, [pack]);
 
   if (!p.state.target.title.trim()) {
     return <><p className="text-xs" style={{ color: "var(--faint)" }}>{L.none}</p></>;
