@@ -115,6 +115,59 @@ ok("the probe asks for almost no output",
 for (const field of ["rateLimit", "tasks", "pricing", "support", "apiKeyPresent"]) {
   ok(`the report includes ${field}`, new RegExp(`${field}:`).test(SRC));
 }
+
+/* ── the two brains, reported and probed separately ── */
+
+/**
+ * The endpoint describes two providers because the product runs two: a fast cheap model
+ * behind a form field, and a stronger one for whole-document work. Everything below is
+ * about that split being honest in BOTH halves of the report.
+ */
+for (const field of ["suggestProvider", "suggestModel", "suggestKeyPresent"]) {
+  ok(`the report includes ${field}`, new RegExp(`${field}[,:]`).test(SRC));
+}
+ok("the suggest provider falls back to the global one, not to a hardcoded name",
+  /AI_PROVIDER_SUGGEST \|\| process\.env\.AI_PROVIDER/.test(SRC));
+ok("the suggest model defaults to the cheap fast one, never to the interview's",
+  /ANTHROPIC_MODEL_SUGGEST \|\| "claude-haiku-4-5"/.test(SRC)
+  && !/ANTHROPIC_MODEL_SUGGEST \|\| process\.env\.ANTHROPIC_MODEL/.test(SRC));
+
+/*
+ * The defect this pair exists for, found by reading the route after it shipped.
+ *
+ * `ok` was computed twice: once for the configuration report, where it required both keys,
+ * and once at the end of the live probe, where it required only the global one. So a
+ * deployment with AI_PROVIDER_SUGGEST=anthropic and no Anthropic key answered
+ * `ok: false` to a plain GET and `ok: true` to `?live=1` — the more expensive request
+ * giving the more optimistic answer, which is the wrong way round for a health check.
+ *
+ * Asserted as a count, because the failure was not a missing check but an INCONSISTENT
+ * one: every place that computes `ok` from a key must name both keys.
+ */
+{
+  /* `ok:` in the object literal and `report.ok =` in the probe — both spellings, either
+     spacing. Getting this pattern wrong is how the inconsistency survived a review. */
+  const oks = [...SRC.matchAll(/(?:^|\s)(?:report\.)?ok\s*[:=]\s*keyPresent[^\n;,]*/g)].map((m) => m[0]);
+  ok("every ok computed from a key requires BOTH keys", oks.length >= 2
+    && oks.every((line) => /suggestKeyPresent/.test(line)),
+    oks.map((l) => l.trim()).join(" · "));
+}
+ok("a missing suggestion key refuses the live probe too",
+  /!keyPresent \|\| !suggestKeyPresent/.test(SRC));
+
+/*
+ * And the live half must actually ASK the suggestion provider. Reporting its name while
+ * probing only the global one is the same lie with an extra step: `ok: true` on a
+ * deployment where every suggestion fails.
+ */
+ok("the live probe is routed by provider rather than hardcoded",
+  /function probe\(which: string, model: string\)/.test(SRC));
+ok("and the suggestion provider gets its own probe",
+  /probe\(suggestProvider, suggestModel\)/.test(SRC));
+ok("which is skipped only when provider AND model both match",
+  /suggestProvider === provider && suggestModel === model/.test(SRC));
+ok("the live status code follows the combined verdict, not one probe",
+  /status: report\.ok \? 200 : 502/.test(SRC));
 ok("it names the in-memory rate-limit fallback as the problem it is",
   /per-instance/.test(SRC));
 ok("it is never cached — the point is the state right now",
@@ -143,6 +196,10 @@ if (process.env.HEALTH_BASE) {
  *   · changing 404 to 401                         → "answers 404, not 401" fails
  *   · adding `key: process.env.NVIDIA_API_KEY`    → "no secret env var is read" fails
  *   · removing the `live !== "1"` early return    → "a plain GET does not make a model call" fails
+ *   · dropping `suggestKeyPresent` from the live `report.ok`
+ *                                                → "every ok computed from a key requires BOTH keys" fails
+ *   · replacing `probe(suggestProvider, …)` with `probe(provider, …)`
+ *                                                → "the suggestion provider gets its own probe" fails
  */
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

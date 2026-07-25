@@ -139,6 +139,8 @@ export async function GET(req: NextRequest) {
     },
 
     live: null as unknown,
+    /** The suggestion provider's own probe. Null unless `?live=1`. */
+    liveSuggest: null as unknown,
   };
 
   if (req.nextUrl.searchParams.get("live") !== "1") {
@@ -146,8 +148,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(report);
   }
 
-  if (!keyPresent) {
-    report.live = { ran: false, ok: false, note: "No API key configured — nothing to call." };
+  if (!keyPresent || !suggestKeyPresent) {
+    report.live = {
+      ran: false, ok: false,
+      note: keyPresent
+        ? "No API key for the suggestion provider — nothing to call."
+        : "No API key configured — nothing to call.",
+    };
     return NextResponse.json(report, { status: 503 });
   }
 
@@ -157,15 +164,28 @@ export async function GET(req: NextRequest) {
    * Not "is the service up" in the abstract — whether THIS key, against THIS model name,
    * returns a completion. A wrong model id and an expired key both fail here, and the
    * provider's own error text is passed through because it distinguishes them.
+   *
+   * BOTH brains are probed when they differ, and that is the whole point of the split. The
+   * configuration half of this report already describes two providers; a live half that
+   * probed only the global one would return `ok: true` for a deployment whose suggestions —
+   * the call most users actually make — fail on every tap. So the endpoint asks each
+   * provider its own question, against its own model name, and `ok` requires both.
    */
   const t0 = Date.now();
   try {
-    const out = provider === "anthropic"
-      ? await probeAnthropic(model)
-      : await probeNvidia(model);
+    const out = await probe(provider, model);
     report.live = { ran: true, ...out, ms: Date.now() - t0 };
-    report.ok = keyPresent && out.ok === true;
-    return NextResponse.json(report, { status: out.ok ? 200 : 502 });
+
+    /* Same provider AND same model id means one probe already answered for both. */
+    const shares = suggestProvider === provider && suggestModel === model;
+    const t1 = Date.now();
+    const sug = shares ? out : await probe(suggestProvider, suggestModel);
+    report.liveSuggest = shares
+      ? { ran: true, ...sug, sharedWithGlobal: true }
+      : { ran: true, ...sug, ms: Date.now() - t1 };
+
+    report.ok = keyPresent && suggestKeyPresent && out.ok === true && sug.ok === true;
+    return NextResponse.json(report, { status: report.ok ? 200 : 502 });
   } catch (e) {
     report.live = {
       ran: true, ok: false, ms: Date.now() - t0,
@@ -174,6 +194,11 @@ export async function GET(req: NextRequest) {
     report.ok = false;
     return NextResponse.json(report, { status: 502 });
   }
+}
+
+/** Route a probe to the provider that will actually serve the call being described. */
+function probe(which: string, model: string) {
+  return which === "anthropic" ? probeAnthropic(model) : probeNvidia(model);
 }
 
 /** One token out, ten-second ceiling. A probe that can hang is not a health check. */
