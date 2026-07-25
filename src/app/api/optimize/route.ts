@@ -291,6 +291,51 @@ function parseModelJson(raw: string): Record<string, unknown> {
  * Streams the NVIDIA completion. Calls onDelta for each text chunk and
  * resolves with the full accumulated text.
  */
+/**
+ * Bound an upstream call in the two ways it can hang.
+ *
+ * This route had NO timeout on its provider call at all, and `maxDuration = 300`, so a hung
+ * connection burned five minutes of paid compute while the user watched nothing happen. It is
+ * not hypothetical: production logged `Task timed out after 300 seconds` on /api/optimize, and
+ * the titles bench measured this provider dropping roughly 1% of connections outright.
+ *
+ * Two deadlines, because a stream can fail in two different places:
+ *
+ *   STALL  no bytes for this long. The one that matters — a stream that opens and then goes
+ *          quiet is invisible to a connect timeout, and `reader.read()` simply never resolves.
+ *          Reset on every chunk, so a long generation that keeps emitting is never cut off.
+ *   HARD   a ceiling on the whole attempt regardless of activity, so a provider dribbling one
+ *          token every 20 s cannot outlast the platform.
+ *
+ * Aborting makes the pending `read()` reject, which the caller's existing try/catch already
+ * treats as a failed attempt — so the retry it guards can run, inside the 150 s budget.
+ */
+const STALL_MS = 30_000;
+const HARD_MS = 120_000;
+
+interface StreamGuard {
+  signal: AbortSignal;
+  /** Call on every chunk: the silence clock starts again. */
+  alive: () => void;
+  done: () => void;
+}
+
+function streamGuard(): StreamGuard {
+  const ctrl = new AbortController();
+  let stall: ReturnType<typeof setTimeout>;
+  const arm = () => {
+    clearTimeout(stall);
+    stall = setTimeout(() => ctrl.abort(new Error("upstream stalled")), STALL_MS);
+  };
+  arm();
+  const hard = setTimeout(() => ctrl.abort(new Error("upstream exceeded its ceiling")), HARD_MS);
+  return {
+    signal: ctrl.signal,
+    alive: arm,
+    done: () => { clearTimeout(stall); clearTimeout(hard); },
+  };
+}
+
 async function streamNvidia(
   resume: string,
   jobDescription: string,
@@ -303,8 +348,10 @@ async function streamNvidia(
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
   const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
 
+  const guard = streamGuard();
   const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
     method: "POST",
+    signal: guard.signal,
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       model,
@@ -327,6 +374,7 @@ async function streamNvidia(
   });
 
   if (!res.ok || !res.body) {
+    guard.done();
     const body = await res.text();
     throw new Error(`NVIDIA API ${res.status}: ${body.slice(0, 300)}`);
   }
@@ -337,9 +385,12 @@ async function streamNvidia(
   const decoder = new TextDecoder();
   let full = "";
   let buf = "";
+  try {
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
+    // Bytes arrived: the silence clock starts again.
+    guard.alive();
     buf += decoder.decode(value, { stream: true });
     const lines = buf.split("\n");
     buf = lines.pop() ?? "";
@@ -364,6 +415,11 @@ async function streamNvidia(
       }
     }
   }
+  } finally {
+    // Always, on every path out — a leaked abort timer would fire mid-way through the NEXT
+    // attempt and kill a healthy stream.
+    guard.done();
+  }
   // Log before returning — a meter placed after the return is not a meter.
   logUsage({
     route: "optimize", op: "optimize", provider: "nvidia", model,
@@ -381,8 +437,11 @@ async function callAnthropic(resume: string, jobDescription: string, extra = "")
   const model = process.env.AI_MODEL || "claude-sonnet-5";
   const t0 = Date.now();
 
+  // Not streamed, so only the ceiling applies — but it applies, which it did not before.
+  const anthropicGuard = streamGuard();
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
+    signal: anthropicGuard.signal,
     headers: {
       "x-api-key": key,
       "anthropic-version": "2023-06-01",
@@ -395,6 +454,7 @@ async function callAnthropic(resume: string, jobDescription: string, extra = "")
     }),
   });
 
+  anthropicGuard.done();
   if (!res.ok) {
     const body = await res.text();
     throw new Error(`Anthropic API ${res.status}: ${body.slice(0, 300)}`);
