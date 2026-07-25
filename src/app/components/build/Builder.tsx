@@ -27,9 +27,11 @@ import { readDraft, writeDraft, contactLine } from "@/app/lib/draftStore";
 import { setBuilderMode } from "@/app/lib/flags";
 import {
   type BuilderState, type SectionId, type Item, EMPTY_BUILDER,
-  newItem, confirmItem, rejectItem, pending,
+  newItem, confirmItem, rejectItem, pending, editItem, newId,
 } from "@/app/lib/builderDoc";
+import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
 import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
+import ExperienceSection from "./ExperienceSection";
 
 /* ───────────────────────── copy ───────────────────────── */
 
@@ -125,6 +127,13 @@ type Action =
   | { t: "personal"; patch: Partial<BuilderState["personal"]> }
   | { t: "template"; slug: string }
   | { t: "seed"; pack: RolePack; lang: "ar" | "en" }
+  | { t: "addRole" }
+  | { t: "role"; id: string; patch: Partial<Role> }
+  | { t: "removeRole"; id: string }
+  | { t: "moveBullet"; roleId: string; from: number; to: number }
+  | { t: "removeBullet"; roleId: string; index: number }
+  | { t: "offer"; items: Item[] }
+  | { t: "editItem"; id: string; text: string }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId };
@@ -188,6 +197,48 @@ function reducer(s: BuilderState, a: Action): BuilderState {
       return { ...s, suggestions: [...s.suggestions, ...fresh] };
     }
 
+    /* ── roles ── */
+    case "addRole": {
+      const role: Role = {
+        id: newId("r"), title: "", company: "", location: "",
+        department: "", start: "", end: "", bullets: [],
+      };
+      return { ...s, profile: { ...s.profile, roles: [...(s.profile.roles || []), role] } };
+    }
+    case "role": {
+      const roles = (s.profile.roles || []).map((r) => r.id === a.id ? { ...r, ...a.patch } : r);
+      return { ...s, profile: { ...s.profile, roles, wovenLines: rolesToLines(roles) } };
+    }
+    case "removeRole": {
+      const roles = (s.profile.roles || []).filter((r) => r.id !== a.id);
+      return {
+        ...s,
+        profile: { ...s.profile, roles, wovenLines: rolesToLines(roles) },
+        // Orphaned suggestions would sit in the bag forever, invisible and counted.
+        suggestions: s.suggestions.filter((i) => i.roleId !== a.id),
+      };
+    }
+    case "moveBullet": {
+      const roles = (s.profile.roles || []).map((r) => {
+        if (r.id !== a.roleId) return r;
+        const b = [...r.bullets];
+        const [m] = b.splice(a.from, 1);
+        b.splice(a.to, 0, m);
+        return { ...r, bullets: b };
+      });
+      return { ...s, profile: { ...s.profile, roles, wovenLines: rolesToLines(roles) } };
+    }
+    case "removeBullet": {
+      const roles = (s.profile.roles || []).map((r) => r.id !== a.roleId
+        ? r
+        : { ...r, bullets: r.bullets.filter((_, i) => i !== a.index) });
+      return { ...s, profile: { ...s.profile, roles, wovenLines: rolesToLines(roles) } };
+    }
+    case "offer":
+      return { ...s, suggestions: [...s.suggestions, ...a.items] };
+    case "editItem":
+      return editItem(s, a.id, a.text);
+
     case "confirm":
       return confirmItem(s, a.id).state;
 
@@ -248,7 +299,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
       } catch { setSave("failed"); }
     }, 450);
     return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [state, lang]);
 
   /* The preview is expensive: ResumeTemplate re-parses and re-measures on every
@@ -270,7 +321,7 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
     dispatch({ t: "done", section });
     track("builder_section_completed", { section });
     cinema.open(index + 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [cinema]);
 
   const sectionProps = (id: SectionId, i: number) => ({
@@ -342,11 +393,22 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
               <TargetSection {...sectionProps("target", 1)} state={state} dispatch={dispatch} />
               <BlueprintSection {...sectionProps("blueprint", 2)} state={state} dispatch={dispatch} />
               <PersonalSection {...sectionProps("personal", 3)} state={state} dispatch={dispatch} />
-              {ORDER.slice(4).map((id, k) => (
-                id === "skills"
-                  ? <SkillsSection key={id} {...sectionProps(id, k + 4)} state={state} dispatch={dispatch} />
-                  : <Placeholder key={id} {...sectionProps(id, k + 4)} note={t.soon} />
-              ))}
+              {ORDER.slice(4).map((id, k) => {
+                const props = sectionProps(id, k + 4);
+                if (id === "experience") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <ExperienceSection
+                        lang={lang} state={state} target={state.target}
+                        dispatch={dispatch as unknown as React.Dispatch<{ t: string; [k: string]: unknown }>}
+                      />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
+                if (id === "skills") return <SkillsSection key={id} {...props} state={state} dispatch={dispatch} />;
+                return <Placeholder key={id} {...props} note={t.soon} />;
+              })}
             </div>
 
             <aside className={`bd-preview${mobileView === "edit" ? " hide" : ""}`}>
@@ -591,6 +653,18 @@ function Placeholder(p: ShellProps & { note: string }) {
 
 /* ───────────────────── blueprint ───────────────────── */
 
+/** Hoisted: declaring a component inside a render creates a new type every pass. */
+function ChipRow({ head, items }: { head: string; items: string[] }) {
+  return (
+    <div className="mt-3">
+      <div className="bd-label">{head}</div>
+      <div className="bd-chips">
+        {items.map((x) => <span key={x} className="bd-chip" style={{ cursor: "default" }}>{x}</span>)}
+      </div>
+    </div>
+  );
+}
+
 /**
  * What the product knows about this job, shown the instant the title is entered.
  *
@@ -636,15 +710,6 @@ function BlueprintSection(p: ShellProps & { state: BuilderState; dispatch: React
     );
   }
 
-  const Row = ({ head, items }: { head: string; items: string[] }) => (
-    <div className="mt-3">
-      <div className="bd-label">{head}</div>
-      <div className="bd-chips">
-        {items.map((x) => <span key={x} className="bd-chip" style={{ cursor: "default" }}>{x}</span>)}
-      </div>
-    </div>
-  );
-
   return (
     <SectionShell {...p}>
       <div className="card p-4">
@@ -654,14 +719,14 @@ function BlueprintSection(p: ShellProps & { state: BuilderState; dispatch: React
             {L.alsoKnown}: {pack.aliases.slice(0, 5).join(" · ")}
           </div>
         )}
-        {pack.groups.map((g) => <Row key={g.label.en} head={g.label[p.lang]} items={g.items.map((i) => i[p.lang])} />)}
+        {pack.groups.map((g) => <ChipRow key={g.label.en} head={g.label[p.lang]} items={g.items.map((i) => i[p.lang])} />)}
         <div className="mt-3">
           <div className="bd-label">{L.duties}</div>
           <ul className="space-y-1 text-xs" style={{ color: "var(--muted)" }}>
             {pack.duties.slice(0, 6).map((d) => <li key={d.en}>• {d[p.lang]}</li>)}
           </ul>
         </div>
-        <Row head={L.creds} items={pack.credentials.map((c) => c.title[p.lang])} />
+        <ChipRow head={L.creds} items={pack.credentials.map((c) => c.title[p.lang])} />
         <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>{L.nothingYet}</p>
       </div>
       <ContinueButton onClick={p.onDone} label={p.contLabel} />
