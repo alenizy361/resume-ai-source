@@ -102,6 +102,17 @@ export async function POST(req: NextRequest) {
     const role = String(body?.role || "").slice(0, 100);
     const company = String(body?.company || "").slice(0, 100);
     const current = String(body?.current || "").slice(0, 1200);
+    /*
+     * The confirmed CV, for the kinds that summarise the whole document.
+     *
+     * Separate from `current` for two reasons. `current` means "what the candidate
+     * typed in THIS field" and is capped at 1200 characters, which a five-role CV
+     * blows past — and a digest silently cut off mid-role is the exact failure that
+     * made the interview announce a finished CV it had not read. Second, the digit
+     * rules below are written against field content; folding a whole CV into that
+     * variable would change what they mean.
+     */
+    const facts = String(body?.facts || "").slice(0, 4000);
     /** kind:"ask" only — the user's own question about this section. */
     const question = String(body?.question || "").slice(0, 300);
     /*
@@ -121,7 +132,7 @@ export async function POST(req: NextRequest) {
     const legacy = !mode && (LEGACY_KINDS as readonly string[]).includes(kind);
     const busy = legacy || lang !== "ar" ? BUSY_EN : "المساعد مشغول — جرب ثانية.";
 
-    if (!targetRole && !role && !current && !question) {
+    if (!targetRole && !role && !current && !question && !facts) {
       return NextResponse.json({ error: lang === "ar" ? "اكتب المسمى الوظيفي أولاً عشان أقدر أقترح." : "Fill in the role first so I have something to work from." }, { status: 400 });
     }
 
@@ -149,6 +160,11 @@ KNOWN FACTS (use ONLY these — never invent employers, dates, numbers, degrees,
 - Company: ${company || "not given"}
 - What the candidate already wrote in this field: ${current || "nothing yet"}
 ${question ? `- THEIR QUESTION, which is what you must answer: ${question}` : ""}
+
+${facts ? `THEIR CONFIRMED CV — every line below is content this candidate has already
+accepted onto their resume, so it is theirs to claim and yours to draw on. Nothing
+outside it may be asserted:
+${facts}` : ""}
 
 ${jobAd ? `THE LIVE JOB POSTING they are applying to — fetched today, so this is the
 vocabulary the employer's ATS is actually scanning for. Mirror its wording where it
@@ -231,10 +247,11 @@ ${shapeRule}`;
     }
 
     if (mode === "variants") {
-      // Summaries are the one place a figure may be legitimate — it can only have
-      // come from what the candidate already wrote in this field. So the digit rule
-      // here is conditional on their own draft, the way stripPlaceholders is.
-      const sourceHasMetric = hasMetric(current);
+      // Summaries are the one place a figure may be legitimate — but only a figure
+      // the candidate already owns: one they typed into this field, or one already
+      // confirmed onto their CV. Both are their own words, so the digit rule is
+      // conditional on them, the way stripPlaceholders is.
+      const sourceHasMetric = hasMetric(current) || hasMetric(facts);
       const variants = (parseVariants(raw) ?? []).filter((v) => sourceHasMetric || !hasMetric(v.text));
       if (!variants.length) return NextResponse.json({ error: busy }, { status: 502 });
       // `text` mirrors variants[0] so a caller written against `{text}` still works.

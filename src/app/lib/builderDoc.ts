@@ -127,6 +127,15 @@ export interface BuilderState {
   languages: LanguageEntry[];
   template: string;
   sectionsDone: SectionId[];
+  /**
+   * The state of the CV at the moment the confirmed summary was written.
+   *
+   * A summary is a claim about the whole document, so it is the one field that
+   * silently rots: add a job after writing it and it now describes someone else.
+   * Storing the basis lets the section say "your experience changed — rewrite
+   * this?" instead of leaving a stale paragraph at the top of the CV.
+   */
+  summaryBasis?: string;
   updatedAt: number;
 }
 
@@ -330,6 +339,23 @@ export function pending(state: BuilderState, section: SectionId, roleId?: string
 
 export function rejected(state: BuilderState, section: SectionId): Item[] {
   return state.suggestions.filter((i) => i.status === "rejected" && i.section === section);
+}
+
+/**
+ * A fingerprint of what a professional summary is a summary OF.
+ *
+ * Titles, employers and how many bullets each job carries — deliberately not the
+ * bullet TEXT. Rewording a duty does not make the summary wrong, and a digest that
+ * moved on every keystroke would nag the user out of trusting the notice at all.
+ * Adding a job, dropping one, or gaining a whole responsibility does change what
+ * the paragraph should say, and each of those moves this string.
+ */
+export function summaryBasis(p: Profile): string {
+  const roles = (p.roles || [])
+    .map((r) => `${normalizeLabel(r.title)}|${normalizeLabel(r.company)}|${r.bullets.length}`)
+    .join(";");
+  const skills = String(p.skills || "").split(/[,،]/).filter((s) => s.trim()).length;
+  return `${normalizeLabel(p.role)}#${roles}#${skills}`;
 }
 
 /** Nothing unconfirmed may reach a document. Asserted by the tests, not assumed. */

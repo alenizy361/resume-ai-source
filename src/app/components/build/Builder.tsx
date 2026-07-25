@@ -28,12 +28,13 @@ import { setBuilderMode } from "@/app/lib/flags";
 import {
   type BuilderState, type SectionId, type Item, type Credential, type LanguageEntry,
   EMPTY_BUILDER,
-  newItem, confirmItem, rejectItem, pending, editItem, newId,
+  newItem, confirmItem, rejectItem, pending, editItem, newId, summaryBasis,
 } from "@/app/lib/builderDoc";
 import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
 import { findRolePack, type RolePack } from "@/app/lib/rolePacks";
 import ExperienceSection from "./ExperienceSection";
 import { EducationBlock, CredentialsBlock, LanguagesBlock } from "./DetailSections";
+import SummarySection from "./SummarySection";
 
 /* ───────────────────────── copy ───────────────────────── */
 
@@ -143,6 +144,9 @@ type Action =
   | { t: "langAdd"; entry: LanguageEntry }
   | { t: "lang"; id: string; patch: Partial<LanguageEntry> }
   | { t: "langRemove"; id: string }
+  | { t: "offerSummary"; items: Item[] }
+  | { t: "pickSummary"; id: string }
+  | { t: "summaryText"; text: string }
   | { t: "confirm"; id: string }
   | { t: "reject"; id: string }
   | { t: "done"; section: SectionId };
@@ -297,6 +301,38 @@ function reducer(s: BuilderState, a: Action): BuilderState {
       return withLangs(s, s.languages.map((x) => x.id === a.id ? { ...x, ...a.patch } : x));
     case "langRemove":
       return withLangs(s, s.languages.filter((x) => x.id !== a.id));
+
+    /* ── summary ──
+     * The summary is one field, not a list, so its suggestions do not accumulate:
+     * a new set of variants replaces the old one outright, and choosing one discards
+     * the other two. An unchosen variant is not a pending item the user still owes a
+     * decision on — it is a road not taken, and leaving it in the bag would have the
+     * review section report unconfirmed AI content forever.
+     */
+    case "offerSummary":
+      return {
+        ...s,
+        suggestions: [...s.suggestions.filter((i) => i.section !== "summary"), ...a.items],
+      };
+    case "pickSummary": {
+      const next = confirmItem(s, a.id).state;
+      return {
+        ...next,
+        suggestions: next.suggestions.filter((i) => i.section !== "summary"),
+        summaryBasis: summaryBasis(next.profile),
+      };
+    }
+    case "summaryText": {
+      const text = a.text.trim();
+      const profile = { ...s.profile, summary: text };
+      return {
+        ...s,
+        profile,
+        // Recomputed from the result, not passed in: the stale notice is only honest
+        // if the stored basis is the state the summary was actually written against.
+        summaryBasis: text ? summaryBasis(profile) : undefined,
+      };
+    }
 
     case "confirm":
       return confirmItem(s, a.id).state;
@@ -481,6 +517,14 @@ export default function Builder({ lang }: { lang: "ar" | "en" }) {
                   return (
                     <SectionShell key={id} {...props}>
                       <CredentialsBlock lang={lang} state={state} dispatch={dispatch as never} referenceDate={today} />
+                      <ContinueButton onClick={props.onDone} label={props.contLabel} />
+                    </SectionShell>
+                  );
+                }
+                if (id === "summary") {
+                  return (
+                    <SectionShell key={id} {...props}>
+                      <SummarySection lang={lang} state={state} dispatch={dispatch as never} />
                       <ContinueButton onClick={props.onDone} label={props.contLabel} />
                     </SectionShell>
                   );

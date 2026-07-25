@@ -16,7 +16,7 @@
 
 import {
   EMPTY_BUILDER, newItem, confirmItem, rejectItem, editItem, pending, rejected,
-  hasUnconfirmed, filterFresh, bulletRoom, normalizeLabel, SCHEMA_VERSION,
+  hasUnconfirmed, filterFresh, bulletRoom, normalizeLabel, summaryBasis, SCHEMA_VERSION,
 } from "../app/lib/builderDoc.ts";
 import { assembleResume } from "../app/lib/mergeProfile.ts";
 import { upsertRole, rolesToLines } from "../app/lib/resumeDoc.ts";
@@ -198,6 +198,58 @@ eq("the schema is versioned", SCHEMA_VERSION, 2);
   const jobs = rolesToLines(st.profile.roles).filter((l) => !/^[-•]/.test(l));
   eq("one employer, one job entry", jobs.length, 1);
 }
+
+/* ── the summary: one field, three candidates, and a basis that can go stale ── */
+{
+  const roleAt = (title, company, bullets) => ({
+    id: `r_${title}`, title, company, location: "", department: "",
+    start: "Jan 2020", end: "Present", bullets,
+  });
+
+  let st = base();
+  st.profile.role = "Radiology Technologist";
+  st.profile.roles = [roleAt("Radiographer", "Dallah", ["Performed CT examinations"])];
+
+  // Three variants offered at once. The UI shows one at a time; the bag holds all.
+  const variants = ["concise version", "professional version", "achievement version"]
+    .map((text, i) => newItem({
+      section: "summary", type: "summary", text,
+      group: ["concise", "professional", "achievement"][i],
+    }));
+  st.suggestions = variants;
+
+  ok("no variant is on the CV before one is chosen",
+    !assembleResume(st.profile, false).includes("version"));
+  eq("all three are pending", pending(st, "summary").length, 3);
+
+  // Confirming a summary REPLACES rather than appends — it is one field.
+  const first = confirmItem(st, variants[1].id).state;
+  ok("the chosen variant is the summary", first.profile.summary === "professional version");
+  const second = confirmItem(
+    { ...first, suggestions: [newItem({ section: "summary", type: "summary", text: "a rewrite" })] },
+    "x",
+  );
+  ok("an unknown id changes nothing", second.state.profile.summary === "professional version");
+
+  const written = summaryBasis(first.profile);
+  ok("the basis is not the summary text itself", !written.includes("professional version"));
+
+  // Rewording a bullet does NOT invalidate the summary: a digest that moved on every
+  // keystroke would train the user to ignore the stale notice.
+  const reworded = { ...first.profile, roles: [roleAt("Radiographer", "Dallah", ["Performed CT scans"])] };
+  eq("rewording a duty leaves the basis alone", summaryBasis(reworded), written);
+
+  // Gaining a whole responsibility, a new job, or a skill DOES.
+  const gained = { ...first.profile, roles: [roleAt("Radiographer", "Dallah", ["Performed CT examinations", "Operated PACS"])] };
+  ok("adding a responsibility moves the basis", summaryBasis(gained) !== written);
+
+  const hired = { ...first.profile, roles: [...first.profile.roles, roleAt("Senior Radiographer", "KFSH", [])] };
+  ok("adding a job moves the basis", summaryBasis(hired) !== written);
+
+  const skilled = { ...first.profile, skills: "CT، PACS" };
+  ok("adding skills moves the basis", summaryBasis(skilled) !== written);
+}
+
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
