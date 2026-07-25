@@ -17,10 +17,18 @@ export const BULLET_CAP_CURRENT = 6;
 export const BULLET_CAP_PAST = 4;
 
 export interface Role {
+  /**
+   * Stable handle for a role, so a suggestion can name the job it belongs to
+   * without depending on the title still being spelled the way it was when the
+   * suggestion arrived. Optional: drafts written before the form existed have none.
+   */
+  id?: string;
   title: string;
   company: string;
   /** Kept because the CV the product was measured against shows one per role. */
   location: string;
+  /** Department or modality — a radiology CV is judged on which machines, not just the title. */
+  department?: string;
   start: string;
   end: string;
   bullets: string[];
@@ -136,8 +144,13 @@ export function upsertRole(roles: Role[], incoming: Partial<Role>, replace = fal
 
   if (at === -1) {
     return [...roles, capBullets({
+      // Named-field construction again: every field the caller passed must be
+      // listed or it is silently lost. `id` matters most — a suggestion refers to
+      // its job by id, so dropping it here detaches every bullet that follows.
+      id: incoming.id,
       title, company,
       location: String(incoming.location || ""),
+      department: incoming.department,
       start: String(incoming.start || ""),
       end: String(incoming.end || ""),
       bullets: incomingBullets,
@@ -146,6 +159,10 @@ export function upsertRole(roles: Role[], incoming: Partial<Role>, replace = fal
 
   const prev = roles[at];
   const merged: Role = {
+    // Rebuilt from named fields, so anything not named here is LOST. That is how a
+    // freshly assigned id would vanish on the next merge.
+    id: incoming.id || prev.id,
+    department: incoming.department || prev.department,
     title: title || prev.title,
     company: company || prev.company,
     location: String(incoming.location || prev.location),
@@ -160,7 +177,10 @@ export function upsertRole(roles: Role[], incoming: Partial<Role>, replace = fal
 
 /** The header line the template and the ATS both read. */
 export function roleHeader(r: Role): string {
-  const who = [r.title, r.company].filter(Boolean).join(" — ");
+  // Department rides with the title, because "Radiographer, CT" tells a recruiter
+  // in one line what "Radiographer" alone makes them guess.
+  const role = r.department ? `${r.title}, ${r.department}` : r.title;
+  const who = [role, r.company].filter(Boolean).join(" — ");
   const where = r.location ? `, ${r.location}` : "";
   const period = r.start && r.end ? `${r.start} – ${r.end}` : r.start || r.end;
   return `${who}${where}${period ? ` | ${period}` : ""}`;
