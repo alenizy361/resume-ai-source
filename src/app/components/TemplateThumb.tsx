@@ -6,22 +6,32 @@ import type { TemplateDef } from "../lib/templateCatalog";
  * accent color distinguish it at a glance. Used in the template CARD gallery on
  * the reveal step (a real ResumeTemplate per card would be far too heavy).
  */
+/*
+ * Hoisted out of the render.
+ *
+ * `Bar` captured nothing. `Head` closed over `a` (= def.accent), so it takes it as a prop
+ * — the same dependency the closure had, now written down. Declared inside the render
+ * these were new component types on every pass, which for a thumbnail grid means React
+ * rebuilding every bar of every card instead of leaving them alone.
+ */
+function Bar({ w, c = "#d4d7dd", h = 2.5 }: { w: string | number; c?: string; h?: number }) {
+  return <div style={{ width: w, height: h, background: c, borderRadius: 2 }} />;
+}
+
+function Head({ accent }: { accent: string }) {
+  return <div style={{ height: 3.5, width: "42%", background: accent, borderRadius: 2, marginTop: 7, marginBottom: 4 }} />;
+}
+
 export default function TemplateThumb({ def }: { def: TemplateDef }) {
   const a = def.accent;
   const v = def.variant;
-  const Bar = ({ w, c = "#d4d7dd", h = 2.5 }: { w: string | number; c?: string; h?: number }) => (
-    <div style={{ width: w, height: h, background: c, borderRadius: 2 }} />
-  );
-  const Head = () => (
-    <div style={{ height: 3.5, width: "42%", background: a, borderRadius: 2, marginTop: 7, marginBottom: 4 }} />
-  );
   const lines = (
     <>
-      <Head />
+      <Head accent={a} />
       <div style={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
         <Bar w="100%" /><Bar w="92%" /><Bar w="76%" />
       </div>
-      <Head />
+      <Head accent={a} />
       <div style={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
         <Bar w="88%" /><Bar w="96%" />
       </div>

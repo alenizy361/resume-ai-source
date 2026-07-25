@@ -25,6 +25,16 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   };
 }
 
+/** Hoisted: see the Arabic twin. A component declared in a render remounts its subtree. */
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-10">
+      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
 export default async function Page({ params }: { params: Promise<{ job: string }> }) {
   const { job } = await params;
   const j = getJob(job);
@@ -51,13 +61,6 @@ export default async function Page({ params }: { params: Promise<{ job: string }
       { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
     ],
   };
-
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <section className="mt-10">
-      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
-      {children}
-    </section>
-  );
 
   return (
     <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>

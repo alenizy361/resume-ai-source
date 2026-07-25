@@ -33,6 +33,23 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   };
 }
 
+/**
+ * Hoisted out of the page component.
+ *
+ * Declared inside a render, this is a NEW component type on every pass, so React
+ * unmounts and remounts the entire subtree rather than updating it — and any state
+ * inside would reset. Harmless on a static page, wrong everywhere else, and this file
+ * is the template that 55 occupation pages are generated from.
+ */
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-10">
+      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
 export default async function Page({ params }: { params: Promise<{ job: string }> }) {
   const { job } = await params;
   const j = getJobAr(job);
@@ -59,13 +76,6 @@ export default async function Page({ params }: { params: Promise<{ job: string }
       { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
     ],
   };
-
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <section className="mt-10">
-      <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
-      {children}
-    </section>
-  );
 
   return (
     <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>

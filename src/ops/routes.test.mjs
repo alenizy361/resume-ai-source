@@ -78,7 +78,16 @@ const ROUTES = [
   { path: "/ar/resume-examples/software-engineer", must: "نطاق استرشادي فقط" },
   { path: "/resume-skills/software-engineer", must: "Indicative range only" },
   { path: "/cover-letter-examples/software-engineer", must: "" },
-  { path: "/resume-templates/ats-pro", must: "" },
+  /*
+   * NB: this route's slugs are TEMPLATES[].slug in lib/templates.ts — minimal,
+   * professional, executive, creative, simple, two-column, jadarat. NOT the design slugs
+   * in templateCatalog ("ats-pro", "azure"), and NOT the `layout` field on the same
+   * objects ("classic", "sidebar", "bold"), both of which 404 here. I guessed wrong twice,
+   * once from each of those lists, so the real ones are written down.
+   *
+   * `jadarat` is the Saudi portal template — the most load-bearing one in this market.
+   */
+  { path: "/resume-templates/jadarat", must: "Jadarat" },
   // The retired Arabic chat builder must still answer, as a redirect.
   { path: "/ar/builder", must: "", redirectsTo: "/ar/build" },
 ];

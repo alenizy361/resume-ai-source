@@ -50,6 +50,17 @@ export default function CheckoutButton({
   const [error, setError] = useState("");
   const txRef = useRef<string>("");
   const urlRef = useRef<string>("");
+  /*
+   * The hosted-checkout URL, in state as well as in the ref.
+   *
+   * The "other ways to pay" link rendered `href={urlRef.current}`. That worked, but only
+   * because `setPhase("card")` happens to follow the ref write in the same function, so a
+   * re-render was already queued. A ref is not a render input: if that ordering ever
+   * changes, the link becomes `href="#"` — a dead Tamara / Tabby / Apple Pay link on the
+   * payment modal, at the exact moment a customer is reaching for it. The ref stays for
+   * the synchronous fallback read inside `catch`, where state would be stale.
+   */
+  const [payUrl, setPayUrl] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payRef = useRef<any>(null);
 
@@ -114,6 +125,7 @@ export default function CheckoutButton({
       if (!res.ok || !data.url || !data.transactionNo) throw new Error(data.error || t.failed);
       txRef.current = String(data.transactionNo);
       urlRef.current = String(data.url);
+      setPayUrl(String(data.url));
       // Switch to the card phase — the effect binds the SDK once the fields mount.
       setPhase("card"); setLoading(false);
     } catch (err) {
@@ -180,7 +192,7 @@ export default function CheckoutButton({
                   </div>
                   {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
                   <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full py-3 disabled:opacity-50">{paying ? t.processing : t.payNow}</button>
-                  <a href={urlRef.current || "#"} className="block w-full py-2 text-center text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
+                  <a href={payUrl || "#"} className="block w-full py-2 text-center text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
                   <p className="text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>{t.secure}</p>
                 </div>
               </div>

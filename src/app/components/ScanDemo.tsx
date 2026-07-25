@@ -15,27 +15,14 @@ export default function ScanDemo({ ar = false }: { ar?: boolean }) {
   const started = useRef(false);
   const alive = useRef(true);
 
-  useEffect(() => {
-    alive.current = true;
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !started.current) {
-          started.current = true;
-          runSequence();
-        }
-      },
-      { threshold: 0.4 }
-    );
-    io.observe(el);
-    return () => {
-      alive.current = false;
-      io.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  /*
+   * Declared before the effect that calls it.
+   *
+   * It used to sit below, and worked because function declarations hoist. The lint rule
+   * is right to flag it anyway: the effect closes over a binding declared after itself,
+   * which is a temporal-dead-zone crash the day anyone converts this to
+   * `const runSequence = () => …`. Cheap to order correctly now rather than to debug then.
+   */
   function runSequence() {
     if (!alive.current) return;
     // Let the scan line sweep, then count the score up.
@@ -68,6 +55,28 @@ export default function ScanDemo({ ar = false }: { ar?: boolean }) {
       }
     }, scanMs);
   }
+
+  useEffect(() => {
+    alive.current = true;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !started.current) {
+          started.current = true;
+          runSequence();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => {
+      alive.current = false;
+      io.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const passing = score >= 75;
   const accent = passing ? "#a78bfa" : score >= 55 ? "#fbbf24" : "#f87171";

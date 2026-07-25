@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
+import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entitlement";
+import { toArabicDigits } from "@/app/lib/plans";
 import OrbBrand from "../components/OrbBrand";
 import OrbSceneSetter from "../components/orb/OrbSceneSetter";
 import Link from "next/link";
@@ -86,6 +88,8 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
     } catch { /* noop */ }
   }, []);
   const t = STRINGS[lang];
+  /** When /api/auth/me answered — the reference point for expiry, read outside render. */
+  const [knownAt, setKnownAt] = useState(0);
   // Capture the welcome flag once into state — router.replace below strips the
   // param, which flips the reactive searchParams value back to false and would
   // otherwise make the banner flash and immediately vanish.
@@ -111,7 +115,14 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const [ju, setJu] = useState(""); // url
 
   useEffect(() => {
-    fetch("/api/auth/me").then((r) => r.json()).then(setMe).catch(() => setMe({ signedIn: false })).finally(() => setLoading(false));
+    // The clock is read HERE, in the promise callback, not during render. `Date.now()` in
+    // a render body — even inside useMemo, whose factory also runs during render — makes
+    // the server's output differ from the client's. The moment we learned the entitlement
+    // is also the honest reference point for "when does it expire".
+    fetch("/api/auth/me").then((r) => r.json())
+      .then((d) => { setMe(d); setKnownAt(Date.now()); })
+      .catch(() => { setMe({ signedIn: false }); setKnownAt(Date.now()); })
+      .finally(() => setLoading(false));
     try {
       const raw = localStorage.getItem("ra_published");
       if (raw) setLinks(JSON.parse(raw));
@@ -202,7 +213,20 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   // رابط keeps a quiet presence over the Library — golden once you own a pack.
   useOrbScene({ visible: true, top: "84px", size: 30, mood: owned ? "golden" : "idle", z: 45 }, [owned]);
 
-  const until = me?.until && me.until > Date.now() ? new Date(me.until) : null;
+  /*
+   * Read once per mount, not on every render.
+   *
+   * `Date.now()` in a render body makes the output depend on when React happened to
+   * render — the same reason `reviewChecks` takes its reference date as an argument. It
+   * also goes through `daysRemaining`/`accessExpiresAt` now, so "when does my access
+   * end" is answered by the entitlement service rather than by arithmetic here.
+   */
+  const entitlement = useMemo(() => entitlementFrom(me), [me]);
+  const untilMs = accessExpiresAt(entitlement);
+  // `knownAt` is 0 until the fetch resolves, and `me` is null until then too, so this
+  // block does not render before there is a real time to compare against.
+  const until = knownAt > 0 && untilMs > knownAt ? new Date(untilMs) : null;
+  const daysLeft = knownAt > 0 ? daysRemaining(entitlement, knownAt) : null;
 
   const sectionCard = "card p-6";
   const sectionTitle = "mb-4 text-sm font-bold";
@@ -253,7 +277,14 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                 {until && (
                   <div className="flex items-center justify-between">
                     <dt className="text-sm" style={{ color: "var(--faint)" }}>{t.accessUntil}</dt>
-                    <dd className="text-sm font-medium">{until.toLocaleDateString()} {until.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</dd>
+                    <dd className="text-sm font-medium">
+                      {until.toLocaleDateString()} {until.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      {/* Rounded up by daysRemaining: a pass with four hours left has one
+                          day left, not zero. */}
+                      {daysLeft !== null && (
+                        <span style={{ color: "var(--faint)" }}> · {lang === "ar" ? `${toArabicDigits(daysLeft)} يوم` : `${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}</span>
+                      )}
+                    </dd>
                   </div>
                 )}
               </dl>

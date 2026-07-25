@@ -8,6 +8,29 @@
  */
 interface Improvement { area: string; issue: string; fix: string; source?: string }
 
+/**
+ * Hoisted out of the render. Captures nothing, so it moves as-is.
+ *
+ * Declared inside the component it was a new type on every render, which makes React
+ * remount the subtree rather than update it — and these blocks carry a `reveal-rise`
+ * entrance animation, so remounting means the animation replays on every parent render.
+ * That is the visible symptom of an invisible mistake.
+ */
+function Section({ icon, title, hint, items }: { icon: string; title: string; hint: string; items: string[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+      <div className="mb-1 text-sm font-bold" style={{ color: "var(--fg)" }}>{icon} {title}</div>
+      <div className="mb-2 text-xs" style={{ color: "var(--muted)" }}>{hint}</div>
+      <div className="flex flex-wrap gap-1.5">
+        {items.slice(0, 12).map((k, i) => (
+          <span key={i} className="rounded-full px-2.5 py-1 text-xs" style={{ background: "rgba(139,92,246,0.08)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ResultCoaching({
   before, after, improvements, missingKeywords, skillsGap, hasPlaceholders, ar = false,
 }: {
@@ -55,19 +78,6 @@ export default function ResultCoaching({
         missing: "Job requirements not shown in your resume",
         rescan: "After you add them, re-scan to see the score rise",
       };
-
-  const Section = ({ icon, title, hint, items }: { icon: string; title: string; hint: string; items: string[] }) =>
-    items.length === 0 ? null : (
-      <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
-        <div className="mb-1 text-sm font-bold" style={{ color: "var(--fg)" }}>{icon} {title}</div>
-        <div className="mb-2 text-xs" style={{ color: "var(--muted)" }}>{hint}</div>
-        <div className="flex flex-wrap gap-1.5">
-          {items.slice(0, 12).map((k, i) => (
-            <span key={i} className="rounded-full px-2.5 py-1 text-xs" style={{ background: "rgba(139,92,246,0.08)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
-          ))}
-        </div>
-      </div>
-    );
 
   return (
     <div className="my-6">
