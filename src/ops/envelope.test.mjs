@@ -26,7 +26,9 @@
  *   node --experimental-strip-types ops/envelope.test.mjs
  */
 
-import { countryCode, credentialsFor, exclusionsFor, CREDENTIAL_RULES } from "../app/lib/countryRules.ts";
+import {
+  countryCode, credentialsFor, exclusionsFor, CREDENTIAL_RULES, EXCLUSION_RULES,
+} from "../app/lib/countryRules.ts";
 import { resolveOccupation } from "../app/lib/occupations.ts";
 
 let pass = 0, fail = 0;
@@ -114,6 +116,39 @@ ok("and empty input is empty", countryCode("") === "" && countryCode("   ") === 
     CREDENTIAL_RULES.every((r) => /^https:\/\//.test(r.sourceUrl)));
   ok("and its own attestation status",
     CREDENTIAL_RULES.every((r) => ["encoded", "verified", "retired"].includes(r.status)));
+}
+
+/* ──────────────── every rule can actually be verified by a person ──────────────── */
+
+/*
+ * "Verify the country rules" used to mean "read five licensing authorities' websites and form a
+ * view", which is a research project, so it never happened and eleven rules sat at `encoded`
+ * indefinitely. A rule that cannot be checked in one sitting will not be checked.
+ *
+ * So each one now carries a CLAIM: one sentence that is true or false at its own source. These
+ * assertions are about that being real — a claim that restates the title, or has no source behind
+ * it, would put the checklist back where it started.
+ */
+{
+  const all = [...CREDENTIAL_RULES, ...EXCLUSION_RULES];
+
+  for (const r of all) {
+    ok(`${r.id} states a checkable claim`, typeof r.claim === "string" && r.claim.length > 40, r.claim);
+    ok(`${r.id} claims something, not a topic`, /\b(requires?|is|are|does|confers?|must)\b/i.test(r.claim || ""));
+  }
+
+  ok("no claim merely repeats the rule's own title",
+    CREDENTIAL_RULES.every((r) => r.claim.toLowerCase() !== r.title.en.toLowerCase()));
+
+  /* The provenance is honest about itself: nothing is `verified` that no human has confirmed. A
+     test that asserted "all verified" would be asserting a lie about work nobody did. */
+  const verified = all.filter((r) => r.status === "verified");
+  ok("a verified rule always records WHEN it was verified",
+    verified.every((r) => typeof r.verifiedAt === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.verifiedAt)));
+
+  /* And an unverified one is never dated as if it were. */
+  ok("an encoded rule carries no verification date",
+    all.filter((r) => r.status === "encoded").every((r) => !r.verifiedAt));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

@@ -51,6 +51,8 @@ const C = {
     needTitle: "Add the job title first, so a suggestion has something to be about.",
     /* Said on the chip itself: a licence you cannot practise without is not a suggestion. */
     required: "required to practise",
+    /* The same fact, stated at the strength the evidence supports. */
+    usuallyRequired: "usually required — check with the authority",
   },
   ar: {
     ask: "اقترح بالذكاء",
@@ -63,6 +65,7 @@ const C = {
     thinking: "أستخلص ما تتضمنه هذه المهنة…",
     needTitle: "اكتب المسمى الوظيفي أولاً ليكون للاقتراح موضوع.",
     required: "مطلوب نظاماً لمزاولة المهنة",
+    usuallyRequired: "غالباً مطلوب — تحقّق من الجهة المختصة",
   },
 };
 
@@ -160,9 +163,18 @@ export default function BlueprintStrip({
        * `onPick` hands this text to the section, which makes a credential out of it — so a title
        * carrying "— required to practise" would print that phrase on the CV as part of the
        * credential's name. The chip shows both; only one of them is the document.
+       *
+       * And the wording follows the rule's own PROVENANCE. `countryRules.ts` states the doctrine
+       * plainly: an `encoded` rule is usable as a suggestion the user confirms and NOT usable as a
+       * claim the product makes. "Required to practise" is a claim about the law of a jurisdiction;
+       * until an administrator has opened the source and confirmed it, the honest note is the
+       * weaker one. Verifying a rule is what upgrades the sentence — see `ops/verify-rules.mjs`.
        */
-      .map((rule) => ({ text: rule.title[career.cvLang], note: rule.mandatory ? c.required : "" }));
-  }, [blueprint, field, career.occupation, career.country, career.cvLang, c.required]);
+      .map((rule) => ({
+        text: rule.title[career.cvLang],
+        note: !rule.mandatory ? "" : rule.status === "verified" ? c.required : c.usuallyRequired,
+      }));
+  }, [blueprint, field, career.occupation, career.country, career.cvLang, c.required, c.usuallyRequired]);
 
   /*
    * The chips minus what the user has already said no to.

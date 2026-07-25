@@ -49,6 +49,15 @@ export interface CredentialRule {
   /** True when practising the occupation legally requires it, as far as is encoded. */
   mandatory: boolean;
   sourceUrl: string;
+  /**
+   * The single sentence an administrator has to confirm at `sourceUrl` — written as a claim that
+   * can be true or false, not as a topic.
+   *
+   * Without it "verify this rule" means "read a licensing authority's website and form a view",
+   * which is a research project nobody does. With it, verification is a yes/no against one page,
+   * and `ops/verify-rules.mjs` can print the list to work through.
+   */
+  claim: string;
   status: RuleStatus;
   /** ISO date. For `encoded` rules this is when the text was written, not when it was checked. */
   encodedAt: string;
@@ -78,6 +87,8 @@ export interface ExclusionRule {
   /** What to offer instead, by `CredentialRule.id`. */
   insteadOf: string[];
   sourceUrl: string;
+  /** The sentence to confirm at `sourceUrl`. See `CredentialRule.claim`. */
+  claim: string;
   status: RuleStatus;
   encodedAt: string;
   needsVerificationBy: string;
@@ -104,6 +115,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "registration",
     mandatory: true,
     sourceUrl: "https://scfhs.org.sa",
+    claim: "Practising a health profession in Saudi Arabia requires SCFHS professional classification AND registration, and both must be current.",
   },
   {
     ...base,
@@ -115,6 +127,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "licence",
     mandatory: true,
     sourceUrl: "https://etec.gov.sa",
+    claim: "Teaching in a Saudi school requires the ETEC professional teaching licence, and it is renewable rather than permanent.",
   },
   {
     ...base,
@@ -126,6 +139,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "membership",
     mandatory: false,
     sourceUrl: "https://socpa.org.sa",
+    claim: "SOCPA membership is required to sign audit opinions in Saudi Arabia; ordinary accounting roles do not require it.",
   },
   {
     ...base,
@@ -140,6 +154,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "registration",
     mandatory: true,
     sourceUrl: "https://saudieng.sa",
+    claim: "Practising engineering in Saudi Arabia requires Saudi Council of Engineers accreditation, including for expatriate engineers.",
   },
   {
     ...base,
@@ -151,6 +166,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "licence",
     mandatory: true,
     sourceUrl: "https://sba.gov.sa",
+    claim: "Appearing as a lawyer in Saudi Arabia requires a licence from the Saudi Bar Association.",
   },
   {
     ...base,
@@ -165,6 +181,7 @@ export const CREDENTIAL_RULES: CredentialRule[] = [
     kind: "certification",
     mandatory: false,
     sourceUrl: "https://scfhs.org.sa",
+    claim: "BLS certification is expected of Saudi clinical staff by employers but is NOT itself a licence to practise.",
   },
 ];
 
@@ -178,6 +195,7 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     excludedIn: ["sa", "ae", "kw", "qa", "bh", "om"],
     insteadOf: ["sa-scfhs-registration"],
     sourceUrl: "https://www.arrt.org",
+    claim: "ARRT certification is a United States credential and confers no right to practise radiography in the Gulf.",
   },
   {
     ...base,
@@ -188,6 +206,7 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     excludedIn: ["sa"],
     insteadOf: ["sa-scfhs-registration"],
     sourceUrl: "https://www.nclex.com",
+    claim: "NCLEX-RN is the United States nursing licensure examination and is not the Saudi route to nursing registration.",
   },
   {
     ...base,
@@ -198,6 +217,7 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     excludedIn: ["sa"],
     insteadOf: ["sa-socpa-membership"],
     sourceUrl: "https://www.aicpa.org",
+    claim: "The US CPA is a United States licence and does not substitute for SOCPA membership in Saudi Arabia.",
   },
   {
     ...base,
@@ -208,6 +228,7 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     excludedIn: ["sa"],
     insteadOf: ["sa-etec-teacher-licence"],
     sourceUrl: "https://www.gov.uk/guidance/qualified-teacher-status-qts",
+    claim: "QTS is an England-and-Wales status and is not recognised as a Saudi teaching licence.",
   },
   {
     ...base,
@@ -218,6 +239,7 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     excludedIn: ["sa"],
     insteadOf: ["sa-sce-registration"],
     sourceUrl: "https://ncees.org",
+    claim: "The US Professional Engineer licence is issued per state and is not a Saudi engineering accreditation.",
   },
 ];
 
