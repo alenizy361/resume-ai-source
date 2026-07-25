@@ -181,7 +181,11 @@ for (const field of ["cachedPrefixTokens", "cacheFloorTokens", "cacheablePrefix"
 ok("the cached prefix is measured against the floor, not assumed",
   /estimateTokens\(CORE_RULES\) >= CACHE_FLOOR_TOKENS/.test(SRC));
 ok("the shared pack cache reports absent rather than pretending",
-  /packCacheConfigured\(\) \? "upstash" : "absent"/.test(SRC));
+  /packCacheConfigured\(\) \? "configured" : "absent"/.test(SRC));
+/* Two env spellings are in circulation and reading only one is a silent downgrade to in-memory
+   counting next to a Redis the operator can see in the same browser. */
+ok("and names which credential spelling was found, including the half-set case",
+  /redisCredentials: redisSource\(\)/.test(SRC));
 ok("the country rules report their own provenance",
   /ruleProvenance\(\)/.test(SRC) && /staleRules\(/.test(SRC));
 ok("the budgets are reportable, so a ceiling is never a mystery",

@@ -30,13 +30,10 @@
  * product it accelerates has negative value, and the fallback below it is genuinely good.
  */
 
-const UP_URL = process.env.UPSTASH_REDIS_REST_URL;
-const UP_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+import { redisConfigured, redisToken, redisUrl } from "./redisEnv.ts";
 
 /** Whether a shared cache exists at all. Reported by the health endpoint, not assumed. */
-export function packCacheConfigured(): boolean {
-  return Boolean(UP_URL && UP_TOKEN);
-}
+export const packCacheConfigured = redisConfigured;
 
 /**
  * Thirty days.
@@ -67,9 +64,9 @@ async function redis(command: unknown[]): Promise<unknown> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(`${UP_URL}/pipeline`, {
+    const res = await fetch(`${redisUrl()}/pipeline`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${UP_TOKEN}`, "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${redisToken()}`, "Content-Type": "application/json" },
       body: JSON.stringify([command]),
       cache: "no-store",
       signal: ctrl.signal,

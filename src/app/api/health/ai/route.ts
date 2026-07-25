@@ -4,6 +4,7 @@ import { modelConfig, MAX_OUTPUT, TASK_CLASS } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, CACHE_FLOOR_TOKENS } from "@/app/lib/aiPrompts";
 import { packCacheConfigured } from "@/app/lib/packCache";
+import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
 import { budgets } from "@/app/lib/aiBudget";
 import { priceMismatch } from "@/app/lib/plans";
@@ -132,8 +133,16 @@ export async function GET(req: NextRequest) {
       schemaTokens: Object.fromEntries(
         Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(v ?? "")]),
       ),
-      /** Absent means the between-users pack cache misses every time. Not an error; a cost. */
-      sharedPackCache: packCacheConfigured() ? "upstash" : "absent",
+      /**
+       * Absent means the between-users pack cache misses every time. Not an error; a cost.
+       *
+       * `redisSource` names WHICH spelling was found, because there are two in circulation
+       * (`UPSTASH_REDIS_REST_*` from Upstash's integration, `KV_REST_API_*` from a store created
+       * through Vercel's Storage tab) and `"half"` is the case worth seeing: one of the pair set
+       * and not the other, which behaves like absent and reads like configured.
+       */
+      sharedPackCache: packCacheConfigured() ? "configured" : "absent",
+      redisCredentials: redisSource(),
     },
 
     /*

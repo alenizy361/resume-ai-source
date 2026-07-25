@@ -1,3 +1,4 @@
+import { redisConfigured, redisToken, redisUrl } from "./redisEnv.ts";
 import type { NextRequest } from "next/server";
 
 /**
@@ -18,9 +19,11 @@ import type { NextRequest } from "next/server";
 type Hit = { count: number; reset: number };
 const buckets = new Map<string, Hit>();
 
-const UP_URL = process.env.UPSTASH_REDIS_REST_URL;
-const UP_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-const sharedConfigured = () => !!(UP_URL && UP_TOKEN);
+/* Two spellings, one store — see redisEnv.ts. Reading only one name is a silent
+   downgrade to in-memory counting next to a Redis the operator can see. */
+const UP_URL = redisUrl();
+const UP_TOKEN = redisToken();
+const sharedConfigured = redisConfigured;
 
 export function clientIp(req: NextRequest): string {
   const xff = req.headers.get("x-forwarded-for");
