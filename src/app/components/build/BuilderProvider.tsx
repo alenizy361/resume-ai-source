@@ -34,6 +34,7 @@ import {
 import { track } from "@vercel/analytics";
 
 import { assembleResume } from "@/app/lib/mergeProfile";
+import { applyVersionToProfile } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readBuilder, writeBuilder, readDraft } from "@/app/lib/draftStore";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
@@ -60,8 +61,12 @@ interface BuilderContextValue {
   hydrated: boolean;
   /** The assembled CV text, debounced — the preview and the exports both read this. */
   previewText: string;
-  /** The document's language, which is not the interface's. */
+  /** The document's AUTHORING language, which is not the interface's. */
   cv: "ar" | "en";
+  /** The language currently being previewed and exported. Equals `cv` unless a version is selected. */
+  viewLang: "ar" | "en";
+  /** The profile as the active version renders it. Wording swapped, facts identical. */
+  shown: BuilderState["profile"];
   progress: number;
   template: (typeof TEMPLATE_CATALOG)[number];
   /** Today, read once per mount: an expiry check that re-reads the clock renders differently for no reason. */
@@ -254,11 +259,31 @@ export default function BuilderProvider({
      change, so binding it to raw keystrokes re-lays out an A4 page per letter. */
   const [previewText, setPreviewText] = useState("");
   const cv = cvLang(state.target);
-  const resumeRtl = cv === "ar";
+
+  /*
+   * Which version the preview and the exports render.
+   *
+   * `activeVersion` is a VIEW setting: it swaps wording and cannot touch a fact, because
+   * `applyVersionToProfile` reads a map of strings keyed by source item id and there is nowhere in
+   * that map for an employer or a date to hide. When it names the authoring language — or names
+   * nothing, or names a version that does not exist — the document renders as itself.
+   *
+   * The direction follows the VERSION, not the CV's authoring language. An English version of an
+   * Arabic CV is left-to-right, and getting that wrong produces a document that is correct and
+   * unreadable.
+   */
+  const viewLang: "ar" | "en" = state.activeVersion === "en" ? "en"
+    : state.activeVersion === "ar" ? "ar"
+    : cv;
+  const shown = useMemo(
+    () => (viewLang === cv ? state.profile : applyVersionToProfile(state.profile, state.versions?.[viewLang])),
+    [state.profile, state.versions, viewLang, cv],
+  );
+  const resumeRtl = viewLang === "ar";
   useEffect(() => {
-    const id = setTimeout(() => setPreviewText(assembleResume(state.profile, resumeRtl)), 250);
+    const id = setTimeout(() => setPreviewText(assembleResume(shown, resumeRtl)), 250);
     return () => clearTimeout(id);
-  }, [state.profile, resumeRtl]);
+  }, [shown, resumeRtl]);
 
   const template = useMemo(
     () => TEMPLATE_CATALOG.find((x) => x.slug === state.template) ?? TEMPLATE_CATALOG[0],
@@ -289,8 +314,8 @@ export default function BuilderProvider({
 
   const value = useMemo<BuilderContextValue>(() => ({
     lang, resumeId, state, dispatch, save, flush, hydrated,
-    previewText, cv, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, state, save, flush, hydrated, previewText, cv, progress, template, today, markDone, gen, career]);
+    previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career,
+  }), [lang, resumeId, state, save, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

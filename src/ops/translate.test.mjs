@@ -17,6 +17,7 @@ import {
   buildTranslationSource, protectedNames, validateTranslation,
   sourceContentHash, sectionHashes, staleSections, translationFresh,
   translationKey, translationEscalation, TRANSLATION_PROMPT_VERSION, TRANSLATABLE_SECTIONS,
+  applyVersionToProfile, versionDir,
 } from "../app/lib/translate.ts";
 import {
   GLOSSARY, GLOSSARY_SIZE, GLOSSARY_VERSION, lookup, render, applyGlossary, glossaryFor, entryById,
@@ -341,6 +342,76 @@ ok("the fixture translates every source item and invents none",
    */
   ok("validation failure takes precedence over a user request",
     translationEscalation(src, { userRequested: true, validationFailed: true }) === "validation-failed");
+}
+
+/* ─────────────────────── rendering a version ─────────────────────── */
+
+{
+  const rendered = applyVersionToProfile(CV.profile, { items: good });
+
+  ok("the summary renders in English", rendered.summary === good["profile.summary"]);
+  ok("the bullets render in English", rendered.roles[0].bullets[1] === good["r1.b1"]);
+  ok("the role title renders in English", rendered.roles[0].title === good["r1.title"]);
+  ok("the skills render in English", rendered.skills === good["profile.skills"]);
+
+  /*
+   * THE ASSERTION. Facts that were never translatable must survive a render untouched — the employer,
+   * the dates, the location. They are absent from the item map by construction, so this holds because
+   * there is nowhere for a translation to put them, not because a rule remembers to skip them.
+   */
+  ok("the employer is unchanged", rendered.roles[0].company === "مستشفى الملك فهد");
+
+  /*
+   * The stronger version of that assertion, added after injecting the defect and watching the suite
+   * pass it: a map that CONTAINS a key for the employer must still not move the employer.
+   *
+   * The first check only proved the renderer does not invent a company key. It did not prove the
+   * renderer ignores one that arrives — and a model that returns `r1.company` is exactly the case
+   * where a CV silently changes where someone worked. The renderer reads a fixed set of fields; keys
+   * outside it are inert, and that is now asserted rather than assumed.
+   */
+  const hostile = applyVersionToProfile(CV.profile, {
+    items: {
+      ...good,
+      "r1.company": "King Fahad Medical City",
+      "r1.start": "2015",
+      "r1.end": "2020",
+      "r1.location": "Jeddah",
+    },
+  });
+  ok("an employer key in the translation is ignored",
+    hostile.roles[0].company === "مستشفى الملك فهد");
+  ok("a start-date key in the translation is ignored", hostile.roles[0].start === "2019");
+  ok("an end-date key is ignored — the role stays current", hostile.roles[0].end === "");
+  ok("a location key is ignored", hostile.roles[0].location === "الرياض");
+  ok("the start date is unchanged", rendered.roles[0].start === "2019");
+  ok("the end date is unchanged — still the current role", rendered.roles[0].end === "");
+  ok("the location is unchanged", rendered.roles[0].location === "الرياض");
+  ok("the number of jobs is unchanged", rendered.roles.length === CV.profile.roles.length);
+  ok("the number of bullets is unchanged",
+    rendered.roles[0].bullets.length === CV.profile.roles[0].bullets.length);
+
+  /* And the Arabic document is not mutated by rendering a view of it. */
+  ok("rendering does not touch the source profile",
+    CV.profile.summary === "أخصائي أشعة تشخيصية بخبرة في التصوير المقطعي والعام."
+    && CV.profile.roles[0].bullets[0].startsWith("نفّذت"));
+
+  /*
+   * A missing translation falls back to the SOURCE line, never to an empty one. A blank line silently
+   * deletes a job someone did; an Arabic line inside an English CV is visible and fixable.
+   */
+  const partial = applyVersionToProfile(CV.profile, { items: { "profile.summary": good["profile.summary"] } });
+  ok("an untranslated bullet keeps its Arabic rather than vanishing",
+    partial.roles[0].bullets[0] === CV.profile.roles[0].bullets[0]);
+  ok("and the translated summary still applies", partial.summary === good["profile.summary"]);
+  ok("an empty translation is treated as missing",
+    applyVersionToProfile(CV.profile, { items: { "profile.summary": "   " } }).summary === CV.profile.summary);
+
+  ok("no version at all renders the document itself",
+    applyVersionToProfile(CV.profile, null) === CV.profile);
+
+  ok("the English version reads left to right", versionDir("en") === "ltr");
+  ok("and the Arabic one right to left", versionDir("ar") === "rtl");
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

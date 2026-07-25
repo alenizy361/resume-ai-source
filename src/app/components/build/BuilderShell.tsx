@@ -23,6 +23,7 @@ import { track } from "@vercel/analytics";
 import ResumeTemplate from "../ResumeTemplate";
 import OrbBrand from "../OrbBrand";
 import { stepMark } from "@/app/lib/stepReady";
+import VersionSwitch from "./VersionSwitch";
 import { setBuilderMode } from "@/app/lib/flags";
 import { useBuilder } from "./BuilderProvider";
 import { STEPS, SECTION_COPY, stepFromSlug, stepHref, stepIndex } from "./steps";
@@ -212,6 +213,8 @@ export default function BuilderShell({
 
                 <aside className={`bd-preview${mobileView === "edit" ? " hide" : ""}`}>
                   <div className="card overflow-hidden p-2">
+                    {/* Above the preview, so the thing it controls is directly below it. */}
+                    <VersionSwitch />
                     {previewText.trim() ? (
                       <ResumeTemplate
                         text={previewText}

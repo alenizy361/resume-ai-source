@@ -193,6 +193,16 @@ export interface BuilderState {
    */
   versions?: Record<string, TranslatedVersion>;
 
+  /**
+   * Which version the preview and the exports are currently showing.
+   *
+   * A VIEW setting, not a fact — it changes which strings are rendered and nothing about what the CV
+   * claims. Absent means the authoring language, which is the document itself. Stored with the resume
+   * so the choice survives a refresh, because a switcher that silently resets is one the user stops
+   * trusting after the first export.
+   */
+  activeVersion?: string;
+
   updatedAt: number;
 }
 

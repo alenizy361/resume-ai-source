@@ -375,3 +375,58 @@ export function translationEscalation(
   if (chars > 6000) return "senior-achievements";
   return null;
 }
+
+/* ─────────────────────────── rendering a version ─────────────────────────── */
+
+/**
+ * Build the profile a localized version renders as — WORDING SWAPPED, FACTS UNTOUCHED.
+ *
+ * The item ids that `buildTranslationSource` produced are the map back: `profile.summary` returns to
+ * the summary, `r1.b0` to the first bullet of role `r1`. Nothing else moves. Dates, employers,
+ * locations and the contact line are copied across verbatim — they were never sent for translation,
+ * so there is nothing to swap and no opportunity to swap the wrong thing.
+ *
+ * A missing translation falls back to the SOURCE line rather than to an empty one. That is the honest
+ * failure: a partially translated CV shows the Arabic sentence the translation did not cover, which a
+ * user can see and fix, where a blank line silently deletes a job they did.
+ *
+ * Pure, and deliberately returns a new `Profile` rather than mutating: the Arabic document is the
+ * document, and a function that could edit it in place while "rendering a view" is one refactor away
+ * from the English version overwriting the Arabic one.
+ */
+export function applyVersionToProfile<
+  P extends {
+    role: string; summary: string; education: string; skills: string; languages: string;
+    roles: Array<{ id?: string; title: string; bullets: string[] }>;
+  },
+>(profile: P, version: { items: Record<string, string> } | null | undefined): P {
+  if (!version) return profile;
+  const t = (id: string, fallback: string): string => {
+    const v = version.items[id];
+    return typeof v === "string" && v.trim() ? v : fallback;
+  };
+
+  return {
+    ...profile,
+    role: t("target.title", profile.role),
+    summary: t("profile.summary", profile.summary),
+    education: t("profile.education", profile.education),
+    skills: t("profile.skills", profile.skills),
+    languages: t("profile.languages", profile.languages),
+    roles: profile.roles.map((r, i) => {
+      const rid = r.id || `role${i}`;
+      return {
+        ...r,
+        title: t(`${rid}.title`, r.title),
+        /* Employer, location and dates are absent from the item map by construction — they were never
+           translatable — so they survive without needing a rule that says so. */
+        bullets: r.bullets.map((b, j) => t(`${rid}.b${j}`, b)),
+      };
+    }),
+  };
+}
+
+/** Which language a version renders in — for `dir`, and for choosing the export path. */
+export function versionDir(lang: "ar" | "en"): "rtl" | "ltr" {
+  return lang === "ar" ? "rtl" : "ltr";
+}

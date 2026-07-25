@@ -87,7 +87,9 @@ export type Action =
    * career fact. So there is exactly one set of facts and no way for the English CV to claim something
    * the Arabic one does not.
    */
-  | { t: "version"; lang: string; version: TranslatedVersion };
+  | { t: "version"; lang: string; version: TranslatedVersion }
+  /** Switch which version is shown. Never touches content — see `activeVersion`. */
+  | { t: "viewVersion"; lang: string };
 
 /**
  * Rebuild the certifications block from the confirmed credentials only.

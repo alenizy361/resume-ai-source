@@ -38,6 +38,7 @@ import { type BuilderState, type SectionId } from "@/app/lib/builderDoc";
 import { review } from "@/app/lib/reviewChecks";
 import { shouldShowWatermark } from "@/app/lib/entitlement";
 import { useEntitlement } from "@/app/lib/useEntitlement";
+import { useBuilder } from "./BuilderProvider";
 
 type Lang = "ar" | "en";
 
@@ -138,7 +139,17 @@ export default function DesignSection({
 }) {
   const c = C[lang];
   const ar = lang === "ar";
-  const arabicCv = state.target.language === "ar";
+  /*
+   * The DIRECTION and the export format follow the version being VIEWED, not the language the CV was
+   * authored in.
+   *
+   * An English version of an Arabic CV is left-to-right and can have a real text PDF; reading
+   * `target.language` here would offer it Word-only, name the file `resume-ar.docx`, and render it
+   * right-to-left — a document that is factually correct and unreadable. `previewText` already
+   * follows the active version, so this is the last place the two could disagree.
+   */
+  const { viewLang } = useBuilder();
+  const arabicCv = viewLang === "ar";
 
   const [showAll, setShowAll] = useState(false);
   /*
