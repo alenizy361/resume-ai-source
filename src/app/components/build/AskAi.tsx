@@ -29,6 +29,7 @@ const C = {
     send: "Ask",
     busy: "Thinking…",
     err: "The assistant is busy — try again in a moment.",
+    slow: "You have asked a lot in the last few minutes — try again shortly.",
     note: "Advice only. Nothing here is added to your CV.",
   },
   ar: {
@@ -38,6 +39,7 @@ const C = {
     send: "اسأل",
     busy: "يفكّر…",
     err: "المساعد مشغول — جرّب بعد لحظة.",
+    slow: "سألت كثيراً في الدقائق الماضية — جرّب بعد قليل.",
     note: "إجابة استشارية فقط. لا يُضاف منها شيء إلى سيرتك.",
   },
 };
@@ -76,13 +78,14 @@ export default function AskAi({
         }),
       });
       const data = await res.json().catch(() => ({}));
+      if (res.status === 429) { setErr(String(data?.error || "").trim() || c.slow); return; }
       if (!res.ok) throw new Error(String(data?.error || "failed"));
       setAnswer(String(data?.text || "").trim());
       track("builder_ask_ai", { section });
     } catch (e) {
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
-  }, [q, busy, lang, targetRole, current, section, c.err]);
+  }, [q, busy, lang, targetRole, current, section, c.err, c.slow]);
 
   if (!open) {
     return (

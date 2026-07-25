@@ -636,6 +636,12 @@ export default function OptimizePage() {
                       </button>
                       <PdfExport text={result.optimizedResume} watermark={result.watermark} />
                       <DocxExport text={result.optimizedResume} watermark={result.watermark} />
+                      {/* The builder can read a saved CV back now, so "keep editing this
+                          in the form" is a real offer rather than a dead end at the
+                          download button. */}
+                      <Link href="/build" className="btn-ghost px-5 py-2.5 text-sm font-semibold">
+                        Keep editing in the builder →
+                      </Link>
                     </div>
                   )}
                 </div>

@@ -49,6 +49,7 @@ const C = {
     skip: "Skip — no figure",
     busy: "Writing…",
     err: "The assistant is busy. Keep typing — you can add responsibilities by hand.",
+    slow: "You have asked the AI a lot in the last few minutes. Carry on filling this in by hand — it works with the AI switched off — and it will answer again shortly.",
   },
   ar: {
     addRole: "+ أضف وظيفة", remove: "حذف",
@@ -70,18 +71,35 @@ const C = {
     skip: "تجاوز — بلا رقم",
     busy: "يكتب…",
     err: "المساعد مشغول. واصل الكتابة — تستطيع إضافة المهام بيدك.",
+    slow: "طلبت من الذكاء كثيراً في الدقائق الماضية. واصل التعبئة بيدك — النموذج يعمل والذكاء مطفأ — وسيجيبك بعد قليل.",
   },
 };
 
-/** One call, cancellable, so a stale reply cannot overwrite a newer one. */
+/**
+ * One call, cancellable, so a stale reply cannot overwrite a newer one.
+ *
+ * A 429 is marked, because it is not the same event as a failure. "The assistant is
+ * busy" tells a rate-limited user to keep clicking; "you have used this a lot in the
+ * last few minutes" tells them to carry on typing and come back — and the form works
+ * either way, which is the whole thesis. The route's own message is the useful text, so
+ * it is passed through rather than replaced.
+ */
+class Throttled extends Error {}
+
 async function askSuggest(body: Record<string, unknown>, signal: AbortSignal) {
   const res = await fetch("/api/suggest", {
     method: "POST", headers: { "Content-Type": "application/json" },
     signal, body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
+  if (res.status === 429) throw new Throttled(String(data?.error || "").trim());
   if (!res.ok) throw new Error(String(data?.error || "failed"));
   return data as { text?: string; items?: string[]; question?: string; rewritten?: string };
+}
+
+/** Which sentence this failure deserves. A throttle is not an outage. */
+function reason(e: unknown, c: (typeof C)["en"]): string {
+  return e instanceof Throttled ? (e.message || c.slow) : c.err;
 }
 
 export default function ExperienceSection({
@@ -187,10 +205,10 @@ function RoleCard({
       });
       track("builder_suggestions_shown", { section: "experience", n: fresh.length });
     } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
+      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
     } finally { setBusy(false); }
      
-  }, [role, offered, state, lang, cv, target, dispatch, c.err]);
+  }, [role, offered, state, lang, cv, target, dispatch, c]);
 
   /** Rewrite one pending suggestion in place. */
   const rewrite = useCallback(async (it: Item, kind: "bullet_improve" | "bullet_shorter") => {
@@ -203,10 +221,10 @@ function RoleCard({
       }, abort.current.signal);
       if (d.text?.trim()) dispatch({ t: "editItem", id: it.id, text: d.text.trim() });
     } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
+      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
     } finally { setBusy(false); }
      
-  }, [role, cv, target, dispatch, c.err]);
+  }, [role, cv, target, dispatch, c]);
 
   /**
    * The metric path. The model returns the QUESTION and the sentence shape — never
@@ -226,10 +244,10 @@ function RoleCard({
         track("builder_metric_asked", {});
       }
     } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
+      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
     } finally { setBusy(false); }
      
-  }, [role, cv, target, c.err]);
+  }, [role, cv, target, c]);
 
   /**
    * The achievement extractor — the same machinery, aimed at the role instead of at
@@ -258,10 +276,10 @@ function RoleCard({
         track("builder_achievement_asked", {});
       }
     } catch (e) {
-      if ((e as Error).name !== "AbortError") setErr(c.err);
+      if ((e as Error).name !== "AbortError") setErr(reason(e, c));
     } finally { setBusy(false); }
      
-  }, [role, cv, target, c.err]);
+  }, [role, cv, target, c]);
 
   const applyFigure = () => {
     if (!ask) return;

@@ -51,6 +51,7 @@ const C = {
     stale: "Your experience changed after this summary was written — it may no longer describe your CV.",
     staleAct: "Write three new versions",
     err: "The assistant is busy. You can also write the summary yourself — the field below is yours.",
+    slow: "You have asked the AI a lot in the last few minutes. Write the summary yourself below, or come back to this in a minute.",
     own: "Or write your own",
     ownPh: "Two or three lines: what you do, at what level, and what you are aiming for.",
   },
@@ -73,6 +74,7 @@ const C = {
     stale: "تغيّرت خبرتك بعد كتابة هذا الملخص — قد لا يصف سيرتك الآن.",
     staleAct: "اكتب ثلاث نسخ جديدة",
     err: "المساعد مشغول. وتستطيع كتابة الملخص بنفسك — الحقل أدناه لك.",
+    slow: "طلبت من الذكاء كثيراً في الدقائق الماضية. اكتب الملخص بنفسك أدناه، أو ارجع لهذا بعد دقيقة.",
     own: "أو اكتبه بنفسك",
     ownPh: "سطران أو ثلاثة: ماذا تعمل، بأي مستوى، وما تستهدفه.",
   },
@@ -160,6 +162,9 @@ export default function SummarySection({
         }),
       });
       const data = await res.json().catch(() => ({}));
+      // A throttle is not an outage: it says "come back", and the field below is still
+      // the user's to type into either way.
+      if (res.status === 429) { setErr(String(data?.error || "").trim() || c.slow); return; }
       if (!res.ok) throw new Error(String(data?.error || "failed"));
       const variants = (data?.variants ?? []) as { label: VariantLabel; text: string }[];
       if (!variants.length) { setErr(c.err); return; }
@@ -174,7 +179,7 @@ export default function SummarySection({
     } catch (e) {
       if ((e as Error).name !== "AbortError") setErr(c.err);
     } finally { setBusy(false); }
-  }, [state, confirmed, lang, dispatch, c.err]);
+  }, [state, confirmed, lang, dispatch, c]);
 
   if (!ready) {
     return (

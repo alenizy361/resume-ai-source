@@ -20,6 +20,7 @@
 import { useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 import { type ParsedCv, parseCv, worthImporting } from "@/app/lib/importCv";
+import { type SavedResume, getResumes } from "@/app/lib/localdata";
 
 type Lang = "ar" | "en";
 
@@ -43,6 +44,11 @@ const C = {
     budget: (n: number) => `${n} extra ${n === 1 ? "duty" : "duties"} will be offered rather than added — a job shows six at most.`,
     nothing: "Tick at least one thing to bring across.",
     done: "Brought across. Everything is editable in the sections below.",
+    saved: "Or continue from a CV you already made here",
+    savedSub: "Including one built in the chat. It is read the same way an uploaded file is, so you can carry on editing it in the form.",
+    open: "Open",
+    showSaved: "Show what is saved on this device",
+    noSaved: "Nothing saved on this device yet.",
   },
   ar: {
     have: "لديّ سيرة ذاتية بالفعل",
@@ -63,6 +69,11 @@ const C = {
     budget: (n: number) => `${n} مهمة إضافية ستُعرض عليك بدل إضافتها — الوظيفة تُظهر ستاً كحد أعلى.`,
     nothing: "حدّد شيئاً واحداً على الأقل لنقله.",
     done: "تم النقل. وكل شيء قابل للتعديل في الأقسام أدناه.",
+    saved: "أو واصل من سيرة أنشأتها هنا",
+    savedSub: "بما فيها ما بُني بالمحادثة. تُقرأ كما يُقرأ الملف المرفوع، فتستطيع مواصلة تعديلها في النموذج.",
+    open: "افتح",
+    showSaved: "اعرض المحفوظ على هذا الجهاز",
+    noSaved: "لا يوجد محفوظ على هذا الجهاز بعد.",
   },
 };
 
@@ -83,6 +94,32 @@ export default function ImportPanel({
   const [showUnread, setShowUnread] = useState(false);
   const [done, setDone] = useState(false);
   const input = useRef<HTMLInputElement | null>(null);
+  /*
+   * CVs this browser has already produced — including ones the chat door built.
+   *
+   * `entry: "saved"` has been in the schema since the first commit with nothing to
+   * populate it, because reading a resume back required a parser. There is one now, and
+   * saved text goes through exactly the same path as an uploaded file: one code path, so
+   * a chat-built CV cannot import differently from a PDF.
+   *
+   * Read on click, not on mount. localStorage does not exist during the server render,
+   * and reading it in an effect would mean a setState on every visit for a list most
+   * people will never open. `null` means "not looked yet"; `[]` means "looked, nothing
+   * there", and the two need different copy.
+   */
+  const [saved, setSaved] = useState<SavedResume[] | null>(null);
+  const look = () => {
+    try { setSaved(getResumes().slice(0, 5)); } catch { setSaved([]); }
+  };
+
+  function openSaved(entry: SavedResume) {
+    setErr(""); setDone(false);
+    const cv = parseCv(entry.text);
+    if (!worthImporting(cv)) { setErr(c.tooLittle); return; }
+    setParsed(cv);
+    setPicks({ roles: cv.roles.map(() => true), skills: true, education: true, certs: true, langs: true });
+    track("builder_saved_opened", { roles: cv.roles.length });
+  }
 
   async function read(file: File) {
     setErr(""); setBusy(true); setParsed(null); setDone(false);
@@ -153,6 +190,37 @@ export default function ImportPanel({
       >
         {busy ? c.reading : c.pick}
       </button>
+
+      {!parsed && (
+        <div className="mt-4">
+          <div className="bd-label">{c.saved}</div>
+          <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.savedSub}</p>
+          {saved === null && (
+            <button
+              onClick={look}
+              className="rounded-full px-3 text-xs font-semibold"
+              style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+            >
+              {c.showSaved}
+            </button>
+          )}
+          {saved?.length === 0 && (
+            <p className="text-xs" style={{ color: "var(--faint)" }}>{c.noSaved}</p>
+          )}
+          {(saved ?? []).map((r) => (
+            <div key={r.id} className="bd-confirmed mb-1.5">
+              <span className="flex-1 text-xs leading-relaxed">{r.title || "CV"}</span>
+              <button
+                onClick={() => openSaved(r)}
+                className="rounded-full px-2.5 text-[11px] font-semibold"
+                style={{ minHeight: 32, border: "1px solid var(--line)", color: "var(--muted)" }}
+              >
+                {c.open}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
       {done && <p className="mt-2 text-xs" style={{ color: "#6ee7b7" }}>{c.done}</p>}
