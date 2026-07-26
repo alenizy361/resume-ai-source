@@ -160,10 +160,38 @@ console.log("\n── every effect is used, and used where something happens ─
   const bar = read("app/components/build/StepBar.tsx");
   const shell = read("app/components/build/BuilderShell.tsx");
 
-  /* The core gesture of the whole builder. It had no feedback before this. */
-  ok("accepting a suggestion animates", /t-accept/.test(chip));
-  ok("and the accept still fires immediately, so nothing is delayed",
-    /setAccepted\(true\); onAdd\(\);/.test(chip));
+  /*
+   * ── the rule this section exists to enforce now ──
+   *
+   * The core gesture of the builder had an animation and it never ran, for a reason no source check
+   * here could see and no browser test was looking for: `onAdd()` removes the chip in the same commit
+   * that adds the class, so the class lands on a node that is already gone. Proved by adding a class
+   * and removing the element in one task — zero `animationstart`.
+   *
+   * The general rule is: AN EFFECT MUST NOT BE ATTACHED TO AN ELEMENT THAT THE SAME HANDLER REMOVES.
+   * It cannot be checked in general from source, so it is checked at the one place it was broken, in
+   * the shape that broke it — a local flag set beside the callback that unmounts the element.
+   */
+  ok("the chip does not animate itself on a click that removes it",
+    !/setAccepted|t-accept/.test(chip), "the acknowledgement must be on the arrival, not the chip");
+  ok("and the accept still fires immediately, so nothing is delayed", /onClick=\{onAdd\}/.test(chip));
+
+  /* Where it went instead: a newly mounted row, which animates by construction. */
+  const arrived = read("app/components/build/useJustArrived.ts");
+  const details = read("app/components/build/DetailSections.tsx");
+  const forms = read("app/components/build/FormSections.tsx");
+  ok("the arrival animates", /\.t-land\s*\{/.test(decls));
+  ok("via @starting-style, so no class toggle can race an unmount",
+    /@starting-style[\s\S]{0,200}\.t-land/.test(decls));
+  ok("gated to rows that were not there a render ago", /useJustArrived/.test(arrived));
+  ok("and it is computed during render, or the class would arrive after the mount",
+    !/useEffect/.test(arrived), "an effect runs one render too late for @starting-style");
+  ok("wired where accepted credentials land", /t-land/.test(details));
+  ok("and where accepted skills land", /t-land/.test(forms));
+
+  /* iOS Safari does not apply `:active` on tap unless the element reads as interactive. Without this
+     the press state never renders on the platform most of this product is used on. */
+  ok("the tap class carries the iOS `:active` enabler", /\.t-tap\s*\{[^}]*cursor:\s*pointer/.test(decls));
 
   /* A number that changed must look changed — which needs the `key`, not the class. */
   ok("the step counter pops", /t-pop/.test(bar));

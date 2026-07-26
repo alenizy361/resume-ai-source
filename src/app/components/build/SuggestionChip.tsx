@@ -66,18 +66,24 @@ export default function SuggestionChip({
   const c = WHY_LABEL[lang];
   const [openWhy, setOpenWhy] = useState(false);
   /*
-   * ── the product's core gesture, which had no feedback ──
+   * ── where the acknowledgement went, and why it is not here ──
    *
-   * Tapping a suggested skill or duty to accept it is THE interaction in this builder; everything else
-   * is typing. Until now the chip simply vanished from the list, and on a phone — where the finger
-   * covers the chip — it was easy to be unsure the tap had landed at all.
+   * This chip used to carry it: tap, set a flag, animate. It never ran once. `onAdd()` removes the
+   * chip from the suggestion list in the SAME commit that adds the class, so the class landed on a
+   * node that was already gone. Measured rather than reasoned about — add a class and remove the
+   * element in one task and the browser fires no `animationstart`; keep the element and it does.
    *
-   * So the chip acknowledges itself for one frame before the parent removes it. Purely visual: `onAdd`
-   * still fires immediately, so nothing is delayed and a fast double-tap cannot lose an item. If the
-   * parent unmounts the chip first the animation never runs, which is the correct outcome — the item
-   * moved, which is feedback of its own.
+   * The comment that used to sit here said that was "the correct outcome — the item moved, which is
+   * feedback of its own". That was not analysis, it was a rationalisation of a failure, and the
+   * failure is exactly what was reported: nothing happens, so people tap again.
+   *
+   * Delaying the removal to let it play would delay the real action and let a fast double-tap add
+   * twice. So the acknowledgement is on the row that ARRIVES — a newly mounted node, which animates
+   * by construction with nothing to race. See `.t-land` and `useJustArrived`.
+   *
+   * What stays here is the press itself: `t-tap` on the button, which fires on touch-down, before any
+   * state changes, and cannot be outrun by an unmount.
    */
-  const [accepted, setAccepted] = useState(false);
   const why = whySentence(lang, source, reason);
 
   return (
@@ -85,11 +91,11 @@ export default function SuggestionChip({
       {/* The controls live INSIDE the pill, the way a confirmed skill's remove already does. Two
           circles floating beside every chip read as separate objects and cost a row each on a
           390px screen — a phone screenshot is what settled it. */}
-      <span className={`bd-chip${accepted ? " t-accept" : ""}`}>
+      <span className="bd-chip">
         <button
           type="button"
           className="bd-chip-add t-tap"
-          onClick={() => { setAccepted(true); onAdd(); }}
+          onClick={onAdd}
         >
           + {text}
           {suffix}

@@ -16,6 +16,7 @@
  */
 
 import { useMemo, useState } from "react";
+import { useJustArrived } from "./useJustArrived";
 import { track } from "@vercel/analytics";
 import AiSuggest from "../AiSuggest";
 import BlueprintStrip from "./BlueprintStrip";
@@ -152,6 +153,8 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
 }) {
   const c = C[lang];
   const pack = useMemo(() => findRolePack(state.target.title), [state.target.title]);
+  /* Which credential rows appeared since the last render — the ones a tap just produced. */
+  const arrived = useJustArrived(state.credentials.map((x) => x.id));
 
   const { hidden, drop } = useDismissals("credentials", state, dispatch);
 
@@ -201,8 +204,17 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
         </>
       )}
 
+      {/*
+        The tap's acknowledgement lives HERE, on the row that arrives — not on the chip that was
+        tapped. The chip is removed in the same commit that would have animated it, so its animation
+        never ran; a newly mounted row animates by construction. `useJustArrived` limits it to rows
+        that were not there a render ago, so arriving at a step with five credentials does not set
+        five of them moving for no reason.
+      */}
       {state.credentials.map((cr) => (
-        <CredentialCard key={cr.id} cred={cr} lang={lang} dispatch={dispatch} referenceDate={referenceDate} />
+        <div key={cr.id} className={arrived.has(cr.id) ? "t-land" : undefined}>
+          <CredentialCard cred={cr} lang={lang} dispatch={dispatch} referenceDate={referenceDate} />
+        </div>
       ))}
 
       <button onClick={() => add("certification")} className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold">
@@ -287,6 +299,7 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
   lang: Lang; cv: Lang; state: BuilderState; dispatch: Dispatch;
 }) {
   const c = C[lang];
+  const arrivedLangs = useJustArrived(state.languages.map((x) => x.id));
   // Arabic and English are offered because this market's CVs almost always list
   // both — but offered with NO level, so the user states their own proficiency.
   const add = (name = "") => dispatch({
@@ -327,7 +340,10 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
         const set = (patch: Partial<LanguageEntry>) => dispatch({ t: "lang", id: l.id, patch });
         const published = l.status === "confirmed" && Boolean(l.level);
         return (
-          <div key={l.id} className={published ? "bd-confirmed mb-2 block" : "bd-sug mb-2 block"}>
+          <div
+            key={l.id}
+            className={`${published ? "bd-confirmed" : "bd-sug"} mb-2 block${arrivedLangs.has(l.id) ? " t-land" : ""}`}
+          >
             <div className="bd-grid two">
               <Text label={c.name} value={l.name} onChange={(v) => set({ name: v })} />
               <label>

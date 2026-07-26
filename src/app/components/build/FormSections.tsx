@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useJustArrived } from "./useJustArrived";
 import { track } from "@vercel/analytics";
 
 import { type BuilderState, type Item, newItem, pending } from "@/app/lib/builderDoc";
@@ -466,6 +467,8 @@ export function SkillsBody(p: Common) {
 
   const offered = pending(p.state, "skills");
   const chosen = String(p.state.profile.skills || "").split(/[,،]/).map((x) => x.trim()).filter(Boolean);
+  /* Skills have no ids — the text IS the identity, which is also how `removeSkill` addresses them. */
+  const arrivedSkills = useJustArrived(chosen);
 
   const groups = useMemo(() => {
     const m = new Map<string, Item[]>();
@@ -535,8 +538,10 @@ export function SkillsBody(p: Common) {
         <div className="mb-4">
           <div className="bd-label">{L.chosen}</div>
           <div className="bd-chips">
+            {/* A tapped suggestion lands here. The chip that was tapped is gone by the time any
+                animation on it could run — measured — so the acknowledgement is on the arrival. */}
             {chosen.map((x) => (
-              <span key={x} className="bd-chip on">
+              <span key={x} className={`bd-chip on${arrivedSkills.has(x) ? " t-land" : ""}`}>
                 {x}
                 {/* Confirmed skills had no way off the CV. Importing a dozen at once made
                     that impossible to ignore. */}

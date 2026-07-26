@@ -29,7 +29,7 @@
    was right and it left the product plain. This puts motion back at the places a person is actually
    doing something, and nowhere else.
 
-   ── why 8 effects and not the reference's 18 ──
+   ── why 9 effects and not the reference's 18 ──
 
    An effect with no gesture behind it is decoration that still has to be maintained. Each one here
    is named for the moment it serves, and if a moment is not in this product the effect is not here.
@@ -65,36 +65,53 @@
 .t-tap {
   transition: transform var(--t-fast) var(--t-ease), background-color var(--t-fast) var(--t-ease),
               border-color var(--t-fast) var(--t-ease), color var(--t-fast) var(--t-ease);
+  /*
+   * Not cosmetic, and not for the mouse. Safari on iOS does not apply `:active` to an element on tap
+   * unless it looks interactive to the engine — a touch listener somewhere above it, or this. Without
+   * it the press state simply never renders on the one platform most of this product is used on, and
+   * the button feels dead in exactly the way that makes a person tap it again.
+   *
+   * It is a documented Safari behaviour rather than something I could reproduce here — this sandbox
+   * has Chromium only, and the quirk is WebKit's. Stated so the next person knows it is untested
+   * rather than assuming it was verified.
+   */
+  cursor: pointer;
 }
 .t-tap:active { transform: scale(0.97); }
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   2. t-accept — the product's core gesture
+   2. t-land — the accepted item arriving where it now lives
    ────────────────────────────────────────────────────────────────────────────── */
 
 /*
- * Tapping a suggested skill or duty to accept it is THE interaction in this builder — everything else
- * is typing. It had no feedback: the chip changed colour and that was all, so on a phone it was easy
- * to be unsure whether the tap landed.
+ * ── an effect that was deleted because it could not run ──
  *
- * A brief overshoot, then settle. `transform` only, so the chip does not reflow the row it sits in and
- * the ones after it do not shift — a chip that nudged its neighbours would be CLS on the busiest
- * screen in the product.
+ * There was a `t-accept` here: tapping a suggested skill scaled the chip briefly. It never ran once.
+ * `onAdd()` removes the chip from the suggestion list in the SAME commit that adds the class, so the
+ * class landed on a node that was already gone. Measured, not reasoned about — add a class and remove
+ * the element in one task and the browser fires no `animationstart`; keep the element and it fires.
+ *
+ * The comment that shipped with it said the unmount was "the correct outcome — the item moved, which
+ * is feedback of its own". That was a rationalisation of a failure, and the failure was reported back
+ * exactly as it behaves: the tap does nothing, so people tap again.
+ *
+ * Delaying the removal so it could play would delay the real action and let a fast double-tap add the
+ * same item twice. So the acknowledgement moved to the element that ARRIVES. A confirmed row is a
+ * NEWLY MOUNTED node, so `@starting-style` runs on it by construction — no class toggle, nothing to
+ * race. And it answers the better question: not "did that register" but "where did it go".
+ *
+ * Gated by `useJustArrived` to rows that were not there a render ago. Ungated, every existing row
+ * would animate on each step mount, which is decoration rather than an answer.
  */
-.t-accept { animation: t-accept-pop var(--t-base) var(--t-spring); }
-
-@keyframes t-accept-pop {
-  0% { transform: scale(1); }
-  55% { transform: scale(1.06); }
-  100% { transform: scale(1); }
+.t-land {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity var(--t-base) var(--t-out), transform var(--t-base) var(--t-spring);
 }
 
-/*
- * A companion tick was written here and removed again. The only ✓ in the builder is the step marker
- * inside the steps sheet (`StepBar`), and the sheet is shut at the moment a step completes — so the
- * animation would fire on sheet-open, twelve at once, for steps finished minutes ago. That is motion
- * reporting nothing, which is the one thing this file refuses to carry.
- */
+@starting-style {
+  .t-land { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
 
 /* ──────────────────────────────────────────────────────────────────────────────
    3. t-pop — a number that changed should look like it changed
@@ -231,7 +248,7 @@
    ══════════════════════════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
-  .t-tap, .t-accept, .t-pop, .t-reveal, .t-scrim, .t-sheet,
+  .t-tap, .t-land, .t-pop, .t-reveal, .t-scrim, .t-sheet,
   .t-shake, .t-swap, .t-lift {
     animation: none !important;
     transition: none !important;
@@ -239,5 +256,5 @@
   .t-tap:active, .t-lift:hover { transform: none; }
   /* `@starting-style` sets the pre-transition value; with the transition gone the element would be
      stuck at it, so the settled values are restated. */
-  .t-reveal, .t-sheet, .t-scrim { opacity: 1; transform: none; }
+  .t-reveal, .t-sheet, .t-scrim, .t-land { opacity: 1; transform: none; }
 }
