@@ -187,6 +187,64 @@ console.log("\n── the key function is injective again ──");
     /legacyKey\(email\)/.test(decls));
 }
 
+/* ── 6. a refund takes the access back ────────────────────────────────────────────── */
+console.log("\n── the 7-day money-back guarantee we advertise ──");
+{
+  /*
+   * Every receipt this product sends ends with "7-day money-back guarantee applies", and until now
+   * nothing could act on one: Paylink's refund webhook is documented, and there was no endpoint to
+   * receive it, so a refunded customer kept the entitlement they had been refunded for.
+   */
+  const R = "refunded@example.com";
+  const t = 2_000_000_000_000;
+  await E.grantEntitlement(R, t + 90 * DAY);
+  ok("the customer has access", (await E.getEntitlement(R)) === t + 90 * DAY);
+
+  ok("revoking reports success", (await E.revokeEntitlement(R, t)) === true);
+  const after = await E.getEntitlement(R);
+  ok("and access has ended", after < t, String(after));
+  ok("via an explicit past expiry, not a deleted key", after > 0, String(after));
+
+  /*
+   * The distinction the past-timestamp buys: `getEntitlement` returns 0 both for a missing key and
+   * for a store that failed, because it swallows its errors on purpose. Deleting would make
+   * "refunded" indistinguishable from "the store blinked" — and `grantEntitlement` takes a maximum
+   * against the current value, so it would then see 0 and write whatever it was handed.
+   */
+  await E.grantEntitlement(R, t + 1 * DAY);
+  ok("a later genuine purchase still works after a refund",
+    (await E.getEntitlement(R)) === t + 1 * DAY);
+
+  ok("revoking nobody is refused", (await E.revokeEntitlement("")) === false);
+
+  /* And the route's own contract, which is specified rather than guessed — unlike the payment
+     webhook next door, whose field names could not be looked up. */
+  const { readFileSync } = await import("node:fs");
+  const src = readFileSync("app/api/pay/refund/route.ts", "utf8");
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+
+  ok("the route reads X-API-KEY, not Authorization",
+    /headers\.get\("x-api-key"\)/.test(code) && !/headers\.get\("authorization"\)/.test(code));
+  ok("and compares it in constant time", /sameSecret\(given, expected\)/.test(code));
+  /* Stricter than the payment webhook on purpose: that one only ever GRANTS what Paylink confirms,
+     this one REMOVES access and has no server-side refund check to verify a claim against. */
+  ok("with no key configured it refuses rather than revoking",
+    /if \(!expected\)/.test(code) && /status: 503/.test(code));
+
+  /* The case a careless handler gets exactly backwards: `Failed` means the refund did NOT happen. */
+  ok("only `Refunded` revokes", /refundStatus\.toLowerCase\(\) !== "refunded"/.test(code));
+  ok("and a failed refund is acknowledged without revoking",
+    /revoked: false, reason: `status:/.test(code));
+
+  /* The provider reads the body, not just the status code, and retries ten times on anything else. */
+  ok("the documented success body is returned", /const OK = \{ status: "success" \}/.test(code));
+
+  /* The buyer's email comes from OUR checkout record. A refund notice naming an email would be a way
+     to revoke a stranger's access. */
+  ok("the email is looked up, never taken from the request",
+    /getOrderEmail\(orderNumber\)/.test(code) && !/body\.email/.test(code));
+}
+
 server.close();
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

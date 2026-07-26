@@ -155,3 +155,61 @@ GitHub; it simply no longer builds a preview nobody opens.
 The `deploy-now` workflow is worth keeping for exactly the reason it was written: a push
 that produces no build is silent, and this prints Vercel's own JSON so a refusal explains
 itself instead of looking like a slow deploy.
+
+## Paylink, and the three variables that gate the money path
+
+Compiled from the official documentation (v1.4) after it turned out to be unreachable from the
+build environment — the egress policy refuses `developer.paylink.sa`.
+
+| Variable | Read by | If unset |
+|---|---|---|
+| `PAYLINK_API_ID`, `PAYLINK_SECRET_KEY` | `/api/pay`, `lib/fulfil.ts` | every payment call throws |
+| `PAYLINK_BASE_URL` | the same | defaults to production, `https://restapi.paylink.sa` |
+| `PAY_WEBHOOK_SECRET` | `/api/pay/webhook` | **the webhook still works.** Optional on purpose — a webhook that refuses everything because a variable was never pasted is a webhook that silently does not exist |
+| `PAYLINK_REFUND_API_KEY` | `/api/pay/refund` | **the refund route refuses everything.** Mandatory on purpose — see below |
+
+### Why one secret is optional and the other is not
+
+The payment webhook only ever GRANTS, and only what Paylink itself confirms: nothing in the request
+body is believed, the invoice is re-read server-to-server, and the amount decides the plan. An
+unauthenticated caller can therefore achieve nothing except asking us to re-check a real payment.
+
+The refund route REMOVES access, and there is no server-side "is this refunded" call to check a
+claim against — Get Invoice reports the payment, not the refund. Without a key there is nothing
+separating a real refund notice from a stranger's, and the cost of being wrong is locking a paying
+customer out of what they bought. So it refuses when unconfigured, loudly, naming the variable.
+
+### There is a test environment, and it changes what can be verified
+
+`https://restpilot.paylink.sa` is the documented pilot host, with its own credentials. Set
+`PAYLINK_BASE_URL` to it and the whole flow — invoice, hosted page, callback, webhook, refund — is
+exercisable without real money.
+
+This corrects something stated earlier in this work: that the payment path could only be verified by
+shipping to production. That was wrong, and it was the justification for allowing preview
+deployments through the return-URL allow-list. The allow-list is still right for other reasons, but
+the pilot host is the honest way to test.
+
+### What to register in the My Paylink portal
+
+| Setting | Value |
+|---|---|
+| Payment webhook URL | `https://cv.rabit.sa/api/pay/webhook` |
+| Payment webhook version | `v2` |
+| HTTP Header 1 | `Authorization` |
+| HTTP Header 1 Value | the same string as `PAY_WEBHOOK_SECRET` (a `Bearer ` prefix is accepted) |
+| Refund webhook URL | `https://cv.rabit.sa/api/pay/refund` |
+| Refund webhook header | `X-API-KEY`, matching `PAYLINK_REFUND_API_KEY` |
+
+**The payment webhook field holds one URL.** If this Paylink account is shared with another project,
+setting ours removes theirs. Options, in order of preference: separate merchant accounts; or the
+existing receiver forwards the raw request on to us; or one endpoint routes by order-number prefix —
+ours all begin `RA-`.
+
+### Two documented requirements not yet met
+
+- **Token caching.** The docs require caching the `id_token`, refreshing before expiry, and a
+  single-flight lock. Every `/api/pay/verify` and every webhook delivery currently performs a fresh
+  `/api/auth` — two upstream calls where one would do. Not a correctness bug; a rate-limit risk under
+  load and explicitly contrary to the documented guidance.
+- **Settlement webhook.** Documented, for reconciliation. Nothing in this product needs it yet.

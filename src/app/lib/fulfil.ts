@@ -76,7 +76,10 @@ export async function readInvoice(transactionNo: string): Promise<Invoice> {
   const auth = await fetch(`${BASE}/api/auth`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ apiId, secretKey, persistToken: "false" }),
+    /* A BOOLEAN, per the documented schema. This was the string "false", which a server that
+       coerces would read as truthy — silently taking the ~30-hour token instead of the ~30-minute
+       one. Nothing broke, which is why it survived; it was simply not what the field means. */
+    body: JSON.stringify({ apiId, secretKey, persistToken: false }),
   });
   if (!auth.ok) throw new Error(`auth ${auth.status}`);
   const token = (await auth.json()).id_token;

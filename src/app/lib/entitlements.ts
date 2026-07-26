@@ -187,6 +187,50 @@ export async function hasActiveEntitlement(email: string, now: number): Promise<
   return (await getEntitlement(email)) > now;
 }
 
+/**
+ * Take paid access away. For a refund.
+ *
+ * ── the gap this closes ──
+ *
+ * Every receipt this product sends says "7-day money-back guarantee applies", and nothing in the
+ * system could act on one. Paylink delivers a refund webhook — documented, with its own `X-API-KEY`
+ * header and its own retry policy — and there was no endpoint to receive it. So a refunded customer
+ * kept the full entitlement they had been refunded for.
+ *
+ * ── why it writes a past timestamp rather than deleting the key ──
+ *
+ * `getEntitlement` returns 0 for a missing key, and 0 is also what a store outage returns — the
+ * function swallows its errors deliberately, because a transient failure must not look like a fraud
+ * attempt. Deleting would make "refunded" indistinguishable from "the store blinked", and a later
+ * `grantEntitlement` — which takes a maximum against the current value — would then see 0 and write
+ * whatever it was given.
+ *
+ * An explicit expiry in the past is unambiguous: the record exists, it says access ended, and the
+ * maximum in `grantEntitlement` still behaves correctly if the customer buys again afterwards.
+ *
+ * ── the legacy key too ──
+ *
+ * A customer who paid before the base64url collision was fixed has their grant under the folded key,
+ * and `getEntitlement` still reads it as a fallback. Revoking only the current key would leave that
+ * customer's access intact after a refund — the one case where missing a key costs money.
+ */
+export async function revokeEntitlement(email: string, now = Date.now()): Promise<boolean> {
+  if (!storeConfigured() || !email) return false;
+  /* One second in the past: `hasActiveEntitlement` compares `> now`, so any past value ends access.
+     A recognisable number is easier to read in a store dump than 0. */
+  const ended = String(now - 1000);
+  if (edgeConfigured()) {
+    await edgeSet(key(email), ended);
+    try { await edgeSet(legacyKey(email), ended); } catch { /* absent for anyone who paid after the fix */ }
+    return true;
+  }
+  if (upstashConfigured()) {
+    await upstash(["SET", `ent:${email.toLowerCase().trim()}`, ended]);
+    return true;
+  }
+  return false;
+}
+
 // ── Order -> buyer email mapping (set at invoice creation, read at verify) ──
 const orderKey = (orderNumber: string) => "ord_" + orderNumber.replace(/[^a-zA-Z0-9_]/g, "_");
 
