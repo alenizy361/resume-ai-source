@@ -30,8 +30,12 @@
  * 2. **Crossing Haiku's 4096-token floor means a LONGER prefix.** A cache write is billed at 1.25×,
  *    so until enough calls land inside a live five-minute window, padding the prefix to earn the
  *    discount costs more than not earning it.
- * 3. **A bigger model does not help.** Sonnet 5's floor is low enough that the current prefix would
- *    cache immediately — and its output is 3× the price, which swamps the saving.
+ * 3. **A bigger model does not help HERE — but not for the reason it looks like.** Sonnet 5's floor
+ *    is low enough that the current prefix caches immediately, so on INPUT alone Sonnet is 2.7×
+ *    cheaper than uncached Haiku. Its output at 3× the price is what reverses that, and only above
+ *    ~145 output tokens. Every live task generates far more, so Haiku wins — see
+ *    `breakEvenOutputTokens` and `cheapestModelFor`, which recompute it instead of trusting this
+ *    paragraph.
  *
  * No `next/*` imports — `ops/economics.test.mjs` loads this in plain Node.
  */
@@ -210,3 +214,102 @@ export const MEASURED_FINAL_CONTENT: CallShape = {
 
 /** What production logged for that call, to the microdollar. */
 export const MEASURED_FINAL_CONTENT_USD = 0.005040;
+
+/* ─────────────────────────── sizing a prompt without calling anything ─────────────────────────── */
+
+/**
+ * Characters per token for this product's prompts, CALIBRATED rather than guessed.
+ *
+ * `CORE_RULES` is 6822 characters and the logged call counted its prefix at 1898 tokens; the
+ * `final_content` schema is 1305 characters against 363 tokens. 6822/1898 = 3.594 and
+ * 1305/363 = 3.595 — the same ratio from two independent texts, which is what makes this a
+ * measurement of English-plus-JSON-schema prose rather than the "4 chars per token" folklore.
+ *
+ * Used only to decide whether a prefix clears a cache floor, where being 2% out changes nothing:
+ * the nearest floor is 1.8× away from the nearest prefix. It is NOT used to price a call — every
+ * price in this file comes from tokens the provider actually reported.
+ */
+export const CHARS_PER_TOKEN = 3.594;
+
+/** Approximate token count for a prompt block, for floor comparisons only. */
+export const estimateTokens = (text: string): number => Math.round(text.length / CHARS_PER_TOKEN);
+
+/* ─────────────────────────── is the cheap model actually the cheap one? ─────────────────────────── */
+
+/**
+ * The non-obvious question this answers.
+ *
+ * Haiku is a third of Sonnet's input price and a third of its output price, so "use the small
+ * model" looks like it needs no thought. But Haiku's cache floor is 4096 tokens and Sonnet's is
+ * 1024, and this product's prefix sits at ~2300 — between the two. So the comparison is not
+ * Haiku-cached vs Sonnet-cached; it is **Haiku at full price vs Sonnet at a tenth of its input
+ * price**, and on input alone Sonnet is 2.7× CHEAPER:
+ *
+ *   haiku,  prefix 2261 uncached   (2261 + 64) × $1  = $0.002325
+ *   sonnet, prefix 2261 cache read  (226 + 64) × $3  = $0.000870
+ *
+ * Output is what reverses it. Sonnet charges $15/M against Haiku's $5, so every output token
+ * costs $10/M more and eats the $0.001455 input saving after ~145 tokens. Above that Haiku wins;
+ * below it the bigger model is genuinely cheaper.
+ *
+ * That is a real threshold, not a curiosity — which is why it is a function the test recomputes
+ * against the live `MAX_OUTPUT` table instead of a sentence in a document that ages.
+ */
+
+/**
+ * The output-token count at which `alt` (cached) stops being cheaper than `current` (whatever
+ * mode its own floor allows). Below the returned number, `alt` costs less.
+ *
+ * Returns 0 when `alt` is never cheaper — at equal or higher output price there is no crossover,
+ * because `alt` cannot claw back an input saving it never made.
+ */
+export function breakEvenOutputTokens(current: CallShape, altModel: string): number {
+  const cur = PRICES[current.model];
+  const alt = PRICES[altModel];
+  if (!cur || !alt) throw new Error(`no price for ${current.model} / ${altModel}`);
+
+  const zero = { ...current, outputTokens: 0 };
+  const curInput = callCost(zero, prefixCaches(current) ? "read" : "none");
+  const altInput = callCost({ ...zero, model: altModel },
+    prefixCaches({ ...current, model: altModel }) ? "read" : "none");
+
+  const inputSaving = curInput - altInput;
+  const outputPenalty = (alt.output - cur.output) / 1e6;
+  if (inputSaving <= 0) return 0;                 // no input saving to spend
+  if (outputPenalty <= 0) return Infinity;        // cheaper on both axes, always wins
+  return inputSaving / outputPenalty;
+}
+
+export interface ModelOption {
+  model: string;
+  /** What this model would ACTUALLY be billed at, given its own floor and this prefix. */
+  mode: CacheMode;
+  usd: number;
+}
+
+/**
+ * Price one call shape on every candidate model and return them cheapest first.
+ *
+ * The mode per candidate is derived from that model's own floor, which is the whole point: a
+ * comparison that assumes caching works everywhere, or nowhere, gets this backwards.
+ *
+ * **Stated assumption:** a caching candidate is priced as a cache READ — a warm prefix. The
+ * prompt cache is per-organisation, so any steady traffic keeps the shared prefix warm for
+ * everyone; at this product's four calls an hour with a five-minute TTL it would mostly be a
+ * WRITE, which is 12.5× the read. `worstCase: true` prices caching candidates as writes instead,
+ * so the pessimistic answer is one argument away rather than a separate derivation.
+ */
+export function cheapestModelFor(
+  shape: CallShape,
+  candidates: string[] = Object.keys(PRICES),
+  opts: { worstCase?: boolean } = {},
+): { winner: ModelOption; ranking: ModelOption[] } {
+  const ranking = candidates.map((model): ModelOption => {
+    const s = { ...shape, model };
+    const mode: CacheMode = prefixCaches(s) ? (opts.worstCase ? "write" : "read") : "none";
+    return { model, mode, usd: callCost(s, mode) };
+  }).sort((a, b) => a.usd - b.usd);
+
+  if (!ranking.length) throw new Error("no candidate models");
+  return { winner: ranking[0], ranking };
+}

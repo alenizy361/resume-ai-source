@@ -149,8 +149,48 @@ done deliberately than under pressure.
 TTL, and the logs show it working: `op=role_blueprint:cache-hit provider=cache usd=0`. `final_content`
 and `experience_package` are correctly *not* shared — they are derived from one person's own facts.
 
-**Model tiering.** Every task runs on the `fast` class (`claude-haiku-4-5`); `claude-sonnet-5` is
-configured as the reasoning model and no task is assigned to it. That is the cheap setting already.
+**Model tiering — cheapest, but not for the obvious reason.** Every task runs on the `fast` class
+(`claude-haiku-4-5`); `claude-sonnet-5` is the configured reasoning model and no task is assigned to
+it. "Small model is cheaper" is the wrong reasoning to reach that conclusion by, because the cache
+floors cut across it. Haiku's floor is 4096 and Sonnet's is 1024, and this product's prefix sits
+**between them** — so the real comparison is uncached Haiku against Sonnet at a tenth of its input
+price:
+
+| | Input per call |
+|---|---|
+| Haiku, prefix 2261, **uncached** (floor missed) | $0.002325 |
+| Sonnet 5, same prefix, **cache read** | $0.000870 |
+
+**On input alone the bigger model is 2.7× cheaper.** What reverses it is output: Sonnet charges
+$15/M against Haiku's $5, so each output token costs $10/M more and repays the $0.001455 input
+saving after **145 tokens**. Against Opus 5 the threshold is **44**.
+
+So Haiku wins only where output exceeds that, and every live task does — comfortably:
+
+| `/api/generate` task | Output cap | Break-even vs Sonnet | Margin |
+|---|---|---|---|
+| `role_blueprint` | 1400 | 150 | 9.3× |
+| `experience_package` | 1100 | 146 | 7.5× |
+| `final_content` | 900 (measured 543) | 145 | 6.2× (3.7× measured) |
+| `jd_delta` | 500 | 138 | 3.6× |
+
+`cheapestModelFor` and `breakEvenOutputTokens` in `lib/aiEconomics.ts` compute this, and
+`ops/economics.test.mjs` runs them over the **live** `CORE_RULES`, `TASK_SCHEMA` and `MAX_OUTPUT` —
+so adding a short-output task to `/api/generate` fails the suite rather than quietly overpaying. The
+narrowest margin is `jd_delta` at 3.6×; a task capped under ~145 tokens would be genuinely cheaper
+on cached Sonnet.
+
+There is no such task today. `MAX_OUTPUT` lists four names under that threshold or near it —
+`occupation_classify` (120), `bullet_rewrite` (160), `achievement_write` (400), `ask_section` (400) —
+but `/api/generate`'s `TASKS` array accepts only the four in the table above, so three of those names
+are routed nowhere and cost nothing. (`ask_section` reaches `/api/suggest`, which is a different
+prompt shape — see below.) A dead table entry is not a saving opportunity.
+
+**`/api/suggest` has no `cache_control` at all, and that is correct.** Next to `/api/generate`'s two
+breakpoints it looks like an oversight. Its only stable text is `DRAFTING_DOCTRINE` plus a one-line
+shape rule — **409 tokens**, measured — which is below *every* model's floor, Opus's 512 included.
+Markers there would be accepted and silently ignored on any model we could send them to. Asserted,
+so the claim decays visibly if the doctrine grows.
 
 **Output caps.** `MAX_OUTPUT` is per task (900 for `final_content`, 1400 for `role_blueprint`). Caps
 do not cost anything unless used — the measured call used 543 of 900 — so there is no saving in
@@ -176,8 +216,10 @@ Nothing schedules it.
 
 ## The order to act in
 
-1. **Nothing, on the AI side.** The current configuration is the cheapest; the two free wins are
-   already shipped. `/api/health/ai` will tell you when that stops being true.
+1. **Nothing, on the AI side.** The current configuration is the cheapest — checked per task
+   against the cache floors, not assumed from model size — and the two free wins are already
+   shipped. `/api/health/ai` will tell you when the caching verdict stops being true, and
+   `ops/economics.test.mjs` will fail if a new short-output task makes the model choice wrong.
 2. **Pre-warm the occupation packs via the Batch API** — $0.72 once, and the biggest single
    improvement available to both cost and latency. Needs a key and Upstash credentials.
 3. **Split the root layout into two route groups** when traffic makes function duration visible, or

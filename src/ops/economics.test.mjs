@@ -11,9 +11,13 @@
 
 import {
   CACHE_FLOORS, MEASURED_FINAL_CONTENT, MEASURED_FINAL_CONTENT_USD, PRICES,
-  breakEvenReadFraction, cacheVerdict, callCost, callsPerHourFor, prefixCaches,
+  breakEvenOutputTokens, breakEvenReadFraction, cacheVerdict, callCost, callsPerHourFor,
+  cheapestModelFor, estimateTokens, prefixCaches,
 } from "../app/lib/aiEconomics.ts";
 import { packKey } from "../app/lib/aiCache.ts";
+import { CORE_RULES, TASK_SCHEMA } from "../app/lib/aiPrompts.ts";
+import { DRAFTING_DOCTRINE } from "../app/lib/prompts.ts";
+import { MAX_OUTPUT } from "../app/lib/aiModels.ts";
 
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => {
@@ -177,6 +181,118 @@ console.log("\n── the cache key collapses synonyms and nothing else ──")
   /* The occupation still separates packs — the thing the cache is actually keyed on. */
   ok("a different occupation is a different key",
     packKey({ ...base, country: "sa" }) !== packKey({ ...base, country: "sa", occupation: "accountant" }));
+}
+
+/* ─────────────── 8. the small model is the cheap one — checked, not assumed ─────────────── */
+
+console.log("\n── is haiku actually cheapest, per live task? ──");
+
+/*
+ * The trap this section exists to catch.
+ *
+ * Haiku's cache floor is 4096 and Sonnet's is 1024, and this product's prefix sits BETWEEN them.
+ * So the real comparison is not "small model vs big model" — it is uncached Haiku against Sonnet
+ * at a tenth of its input price, and on input alone Sonnet is 2.7× cheaper. Only Sonnet's 3×
+ * output price reverses it, and only above a threshold.
+ *
+ * That threshold is computed here from the LIVE prompt text and the LIVE output table, so adding
+ * a short-output task to `/api/generate` fails this suite instead of quietly overpaying.
+ */
+
+/* `/api/generate` accepts exactly these four — the other four names in MAX_OUTPUT are routed
+   nowhere, so pricing them would be pricing a call that never happens. */
+const LIVE_TASKS = ["role_blueprint", "experience_package", "final_content", "jd_delta"];
+
+const CORE_TOKENS = estimateTokens(CORE_RULES);
+ok("the token estimator reproduces the logged prefix size", CORE_TOKENS === 1898,
+  `estimated ${CORE_TOKENS}, logged 1898`);
+
+for (const task of LIVE_TASKS) {
+  const schema = TASK_SCHEMA[task];
+  ok(`${task} has a task schema to cache`, typeof schema === "string" && schema.length > 0);
+
+  const shape = {
+    model: "claude-haiku-4-5",
+    prefixTokens: CORE_TOKENS + estimateTokens(schema ?? ""),
+    messageTokens: MEASURED_FINAL_CONTENT.messageTokens,
+    outputTokens: MAX_OUTPUT[task],
+  };
+
+  /* Input-only, which is where the surprise lives and where a naive comparison stops. */
+  const inHaiku = callCost({ ...shape, outputTokens: 0 }, "none");
+  const inSonnet = callCost({ ...shape, model: "claude-sonnet-5", outputTokens: 0 }, "read");
+  ok(`${task}: sonnet's CACHED input beats haiku's uncached input`, inSonnet < inHaiku,
+    `$${inSonnet.toFixed(6)} vs $${inHaiku.toFixed(6)}`);
+
+  /* And output puts it back. This is the assertion that makes "stay on haiku" a result. */
+  const be = breakEvenOutputTokens(shape, "claude-sonnet-5");
+  ok(`${task}: its ${MAX_OUTPUT[task]}-token output cap is above the ${Math.round(be)}-token break-even`,
+    MAX_OUTPUT[task] > be, `cap ${MAX_OUTPUT[task]} vs break-even ${be.toFixed(0)}`);
+
+  const { winner } = cheapestModelFor(shape, ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5"]);
+  ok(`${task}: cheapest model is haiku`, winner.model === "claude-haiku-4-5",
+    `${winner.model} at $${winner.usd.toFixed(6)}`);
+  /* Priced at what it is actually billed — no caching, whatever the markers say. */
+  ok(`${task}: and it is priced as uncached`, winner.mode === "none");
+}
+
+/*
+ * The measured call, not the cap: real output was 543 against a 900 ceiling, so the margin is
+ * checked at the number production produced rather than the number it is allowed.
+ */
+{
+  const be = breakEvenOutputTokens(MEASURED_FINAL_CONTENT, "claude-sonnet-5");
+  ok("the MEASURED output is comfortably above the break-even too",
+    MEASURED_FINAL_CONTENT.outputTokens > be * 2,
+    `${MEASURED_FINAL_CONTENT.outputTokens} vs ${be.toFixed(0)} (${(MEASURED_FINAL_CONTENT.outputTokens / be).toFixed(1)}×)`);
+  console.log(`   (break-even ${be.toFixed(0)} output tokens vs sonnet, `
+    + `${breakEvenOutputTokens(MEASURED_FINAL_CONTENT, "claude-opus-5").toFixed(0)} vs opus)`);
+}
+
+/* The pessimistic reading must not flip the answer either: at four calls an hour on a 5-minute
+   TTL a caching candidate mostly WRITES, which is 12.5× a read. */
+{
+  const shape = { ...MEASURED_FINAL_CONTENT, outputTokens: MAX_OUTPUT.final_content };
+  const { winner } = cheapestModelFor(shape, Object.keys(PRICES), { worstCase: true });
+  ok("haiku still wins when caching candidates are priced as cache WRITES",
+    winner.model === "claude-haiku-4-5");
+}
+
+/*
+ * The two edges, and each says something about the product rather than about the formula.
+ *
+ * Once a prefix clears EVERY floor, both models cache and the small one is cheaper on both axes —
+ * there is no threshold left to think about, so the answer must be Infinity and not a number that
+ * reads like one. That is the shape this product would have if the prefix were ever padded past
+ * 4096: the model question would stop being interesting.
+ */
+ok("above every floor, the small model wins outright — no break-even",
+  breakEvenOutputTokens(
+    { ...MEASURED_FINAL_CONTENT, model: "claude-sonnet-5", prefixTokens: 4100 },
+    "claude-haiku-4-5",
+  ) === Infinity);
+
+/* And the reverse of today's finding: from Haiku there is no input saving to spend, because Haiku
+   is the one model whose floor this prefix misses. */
+ok("a model with no input saving to spend returns 0",
+  breakEvenOutputTokens(MEASURED_FINAL_CONTENT, "claude-haiku-4-5") === 0);
+
+/* ─────────────── 9. /api/suggest cannot cache anything, on any model ─────────────── */
+
+console.log("\n── the other AI route: nothing to cache there ──");
+
+/*
+ * `/api/suggest` carries no `cache_control` at all, which looks like an oversight next to
+ * `/api/generate`'s two breakpoints. It is not one. Its only stable text is the drafting doctrine
+ * plus a one-line shape rule — measured below — and that is under EVERY model's floor, Opus's 512
+ * included. Adding markers there would be accepted and silently ignored.
+ */
+{
+  const stable = estimateTokens(DRAFTING_DOCTRINE) + 61;  // + preamble, kind rule and language line
+  const lowest = Math.min(...Object.values(CACHE_FLOORS));
+  ok("suggest's stable prefix is below the LOWEST floor of any model", stable < lowest,
+    `${stable} tokens vs floor ${lowest}`);
+  console.log(`   (${stable} stable tokens — markers there would be accepted and ignored)`);
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
