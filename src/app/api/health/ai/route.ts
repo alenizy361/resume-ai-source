@@ -610,8 +610,17 @@ async function probeSchema(model: string, task: AiTaskType): Promise<Record<stri
       },
       body: JSON.stringify({
         model,
-        /* Enough for the shape and nothing more. The point is the envelope, not the content. */
-        max_tokens: 300,
+        /*
+         * The task's REAL cap, not a flat 300 — and this is the correction that matters.
+         *
+         * A flat 300 made this probe lie. `role_blueprint` has eleven keys and a nested
+         * array-of-objects, so the model began emitting the full structure, hit the cap, and returned
+         * truncated — therefore invalid — JSON with status 200. The probe reported "accepted, but the
+         * body did not come back as this schema's keys", which reads exactly like a broken schema and
+         * was actually a starved one. Testing an envelope with less room than production gives it is
+         * not testing production.
+         */
+        max_tokens: MAX_OUTPUT[task],
         ...(acceptsTemperature(model) ? { temperature: 0.3 } : {}),
         ...(thinksByDefault(model) && canDisableThinking(model) ? { thinking: { type: "disabled" } } : {}),
         ...cfg,
@@ -647,7 +656,9 @@ async function probeSchema(model: string, task: AiTaskType): Promise<Record<stri
       };
     }
 
-    const data = JSON.parse(bodyText) as { content?: Array<{ text?: string }> };
+    const data = JSON.parse(bodyText) as {
+      content?: Array<{ text?: string }>; stop_reason?: string;
+    };
     const text = data?.content?.[0]?.text ?? "";
     let parsed: Record<string, unknown> | null = null;
     try { parsed = JSON.parse(text) as Record<string, unknown>; } catch { parsed = null; }
@@ -666,10 +677,23 @@ async function probeSchema(model: string, task: AiTaskType): Promise<Record<stri
       parsedAsJson: parsed !== null,
       keysMatch: parsed !== null && missing.length === 0 && extra.length === 0,
       missing, extra,
+      /*
+       * Reported because without it three different failures look identical from outside: a schema
+       * the provider refused, a model that ignored the constraint, and a response that simply ran out
+       * of room. The first needs a schema fix, the third needs a bigger `max_tokens`, and treating one
+       * as the other is how a working feature gets abandoned.
+       */
+      stopReason: data?.stop_reason ?? null,
+      truncated: data?.stop_reason === "max_tokens",
+      outputTokens: u.output,
+      maxTokens: MAX_OUTPUT[task],
       estimatedUsd: Number(estimateCallCost(model, u).toFixed(6)),
       verdict: parsed !== null && missing.length === 0 && extra.length === 0
         ? "Accepted, and the body came back as exactly this schema's keys."
-        : "Accepted, but the body did not come back as this schema's keys.",
+        : data?.stop_reason === "max_tokens"
+          ? "Accepted, but the answer was cut off at max_tokens, so the JSON is incomplete. That is a "
+            + "budget problem, not a schema problem — raise the cap for this task before judging it."
+          : "Accepted, but the body did not come back as this schema's keys.",
     };
   } catch (e) {
     return { ran: true, accepted: false, error: e instanceof Error ? e.message.slice(0, 120) : "probe failed" };
@@ -691,12 +715,14 @@ async function probeSchemas(model: string): Promise<Record<string, unknown>> {
   const tasks: AiTaskType[] = ["role_blueprint", "experience_package", "final_content", "jd_delta"];
   const byTask: Record<string, unknown> = {};
   let allAccepted = true;
+  let truncated = false;
   let usd = 0;
 
   for (const task of tasks) {
     const r = await probeSchema(model, task);
     byTask[task] = r;
     if (!(r.accepted === true && r.keysMatch === true)) allAccepted = false;
+    if (r.truncated === true) truncated = true;
     if (typeof r.estimatedUsd === "number") usd += r.estimatedUsd;
   }
 
@@ -706,13 +732,18 @@ async function probeSchemas(model: string): Promise<Record<string, unknown>> {
     allAccepted,
     estimatedUsd: Number(usd.toFixed(6)),
     byTask,
+    truncated,
     verdict: allAccepted
       ? "All four schemas were accepted and each returned exactly its own keys. Safe to set "
         + "ANTHROPIC_STRUCTURED_OUTPUTS=1 — that removes the schema-invalid retry, which costs about "
         + "four times a clean call. Counts are still NOT enforced by the schema, only the shape, so the "
         + "prose LIMITS and the route's own validator both stay."
-      : "At least one schema was refused or did not come back as its keys. Keep "
-        + "ANTHROPIC_STRUCTURED_OUTPUTS off and fix that schema first — a refused schema fails the "
-        + "generation outright rather than falling back to prose.",
+      : truncated
+        ? "A schema ran out of output budget rather than being refused — see `truncated` per task. "
+          + "That is a max_tokens problem, not a schema problem. Raise the cap and re-run before "
+          + "concluding anything about the schema."
+        : "At least one schema was refused or did not come back as its keys. Keep "
+          + "ANTHROPIC_STRUCTURED_OUTPUTS off and fix that schema first — a refused schema fails the "
+          + "generation outright rather than falling back to prose.",
   };
 }
