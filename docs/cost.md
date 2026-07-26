@@ -236,6 +236,30 @@ sandbox, and shipping a batch job I could not run once would be worse than shipp
 cache-key fix above is the prerequisite and is done: pre-warming a fragmented key space would have
 warmed the wrong keys.
 
+### Reading a scanned CV — the second per-user cost, and it is opt-in
+
+`/api/extract` pulls a text layer out of a PDF. A scan or a phone photo has none, and the honest
+failure message was the entire feature until now. `/api/ocr` sends the file to a vision model and
+transcribes it.
+
+| | |
+|---|---|
+| One page, Haiku 4.5, measured on production | **$0.0018** |
+| A two-page CV, estimated from that | ~$0.004 |
+| Rate limit | 6 per IP per 10 minutes |
+| Upload cap | 4 MB |
+
+Cheap, and still the only route in the product where a user's **file** — not derived text — leaves for
+a third party. That is why it is a separate route behind a separate button with its own consent
+sentence, and why a failed upload does not trigger it automatically. The upload card promises "no AI
+provider sees the file"; that promise is why someone uploads a CV carrying their national ID, and it
+has to survive a failed read.
+
+Verified on production by `?live=1`'s `liveOcr` probe, which builds a small PDF in code and checks the
+words come back — 6 of 6, $0.0018. It proves the pipeline and says so explicitly about its own limit:
+the sample is Latin because the embedded font cannot set Arabic, so **Arabic transcription quality is
+not established by that green tick** and needs a real photograph.
+
 ## 2. Hosting — structural, and worth knowing before traffic arrives
 
 **Every page on this site is a serverless function invocation.** The build's route table shows `ƒ`
