@@ -37,6 +37,17 @@ const nextConfig: NextConfig = {
    * cost and worth stating plainly: the flag could change. What it guards is the 404 page — so if it
    * ever regresses, mistyped URLs render plainly again, and no route that anyone reaches on purpose is
    * affected.
+   *
+   * ── it works in production and NOT under `next start` ──
+   *
+   * Locally, `/nope` returns the framework's bare document while the correct artifact sits unserved on
+   * disk (`.next/server/app/_not-found.html` holds the designed page). On the deployment the same
+   * request returns 404 with `x-matched-path: /404`, `<html lang="en" dir="ltr">`, the real title, the
+   * designed card and the stylesheet.
+   *
+   * That gap was almost shipped as a documented regression, on the strength of the local result alone.
+   * The rule this repository already had for HTML — only fetching tells you what was sent — turns out
+   * to apply to the dev server too.
    */
   experimental: {
     globalNotFound: true,

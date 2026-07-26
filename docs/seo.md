@@ -309,24 +309,37 @@ One masked bug, now fixed: `/builder` and `/ar/builder` could never have been pr
 `BuilderStart` reads `useSearchParams()` with no Suspense boundary. Nothing had reported it, because
 nothing had ever tried to prerender them.
 
-One regression that is not fixed: a URL matching nothing in EITHER group — `/nope`, `/pricing/nope` —
-has no root layout Next can choose, so it gets the framework's bare error document instead of the
-designed 404. **The status code is 404 in every case**, so no crawler is misled and nothing about
-ranking is affected; what is lost is the page a person sees after a typo. Arabic is unaffected —
-`app/(ar)/ar/[...missing]` catches those and renders the Arabic 404 properly.
+The 404, which took two attempts and where `next start` lied.
 
-Two fixes were tried and neither works in Next 16.2.10 under Turbopack. A root-level catch-all
-mirroring the Arabic one: the route builds, but a probe page placed there was never reached for
-`/nope`, `/pricing/nope` or `/a/b/c` — Next cannot assign an unmatched top-level URL to a group, which
-is the same reason the fallback happens at all. And `experimental.globalNotFound` with
-`app/global-not-found.tsx`, which is the framework's documented answer for multiple root layouts: the
-flag is recognised (`✓ globalNotFound` in the build output) and the artifact is correct —
-`.next/server/app/_not-found.html` contains the designed page with `<html lang="en" dir="ltr">` and
-its stylesheet — but the router serves the built-in 404 instead. Not the middleware: removing
-`proxy.ts` entirely changes nothing.
+With no layout above the two groups, a URL matching nothing in EITHER group — `/nope`,
+`/pricing/nope` — has no root layout Next can choose. The first fix was a root-level catch-all
+mirroring `app/(ar)/ar/[...missing]`; it does not work. The route builds, but a probe page placed
+there was never reached for `/nope`, `/pricing/nope` or `/a/b/c` — Next cannot assign an unmatched
+top-level URL to a group, which is the same reason the problem exists.
 
-The flag and the file are kept. They cost nothing, they are correct, and they will take effect when
-the router catches up.
+The second is `experimental.globalNotFound` with `app/global-not-found.tsx`, the framework's
+documented answer for exactly this case. **It works on Vercel and it does not work under
+`next start`** — and the local failure was convincing enough to have been reported as an unfixed
+regression before the deployment was checked.
+
+Verified on the deployment, `GET /definitely-not-a-page`:
+
+```
+status 404 · x-matched-path: /404
+<html lang="en" dir="ltr">
+<title>404 — page not found | Sira</title>
+"Lost in space", the designed card, both links, the stylesheet
+robots: noindex, follow
+```
+
+Locally the same request returns the framework's bare document, with the artifact sitting correct
+and unserved on disk — `.next/server/app/_not-found.html` contains the designed page. Not the
+middleware: removing `proxy.ts` entirely changes nothing. So the routing gap is in `next start`, not
+in the build, and the build is what Vercel deploys.
+
+The lesson is the one this file opens with, arriving from a new direction: **only fetching tells you
+what was sent**. It applied to a local dev server here rather than to source code, and the local
+server was the thing that was wrong.
 
 ## What to do next, in order
 
