@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { batchRequest, plan, targets, type PackTarget } from "@/app/lib/prewarm";
-import { writePack, packCacheConfigured } from "@/app/lib/packCache";
+import { readPack, writePack, packCacheConfigured } from "@/app/lib/packCache";
 import { modelConfig } from "@/app/lib/aiModels";
 import { PRIVATE_NO_STORE } from "@/app/lib/privateCache";
 
@@ -106,6 +106,59 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  /*
+   * ── verify: free, and the only thing that proves the money bought anything ──
+   *
+   * `?collect` reporting "444 written" proves 444 values were PUT somewhere. It does not prove the
+   * builder can find them, and that is the entire question: the keys are hashes, so a one-character
+   * drift between the writer and the reader produces a cache nobody ever hits, with no error anywhere.
+   *
+   * So this reads back through `readPack` — the same function `/api/generate` calls — using keys built
+   * by the same `targets()` the writer used, and checks the CONTENT has the shape a blueprint should.
+   * A present-but-empty pack would satisfy a mere existence check and still make every user wait.
+   *
+   * Redis reads only. No model call, no cost.
+   */
+  if (q.get("verify") === "1") {
+    if (!packCacheConfigured()) return json({ error: "The pack cache is not configured." }, 503);
+    const list = targets(opts);
+    const sample = Number(q.get("sample") || "24");
+
+    /* Spread across the list rather than taking the first N: the first N are all one occupation at
+       four levels, which would pass while 400 others were missing. */
+    const step = Math.max(1, Math.floor(list.length / Math.max(1, sample)));
+    const picked = list.filter((_, i) => i % step === 0).slice(0, sample);
+
+    let present = 0, missing = 0, thin = 0;
+    const misses: string[] = [];
+    for (const t of picked) {
+      const rec = await readPack<Record<string, unknown>>(t.key);
+      if (!rec) { missing++; misses.push(t.customId); continue; }
+      present++;
+      /* A blueprint that carries no skills is not a warm cache, it is a warm hole. */
+      const r = rec.result ?? {};
+      const groups = (r as { skillGroups?: unknown[] }).skillGroups;
+      const kw = (r as { importantKeywords?: unknown[] }).importantKeywords;
+      if (!Array.isArray(groups) || groups.length === 0 || !Array.isArray(kw) || kw.length === 0) thin++;
+    }
+
+    return json({
+      verified: true,
+      sampled: picked.length,
+      ofTotal: list.length,
+      present, missing, thin,
+      missingIds: misses.slice(0, 5),
+      verdict: missing === 0 && thin === 0
+        ? "Every sampled key was found through readPack — the same function /api/generate calls — and "
+          + "each pack carries skill groups and keywords. The warmed cache is reachable."
+        : missing > 0
+          ? "Keys are missing. The writer and the reader disagree, or the matrix differs from the one "
+            + "submitted — pass the same &levels/&countries."
+          : "Present but thin: packs exist with empty skill groups or keywords, so users would still "
+            + "get nothing useful from the cache.",
+    });
+  }
+
   /* ── status: free ── */
   const statusId = q.get("status");
   if (statusId) {
@@ -193,6 +246,7 @@ export async function GET(req: NextRequest) {
       submit: "?submit=1 (dry run) then &confirm=1 — SPENDS",
       status: "?status=<batchId>",
       collect: "?collect=<batchId> — writes the packs into Redis",
+      verify: "?verify=1&sample=24 — free, reads packs back through readPack and checks their shape",
     },
     parameters: {
       levels: "comma-separated, default Entry,Mid,Senior,Lead",
