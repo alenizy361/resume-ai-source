@@ -39,7 +39,7 @@ import Link from "next/link";
 import { type SectionId } from "@/app/lib/builderDoc";
 import { stepMark } from "@/app/lib/stepReady";
 import { toArabicDigits } from "@/app/lib/plans";
-import { STEPS, SECTION_COPY, stepHref, stepIndex } from "./steps";
+import { STEPS, SECTION_COPY, stepHref } from "./steps";
 import type { BuilderState } from "@/app/lib/builderDoc";
 
 const T = {
@@ -61,7 +61,6 @@ export default function StepBar({
   const [open, setOpen] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
 
-  const i = stepIndex(step) + 1;
   const n = STEPS.length;
   /*
    * Progress is measured in steps whose data VALIDATES, not steps that were visited.
@@ -70,6 +69,24 @@ export default function StepBar({
    */
   const done = STEPS.filter((s) => stepMark(s, state, step) === "done").length;
   const pct = Math.round((done / n) * 100);
+
+  /*
+   * ── the number and the bar have to measure the SAME thing ──
+   *
+   * This read `stepIndex(step) + 1` — the current POSITION — while the bar beside it filled to
+   * `done / n`, the count of steps whose data validates. A screenshot from a real phone caught the
+   * consequence: "٦ / ١١" printed against a bar filled to 91%, because the user had visited ten
+   * steps and walked back to the sixth. Both numbers were true. Together they read as a fault in the
+   * product.
+   *
+   * The fraction is the one that gives way, because it is the redundant one: the step NAME sits
+   * between them and already answers "where am I". So the number now answers "how much is finished",
+   * which is what the bar was answering all along, and the two can no longer disagree.
+   *
+   * Keeping the bar on validated steps rather than switching both to position is deliberate — a bar
+   * that advances for a step you walked through without filling in is the reason the old rail could
+   * report 60% on a resume with no job title.
+   */
 
   /* Escape closes it. A sheet that can only be dismissed by tapping a small × is a trap
      on a phone and unreachable by keyboard. */
@@ -86,7 +103,7 @@ export default function StepBar({
   return (
     <>
       <div className="bd-stepbar">
-        <span className="bd-stepbar-num" aria-hidden>{t.of(i, n)}</span>
+        <span className="bd-stepbar-num" aria-hidden>{t.of(done, n)}</span>
         <div className="bd-stepbar-mid">
           <span className="bd-stepbar-name">{copy.nav[step]}</span>
           {/*
@@ -100,6 +117,9 @@ export default function StepBar({
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label={copy.nav[step]}
+            /* The visible fraction is `aria-hidden`, so this is the only place a screen reader can
+               learn the count rather than the percentage. Same two numbers, said once. */
+            aria-valuetext={t.of(done, n)}
           >
             <span className="bd-stepbar-fill" style={{ width: `${pct}%` }} />
           </span>

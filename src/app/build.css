@@ -61,7 +61,10 @@
    beside the text; with the number gone, the title and the subtitle became two columns
    sitting side by side and the h1 was squeezed into half the width. */
 .build-root .bd-head { display: block; }
-.build-root .bd-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em; }
+.build-root .bd-title { font-size: 1.05rem; font-weight: 800; }
+/* Negative tracking crowds Arabic joins instead of breaking them — subtler, wrong for the same
+   reason. LTR only. */
+.build-root[dir="ltr"] .bd-title { letter-spacing: -.01em; }
 .build-root .bd-sub { margin-top: 2px; font-size: .8rem; color: var(--muted); }
 .build-root .bd-body { margin-top: 16px; }
 
@@ -104,9 +107,15 @@
 }
 .build-root .bd-sug + .bd-sug { margin-top: 8px; }
 .build-root .bd-sug-badge {
-  font: 700 10px/1 var(--font-mono, ui-monospace), monospace;
-  text-transform: uppercase; letter-spacing: .1em;
+  font-size: 10px; line-height: 1; font-weight: 700;
+  text-transform: uppercase;
   color: #c4b5fd; white-space: nowrap; padding-top: 3px;
+}
+/* Same rule as `.bd-save`: tracking and monospace are LTR-only, because neither survives contact
+   with a cursive script. */
+.build-root[dir="ltr"] .bd-sug-badge {
+  font-family: var(--font-mono, ui-monospace), monospace;
+  letter-spacing: .1em;
 }
 /* Confirmed content is plain text — the visual difference IS the contract. */
 .build-root .bd-confirmed {
@@ -169,9 +178,25 @@
 
 /* ── progress rail ────────────────────────────────────────── */
 
+/*
+ * ── the saved indicator, and why it carries no tracking ──
+ *
+ * This is the element a screenshot from a real iPhone caught rendering "محفوظ" as "مـحفـوظ" —
+ * disconnected stumps instead of a word. Arabic is cursive: `letter-spacing` inserts a gap between
+ * every pair of letters, so it does not space Arabic out, it takes it apart. The monospace family
+ * made it worse, since those stacks rarely carry Arabic and the browser substitutes glyph by glyph.
+ *
+ * The base rule is therefore safe for Arabic and the flourish is re-applied for LTR only. That
+ * direction matters: an override would have to out-specify a stylesheet the cascade loads later,
+ * whereas a base rule that is simply safe cannot be lost.
+ */
 .build-root .bd-save {
-  font: 600 11px/1 var(--font-mono, ui-monospace), monospace;
-  color: var(--faint); letter-spacing: .06em;
+  font-size: 11px; line-height: 1; font-weight: 600;
+  color: var(--faint);
+}
+.build-root[dir="ltr"] .bd-save {
+  font-family: var(--font-mono, ui-monospace), monospace;
+  letter-spacing: .06em;
 }
 .build-root .bd-save.err { color: #f87171; }
 
@@ -244,6 +269,12 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.03);
 }
+/*
+ * The one place monospace and tracking STAY in both directions: this element holds digits only.
+ * Arabic-Indic numerals (٦ ١١) do not join, so nothing is broken by spacing them, and tabular
+ * figures are what stop the strip twitching as the count changes. The distinction is the script's
+ * cursiveness, not the language — worth stating, so the next person does not "fix" this one too.
+ */
 .build-root .bd-stepbar-num {
   font: 700 12px/1 var(--font-mono, ui-monospace), monospace;
   color: var(--faint);

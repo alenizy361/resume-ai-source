@@ -76,11 +76,22 @@ const LEVEL_LABEL: Record<LanguageLevel, { en: string; ar: string }> = {
   basic: { en: "Basic", ar: "مبتدئ" },
 };
 
+/*
+ * ── `credHint` is NOT a restatement of the step subtitle ──
+ *
+ * A screenshot from a real phone showed it rendered directly beneath the credentials step's own
+ * subtitle — "Suggestions start unchecked. Nothing is claimed on your behalf." — and both opened
+ * with the same clause. Two sentences, one point, stacked. The subtitle owns the confirmation rule;
+ * this line exists for the DIFFERENT point, that prevalence in a profession is not possession.
+ *
+ * The note sits out here rather than beside the entry because `ops/i18n.test.mjs` reads these
+ * dictionaries line by line, and a block comment inside the literal invents a key ("targetRolelang").
+ */
 const C = {
   en: {
     eduHint: "AI may tidy the wording. It will not invent a degree, an institution, a year or a GPA — those are yours alone.",
     eduPh: "BSc Radiological Sciences — King Saud bin Abdulaziz University for Health Sciences, 2022\nGPA 2.84 / 5.00",
-    credHint: "Suggestions start unchecked, always. Common for the profession is not proof that you hold it.",
+    credHint: "Common for the profession is not proof that you hold it.",
     credAdd: "+ Add manually", pick: "Add", kind: "Type",
     cTitle: "Exact title", issuer: "Issuing organization", issued: "Issue date",
     expiry: "Expiry date", num: "Credential number", url: "Credential URL",
@@ -93,7 +104,7 @@ const C = {
   ar: {
     eduHint: "قد يرتّب الذكاء الصياغة. لن يختلق شهادة ولا جامعة ولا سنة ولا معدلاً — هذه لك وحدك.",
     eduPh: "بكالوريوس علوم الأشعة — جامعة الملك سعود بن عبدالعزيز للعلوم الصحية، ٢٠٢٢\nالمعدل ٢٫٨٤ من ٥",
-    credHint: "الاقتراحات تبدأ غير مختارة دائماً. شيوعها في المهنة ليس دليلاً أنك تحملها.",
+    credHint: "شيوع الشهادة في المهنة ليس دليلاً أنك تحملها.",
     credAdd: "+ أضف يدوياً", pick: "أضف", kind: "النوع",
     cTitle: "الاسم الدقيق", issuer: "الجهة المانحة", issued: "تاريخ الإصدار",
     expiry: "تاريخ الانتهاء", num: "رقم الشهادة", url: "رابط الشهادة",

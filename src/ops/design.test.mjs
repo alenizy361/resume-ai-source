@@ -464,6 +464,127 @@ for (const prof of [PROFILES[1], PROFILES[4], PROFILES[6]]) {
   await ctx.close();
 }
 
+/* ── Arabic is cursive: nothing rendering it may carry letter-spacing ── */
+
+/*
+ * The bug this exists for was invisible to every assertion above and obvious in a screenshot from a
+ * real iPhone: the builder's saved indicator rendered "محفوظ" as disconnected stumps. Cause was
+ * `letter-spacing: .06em` on `.bd-save`, plus a monospace family. Arabic letters JOIN — spacing them
+ * does not space the word out, it takes it apart.
+ *
+ * So this walks the real Arabic pages and asks the browser what it actually computed. A decorative
+ * `letter-spacing` added to a shared class months from now fails here instead of shipping.
+ */
+console.log("\n── Arabic typography: no letter-spacing on cursive text ──");
+{
+  const ctx = await browser.newContext(PROFILES[1].ctx);
+  const page = await ctx.newPage();
+
+  for (const path of ["/ar", "/ar/builder", "/ar/pricing"]) {
+    await page.goto(`${BASE}${path}`, { waitUntil: "load" }).catch(() => null);
+    await page.waitForTimeout(500);
+
+    /*
+     * Every element whose OWN text contains an Arabic letter — not its descendants', or a wrapper
+     * would be blamed for a child's spacing and the real culprit would hide behind it.
+     */
+    const offenders = await page.evaluate(() => {
+      const ARABIC = /[\u0621-\u064A\u0660-\u0669\u06F0-\u06F9]/;
+      const bad = [];
+      for (const el of document.querySelectorAll("body *")) {
+        const own = [...el.childNodes]
+          .filter((nd) => nd.nodeType === 3)
+          .map((nd) => nd.textContent || "").join("");
+        /* Arabic LETTERS only. Arabic-Indic DIGITS do not join, so spacing them is harmless — and
+           the step counter deliberately keeps tabular monospace figures. */
+        if (!/[\u0621-\u064A]/.test(own)) continue;
+        const cs = getComputedStyle(el);
+        const ls = cs.letterSpacing;
+        if (ls && ls !== "normal" && Math.abs(parseFloat(ls)) > 0.01) {
+          bad.push(`${el.className || el.tagName}: ${ls} on "${own.trim().slice(0, 24)}"`);
+        }
+      }
+      return bad;
+    }).catch(() => null);
+
+    if (offenders === null) { console.log(`   (skipped ${path} — not reachable)`); continue; }
+    ok(`${path}: no Arabic text carries letter-spacing`, offenders.length === 0,
+      offenders.slice(0, 4).join(" · "));
+  }
+
+  /*
+   * The PRINTED RESUME, which is the highest-stakes instance of the same rule and the one no page
+   * sweep would have reached: `ResumeTemplate` set `letterSpacing: 1-2px` on every section heading
+   * and on the candidate's name. On an Arabic CV that pulls "الخبرة العملية" apart into separate
+   * letterforms — in the PDF a recruiter opens. An inline style, so the global RTL reset could not
+   * have saved it.
+   */
+  const tpl = page.locator("[dir=rtl] [style*='letter-spacing']");
+  const inlineOffenders = await page.evaluate(() => {
+    const bad = [];
+    for (const el of document.querySelectorAll("[style*='letter-spacing']")) {
+      if (!el.closest('[dir="rtl"]')) continue;
+      const ls = getComputedStyle(el).letterSpacing;
+      if (ls && ls !== "normal" && Math.abs(parseFloat(ls)) > 0.01) bad.push(`${el.tagName}: ${ls}`);
+    }
+    return bad;
+  }).catch(() => []);
+  ok("no inline letter-spacing survives inside RTL", inlineOffenders.length === 0,
+    inlineOffenders.slice(0, 3).join(" · "));
+  void tpl;
+
+  /* And the saved indicator specifically, since it is the element the screenshot caught. */
+  await page.goto(`${BASE}/ar/builder`, { waitUntil: "load" }).catch(() => null);
+  await page.waitForTimeout(400);
+  const save = page.locator(".bd-save").first();
+  if (await save.count()) {
+    const st = await save.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { ls: cs.letterSpacing, family: cs.fontFamily };
+    });
+    ok("the saved indicator has no letter-spacing in Arabic",
+      st.ls === "normal" || Math.abs(parseFloat(st.ls)) <= 0.01, st.ls);
+    /* Monospace stacks rarely carry Arabic, so the browser substitutes glyph by glyph. */
+    ok("and is not forced into a monospace stack in Arabic",
+      !/mono/i.test(st.family), st.family);
+  }
+
+  await ctx.close();
+}
+
+/* ── the step counter and the bar must measure the same thing ── */
+
+/*
+ * Also from that screenshot: "٦ / ١١" printed beside a bar filled to 91%, because the number was the
+ * current POSITION and the bar was VALIDATED STEPS. Both true, and together they read as a bug.
+ */
+console.log("\n── the step counter agrees with the bar ──");
+{
+  const ctx = await browser.newContext(PROFILES[1].ctx);
+  const page = await ctx.newPage();
+  await page.goto(`${BASE}/ar/builder`, { waitUntil: "load" }).catch(() => null);
+  await page.waitForTimeout(500);
+  const start = page.locator("button", { hasText: /ابدأ|تابع|Start|Continue/ }).first();
+  if (await start.count()) { await start.click(); await page.waitForTimeout(800); }
+
+  const bar = page.locator(".bd-stepbar-track").first();
+  const num = page.locator(".bd-stepbar-num").first();
+  if (await bar.count() && await num.count()) {
+    const pct = Number(await bar.getAttribute("aria-valuenow"));
+    const text = (await num.innerText()).trim();
+    /* Read the fraction back through Arabic-Indic digits, which is how it is printed. */
+    const western = text.replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+    const m = /(\d+)\s*\/\s*(\d+)/.exec(western);
+    ok("the counter prints a fraction", Boolean(m), text);
+    if (m) {
+      const expected = Math.round((Number(m[1]) / Number(m[2])) * 100);
+      ok("the printed fraction equals the bar's own percentage", expected === pct,
+        `${text} → ${expected}% vs bar ${pct}%`);
+    }
+  }
+  await ctx.close();
+}
+
 await browser.close();
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

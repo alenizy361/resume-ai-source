@@ -157,7 +157,13 @@ export default function ResumeTemplate({ text, name = "resume", accent = "#0f766
   const sectionHeadingStyle: React.CSSProperties = {
     fontSize: 14,
     fontWeight: 700,
-    letterSpacing: serif ? 2 : 1,
+    /*
+     * Zero for Arabic, and this is the highest-stakes instance of that rule in the product: it is
+     * the user's PRINTED resume. 1-2px of tracking on Arabic pulls "الخبرة العملية" apart into
+     * separate letterforms, in the PDF a recruiter opens. `textTransform: uppercase` below is a
+     * harmless no-op on Arabic; letter-spacing is not.
+     */
+    letterSpacing: isRtl ? 0 : serif ? 2 : 1,
     textTransform: "uppercase",
     marginBottom: 8,
     color: strict || variant === "minimal" ? "#111827" : variant === "modern" ? accent : "#111827",
@@ -199,7 +205,7 @@ export default function ResumeTemplate({ text, name = "resume", accent = "#0f766
           {/* Header: white background always (colored header blocks confuse some
               parsers and waste toner). Name ≈ 22pt; contact one line below. */}
           <div style={{ padding: "40px 64px 0", textAlign: headerCentered ? "center" : "start" }}>
-            <div style={{ fontSize: 29, fontWeight: serif ? 700 : 800, letterSpacing: serif ? 1.5 : 0.3, color: strict || variant === "minimal" ? "#111827" : accent, fontFamily: serif ? "Georgia, 'Times New Roman', serif" : undefined }}>{parsed.name}</div>
+            <div style={{ fontSize: 29, fontWeight: serif ? 700 : 800, letterSpacing: isRtl ? 0 : serif ? 1.5 : 0.3, color: strict || variant === "minimal" ? "#111827" : accent, fontFamily: serif ? "Georgia, 'Times New Roman', serif" : undefined }}>{parsed.name}</div>
             {parsed.contact && <div dir="ltr" style={{ marginTop: 8, fontSize: 12.5, color: "#4b5563", textAlign: headerCentered ? "center" : isRtl ? "right" : "left", unicodeBidi: "plaintext" }}>{parsed.contact}</div>}
             <div style={{ marginTop: 14, borderBottom: strict ? "1.5px solid #111827" : variant === "classic" ? `3px solid ${accent}` : variant === "modern" ? `2px solid ${accent}` : serif ? "1px solid #9ca3af" : "1.5px solid #d1d5db" }} />
           </div>

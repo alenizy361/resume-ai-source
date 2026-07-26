@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+/*
+ * ══════════════════════════════════════════════════════════════════════════════
+ * ARABIC IS CURSIVE — NOTHING IN RTL MAY CARRY LETTER-SPACING
+ * ══════════════════════════════════════════════════════════════════════════════
+ *
+ * A screenshot from a real iPhone showed the builder's saved indicator rendering "محفوظ" as
+ * disconnected stumps. Arabic letters JOIN, and `letter-spacing` inserts a gap between every pair —
+ * so on Arabic it does not space a word out, it takes the word apart. Negative tracking is the same
+ * error mirrored: it crowds the joins.
+ *
+ * The single element in that screenshot was one instance. A browser sweep of the real Arabic pages
+ * found the rest, all of it from Tailwind tracking utilities on text shared between the two
+ * languages: `tracking-tight` on the brand and every marketing heading, and — the visibly broken
+ * ones — `tracking-widest` at +1.2px and `tracking-wider` at +0.5px on the pricing badges.
+ *
+ * ── why one rule here rather than twenty edits at the call sites ──
+ *
+ * Those classes sit on components that render in BOTH languages, so removing them would strip the
+ * flourish from English too. And there are more than twenty files; a sweep would be finished and
+ * then quietly undone by the next component someone writes.
+ *
+ * This rule is UNLAYERED, and that is what makes it hold: Tailwind's utilities live in
+ * `@layer utilities`, and layered declarations lose to unlayered ones no matter their specificity or
+ * order. So `tracking-widest` cannot win here, and neither can the next utility like it.
+ *
+ * The cost is that Latin text inside an Arabic page also loses its tracking — an English badge on
+ * /ar/pricing, say. That is a cosmetic loss on a minority of strings, against a legibility bug on
+ * the primary language. `ops/design.test.mjs` asserts the result by asking the browser what it
+ * computed on /ar, /ar/builder and /ar/pricing.
+ */
+[dir="rtl"] * { letter-spacing: normal; }
+
 :root {
   --bg: #0b0626;            /* COSMOS — the creation world (deep violet) */
   --surface: #101316;
@@ -246,10 +278,25 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: rgba(244, 245, 243, 0.75);
-  font-family: ui-monospace, monospace;
   font-size: 0.7rem;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+/*
+ * ── the decoration is LTR-only, and this is not a preference ──
+ *
+ * Arabic is a CURSIVE script: its letters join, and `letter-spacing` inserts a gap between every
+ * pair, so "محفوظ" renders as disconnected stumps — visible in the builder header on a real phone,
+ * where the saved indicator read as broken glyphs rather than a word. A monospace family compounds
+ * it, since those stacks rarely carry Arabic and the browser substitutes per glyph.
+ *
+ * So the base rule carries nothing that can break Arabic, and the tracking-and-mono flourish is
+ * re-applied for LTR only. Written this way round deliberately: an override would have to win a
+ * cascade fight against a stylesheet imported later, while a base rule that is simply safe cannot
+ * be lost — and a new class added below inherits the safe default by doing nothing.
+ */
+[dir="ltr"] .chip {
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.12em;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -719,9 +766,11 @@ main {
   gap: 10px;
   font-size: 15px;
   font-weight: 800;
-  letter-spacing: -0.01em;
   color: var(--fg);
 }
+/* Negative tracking crowds Arabic joins rather than breaking them — subtler than the gap above,
+   and wrong for the same reason. LTR only. */
+[dir="ltr"] .ps-brand { letter-spacing: -0.01em; }
 .ps-cta {
   display: inline-flex;
   align-items: center;

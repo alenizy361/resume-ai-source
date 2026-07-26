@@ -98,7 +98,11 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-2xl font-extrabold leading-snug" style={{ letterSpacing: "-0.02em" }}>{t.h1}</h1>
+      {/* Tracking is LTR-only: Arabic letters join, and spacing them — in either direction —
+          fights the joins rather than the rhythm. An inline style beats every stylesheet rule,
+          so the global RTL reset cannot save this one; it has to be conditional here. */}
+      <h1 className="text-2xl font-extrabold leading-snug"
+        style={lang === "ar" ? undefined : { letterSpacing: "-0.02em" }}>{t.h1}</h1>
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
 
       {hasDraft && (
