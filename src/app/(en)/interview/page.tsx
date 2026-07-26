@@ -3,6 +3,8 @@ import { useState } from "react";
 import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import useLang from "@/app/components/useLang";
+import MyCvPicker from "@/app/components/MyCvPicker";
+import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
 interface InterviewResult {
   questions: { q: string; why: string; answer: string }[];
@@ -20,6 +22,14 @@ export default function InterviewPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState<number | null>(0);
   const [copied, setCopied] = useState(false);
+  /*
+   * The CV the user chose from their own, when they chose one.
+   *
+   * Held for one reason: it is the only place that KNOWS the CV's language, because the user
+   * declared it in the builder. `outLangFor` prefers that declaration over guessing from the text,
+   * and stops trusting it the moment the text stops matching. See `lib/myCvs.ts`.
+   */
+  const [picked, setPicked] = useState<MyCv | null>(null);
 
   async function run(e: React.FormEvent) {
     e.preventDefault();
@@ -36,7 +46,15 @@ export default function InterviewPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           signal: ctrl.signal,
-          body: JSON.stringify({ mode: "interview", inputA: resume, inputB: jd , lang: "en" }),
+          /*
+           * `lang` was hardcoded `"en"`. This page is served to Arabic readers too — `/ar/interview`
+           * redirects here with `?lang=ar` — so every Arabic user preparing for an Arabic interview
+           * was handed English questions, with no field anywhere to say otherwise.
+           */
+          body: JSON.stringify({
+            mode: "interview", inputA: resume, inputB: jd,
+            lang: outLangFor(picked, resume, ar),
+          }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || `Server ${res.status}`);
@@ -92,6 +110,19 @@ export default function InterviewPage() {
 
         {!result ? (
           <form onSubmit={run} className="card space-y-4 p-7">
+            {/*
+              The job advert comes across too, but ONLY into an empty box. The builder's target job
+              is what the user is applying to, so it is the right default; overwriting something they
+              had already typed here would be the picker deciding it knows better than they do.
+            */}
+            <MyCvPicker
+              ar={ar}
+              onPick={(cv) => {
+                setPicked(cv);
+                setResume(cv.text);
+                if (!jd.trim() && cv.jobAdText.trim()) setJd(cv.jobAdText);
+              }}
+            />
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "سيرتك" : "Your resume"}</label>
               <textarea value={resume} onChange={(e) => setResume(e.target.value)} rows={8} required

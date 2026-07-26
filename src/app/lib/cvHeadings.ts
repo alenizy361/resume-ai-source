@@ -49,9 +49,36 @@ export const HEADINGS_AR = [
   "البيانات الشخصية", "المعلومات الشخصية", "الإنجازات", "الجوائز", "المراجع",
 ];
 
+/**
+ * The Arabic character range, written ONCE.
+ *
+ * U+0600–U+06FF plus U+0750–U+077F (Arabic Supplement). Two functions below need it and they must
+ * not answer differently about the same character — a presence test and a majority test disagreeing
+ * on what "Arabic" means is a bug that only shows up on a mixed-script CV, which in this market is
+ * most of them.
+ */
+const ARABIC_RANGE = "؀-ۿݐ-ݿ";
+
 /** Anything with Arabic letters in it. */
 export function hasArabic(s: string): boolean {
-  return /[؀-ۿݐ-ݿ]/.test(s);
+  return new RegExp(`[${ARABIC_RANGE}]`).test(s);
+}
+
+/**
+ * Which script this text is mostly written in.
+ *
+ * `hasArabic` answers "is there any", which is the right question for "does jsPDF have to be
+ * avoided" and the WRONG one for "what language is this document". A Saudi applicant's English CV
+ * routinely carries an Arabic name, an Arabic employer or an Arabic city, and a presence test calls
+ * that document Arabic — then a model is asked for Arabic interview questions about an English CV.
+ *
+ * Counting letters rather than looking for one is the whole difference. Ties and empty text answer
+ * `en`, matching the product's own default everywhere else.
+ */
+export function dominantScript(s: string): "ar" | "en" {
+  const arabic = (s.match(new RegExp(`[${ARABIC_RANGE}]`, "g")) || []).length;
+  const latin = (s.match(/[A-Za-z]/g) || []).length;
+  return arabic > latin ? "ar" : "en";
 }
 
 export function isHeading(line: string): boolean {

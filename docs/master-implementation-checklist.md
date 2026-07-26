@@ -64,8 +64,8 @@ under the order's own priority rule (P0 before everything) that is the first thi
 
 | ID | Requirement | Status | Evidence / gap |
 |---|---|---|---|
-| P1-1 | One builder for build / upload / continue / tailor | `PARTIAL` | Upload already lands in the builder (`ImportPanel` → `/api/extract` → `BuilderState`). `/optimize` is a second state model and still separate. |
-| P1-2 | Arabic CV → Arabic suggestions; English → English | audit run | The CV language is a stored field (`resumeLanguage`), distinct from UI language — the conflation was fixed earlier. Per-task verification in the AI task map. |
+| P1-1 | One builder for build / upload / continue / tailor | `PARTIAL` | Upload already lands in the builder (`ImportPanel` → `/api/extract` → `BuilderState`). The five feature pages now read the CV this browser holds instead of asking for it again — `lib/myCvs.ts` + `MyCvPicker` (F-18), verified in Chromium across all five. `/optimize` is still a second state model (O-9), which is what keeps this `PARTIAL`. |
+| P1-2 | Arabic CV → Arabic suggestions; English → English | `DONE` | Every route that writes CV text now takes the document's language: `/api/cover-letter` (F-14), `/api/optimize` (F-15), `ats_review` (F-16), `/api/tools` (F-17), and the two pages that called `/api/tools` with a hardcoded `"en"` (F-18). The fallback counts letters (`dominantScript`) rather than looking for one, so an Arabic name on an English CV no longer flips the document. |
 | P1-3 | Country + occupation context respected | `PARTIAL` | `countryRules.ts`, `rolePacks.ts`, `occupations.ts` exist and are wired into the blueprint path |
 | P1-4 | Mobile navigation, sticky bars, safe areas, route transitions | `DONE` (earlier this session) | One step bar, fixed action bar with `env(safe-area-inset-*)`, `dvh`, one scroll system; `ops/devices.test.mjs`, `ops/motion.browser.mjs` |
 | P1-5 | Cinematic loading screen removed | `DONE` (earlier this session) | Blocking page transition, canvas cosmos and the 1100 ms step reveal are gone; `ops/motion.test.mjs` forbids their return |
@@ -83,8 +83,8 @@ Listed here so the checklist is complete rather than convenient.
 | P2-3 | 5 | Saudi occupation knowledge base | `PARTIAL` — `rolePacks.ts` (906 lines), `occupations.ts`, `countryRules.ts` with a verification pack already exist |
 | P2-4 | 6 | Career dashboard | `TODO` |
 | P3-1 | 7 | Job application tracker | `TODO` |
-| P3-2 | 8 | Interview preparation | `PARTIAL` — `/interview` and `/interview-live` exist |
-| P3-3 | 9 | LinkedIn improvement | `PARTIAL` — `/linkedin` exists |
+| P3-2 | 8 | Interview preparation | `PARTIAL` — `/interview` and `/interview-live` exist, and both now read the user's own CV (F-18) |
+| P3-3 | 9 | LinkedIn improvement | `PARTIAL` — `/linkedin` exists, reads the user's own CV, and answers in the CV's language (F-18) |
 | P3-4 | 10 | Career plan | `TODO` |
 | P3-5 | 11 | Resume health | `PARTIAL` — `reviewChecks.ts` is 1209 lines and already scores completeness, evidence and ATS formatting |
 | P4-1 | 12 | SEO free tools | `PARTIAL` — `/ats-resume-checker`, `/free-resume-checker`, `/api/tools` exist |

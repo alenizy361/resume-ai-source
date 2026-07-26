@@ -3,6 +3,8 @@ import { useState } from "react";
 import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import useLang from "@/app/components/useLang";
+import MyCvPicker from "@/app/components/MyCvPicker";
+import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
 interface LinkedInResult {
   headline: string;
@@ -21,6 +23,8 @@ export default function LinkedInPage() {
   const [result, setResult] = useState<LinkedInResult | null>(null);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState("");
+  /** The CV the user picked from their own — the only source that declares its own language. */
+  const [picked, setPicked] = useState<MyCv | null>(null);
 
   async function run(e: React.FormEvent) {
     e.preventDefault();
@@ -31,7 +35,12 @@ export default function LinkedInPage() {
       const res = await fetch("/api/tools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "linkedin", inputA: profile, inputB: targetRole , lang: "en" }),
+        /* Was a hardcoded `"en"`. A LinkedIn headline is published text, so it follows the CV's
+           language — the same rule the resume itself follows. See `outLangFor`. */
+        body: JSON.stringify({
+          mode: "linkedin", inputA: profile, inputB: targetRole,
+          lang: outLangFor(picked, profile, ar),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
@@ -73,6 +82,16 @@ export default function LinkedInPage() {
 
         {!result ? (
           <form onSubmit={run} className="card space-y-4 p-7">
+            {/* The target role comes across only when this page's own field is still empty — the
+                user's typing outranks a default taken from their draft. */}
+            <MyCvPicker
+              ar={ar}
+              onPick={(cv) => {
+                setPicked(cv);
+                setProfile(cv.text);
+                if (!targetRole.trim() && cv.targetTitle.trim()) setTargetRole(cv.targetTitle);
+              }}
+            />
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "سيرتك أو نص ملف لينكدإن الحالي" : "Your resume or current LinkedIn profile text"}</label>
               <textarea value={profile} onChange={(e) => setProfile(e.target.value)} rows={10} required

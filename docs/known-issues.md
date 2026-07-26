@@ -472,12 +472,71 @@ content, and translating them would break the reader rather than serve them.
 Both prompts are hardcoded English and the route reads no language. LinkedIn headline/About
 and the eight interview questions always return English regardless of CV or UI language.
 
-### O-8 · P1 · Five feature pages each ask the user to paste their CV again
+### F-18 · P1 · The five pages now read the CV this browser already holds — FIXED *(was O-8)*
 
-`/interview`, `/interview-live`, `/linkedin`, and both `/optimize` pages hold their own
-throwaway copy of the user's CV. None reads the builder's confirmed `profile`. A user who
-has just finished eleven builder steps must copy-paste into each one. This is the single
-largest integration gap and the precondition for Phases 8–10 being worth building.
+`/interview`, `/interview-live`, `/linkedin` and both `/optimize` pages each opened on an empty
+textarea labelled "paste your resume". Every one of them is reached from inside a product that had
+just spent eleven steps collecting that exact resume, and none of them could see it. The CV was two
+keys away in the same browser and the answer was "type it again".
+
+`/interview-live` was the worst of the five: it refuses to start until the box holds a real career,
+so the only way through was to type a CV out in front of a camera.
+
+**Fix — one reader, one strip, five call sites.**
+
+`app/lib/myCvs.ts` gathers both places a finished CV can live — the builder's structured
+`ra_cv:{owner}:{id}` records, assembled through `assembleResume`, and the flat text in
+`ra_saved_resumes:{owner}` — into one list. It writes nothing and adds no key: a "recent CVs" cache
+would be a third copy of the same text that could disagree with the two that already exist.
+
+`app/components/MyCvPicker.tsx` is the surface. It **offers and never fills by itself** — the lesson
+from the "the cache still shows my previous entries" report, where storage silently repopulating a
+form read as the product remembering something it had not been asked to remember. It renders `null`
+when there is nothing to offer, so a first-time visitor arriving from search sees those pages exactly
+as before.
+
+Three properties are load-bearing and each is asserted:
+
+- **The language comes from the DOCUMENT.** `ResumeRecord.lang` is the language the *builder was
+  being read in* — `BuilderProvider` passes its route's `lang` prop straight through. The CV's own
+  language is `cvLang(state.target)`. Reading the wrong one reintroduces the most damaging bug this
+  product has had.
+- **The visit rule governs both stores.** `mayRestore(owner)` gates the whole list. Gating the
+  builder's records and not the saved ones would make the rule depend on which door the CV came
+  through, which is not a rule.
+- **De-duplication keeps the builder's copy.** Building a CV and saving it puts the same text in both
+  stores; only the builder's knows the target job, so the loop order decides whether the interview
+  page can fill its second box.
+
+**And the hardcoded output language, which a picker alone would not have fixed.** `/interview` and
+`/linkedin` both sent `lang: "en"` to `/api/tools`. `/ar/interview` and `/ar/linkedin` redirect to
+those same pages with `?lang=ar`, so every Arabic user was handed English interview questions and an
+English LinkedIn headline with no field anywhere to say otherwise. `outLangFor` now prefers the
+picked CV's own declaration, falls back to the script the user actually typed, and only then to the
+interface — and stops trusting the pick once the text is replaced, because otherwise the language
+follows a CV that is no longer in the box.
+
+The fallback counts letters (`dominantScript`) rather than looking for one (`hasArabic`). A Saudi
+applicant's English CV routinely carries an Arabic name, employer or city, and a presence test calls
+that document Arabic. In this market that is the common case, not the edge one.
+
+**Deliberately excluded: `/interview-live`'s spoken language.** Its question is read by `/api/tts`
+and the answer captured by SpeechRecognition, both keyed on the interface language (`srLang`).
+Switching only the text would leave the voice and the transcriber in the other language, which is
+worse than the inconsistency it fixes. Its picker fills the CV and the target role and leaves
+`uiLang` alone; `ops/mycvs.test.mjs` asserts that, so the omission stays a decision.
+
+**Verification.** `ops/mycvs.test.mjs` — 49 assertions in Node against fake storage, so a failure
+names the cause. `ops/mycvs.browser.mjs` — 30 assertions in Chromium across all five pages: the offer
+appears, the click fills the boxes, the CV reaches the **request body**, an Arabic CV asks for Arabic
+in an English interface, an English CV picked on the Arabic page selects English, and a new tab
+offers nothing. A field filled but ignored by the request would pass every visual check and change
+nothing about what the model sees, which is the whole point of the item.
+
+### O-8 · superseded by F-18
+
+`/interview`, `/interview-live`, `/linkedin` and both `/optimize` pages each opened on a blank
+"paste your resume" box and read none of the CVs this browser already held.
 
 ### O-9 · P1 · `/optimize` is a second CV state model
 

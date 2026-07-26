@@ -17,6 +17,7 @@ import GapFiller from "@/app/components/GapFiller";
 import CheckoutButton from "@/app/components/CheckoutButton";
 import AuthNav from "@/app/components/AuthNav";
 import { addScan, saveResume } from "@/app/lib/localdata";
+import MyCvPicker from "@/app/components/MyCvPicker";
 import { useOwner } from "@/app/components/useOwner";
 import { readPersonalJson, removePersonal, writePersonal } from "@/app/lib/personalStore";
 import { useBackToForm, useCountUp } from "@/app/lib/resultUx";
@@ -374,6 +375,21 @@ export default function ArOptimizePage() {
               <div>
                 <h1 className="text-3xl font-extrabold tracking-tight">أضف سيرتك</h1>
                 <p className="mt-2 mb-5 text-sm" style={{ color: "var(--muted)" }}>ارفع ملفاً أو الصق النص. لن نغيّر أي كلمة بدون موافقتك.</p>
+                {/* The Arabic door's third way in. `outLang` starts at "ar" on this page, so a user
+                    picking their English CV here is exactly the case where taking the language from
+                    the DOCUMENT rather than from the interface stops the rewrite coming back in the
+                    wrong one. Step 3 still shows the choice before anything is generated. */}
+                <MyCvPicker
+                  ar
+                  onPick={(cv) => {
+                    setResume(cv.text);
+                    setOutLang(cv.lang);
+                    if (!jobDescription.trim() && cv.jobAdText.trim()) {
+                      setJobDescription(cv.jobAdText);
+                      if (cv.jobAdText.trim().length >= 30) setMode("target");
+                    }
+                  }}
+                />
                 <div className="mb-3 flex flex-wrap gap-2">
                   <label className="cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
                     {uploading ? "جارٍ القراءة…" : uploadedName ? `${uploadedName.slice(0, 18)}` : "↑ رفع PDF / Word"}

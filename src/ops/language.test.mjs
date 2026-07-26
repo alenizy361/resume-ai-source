@@ -161,9 +161,24 @@ console.log("\n── the CV's language reaches every route that writes CV conte
   /* The JSON keys are a wire format the caller destructures, not content — translating them would
      break the reader rather than serve them. */
   ok("the JSON keys stay English", /Keep the JSON keys exactly as given in English/.test(tools));
+  /*
+   * ── and then the callers stopped declaring a CONSTANT ──
+   *
+   * When the route first learned to read a language, these two pages were made to state theirs
+   * explicitly: `lang: "en"`, which was honest about what they did and better than sending nothing.
+   * It was still wrong. Both are reached by Arabic readers — `/ar/interview` and `/ar/linkedin`
+   * redirect here with `?lang=ar` — so every Arabic user got English interview questions and an
+   * English LinkedIn headline, and no field on either page could say otherwise.
+   *
+   * The assertion is therefore inverted rather than deleted: a hardcoded language is now the
+   * regression, and `outLangFor` (which prefers the picked CV's own declaration, then the script the
+   * user actually typed, then the interface) is the requirement. See `lib/myCvs.ts`.
+   */
   for (const f of ["app/(en)/linkedin/page.tsx", "app/(en)/interview/page.tsx"]) {
-    ok(`${f.split("/").slice(-2).join("/")} declares its language`,
-      /lang: "en"/.test(readFileSync(f, "utf8")));
+    const src = readFileSync(f, "utf8");
+    const name = f.split("/").slice(-2).join("/");
+    ok(`${name} derives its output language`, /lang: outLangFor\(/.test(src));
+    ok(`${name} no longer hardcodes one`, !/lang: "en"/.test(src));
   }
 }
 

@@ -17,6 +17,7 @@ import GapFiller from "@/app/components/GapFiller";
 import CheckoutButton from "@/app/components/CheckoutButton";
 import AuthNav from "@/app/components/AuthNav";
 import { addScan, saveResume } from "@/app/lib/localdata";
+import MyCvPicker from "@/app/components/MyCvPicker";
 import { useOwner } from "@/app/components/useOwner";
 import { readPersonalJson, removePersonal, writePersonal } from "@/app/lib/personalStore";
 import { useBackToForm, useCountUp } from "@/app/lib/resultUx";
@@ -467,6 +468,28 @@ export default function OptimizePage() {
               <div>
                 <h1 className="text-3xl font-extrabold tracking-tight">Add your resume</h1>
                 <p className="mt-2 mb-5 text-sm" style={{ color: "var(--muted)" }}>Upload a file or paste the text. We&apos;ll never change a word without your approval.</p>
+                {/*
+                  A third way in, above the other two: the CV this person already made here.
+                  Uploading a file they exported from this product, so it can be parsed back into the
+                  text it was generated from, was the absurdity this closes.
+
+                  It also carries the two things a file cannot: the job they are targeting, and the
+                  language they chose for the document. `outLang` is a DEFAULT here — step 3 shows it
+                  as an explicit three-way choice before anything is generated, so pre-selecting the
+                  picked CV's own language is a better starting point than the interface's, and the
+                  user still decides.
+                */}
+                <MyCvPicker
+                  ar={false}
+                  onPick={(cv) => {
+                    setResume(cv.text);
+                    setOutLang(cv.lang);
+                    if (!jobDescription.trim() && cv.jobAdText.trim()) {
+                      setJobDescription(cv.jobAdText);
+                      if (cv.jobAdText.trim().length >= 30) setMode("target");
+                    }
+                  }}
+                />
                 <div className="mb-3 flex flex-wrap gap-2">
                   <label className="cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold"
                     style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>

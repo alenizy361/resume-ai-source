@@ -6,6 +6,7 @@ import Link from "next/link";
 import useLang from "@/app/components/useLang";
 import InterviewerAvatar from "@/app/components/InterviewerAvatar";
 import CheckoutButton from "@/app/components/CheckoutButton";
+import MyCvPicker from "@/app/components/MyCvPicker";
 
 /**
  * AI video mock-interview: the candidate sits on camera, the AI asks real
@@ -343,6 +344,18 @@ export default function InterviewLivePage() {
               <p className="mt-3" style={{ color: "var(--muted)" }}>{t.intro}</p>
             </div>
             <div className="card space-y-4 p-7">
+              {/*
+                `resumeTooShort` refuses to start until this box holds a real career, and until now
+                the only way to satisfy it was to type one out again — in front of a camera, which is
+                the worst possible moment to ask someone to retype their CV.
+              */}
+              <MyCvPicker
+                ar={ar}
+                onPick={(cv) => {
+                  setResume(cv.text);
+                  if (!role.trim() && cv.targetTitle.trim()) setRole(cv.targetTitle);
+                }}
+              />
               <div>
                 <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{t.resumeLabel}</label>
                 <textarea value={resume} onChange={(e) => setResume(e.target.value)} rows={7} placeholder={t.resumePlaceholder} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
