@@ -274,7 +274,9 @@ export default function OptimizePage() {
       const res = await fetch("/api/cover-letter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume, jobDescription }),
+        /* The same `outLang` the user chose for the rewrite. The letter and the CV must not disagree
+           about their language. */
+        body: JSON.stringify({ resume, jobDescription, outLang }),
       });
       const data = await res.json();
       if (!res.ok) {

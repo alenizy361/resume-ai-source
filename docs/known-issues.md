@@ -369,7 +369,36 @@ become unreachable immediately after payment.
 Fixable without credentials; not attempted here because it needs its own isolation test pass
 and this sitting's budget went to the payment defects above.
 
-### O-4 · P1 · `/api/cover-letter` has no language input at all
+### F-14 · P1 · The cover letter is written in the CV's language — FIXED *(was O-4)*
+
+`/api/cover-letter` took `resume` and `jobDescription` and nothing else. It never named an output
+language and no caller sent one, so the letter's language was whatever the model inferred from an
+input that is frequently mixed — an Arabic CV against an English advert is the ordinary case in
+this market. An Arabic-CV user could be handed an English cover letter, or the reverse.
+
+This is a **paid** feature, and nothing detected it, because there was no expectation to compare
+the output against.
+
+Worse, one of the prompt's own rules was *"Mirror the job's language/keywords naturally"* — on a
+mixed input that is an instruction to do the wrong thing. It now says keywords, not language.
+
+**Fix.** `outLang` is an explicit argument, stated at the top of the prompt where a model is most
+likely to honour it, and then **checked** with `languageHonoured` and retried once with
+`LANGUAGE_RETRY`. Both already existed for `/api/optimize`, which learned the same lesson from a
+live build that returned a fully Arabic CV to an English request — so the two routes share one
+detector and one retry text and cannot drift on what a language failure sounds like.
+
+All three callers send it. The builder's derives it from the CV (`arabicCv`), never from the
+interface: a user reading the Arabic UI while building an English CV must get an English letter.
+
+`outLang: "both"` — valid for a bilingual *résumé* on `/optimize` — resolves to English, because a
+bilingual letter addressed to a person is not a thing anyone wants. Decided explicitly rather than
+left to fall through an `=== "ar"` test, since the two produce the same output and only one is a
+choice somebody made.
+
+**Evidence.** `ops/language.test.mjs`, +10 assertions.
+
+### O-4 · superseded by F-14
 
 The prompt never names an output language and no call site sends one. An Arabic CV can get
 an English cover letter and vice versa, decided by the model. This is a **paid** feature.

@@ -243,7 +243,10 @@ export default function DesignSection({
       const res = await fetch("/api/cover-letter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume: cv, jobDescription: state.target.jobAdText }),
+        /* `outLang` from the CV's own language, not the interface's. A user reading the Arabic UI
+           while building an English CV must get an English cover letter — that conflation is the
+           bug this field exists to prevent, and the route had no way to know before. */
+        body: JSON.stringify({ resume: cv, jobDescription: state.target.jobAdText, outLang: arabicCv ? "ar" : "en" }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {

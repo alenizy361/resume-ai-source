@@ -52,5 +52,48 @@ ok("empty is not a failure", languageHonoured("", "en"));
 ok("ratio of pure Arabic is high", arabicRatio("أخصائي أشعة") > 0.9);
 ok("ratio of pure English is zero", arabicRatio("Radiography Specialist") === 0);
 
+/* ── the cover letter, a PAID feature that had no language input at all ────────────── */
+console.log("\n── /api/cover-letter writes in the CV's language, not the model's guess ──");
+{
+  const { readFileSync } = await import("node:fs");
+  const route = readFileSync("app/api/cover-letter/route.ts", "utf8");
+  const code = route.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+
+  /*
+   * This route took `resume` and `jobDescription` and nothing else. It never named an output
+   * language, and no caller sent one — so the letter's language was whatever the model inferred from
+   * an input that is frequently mixed: an Arabic CV against an English advert is the ordinary case in
+   * this market. An Arabic-CV user could be handed an English cover letter. It is a paid feature, and
+   * nothing detected it because there was no expectation to compare against.
+   */
+  ok("the prompt takes an output language", /PROMPT = \(resume: string, jobDescription: string, outLang/.test(code));
+  ok("and states it in the prompt", /OUTPUT LANGUAGE/.test(route));
+  ok("the route reads it from the request", /body\.outLang === "ar"/.test(code));
+
+  /* An instruction a model is free to misread is one it eventually misreads — the lesson
+     `/api/optimize` learned from a live build that returned a fully Arabic CV to an English request.
+     Same detector, same retry text, so the two routes cannot drift on what a failure sounds like. */
+  ok("the output is checked, not assumed", /languageHonoured\(coverLetter, outLang\)/.test(code));
+  ok("and retried once with the shared instruction", /LANGUAGE_RETRY\(outLang\)/.test(code));
+
+  /* The old rule told the model to "mirror the job's language", which on a mixed input is an
+     instruction to do the wrong thing. */
+  ok("it no longer asks the model to mirror the job's LANGUAGE",
+    !/Mirror the job's language/.test(route));
+
+  /* All three callers must send it, or the default silently becomes the policy again. */
+  for (const f of ["app/components/build/DesignSection.tsx",
+                   "app/(en)/optimize/page.tsx", "app/(ar)/ar/optimize/page.tsx"]) {
+    const src = readFileSync(f, "utf8");
+    const call = src.slice(src.indexOf('/api/cover-letter'), src.indexOf('/api/cover-letter') + 500);
+    ok(`${f.split("/").pop()} sends outLang`, /outLang/.test(call), call.slice(0, 80));
+  }
+
+  /* And the builder's caller takes it from the CV, never from the interface — a user reading the
+     Arabic UI while building an English CV must get an English letter. */
+  const design = readFileSync("app/components/build/DesignSection.tsx", "utf8");
+  ok("the builder derives it from the CV's language", /outLang: arabicCv \? "ar" : "en"/.test(design));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
