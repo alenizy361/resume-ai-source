@@ -202,8 +202,30 @@ ok("the suggest model defaults to the cheap fast one, never to the interview's",
     && oks.every((line) => /suggestKeyPresent/.test(line)),
     oks.map((l) => l.trim()).join(" · "));
 }
-ok("a missing suggestion key refuses the live probe too",
-  /!keyPresent \|\| !suggestKeyPresent/.test(SRC));
+/*
+ * A missing key must never be papered over — but "refuse everything" was the wrong way to enforce
+ * that, and this assertion used to require it (`!keyPresent || !suggestKeyPresent` → 503, probing
+ * neither). The result was that the live diagnostic went dark in exactly the situation it exists
+ * for: one provider configured and one not. Found on a preview deployment where ANTHROPIC_API_KEY is
+ * present and NVIDIA_API_KEY is production-scoped, so `?live=1` refused to test the working half.
+ *
+ * So the rule is now about the REPORT rather than the refusal: probe what can be probed, and let the
+ * half that cannot say so — by name, with ok false, and with the overall ok still requiring both.
+ */
+ok("only a total absence of keys refuses outright",
+  /if \(!keyPresent && !suggestKeyPresent\)/.test(CODE)
+  && !/if \(!keyPresent \|\| !suggestKeyPresent\)/.test(CODE));
+ok("a missing global key still probes the suggestion provider",
+  /keyPresent\s*\n?\s*\? \{ ran: true, \.\.\.await probe\(provider, model\)/.test(CODE));
+ok("and a missing key reports ran:false with ok:false rather than silence",
+  (CODE.match(/ran: false, ok: false, note: `No key for the/g) || []).length === 2);
+ok("the missing provider is named, so the fix is obvious",
+  /No key for the \$\{provider\} provider/.test(CODE)
+  && /No key for the \$\{suggestProvider\} provider/.test(CODE));
+/* And the escalation probe must not fire without a key either — that would be a 401 reported as a
+   broken escalation tier, which is a worse diagnosis than none. */
+ok("the escalation probe requires the anthropic key",
+  /suggestProvider === "anthropic" && suggestKeyPresent/.test(CODE));
 
 /*
  * And the live half must actually ASK the suggestion provider. Reporting its name while

@@ -312,13 +312,20 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(report);
   }
 
-  if (!keyPresent || !suggestKeyPresent) {
-    report.live = {
-      ran: false, ok: false,
-      note: keyPresent
-        ? "No API key for the suggestion provider — nothing to call."
-        : "No API key configured — nothing to call.",
-    };
+  /*
+   * ── probe what CAN be probed, rather than nothing ──
+   *
+   * This used to return 503 the moment EITHER key was missing, having probed neither. Which means
+   * the live diagnostic was unavailable in precisely the situation it exists for: one provider
+   * configured, one not. Found on a preview deployment, where `ANTHROPIC_API_KEY` is present and
+   * `NVIDIA_API_KEY` is scoped to production — so `?live=1` refused to test the Anthropic half that
+   * was sitting there working.
+   *
+   * `ok` still requires both, and the status is still 503 when a key is missing. What changes is that
+   * the half that CAN answer does, and the half that cannot says so by name.
+   */
+  if (!keyPresent && !suggestKeyPresent) {
+    report.live = { ran: false, ok: false, note: "No API key for either provider — nothing to call." };
     return NextResponse.json(report, { status: 503 });
   }
 
@@ -337,16 +344,20 @@ export async function GET(req: NextRequest) {
    */
   const t0 = Date.now();
   try {
-    const out = await probe(provider, model);
-    report.live = { ran: true, ...out, ms: Date.now() - t0 };
+    const out = keyPresent
+      ? { ran: true, ...await probe(provider, model), ms: Date.now() - t0 }
+      : { ran: false, ok: false, note: `No key for the ${provider} provider on this deployment.` };
+    report.live = out;
 
     /* Same provider AND same model id means one probe already answered for both. */
     const shares = suggestProvider === provider && suggestModel === model;
     const t1 = Date.now();
-    const sug = shares ? out : await probe(suggestProvider, suggestModel);
-    report.liveSuggest = shares
-      ? { ran: true, ...sug, sharedWithGlobal: true }
-      : { ran: true, ...sug, ms: Date.now() - t1 };
+    const sug = !suggestKeyPresent
+      ? { ran: false, ok: false, note: `No key for the ${suggestProvider} provider on this deployment.` }
+      : shares && keyPresent
+        ? { ...out, sharedWithGlobal: true }
+        : { ran: true, ...await probe(suggestProvider, suggestModel), ms: Date.now() - t1 };
+    report.liveSuggest = sug;
 
     /*
      * ── the escalation tier, probed on purpose ──
@@ -366,7 +377,7 @@ export async function GET(req: NextRequest) {
      * answered for it and a second identical call would be paying twice to learn nothing.
      */
     const cfg = modelConfig();
-    if (suggestProvider === "anthropic" && cfg.reasoningModel !== suggestModel) {
+    if (suggestProvider === "anthropic" && suggestKeyPresent && cfg.reasoningModel !== suggestModel) {
       const t2 = Date.now();
       const esc = await probeAnthropic(cfg.reasoningModel);
       report.liveEscalation = {
@@ -377,9 +388,11 @@ export async function GET(req: NextRequest) {
     } else {
       report.liveEscalation = {
         ran: false,
-        note: cfg.reasoningModel === suggestModel
-          ? "The reasoning model is the fast model — the probe above already covered it."
-          : "The suggestion provider is not Anthropic; there is no Claude escalation tier to probe.",
+        note: !suggestKeyPresent
+          ? "No Anthropic key on this deployment — nothing to probe."
+          : cfg.reasoningModel === suggestModel
+            ? "The reasoning model is the fast model — the probe above already covered it."
+            : "The suggestion provider is not Anthropic; there is no Claude escalation tier to probe.",
       };
     }
 
