@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import AiOrb from "./AiOrb";
+import BrandOrb from "./BrandOrb";
 
 /**
  * The interactive "AI writes it for you" control that sits on every builder
@@ -79,7 +79,7 @@ export default function AiSuggest({
         className="flex min-h-9 items-center gap-2 rounded-full py-1 pe-3.5 ps-1.5 text-xs font-bold transition-opacity disabled:opacity-70"
         style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
       >
-        <AiOrb size={22} thinking={busy} />
+        <BrandOrb variant="button" size={22} busy={busy} />
         {busy ? (ar ? "يكتب لك…" : "Writing for you…") : ar ? "خلّ الذكاء يكتبها" : "Let AI write it"}
       </button>
       {prev !== null && !busy && (

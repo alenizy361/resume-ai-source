@@ -21,7 +21,7 @@
 
 import { type TaskName, type TaskInput } from "@/app/lib/aiTasks";
 import { useAiTask } from "./useAiTask";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 
 const C = {
   en: { ask: "Suggest with AI", again: "Suggest more", stop: "Stop", unchecked: "Nothing is added until you tap it." },
@@ -52,7 +52,7 @@ export default function AiStrip({
         className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
-        <AiOrb size={16} />
+        <BrandOrb variant="button" size={16} />
         {ai.busy ? c.stop : items.length ? c.again : c.ask}
       </button>
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import OrbBrand from "../../components/OrbBrand";
-import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import BrandOrb from "../../components/BrandOrb";
 import Link from "next/link";
 import CheckoutButton from "../../components/CheckoutButton";
 import { PLANS, formatPrice } from "../../lib/plans";
@@ -55,12 +54,11 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
 
 export default function ArabicPricingPage() {
   return (
-    <main className="min-h-screen" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/ar" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">سيرة</span>
           </Link>
           <div className="flex items-center gap-4">
@@ -70,8 +68,7 @@ export default function ArabicPricingPage() {
         </div>
       </nav>
 
-      <section className="relative mx-auto max-w-3xl px-6 py-16">
-        <div className="hero-ambient" aria-hidden />
+      <section className="ps-body relative max-w-3xl">
         <div className="relative mb-12 text-center">
           <div className="chip mb-4">الأسعار</div>
           <h1 className="text-4xl font-extrabold tracking-tight">ادفع مرة واحدة. بدون اشتراك.</h1>

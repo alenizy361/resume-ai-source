@@ -8,9 +8,7 @@ import Link from "next/link";
 import PdfExport from "../components/PdfExport";
 import DocxExport from "../components/DocxExport";
 import BeforeAfter from "../components/BeforeAfter";
-import AiOrb from "../components/AiOrb";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import ResumeTemplate from "../components/ResumeTemplate";
 import { TEMPLATE_CATALOG } from "../lib/templateCatalog";
 import ScoreOrb from "../components/orb/ScoreOrb";
@@ -400,15 +398,14 @@ export default function OptimizePage() {
     : (score >= 75 ? "STRONG RESUME" : score >= 55 ? "SOLID START" : "NEEDS WORK");
 
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
       {/* Nav */}
       {/* the orb watches the wizard — it never leaves you mid-journey */}
-      <OrbSceneSetter visible mood="idle" top="12vh" left="86%" size={110} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
             {/* flat logo mark — the living orb is the single flying one */}
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <div className="flex items-center gap-5">
@@ -425,7 +422,7 @@ export default function OptimizePage() {
         </div>
       </nav>
 
-      <div className="mx-auto max-w-6xl px-6 py-12">
+      <div className="ps-body max-w-6xl">
         {/* Loading is handled inside the wizard (step view) below. */}
         {!result ? (
           <div className="mx-auto max-w-2xl">
@@ -448,7 +445,7 @@ export default function OptimizePage() {
               /* Analyzing — live steps instead of an empty spinner. */
               <div className="card mx-auto max-w-2xl overflow-hidden" style={{ borderColor: "rgba(139,92,246,0.35)" }}>
                 <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: "1px solid var(--line)", background: "rgba(139,92,246,0.05)" }}>
-                  <AiOrb size={22} thinking />
+                  <BrandOrb variant="button" size={22} busy />
                   <span className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: "var(--accent)" }}>Analyzing — live</span>
                 </div>
                 <div className="px-5 py-4 font-mono text-xs leading-relaxed" style={{ color: "rgba(244,245,243,0.75)" }}>

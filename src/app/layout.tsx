@@ -4,7 +4,7 @@ import { BRAND, brandName } from "./lib/brand";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import FunnelBeacon from "./components/seo/FunnelBeacon";
-import OrbProvider from "./components/orb/OrbProvider";
+import SpaceBackdrop from "./components/SpaceBackdrop";
 import "./globals.css";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -139,8 +139,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
         />
-        <OrbProvider>{children}</OrbProvider>
-        <div className="grain-overlay" aria-hidden="true" />
+        {/*
+          One background, painted once, behind everything. It replaced OrbProvider, which also
+          wrapped every page in an AnimatePresence `mode="wait"` crossfade — meaning the next
+          page did not begin mounting until the previous one had finished fading out. That is
+          the blank pause between screens, and it is gone with the wrapper.
+        */}
+        <SpaceBackdrop />
+        {children}
         <Analytics />
         {/* Records which page the visitor arrived on, once per tab. Every later funnel step
             reports itself with that entry attached — see `lib/funnel.ts`. */}

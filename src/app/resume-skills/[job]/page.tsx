@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { fitTitle } from "../../lib/seoTitle.ts";
 import { copyright, salaryBasis } from "@/app/lib/brand";
-import OrbBrand from "../../components/OrbBrand";
-import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import BrandOrb from "../../components/BrandOrb";
 import Link from "next/link";
 import SectorLink from "../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
@@ -65,12 +64,11 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
   ];
 
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
@@ -153,7 +151,9 @@ EXPERIENCE (example bullet)
         </section>
 
         {/* CTA */}
-        <section className="card mt-10 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+        <section className="card relative mt-10 overflow-hidden p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+          {/* Decoration only: behind the text, dimmed, and inert to the pointer. */}
+          <BrandOrb variant="decor" size={150} style={{ top: -46, insetInlineEnd: -34 }} />
           <h2 className="text-2xl font-bold">Which of these is YOUR resume missing?</h2>
           <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>
             Paste your resume + a real posting — see your match score and the exact missing keywords, free, in ~10 seconds.

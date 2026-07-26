@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import usePrefersReducedMotion from "../usePrefersReducedMotion";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 
 /**
  * <ScoreOrb> — the counter and the Orb become one thing. A living orb sits at
@@ -59,16 +59,11 @@ export default function ScoreOrb({
   return (
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: size, height: size }}>
-        {/* glowing orb core behind the arc — tinted with the band color */}
-        {/* wrapper carries the absolute centering — `.ai-orb` is position:relative
-            in CSS and would otherwise override an `absolute` class on the orb,
-            dropping it into flow and stacking it above the ring. */}
+        {/* The orb core behind the arc. A wrapper carries the centering because
+            `.brand-orb` is `position: relative` and would override an `absolute`
+            class on the orb itself, dropping it into flow above the ring. */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <AiOrb
-            size={size * 0.62}
-            light={light}
-            style={{ ["--light" as string]: color, ["--bloom-o" as string]: "0.65" }}
-          />
+          <BrandOrb size={Math.round(size * 0.62)} />
         </div>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="relative">
           <circle cx={cx} cy={cx} r={r} fill="none" stroke={light ? "rgba(15,23,42,0.10)" : "rgba(255,255,255,0.1)"} strokeWidth={stroke} />

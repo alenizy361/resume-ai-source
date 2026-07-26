@@ -1,11 +1,9 @@
 "use client";
-import AiOrb from "../../components/AiOrb";
+import BrandOrb from "../../components/BrandOrb";
 import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice } from "@/app/lib/plans";
 import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
-import OrbBrand from "../../components/OrbBrand";
-import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import PdfExport from "../../components/PdfExport";
@@ -308,12 +306,11 @@ export default function ArOptimizePage() {
   }
 
   return (
-    <main dir="rtl" lang="ar" className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="14%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/ar" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">سيرة</span>
           </Link>
           <div className="flex items-center gap-5">
@@ -326,7 +323,7 @@ export default function ArOptimizePage() {
         </div>
       </nav>
 
-      <div className="mx-auto max-w-6xl px-6 py-12">
+      <div className="ps-body max-w-6xl">
         {/* التحميل يُعرض داخل المعالج بالأسفل */}
 
         {!result ? (
@@ -349,7 +346,7 @@ export default function ArOptimizePage() {
             {loading ? (
               <div className="card mx-auto max-w-2xl overflow-hidden" style={{ borderColor: "rgba(139,92,246,0.35)" }}>
                 <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: "1px solid var(--line)", background: "rgba(139,92,246,0.05)" }}>
-                  <AiOrb size={22} thinking />
+                  <BrandOrb variant="button" size={22} busy />
                   <span className="font-mono text-xs tracking-[0.2em]" style={{ color: "var(--accent)" }}>جارٍ التحليل — مباشر</span>
                 </div>
                 <div className="px-5 py-4 font-mono text-xs leading-relaxed" style={{ color: "rgba(244,245,243,0.75)" }}>

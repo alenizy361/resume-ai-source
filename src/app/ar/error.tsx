@@ -25,7 +25,7 @@ export default function ArabicError({
   return (
     <main
       dir="rtl"
-      className="flex min-h-screen items-center justify-center px-6"
+      className="flex min-h-dvh items-center justify-center px-6"
       style={{ background: "var(--bg)", color: "var(--fg)" }}
     >
       <div className="card w-full max-w-md p-10 text-center" style={{ borderColor: "rgba(248,113,113,0.4)" }}>

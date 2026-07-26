@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { formatPrice } from "@/app/lib/plans";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import useLang from "../components/useLang";
 import InterviewerAvatar from "../components/InterviewerAvatar";
@@ -323,12 +322,11 @@ export default function InterviewLivePage() {
   const avg = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} lang={ar ? "ar" : "en"} className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left={ar ? "14%" : "86%"} size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+    <main dir={ar ? "rtl" : "ltr"} lang={ar ? "ar" : "en"} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href={t.home} className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href={t.optimize} className="btn-accent px-4 py-2 text-sm">{t.navCta}</Link>

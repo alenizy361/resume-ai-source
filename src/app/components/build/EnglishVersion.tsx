@@ -26,7 +26,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { track } from "@vercel/analytics";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 import {
   buildTranslationSource, sectionHashes, sourceContentHash, staleSections, translationFresh,
   TRANSLATION_PROMPT_VERSION, type TranslatedVersion,
@@ -159,7 +159,7 @@ export default function EnglishVersion() {
           className="btn-accent rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-45"
         >
           <span className="inline-flex items-center gap-2">
-            <AiOrb size={16} />
+            <BrandOrb variant="button" size={16} />
             {phase === "working" ? c.working : stored ? c.remake : c.make}
           </span>
         </button>

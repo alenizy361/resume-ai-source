@@ -16,7 +16,7 @@
 
 import { useCallback, useState } from "react";
 import { track } from "@vercel/analytics";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 import { type SectionId } from "@/app/lib/builderDoc";
 import { useAiTask } from "./useAiTask";
 
@@ -74,7 +74,7 @@ export default function AskAi({
         className="mt-4 flex items-center gap-2 rounded-full px-3 text-xs font-semibold"
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
-        <AiOrb size={18} />
+        <BrandOrb variant="button" size={18} />
         {c.open}
       </button>
     );

@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import useLang from "../components/useLang";
 
@@ -71,12 +70,11 @@ export default function InterviewPage() {
   }
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main dir={ar ? "rtl" : "ltr"} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">{ar ? "محسّن السيرة ←" : "Resume optimizer →"}</Link>

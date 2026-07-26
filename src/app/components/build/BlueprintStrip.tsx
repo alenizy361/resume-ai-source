@@ -30,7 +30,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 import { credentialsFor } from "@/app/lib/countryRules";
 import { filterFresh, newItem, rejected, type SectionId } from "@/app/lib/builderDoc";
 import { useBuilder } from "./BuilderProvider";
@@ -249,7 +249,7 @@ export default function BlueprintStrip({
         className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
-        <AiOrb size={16} />
+        <BrandOrb variant="button" size={16} />
         {label}
       </button>
 

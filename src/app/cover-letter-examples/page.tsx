@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { copyright } from "@/app/lib/brand";
 import HubLinks from "../components/HubLinks";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import { JOBS, CATEGORIES } from "../lib/jobs";
 
@@ -30,12 +29,11 @@ export const metadata: Metadata = {
 
 export default function CoverLetterHub() {
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>

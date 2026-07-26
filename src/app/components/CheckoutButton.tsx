@@ -3,8 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { PLANS, formatPrice } from "@/app/lib/plans";
-import AiOrb from "./AiOrb";
-import GoldField from "./orb/GoldField";
+import BrandOrb from "./BrandOrb";
 
 /**
  * Two-phase checkout:
@@ -159,12 +158,14 @@ export default function CheckoutButton({
         style={variant === "ghost" ? { color: "var(--fg)" } : undefined}>{label}</button>
 
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
+        <div className="fixed inset-0 flex items-center justify-center p-4"
+          /* `--z-dialog`, the top of the one layer scale. It was `z-[100]`, an arbitrary
+             number chosen to be above whatever else existed at the time. */
+          style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", zIndex: "var(--z-dialog)" }}
           onClick={() => !loading && !paying && reset()}>
           <div dir={ar ? "rtl" : "ltr"} className={`relative w-full max-w-sm overflow-hidden rounded-3xl p-7 ${ar ? "text-right" : "text-left"}`} style={{ background: "rgba(10,14,26,0.96)", border: "1px solid rgba(245,184,64,0.35)", boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }} onClick={(e) => e.stopPropagation()}>
-            <GoldField />
             <div className="relative mb-3 flex items-center gap-2.5">
-              <AiOrb size={30} state="golden" />
+              <BrandOrb variant="button" size={30} />
               <div className="font-mono text-xs tracking-widest" style={{ color: "var(--gold)", textTransform: ar ? "none" : "uppercase" }}>{t.planLine}</div>
             </div>
 

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import HubLinks from "../components/HubLinks";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import TemplatesGallery from "./TemplatesGallery";
 
@@ -20,12 +19,11 @@ export const metadata: Metadata = {
 
 export default function TemplatesPage() {
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <div className="flex items-center gap-4">
@@ -37,7 +35,6 @@ export default function TemplatesPage() {
       </nav>
 
       <section className="relative mx-auto max-w-6xl px-6 py-14">
-        <div className="hero-ambient" aria-hidden />
         <div className="relative mb-10 text-center">
           <div className="chip mb-4">Templates</div>
           <h1 className="text-4xl font-extrabold tracking-tight">Professional resume templates</h1>

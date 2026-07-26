@@ -4,13 +4,10 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import useLang from "./useLang";
 import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entitlement";
 import { toArabicDigits } from "@/app/lib/plans";
-import OrbBrand from "../components/OrbBrand";
-import OrbSceneSetter from "../components/orb/OrbSceneSetter";
+import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import AiOrb from "../components/AiOrb";
 import ScoreOrb from "../components/orb/ScoreOrb";
-import { useOrbScene } from "../components/orb/OrbProvider";
 import {
   getScans, removeScan, type ScanEntry,
   getResumes, removeResume, type SavedResume,
@@ -227,7 +224,6 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   }
 
   // رابط keeps a quiet presence over the Library — golden once you own a pack.
-  useOrbScene({ visible: true, top: "84px", size: 30, mood: owned ? "golden" : "idle", z: 45 }, [owned]);
 
   /*
    * Read once per mount, not on every render.
@@ -248,19 +244,18 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const sectionTitle = "mb-4 text-sm font-bold";
 
   return (
-    <main dir={lang === "ar" ? "rtl" : "ltr"} lang={lang} className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main dir={lang === "ar" ? "rtl" : "ltr"} lang={lang} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href={lang === "ar" ? "/ar" : "/"} className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="text-sm" style={{ color: "var(--muted)" }}>{t.optimizeCta}</Link>
         </div>
       </nav>
 
-      <div className="mx-auto max-w-2xl px-6 py-14">
+      <div className="ps-body max-w-2xl">
         {welcome && (
           <div className="mb-6 rounded-xl px-4 py-3 text-sm font-semibold"
             style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent)" }}>
@@ -398,7 +393,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           <h2 className={sectionTitle}>{t.savedResumes} ({resumes.length})</h2>
           {resumes.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
-              <AiOrb size={40} />
+              <BrandOrb variant="button" size={40} />
               <p className="text-xs" style={{ color: "var(--faint)" }}>{lang === "ar" ? "ما عندك سيرة بعد — خلّينا نسوي واحدة ☕" : "No resume yet — let's make one ☕"}</p>
               <Link href={lang === "ar" ? "/ar" : "/"} className="btn-accent px-5 py-2 text-xs font-semibold">{lang === "ar" ? "ابدأ ←" : "Start →"}</Link>
             </div>
@@ -485,7 +480,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
 
 export default function AccountClient({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   return (
-    <Suspense fallback={<main className="min-h-screen" style={{ background: "var(--bg)" }} />}>
+    <Suspense fallback={<main className="min-h-dvh" style={{ background: "var(--bg)" }} />}>
       <AccountInner initialLang={initialLang} />
     </Suspense>
   );

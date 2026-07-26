@@ -20,8 +20,7 @@
  */
 
 import Link from "next/link";
-import OrbBrand from "../OrbBrand";
-import OrbSceneSetter from "../orb/OrbSceneSetter";
+import BrandOrb from "../BrandOrb";
 import ContinueDraft from "./ContinueDraft";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import { copyright } from "@/app/lib/brand";
@@ -178,13 +177,12 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
   const pack = findRolePack(t.egTitle);
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} lang={lang} className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="12vh" left={ar ? "82%" : "18%"} size={112} />
+    <main dir={ar ? "rtl" : "ltr"} lang={lang} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
 
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.9), transparent)" }}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-4">
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href={p || "/"} className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">{ar ? "سيرة" : "Sira"}</span>
           </Link>
           <div className="flex items-center gap-3">

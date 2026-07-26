@@ -51,9 +51,12 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} style={{ background: "rgba(0,0,0,0.5)" }} />
+          {/* The scrim and the panel are on the ONE layer scale (globals.css), not on two
+              hand-picked Tailwind steps that happened not to collide. */}
+          <div className="fixed inset-0" onClick={() => setOpen(false)}
+            style={{ background: "rgba(0,0,0,0.5)", zIndex: "var(--z-menu)" }} />
           <div
-            className={`absolute z-50 mt-3 min-w-52 rounded-xl p-2 ${ar ? "left-0" : "right-0"}`}
+            className={`absolute mt-3 min-w-52 rounded-xl p-2 ${ar ? "left-0" : "right-0"}`}
             style={{ background: "var(--surface)", border: "1px solid var(--line)", boxShadow: "0 20px 50px -15px rgba(0,0,0,0.7)" }}
           >
             {links.map((l) => (

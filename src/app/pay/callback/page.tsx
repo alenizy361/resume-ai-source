@@ -4,9 +4,7 @@ import { useEffect, useState, useCallback, Suspense } from "react";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import GoldField from "../../components/orb/GoldField";
 import AuroraBurst from "../../components/orb/AuroraBurst";
-import { useOrbScene } from "../../components/orb/OrbProvider";
 
 function CallbackInner() {
   const params = useSearchParams();
@@ -229,16 +227,11 @@ function CallbackInner() {
 
   // رابط becomes the Vault: golden while confirming (with a 🔒), opens to a
   // green(🔓) on success, dims (locked) on failure.
-  useOrbScene(
-    { visible: true, top: "20vh", size: 84, mood: orbState, badge: paid ? "🔓" : "🔒", light: paid },
-    [orbState, paid]
-  );
 
   return (
     <main dir={ar ? "rtl" : "ltr"} lang={ar ? "ar" : "en"}
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-6"
-      style={{ background: paid ? "var(--glass-bg)" : "var(--cosmos-bg)", color: paid ? "var(--glass-text)" : "var(--cosmos-text)", transition: "background 0.9s var(--smooth)" }}>
-      {!paid && <GoldField />}
+      className="relative flex min-h-dvh items-center justify-center px-6"
+      style={{ background: paid ? "var(--glass-bg)" : "var(--bg)", color: paid ? "var(--glass-text)" : "var(--fg)", transition: "background 0.9s var(--smooth)" }}>
 
       <div className={`relative mt-24 w-full max-w-md rounded-3xl p-10 text-center ${paid ? "glass-surface" : ""}`}
         style={paid ? undefined : { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(245,184,64,0.25)", backdropFilter: "blur(10px)" }}>
@@ -249,7 +242,7 @@ function CallbackInner() {
         <h1 className="text-2xl font-extrabold">
           {state === "checking" ? t.checking : paid ? t.paidTitle : state === "pending" ? t.pendingTitle : review ? t.reviewTitle : t.failedTitle}
         </h1>
-        <p className="mt-3 text-sm" style={{ color: paid ? "var(--glass-muted)" : "var(--cosmos-muted)" }}>
+        <p className="mt-3 text-sm" style={{ color: paid ? "var(--glass-muted)" : "var(--muted)" }}>
           {state === "failed" && !review ? t.neverLost : detail || t.wait}
         </p>
         {showSupport && (
@@ -284,11 +277,11 @@ function CallbackInner() {
         {state === "pending" && (
           <div className="mt-6 flex flex-col items-center gap-3">
             <button onClick={checkStatus} className="rounded-xl px-8 py-3 font-bold" style={{ background: "var(--gold)", color: "#3a2708" }}>{t.refresh}</button>
-            <Link href={ar ? "/ar#pricing" : "/#pricing"} className="text-sm font-semibold" style={{ color: "var(--cosmos-muted)" }}>{t.back}</Link>
+            <Link href={ar ? "/ar#pricing" : "/#pricing"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>{t.back}</Link>
           </div>
         )}
         {state === "failed" && (
-          <Link href={ar ? "/ar#pricing" : "/#pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--cosmos-text)" }}>{t.back}</Link>
+          <Link href={ar ? "/ar#pricing" : "/#pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}>{t.back}</Link>
         )}
       </div>
     </main>
@@ -297,7 +290,7 @@ function CallbackInner() {
 
 export default function PayCallback() {
   return (
-    <Suspense fallback={<main className="min-h-screen" style={{ background: "var(--bg)" }} />}>
+    <Suspense fallback={<main className="min-h-dvh" style={{ background: "var(--bg)" }} />}>
       <CallbackInner />
     </Suspense>
   );

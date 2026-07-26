@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { fitTitle } from "../../lib/seoTitle.ts";
 import { copyright, salaryBasis } from "@/app/lib/brand";
-import OrbBrand from "../../components/OrbBrand";
-import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
+import BrandOrb from "../../components/BrandOrb";
 import Link from "next/link";
 import SectorLink from "../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
@@ -89,12 +88,11 @@ export default async function Page({ params }: { params: Promise<{ job: string }
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
@@ -162,7 +160,12 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </Section>
 
         {/* CTA */}
-        <div className="card mt-10 p-7 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+        {/* The third job of BrandOrb: decoration. `relative` on the card and
+            `variant="decor"` on the orb, which is absolutely positioned, dimmed, behind the
+            content and transparent to the pointer — so the button in this card cannot be
+            swallowed by the decoration behind it. Asserted in ops/design.test.mjs. */}
+        <div className="card relative mt-10 overflow-hidden p-7 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+          <BrandOrb variant="decor" size={140} style={{ top: -40, insetInlineEnd: -30 }} />
           <h2 className="text-2xl font-bold">Is your {j.title} resume ATS-ready?</h2>
           <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>Paste it and get an instant match score plus the missing keywords — free, no sign-up.</p>
           <Link href="/optimize" className="btn-accent mt-5 inline-block px-8 py-3">Scan my resume free →</Link>

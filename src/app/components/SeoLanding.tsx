@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { copyright } from "@/app/lib/brand";
-import OrbBrand from "./OrbBrand";
-import OrbSceneSetter from "./orb/OrbSceneSetter";
+import BrandOrb from "./BrandOrb";
 import HubLinks from "./HubLinks";
 
 export interface Faq {
@@ -27,20 +26,18 @@ export interface SeoLandingProps {
  */
 export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs, ctaLine, methodology }: SeoLandingProps) {
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <OrbSceneSetter visible mood="idle" top="14vh" left="86%" size={100} />
-      <nav className="sticky top-0 z-50" style={{ background: "linear-gradient(180deg, rgba(5,7,13,0.85), transparent)" }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <nav className="ps-header">
+        <div className="ps-header-in">
           <Link href="/" className="flex items-center gap-2.5">
-            <OrbBrand size={26} />
+            <BrandOrb size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
           <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
         </div>
       </nav>
 
-      <section className="relative overflow-hidden px-6 pb-16 pt-16">
-        <div className="hero-ambient"><div className="grid-lines" /></div>
+      <section className="relative px-6 pb-16 pt-16">
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <div className="chip mb-6">{eyebrow}</div>
           <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
@@ -105,8 +102,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         </div>
       </section>
 
-      <section className="relative overflow-hidden px-6 py-24 text-center">
-        <div className="hero-ambient" />
+      <section className="ps-body text-center">
         <div className="relative z-10 mx-auto max-w-2xl">
           <h2 className="text-4xl font-extrabold tracking-tight">{ctaLine}</h2>
           <Link href="/optimize" className="btn-accent mt-8 inline-block px-10 py-4 text-lg">Scan my resume free →</Link>
@@ -119,7 +115,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
       <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">
-            <OrbBrand size={20} />
+            <BrandOrb size={20} />
             <span className="text-sm font-bold">Sira</span>
           </div>
           <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>

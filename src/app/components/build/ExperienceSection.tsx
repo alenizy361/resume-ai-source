@@ -19,7 +19,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { track } from "@vercel/analytics";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 import { type Role } from "@/app/lib/resumeDoc";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { useAiTask } from "./useAiTask";
@@ -471,7 +471,7 @@ function RoleCard({
             className="mt-3 flex items-center gap-2 rounded-full px-3 text-xs font-bold"
             style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
           >
-            <AiOrb size={20} thinking={ai.busy && ai.task === "duties_draft"} />
+            <BrandOrb variant="button" size={20} busy={ai.busy && ai.task === "duties_draft"} />
             {ai.busy ? c.stop : c.more}
           </button>
         )}

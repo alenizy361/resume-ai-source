@@ -29,12 +29,10 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 
 import { type SectionId } from "@/app/lib/builderDoc";
-import { toArabicDigits } from "@/app/lib/plans";
 import { useBuilder } from "./BuilderProvider";
 import {
-  SECTION_COPY, nextStep, prevStep, stepHref, stepIndex, builderHome,
+  SECTION_COPY, nextStep, prevStep, stepHref, builderHome,
 } from "./steps";
-import { stepReady } from "@/app/lib/stepReady";
 import StepGate from "./StepGate";
 import { TargetFields, PersonalFields, BlueprintBody, SkillsBody } from "./FormSections";
 import ExperienceSection from "./ExperienceSection";
@@ -54,6 +52,7 @@ export default function BuilderStep({ step }: { step: SectionId }) {
   const router = useRouter();
   const t = T[lang];
   const copy = SECTION_COPY[lang];
+  const arrowBack = lang === "ar" ? "→" : "←";
   const back = prevStep(step);
   const forward = nextStep(step);
 
@@ -74,18 +73,17 @@ export default function BuilderStep({ step }: { step: SectionId }) {
 
   return (
     <section className="bd-section bd-step">
+      {/*
+        No step number here. It used to sit in a circle beside the title, which made it the
+        fourth place on one screen telling the user which step they were on — after the header
+        rail, the eleven-name navigation, and "Step 4 of 11" above this heading. `StepBar` is
+        the one that survived; a heading's job is to name the step, not to count it.
+      */}
       <div className="bd-head">
-        {/* Validated, not merely visited — see `stepReady.ts`. */}
-        <span className={`bd-num${stepReady(step, state).ready && state.sectionsDone.includes(step) ? " done" : ""}`}>
-          {stepReady(step, state).ready && state.sectionsDone.includes(step) ? "✓"
-            : lang === "ar" ? toArabicDigits(stepIndex(step) + 1) : stepIndex(step) + 1}
-        </span>
-        <div>
-          {/* An h1 per step, not an h2 under a page-level h1: each step IS its own page,
-              and a page whose only heading is a site name has no on-page signal at all. */}
-          <h1 className="bd-title">{copy.sections[step]}</h1>
-          <p className="bd-sub">{copy.subs[step]}</p>
-        </div>
+        {/* An h1 per step, not an h2 under a page-level h1: each step IS its own page, and a
+            page whose only heading is a site name has no on-page signal at all. */}
+        <h1 className="bd-title">{copy.sections[step]}</h1>
+        <p className="bd-sub">{copy.subs[step]}</p>
       </div>
 
       <div className="bd-body">
@@ -102,15 +100,29 @@ export default function BuilderStep({ step }: { step: SectionId }) {
         )}
       </div>
 
-      <div className="bd-step-foot">
-        {back ? (
-          <button className="bd-back" onClick={() => goto(back, false)}>← {t.back}</button>
-        ) : (
-          <Link className="bd-back" href={builderHome(lang)}>← {t.start}</Link>
-        )}
-        <button onClick={onContinue} className="btn-accent rounded-xl px-5 py-2.5 text-sm font-bold">
-          {forward ? t.cont : t.done}
-        </button>
+      {/*
+        The action bar is FIXED, not the last thing in the scroll flow.
+        
+        Back and Continue are the two controls a step exists to reach, and in the flow they sat
+        below the form — so on a long step they were off screen, and on iOS Safari the browser's
+        own bottom bar sat on top of them when they were not. Fixed to the bottom with
+        `safe-area-inset-bottom`, with the page reserving exactly its height beneath the content
+        (`--bd-bar` in build.css), they are reachable on every step at every scroll position and
+        cover nothing.
+
+        The arrow direction follows the writing direction: `←` on an Arabic page points forward.
+      */}
+      <div className="bd-actions">
+        <div className="bd-actions-in">
+          {back ? (
+            <button className="bd-back" onClick={() => goto(back, false)}>{arrowBack} {t.back}</button>
+          ) : (
+            <Link className="bd-back" href={builderHome(lang)}>{arrowBack} {t.start}</Link>
+          )}
+          <button onClick={onContinue} className="bd-continue">
+            {forward ? t.cont : t.done}
+          </button>
+        </div>
       </div>
     </section>
   );

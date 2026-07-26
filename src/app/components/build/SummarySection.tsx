@@ -24,7 +24,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useAiTask } from "./useAiTask";
 import { useBuilder } from "./BuilderProvider";
 import { track } from "@vercel/analytics";
-import AiOrb from "../AiOrb";
+import BrandOrb from "../BrandOrb";
 import AskAi from "./AskAi";
 import {
   type BuilderState, type Item, newItem, pending, summaryBasis,
@@ -308,7 +308,7 @@ export default function SummarySection({
         className="flex items-center gap-2 rounded-full px-3 text-xs font-bold"
         style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
       >
-        <AiOrb size={20} thinking={ai.busy} />
+        <BrandOrb variant="button" size={20} busy={ai.busy} />
         {ai.busy ? c.stop : offered.length || confirmed ? c.rewrite : c.write}
       </button>
       {/* Every non-success state, worded once by the hook — so a rate limit here reads the
