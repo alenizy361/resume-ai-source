@@ -218,5 +218,62 @@ console.log("\n── a scan that cannot be read has somewhere to go ──");
   ok("a too-short paste is refused with its own message", /pasteTooShort/.test(src));
 }
 
+/* ── reading a scan or a photo, and the promise it costs ── */
+
+console.log("\n── the OCR door is separate, consented, and honest ──");
+
+/*
+ * The upload card promises "no AI provider sees the file, and it is not saved". That sentence is why
+ * someone uploads a CV carrying their national ID. `/api/ocr` breaks it — the file itself goes to
+ * Anthropic — so the only way to add OCR without making the card a lie is a second door the user
+ * chooses, with its own sentence, visible before the click.
+ *
+ * These assertions are about that structure, not about accuracy. Accuracy is `?live=1`'s liveOcr probe.
+ */
+{
+  const panel = readFileSync("app/components/build/ImportPanel.tsx", "utf8");
+  const route = readFileSync("app/api/ocr/route.ts", "utf8");
+  const lib = readFileSync("app/lib/ocr.ts", "utf8");
+
+  ok("the OCR route exists and is its own route", route.length > 0);
+  ok("the text extractor still promises no AI sees the file",
+    /no AI provider sees the file/.test(panel) && /لا يراه أي مزوّد ذكاء اصطناعي/.test(panel));
+  ok("and the OCR button says outright that this one does, in both languages",
+    /sends the file itself to Anthropic/.test(panel) && /يُرسل الملف نفسه إلى Anthropic/.test(panel));
+
+  /* Never automatic. A failed read must not silently trade a promise the user has been given. */
+  ok("OCR is never triggered by a failed read",
+    !/catch[\s\S]{0,200}readAsImage/.test(panel));
+  ok("it needs its own click", /imageInput\.current\?\.click\(\)/.test(panel));
+  /* Its own picker: one input with the union of both accepts would let a DOCX reach a vision model
+     and bill for the privilege. */
+  ok("it has its own file input, not the extractor's", (panel.match(/type="file"/g) || []).length === 2);
+
+  /* One code path, or the probe tests a copy of the route instead of the route. */
+  ok("route and health probe share one transcribe()",
+    /transcribe\(buf, isPdf/.test(route)
+    && /export async function transcribe\(/.test(lib));
+  ok("the prompt forbids inventing anything",
+    /Never add a job, a date, an employer/.test(lib) && /transcription, not writing/.test(lib));
+  ok("and it keeps the original language", /Arabic stays Arabic/.test(lib));
+
+  /* The transcription is the user's employment history — it must never be logged. */
+  ok("the route logs tokens and cost, never the text",
+    /input: r\.inputTokens/.test(route) && !/r\.text\b[^)]*console/.test(route));
+
+  /* HEIC is what an iPhone shoots. Telling that user "unsupported file" is useless; tell them what
+     to do instead. */
+  ok("HEIC gets its own instruction rather than a generic refusal",
+    /HEIC/.test(route) && /screenshot/.test(route));
+
+  /* Paying per call means a tighter limit than the free text path. */
+  ok("the paid route is rate-limited more tightly than the free one",
+    /allowShared\(`ocr:\$\{clientIp\(req\)\}`, 6,/.test(route));
+  ok("and it caps the upload size", /4 \* 1024 \* 1024/.test(route));
+
+  /* Whatever comes back is still only a suggestion: it lands on the same review screen. */
+  ok("an OCR read goes through the same ingest() as an upload", /ingest\(String\(data\?\.text \|\| ""\), "ocr"\)/.test(panel));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

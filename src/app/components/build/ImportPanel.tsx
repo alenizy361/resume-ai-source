@@ -34,6 +34,9 @@ const C = {
   en: {
     have: "I already have a CV",
     haveSub: "PDF, Word or text. Your file is sent to our server only to read its text — no AI provider sees the file, and it is not saved. We then show you what we understood, and you keep what is right.",
+    ocrOpen: "Read it as an image with AI",
+    ocrWhy: "For a scan or a phone photo there is no text to extract, so this one sends the file itself to Anthropic to be transcribed. That is different from the line above, which is why it is a separate button. The file is not stored, and nothing reaches your CV until you approve it.",
+    ocrBusy: "Reading the image…",
     pick: "Choose a file",
     reading: "Reading…",
     tooLittle: "We could not read enough from that file. It may be a scan or a photo rather than text — paste the words in below, or fill the form and we will suggest as you go.",
@@ -64,6 +67,9 @@ const C = {
   ar: {
     have: "لديّ سيرة ذاتية بالفعل",
     haveSub: "PDF أو Word أو نص. يُرسَل ملفك إلى سيرفرنا لقراءة نصه فقط — لا يراه أي مزوّد ذكاء اصطناعي، ولا يُحفَظ. ثم نعرض لك ما فهمناه، وتُبقي أنت الصحيح.",
+    ocrOpen: "اقرأها كصورة بالذكاء الاصطناعي",
+    ocrWhy: "الملف الممسوح أو المصوَّر بالجوال لا يحتوي نصاً يُستخرج، فهذا الخيار يُرسل الملف نفسه إلى Anthropic لنسخ ما فيه. هذا يختلف عن السطر بالأعلى، ولهذا هو زر منفصل. لا يُحفَظ الملف، ولا يدخل شيء سيرتك قبل أن تعتمده.",
+    ocrBusy: "يقرأ الصورة…",
     pick: "اختر ملفاً",
     reading: "يقرأ…",
     tooLittle: "لم نستطع قراءة ما يكفي من هذا الملف. قد يكون صورة ممسوحة أو تصويراً لا نصاً — الصق الكلام في المربع بالأسفل، أو اكمل النموذج وسنقترح عليك أثناء التعبئة.",
@@ -109,6 +115,8 @@ export default function ImportPanel({
   const [picks, setPicks] = useState<Picks>({ roles: [], skills: true, education: true, certs: true, langs: true });
   const [showUnread, setShowUnread] = useState(false);
   const [showPaste, setShowPaste] = useState(false);
+  const [ocrBusy, setOcrBusy] = useState(false);
+  const imageInput = useRef<HTMLInputElement>(null);
   const [pasted, setPasted] = useState("");
   const [done, setDone] = useState(false);
   const input = useRef<HTMLInputElement | null>(null);
@@ -146,10 +154,11 @@ export default function ImportPanel({
    * same review screen with the same ticks and the same budget warnings. A parallel paste path is
    * how one of them quietly stops honouring a rule the other one does.
    *
-   * `source` only reaches analytics, so an operator can tell how often the upload fails and the
-   * paste rescues it — which is the number that says whether scanned CVs are a real problem here.
+   * `source` only reaches analytics, so an operator can tell how often the upload fails and which
+   * door rescued it — the paste box or the vision read. That ratio is the number that says whether
+   * scanned CVs are a real problem in this market, and how much the OCR path is actually costing.
    */
-  function ingest(text: string, source: "file" | "paste") {
+  function ingest(text: string, source: "file" | "paste" | "ocr") {
     const cv = parseCv(text);
     if (!worthImporting(cv)) { setErr(c.tooLittle); setShowPaste(true); return; }
     setParsed(cv);
@@ -174,6 +183,29 @@ export default function ImportPanel({
       /* A file that could not be read is exactly when the paste box earns its place. */
       setShowPaste(true);
     } finally { setBusy(false); }
+  }
+
+  /**
+   * The scan/photo path: send the FILE to a vision model and transcribe it.
+   *
+   * Deliberately never automatic. `read()` failing does not trigger this, because the upload card
+   * promises no AI provider sees the file and that promise has to survive a failed read — the user
+   * chooses to trade it, knowing what they are trading, or the sentence above the button is false.
+   */
+  async function readAsImage(file: File) {
+    setErr(""); setOcrBusy(true); setParsed(null); setDone(false);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/ocr", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(String(data?.error || "We could not read that file."));
+      ingest(String(data?.text || ""), "ocr");
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : c.tooLittle);
+      /* Still offer the paste box: OCR failing is exactly when typing it out is the way through. */
+      setShowPaste(true);
+    } finally { setOcrBusy(false); }
   }
 
   /** No upload, no request, no model call — `parseCv` runs here. Pasting costs nothing. */
@@ -224,6 +256,17 @@ export default function ImportPanel({
           const f = e.target.files?.[0];
           e.target.value = "";     // so picking the same file twice re-reads it
           if (f) read(f);
+        }}
+      />
+      {/* Its own picker, because it accepts images the text extractor cannot use and refuses the
+          DOCX the text extractor prefers. One input with a union of both accepts would let someone
+          send a Word file to a vision model and pay for the privilege. */}
+      <input
+        ref={imageInput} type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,image/*" hidden
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = "";
+          if (f) readAsImage(f);
         }}
       />
       <button
@@ -282,6 +325,24 @@ export default function ImportPanel({
         It costs nothing to use: `parseCv` runs in the browser, so there is no upload, no request and
         no model call.
       */}
+      {!parsed && (
+        <div className="mt-4">
+          {/*
+            The consent sentence sits ABOVE the button and is always visible — not behind a tooltip,
+            not revealed on tap. The card's own promise is that no AI provider sees the file; this is
+            the one action that changes it, so the change is stated before the click, not after.
+          */}
+          <p className="text-xs" style={{ color: "var(--faint)" }}>{c.ocrWhy}</p>
+          <button
+            onClick={() => imageInput.current?.click()}
+            disabled={ocrBusy || busy}
+            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+          >
+            {ocrBusy ? c.ocrBusy : c.ocrOpen}
+          </button>
+        </div>
+      )}
+
       {!parsed && !showPaste && (
         <button
           onClick={() => setShowPaste(true)}

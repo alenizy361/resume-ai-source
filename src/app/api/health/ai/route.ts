@@ -9,6 +9,7 @@ import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
 import { CHARS_PER_TOKEN, MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
 import { countTokensReport } from "@/app/lib/aiTokenCount";
+import { sampleTextPdf, transcribe } from "@/app/lib/ocr";
 import { OUTPUT_SCHEMA, schemaRequestFor, structuredOutputsEnabled } from "@/app/lib/aiSchemas";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
@@ -292,6 +293,8 @@ export async function GET(req: NextRequest) {
     tokens: null as unknown,
     /** Whether the API accepts our JSON Schemas. Null unless `?live=1`. */
     liveSchema: null as unknown,
+    /** Whether a scanned/photographed CV can actually be read. Null unless `?live=1`. */
+    liveOcr: null as unknown,
   };
 
   /*
@@ -428,6 +431,47 @@ export async function GET(req: NextRequest) {
       report.liveSchema = { ...(await probeSchemas(suggestModel)), ms: Date.now() - t3 };
     } else {
       report.liveSchema = { ran: false, note: "No Anthropic key on this deployment — nothing to probe." };
+    }
+
+    /*
+     * ── can a scanned CV actually be read? ──
+     *
+     * `/api/ocr` is the only route a user reaches by choosing to send their FILE to a model, and it is
+     * reachable solely from a failure state — someone whose upload came back unreadable. That is the
+     * least-trodden path in the product and the one most likely to rot unnoticed.
+     *
+     * So the probe builds a small PDF in code, carrying a sentence it knows, and pushes it through the
+     * SAME `transcribe()` the upload uses. What it proves is the pipeline: document block accepted,
+     * page rasterised, words returned. What it does NOT prove is Arabic quality — Helvetica cannot set
+     * Arabic, so the sample is Latin, and the note below says so rather than letting a green tick
+     * imply more than it earned.
+     */
+    if (suggestKeyPresent) {
+      const t4 = Date.now();
+      const phrase = "Radiology Technologist King Fahad Hospital Riyadh";
+      const r = await transcribe(sampleTextPdf(phrase), "application/pdf", { timeoutMs: 25_000 });
+      /* Word-level rather than exact-string: a transcription may legitimately differ in spacing or
+         line breaks, and demanding a byte match would fail on a correct read. */
+      const words = phrase.split(" ");
+      const got = r.text.toLowerCase();
+      const found = words.filter((w) => got.includes(w.toLowerCase()));
+      report.liveOcr = {
+        ran: true, model: r.model, status: r.status, ok: r.ok,
+        wordsExpected: words.length, wordsFound: found.length,
+        missed: words.filter((w) => !got.includes(w.toLowerCase())),
+        inputTokens: r.inputTokens, outputTokens: r.outputTokens,
+        estimatedUsd: r.estimatedUsd, ms: Date.now() - t4,
+        ...(r.error ? { error: r.error } : {}),
+        verdict: !r.ok
+          ? "The provider refused the document. Scanned and photographed CVs cannot be read — /api/ocr is down."
+          : found.length === words.length
+            ? "A code-generated PDF was transcribed word for word. The document pipeline works. This says "
+              + "nothing about ARABIC transcription quality: the sample is Latin because the embedded font "
+              + "cannot set Arabic. Judge that from a real photograph."
+            : `Only ${found.length} of ${words.length} words came back. The pipeline runs but the read is unreliable.`,
+      };
+    } else {
+      report.liveOcr = { ran: false, note: "No Anthropic key on this deployment — nothing to probe." };
     }
 
     report.ok = keyPresent && suggestKeyPresent && out.ok === true && sug.ok === true;
