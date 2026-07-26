@@ -54,10 +54,26 @@ export default function StepGate({ step }: { step: SectionId }) {
   if (gate.ready) return null;
 
   /*
+   * Never blame the step you are standing on.
+   *
+   * `stepReady("target", …)` legitimately reports `no-title` — the Target step's readiness IS
+   * whether its own fields are filled, and later steps depend on that answer. But rendering it
+   * HERE produced, on step 1 of 11, a warning saying "the job title you are aiming for is
+   * missing" above the empty Job title field, with a button offering to take the user to the
+   * page they were already on. This banner exists to explain a dependency on an EARLIER step;
+   * a field on this screen is explained by the field.
+   *
+   * So the current step's own entries are dropped, and if nothing else remains the banner does
+   * not render at all.
+   */
+  const external = gate.missing.filter((m) => m.step !== step);
+  if (external.length === 0) return null;
+
+  /*
    * The steps to link back to, deduplicated and in the order they were reported. A step missing
    * three fields from one earlier step gets one link, not three.
    */
-  const targets = [...new Set(gate.missing.map((m) => m.step))];
+  const targets = [...new Set(external.map((m) => m.step))];
   const c = C[lang];
 
   return (
@@ -69,7 +85,7 @@ export default function StepGate({ step }: { step: SectionId }) {
 
       {/* The FIELD, not the step. "Target job is incomplete" makes someone open a form and hunt. */}
       <ul className="mt-2 space-y-1 text-xs" style={{ color: "var(--muted)" }}>
-        {gate.missing.map((m) => <li key={`${m.step}:${m.code}`}>· {missingLabel(m.code, lang)}</li>)}
+        {external.map((m) => <li key={`${m.step}:${m.code}`}>· {missingLabel(m.code, lang)}</li>)}
       </ul>
 
       <div className="mt-3 flex flex-wrap gap-2">

@@ -57,7 +57,10 @@
   .build-root * { scroll-behavior: auto !important; }
 }
 
-.build-root .bd-head { display: flex; align-items: center; gap: 10px; }
+/* A block, not a flex row. It was `display: flex` because it held a step-number circle
+   beside the text; with the number gone, the title and the subtitle became two columns
+   sitting side by side and the h1 was squeezed into half the width. */
+.build-root .bd-head { display: block; }
 .build-root .bd-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em; }
 .build-root .bd-sub { margin-top: 2px; font-size: .8rem; color: var(--muted); }
 .build-root .bd-body { margin-top: 16px; }
@@ -409,11 +412,31 @@
   inset-inline: 0;
   bottom: 0;
   z-index: var(--z-actionbar);
-  background: linear-gradient(180deg, rgba(7, 5, 20, 0.72), rgba(7, 5, 20, 0.97));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /*
+   * Opaque, not translucent.
+   *
+   * This was a gradient from `rgba(7,5,20,0.72)` plus a backdrop blur, and on a phone the form
+   * label underneath was plainly legible through it — a field's text reading through the
+   * Continue button, which is the "buttons cover the fields" complaint rather than a fix for it.
+   * A blur cannot be relied on either: it is skipped under some GPU-blocklist and
+   * reduced-transparency settings, and then the bar is simply 28% transparent.
+   *
+   * So the bar is a solid surface. The gradient above it fades the content into the bar's edge
+   * instead of trying to see through it.
+   */
+  background: #0a0718;
   border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
+}
+/* A 20px fade above the bar: the content stops softly instead of being cut by a rule. */
+.build-root .bd-actions::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -20px;
+  height: 20px;
+  background: linear-gradient(180deg, transparent, #0a0718);
+  pointer-events: none;
 }
 .build-root .bd-actions-in {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;

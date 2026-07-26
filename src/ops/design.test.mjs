@@ -314,6 +314,17 @@ for (const prof of [PROFILES[1], PROFILES[4], PROFILES[6]]) {
         if (er.height === 0) continue;
         if (!lowest || er.bottom > lowest.bottom) lowest = er;
       }
+      /*
+       * "Is anything visible through the bar?" answered by hit-testing INSIDE it: a point in the
+       * middle of the bar, away from the two buttons, must resolve to the bar or its own wrapper —
+       * never to a form field that happens to be underneath.
+       */
+      const probeX = Math.round(r.left + r.width / 2);
+      const probeY = Math.round(r.top + Math.min(12, r.height / 3));
+      const under = document.elementFromPoint(probeX, probeY);
+      const inBar = under ? bar.contains(under) || under === bar : false;
+      const bg = cs.backgroundColor;
+      const alpha = /rgba\([^)]*,\s*([\d.]+)\)/.exec(bg);
       return {
         position: cs.position,
         z: cs.zIndex,
@@ -323,9 +334,40 @@ for (const prof of [PROFILES[1], PROFILES[4], PROFILES[6]]) {
         padBottom: cs.paddingBottom,
         overlapsField: lowest ? lowest.bottom > r.top + 1 : false,
         docPad: getComputedStyle(document.querySelector(".bd-main")).paddingBottom,
+        bg,
+        opaque: !alpha || Number(alpha[1]) >= 1,
+        seeThrough: !inBar,
+        seeThroughWhat: inBar ? "" : ((under?.className && String(under.className).slice(0, 40)) || under?.tagName || "none"),
       };
     });
     ok(`${prof.name}: the action bar is fixed`, act?.position === "fixed", act?.position);
+    /*
+     * OPAQUE. Two assertions this suite did not have, and both caught a real defect in a
+     * screenshot rather than in a test — which is the whole reason they are here now.
+     *
+     * The bar was `rgba(7,5,20,0.72)` plus a backdrop blur, and a form label underneath was
+     * plainly legible through it: a field's text reading through the Continue button. A blur is
+     * also not something to rely on — it is skipped under some GPU-blocklist and
+     * reduced-transparency settings, and then the bar is simply 28% transparent.
+     */
+    ok(`${prof.name}: the action bar is opaque`, act?.opaque === true, act?.bg);
+    ok(`${prof.name}: nothing shows through the action bar`, act?.seeThrough === false, act?.seeThroughWhat);
+    /*
+     * And the step heading must own the width. `.bd-head` was `display: flex` because it once
+     * held a step-number circle beside the text; with the number removed the title and the
+     * subtitle became two side-by-side columns and the h1 was squeezed into half the space.
+     */
+    const head = await page.evaluate(() => {
+      const h = document.querySelector(".bd-step h1");
+      const box = document.querySelector(".bd-form") || document.querySelector(".bd-step");
+      if (!h || !box) return null;
+      return {
+        ratio: h.getBoundingClientRect().width / box.getBoundingClientRect().width,
+        display: getComputedStyle(h.parentElement).display,
+      };
+    });
+    ok(`${prof.name}: the step heading spans the form, not half of it`,
+      (head?.ratio ?? 0) > 0.6, `${Math.round((head?.ratio ?? 0) * 100)}% (parent ${head?.display})`);
     ok(`${prof.name}: the action bar sits at the bottom of the viewport`,
       Math.abs((act?.bottom ?? 0) - (act?.viewport ?? 0)) <= 2, `${act?.bottom} vs ${act?.viewport}`);
     ok(`${prof.name}: the action bar covers no field`, act?.overlapsField === false);
