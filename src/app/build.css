@@ -32,28 +32,46 @@
    leftover that makes a live control look dead later. */
 
 /*
- * The step transition: 180ms, opacity and a 4px lift, and nothing else.
+ * The step transition — the most repeated moment in the product, and it has now been wrong twice
+ * in opposite directions.
  *
- * It used to be `bdReveal` — 1100 milliseconds of `opacity` + `translateY(10px)` + an
- * animated `filter: blur(6px)`. Three problems in one rule. It is four to seven times
- * longer than the 150–250ms this brief asks for, so a step change read as waiting rather
- * than as arriving. It animated `filter`, which is re-rasterised every frame, so the
- * cheapest possible transition was made the most expensive one. And it was `both`, which
- * holds the FROM state before the animation starts — meaning the step was invisible until
- * the animation began.
+ * FIRST it was `bdReveal`: 1100ms of opacity + translateY(10px) + an animated `filter: blur(6px)`.
+ * Four to seven times longer than the 150–250ms the brief asks for, so a step change read as waiting
+ * rather than arriving; it animated `filter`, which is re-rasterised every frame, making the cheapest
+ * possible transition the most expensive one; and it was `both`, which holds the FROM state before
+ * the animation starts, so the step was invisible until it began.
  *
- * `bd-step` carries it directly rather than through a `just-opened` class, because the
- * step is a route now: mounting IS the transition, so nothing has to decide when to add
- * a class or when to take it away.
+ * THEN it was corrected to 180ms and 4px — and the correction overshot. Reported as "pages appear and
+ * disappear suddenly, nothing prepares you", which was accurate: four pixels over 180ms on a phone is
+ * not a subtle animation, it is an absent one. Measured rather than assumed — `bdStepIn` fires on
+ * every navigation, so nothing was broken. It simply could not be seen.
+ *
+ * NOW: 240ms and 12px, on the decelerating curve so it settles into place instead of sliding to a
+ * stop. Still inside the brief's range, still transform and opacity only — nothing here can move a
+ * box or cost CLS. The difference from 4px is the difference between a change you notice and one you
+ * do not, which is the entire job.
+ *
+ * `bd-step` carries it directly rather than through a `just-opened` class, because the step is a
+ * route now: mounting IS the transition, so nothing has to decide when to add a class or remove it.
  */
 @keyframes bdStepIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: none; }
 }
-.build-root .bd-step { animation: bdStepIn .18s var(--ez); }
+.build-root .bd-step { animation: bdStepIn .24s var(--ez); }
+
+/*
+ * The title leads by a hair.
+ *
+ * 60ms behind the section, so the eye lands on the name of the step it has arrived at before the
+ * fields under it settle. One stagger, not a cascade — a screen where six things arrive in sequence
+ * is a screen you wait through, which is the fault the 1100ms version had.
+ */
+.build-root .bd-step .bd-head { animation: bdStepIn .24s .06s var(--ez) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .build-root .bd-step { animation: none; }
+  .build-root .bd-step,
+  .build-root .bd-step .bd-head { animation: none; }
   .build-root * { scroll-behavior: auto !important; }
 }
 
