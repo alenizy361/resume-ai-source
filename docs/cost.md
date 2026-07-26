@@ -69,7 +69,7 @@ is 75% reads — below the 1-hour break-even, and far below with any realistic s
 hour**, and `/api/health/ai` will say so itself — the `cacheDecision` field computes the verdict from
 live numbers rather than repeating this paragraph.
 
-### The three AI wins that have no trade-off — all shipped
+### The AI wins that have no trade-off — all shipped
 
 **A cancelled generation is no longer billed.** `useAiTask` single-flights by aborting its own fetch,
 but aborting a fetch only closes the browser's end: the route went on waiting for Anthropic and paid
@@ -92,6 +92,29 @@ reasoning tokens nobody sees, behind a form field with a 30-second timeout, buys
 instead of quality. Fable 5 and Mythos 5 reject an explicit disable, so `outputBudget()` gives those
 4× output headroom instead — unreachable today, but `ANTHROPIC_MODEL_REASONING` is an environment
 variable and a 400 behind a form field is not an acceptable way to find that out.
+
+**And the same two rules on every Anthropic route, not just the one that was audited.** All four
+call sites — `/api/generate`, `/api/translate`, `/api/optimize`, `/api/cover-letter` — are now checked
+by one loop in `ops/aiwiring.test.mjs`, because a fix applied in one route is not the product learning
+anything. Two defects it found:
+
+- **`/api/translate` sent `temperature: 0` unconditionally, and escalates to Sonnet 5.** Every
+  escalated translation was answering **HTTP 400** — the route logs `http-400` and breaks, so the
+  retry that exists to rescue a bad translation had never once run. This is precisely the fault that
+  produced `acceptsTemperature` in the first place; the fix landed in `/api/generate` and this route
+  kept the bug. A 400 bills nothing directly, but a user whose translation silently fails retries the
+  whole document, and that does.
+- **`/api/optimize` and `/api/cover-letter` read `process.env.AI_MODEL || "claude-sonnet-5"`
+  unguarded.** `AI_MODEL` also names the *NVIDIA* model those routes default to, so setting it to
+  `meta/llama-4-maverick-…` — the correct value for their default provider — sends an NVIDIA id to
+  `api.anthropic.com` the moment `AI_PROVIDER=anthropic`. The result is a 404 that reads like an
+  outage. Both now go through `claudeModelOr`, which keeps a valid Claude id, falls back otherwise,
+  and logs the variable's *name* only.
+
+The temperature check counts occurrences inside the Anthropic request body and requires each to sit
+in an `acceptsTemperature` guard — scoped to that body, because the NVIDIA branches accept
+`temperature` perfectly well and a file-wide grep would teach the next person to delete a working
+parameter. Verified by reverting the fix and watching the assertion fail.
 
 **The shared cache key hashes meaning, not spelling.** `country` reaches the key as free text, so
 `"Saudi Arabia"`, `"السعودية"`, `"KSA"` and `"المملكة العربية السعودية"` produced **four separate

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromAnthropic } from "@/app/lib/usage";
-import { modelConfig, estimateCallCost } from "@/app/lib/aiModels";
+import {
+  modelConfig, estimateCallCost, acceptsTemperature, canDisableThinking, thinksByDefault,
+} from "@/app/lib/aiModels";
 import { extractJsonValue } from "@/app/lib/suggestShapes";
 import {
   type TranslationSource, type SourceItem,
@@ -154,13 +156,33 @@ async function callAnthropic(
         model,
         max_tokens: maxTokens,
         /*
-         * Zero temperature, unlike the suggestion routes.
+         * Zero temperature, unlike the suggestion routes — but only where it is accepted.
          *
-         * A suggestion benefits from variety — three summary options should differ. A translation of a
+         * A suggestion benefits from variety: three summary options should differ. A translation of a
          * confirmed fact has one right answer, and sampling around it is how the same term comes back
-         * two ways in one document.
+         * two ways in one document. So zero is the right value wherever it may be sent.
+         *
+         * It may not always be sent. The 4.6-and-later models reason by default and reject any
+         * temperature but 1, and this route's escalation goes to `cfg.reasoningModel` — Sonnet 5. So
+         * EVERY escalated translation was answering HTTP 400, and the route logs `http-400` and
+         * breaks: the retry that exists to rescue a bad translation had never once run. `/api/generate`
+         * hit this exact fault and grew `acceptsTemperature` for it; the fix was applied in one route
+         * and this one kept the bug.
+         *
+         * Dropping the parameter costs nothing here. The escalation model is the strong one, the
+         * output is validated on arrival, and consistency across a document comes from the glossary
+         * this route already builds, not from sampling.
          */
-        temperature: 0,
+        ...(acceptsTemperature(model) ? { temperature: 0 } : {}),
+        /*
+         * And reasoning off, for the same reason it is off in `/api/generate`: `max_tokens` caps
+         * thinking plus response text together, and `maxTokens` here is sized from the input length
+         * for the translation and nothing else. A thinking model would spend part of a CV's
+         * translation budget reasoning, bill it as output at the escalation rate, and truncate the
+         * document.
+         */
+        ...(thinksByDefault(model) && canDisableThinking(model)
+          ? { thinking: { type: "disabled" } } : {}),
         system: [{ type: "text", text: TRANSLATION_RULES, cache_control: { type: "ephemeral" } }],
         messages: [{ role: "user", content: message }],
       }),

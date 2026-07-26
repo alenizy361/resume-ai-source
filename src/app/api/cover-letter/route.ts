@@ -4,6 +4,7 @@ import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
+import { canDisableThinking, claudeModelOr, thinksByDefault } from "@/app/lib/aiModels";
 
 export const maxDuration = 300;
 
@@ -58,12 +59,27 @@ async function callNvidia(resume: string, jobDescription: string): Promise<strin
 async function callAnthropic(resume: string, jobDescription: string): Promise<string> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
-  const model = process.env.AI_MODEL || "claude-sonnet-5";
+  /* `AI_MODEL` is shared with the NVIDIA branch above, where an NVIDIA id is the correct value —
+     so it is validated as a Claude id here rather than forwarded into a 404. See `claudeModelOr`. */
+  const model = claudeModelOr(process.env.AI_MODEL, "claude-sonnet-5");
   const t0 = Date.now();
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "Content-Type": "application/json" },
-    body: JSON.stringify({ model, max_tokens: 900, messages: [{ role: "user", content: PROMPT(resume, jobDescription) }] }),
+    body: JSON.stringify({
+      model,
+      max_tokens: 900,
+      messages: [{ role: "user", content: PROMPT(resume, jobDescription) }],
+      /*
+       * Reasoning off. `max_tokens` caps thinking plus response text together, and 900 tokens is a
+       * cover letter with nothing to spare — a thinking model would spend part of it reasoning,
+       * bill that at $15/M, and truncate the letter mid-sentence. This output is prose the user
+       * reads, so a truncation here is not a retryable schema failure; it is a broken deliverable
+       * on a paid feature.
+       */
+      ...(thinksByDefault(model) && canDisableThinking(model)
+        ? { thinking: { type: "disabled" } } : {}),
+    }),
   });
   if (!res.ok) throw new Error(`Anthropic API ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const data = await res.json();

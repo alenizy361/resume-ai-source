@@ -24,7 +24,8 @@ import { readFileSync, existsSync } from "node:fs";
 import { TASKS, TASK_NAMES } from "../app/lib/aiTasks.ts";
 import { TASK_SCHEMA } from "../app/lib/aiPrompts.ts";
 import {
-  MAX_OUTPUT, acceptsTemperature, canDisableThinking, modelConfig, outputBudget, thinksByDefault,
+  MAX_OUTPUT, acceptsTemperature, canDisableThinking, claudeModelOr, modelConfig, outputBudget,
+  thinksByDefault,
 } from "../app/lib/aiModels.ts";
 
 let pass = 0, fail = 0;
@@ -191,6 +192,81 @@ console.log("\n── reasoning is off on the escalation model ──");
       thinksByDefault(m) === !acceptsTemperature(m));
   }
 }
+
+/* ─────────── every Anthropic call site, not just the one that was audited ─────────── */
+
+console.log("\n── the same two rules on every route that calls Anthropic ──");
+
+/*
+ * `/api/generate` grew `acceptsTemperature` because an escalated call answered HTTP 400 — and the
+ * fix was applied in that one route. `/api/translate` escalates to the same reasoning model and kept
+ * sending `temperature: 0`, so EVERY escalated translation was a 400 and the retry that exists to
+ * rescue a bad translation had never once run. One route learning a lesson is not the product
+ * learning it, which is what this loop is for.
+ */
+const ANTHROPIC_ROUTES = [
+  "app/api/generate/route.ts",
+  "app/api/translate/route.ts",
+  "app/api/optimize/route.ts",
+  "app/api/cover-letter/route.ts",
+];
+
+/**
+ * The request body of the Anthropic call in `src`, brace-matched.
+ *
+ * Scoped rather than whole-file on purpose: `/api/optimize` and `/api/cover-letter` also call
+ * NVIDIA, which accepts `temperature` perfectly well. A file-wide grep would flag the branch that
+ * is correct and teach the next person to delete a working parameter.
+ */
+function anthropicBody(src) {
+  const at = src.indexOf("api.anthropic.com");
+  if (at < 0) return "";
+  const start = src.indexOf("JSON.stringify({", at);
+  if (start < 0) return "";
+  let depth = 0;
+  for (let i = src.indexOf("{", start); i < src.length; i++) {
+    if (src[i] === "{") depth++;
+    else if (src[i] === "}" && --depth === 0) return src.slice(start, i + 1);
+  }
+  return "";
+}
+
+for (const path of ANTHROPIC_ROUTES) {
+  const src = readFileSync(path, "utf8");
+  const name = path.replace("app/api/", "/api/").replace("/route.ts", "");
+  const body = anthropicBody(src);
+
+  ok(`${name}: the Anthropic request body was found`, body.length > 0);
+  /* Every `temperature` in the body must be inside an `acceptsTemperature` guard — counted rather
+     than pattern-matched at line starts, so writing it inline on one line does not slip through. */
+  const temps = (body.match(/temperature:/g) ?? []).length;
+  const guarded = (body.match(/acceptsTemperature\(model\)\s*\?\s*\{\s*temperature:/g) ?? []).length;
+  ok(`${name}: every temperature on the Anthropic body is guarded`, temps === guarded,
+    `${temps} occurrence(s), ${guarded} guarded — a reasoning model rejects any temperature but 1`);
+
+  ok(`${name}: disables thinking where the model permits it`,
+    /thinksByDefault\(model\)\s*&&\s*canDisableThinking\(model\)/.test(src),
+    "max_tokens caps thinking + response text, and every budget here was sized on Haiku");
+
+  /* `AI_MODEL` names the NVIDIA model for the routes that default to NVIDIA, so forwarding it to
+     Anthropic unvalidated is a 404 that reads like an outage. */
+  if (/AI_MODEL/.test(src)) {
+    const anthropicSection = src.slice(src.indexOf("api.anthropic.com"));
+    ok(`${name}: does not hand a raw AI_MODEL to Anthropic`,
+      !/process\.env\.AI_MODEL\s*\|\|\s*"claude/.test(src) || /claudeModelOr/.test(src));
+    ok(`${name}: reads AI_MODEL through claudeModelOr`, /claudeModelOr\(process\.env\.AI_MODEL/.test(src)
+      || !anthropicSection.includes("AI_MODEL"));
+  }
+}
+
+/* And the guard must actually reject a non-Claude id rather than shrug. */
+ok("claudeModelOr rejects an NVIDIA id",
+  claudeModelOr("meta/llama-4-maverick-17b-128e-instruct", "claude-sonnet-5") === "claude-sonnet-5");
+ok("claudeModelOr keeps a valid Claude id",
+  claudeModelOr("claude-haiku-4-5", "claude-sonnet-5") === "claude-haiku-4-5");
+ok("claudeModelOr falls back on an empty value",
+  claudeModelOr(undefined, "claude-sonnet-5") === "claude-sonnet-5"
+  && claudeModelOr("  ", "claude-sonnet-5") === "claude-sonnet-5");
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

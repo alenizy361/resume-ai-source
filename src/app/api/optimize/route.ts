@@ -5,6 +5,7 @@ import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
+import { canDisableThinking, claudeModelOr, thinksByDefault } from "@/app/lib/aiModels";
 import { languageHonoured, LANGUAGE_RETRY } from "@/app/lib/resumeLang";
 
 /**
@@ -434,7 +435,9 @@ async function streamNvidia(
 async function callAnthropic(resume: string, jobDescription: string, extra = ""): Promise<string> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
-  const model = process.env.AI_MODEL || "claude-sonnet-5";
+  /* `AI_MODEL` also names the NVIDIA model this route defaults to, where a `meta/…` id is correct —
+     so it is validated as a Claude id here rather than sent to Anthropic as a 404. */
+  const model = claudeModelOr(process.env.AI_MODEL, "claude-sonnet-5");
   const t0 = Date.now();
 
   // Not streamed, so only the ceiling applies — but it applies, which it did not before.
@@ -451,6 +454,15 @@ async function callAnthropic(resume: string, jobDescription: string, extra = "")
       model,
       max_tokens: 4096,
       messages: [{ role: "user", content: PROMPT(resume, jobDescription) }],
+      /*
+       * Reasoning off — and note this is EXTENDED thinking, not the `{"t":"think"}` lines this route
+       * streams to the user. Those are the model's prose analysis, which is the product; this is
+       * internal reasoning nobody sees, billed as output at the model's output rate, and drawn from
+       * the same 4096-token budget that has to hold a full structured review. A rewritten resume plus
+       * keyword arrays is not a payload with room to spare.
+       */
+      ...(thinksByDefault(model) && canDisableThinking(model)
+        ? { thinking: { type: "disabled" } } : {}),
     }),
   });
 

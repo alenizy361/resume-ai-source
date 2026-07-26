@@ -149,6 +149,27 @@ function validClaudeId(v: string | undefined): string | null {
 }
 
 /**
+ * `raw` if it is a Claude id, `fallback` otherwise — for the routes that read `AI_MODEL` directly.
+ *
+ * `AI_MODEL` is shared by every route and every provider, so a value that is correct for NVIDIA is
+ * a 404 from Anthropic. `/api/suggest` documented that trap and guards it; `/api/cover-letter` and
+ * `/api/optimize` read `process.env.AI_MODEL || "claude-sonnet-5"` unguarded, which means setting
+ * `AI_MODEL=meta/llama-4-maverick-…` — a perfectly reasonable thing to do, since those routes
+ * default to NVIDIA — sends an NVIDIA id to `api.anthropic.com` the moment
+ * `AI_PROVIDER=anthropic`. The failure is a 404 that reads like an outage.
+ *
+ * Rejection is logged by NAME. A configured value may carry information its operator considers
+ * private, and the name is enough to fix it.
+ */
+export function claudeModelOr(raw: string | undefined, fallback: string, envName = "AI_MODEL"): string {
+  const ok = validClaudeId(raw);
+  if (raw?.trim() && !ok) {
+    console.error(`[ai] ignoring ${envName}: not a Claude model id (expected claude-…). Using ${fallback}.`);
+  }
+  return ok ?? fallback;
+}
+
+/**
  * Resolve the ladder from the environment, once per process.
  *
  * `ANTHROPIC_MODEL_SUGGEST` is honoured as the fast model because it is already set in
