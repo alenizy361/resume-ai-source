@@ -52,11 +52,13 @@ export interface ParsedCv {
  */
 const HEADINGS: Array<{ key: Section; re: RegExp }> = [
   { key: "summary", re: /^(professional\s+)?(summary|profile|objective|about)\b|^(الملخص|نبذة|الهدف|الملف)/i },
-  { key: "experience", re: /^(work\s+|professional\s+|employment\s+)?(experience|history|employment)\b|^(الخبرة|الخبرات|التاريخ الوظيفي|الخبرة العملية|الخبرات العملية)/i },
-  { key: "education", re: /^(education|academic|qualifications)\b|^(التعليم|المؤهلات|المؤهل العلمي)/i },
+  /* The Arabic alternates are not guesses. Each of these was measured leaking into `unread` — which
+     means its entire section was lost — on ordinary Saudi CVs. */
+  { key: "experience", re: /^(work\s+|professional\s+|employment\s+)?(experience|history|employment)\b|^(الخبرة|الخبرات|التاريخ الوظيفي|الخبرة العملية|الخبرات العملية|الخبرات الوظيفية|خبرات العمل|السجل الوظيفي|الخبرة المهنية|المسار المهني)/i },
+  { key: "education", re: /^(education|academic|qualifications)\b|^(التعليم|المؤهلات|المؤهل العلمي|المؤهل الدراسي|المؤهلات العلمية)/i },
   { key: "skills", re: /^(skills|technical skills|core competencies|competencies)\b|^(المهارات|الكفاءات)/i },
   { key: "certifications", re: /^(certifications?|licen[cs]es?|credentials|courses|training)\b|^(الشهادات|الرخص|الدورات|التدريب)/i },
-  { key: "languages", re: /^(languages)\b|^(اللغات)/i },
+  { key: "languages", re: /^(languages)\b|^(اللغات|إجادة اللغات|اجادة اللغات)/i },
 ];
 
 type Section = "summary" | "experience" | "education" | "skills" | "certifications" | "languages" | "header";
@@ -79,7 +81,13 @@ const MONTHS =
 const NOW = "present|current|now|to date|till date|الآن|حالياً|حاليا|حتى الآن";
 
 /** "Sep 2024", "09/2024", "2024" — one endpoint of a range. */
-const POINT = `(?:(?:${MONTHS})[a-z]*\\.?\\s*,?\\s*)?(?:\\d{1,2}[/.-])?(?:19|20)\\d{2}`;
+/*
+ * `14\d{2}` is the Hijri range, and it is not decoration in this market: Saudi CVs routinely date
+ * education in Hijri ("1445 - 1447هـ") while dating employment in Gregorian. Without it those lines
+ * carry no detectable date at all. Bounded to 14xx rather than any four digits, so a street number
+ * or a salary cannot be mistaken for a year.
+ */
+const POINT = `(?:(?:${MONTHS})[a-z]*\\.?\\s*,?\\s*)?(?:\\d{1,2}[/.-])?(?:(?:19|20)\\d{2}|14\\d{2})\\s*(?:هـ|هجري)?`;
 const RANGE = new RegExp(`(${POINT})\\s*(?:–|—|-|to|until|إلى|الى|حتى)\\s*(${POINT}|${NOW})`, "i");
 const SINGLE_NOW = new RegExp(`(${POINT})\\s*(?:–|—|-|to|until|إلى|الى|حتى)?\\s*(?:${NOW})`, "i");
 
@@ -170,8 +178,38 @@ function splitList(line: string): string[] {
 
 /* ───────────────────────── the parse ───────────────────────── */
 
+/**
+ * Make the text something the rest of this file can actually read.
+ *
+ * ── Arabic-Indic digits ──
+ *
+ * `POINT` matches years with `(?:19|20)\d{2}`, and `\d` in JavaScript is ASCII-only. A Saudi CV
+ * that writes `سبتمبر ٢٠٢٤ حتى الآن` therefore has NO detectable date: `splitDates` returns empty
+ * strings, the date text falls through into `location`, and if the line has no Latin separator
+ * `looksLikeRoleHeader` rejects it outright — so the job is not merely undated, it is not imported
+ * at all. Two Unicode ranges cover it: U+0660–0669 (Arabic-Indic) and U+06F0–06F9 (Extended, used
+ * in Persian/Urdu keyboards that are common on phones here).
+ *
+ * ── presentation forms ──
+ *
+ * Some PDF producers emit Arabic as the presentation-form blocks (U+FB50–FDFF, U+FE70–FEFF) —
+ * pre-shaped glyphs rather than the standard block every regex in this file is written against.
+ * `NFKC` folds them back. It is a no-op for text that is already normal.
+ *
+ * Both run once, on the raw string, so nothing downstream has to remember.
+ */
+export function normalizeForParsing(raw: string): string {
+  let t = String(raw || "");
+  try { t = t.normalize("NFKC"); } catch { /* older runtime — the digit map below still applies */ }
+  return t.replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => {
+    const code = d.charCodeAt(0);
+    const base = code >= 0x06F0 ? 0x06F0 : 0x0660;
+    return String(code - base);
+  });
+}
+
 export function parseCv(raw: string): ParsedCv {
-  const lines = String(raw || "")
+  const lines = normalizeForParsing(raw)
     .replace(/\r/g, "")
     .split("\n")
     .map((l) => l.replace(/\s+/g, " ").trim())

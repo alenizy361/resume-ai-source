@@ -33,9 +33,47 @@ export async function POST(req: NextRequest) {
     let text = "";
     try {
       if (name.endsWith(".pdf")) {
+        /*
+         * ══════════════════════════════════════════════════════════════════════════════
+         * `mergePages: false`, and the flag is the whole bug
+         * ══════════════════════════════════════════════════════════════════════════════
+         *
+         * This said `mergePages: true`, and unpdf's merge branch is:
+         *
+         *     text: mergePages ? texts.join("\n").replace(/\s+/g, " ") : texts
+         *
+         * `\s` includes `\n`. So a merged extraction returns the ENTIRE PDF as ONE LINE.
+         *
+         * `parseCv` is line-based from top to bottom: it splits on `\n`, `headingFor`
+         * rejects any line over 48 characters, `looksLikeRoleHeader` rejects any line
+         * over 120. Hand it one 4,000-character line and it finds zero headings, zero
+         * roles, zero skills — so `worthImporting` is false and the panel says the file
+         * could not be read.
+         *
+         * Which means EVERY text PDF failed, in every language, 100% of the time.
+         * Measured on a PDF generated with this repo's own jspdf:
+         *
+         *     mergePages: true   →  newlines 0,  roles 0, skills 0  →  rejected
+         *     mergePages: false  →  newlines 10, roles 2, skills 4   →  accepted
+         *
+         * The un-merged path keeps line breaks (it honours each item's `hasEOL`), and
+         * line 39's `Array.isArray(t)` branch was written for exactly this — it has been
+         * dead code all along.
+         *
+         * ── why nothing caught it ──
+         *
+         * The other consumer of this route is `/optimize`, which pours the text into a
+         * textarea where whitespace does not matter. `ops/importcv.test.mjs` tests
+         * `parseCv` against hand-written multi-line fixtures and never calls this route.
+         * And `ops/form-smoke.mjs` STUBS this endpoint with `lines.join("\n")` — the
+         * end-to-end test mocked away the one thing that was broken.
+         *
+         * `ops/pdfextract.test.mjs` now builds a real PDF and runs it through the real
+         * library, which is the test that did not exist.
+         */
         const { extractText, getDocumentProxy } = await import("unpdf");
         const pdf = await getDocumentProxy(new Uint8Array(buf));
-        const { text: t } = await extractText(pdf, { mergePages: true });
+        const { text: t } = await extractText(pdf, { mergePages: false });
         text = Array.isArray(t) ? t.join("\n") : t;
       } else if (name.endsWith(".docx")) {
         const mammoth = (await import("mammoth")).default;
@@ -69,6 +107,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Couldn't read any text from that file. If it's a scanned image, paste the text manually." },
         { status: 422 }
+      );
+    }
+
+    /*
+     * The invariant the `mergePages` bug violated, asserted where it can be seen.
+     *
+     * A CV of any length has line breaks. A long document with none means the extractor
+     * has flattened the page, and every line-based decision downstream is then working
+     * on one enormous line — which fails silently and blames the user's file.
+     *
+     * Logged rather than thrown: the text is still worth returning (the optimizer's
+     * textarea does not care about line breaks, and a partial import beats none). But it
+     * must not be invisible, because invisible is how it survived until a user complained.
+     */
+    if (text.length > 200 && !text.includes("\n")) {
+      console.error(
+        `[extract] no line breaks in ${text.length} chars from ${name.slice(-5)} — `
+        + "the extractor has flattened the document; parseCv will find nothing",
       );
     }
 

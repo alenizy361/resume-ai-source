@@ -40,6 +40,7 @@ const C = {
     pick: "Choose a file",
     reading: "Reading…",
     tooLittle: "We could not read enough from that file. It may be a scan or a photo rather than text — paste the words in below, or fill the form and we will suggest as you go.",
+    noStructure: "We read the text, but could not tell the sections apart. It is in the box below — add a blank line before each section heading and press the button again. This costs nothing and sends nothing anywhere.",
     pasteOpen: "Paste the text instead",
     pasteLabel: "Paste your CV text",
     pasteSub: "Nothing is uploaded and nothing is sent to a model — this is read in your browser.",
@@ -73,6 +74,7 @@ const C = {
     pick: "اختر ملفاً",
     reading: "يقرأ…",
     tooLittle: "لم نستطع قراءة ما يكفي من هذا الملف. قد يكون صورة ممسوحة أو تصويراً لا نصاً — الصق الكلام في المربع بالأسفل، أو اكمل النموذج وسنقترح عليك أثناء التعبئة.",
+    noStructure: "قرأنا النص، لكننا لم نستطع تمييز أقسامه. النص في المربع بالأسفل — اترك سطراً فارغاً قبل كل عنوان قسم ثم اضغط الزر مرة أخرى. هذا لا يكلّف شيئاً ولا يُرسل شيئاً إلى أي جهة.",
     pasteOpen: "الصق النص بدلاً من الملف",
     pasteLabel: "الصق نص سيرتك",
     pasteSub: "لا يُرفَع شيء ولا يُرسَل إلى أي نموذج ذكاء — تُقرأ داخل متصفحك.",
@@ -117,6 +119,14 @@ export default function ImportPanel({
   const [picks, setPicks] = useState<Picks>({ roles: [], skills: true, education: true, certs: true, langs: true });
   const [showUnread, setShowUnread] = useState(false);
   const [showPaste, setShowPaste] = useState(false);
+  /*
+   * Proven: this file HAS a text layer.
+   *
+   * Only ever set from a read that came back with real text. It hides the vision-model button,
+   * because OCR on a document whose text we already have is definitionally the wrong tool and
+   * charging for it is the complaint that produced this flag.
+   */
+  const [hasTextLayer, setHasTextLayer] = useState(false);
   const [ocrBusy, setOcrBusy] = useState(false);
   const imageInput = useRef<HTMLInputElement>(null);
   const [pasted, setPasted] = useState("");
@@ -162,7 +172,35 @@ export default function ImportPanel({
    */
   function ingest(text: string, source: "file" | "paste" | "ocr") {
     const cv = parseCv(text);
-    if (!worthImporting(cv)) { setErr(c.tooLittle); setShowPaste(true); return; }
+    if (!worthImporting(cv)) {
+      /*
+       * ── two very different failures, and they used to share one sentence ──
+       *
+       * `tooLittle` says the file "may be a scan or a photo rather than text", and directly under it
+       * sits a button that spends money sending the file to a vision model. That sentence is TRUE
+       * when the server got nothing. It is FALSE — and expensive — when the server read the text
+       * fine and only the section detection failed, which is what happens to a CV whose headings
+       * this parser does not recognise.
+       *
+       * The user in that case is being told their file is an image, and sold OCR for a document that
+       * has a perfectly good text layer. So the branch is split on the one fact that distinguishes
+       * them: did any text come back.
+       *
+       * The text is put INTO the paste box rather than discarded. It is already in the browser, it
+       * cost nothing to obtain, and one blank line before a heading is usually the whole fix — which
+       * the user can do here, for free, instead of paying for a transcription of text we already have.
+       */
+      const gotText = text.trim().length >= 200;
+      if (gotText) {
+        setErr(c.noStructure);
+        setPasted(text);
+        setHasTextLayer(true);
+      } else {
+        setErr(c.tooLittle);
+      }
+      setShowPaste(true);
+      return;
+    }
     setParsed(cv);
     setPicks({ roles: cv.roles.map(() => true), skills: true, education: true, certs: true, langs: true });
     setShowPaste(false);
@@ -182,7 +220,9 @@ export default function ImportPanel({
       ingest(String(data?.text || ""), "file");
     } catch (e) {
       setErr(e instanceof Error ? e.message : c.tooLittle);
-      /* A file that could not be read is exactly when the paste box earns its place. */
+      /* A file that could not be read is exactly when the paste box earns its place — and the one
+         case where the vision model is the honest answer, so the button comes back. */
+      setHasTextLayer(false);
       setShowPaste(true);
     } finally { setBusy(false); }
   }
@@ -329,7 +369,7 @@ export default function ImportPanel({
         It costs nothing to use: `parseCv` runs in the browser, so there is no upload, no request and
         no model call.
       */}
-      {!parsed && (
+      {!parsed && !hasTextLayer && (
         <div className="mt-4">
           {/*
             The consent sentence sits ABOVE the button and is always visible — not behind a tooltip,
