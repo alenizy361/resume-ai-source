@@ -69,6 +69,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "docx": "^9.7.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",

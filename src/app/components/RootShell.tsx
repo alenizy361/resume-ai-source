@@ -48,6 +48,7 @@
 import { PLANS, planPrice, formatPrice } from "@/app/lib/plans";
 import { BRAND, brandName } from "@/app/lib/brand";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import FunnelBeacon from "@/app/components/seo/FunnelBeacon";
 import SpaceBackdrop from "@/app/components/SpaceBackdrop";
 import "@/app/globals.css";
@@ -180,6 +181,7 @@ export default function RootShell({
         <SpaceBackdrop />
         {children}
         <Analytics />
+        <SpeedInsights />
         {/* Records which page the visitor arrived on, once per tab. Every later funnel step
             reports itself with that entry attached — see `lib/funnel.ts`. */}
         <FunnelBeacon />

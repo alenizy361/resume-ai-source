@@ -95,9 +95,10 @@ console.log("\n── the remaining Vercel-only couplings, named rather than dis
   const pkg = JSON.parse(read("package.json"));
   const vercelDeps = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies })
     .filter((d) => d.startsWith("@vercel/"));
-  /* `@vercel/analytics` degrades to silence off-platform: it stops reporting and nothing breaks. */
-  ok("the only Vercel dependency is analytics, which degrades to silence",
-    vercelDeps.length === 1 && vercelDeps[0] === "@vercel/analytics",
+  /* `@vercel/analytics` and `@vercel/speed-insights` degrade to silence off-platform: they stop reporting and nothing breaks. */
+  const expectedVercelDeps = ["@vercel/analytics", "@vercel/speed-insights"];
+  ok("the only Vercel dependencies are analytics and speed-insights, which degrade to silence",
+    vercelDeps.length === expectedVercelDeps.length && expectedVercelDeps.every(d => vercelDeps.includes(d)),
     vercelDeps.join(", "));
 
   /* Anything else reaching for Edge Config directly would be a fourth store nobody knew about. */
