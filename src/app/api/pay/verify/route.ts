@@ -171,6 +171,20 @@ export async function GET(req: NextRequest) {
          * is legitimate and must keep working; re-FULFILLING it is not.
          */
         const first = await claimTransaction(transactionNo, now);
+        /*
+         * ── the one behaviour change an operator has to know about ──
+         *
+         * `claimTransaction` fails CLOSED: if the store errors while claiming, it returns false and
+         * nothing is fulfilled. That is the right side to fail on — an un-sent receipt is
+         * recoverable by support, a second sign-in token emailed on the strength of a URL is not —
+         * but it does mean a store outage during a FIRST payment now leaves a charged customer
+         * ungranted, where before the outage would have been ridden through.
+         *
+         * So it is logged loudly and distinguishably. `claim-refused` on a transaction that has
+         * never been seen before is the line to alert on: it is a paid customer who needs a manual
+         * grant. The same line on a repeated transactionNo is the ordinary, intended case.
+         */
+        if (!first) console.warn("[pay] claim-refused — already fulfilled, or the store is down", { orderNumber, transactionNo });
         if (first) {
         try {
           const granted = await grantEntitlement(orderEmail, until);

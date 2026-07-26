@@ -38,9 +38,10 @@ import { applyVersionToProfile } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft } from "@/app/lib/draftStore";
 import {
-  endAnonymousVisit, listResumes, mayRestore, migrateLegacy, newResumeId, readResume, writeResume,
+  endAnonymousVisit, listResumes, mayRestore, migrateLegacy, newResumeId, readResume, titleOf, writeResume,
 } from "@/app/lib/resumeStore";
 import { useOwner } from "../useOwner";
+import { useServerSync } from "./useServerSync";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
   type BuilderState, type SectionId, EMPTY_BUILDER, migrateBuilder, cvLang,
@@ -327,6 +328,14 @@ export default function BuilderProvider({
     : written === state ? "saved"
     : "saving";
 
+  /*
+   * `flush` is defined before the sync hook and has to reach it, so the push goes through a ref.
+   * Reordering instead would mean the sync hook reading `lifecycle`, which is derived from state
+   * this block sets — a cycle. One indirection is the smaller cost, and it keeps `flush`'s identity
+   * stable, which matters because the `pagehide` listener below depends on it.
+   */
+  const syncPush = useRef<() => void>(() => {});
+
   /* Held while `invalidResume`, which is the whole point of having that state: the autosave used
      to overwrite an unparseable draft 450ms after arrival, and that draft was the only copy. */
   const flush = useCallback(() => {
@@ -336,6 +345,10 @@ export default function BuilderProvider({
       setWritten(live.current);
       setFailed(false);
     } catch { setFailed(true); }
+    /* After the local write, never instead of it, and deliberately not awaited — `flush` runs
+       synchronously before a navigation and on `pagehide`, where a round trip would either block
+       the navigation or be cancelled by it. */
+    syncPush.current();
   }, [resumeId, lang, lifecycle, owner]);
 
   useEffect(() => {
@@ -346,6 +359,45 @@ export default function BuilderProvider({
     }, 450);
     return () => clearTimeout(id);
   }, [state, lang, resumeId, hydrated, damagedDraft, owner]);
+
+  /*
+   * ── the durable copy ──
+   *
+   * Local stays the write path; this mirrors it to the account on a slower beat. See
+   * `useServerSync` for why that order is not a performance choice — a builder whose autosave
+   * depends on a network is a builder that stops saving on a train, and most visitors are
+   * anonymous and have no account to mirror to.
+   */
+  const sync = useServerSync({
+    resumeId, lang, state, title: titleOf(state), hydrated,
+    /* The same gate the local autosave uses: never write over a draft that would not parse. */
+    writable: mayWrite(lifecycle),
+  });
+  useEffect(() => { syncPush.current = sync.push; }, [sync.push]);
+
+  /*
+   * Adopt the account's copy — but ONLY if nothing has been typed since hydration.
+   *
+   * This is the "I built it on my phone and opened my laptop" case, and it is the one moment the
+   * server is allowed to overrule local. The guard is what keeps it safe: `hydratedState` is the
+   * document as the local draft produced it, and `state === hydratedState` is an identity check
+   * that can only still hold if no action has run. The instant the user types, the reducer makes a
+   * new object, this stops matching, and the server copy is declined rather than applied — their
+   * work survives, and the disagreement surfaces as a save conflict instead of as a silent
+   * replacement of what they just wrote.
+   */
+  const hydratedState = useRef<BuilderState | null>(null);
+  useEffect(() => { if (hydrated && hydratedState.current === null) hydratedState.current = state; }, [hydrated, state]);
+
+  useEffect(() => {
+    if (!sync.incoming) return;
+    const untouched = hydratedState.current !== null && state === hydratedState.current;
+    if (untouched && sync.incoming.state) {
+      dispatch({ t: "hydrate", state: sync.incoming.state });
+      hydratedState.current = sync.incoming.state;
+    }
+    sync.clearIncoming();
+  }, [sync, state]);
 
   const online = useOnline();
 

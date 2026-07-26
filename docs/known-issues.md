@@ -186,3 +186,13 @@ Files are generated in the browser. The `watermark` flag is persisted to localSt
 the optimizer result and rehydrated unverified — editing it yields clean files with no
 server call. F-4 closes the *hole*; it does not make the paywall server-enforced. Real
 enforcement needs a server-side render/export route.
+
+### O-13 · P2 · `ops/form-smoke.mjs` drives a retired route
+
+The harness targets `/build`, which is now a `permanentRedirect` to `/builder`, and then waits
+for copy that the builder start page no longer shows. It fails at its first step. Pre-existing
+drift — it is outside `npm test`, so nothing was watching it.
+
+Worth fixing rather than deleting: it is the one harness that runs with `/api/suggest` blocked,
+which is what proves the form still works with the AI switched off. That is the product's stated
+thesis and nothing else asserts it end to end.
