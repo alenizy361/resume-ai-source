@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           لتعبر سيرة {j.title} أنظمة التوظيف، تحتاج المهارات والكلمات المفتاحية الصحيحة بصياغة الإعلان الوظيفي. أدرج ما تملكه فعلاً فقط.
         </p>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">كلمات ATS الأساسية</h2>
           <div className="flex flex-wrap gap-2">
             {j.keywords.map((k) => (
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           </div>
         </section>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">المهارات الأساسية (Hard & Soft)</h2>
           <ul className="grid gap-2 sm:grid-cols-2">
             {j.skills.map((s) => (
@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           وهي أيضاً السبب في أنها لا تظهر في نتائج البحث العربية. الفقرات أدناه تُبنى من بيانات
           المهنة نفسها، فتختلف من صفحة لأخرى بدل أن تكون قالباً واحداً مكرراً.
         */}
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">كيف تكتب هذه المهارات في سيرتك</h2>
           <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             قائمة مهارات مرصوصة في أسفل الصفحة لا تُقنع أحداً — لا نظام الفرز ولا القارئ. أنظمة
@@ -110,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           </p>
         </section>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">أخطاء شائعة في سيرة {j.title}</h2>
           <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             <li>· سرد المهام بدل النتائج: «مسؤول عن…» تصف الوظيفة التي كانت موجودة، لا ما قدّمته أنت فيها.</li>
@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           </ul>
         </section>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">شهادات تعزّز فرصك</h2>
           <div className="flex flex-wrap gap-2">
             {j.certs.map((c) => (
@@ -142,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <Link href="/ar/optimize" className="btn-accent mt-5 inline-block px-8 py-3">افحص سيرتي مجاناً ←</Link>
         </div>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">روابط مفيدة</h2>
           <div className="flex flex-wrap gap-3">
             <Link href={`/ar/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>مثال سيرة {j.title} ←</Link>
@@ -151,7 +151,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </section>
 
         {siblings.length > 0 && (
-          <section className="mt-10">
+          <section className="t-enter mt-10">
             <h2 className="mb-4 text-2xl font-bold">مهارات مهن {j.category} الأخرى</h2>
             <div className="flex flex-wrap gap-2">
               {siblings.map((s) => (

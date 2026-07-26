@@ -68,7 +68,7 @@ export default function PricingPage() {
         </div>
       </nav>
 
-      <section className="ps-body relative max-w-3xl">
+      <section className="t-enter ps-body relative max-w-3xl">
         <div className="relative mb-12 text-center">
           <div className="chip mb-4">Pricing</div>
           <h1 className="text-4xl font-extrabold tracking-tight">Pay once. No subscription.</h1>

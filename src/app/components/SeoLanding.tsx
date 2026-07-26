@@ -37,7 +37,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         </div>
       </nav>
 
-      <section className="relative px-6 pb-16 pt-16">
+      <section className="t-enter relative px-6 pb-16 pt-16">
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <div className="chip mb-6">{eyebrow}</div>
           <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
@@ -51,7 +51,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 py-16">
+      <section className="t-enter mx-auto max-w-4xl px-6 py-16">
         <div className="grid gap-5 md:grid-cols-2">
           {bullets.map((b) => (
             <div key={b.title} className="card p-6">
@@ -64,7 +64,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
       </section>
 
       {methodology && (
-        <section className="px-6 py-16">
+        <section className="t-enter px-6 py-16">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-3 text-center text-3xl font-bold tracking-tight">How the score is calculated</h2>
             <p className="mx-auto mb-10 max-w-xl text-center text-sm" style={{ color: "var(--muted)" }}>
@@ -88,7 +88,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         </section>
       )}
 
-      <section className="px-6 py-16" style={{ background: "rgba(139,92,246,0.025)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+      <section className="t-enter px-6 py-16" style={{ background: "rgba(139,92,246,0.025)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-10 text-center text-3xl font-bold tracking-tight">Frequently asked questions</h2>
           <div className="space-y-4">
@@ -102,7 +102,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         </div>
       </section>
 
-      <section className="ps-body text-center">
+      <section className="t-enter ps-body text-center">
         <div className="relative z-10 mx-auto max-w-2xl">
           <h2 className="text-4xl font-extrabold tracking-tight">{ctaLine}</h2>
           <Link href="/optimize" className="btn-accent mt-8 inline-block px-10 py-4 text-lg">Scan my resume free →</Link>

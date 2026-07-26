@@ -78,36 +78,95 @@ for (const path of PAGES) {
   });
 
   const invisible = await page.evaluate(() =>
-    [...document.querySelectorAll(".card")]
+    [...document.querySelectorAll(".card, .t-enter")]
       .filter((el) => Number(getComputedStyle(el).opacity) < 0.99)
       .map((el) => `${el.tagName}.${el.className}`.slice(0, 70)));
-  const total = await page.evaluate(() => document.querySelectorAll(".card").length);
-  ok(`${path}: all ${total} cards visible after scrolling`, invisible.length === 0,
+  const total = await page.evaluate(() => document.querySelectorAll(".card, .t-enter").length);
+  ok(`${path}: all ${total} revealed elements visible after scrolling`, invisible.length === 0,
     invisible.slice(0, 3).join(" | "));
   await page.close();
+}
+
+/* ── 2b. and the reveal does not cost a compositor layer per item ──────────── */
+/*
+ * ── the check this suite did not have, and the bug it did not catch ──
+ *
+ * The first version of the scroll entrance was applied to every `.card`. All eighteen checks here
+ * passed: the motion ran, nothing was left invisible, the presses worked. It was still a crash.
+ *
+ * A scroll-driven animation with `fill: both` never finishes. It stays attached for the life of the
+ * page, so every element carrying one is promoted to its own compositor layer PERMANENTLY, on or off
+ * screen. On `/resume-examples` — fifty cards — that took the layer count from 11 to 62, and it was
+ * reported from a real phone as the browser closing the tab on open, which is what a phone running
+ * out of GPU memory looks like to the person it happens to.
+ *
+ * "Does it run" and "what does running it cost" are different questions, and this suite was only
+ * asking the first one. The reveal is now on the SECTION rather than on each card in it, and this
+ * budget is what stops it drifting back: a page may reveal its sections, not its items.
+ */
+{
+  /*
+   * Two numbers, because one of them is the real invariant and the other is only a smoke alarm.
+   *
+   * The absolute cap catches a runaway. What actually went wrong, though, was that the cost SCALED
+   * with the content: fifty cards meant fifty layers, so the busiest page in the catalogue was the
+   * most expensive one, and every new catalogue page made it worse. A page may reveal its sections —
+   * a fixed handful — and must never reveal its items.
+   */
+  const BUDGET = 32;
+  for (const path of ["/resume-examples", "/", "/resume-examples/registered-nurse", "/ar"]) {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await ctx.newPage();
+    const cdp = await ctx.newCDPSession(page);
+    await cdp.send("LayerTree.enable");
+    let layers = [];
+    cdp.on("LayerTree.layerTreeDidChange", (e) => { layers = e.layers || layers; });
+    await page.goto(`${BASE}${path}`, { waitUntil: "load" });
+    await page.waitForTimeout(900);
+    await page.evaluate(() => scrollTo(0, 600));
+    await page.waitForTimeout(900);
+    const { live, cards } = await page.evaluate(() => ({
+      live: document.getAnimations().length,
+      cards: document.querySelectorAll(".card").length,
+    }));
+    ok(`${path}: ${layers.length} compositor layers, under the budget of ${BUDGET}`,
+      layers.length > 0 && layers.length <= BUDGET, `${layers.length} layers, ${live} live animations`);
+    /* Only meaningful where there are enough items for the difference to show. */
+    if (cards >= 20) {
+      ok(`${path}: ${live} live animations for ${cards} cards — the cost does not follow the content`,
+        live < cards / 2, `${live} vs ${cards}`);
+    }
+    await ctx.close();
+  }
 }
 
 /* ── 3. a card actually animates on the way in ─────────────────────────────── */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  await page.goto(`${BASE}/resume-examples`, { waitUntil: "load" });
-  await page.waitForTimeout(300);
+  /* The landing page, not the catalogue index: the index is one section and it is all above the
+     fold, so there would be nothing below the fold to find and the check would report `found: false`
+     rather than a verdict. */
+  await page.goto(`${BASE}/`, { waitUntil: "load" });
+  await page.waitForTimeout(400);
 
+  /* A SECTION, not a card — the reveal moved up a level when the per-card version turned out to cost
+     a permanent compositor layer each. Pointing this at `.card` would now pass vacuously by finding
+     nothing hidden, which is the wrong kind of green. */
   const before = await page.evaluate(() => {
-    const cards = [...document.querySelectorAll(".card")];
-    const below = cards.find((c) => c.getBoundingClientRect().top > innerHeight + 50);
+    const els = [...document.querySelectorAll(".t-enter")];
+    const below = els.find((c) => c.getBoundingClientRect().top > innerHeight + 50);
     return below ? { opacity: getComputedStyle(below).opacity, found: true } : { found: false };
   });
-  ok("a card below the fold starts hidden", before.found && Number(before.opacity) < 0.2,
+  ok("a section below the fold starts hidden", before.found && Number(before.opacity) < 0.2,
     JSON.stringify(before));
 
-  const after = await page.evaluate(async () => {
-    const cards = [...document.querySelectorAll(".card")];
-    const below = cards.find((c) => c.getBoundingClientRect().top > innerHeight + 50);
+  const after = before.found ? await page.evaluate(async () => {
+    const els = [...document.querySelectorAll(".t-enter")];
+    const below = els.find((c) => c.getBoundingClientRect().top > innerHeight + 50);
     below.scrollIntoView({ block: "center" });
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 250));
     return getComputedStyle(below).opacity;
-  });
+  }) : "0";
   ok("and is fully visible once scrolled to", Number(after) > 0.99, `opacity ${after}`);
   await page.close();
 }

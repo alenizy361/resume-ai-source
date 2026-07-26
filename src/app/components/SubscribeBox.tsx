@@ -27,7 +27,7 @@ export default function SubscribeBox({ ar = false }: { ar?: boolean }) {
   }
 
   return (
-    <section className="px-6 py-14" style={{ borderTop: "1px solid var(--line)" }}>
+    <section className="t-enter px-6 py-14" style={{ borderTop: "1px solid var(--line)" }}>
       <div className="mx-auto max-w-xl text-center">
         <h2 className="text-2xl font-bold">{t.title}</h2>
         <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>

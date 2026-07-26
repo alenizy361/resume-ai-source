@@ -99,7 +99,7 @@ Sincerely,
         </p>
 
         {/* Structure */}
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">The 4-paragraph structure</h2>
           <div className="space-y-3">
             {[
@@ -120,7 +120,7 @@ Sincerely,
         </section>
 
         {/* Template */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-2 text-2xl font-bold">Fill-in template</h2>
           <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
             The <span style={{ color: "#fbbf24" }}>[brackets]</span> are yours to fill with real facts — the example achievements shown are illustrations of the level of specificity to aim for, not claims to copy.
@@ -131,13 +131,13 @@ Sincerely,
         </section>
 
         {/* Mistake */}
-        <section className="card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
+        <section className="t-enter card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
           <h2 className="font-bold" style={{ color: "#f87171" }}>⚠ The most common {j.title} mistake</h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.mistake}</p>
         </section>
 
         {/* CTA */}
-        <section className="card mt-10 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+        <section className="t-enter card mt-10 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
           <h2 className="text-2xl font-bold">Generate yours from the actual job posting</h2>
           <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>
             Paste your resume + the posting — the AI writes a tailored letter using only facts you provided. Free ATS scan included.
@@ -146,7 +146,7 @@ Sincerely,
         </section>
 
         {/* FAQ */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-6 text-2xl font-bold">Frequently asked questions</h2>
           <div className="space-y-4">
             {faqs.map((f) => (
@@ -159,7 +159,7 @@ Sincerely,
         </section>
 
         {/* Cross-links */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-4 text-lg font-bold">Keep going</h2>
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>

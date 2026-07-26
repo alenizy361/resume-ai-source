@@ -209,7 +209,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
         </div>
 
         {/* ── the professions, each linking to all three of its pages ── */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-4 text-2xl font-bold tracking-tight">{l.professionsHeading(jobs.length)}</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {jobs.map((j) => (
@@ -230,7 +230,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
 
         {/* ── computed from the catalogue; absent when the catalogue has no overlap to report ── */}
         {keywords.length > 0 && (
-          <section className="mt-12">
+          <section className="t-enter mt-12">
             <h2 className="mb-3 text-2xl font-bold tracking-tight">{l.keywordsHeading}</h2>
             <p className="mb-4 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{l.keywordsNote(jobs.length)}</p>
             <div className="flex flex-wrap gap-2">
@@ -245,7 +245,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
         )}
 
         {certs.length > 0 && (
-          <section className="mt-12">
+          <section className="t-enter mt-12">
             <h2 className="mb-3 text-2xl font-bold tracking-tight">{l.certsHeading}</h2>
             <p className="mb-4 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{l.certsNote}</p>
             <div className="flex flex-wrap gap-2">
@@ -259,12 +259,12 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
           </section>
         )}
 
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-3 text-2xl font-bold tracking-tight">{l.hiringHeading}</h2>
           <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{copy.hiring}</p>
         </section>
 
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-4 text-2xl font-bold tracking-tight">{l.faqHeading}</h2>
           <div className="space-y-4">
             {copy.faq.map((f) => (
@@ -277,7 +277,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
         </section>
 
         {siblings.length > 0 && (
-          <section className="mt-12">
+          <section className="t-enter mt-12">
             <h2 className="mb-4 text-2xl font-bold tracking-tight">{l.otherSectors}</h2>
             <div className="flex flex-wrap gap-2">
               {siblings.map((s) => (

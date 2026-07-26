@@ -28,7 +28,7 @@ export default function Hub() {
         </div>
       </nav>
 
-      <section className="relative px-6 py-16 text-center">
+      <section className="t-enter relative px-6 py-16 text-center">
         <div className="relative z-10 mx-auto max-w-3xl">
           <div className="chip mb-4">Free · ATS-friendly</div>
           <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Free resume templates</h1>

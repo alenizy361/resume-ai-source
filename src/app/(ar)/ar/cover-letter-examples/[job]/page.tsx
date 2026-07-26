@@ -87,12 +87,12 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           نموذج خطاب تعريف احترافي لوظيفة {j.title} — انسخه وخصّصه بمعلوماتك، أو أنشئ خطاباً مخصصاً لوظيفتك تلقائياً.
         </p>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">نموذج الخطاب (قابل للنسخ)</h2>
           <div className="card whitespace-pre-wrap p-6 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{letter}</div>
         </section>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">نصائح لخطاب {j.title} مقنع</h2>
           <ul className="space-y-3">
             {tips.map((t) => (
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <Link href="/ar/optimize" className="btn-accent mt-5 inline-block px-8 py-3">ابدأ مجاناً ←</Link>
         </div>
 
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">لهذه المهنة</h2>
           <div className="flex flex-wrap gap-3">
             <Link href={`/ar/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>مثال سيرة {j.title} ←</Link>
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </section>
 
         {siblings.length > 0 && (
-          <section className="mt-10">
+          <section className="t-enter mt-10">
             <h2 className="mb-4 text-2xl font-bold">خطابات تعريف لمهن {j.category}</h2>
             <div className="flex flex-wrap gap-2">
               {siblings.map((s) => (

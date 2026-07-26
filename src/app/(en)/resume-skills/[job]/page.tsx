@@ -89,7 +89,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
         </p>
 
         {/* ATS keywords */}
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-2 text-2xl font-bold">ATS keywords ({j.atsKeywords.length})</h2>
           <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
             These are the terms hiring systems match against {j.title} postings. Include the ones that are genuinely true of you — in your skills section AND woven into experience bullets.
@@ -102,7 +102,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
         </section>
 
         {/* Core skills */}
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-2 text-2xl font-bold">Core skills recruiters look for</h2>
           <ul className="mt-4 space-y-2">
             {j.skills.map((s) => (
@@ -114,7 +114,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
         </section>
 
         {/* How to present */}
-        <section className="mt-10">
+        <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">How to present them (example)</h2>
           <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>
             A grouped skills section parses cleanly in ATS software. Then prove your top skills inside experience bullets — like this example of the level to aim for:
@@ -134,7 +134,7 @@ EXPERIENCE (example bullet)
 
         {/* Certs */}
         {j.certs.length > 0 && (
-          <section className="mt-10">
+          <section className="t-enter mt-10">
             <h2 className="mb-3 text-2xl font-bold">Certifications worth listing</h2>
             <div className="flex flex-wrap gap-2">
               {j.certs.map((c) => (
@@ -145,13 +145,13 @@ EXPERIENCE (example bullet)
         )}
 
         {/* Mistake */}
-        <section className="card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
+        <section className="t-enter card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
           <h2 className="font-bold" style={{ color: "#f87171" }}>⚠ Common {j.title} mistake</h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.mistake}</p>
         </section>
 
         {/* CTA */}
-        <section className="card relative mt-10 overflow-hidden p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
+        <section className="t-enter card relative mt-10 overflow-hidden p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
           {/* Decoration only: behind the text, dimmed, and inert to the pointer. */}
           <BrandOrb variant="decor" size={150} style={{ top: -46, insetInlineEnd: -34 }} />
           <h2 className="text-2xl font-bold">Which of these is YOUR resume missing?</h2>
@@ -162,7 +162,7 @@ EXPERIENCE (example bullet)
         </section>
 
         {/* FAQ */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-6 text-2xl font-bold">Frequently asked questions</h2>
           <div className="space-y-4">
             {faqs.map((f) => (
@@ -175,7 +175,7 @@ EXPERIENCE (example bullet)
         </section>
 
         {/* Cross-links */}
-        <section className="mt-12">
+        <section className="t-enter mt-12">
           <h2 className="mb-4 text-lg font-bold">Keep going</h2>
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>

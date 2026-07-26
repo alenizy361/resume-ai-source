@@ -246,7 +246,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       </section>
 
       {/* ── the flow ── */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
+      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-2xl font-bold tracking-tight">{t.howHead}</h2>
         <ol className="mt-6 grid gap-4">
           {t.how.map(([head, body], i) => (
@@ -268,7 +268,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
       {/* ── the worked example ── */}
       {pack && (
-        <section className="mx-auto max-w-3xl px-6 py-12">
+        <section className="t-enter mx-auto max-w-3xl px-6 py-12">
           <h2 className="text-2xl font-bold tracking-tight">{t.egHead}</h2>
           <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{t.egLede}</p>
 
@@ -323,7 +323,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       )}
 
       {/* ── the promises, stated as limits ── */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
+      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-2xl font-bold tracking-tight">{t.trustHead}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {t.trust.map(([head, body]) => (
@@ -336,7 +336,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       </section>
 
       {/* ── pricing, read from lib/plans.ts ── */}
-      <section className="mx-auto max-w-3xl px-6 py-12">
+      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-2xl font-bold tracking-tight">{t.priceHead}</h2>
 
         <div className="card mt-6 p-5">

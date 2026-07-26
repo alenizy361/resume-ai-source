@@ -40,7 +40,7 @@ export default function Hub() {
         </div>
       </nav>
 
-      <section className="relative px-6 py-16 text-center">
+      <section className="t-enter relative px-6 py-16 text-center">
         <div className="relative z-10 mx-auto max-w-3xl">
           <div className="chip mb-4">Free · ATS-optimized</div>
           <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Resume examples &amp; ATS keywords by job</h1>
@@ -56,7 +56,7 @@ export default function Hub() {
           industry but not the job title had nowhere to go before this; a crawler had no signal that
           the professions under one heading belonged together beyond the heading itself.
         */}
-        <section className="mb-12">
+        <section className="t-enter mb-12">
           <h2 className="mb-3 text-xl font-bold tracking-tight">Browse by sector</h2>
           <div className="flex flex-wrap gap-2">
             {sectorsFor("en").map((s) => (

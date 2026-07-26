@@ -68,7 +68,7 @@ export default function ArabicPricingPage() {
         </div>
       </nav>
 
-      <section className="ps-body relative max-w-3xl">
+      <section className="t-enter ps-body relative max-w-3xl">
         <div className="relative mb-12 text-center">
           <div className="chip mb-4">الأسعار</div>
           <h1 className="text-4xl font-extrabold tracking-tight">ادفع مرة واحدة. بدون اشتراك.</h1>

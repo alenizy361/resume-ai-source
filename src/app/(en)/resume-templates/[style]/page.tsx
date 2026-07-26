@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
           <div className="mx-auto w-full max-w-xs"><TemplatePreview t={t} /></div>
         </div>
 
-        <section className="mt-16">
+        <section className="t-enter mt-16">
           <h2 className="mb-4 text-2xl font-bold tracking-tight">FAQ</h2>
           <div className="space-y-4">
             {faqs.map((f) => (
@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
           </div>
         </section>
 
-        <section className="mt-16">
+        <section className="t-enter mt-16">
           <h2 className="mb-4 text-2xl font-bold tracking-tight">More free resume templates</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {others.map((o) => (

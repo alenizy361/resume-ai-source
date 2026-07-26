@@ -266,15 +266,31 @@
  * arrives in reading order because that is the order they cross the viewport — no `nth-child` delays,
  * no counting, and it stays correct when the grid reflows to one column on a phone.
  *
- * ── why every `.card` and not an opt-in class ──
+ * ── it is opt-in, and the first version was not, and that shipped a crash ──
  *
- * Same argument as section 10: a class that must be remembered at 120 call sites is a class that is
- * present at some of them. Cards are the product's unit of content — the three doors on the landing
- * page, the responsibilities on every catalogue page, the plans, the templates — so "content arrives
- * as you reach it" and "cards arrive as you reach them" are the same sentence here.
+ * This was written as `.t-enter, .card` — every card in the product, on the argument that a class
+ * nobody remembers is a class that is missing. Section 10 makes that argument correctly for hover
+ * and press, and it is WRONG here, for a reason that has nothing to do with taste.
  *
- * A card already on screen at load is at the END of its own range, not the start, so nothing above
- * the fold fades in on arrival and there is no first-paint flash.
+ * A scroll-driven animation with `fill: both` never finishes. It stays attached for the life of the
+ * page, so the browser keeps every element carrying one promoted to its own compositor layer —
+ * permanently, whether or not it is on screen. Measured on `/resume-examples`, a 390px viewport:
+ *
+ *     compositor layers   11  →  62
+ *     live animations      3  →  53
+ *
+ * Fifty permanently promoted layers, on a page whose cards also carry a `backdrop-filter`. It was
+ * reported from a real phone as the browser closing the tab on open, which is what running out of
+ * GPU memory looks like to the person it happens to.
+ *
+ * The desktop browser sweep that verified every effect passed all eighteen checks while this was
+ * true: it asked whether the motion RUNS, and this is a question about what running it costs. There
+ * is now a layer budget in `ops/motion.browser.mjs` so the count itself is a thing that can fail.
+ *
+ * So: opt-in, applied to the SECTION rather than to each card in it. One layer per section instead
+ * of one per item, the reveal reads the same to a reader, and a long list cannot make it expensive.
+ * A section already on screen at load is at the END of its own range, so nothing above the fold
+ * fades in on arrival and there is no first-paint flash.
  */
 
 /*
@@ -330,8 +346,7 @@
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .t-enter,
-    .card {
+    .t-enter {
       animation: t-enter-scroll linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 100%;
@@ -600,8 +615,8 @@ label.card:active,
 
 @media (prefers-reduced-motion: reduce) {
   .t-tap, .t-land, .t-pop, .t-reveal, .t-scrim, .t-sheet,
-  .t-shake, .t-swap, .t-lift, .t-enter, .card, .t-stagger > *, .t-hero > *,
-  .btn-accent, .btn-ghost, .t-busy::after, .t-ghost::after {
+  .t-shake, .t-swap, .t-lift, .t-enter, .t-stagger > *, .t-hero > *,
+  .card, .btn-accent, .btn-ghost, .t-busy::after, .t-ghost::after {
     animation: none !important;
     transition: none !important;
   }
@@ -612,7 +627,7 @@ label.card:active,
   /* `@starting-style` sets the pre-transition value, and a `both` keyframe holds its FROM state;
      with the animation gone either would strand the element at the invisible end. So every settled
      value is restated. */
-  .t-reveal, .t-sheet, .t-scrim, .t-land, .t-enter, .card, .t-stagger > *, .t-hero > * {
+  .t-reveal, .t-sheet, .t-scrim, .t-land, .t-enter, .t-stagger > *, .t-hero > * {
     opacity: 1;
     transform: none;
     /* The entrance rises with `translate`, not `transform` — see `t-enter-in`. Restating only

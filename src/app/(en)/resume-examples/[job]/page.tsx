@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
 /** Hoisted: see the Arabic twin. A component declared in a render remounts its subtree. */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-10">
+    <section className="t-enter mt-10">
       <h2 className="mb-4 text-2xl font-bold tracking-tight">{title}</h2>
       {children}
     </section>
