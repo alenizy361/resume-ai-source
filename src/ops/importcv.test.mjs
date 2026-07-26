@@ -14,6 +14,7 @@
  *   node --experimental-strip-types src/ops/importcv.test.mjs
  */
 
+import { readFileSync } from "node:fs";
 import { parseCv, splitDates, worthImporting } from "../app/lib/importCv.ts";
 
 let pass = 0, fail = 0;
@@ -175,6 +176,46 @@ const AR = `
 
   const s = parseCv("EXPERIENCE\nAchieved 30% faster turnaround at 128-slice CT\n");
   ok("a duty mentioning numbers is not read as a phone number", s.phone === "", s.phone);
+}
+
+/* ── the unreadable-file escape hatch ── */
+
+console.log("\n── a scan that cannot be read has somewhere to go ──");
+
+/*
+ * `/api/extract` answers 400 rather than 500 on an unreadable file, and its own comment says why:
+ * "so the UI can show a 'paste the text instead' hint". The hint shipped and the box did not — and
+ * the hint named the JOB DESCRIPTION field, so a user who followed it would have pasted their own CV
+ * in as the advert they were applying to and had the tailoring computed against themselves.
+ *
+ * A phone photo of a CV is the common case in this market, not an edge one, and it is the single case
+ * the upload cannot rescue.
+ */
+{
+  const src = readFileSync("app/components/build/ImportPanel.tsx", "utf8");
+
+  ok("neither language sends the user to the job-description box",
+    !/job description box/.test(src) && !/مربع وصف الوظيفة/.test(src));
+  ok("a paste affordance exists", /id="cv-paste"/.test(src) && /readPasted/.test(src));
+  ok("the paste box opens itself when a read fails",
+    (src.match(/setShowPaste\(true\)/g) || []).length >= 2);
+
+  /* One parse path for both entries, or the two review screens drift apart — the paste one would
+     quietly stop honouring a budget or a tick the upload still honours. */
+  ok("file and paste both funnel through one ingest()",
+    /ingest\(String\(data\?\.text \|\| ""\), "file"\)/.test(src) && /ingest\(pasted, "paste"\)/.test(src));
+  ok("and only one place builds the review state",
+    (src.match(/function ingest\(/g) || []).length === 1);
+
+  /* Pasting must cost nothing: no upload, no request, no model call. */
+  const paste = src.slice(src.indexOf("function readPasted"), src.indexOf("function readPasted") + 400);
+  ok("the paste path makes no network call", !/fetch\(/.test(paste));
+
+  /* A CV can be in either language whatever the interface is set to. */
+  ok("the paste box lets the text decide its own direction", /id="cv-paste"[\s\S]{0,400}dir="auto"/.test(src));
+
+  /* And it must refuse a stub rather than opening a review screen with nothing in it. */
+  ok("a too-short paste is refused with its own message", /pasteTooShort/.test(src));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

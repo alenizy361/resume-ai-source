@@ -36,7 +36,12 @@ const C = {
     haveSub: "PDF, Word or text. Your file is sent to our server only to read its text — no AI provider sees the file, and it is not saved. We then show you what we understood, and you keep what is right.",
     pick: "Choose a file",
     reading: "Reading…",
-    tooLittle: "We could not read enough from that file. It may be a scan rather than text — paste the content into the job description box, or fill the form and we will suggest as you go.",
+    tooLittle: "We could not read enough from that file. It may be a scan or a photo rather than text — paste the words in below, or fill the form and we will suggest as you go.",
+    pasteOpen: "Paste the text instead",
+    pasteLabel: "Paste your CV text",
+    pasteSub: "Nothing is uploaded and nothing is sent to a model — this is read in your browser.",
+    pasteGo: "Read this text",
+    pasteTooShort: "That is too short to read as a CV. Paste the whole thing, including the job titles and dates.",
     read: "Here is what we read",
     roles: "Positions",
     skills: "Skills",
@@ -61,7 +66,12 @@ const C = {
     haveSub: "PDF أو Word أو نص. يُرسَل ملفك إلى سيرفرنا لقراءة نصه فقط — لا يراه أي مزوّد ذكاء اصطناعي، ولا يُحفَظ. ثم نعرض لك ما فهمناه، وتُبقي أنت الصحيح.",
     pick: "اختر ملفاً",
     reading: "يقرأ…",
-    tooLittle: "لم نستطع قراءة ما يكفي من هذا الملف. قد يكون صورة ممسوحة لا نصاً — الصق المحتوى في مربع وصف الوظيفة، أو اكمل النموذج وسنقترح عليك أثناء التعبئة.",
+    tooLittle: "لم نستطع قراءة ما يكفي من هذا الملف. قد يكون صورة ممسوحة أو تصويراً لا نصاً — الصق الكلام في المربع بالأسفل، أو اكمل النموذج وسنقترح عليك أثناء التعبئة.",
+    pasteOpen: "الصق النص بدلاً من الملف",
+    pasteLabel: "الصق نص سيرتك",
+    pasteSub: "لا يُرفَع شيء ولا يُرسَل إلى أي نموذج ذكاء — تُقرأ داخل متصفحك.",
+    pasteGo: "اقرأ هذا النص",
+    pasteTooShort: "هذا أقصر من أن يُقرأ كسيرة. الصقها كاملة، بالمسميات والتواريخ.",
     read: "هذا ما قرأناه",
     roles: "الوظائف",
     skills: "المهارات",
@@ -98,6 +108,8 @@ export default function ImportPanel({
   const [parsed, setParsed] = useState<ParsedCv | null>(null);
   const [picks, setPicks] = useState<Picks>({ roles: [], skills: true, education: true, certs: true, langs: true });
   const [showUnread, setShowUnread] = useState(false);
+  const [showPaste, setShowPaste] = useState(false);
+  const [pasted, setPasted] = useState("");
   const [done, setDone] = useState(false);
   const input = useRef<HTMLInputElement | null>(null);
   /*
@@ -127,6 +139,27 @@ export default function ImportPanel({
     track("builder_saved_opened", { roles: cv.roles.length });
   }
 
+  /**
+   * Text in, review out — the ONE path, whether the text came from a file or from a paste.
+   *
+   * Written as a shared function rather than a second copy because the two entries must reach the
+   * same review screen with the same ticks and the same budget warnings. A parallel paste path is
+   * how one of them quietly stops honouring a rule the other one does.
+   *
+   * `source` only reaches analytics, so an operator can tell how often the upload fails and the
+   * paste rescues it — which is the number that says whether scanned CVs are a real problem here.
+   */
+  function ingest(text: string, source: "file" | "paste") {
+    const cv = parseCv(text);
+    if (!worthImporting(cv)) { setErr(c.tooLittle); setShowPaste(true); return; }
+    setParsed(cv);
+    setPicks({ roles: cv.roles.map(() => true), skills: true, education: true, certs: true, langs: true });
+    setShowPaste(false);
+    track("builder_cv_imported", {
+      roles: cv.roles.length, skills: cv.skills.length, unread: cv.unread.length, source,
+    });
+  }
+
   async function read(file: File) {
     setErr(""); setBusy(true); setParsed(null); setDone(false);
     try {
@@ -135,16 +168,19 @@ export default function ImportPanel({
       const res = await fetch("/api/extract", { method: "POST", body: fd });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(String(data?.error || "Failed to read that file."));
-      const cv = parseCv(String(data?.text || ""));
-      if (!worthImporting(cv)) { setErr(c.tooLittle); return; }
-      setParsed(cv);
-      setPicks({ roles: cv.roles.map(() => true), skills: true, education: true, certs: true, langs: true });
-      track("builder_cv_imported", {
-        roles: cv.roles.length, skills: cv.skills.length, unread: cv.unread.length,
-      });
+      ingest(String(data?.text || ""), "file");
     } catch (e) {
       setErr(e instanceof Error ? e.message : c.tooLittle);
+      /* A file that could not be read is exactly when the paste box earns its place. */
+      setShowPaste(true);
     } finally { setBusy(false); }
+  }
+
+  /** No upload, no request, no model call — `parseCv` runs here. Pasting costs nothing. */
+  function readPasted() {
+    setErr(""); setParsed(null); setDone(false);
+    if (pasted.trim().length < 40) { setErr(c.pasteTooShort); return; }
+    ingest(pasted, "paste");
   }
 
   /** Apply only what is ticked, by handing over a narrowed copy of the parse. */
@@ -229,6 +265,56 @@ export default function ImportPanel({
       )}
 
       {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+
+      {/*
+        ── the paste box, which the error message used to point away from ──
+
+        `/api/extract` returns 400 rather than 500 on an unreadable file, and its own comment says
+        why: "so the UI can show a 'paste the text instead' hint". The hint shipped; the box did not.
+        Worse, it named the JOB DESCRIPTION field — so a user following the instruction would have
+        pasted their own CV in as the advert they were applying to, and the tailoring would have been
+        computed against themselves.
+
+        A scan or a phone photo of a CV is the common case here, not an edge one, and it is the one
+        case where the upload can do nothing. So the box opens itself the moment a read fails, and
+        stays reachable otherwise.
+
+        It costs nothing to use: `parseCv` runs in the browser, so there is no upload, no request and
+        no model call.
+      */}
+      {!parsed && !showPaste && (
+        <button
+          onClick={() => setShowPaste(true)}
+          className="mt-3 block rounded-full px-3 text-xs font-semibold"
+          style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+        >
+          {c.pasteOpen}
+        </button>
+      )}
+
+      {!parsed && showPaste && (
+        <div className="mt-3">
+          <label className="bd-label" htmlFor="cv-paste">{c.pasteLabel}</label>
+          <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.pasteSub}</p>
+          <textarea
+            id="cv-paste"
+            className="bd-input"
+            rows={7}
+            value={pasted}
+            onChange={(e) => setPasted(e.target.value)}
+            /* The CV may be in either language whatever the interface is set to, so the browser
+               decides the direction from the text rather than inheriting the UI's. */
+            dir="auto"
+          />
+          <button
+            onClick={readPasted}
+            disabled={!pasted.trim()}
+            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+          >
+            {c.pasteGo}
+          </button>
+        </div>
+      )}
       {done && <p className="mt-2 text-xs" style={{ color: "#6ee7b7" }}>{c.done}</p>}
 
       {parsed && (
