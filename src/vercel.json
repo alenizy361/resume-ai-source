@@ -6,5 +6,11 @@
   "functions": {
     "app/api/optimize/route.ts": { "maxDuration": 300 },
     "app/api/cover-letter/route.ts": { "maxDuration": 300 }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "claude/repo-push-permissions-dvbp16": false
+    }
   }
 }

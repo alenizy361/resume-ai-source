@@ -118,3 +118,40 @@ it does.
 
 `NEXT_PUBLIC_SUPPORT_EMAIL` is worth setting rather than leaving: unset, the contact
 address shown to visitors is the owner's personal one.
+
+## The daily deployment limit, and how it kept being spent
+
+Hobby allows **100 deployments per rolling 24 hours**, counted per deployment created —
+not per push, not per successful build. Hit it and every deploy returns:
+
+```
+HTTP 402 {"error":{"code":"payment_required",
+  "message":"Resource is limited - try again in 24 hours (more than 100,
+             code: \"api-deployments-free-per-day\")",
+  "limit":{"total":100,"remaining":0,"reset":<epoch ms>}}}
+```
+
+The `reset` field is the exact moment it clears. It is a rolling window from when the
+limit was hit, not midnight.
+
+**Why it was reached twice in one day.** The working pattern was: push to the feature
+branch, then merge and push to `main`. Vercel builds *both* — a preview for the branch and
+production for main — so every commit cost two of the hundred. Add a few empty commits
+pushed to force a rebuild and the budget goes quickly.
+
+`vercel.json` now sets `git.deploymentEnabled` false for the feature branch, so a commit
+costs one deployment instead of two. The branch is still pushed and still reviewable on
+GitHub; it simply no longer builds a preview nobody opens.
+
+**When it is already spent**, there are three ways out and only one is instant:
+
+1. **Promote an existing READY deployment** in the Vercel dashboard (Deployments → ⋯ →
+   Promote to Production). This reuses a build that already exists, so it does not create a
+   new deployment and is not refused by the limit. It is the only same-day option.
+2. **Wait for `reset`.** The push to `main` is already there; nothing needs re-pushing.
+   Trigger `.github/workflows/deploy-now.yml` afterwards, or push any commit.
+3. **Pro**, which removes the cap.
+
+The `deploy-now` workflow is worth keeping for exactly the reason it was written: a push
+that produces no build is silent, and this prints Vercel's own JSON so a refusal explains
+itself instead of looking like a slow deploy.
