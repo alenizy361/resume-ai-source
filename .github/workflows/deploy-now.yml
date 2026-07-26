@@ -1,0 +1,98 @@
+name: Deploy now
+
+# Ask Vercel to build a commit, when the Git integration will not.
+#
+# ── why this exists ──
+#
+# Twice in one day, pushing to `main` produced no Vercel deployment at all. Not a failed build — no
+# build. The commit lands, GitHub has it, and nothing happens, so the site keeps serving an older
+# commit while `main` moves ahead. There is no error anywhere to read, which is the worst part: a
+# silent no-op looks exactly like a slow one.
+#
+# This calls the deployments API directly with the token already stored for `vercel-setup.yml`, and
+# PRINTS THE RESPONSE. That matters as much as the deploy: if the account has hit a build limit, or
+# the project is paused, or the Git connection has come loose, the API says which. Silence becomes a
+# sentence you can act on.
+#
+# Required secret: VERCEL_TOKEN — the same one `vercel-setup.yml` already uses.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or commit SHA to deploy"
+        type: string
+        default: "main"
+      target:
+        description: "production, or preview for a throwaway URL"
+        type: choice
+        options: ["production", "preview"]
+        default: "production"
+
+env:
+  API: https://api.vercel.com
+  # Not secrets. The team and project are visible in every deployment URL, and the numeric repo id
+  # is public metadata on a public repository.
+  TEAM_ID: team_hjF234hbm43fAcQlbEVkuHvh
+  PROJECT: resume-ai
+  REPO_ID: "1311291739"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse early if the token is missing
+        env:
+          TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN is not set on this repository."
+            echo "Add it in Settings → Secrets and variables → Actions."
+            echo "Vercel → Account Settings → Tokens, scoped to the team."
+            exit 1
+          fi
+          echo "Token present."
+
+      - name: Ask Vercel to build ${{ inputs.ref }}
+        env:
+          TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -o pipefail
+          body=$(cat <<JSON
+          {
+            "name": "${PROJECT}",
+            "target": "${{ inputs.target }}",
+            "gitSource": { "type": "github", "repoId": ${REPO_ID}, "ref": "${{ inputs.ref }}" }
+          }
+          JSON
+          )
+          echo "Requesting a ${{ inputs.target }} deployment of ${{ inputs.ref }}…"
+
+          code=$(curl -sS -o /tmp/deploy.json -w '%{http_code}' \
+            -X POST "${API}/v13/deployments?teamId=${TEAM_ID}&forceNew=1" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$body")
+
+          echo "HTTP ${code}"
+          # Printed whatever happens. A refusal explains itself here and nowhere else.
+          cat /tmp/deploy.json
+          echo
+
+          case "$code" in
+            20*)
+              url=$(sed -n 's/.*"url":"\([^"]*\)".*/\1/p' /tmp/deploy.json | head -1)
+              id=$(sed -n 's/.*"id":"\([^"]*\)".*/\1/p' /tmp/deploy.json | head -1)
+              echo "::notice::Building ${id} → https://${url}"
+              echo "Watch it finish in the Vercel dashboard; this step does not wait."
+              ;;
+            402|403)
+              echo "::error::Vercel refused (${code}). Usually a plan limit or deployment protection."
+              echo "The JSON above names which."
+              exit 1
+              ;;
+            *)
+              echo "::error::Vercel returned ${code}. See the JSON above."
+              exit 1
+              ;;
+          esac
