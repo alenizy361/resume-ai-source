@@ -30,6 +30,8 @@ let pass = 0, fail = 0;
 const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
 
 const SRC = readFileSync("app/api/health/ai/route.ts", "utf8");
+/* The free token probe lives beside the other provider code, not in the route — see section 9. */
+const TOKEN_SRC = readFileSync("app/lib/aiTokenCount.ts", "utf8");
 
 /* ── 1 & 2: fail closed, and 404 rather than 401 ── */
 
@@ -281,6 +283,60 @@ if (process.env.HEALTH_BASE) {
  *   · replacing `probe(suggestProvider, …)` with `probe(provider, …)`
  *                                                → "the suggestion provider gets its own probe" fails
  */
+
+/* ── 9: the free token probe ── */
+
+console.log("\n── ?tokens=1 measures for nothing, and is not confused with ?live=1 ──");
+
+/*
+ * The distinction this protects.
+ *
+ * `?live=1` sends a real completion and spends the owner's credit, so it carries a warning.
+ * `count_tokens` returns a count and no completion, so it bills nothing. Folding the free probe in
+ * behind the paid flag would put a spending warning on a free measurement, and nobody runs a probe
+ * that says it costs money — the estimate stays in place forever instead.
+ */
+ok("the token probe has its own flag", /searchParams\.get\("tokens"\) === "1"/.test(SRC));
+ok("and does not ride on the paid one",
+  !/searchParams\.get\("live"\)[\s\S]{0,200}countTokensReport/.test(SRC));
+ok("the report says outright that it bills nothing", /bills nothing|\$0\.00/.test(SRC + TOKEN_SRC));
+
+/*
+ * The reason the probe is a library at all. It began inside the route and the secret-leak guard
+ * above rejected it — correctly, since it read `process.env.ANTHROPIC_API_KEY` into a function whose
+ * return value goes into the response body. Safe as written, and still the wrong shape. So the
+ * route must stay clean and the lib must carry the same discipline.
+ */
+ok("the route delegates rather than reading the key", /await countTokensReport\(\)/.test(SRC));
+ok("the route never reads the anthropic key's value",
+  !/countTokensReport\(process\.env/.test(SRC));
+
+ok("the probe library exists", TOKEN_SRC.length > 0);
+ok("the probe sends the key upstream and nowhere else",
+  /"x-api-key": String\(process\.env\.ANTHROPIC_API_KEY\)/.test(TOKEN_SRC));
+ok("the probe is timeout-bounded — a health check that can hang is not one",
+  /setTimeout\(\(\) => ctrl\.abort\(\), 15_000\)/.test(TOKEN_SRC));
+ok("the probe calls count_tokens, not messages",
+  TOKEN_SRC.includes("/v1/messages/count_tokens") && !/api\.anthropic\.com\/v1\/messages"/.test(TOKEN_SRC));
+/* No `max_tokens`, because there is no completion to cap — its presence would mean this drifted into
+   being a real call, which is the one way this probe could start costing money. */
+ok("the probe asks for no completion at all", !/max_tokens/.test(TOKEN_SRC));
+
+/* It must measure every model whose floor differs, or it cannot answer the question it exists for:
+   the same prefix caches on Sonnet and does not on Haiku. */
+for (const m of ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5"]) {
+  ok(`the probe measures ${m}`, TOKEN_SRC.includes(m));
+}
+ok("the probe reports the floor verdict, not just a number", /clearsFloor/.test(TOKEN_SRC));
+/* And it must show the estimate beside the measurement, so drift between them is visible rather
+   than something the reader has to work out. */
+ok("the probe shows the estimate next to the measurement", /estimated:/.test(TOKEN_SRC));
+
+/* Two numbers both labelled "the prefix" is what made this report confusing: 2329 for
+   role_blueprint next to 2261 for final_content, neither saying which task it meant. */
+ok("the prefix figure names its task", /cachedPrefixTask/.test(SRC));
+ok("and every task's prefix is reported", /prefixTokensByTask/.test(SRC));
+ok("the estimate is labelled an estimate", /prefixTokensEstimated/.test(SRC));
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

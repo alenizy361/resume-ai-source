@@ -5,6 +5,7 @@ import { modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost } from "@/app/lib
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
 import { MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
+import { countTokensReport } from "@/app/lib/aiTokenCount";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
@@ -149,7 +150,24 @@ export async function GET(req: NextRequest) {
        * `cacheablePrefix: true` while every call paid full price. The `?live=1` probe is what
        * caught it — `cacheWriteTokens: 0` on a request whose markers were accepted.
        */
+      /*
+       * ONE task named, because two numbers both labelled "the prefix" is how this field started
+       * confusing people: this said 2329 (role_blueprint) while `cacheDecision` said 2261
+       * (final_content), side by side, neither saying which task it meant. Both were true. Together
+       * they read like a contradiction.
+       */
+      cachedPrefixTask: "role_blueprint",
       cachedPrefixTokens: estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? ""),
+      /* Every task's prefix, since they differ by up to 168 tokens and the floor question is
+         per task, not per product. */
+      prefixTokensByTask: Object.fromEntries(
+        Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(CORE_RULES) + estimateTokens(v ?? "")]),
+      ),
+      prefixTokensEstimated: true,
+      prefixTokensNote:
+        "Estimated at 3.594 chars/token, calibrated against a logged call. Add ?tokens=1 for exact "
+        + "per-model counts from count_tokens — that endpoint returns a count and no completion, so "
+        + "it bills nothing.",
       cacheFloorTokens: cacheFloorFor(suggestModel),
       cacheablePrefix:
         estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? "")
@@ -263,7 +281,29 @@ export async function GET(req: NextRequest) {
     live: null as unknown,
     /** The suggestion provider's own probe. Null unless `?live=1`. */
     liveSuggest: null as unknown,
+    /** Exact per-model token counts. Null unless `?tokens=1`. Bills nothing. */
+    tokens: null as unknown,
   };
+
+  /*
+   * ── the free measurement ──
+   *
+   * Every cache decision in `docs/cost.md` turns on whether the prefix clears a model's floor, and
+   * every number behind it was ESTIMATED at 3.594 characters per token. Good enough against a floor
+   * 1.8x away, and still an estimate — and token counts are model-specific, so one estimate cannot
+   * answer the question for three models.
+   *
+   * `POST /v1/messages/count_tokens` answers it exactly and returns a count with NO completion:
+   * no output tokens, no input tokens, nothing on the invoice. So unlike `?live=1`, this needs no
+   * spending warning — it needs the opposite, a note saying it is free, because the reflex around
+   * anything that touches a model API is to assume it costs.
+   *
+   * Separate from `?live=1` on purpose. That flag means "spend money"; conflating a free probe with
+   * it would make the free one unusable by anyone reading the warning.
+   */
+  if (req.nextUrl.searchParams.get("tokens") === "1") {
+    report.tokens = await countTokensReport();
+  }
 
   if (req.nextUrl.searchParams.get("live") !== "1") {
     report.live = { ran: false, note: "Add ?live=1 to send one real completion. That spends model credit." };
