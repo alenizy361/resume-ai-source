@@ -560,6 +560,12 @@ Neither covers Arabic Extended-A or the presentation forms that `importCv.ts` it
 documents PDF producers as emitting. Text in those ranges passes the PDF guard and renders
 as mojibake with no warning, and Word lays it out left-to-right with the Latin font.
 
+**Narrowed by F-18, not closed.** `cvHeadings.ts` now holds the range in one constant
+(`ARABIC_RANGE`), shared by `hasArabic` and the new `dominantScript`, so the two script questions
+this file answers cannot disagree with each other. `PdfExport` still carries its own literal, and
+neither covers Extended-A or the presentation forms — one place to widen instead of two, and the same
+bug until someone widens it.
+
 ### O-12 · P1 · The export paywall is advisory
 
 Files are generated in the browser. The `watermark` flag is persisted to localStorage with
