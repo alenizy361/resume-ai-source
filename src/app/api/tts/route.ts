@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PRIVATE_NO_STORE } from "@/app/lib/privateCache";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 
 export const maxDuration = 30;
 
 /**
+ * ── cache policy, corrected ──
+ *
+ * These three responses carried `public, max-age=86400`. The text they speak is an interview question
+ * generated from one candidate's CV, so a shared cache holding it for a day is one person's résumé
+ * read aloud to whoever asks for the same URL next. `private, no-store` instead: synthesised audio of
+ * somebody's employment history should not survive the response.
+ *
  * Natural Arabic text-to-speech. Tries providers in quality order and returns
  * an MP3/WAV so the same human-like voice plays on every device (replacing the
  * robotic browser speechSynthesis). All keys live only in env vars.
@@ -54,7 +62,7 @@ async function geminiTts(text: string, female: boolean, _lang?: string): Promise
     const pcm = Buffer.from(b64, "base64");
     const wav = pcmToWav(pcm, 24000);
     return new NextResponse(new Uint8Array(wav), {
-      headers: { "Content-Type": "audio/wav", "Cache-Control": "public, max-age=86400" },
+      headers: { "Content-Type": "audio/wav", "Cache-Control": PRIVATE_NO_STORE },
     });
   } catch (e) {
     console.error("Gemini TTS error", e);
@@ -107,7 +115,7 @@ async function elevenTts(text: string, female: boolean, _lang?: string): Promise
     }
     const audio = await res.arrayBuffer();
     return new NextResponse(audio, {
-      headers: { "Content-Type": "audio/mpeg", "Cache-Control": "public, max-age=86400" },
+      headers: { "Content-Type": "audio/mpeg", "Cache-Control": PRIVATE_NO_STORE },
     });
   } catch (e) {
     console.error("ElevenLabs error", e);
@@ -145,7 +153,7 @@ async function azureTts(text: string, female: boolean, lang: string): Promise<Re
     }
     const audio = await res.arrayBuffer();
     return new NextResponse(audio, {
-      headers: { "Content-Type": "audio/mpeg", "Cache-Control": "public, max-age=86400" },
+      headers: { "Content-Type": "audio/mpeg", "Cache-Control": PRIVATE_NO_STORE },
     });
   } catch (e) {
     console.error("Azure TTS error", e);

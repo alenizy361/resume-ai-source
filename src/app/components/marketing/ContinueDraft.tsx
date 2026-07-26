@@ -23,7 +23,8 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { draftKey, readBuilder } from "@/app/lib/draftStore";
+import { indexKey, listResumes, readResume } from "@/app/lib/resumeStore";
+import { useOwner } from "@/app/components/build/useOwner";
 import { STEPS, stepHref, SECTION_COPY } from "../build/steps";
 
 const T = {
@@ -38,16 +39,28 @@ function subscribe(onChange: () => void): () => void {
 }
 
 export default function ContinueDraft({ lang }: { lang: "ar" | "en" }) {
+  /*
+   * Owner-scoped, like every other read of a resume.
+   *
+   * This used to watch `ra_journey_{lang}` — the single shared slot — and call `readBuilder(lang)`,
+   * so on a shared browser it advertised "you have a CV in progress" pointing at whichever account
+   * had used the laptop last, and the link carried that CV's id. Watching the OWNER'S INDEX instead
+   * means the banner can only ever offer a resume belonging to whoever is signed in now.
+   */
+  const owner = useOwner();
   const raw = useSyncExternalStore(
     subscribe,
-    () => { try { return localStorage.getItem(draftKey(lang)); } catch { return null; } },
+    () => { try { return owner ? localStorage.getItem(indexKey(owner)) : null; } catch { return null; } },
     () => null,
   );
 
   const draft = useMemo(() => {
-    if (!raw) return null;
-    const { id, state } = readBuilder(lang);
-    if (!state) return null;
+    if (!raw || !owner) return null;
+    /* The most recent resume is the right offer HERE, because this banner is the one place with no
+       requested id to contradict — see the same reasoning in `BuilderProvider`. */
+    const id = listResumes(owner)[0]?.resumeId;
+    const state = id ? readResume(owner, id).record?.state ?? null : null;
+    if (!id || !state) return null;
     // A draft with nothing in it is not progress worth advertising. Someone who opened the
     // builder and left should see the normal landing page, not a "continue" banner
     // pointing at an empty form.
@@ -55,7 +68,7 @@ export default function ContinueDraft({ lang }: { lang: "ar" | "en" }) {
     if (!label) return null;
     const next = STEPS.find((s) => !state.sectionsDone.includes(s)) ?? STEPS[STEPS.length - 1];
     return { href: stepHref(lang, id, next), label, at: SECTION_COPY[lang].nav[next] };
-  }, [raw, lang]);
+  }, [raw, lang, owner]);
 
   if (!draft) return null;
 

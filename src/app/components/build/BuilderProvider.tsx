@@ -36,7 +36,11 @@ import { track } from "@vercel/analytics";
 import { assembleResume } from "@/app/lib/mergeProfile";
 import { applyVersionToProfile } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
-import { readBuilder, writeBuilder, readDraft } from "@/app/lib/draftStore";
+import { readDraft } from "@/app/lib/draftStore";
+import {
+  listResumes, migrateLegacy, newResumeId, readResume, writeResume,
+} from "@/app/lib/resumeStore";
+import { useOwner } from "./useOwner";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
   type BuilderState, type SectionId, EMPTY_BUILDER, migrateBuilder, cvLang,
@@ -130,6 +134,8 @@ export default function BuilderProvider({
   resumeId?: string;
   children: React.ReactNode;
 }) {
+  /* Every storage key starts with this. Empty until /api/auth/me answers — see `useOwner`. */
+  const owner = useOwner();
   const [state, dispatch] = useReducer(reducer, EMPTY_BUILDER);
   /**
    * Everything the one read of storage established, written once.
@@ -147,18 +153,42 @@ export default function BuilderProvider({
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   /*
-   * Hydrate once, from whichever of the three states the browser is actually in.
+   * Hydrate for THIS (owner, resumeId), and re-hydrate when either changes.
    *
-   * Keyed on `lang` only. Not on `urlId`: re-running this when the URL's id changes
-   * would let a mistyped id wipe a live reducer back to the stored copy, and the
-   * mismatch case is handled by redirecting the URL to the real id rather than by
-   * reloading state to match the URL.
+   * ── what this used to do, and why it was the bug ──
+   *
+   * It ran once, keyed on `lang`, and its comment said "Not on `urlId`". So the state came from one
+   * shared per-language slot while the id came from the URL: open /builder/rA/target after editing
+   * Resume B and you got B's content under A's id, then the autosave wrote B back as A.
+   *
+   * The old reasoning for ignoring `urlId` was that re-running would "let a mistyped id wipe a live
+   * reducer back to the stored copy". That risk is real and it is answered by resetting to an EMPTY
+   * form for an id with no record — not by loading a different resume. An unknown id showing a blank
+   * builder is correct; an unknown id showing somebody else's CV is not.
    */
-  const started = useRef(false);
+  const started = useRef<string>("");
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
-    const { id, state: saved, fromChat, damaged } = readBuilder(lang);
+    /* One hydration per (owner, id) pair. The guard is a key rather than a boolean because switching
+       resumes MUST re-run this, and a boolean is what stopped it. */
+    const pair = `${owner}::${urlId || ""}`;
+    if (started.current === pair) return;
+    started.current = pair;
+    if (!owner) return;                 // owner unknown yet — wait rather than read `anon` and swap later
+
+    /* The shared slot, moved into a real record the first time an owner is seen. */
+    const moved = migrateLegacy(owner, lang);
+
+    /*
+     * No id in the URL — /builder itself. Resolve to the owner's most recent resume if there is one,
+     * otherwise mint a fresh id. This is the ONLY place "most recent" is allowed to mean anything,
+     * because there is no requested resume to contradict.
+     */
+    const wanted = urlId || moved.resumeId || listResumes(owner)[0]?.resumeId || newResumeId();
+    const { record, damaged } = readResume(owner, wanted);
+    const saved = record?.state ?? null;
+    const id = wanted;
+    /* Carrying a chat draft forward is only sensible into a resume that does not exist yet. */
+    const fromChat = !saved && Boolean(readDraft(lang).profile?.role || readDraft(lang).profile?.name);
 
     /*
      * A FRESH draft's CV language follows the interface language.
@@ -207,10 +237,22 @@ export default function BuilderProvider({
     /* One write, at the end, carrying every fact this read established.
        Three separate `setState` calls for one event is three renders and three chances for the
        screen to show a half-read draft. */
-    setBoot({ id: urlId || id, hydrated: true, damaged, migrated: upgraded });
+    /*
+     * One `setBoot` carrying every fact this read established — three separate calls for one event
+     * is three renders and three chances to show a half-read draft.
+     *
+     * `set-state-in-effect` is disabled here with a reason rather than worked around. The rule is
+     * aimed at state derived from other state; this is a LOAD from an external store (localStorage)
+     * triggered by a key change, which is the case the rule's own documentation carves out. The
+     * codebase's other pattern for reading storage, `useSyncExternalStore`, does not fit: that is for
+     * SUBSCRIBING to a value that changes underneath you, and a resume is fetched once per id, not
+     * watched.
+     */
+    // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
+    setBoot({ id, hydrated: true, damaged, migrated: upgraded });
     track("builder_started", { lang, surface: "steps" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lang]);
+  }, [lang, owner, urlId]);
 
   /*
    * The current state, readable from a callback without making the callback change.
@@ -255,20 +297,20 @@ export default function BuilderProvider({
   const flush = useCallback(() => {
     if (!resumeId || !mayWrite(lifecycle)) return;
     try {
-      writeBuilder(lang, resumeId, live.current);
+      writeResume(owner, resumeId, lang, live.current);
       setWritten(live.current);
       setFailed(false);
     } catch { setFailed(true); }
-  }, [resumeId, lang, lifecycle]);
+  }, [resumeId, lang, lifecycle, owner]);
 
   useEffect(() => {
     if (!hydrated || !resumeId || damagedDraft) return;
     const id = setTimeout(() => {
-      try { writeBuilder(lang, resumeId, state); setWritten(state); setFailed(false); }
+      try { writeResume(owner, resumeId, lang, state); setWritten(state); setFailed(false); }
       catch { setFailed(true); }
     }, 450);
     return () => clearTimeout(id);
-  }, [state, lang, resumeId, hydrated, damagedDraft]);
+  }, [state, lang, resumeId, hydrated, damagedDraft, owner]);
 
   const online = useOnline();
 
