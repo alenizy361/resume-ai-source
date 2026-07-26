@@ -353,6 +353,10 @@ export default function DesignSection({
           variant={tpl.variant}
           accent={tpl.accent}
           dir={arabicCv ? "rtl" : "ltr"}
+          /* The same flag `PdfExport` and `DocxExport` already receive. This component had no such
+             prop, so the designed PDF — the ONLY PDF offered for an Arabic CV, because the plain one
+             refuses Arabic — was an unmarked paid-quality file for every free user. */
+          watermark={watermark}
           fitWidth
         />
       </div>

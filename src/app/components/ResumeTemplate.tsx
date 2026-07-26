@@ -86,7 +86,23 @@ export function detectDir(text: string): "ltr" | "rtl" {
   return arabic > latin ? "rtl" : "ltr";
 }
 
-export default function ResumeTemplate({ text, name = "resume", accent = "#0f766e", variant = "classic", preview = false, dir = "auto", fitWidth = false }: { text: string; name?: string; accent?: string; variant?: TemplateVariant; preview?: boolean; dir?: "ltr" | "rtl" | "auto"; fitWidth?: boolean }) {
+/**
+ * ── the watermark, and the hole it closes ──
+ *
+ * This component had no `watermark` prop at all, so `DesignSection` — which computes the flag
+ * correctly and passes it to `PdfExport` and `DocxExport` — could not pass it here. The designed
+ * PDF was therefore a clean, paid-quality export available to every free user, which is the entire
+ * paywall bypassed by the most attractive of the three download buttons.
+ *
+ * It is worse for Arabic. `PdfExport` refuses Arabic outright, so `DesignSection` hides the plain
+ * PDF for an Arabic CV — making this raster export the ONLY PDF an Arabic user is offered. Free
+ * Arabic users got an unmarked file; there was no version of this that charged them.
+ *
+ * Defaulting to `true` is deliberate and is the fail-closed direction: a call site that forgets the
+ * prop marks the file rather than giving it away. The cost of the mistake is then a support message
+ * about an unexpected watermark, not silent lost revenue with no signal at all.
+ */
+export default function ResumeTemplate({ text, name = "resume", accent = "#0f766e", variant = "classic", preview = false, dir = "auto", fitWidth = false, watermark = true }: { text: string; name?: string; accent?: string; variant?: TemplateVariant; preview?: boolean; dir?: "ltr" | "rtl" | "auto"; fitWidth?: boolean; watermark?: boolean }) {
   const parsed = useMemo(() => parse(text), [text]);
   const ref = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -134,6 +150,24 @@ export default function ResumeTemplate({ text, name = "resume", accent = "#0f766
         pdf.addPage();
         pdf.addImage(img, "JPEG", 0, pos, pw, ih);
         heightLeft -= ph;
+      }
+      /*
+       * Stamped on every page, after the image, so it cannot be lifted by cropping one page — and
+       * drawn into the PDF rather than into the captured DOM, so it cannot be removed by editing
+       * the page in devtools before pressing the button.
+       */
+      if (watermark) {
+        const pages = pdf.getNumberOfPages();
+        for (let p = 1; p <= pages; p++) {
+          pdf.setPage(p);
+          pdf.setTextColor(150, 150, 150);
+          pdf.setFontSize(38);
+          /* jsPDF has no Arabic face, so the mark is Latin in both languages. It identifies the
+             product and the state of the file, which is the job; it is not CV content. */
+          pdf.text("sira - cv.rabit.sa", pw / 2, ph / 2, { align: "center", angle: 32 });
+          pdf.setFontSize(9);
+          pdf.text("Unlicensed preview - remove the watermark at cv.rabit.sa/pricing", pw / 2, ph - 8, { align: "center" });
+        }
       }
       pdf.save(`${name || "resume"}-designed.pdf`);
     } catch {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { grantPass, grantEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
 import { readSession, createSession, SESSION_COOKIE, createMagicToken } from "@/app/lib/session";
-import { grantEntitlement, getOrderEmail } from "@/app/lib/entitlements";
+import { grantEntitlement, getOrderEmail, claimTransaction } from "@/app/lib/entitlements";
 import { signTx, PAY_BIND_COOKIE } from "@/app/lib/paybind";
 import { sendEmail, emailShell } from "@/app/lib/email";
 
@@ -11,13 +11,31 @@ export const maxDuration = 30;
 
 const BASE = process.env.PAYLINK_BASE_URL || "https://restapi.paylink.sa";
 
-// The expected price per plan — must match app/api/pay/route.ts. Verification
-// checks the amount Paylink actually collected against this so an underpaid or
-// tampered invoice can't unlock a full entitlement.
+/*
+ * ── the third price table, and why it is gone ──
+ *
+ * This file used to declare its own `PLAN_PRICE`, reading only `PRICE_SINGLE` and friends. `plans.ts`
+ * — which the modal and `/api/pay` both use — additionally honours `NEXT_PUBLIC_PRICE_*`. So a
+ * promotion configured the documented way, `NEXT_PUBLIC_PRICE_SINGLE=19`, made `/api/pay` invoice 19
+ * while this file expected 35: `amountOk` false, and a customer who paid exactly what they were
+ * shown was refused their entitlement and told their payment "needs review".
+ *
+ * `ops/pricing.test.mjs` has a ratchet against hardcoded prices and could not see this, because it
+ * skips `api/` entirely. That exemption is now removed there too — a price table inside a route is
+ * the one place a divergence costs money rather than a wrong label.
+ */
+import { chargeableAmount } from "@/app/lib/plans";
+
+/*
+ * `chargeableAmount`, not `planPrice`, and that is the whole reason it exists: it accepts RETIRED
+ * plan ids so an invoice raised months ago under `monthly` stays verifiable after the plan is
+ * withdrawn. `planPrice` would not type-check against it, which is the type system correctly
+ * refusing to price a plan that is no longer sold — and this route must still be able to.
+ */
 const PLAN_PRICE: Record<string, number> = {
-  single: Number(process.env.PRICE_SINGLE || 35),
-  complete: Number(process.env.PRICE_COMPLETE || 99),
-  monthly: Number(process.env.PRICE_MONTHLY || 75), // legacy (backward-compat)
+  single: chargeableAmount("single") ?? Infinity,
+  complete: chargeableAmount("complete") ?? Infinity,
+  monthly: chargeableAmount("monthly") ?? Infinity, // legacy (backward-compat)
 };
 
 async function authenticate(): Promise<string> {
@@ -129,8 +147,36 @@ export async function GET(req: NextRequest) {
       // reclaim access on any device by signing in.
       const orderEmail = await getOrderEmail(orderNumber);
       if (orderEmail) {
+        /*
+         * ── fulfilment happens ONCE per transaction ──
+         *
+         * Everything below this line used to run on every call to this endpoint, and this endpoint
+         * is called at least twice on the ordinary happy path (the callback page's effect depends on
+         * `owner`, which changes when `/api/auth/me` answers) plus once per "Refresh status" tap.
+         *
+         * Two consequences, both live:
+         *
+         *   · `grantEntitlement` recomputed `until` from the CURRENT clock and overwrote. Re-opening
+         *     this URL from history 89 days after a 90-day pack renewed it for another 90 — one
+         *     payment, unlimited access. `grantEntitlement` now takes a maximum, and the claim below
+         *     stops the replay reaching it at all.
+         *
+         *   · a receipt was emailed and a FRESH 15-minute sign-in token minted, every time, with no
+         *     authentication beyond knowing a transaction number that lives in browser history and
+         *     referrers. That is a working sign-in link to the buyer's inbox, on demand, forever.
+         *
+         * `claimTransaction` returns true to exactly one caller. A later call still returns the
+         * correct `paid`/`plan`/`amount` JSON to the page, and still sets this browser's cookies
+         * below — it simply does not re-fulfil. That distinction is the point: re-checking a payment
+         * is legitimate and must keep working; re-FULFILLING it is not.
+         */
+        const first = await claimTransaction(transactionNo, now);
+        if (first) {
         try {
-          await grantEntitlement(orderEmail, until);
+          const granted = await grantEntitlement(orderEmail, until);
+          /* A charged customer with no grant is the one failure that must never be silent. It was:
+             the store returned without writing when unconfigured, and the caller could not tell. */
+          if (!granted) console.error("grantEntitlement: no store wrote", { orderNumber });
         } catch (e) {
           console.error("grantEntitlement (order) failed:", e);
         }
@@ -152,6 +198,7 @@ export async function GET(req: NextRequest) {
           });
         } catch (e) {
           console.error("receipt email failed:", e);
+        }
         }
       }
 

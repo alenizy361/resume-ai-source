@@ -733,7 +733,7 @@ export default function OptimizePage() {
                     </div>
                     {(() => {
                       const tp = TEMPLATE_CATALOG.find((x) => x.slug === tplSlug) || TEMPLATE_CATALOG[0];
-                      return <ResumeTemplate text={result.optimizedResume} name="optimized-resume" variant={tp.variant} accent={tp.accent} fitWidth />;
+                      return <ResumeTemplate text={result.optimizedResume} name="optimized-resume" variant={tp.variant} accent={tp.accent} watermark={watermarkFromResponse(result)} fitWidth />;
                     })()}
                   </div>
                 ) : (
