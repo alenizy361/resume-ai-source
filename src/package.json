@@ -64,7 +64,8 @@
     "test:motion:browser": "node ops/motion.browser.mjs",
     "test:aifeedback:browser": "node ops/aifeedback.browser.mjs",
     "test:resumeserver": "node --experimental-strip-types ops/resumeserver.test.mjs",
-    "test:fulfilment": "node --experimental-strip-types ops/fulfilment.test.mjs"
+    "test:fulfilment": "node --experimental-strip-types ops/fulfilment.test.mjs",
+    "test:iosblur:browser": "node ops/iosblur.browser.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

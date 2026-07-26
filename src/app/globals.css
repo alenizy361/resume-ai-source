@@ -213,12 +213,44 @@ body {
 }
 
 /* Cards */
+/*
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * NO BACKDROP FILTER HERE. It closed the browser on a real iPhone.
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * `.card` used to carry `backdrop-filter: blur(14px)`. It is the most repeated element in the
+ * product — 50 of them on one catalogue page, and there are 357 catalogue pages — so that one
+ * declaration asked iOS Safari for fifty backdrop snapshots and fifty blur passes on a single
+ * screen. Measured by selector: 51 blurred elements totalling 1.42 megapixels on
+ * `/resume-examples` at 390px wide. It was reported as the browser closing the tab on open, which
+ * is what exhausting GPU memory looks like to the person it happens to.
+ *
+ * ── why this was invisible to every check that ran ──
+ *
+ * The build emits ONLY the prefixed form:
+ *
+ *     .card{-webkit-backdrop-filter:blur(14px); …}
+ *
+ * Blink ignores `-webkit-backdrop-filter`; WebKit requires it. So Chromium — the only engine this
+ * sandbox has — renders zero blurs and reports `backdropFilter: "none"`, while an iPhone renders
+ * every one of them. A browser sweep that measured compositor layers and computed opacity on
+ * Chromium was therefore structurally incapable of seeing the most expensive thing on the page.
+ * That is a hole in the method, not bad luck, and it is written down in `docs/known-issues.md`.
+ *
+ * ── and why removing it costs nothing ──
+ *
+ * A backdrop filter blurs what is BEHIND the element. Behind a card here is a flat near-black
+ * background at `--bg`, and on some pages a static gradient. Blurring a flat colour produces the
+ * same flat colour. The visible card — the 3.5% white fill, the hairline border, the 20px radius —
+ * is unchanged, which is why the removal is not a design compromise.
+ *
+ * Blur is kept where there is exactly ONE per page and something real behind it: `.ps-header`,
+ * `.bd-header`, the sheet scrim, `.glass-surface`. The rule is the count, not the effect.
+ */
 .card {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 .card-hover:hover {
@@ -346,8 +378,8 @@ body {
   padding: 7px;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.09);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* No blur, same reason as `.card` above: a template gallery renders one of these per template,
+     so the cost scales with the catalogue while the visual gain is a blurred flat background. */
   transition: transform 0.22s var(--smooth, ease), border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
   cursor: pointer;
 }

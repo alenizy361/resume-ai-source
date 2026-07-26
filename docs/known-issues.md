@@ -82,6 +82,67 @@ their payment "needs review".
 **Fix.** The route reads `chargeableAmount()` — the function that exists precisely so retired
 plan ids stay verifiable.
 
+### F-7 · P0 · Fifty backdrop blurs per page closed the browser on iOS
+
+Reported twice from a real iPhone: opening the site closes the browser.
+
+`.card` carried `backdrop-filter: blur(14px)`. It is the most repeated element in the
+product — 50 on one catalogue page, across 357 catalogue pages — so that one declaration
+asked iOS Safari for fifty backdrop snapshots and fifty blur passes on a single screen.
+Measured by selector at 390px wide:
+
+| page | blurred elements | blurred area |
+|---|---|---|
+| `/resume-examples` | **51** → 2 | **1.42 MPx** → 0.03 |
+| `/` | 12 → 2 | 0.81 → 0.03 |
+| `/resume-examples/registered-nurse` | 11 → 2 | 0.59 → 0.03 |
+| `/pricing` | 7 → 2 | 0.55 → 0.02 |
+
+**Why every check missed it, which is the part worth keeping.** The build emits only the
+prefixed form:
+
+```
+.card{-webkit-backdrop-filter:blur(14px); …}
+```
+
+Blink ignores `-webkit-backdrop-filter`; WebKit requires it. So Chromium — the only engine
+this environment has — renders **zero** blurs and reports `backdropFilter: "none"` on a page
+that blurs fifty elements on the device the product is actually used on. A browser sweep that
+measured compositor layers, computed opacity and real pointer presses was structurally
+incapable of seeing the most expensive thing on the page. That is a hole in the method, not
+bad luck.
+
+It also compounded with the earlier per-card scroll reveal (F-8 below): fifty permanently
+promoted compositor layers *and* fifty backdrop blurs on the same page.
+
+**Fix.** Blur removed from `.card` and `.tpl-card` — the two classes that repeat per item. It
+is kept where there is exactly one per page and something real behind it: `.ps-header`,
+`.bd-header`, the sheet scrim, `.glass-surface`, `.chip`. **The rule is the count, not the
+effect.** Behind a card here is a flat near-black background; blurring a flat colour produces
+the same flat colour, so nothing visible changed.
+
+**Evidence.** `ops/motion.test.mjs` forbids a backdrop-filter on any class that repeats, and
+asserts the singleton surfaces still blur — a source rule, so it covers all 400+ pages.
+`ops/iosblur.browser.mjs` (new, 10 assertions) derives the blurred selectors from the SERVED
+stylesheet and matches them against the live DOM, measuring what WebKit will do using a
+browser that will not do it.
+
+### F-8 · P0 · The per-card scroll reveal cost a compositor layer each
+
+A scroll-driven animation with `fill: both` never finishes, so every element carrying one
+stays promoted to its own compositor layer for the life of the page. Applied to every `.card`,
+`/resume-examples` went from 11 layers to **62**, and live animations from 3 to 53.
+
+**Fix.** The reveal moved to the SECTION rather than each card in it — one layer per section
+instead of one per item. `ops/motion.browser.mjs` now asserts an absolute cap of 32 layers and,
+more importantly, that on a page with 20+ cards the live-animation count stays under half the
+card count, so the cost cannot follow the content again.
+
+**This fix existed for hours before it reached production.** Every deployment after it was
+refused with HTTP 402 `api-deployments-free-per-day`, so production kept serving the crashing
+build while the repository held the fix. A pushed fix is not a shipped fix — see
+`docs/vercel-env.md`.
+
 ### F-6 · P0 · A transient store blip could overwrite a live CV
 
 Found by `ops/resumeserver.test.mjs` against code written in the same sitting.

@@ -7,6 +7,21 @@
  *
  * So nothing here asserts that a class exists. Every check observes the browser: `animationstart`,
  * `transitionstart`, or a computed value read at a moment that matters.
+ *
+ * ── a sandbox limit worth knowing before you read a failure here ──
+ *
+ * This suite makes about twenty-three navigations. In a long-lived container it has been observed to
+ * die at the last one with "Target page, context or browser has been closed" — including with a
+ * freshly launched browser for that section, so it is the environment running out of something
+ * (descriptors, /dev/shm, PIDs) rather than the suite or the page. The route in question answers in
+ * 19ms to curl at the same moment.
+ *
+ * If the final section fails that way, restart the container or the server and re-run before
+ * believing it. Everything up to it passing and only the last navigation failing is the signature.
+ *
+ * The iOS backdrop-filter budget deliberately lives in its own file, `ops/iosblur.browser.mjs`, for
+ * the same reason — adding its navigations here killed this suite partway through, which made an
+ * unrelated section look broken.
  */
 
 import { chromium } from "playwright";

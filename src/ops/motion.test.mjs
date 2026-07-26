@@ -322,6 +322,44 @@ console.log("\n── the entrance cannot switch off the press, and cannot cost 
   const ghost = GLOBALS.replace(/\/\*[\s\S]*?\*\//g, "").match(/\.btn-ghost\s*\{([^}]*)\}/)?.[1] ?? "";
   ok("the ghost button can ease its press", /transition:[^;]*transform/.test(ghost));
 
+  /*
+   * ── trap 5: a blur on an element that repeats, which no Chromium check can see ──
+   *
+   * `.card` carried `backdrop-filter: blur(14px)`. It is the most repeated element in the product —
+   * 50 on one catalogue page, across 357 catalogue pages — so that single declaration asked iOS for
+   * fifty backdrop snapshots and fifty blur passes on one screen. Measured by selector: 51 blurred
+   * elements, 1.42 megapixels, at 390px wide. It closed the browser on a real iPhone.
+   *
+   * It was invisible to every check that ran, and not by accident. The build emits ONLY the
+   * prefixed form — `-webkit-backdrop-filter` — which Blink ignores and WebKit requires. So the
+   * browser sweep, which has Chromium and nothing else, measured zero blurs on a page that renders
+   * fifty of them on the device the product is actually used on. A cross-engine hole a runtime
+   * check cannot close is one the SOURCE has to.
+   *
+   * The rule is the COUNT, not the effect. A blur on a page's single sticky header is one snapshot
+   * and is fine. A blur on a class that appears once per list item is a cost that grows with the
+   * content, and the busiest page becomes the most expensive one.
+   */
+  const REPEATS = ["card", "tpl-card", "bd-sug", "bd-chip", "bd-confirmed", "bd-chip-group"];
+  const cssFiles = ["app/globals.css", "app/build.css", "app/transitions.css"];
+  const blurred = [];
+  for (const f of cssFiles) {
+    const src = read(f).replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const cls of REPEATS) {
+      /* The declaration must fall inside THIS class's own block, so a blur three rules later does
+         not read as this rule's. */
+      const m = src.match(new RegExp(`\\.${cls}\\s*\\{([^}]*)\\}`));
+      if (m && /backdrop-filter/.test(m[1])) blurred.push(`${f} .${cls}`);
+    }
+  }
+  ok("no blur on a class that repeats per item", blurred.length === 0, blurred.join(", "));
+
+  /* And the positive half, so the assertion above cannot pass by the blurs simply being gone: the
+     singleton surfaces that legitimately blur must still do so. */
+  const g = read("app/globals.css").replace(/\/\*[\s\S]*?\*\//g, "");
+  ok("the one-per-page surfaces still blur",
+    /\.ps-header\s*\{[^}]*backdrop-filter/.test(g) && /\.glass-surface\s*\{[^}]*backdrop-filter/.test(g));
+
   /* The two infinite animations are the only thing saying a request is still open, so the guard must
      replace them rather than merely stopping them — a stopped ring mid-fade is invisible. */
   const guard = decls.slice(decls.indexOf("prefers-reduced-motion: reduce"));
