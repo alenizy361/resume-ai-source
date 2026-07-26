@@ -70,8 +70,17 @@ export function Field({
 
 /* ───────────────────────── sections ───────────────────────── */
 
-export function StartCards(p: Common & { onPicked: () => void }) {
-  const [showImport, setShowImport] = useState(false);
+export function StartCards(p: Common & { onPicked: () => void; openImport?: boolean }) {
+  /*
+   * `openImport` is how the home page's "I already have a CV" card arrives here.
+   *
+   * That card used to link to `/optimize` — a separate three-step tool with its own state, its own
+   * preview and its own export path — so the visitor who pressed the most popular button left the
+   * product they had just chosen and could not continue building in the form afterwards. It now
+   * links to `/builder?entry=upload`, and this opens the importer on arrival so the visitor sees a
+   * file picker rather than having to find the same card a second time.
+   */
+  const [showImport, setShowImport] = useState(Boolean(p.openImport));
   const ar = p.lang === "ar";
   const C = ar ? C_AR : C_EN;
   return (

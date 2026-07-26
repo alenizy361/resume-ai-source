@@ -123,6 +123,9 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
         {hasDraft && <div className="bd-label">{t.fresh}</div>}
         <StartCards
           lang={lang} state={state} dispatch={dispatch}
+          /* `?entry=upload` comes from the home page's upload card. One addressable entry per
+             door means the landing can point at the right one instead of at another product. */
+          openImport={params.get("entry") === "upload"}
           onPicked={() => enter()}
         />
       </div>

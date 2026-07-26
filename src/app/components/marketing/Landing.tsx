@@ -37,8 +37,11 @@ const C = {
     ctaBuildSub: "Eleven short steps. Nothing enters your CV until you approve it.",
     ctaUpload: "I already have a CV — improve it",
     ctaUploadSub: "We read your file, score it against the job, and rewrite it without inventing anything.",
-    ctaChat: "I would rather just talk",
-    ctaChatSub: "Answer questions in a conversation and get the same CV out of it.",
+    /* `ctaChat` used to be here, for a card pointing at `/journey`. The conversation was retired,
+       the card was removed, and these two strings stayed behind — an invitation for someone to
+       re-add a link to a 308 redirect. Replaced by the third door, which is real. */
+    ctaResume: "Continue a CV I saved here",
+    ctaResumeSub: "Everything is kept on this device. Pick it up where you stopped, in the same form.",
 
     howHead: "How it works",
     how: [
@@ -105,8 +108,8 @@ const C = {
     ctaBuildSub: "إحدى عشرة خطوة قصيرة. لا يدخل شيء سيرتك قبل أن تعتمده.",
     ctaUpload: "لديّ سيرة — حسّنها",
     ctaUploadSub: "نقرأ ملفك، ونقيّمه مقابل الوظيفة، ونعيد صياغته دون اختلاق أي شيء.",
-    ctaChat: "أفضّل المحادثة",
-    ctaChatSub: "أجب عن أسئلة في محادثة واحصل على السيرة نفسها.",
+    ctaResume: "أكمل سيرة حفظتها هنا",
+    ctaResumeSub: "كل شيء محفوظ على جهازك. واصل من حيث توقفت، في النموذج نفسه.",
 
     howHead: "كيف يعمل",
     how: [
@@ -211,9 +214,25 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <div className="text-base font-bold">{t.ctaBuild} →</div>
             <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaBuildSub}</div>
           </Link>
-          <Link href={`${p}/optimize`} className="card card-hover p-5">
+          {/*
+            Into the BUILDER, with the importer open — not to `/optimize`.
+            
+            `/optimize` is a good tool and keeps its own address and its own search traffic, but it
+            is a different engine: its own state, its own preview, its own export. Sending the file
+            there meant the visitor who pressed this card could not then carry on building in the
+            form; they had a score and a rewrite and no way back into the product. All three doors —
+            new, upload, continue a saved CV — now land in one data model, one preview, one save and
+            one download.
+          */}
+          <Link href={`${p}/builder?entry=upload`} className="card card-hover p-5">
             <div className="text-base font-bold">{t.ctaUpload} →</div>
             <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaUploadSub}</div>
+          </Link>
+          {/* And the third door: a CV already saved on this device. It was reachable only from
+              inside the builder, so a returning visitor's first screen did not mention it. */}
+          <Link href={`${p}/builder`} className="card card-hover p-5">
+            <div className="text-base font-bold">{t.ctaResume} →</div>
+            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaResumeSub}</div>
           </Link>
         </div>
       </section>
