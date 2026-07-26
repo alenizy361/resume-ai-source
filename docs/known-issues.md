@@ -367,3 +367,49 @@ points at something language-specific in the header area rather than at the layo
 Not fixed here: this turn's budget went to the crash. It is cheap to investigate — one page,
 one shift entry, a named source — and it is worth doing before more catalogue pages are added,
 because whatever causes it is in a shared template.
+
+### O-15 · P1 · Static pages ship 400–800 KB of JavaScript, and the cause is one line's position
+
+Measured with `next start`, 390px viewport, uncompressed script bodies:
+
+| page | JS | chunks |
+|---|---|---|
+| `/resume-examples` | 409–641 KB | 15–39 |
+| `/resume-examples/registered-nurse` | 570–810 KB | 20–41 |
+| `/` | 720 KB | 37 |
+
+These are server components rendering headings, lists and links. They need no client JavaScript
+at all. For comparison the same pages carry 145–309 DOM nodes and 34–70 KB of HTML — **the
+JavaScript is roughly ten times the content it decorates.**
+
+**The cause.** `RootShell` — which wraps every route — renders `<Analytics />` and
+`<FunnelBeacon />`, and both are `"use client"`. A client component in the ROOT layout puts the
+client boundary at the top of every route, so React's client runtime and the client-component
+manifest ship to all 357 static catalogue pages. The bytes are not those two components' own
+size; they are the cost of having any client component that high in the tree.
+
+`SpaceBackdrop` was checked and is already a server component. `BrandOrb` too — a `grep` for
+`"use client"` matches its comment text, which is a false positive worth knowing about.
+
+**An attempt was made and reverted.** Replacing both with plain `<script>` tags — Vercel
+Analytics is only a script that defines `window.va`, and the beacon is one `sessionStorage` key
+plus one event — is the right shape. Two things stopped it shipping:
+
+1. **The inline beacon did not fire.** Nothing written to `ra_funnel_entry`, no event, on any
+   page. Not diagnosed. Shipping silent analytics is worse than shipping heavy analytics,
+   because a wrong number looks exactly like a right one.
+2. **The saving did not reproduce.** Deleting the two components measured 109 KB on
+   `/resume-examples`; reimplementing them as scripts measured 409 KB on the same page. Turbopack
+   chunk splitting varies between builds, so a single before/after pair is not evidence. The
+   83% figure should be treated as unverified until it is measured across repeated builds.
+
+**What a correct fix needs**, so the next attempt starts further along: the two features moved out
+of the root layout without becoming React client components; the beacon's referrer and
+page-family classification kept in ONE place rather than duplicated into a script — the
+duplication is the real hazard, because analytics drift is silent; a repeated-build measurement
+rather than one pair; and a test that the entry is stamped once per session and the event fires,
+which `ops/funnel.test.mjs` does not currently assert against a browser.
+
+**Not a proven cause of the iOS crash.** It is a real weight problem worth fixing on its own
+terms — on pages whose only purpose is organic search, where payload is a ranking input — but the
+two crash causes that were measured and fixed were GPU-side (F-7, F-8, F-10), not JavaScript.
