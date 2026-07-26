@@ -1,0 +1,43 @@
+Implemented Vercel Speed Insights integration
+
+I successfully installed and configured Vercel Speed Insights for this Next.js project following the latest official documentation from https://vercel.com/docs/speed-insights/quickstart.
+
+## Changes Made
+
+### 1. Package Installation
+- Installed `@vercel/speed-insights` package version compatible with the project
+- Updated `package.json` and `package-lock.json` with the new dependency
+
+### 2. Component Integration (app/components/RootShell.tsx)
+- Added import: `import { SpeedInsights } from "@vercel/speed-insights/next";`
+- Integrated the `<SpeedInsights />` component in the HTML body, positioned alongside the existing `<Analytics />` component
+- The component was added to the shared RootShell component, which serves both English and Arabic root layouts, ensuring Speed Insights coverage across all pages
+
+### 3. Test Updates (ops/portability.test.mjs)
+- Updated the portability test to reflect the addition of `@vercel/speed-insights` as a second Vercel dependency
+- Modified test assertion to expect both `@vercel/analytics` and `@vercel/speed-insights`
+- Updated test message to clarify both dependencies degrade gracefully when running off-platform
+
+## Implementation Details
+
+The integration follows the framework-specific Next.js instructions from the official documentation:
+- Used the Next.js-specific import path: `@vercel/speed-insights/next`
+- Placed the component at the root level to track performance across all routes
+- Component is positioned after children content and alongside Analytics, following best practices
+
+## Verification
+
+All verification steps completed successfully:
+- ✅ Build completed without errors (npm run build)
+- ✅ No new linting errors introduced
+- ✅ All test suites pass (npm test)
+- ✅ Package dependencies properly updated with lockfile
+
+The Speed Insights component will begin collecting performance metrics once the application is deployed to Vercel and Speed Insights is enabled in the Vercel dashboard.
+
+## Files Modified
+
+1. `package.json` - Added @vercel/speed-insights dependency
+2. `package-lock.json` - Updated with package resolution
+3. `app/components/RootShell.tsx` - Added SpeedInsights import and component
+4. `ops/portability.test.mjs` - Updated test to recognize the new Vercel dependency
