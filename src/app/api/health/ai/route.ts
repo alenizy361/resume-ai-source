@@ -7,9 +7,9 @@ import {
 } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
-import { MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
+import { CHARS_PER_TOKEN, MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
 import { countTokensReport } from "@/app/lib/aiTokenCount";
-import { OUTPUT_SCHEMA, schemaRequestFor } from "@/app/lib/aiSchemas";
+import { OUTPUT_SCHEMA, schemaRequestFor, structuredOutputsEnabled } from "@/app/lib/aiSchemas";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
@@ -168,10 +168,13 @@ export async function GET(req: NextRequest) {
         Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(CORE_RULES) + estimateTokens(v ?? "")]),
       ),
       prefixTokensEstimated: true,
+      /* The constant moved from 3.594 to 4.067 when count_tokens showed the first calibration was
+         13% high; this sentence quoted the old one and would have sent the next reader to the wrong
+         arithmetic. Read from the export so it cannot drift again. */
       prefixTokensNote:
-        "Estimated at 3.594 chars/token, calibrated against a logged call. Add ?tokens=1 for exact "
-        + "per-model counts from count_tokens — that endpoint returns a count and no completion, so "
-        + "it bills nothing.",
+        `Estimated at ${CHARS_PER_TOKEN} chars/token, recalibrated against count_tokens. Add `
+        + "?tokens=1 for exact per-model counts — that endpoint returns a count and no completion, "
+        + "so it bills nothing.",
       cacheFloorTokens: cacheFloorFor(suggestModel),
       cacheablePrefix:
         estimateTokens(CORE_RULES) + estimateTokens(TASK_SCHEMA.role_blueprint ?? "")
@@ -733,11 +736,19 @@ async function probeSchemas(model: string): Promise<Record<string, unknown>> {
     estimatedUsd: Number(usd.toFixed(6)),
     byTask,
     truncated,
+    /* Says what IS, not what to do: structured outputs went on by default once this probe first came
+       back clean, so "safe to set ANTHROPIC_STRUCTURED_OUTPUTS=1" was advice to do something already
+       done — the kind of stale instruction that makes a reader doubt the rest of the report. */
+    enabledNow: structuredOutputsEnabled(),
     verdict: allAccepted
-      ? "All four schemas were accepted and each returned exactly its own keys. Safe to set "
-        + "ANTHROPIC_STRUCTURED_OUTPUTS=1 — that removes the schema-invalid retry, which costs about "
-        + "four times a clean call. Counts are still NOT enforced by the schema, only the shape, so the "
-        + "prose LIMITS and the route's own validator both stay."
+      ? "All four schemas were accepted and each returned exactly its own keys"
+        + (structuredOutputsEnabled()
+          ? " — and output_config is ON, so the schema-invalid retry (about four times a clean call) is "
+            + "not reachable. ANTHROPIC_STRUCTURED_OUTPUTS=0 turns it off without a deploy."
+          : " — but ANTHROPIC_STRUCTURED_OUTPUTS is set to off, so nothing is enforcing them. Remove "
+            + "that override to get the saving.")
+        + " Counts are still NOT enforced by the schema, only the shape, so the prose LIMITS and the "
+        + "route's own validator both stay."
       : truncated
         ? "A schema ran out of output budget rather than being refused — see `truncated` per task. "
           + "That is a max_tokens problem, not a schema problem. Raise the cap and re-run before "

@@ -387,5 +387,27 @@ ok("the prefix figure names its task", /cachedPrefixTask/.test(SRC));
 ok("and every task's prefix is reported", /prefixTokensByTask/.test(SRC));
 ok("the estimate is labelled an estimate", /prefixTokensEstimated/.test(SRC));
 
+/* ── the report must not quote numbers it no longer uses ── */
+
+console.log("\n── no stale constants or stale advice in the report ──");
+
+/*
+ * Both of these shipped wrong and both were the same kind of wrong: a sentence that was true when it
+ * was written and became false when the code moved, in a diagnostic whose only job is to be trusted.
+ *
+ *   · the prefix note quoted "3.594 chars/token" after the constant became 4.067
+ *   · the schema verdict said "safe to set ANTHROPIC_STRUCTURED_OUTPUTS=1" after it went on by default
+ *
+ * One stale sentence in a health report costs more than the fact it misstates, because it makes a
+ * reader discount the fields that ARE right.
+ */
+ok("the chars-per-token figure is read, not typed", /\$\{CHARS_PER_TOKEN\}/.test(CODE)
+  && !/3\.594/.test(CODE));
+ok("the schema verdict reports the state instead of advising a change",
+  /enabledNow: structuredOutputsEnabled\(\)/.test(CODE)
+  && !/Safe to set ANTHROPIC_STRUCTURED_OUTPUTS=1/.test(CODE));
+ok("and it names the off switch, which is the action that still exists",
+  /ANTHROPIC_STRUCTURED_OUTPUTS=0/.test(CODE));
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
