@@ -82,6 +82,52 @@ their payment "needs review".
 **Fix.** The route reads `chargeableAmount()` — the function that exists precisely so retired
 plan ids stay verifiable.
 
+### F-10 · P0 · Scrolling down threw the user out of the browser
+
+Third report from the same iPhone, and the most specific: the site opens, and scrolling down
+closes the browser.
+
+`t-enter` was `animation-timeline: view()` — a browser-driven scroll animation with no
+JavaScript, running on the compositor. On paper the cheapest possible reveal, which is why it
+was chosen, and the argument against the alternative still holds: an `IntersectionObserver`
+reveal is a main-thread callback per element firing inside the exact window INP measures, on 357
+pages whose whole purpose is search traffic.
+
+Measured before removal: **9 live `ViewTimeline`s** on a catalogue detail page, 4 on the
+landing page, each attached for the life of the page.
+
+**Why removed rather than tuned.** Two of its faults were already found and fixed by
+measurement — the per-card version promoted a compositor layer per item (62 layers on one
+page, F-8), and a fixed pixel range could never complete near the bottom of a short document.
+Both fixes were real, and the reports kept coming. The deciding fact is not about the effect:
+**this environment has Chromium and only Chromium.** Scroll-driven animations shipped in Safari
+very recently, WebKit is where the crash happens, and it cannot be reproduced, bisected or
+cleared from here. A decorative effect whose safety cannot be checked on the platform most
+users are on is not a trade worth making.
+
+**Fix.** `t-enter` is a one-time `@starting-style` entrance at mount. No timeline, nothing
+attached after 260ms. Sections below the fold animate while off screen, which is invisible and
+free. All 57 call sites keep their markup; only the cost changed.
+
+    live ViewTimelines   9 → 0   (catalogue detail)
+    live animations     15 → 6   (catalogue detail), 11 → 7 (landing), 5 → 3 (catalogue index)
+
+**And the question that came with the report** — "why load every screen at once, it's heavy" —
+is answered in the same rule. `content-visibility: auto` with `contain-intrinsic-size: auto
+500px` on each section lets the browser skip layout, paint and compositing for anything off
+screen, on pages that are up to 7.8 screens tall. The content stays in the DOM, so nothing
+changes for a crawler or for Cmd-F; only the rendering work is deferred. That is the difference
+from pagination, which would cost the search traffic these pages exist for.
+
+Worth noting the measurement that did NOT support the report's premise: these pages are not
+heavy in content terms — 145–309 DOM nodes and 34–70 KB of HTML. The weight was in what the
+CSS asked the compositor to do, not in how much was loaded.
+
+**Evidence.** `ops/motion.test.mjs` (49 assertions) now bans `animation-timeline` and any
+`view()`/`scroll()` timeline outright — a source rule, because no Chromium runtime check can
+measure what made it unsafe — and asserts the replacement is still a real entrance and that
+`content-visibility` has an intrinsic size to go with it.
+
 ### F-9 · P0 · "Open the site and the previous entries are still there"
 
 Reported twice, after the fix that was supposed to prevent it.
@@ -298,3 +344,26 @@ drift — it is outside `npm test`, so nothing was watching it.
 Worth fixing rather than deleting: it is the one harness that runs with `/api/suggest` blocked,
 which is what proves the form still works with the AI switched off. That is the product's stated
 thesis and nothing else asserts it end to end.
+
+### O-14 · P1 · `/resume-examples` has a CLS of 0.25 at load
+
+Found while verifying that `content-visibility` had not introduced layout shift. It had not —
+the figure is **identical with and without it**, so this is pre-existing:
+
+| page | CLS at load | after a full scroll down and back |
+|---|---|---|
+| `/resume-examples` | **0.2489** | 0.2489 |
+| `/ar/resume-examples` | 0.0398 | 0.0398 |
+| `/resume-examples/registered-nurse`, `/`, `/pricing` | 0.0000 | 0.0000 |
+
+Google's threshold for "good" is 0.1 and "poor" starts at 0.25, so the English catalogue index
+is at the edge of poor — on a page whose entire purpose is organic search, which is the
+product's only acquisition channel.
+
+One shift entry, sourced to `mx-auto max-w-4xl px-6 pb-16` and `mb-10` — a container and a
+block near the top, not the card grid. The Arabic equivalent shifts by a sixth as much, which
+points at something language-specific in the header area rather than at the layout itself.
+
+Not fixed here: this turn's budget went to the crash. It is cheap to investigate — one page,
+one shift entry, a named source — and it is worth doing before more catalogue pages are added,
+because whatever causes it is in a shared template.

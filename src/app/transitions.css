@@ -236,61 +236,30 @@
 
 
 /* ──────────────────────────────────────────────────────────────────────────────
-   9. t-enter — content arriving as you scroll to it, with no JavaScript at all
+   9. t-enter — a section arriving once, and not being rendered until it is near
    ────────────────────────────────────────────────────────────────────────────── */
 
 /*
- * ── the one technique that makes this affordable ──
+ * ── what this section used to say, and why the argument was right and the answer wrong ──
  *
- * "Reveal on scroll" normally means an `IntersectionObserver`: a JS callback per element, firing
- * during the exact window INP measures, on 357 catalogue pages whose entire purpose is search
- * traffic. That is the trade this file exists to refuse.
+ * It argued for `animation-timeline: view()` at length, and the argument still holds on its own
+ * terms: "reveal on scroll" normally means an `IntersectionObserver`, which is a JS callback per
+ * element firing inside the exact window INP measures, on 357 pages whose whole purpose is search
+ * traffic. A browser-driven scroll timeline has none of that cost.
  *
- * `animation-timeline: view()` is the same effect with none of it. The browser drives the animation
- * from the element's own position in the scrollport, on the compositor, with no main-thread work and
- * no observer. It is the reason the product can look alive and still be cheap.
+ * What the argument never covered is the cost it DID have, on an engine this environment cannot run.
+ * Three crash reports from a real iPhone named it, the last one precisely — "it opens, but scrolling
+ * down throws me out of the browser" — with 9 live `ViewTimeline`s on the page. So the effect is
+ * gone, and the reasoning is recorded below rather than deleted, because the next person will have
+ * the same good idea.
  *
- * ── the degradation, which had to be got right first ──
+ * The replacement is deliberately dull: `@starting-style` gives each section one 260ms entrance at
+ * mount, and then nothing is attached to it ever again. Sections below the fold animate while off
+ * screen, which is invisible and costs nothing.
  *
- * The obvious way to write this is `opacity: 0` in the base rule and let the animation bring it back.
- * On a browser without scroll-driven animations that leaves the page BLANK — every card invisible,
- * permanently, with no error. Content that depends on an animation to exist is not a progressive
- * enhancement, it is a bug waiting for the wrong browser.
- *
- * So the base state is the FINISHED state. The hidden start exists only inside `@supports`, and only
- * when motion is welcome. Unsupported, or reduced-motion: the content is simply there.
- *
- * ── the stagger is free ──
- *
- * Each element gets its own `view()` timeline, driven by its own position. A grid of cards therefore
- * arrives in reading order because that is the order they cross the viewport — no `nth-child` delays,
- * no counting, and it stays correct when the grid reflows to one column on a phone.
- *
- * ── it is opt-in, and the first version was not, and that shipped a crash ──
- *
- * This was written as `.t-enter, .card` — every card in the product, on the argument that a class
- * nobody remembers is a class that is missing. Section 10 makes that argument correctly for hover
- * and press, and it is WRONG here, for a reason that has nothing to do with taste.
- *
- * A scroll-driven animation with `fill: both` never finishes. It stays attached for the life of the
- * page, so the browser keeps every element carrying one promoted to its own compositor layer —
- * permanently, whether or not it is on screen. Measured on `/resume-examples`, a 390px viewport:
- *
- *     compositor layers   11  →  62
- *     live animations      3  →  53
- *
- * Fifty permanently promoted layers, on a page whose cards also carry a `backdrop-filter`. It was
- * reported from a real phone as the browser closing the tab on open, which is what running out of
- * GPU memory looks like to the person it happens to.
- *
- * The desktop browser sweep that verified every effect passed all eighteen checks while this was
- * true: it asked whether the motion RUNS, and this is a question about what running it costs. There
- * is now a layer budget in `ops/motion.browser.mjs` so the count itself is a thing that can fail.
- *
- * So: opt-in, applied to the SECTION rather than to each card in it. One layer per section instead
- * of one per item, the reveal reads the same to a reader, and a long list cannot make it expensive.
- * A section already on screen at load is at the END of its own range, so nothing above the fold
- * fades in on arrival and there is no first-paint flash.
+ * `content-visibility` is the part that actually addresses page weight, and it is the answer to the
+ * question that came with the third report — why load every screen at once on a page that is nearly
+ * eight screens tall. See the property's own note below.
  */
 
 /*
@@ -312,46 +281,63 @@
 }
 
 /*
- * The scroll-driven entrance has its own keyframes, and the plateau is the whole point.
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE SCROLL-DRIVEN VERSION IS GONE. It was implicated in three crash reports.
+ * ══════════════════════════════════════════════════════════════════════════════════════
  *
- * ── what a fixed pixel range did, measured ──
+ * `t-enter` was `animation-timeline: view()` — a browser-driven scroll animation, no JavaScript,
+ * compositor-only. On paper the cheapest possible reveal, and the reason it was chosen.
  *
- * This was `animation-range: entry 0% entry 240px` — a fixed reveal distance, chosen so a 60px chip
- * and a 900px panel would behave alike. A browser sweep across nine pages found the flaw: the LAST
- * card on `/pricing` and on `/ar/pricing` was stuck at 73% opacity, permanently, with the page
- * scrolled all the way down.
+ * In practice it was named in three separate reports from a real iPhone, and the third was
+ * specifically "it opens, but when I scroll down it throws me out of the browser". Measured: 9 live
+ * `ViewTimeline`s on a catalogue detail page, each attached for the life of the page.
  *
- * The reason is that `entry` is not as long as I assumed. It runs from "the element's top edge
- * touches the bottom of the scrollport" to "the element is fully inside it" — a length of
- * min(element height, viewport height), NOT element + viewport. For a 110px card that is 110px of
- * scroll. Asking for 240px of it means the range extends past the document's own end, so a card
- * near the bottom of a short page can never reach 100% — there is no more page to scroll.
+ * ── why it is removed rather than tuned ──
  *
- * ── why the plateau, rather than simply a shorter range ──
+ * Two of its faults were found and fixed by measurement: the per-card version promoted a compositor
+ * layer per item (62 layers on one page), and a fixed pixel range could never complete near the
+ * bottom of a short document. Both fixes were real. And the reports kept coming.
  *
- * `entry 100%` is the one end point that is always reachable: it is the moment the element is fully
- * on screen, and an element that is on screen has been scrolled to by definition. So the RANGE ends
- * there, and the visible motion is finished early inside it by the keyframes — settled at 55%, held
- * for the rest.
+ * The deciding fact is not about the effect, it is about what can be verified: this environment has
+ * Chromium and only Chromium. Scroll-driven animations shipped in Safari very recently, WebKit is
+ * where the crash happens, and I cannot reproduce, bisect or clear it there. Keeping a decorative
+ * effect whose safety cannot be checked on the platform most of this product's users are on is not a
+ * trade worth making — the same reasoning that removed the `backdrop-filter` on `.card`.
  *
- * That also fixes what the fixed distance was invented to fix. On a card taller than the viewport
- * the range is capped at the viewport height rather than growing with the element, so the reveal
- * cannot stretch across two screenfuls of reading.
+ * ── what `t-enter` is now ──
+ *
+ * A one-time entrance at mount, via `@starting-style`. No timeline, no permanent animation, nothing
+ * attached after it finishes. Sections below the fold animate while off screen, which is invisible
+ * and free — 260ms of opacity and `translate` once, then the element is inert forever.
+ *
+ * The 57 call sites keep their meaning and their markup. What changed is what the class costs.
  */
-@keyframes t-enter-scroll {
-  0%   { opacity: 0; translate: 0 20px; }
-  55%  { opacity: 1; translate: none; }
-  100% { opacity: 1; translate: none; }
+.t-enter {
+  opacity: 1;
+  translate: none;
+  transition: opacity var(--t-slow) var(--t-out), translate var(--t-slow) var(--t-out);
+
+  /*
+   * ── and the part that answers "why load every screen at once" ──
+   *
+   * Asked directly, and it is the right question: a catalogue page is 7.8 screens tall. This is the
+   * CSS answer to it. `content-visibility: auto` lets the browser SKIP rendering — layout, paint,
+   * compositing — for a section that is off screen, and do it when the section approaches. The
+   * content stays in the DOM, so nothing changes for a crawler or for Cmd-F; only the rendering work
+   * is deferred. That is the difference between this and pagination, which would cost the SEO these
+   * pages exist for.
+   *
+   * `contain-intrinsic-size: auto 500px` is the placeholder height used before a section has ever
+   * been rendered. `auto` means the browser remembers the real height once it knows it, so scrolling
+   * back up does not re-guess and the scrollbar stops moving after the first pass. Without a size
+   * here every unrendered section would collapse to zero and the page would have no length.
+   */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .t-enter {
-      animation: t-enter-scroll linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
-    }
-  }
+@starting-style {
+  .t-enter { opacity: 0; translate: 0 12px; }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────────

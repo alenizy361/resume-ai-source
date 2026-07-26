@@ -257,8 +257,8 @@ console.log("\n── the entrance cannot switch off the press, and cannot cost 
    * `translate` is an independent transform property: it composes with `transform` instead of
    * replacing it. This asserts the entrance keyframes never touch `transform`.
    */
-  const entrance = [...decls.matchAll(/@keyframes\s+(t-enter-in|t-enter-scroll|t-hero-in)[^{]*\{([\s\S]*?)\n\}/g)];
-  ok("all three entrance keyframes exist", entrance.length === 3, `${entrance.length} found`);
+  const entrance = [...decls.matchAll(/@keyframes\s+(t-enter-in|t-hero-in)[^{]*\{([\s\S]*?)\n\}/g)];
+  ok("both entrance keyframes exist", entrance.length === 2, `${entrance.length} found`);
   const usesTransform = entrance.filter(([, name, body]) => /transform\s*:/.test(body)).map(([, n]) => n);
   ok("the entrance moves with `translate`, so it cannot cancel a press",
     usesTransform.length === 0, usesTransform.join(", "));
@@ -274,38 +274,37 @@ console.log("\n── the entrance cannot switch off the press, and cannot cost 
   ok("the hero entrance does not animate opacity", hero !== "" && !/opacity\s*:/.test(hero));
 
   /*
-   * ── trap 3: content that needs an animation to exist ──
+   * ── trap 3: no scroll-driven animation, at all ──
    *
-   * The obvious way to write a scroll reveal is `opacity: 0` in the base rule. On a browser without
-   * scroll-driven animations that leaves the page permanently BLANK, with no error. So the hidden
-   * start must exist ONLY inside `@supports`, and the base state must be the finished one.
+   * `t-enter` was `animation-timeline: view()`. It was named in three crash reports from a real
+   * iPhone, the last one specifically on scroll, with 9 live `ViewTimeline`s on the page. The
+   * technique is cheap on Chromium and cannot be verified on WebKit from here, and WebKit is where
+   * the crash was — so it is banned rather than tuned.
+   *
+   * This is a source rule because it has to be: no Chromium runtime check can measure the thing that
+   * made it unsafe. Same reasoning as the backdrop-filter rule below.
    */
-  const gateAt = decls.indexOf("@supports (animation-timeline: view())");
-  ok("the scroll entrance is behind an @supports gate", gateAt !== -1);
-  /* Matching the closing braces is what a first attempt did, and it is brittle to indentation. What
-     actually matters is that no `animation-timeline` is declared BEFORE the gate opens — a second one
-     added above it would be exactly the unguarded case this protects against. */
-  const timelines = [...decls.matchAll(/animation-timeline\s*:/g)].map((m) => m.index);
-  ok("and no timeline is declared outside it",
-    gateAt !== -1 && timelines.every((i) => i > gateAt), `${timelines.length} declarations`);
-  ok("and nothing outside it hides a card",
-    !/^\s*\.card\s*\{[^}]*opacity:\s*0/m.test(decls));
+  const timelines = [...decls.matchAll(/animation-timeline\s*:/g)];
+  ok("no scroll-driven animation anywhere", timelines.length === 0,
+    `${timelines.length} animation-timeline declarations`);
+  ok("and no view() or scroll() timeline function", !/\b(view|scroll)\(\s*\)/.test(decls));
+
+  /* And the replacement must still be a real entrance rather than nothing: a settled state plus a
+     `@starting-style`, like every other entrance in this file. */
+  ok("t-enter declares a settled state", /^\.t-enter\s*\{/m.test(decls));
+  ok("t-enter has a @starting-style", /@starting-style\s*\{[^}]*\.t-enter/.test(decls));
 
   /*
-   * ── trap 3b: a range the document may not be long enough to complete ──
+   * ── and the answer to page weight, which was asked for directly ──
    *
-   * `entry` runs from "the element's top touches the bottom of the scrollport" to "the element is
-   * fully inside it" — min(element height, viewport height), not element PLUS viewport. Asking for a
-   * fixed 240px of it left the last card on /pricing stuck at 73% opacity forever, because the page
-   * had already run out of scroll. `entry 100%` is the one end point always reachable: an element on
-   * screen has been scrolled to by definition. The motion finishes early via a keyframe plateau
-   * instead, which is checked here so the pixel version cannot come back.
+   * A catalogue page is nearly eight screens tall. `content-visibility: auto` lets the browser skip
+   * rendering an off-screen section entirely while leaving it in the DOM, so it costs nothing for
+   * search. It is useless without an intrinsic size — every deferred section would collapse to zero
+   * height and the page would have no length — so both are asserted together.
    */
-  const range = decls.match(/animation-range:\s*([^;]+);/)?.[1]?.trim() ?? "";
-  ok("the scroll range ends somewhere the document can always reach",
-    range === "entry 0% entry 100%", range || "no animation-range");
-  const scrollKf = entrance.find(([, n]) => n === "t-enter-scroll")?.[2] ?? "";
-  ok("and the motion is finished before the range is", /^\s*55%/m.test(scrollKf));
+  const enterRule = decls.match(/^\.t-enter\s*\{([\s\S]*?)\n\}/m)?.[1] ?? "";
+  ok("off-screen sections are not rendered", /content-visibility:\s*auto/.test(enterRule));
+  ok("and they still have a height before they are", /contain-intrinsic-size:\s*auto/.test(enterRule));
 
   /*
    * ── trap 4: a stronger selector elsewhere silently replacing the shared press ──
