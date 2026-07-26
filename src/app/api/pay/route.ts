@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { chargeableAmount } from "@/app/lib/plans";
 import { BRAND } from "@/app/lib/brand";
 import { setOrderEmail } from "@/app/lib/entitlements";
+import { allowedOrigin } from "@/app/lib/payOrigin";
 import { signTx, PAY_BIND_COOKIE } from "@/app/lib/paybind";
 
 export const maxDuration = 30;
@@ -13,6 +14,7 @@ export const maxDuration = 30;
  */
 
 const BASE = process.env.PAYLINK_BASE_URL || "https://restapi.paylink.sa";
+
 const CURRENCY = process.env.PAY_CURRENCY || "SAR";
 
 /*
@@ -67,7 +69,24 @@ export async function POST(req: NextRequest) {
 
     const token = await authenticate();
 
-    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+    /*
+     * ── where the payment provider sends the buyer back, and why it is not the caller's choice ──
+     *
+     * This was `req.headers.get("origin") || APP_URL`. The Origin header is supplied by whoever makes
+     * the request, and this endpoint is unauthenticated — so any caller could mint a real Paylink
+     * invoice whose return URL points at a host they control. The buyer would pay on Paylink's own
+     * hosted page, then land somewhere else entirely, carrying `transactionNo` in the URL. Before the
+     * idempotency work that number was enough to trigger a receipt and a fresh 15-minute sign-in
+     * token; it is still a real payment reference that should not be handed to a third party.
+     *
+     * An allow-list rather than "always use APP_URL", because preview deployments have to be able to
+     * complete a real test purchase — that is the only way this path gets verified at all, and no
+     * Paylink credential exists outside production. So: the configured app URL, and this project's
+     * own `*.vercel.app` deployments. Anything else falls back to the app URL rather than erroring,
+     * because a legitimate buyer on an unexpected host should still be able to pay and still be
+     * returned somewhere that works.
+     */
+    const origin = allowedOrigin(req.headers.get("origin"));
     // Encode the plan in the order number — Paylink echoes it back on Get Invoice,
     // so verification can trust which plan was actually paid for.
     const orderNumber = `RA-${plan}-${Date.now()}-${Math.floor(Math.random() * 100000)}`;

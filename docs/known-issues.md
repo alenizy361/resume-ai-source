@@ -245,7 +245,42 @@ one remains for readers, which can safely fall back to the browser draft.
 
 ## OPEN
 
-### O-1 · P0 · There is no payment webhook
+### F-12 · P0 · There is now a payment webhook — FIXED *(was O-1)*
+
+The only thing that granted access was the buyer's browser returning to `/pay/callback` and a
+fetch succeeding. Close the tab on the payment page, lose signal in a lift, have iOS kill the
+app while the bank's 3-D Secure page is open — charged, with no entitlement, no receipt and no
+sign-in link. Nothing on the server knew a payment had happened.
+
+`POST|GET /api/pay/webhook` is the server hearing it directly. The browser path stays and is
+still first whenever it works, because it is what makes the confirmation screen instant.
+
+**Safe without a shared secret**, which is the design point: nothing in the request body is
+believed. A caller supplies at most a `transactionNo`, and the invoice is then fetched from
+Paylink with this server's own credentials — a forged body claiming a 99-riyal payment gets
+whatever Paylink actually says about that transaction. `PAY_WEBHOOK_SECRET` is honoured when set
+but deliberately optional: a webhook that refuses everything because a variable was never pasted
+is a webhook that silently does not exist, which is the failure being fixed.
+
+**One money path, not two.** The grant, the amount check, the receipt and the sign-in token moved
+to `app/lib/fulfil.ts`, and both routes call it. On the money path two implementations is not
+duplication to tidy later — it is two answers to "was this paid for, and for how long", drifting
+apart where being wrong costs a customer or costs revenue. `ops/paycallback.test.mjs` asserts
+neither route grants, mints a token or sends mail itself.
+
+`claimTransaction` already made fulfilment once-per-transaction, so the webhook and the browser
+racing each other produces one grant and one receipt. That guard was built for the browser
+replaying itself; the webhook is why it had to be keyed on the transaction rather than the request.
+
+Any transaction the server successfully looked at answers **200**, whatever the outcome, because
+providers retry non-2xx and "already fulfilled" is the system working. The only 5xx is 503, for
+the one case a retry genuinely helps: Paylink itself unreachable.
+
+**Still needs you, and this part code cannot do:** register the URL in the Paylink dashboard as
+the merchant webhook — `https://cv.rabit.sa/api/pay/webhook`. Until then the route is correct and
+never called.
+
+### O-1 · superseded by F-12
 
 The entire grant depends on the buyer's browser returning to `/pay/callback` and the fetch
 succeeding. Close the tab after paying and the customer is charged with no entitlement, no
@@ -255,7 +290,30 @@ receipt and no sign-in link.
 account this environment cannot reach. The endpoint itself is straightforward and
 `claimTransaction` already makes it safe to run alongside the browser path.
 
-### O-2 · P0 · `callBackUrl` is built from the request's `Origin` header
+### F-13 · P0 · The payment return URL is no longer the caller's choice — FIXED *(was O-2)*
+
+`/api/pay` built the invoice's `callBackUrl` from `req.headers.get("origin")`, with no allow-list,
+on an unauthenticated endpoint. Any caller could mint a real Paylink invoice whose return URL
+pointed at a host they control: the buyer pays on Paylink's own hosted page and lands somewhere
+else, carrying a live payment reference.
+
+**Fix.** `app/lib/payOrigin.ts` — the configured app URL, this project's `*.vercel.app`
+deployments, and localhost. Anything else falls back to the app URL rather than erroring, because
+an unexpected Origin is far more likely to be a legitimate buyer than an attack, and refusing the
+purchase to punish a header would cost a sale to prevent nothing.
+
+Previews are allowed on purpose: a real test purchase is the only way this path is ever verified,
+since no Paylink credential exists outside production.
+
+The suffix check is anchored, which is the part a naive version gets wrong. `ops/paycallback.test.mjs`
+asserts both mistakes are refused — `evil-vercel.app`, and `vercel.app.attacker.com`, the one that
+reads as safe. Plain HTTP is refused too, localhost excepted: a return URL is where a paying
+customer lands, and `http` there is a cleartext hop carrying a payment reference.
+
+Its own module rather than a helper in the route, because the interesting cases are the refusals
+and a route file cannot be imported outside Next.
+
+### O-2 · superseded by F-13
 
 `app/api/pay/route.ts` interpolates the caller's `origin` into the payment return URL with
 no allow-list, and the endpoint is unauthenticated and unrate-limited.

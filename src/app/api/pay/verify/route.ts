@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { grantPass, grantEntPass, ACCESS_COOKIE, ENT_COOKIE } from "@/app/lib/access";
-import { readSession, createSession, SESSION_COOKIE, createMagicToken } from "@/app/lib/session";
-import { grantEntitlement, getOrderEmail, claimTransaction } from "@/app/lib/entitlements";
+import { readSession, createSession, SESSION_COOKIE } from "@/app/lib/session";
 import { signTx, PAY_BIND_COOKIE } from "@/app/lib/paybind";
-import { sendEmail, emailShell } from "@/app/lib/email";
+import { fulfilOrder } from "@/app/lib/fulfil";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -145,76 +144,35 @@ export async function GET(req: NextRequest) {
       // buyer's own email captured at checkout — never the caller — so it can't
       // leak access, yet a paid buyer is never permanently locked out and can
       // reclaim access on any device by signing in.
-      const orderEmail = await getOrderEmail(orderNumber);
-      if (orderEmail) {
-        /*
-         * ── fulfilment happens ONCE per transaction ──
-         *
-         * Everything below this line used to run on every call to this endpoint, and this endpoint
-         * is called at least twice on the ordinary happy path (the callback page's effect depends on
-         * `owner`, which changes when `/api/auth/me` answers) plus once per "Refresh status" tap.
-         *
-         * Two consequences, both live:
-         *
-         *   · `grantEntitlement` recomputed `until` from the CURRENT clock and overwrote. Re-opening
-         *     this URL from history 89 days after a 90-day pack renewed it for another 90 — one
-         *     payment, unlimited access. `grantEntitlement` now takes a maximum, and the claim below
-         *     stops the replay reaching it at all.
-         *
-         *   · a receipt was emailed and a FRESH 15-minute sign-in token minted, every time, with no
-         *     authentication beyond knowing a transaction number that lives in browser history and
-         *     referrers. That is a working sign-in link to the buyer's inbox, on demand, forever.
-         *
-         * `claimTransaction` returns true to exactly one caller. A later call still returns the
-         * correct `paid`/`plan`/`amount` JSON to the page, and still sets this browser's cookies
-         * below — it simply does not re-fulfil. That distinction is the point: re-checking a payment
-         * is legitimate and must keep working; re-FULFILLING it is not.
-         */
-        const first = await claimTransaction(transactionNo, now);
-        /*
-         * ── the one behaviour change an operator has to know about ──
-         *
-         * `claimTransaction` fails CLOSED: if the store errors while claiming, it returns false and
-         * nothing is fulfilled. That is the right side to fail on — an un-sent receipt is
-         * recoverable by support, a second sign-in token emailed on the strength of a URL is not —
-         * but it does mean a store outage during a FIRST payment now leaves a charged customer
-         * ungranted, where before the outage would have been ridden through.
-         *
-         * So it is logged loudly and distinguishably. `claim-refused` on a transaction that has
-         * never been seen before is the line to alert on: it is a paid customer who needs a manual
-         * grant. The same line on a repeated transactionNo is the ordinary, intended case.
-         */
-        if (!first) console.warn("[pay] claim-refused — already fulfilled, or the store is down", { orderNumber, transactionNo });
-        if (first) {
-        try {
-          const granted = await grantEntitlement(orderEmail, until);
-          /* A charged customer with no grant is the one failure that must never be silent. It was:
-             the store returned without writing when unconfigured, and the caller could not tell. */
-          if (!granted) console.error("grantEntitlement: no store wrote", { orderNumber });
-        } catch (e) {
-          console.error("grantEntitlement (order) failed:", e);
-        }
-        // Receipt + recovery: email the buyer a sign-in link so they can open
-        // their paid access from ANY device (not just the browser that paid).
-        try {
-          const planName = plan === "complete" ? "Complete Pack (90 days)" : plan === "monthly" ? "Monthly" : "One-time (24 hours)";
-          const untilStr = new Date(until).toISOString().slice(0, 10);
-          const signin = `${APP_URL}/api/auth/verify?token=${encodeURIComponent(createMagicToken(orderEmail, now))}`;
-          await sendEmail({
-            to: orderEmail,
-            subject: "Your Sira receipt & access link",
-            html: emailShell(`
-              <h2 style="margin:0 0 8px">Payment received — thank you! ✅</h2>
-              <p>Your <strong>${planName}</strong> access is active until <strong>${untilStr}</strong>.</p>
-              <p>Open your paid access from any device with this link (valid 15 min; you stay signed in after):</p>
-              <p><a href="${signin}" style="display:inline-block;background:#7c3aed;color:#ffffff;font-weight:bold;padding:12px 24px;border-radius:8px;text-decoration:none">Open my account →</a></p>
-              <p style="color:#666;font-size:13px">Plan: ${planName}<br/>Access until: ${untilStr}<br/>7-day money-back guarantee applies.</p>`),
-          });
-        } catch (e) {
-          console.error("receipt email failed:", e);
-        }
-        }
-      }
+      /*
+       * ── the durable half, now shared with the webhook ──
+       *
+       * Granting, the amount check and the receipt used to be written out here. They are in
+       * `lib/fulfil.ts` because there are two callers now: this route, and `/api/pay/webhook`, which
+       * exists so that closing the tab after paying no longer means charged-and-not-granted.
+       *
+       * On the money path two implementations is not duplication to tidy later — it is two answers to
+       * "was this paid for, and for how long", drifting apart in the one place where being wrong costs
+       * a customer or costs revenue.
+       *
+       * `fulfilOrder` claims the transaction, so whichever of the two arrives first does the work and
+       * the other is a no-op. Everything below this line is browser-specific and stays here.
+       */
+      const fulfilled = await fulfilOrder(transactionNo, {
+        paid, status: String(inv.orderStatus || "Unknown"), amount: paidAmount,
+        orderNumber, plan, amountOk,
+      }, now);
+
+      /*
+       * The buyer's email, for this browser's cookies.
+       *
+       * Read from the fulfilment result when THIS call won the claim. When it did not — the webhook
+       * got there first, or the browser is re-checking — `fulfilOrder` does not return it, and the
+       * session cookie below is the fallback. That is not a downgrade: a browser without a session
+       * and without the claim has not proved whose payment this is, and the account entitlement it
+       * would otherwise write is already written by whoever did win.
+       */
+      const orderEmail = fulfilled.done ? fulfilled.email : "";
 
       // Everything below unlocks THIS browser directly — gated on the bind cookie.
       if (boundToCaller) {
