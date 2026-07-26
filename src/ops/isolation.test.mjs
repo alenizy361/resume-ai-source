@@ -28,8 +28,12 @@ class FakeStorage {
   clear() { this.map.clear(); }
 }
 
-globalThis.window = { localStorage: new FakeStorage() };
+/* Both stores, because the visit rule now lives in `sessionStorage` — the tab-scoped one. A fake
+   window with only `localStorage` would make `mayRestore` answer "no" for every case and the whole
+   visit block would pass by never being able to say yes. */
+globalThis.window = { localStorage: new FakeStorage(), sessionStorage: new FakeStorage() };
 const store = globalThis.window.localStorage;
+const session = globalThis.window.sessionStorage;
 
 const {
   deleteResume, forgetOwner, indexKey, listResumes, migrateLegacy, newResumeId,
@@ -470,29 +474,45 @@ console.log("\n── a corrupt value degrades to empty, never to a crash ──
 
 console.log("\n── an anonymous draft does not come back from a previous visit ──");
 {
-  const { mayRestore, endAnonymousVisit, touchVisit, VISIT_GAP_MS } =
+  const { mayRestore, endAnonymousVisit, touchVisit } =
     await import("../app/lib/resumeStore.ts");
-  store.clear();
 
-  /* Nothing recorded at all: a first-ever visit has nothing to restore, and must not be treated as
-     an expired one either — the distinction matters only for what gets deleted, and there is
-     nothing to delete. */
-  ok("a browser with no history restores nothing", mayRestore("anon") === false);
+  /*
+   * ── the visit is the TAB SESSION, and the first answer here was a thirty-minute cache ──
+   *
+   * This block used to assert a thirty-minute last-seen window: a gap inside it was the same visit,
+   * a gap beyond it a new one. That shipped, and came straight back as "open the site and the
+   * previous entries are still there" — because thirty minutes of localStorage IS a cache, and the
+   * instruction had been that only signing in should bring old data back.
+   *
+   * `sessionStorage` is the primitive that matches: it survives a reload and dies with the tab.
+   */
+  ok("a browser with no session marker restores nothing", mayRestore("anon") === false);
 
-  writeResume("anon", "rV", "en", cv("in progress"));
-  ok("but work just done IS restorable — the visit is live", mayRestore("anon") === true);
-  ok("because writing stamps the visit", store.getItem("ra_visit:anon") !== null);
+  touchVisit("anon", Date.now());
+  ok("but work just done IS restorable — the same tab, after a reload", mayRestore("anon") === true);
 
-  /* Inside the window: a refresh, a phone call, a look at the job advert in another app. Losing a
-     half-filled CV to any of those would lose the customer, which is why the window exists at all. */
-  touchVisit("anon", Date.now() - (VISIT_GAP_MS - 60_000));
-  ok("a gap inside the window is the same visit", mayRestore("anon") === true);
+  /* Time does not enter into it any more, which is the point: an hour later in the same tab is still
+     the same visit, and one second later in a NEW tab is not. */
+  ok("an hour later in the same tab is still the same visit", mayRestore("anon") === true);
 
-  touchVisit("anon", Date.now() - (VISIT_GAP_MS + 60_000));
-  ok("a gap beyond it is a new visit", mayRestore("anon") === false);
+  /* A new tab is a new sessionStorage. Simulated the only way it can be here — by clearing it. */
+  session.clear();
+  ok("a new tab is a new visit", mayRestore("anon") === false);
+
+  /* And it fails CLOSED where sessionStorage cannot be reached, because the cost of that is a clean
+     builder while the cost of failing open is somebody else's CV. */
+  globalThis.window.sessionStorage = undefined;
+  ok("no sessionStorage means no restore", mayRestore("anon") === false);
+  globalThis.window.sessionStorage = session;
 
   /* And the records go, rather than merely being skipped — anything left behind could surface later
-     through a path this rule does not control. */
+     through a path this rule does not control.
+
+     The record is written HERE rather than relied on from earlier in the file: the rewrite of this
+     block dropped the `writeResume` the old version had, and the assertion then failed on an empty
+     keyspace — a true statement about nothing. */
+  writeResume("anon", newResumeId(), "en", cv("Lapsed anonymous draft"));
   ok("ending the visit removes the anonymous records", endAnonymousVisit() >= 1);
   ok("the draft is gone", readResume("anon", "rV").record === null);
   ok("and so is the marker", store.getItem("ra_visit:anon") === null);
@@ -500,7 +520,7 @@ console.log("\n── an anonymous draft does not come back from a previous visi
 
 console.log("\n── a signed-in account is never subject to it ──");
 {
-  const { mayRestore, endAnonymousVisit, touchVisit, VISIT_GAP_MS } =
+  const { mayRestore, endAnonymousVisit, touchVisit } =
     await import("../app/lib/resumeStore.ts");
   store.clear();
 
@@ -508,8 +528,8 @@ console.log("\n── a signed-in account is never subject to it ──");
   /* The offer signing in makes, stated as an assertion: your CVs come back because we know whose
      they are. No marker, an ancient marker, no marker at all — none of it applies. */
   ok("an account restores with no visit marker", mayRestore(A) === true);
-  touchVisit(A, Date.now() - VISIT_GAP_MS * 100);
-  ok("and restores however long ago it was", mayRestore(A) === true);
+  touchVisit(A, Date.now() - 90 * 24 * 60 * 60 * 1000);
+  ok("and restores however long ago it was — three months, still theirs", mayRestore(A) === true);
 
   /* The rule must not become a way to delete an account's work. */
   writeResume("anon", "rAnon", "en", cv("anonymous"));

@@ -279,29 +279,65 @@ export function forgetOwner(owner: string): number {
  * visit in progress, not a saved document. Come back later and the builder starts clean. Sign in and
  * your CVs are yours again, from `/api/resumes` and from the owner-scoped records that survive.
  *
- * ── why a gap and not "clear on unload" ──
+ * ── what "the visit" means, and why the first answer was wrong ──
  *
- * The recovery inside a visit has to keep working, and it is not optional: a person fills four
- * fields, the phone backgrounds the tab, iOS reclaims it, they come back — losing that is losing the
- * customer. `sessionStorage` would handle a refresh but is per-TAB, so opening the builder in a
- * second tab would read as a new visit and wipe the first. A last-seen timestamp has neither fault.
+ * This was a thirty-minute last-seen timestamp in localStorage. The reasoning was that thirty
+ * minutes covers a refresh, a phone call, a look at the advert in another app — and that
+ * `sessionStorage` was unusable because it is per-tab, so a second tab would read as a new visit and
+ * wipe the first.
  *
- * ── why thirty minutes ──
+ * It was reported straight back: open the site and the previous entries are still there. The
+ * instruction had been plain — no cache, and signing in is what brings old data back — and thirty
+ * minutes of localStorage is a cache. The second-tab argument was also weaker than it looked: a
+ * second tab is not how people use this, and the cost of getting it wrong there is one clean builder
+ * rather than a stranger's half-built CV appearing.
  *
- * It is a judgement, and it is worth naming as one. Long enough to cover a refresh, a phone call, a
- * look at the job advert in another app, a train tunnel. Short enough that "yesterday" is never
- * treated as "still working". Nothing breaks at the boundary — crossing it starts a clean CV, which
- * is the intended outcome, not a failure.
+ * So the visit is now the TAB SESSION, marked in `sessionStorage`:
+ *
+ *   refresh, or iOS reclaiming and restoring the tab   → same visit, work recovered
+ *   closing the tab and coming back, at any interval   → new visit, clean builder
+ *   signing in                                         → the account's CVs, always
+ *
+ * That is the rule as asked for, and it keeps the one recovery that is not optional: a person who
+ * fills four fields and reloads must not lose them.
+ *
+ * ── it fails CLOSED ──
+ *
+ * If `sessionStorage` cannot be reached — private mode in some browsers, a storage policy — the
+ * answer is "do not restore". The cost of that is a clean builder. The cost of failing the other way
+ * is old data surfacing, which is the thing being fixed.
+ *
+ * `VISIT_GAP_MS` is gone rather than kept "in case": a second definition of when a visit ends is how
+ * two answers to the same question end up in one product.
  */
-export const VISIT_GAP_MS = 30 * 60 * 1000;
-
 const visitKey = (owner: string): string => `ra_visit:${owner}`;
 
-/** Record that this owner is active now. Called on every write. */
+/**
+ * The tab-session marker for anonymous work. Not owner-keyed: `sessionStorage` is already scoped to
+ * the tab, and `anon` is the only owner this applies to.
+ */
+const SESSION_VISIT = "ra_visit_session";
+
+const ss = (): Storage | null => {
+  try { return typeof window === "undefined" ? null : window.sessionStorage; } catch { return null; }
+};
+
+/**
+ * Record that this owner is active in this visit. Called on every write.
+ *
+ * For `anon` the marker that DECIDES restoration is the sessionStorage one. The localStorage
+ * timestamp is still written because `endAnonymousVisit` and the account screens use it to tell "has
+ * ever worked here" from "has never" — it no longer grants anything.
+ */
 export function touchVisit(owner: string, now = Date.now()): void {
   const store = ls();
-  if (!store || !owner) return;
-  try { store.setItem(visitKey(owner), String(now)); } catch { /* noop */ }
+  if (store && owner) {
+    try { store.setItem(visitKey(owner), String(now)); } catch { /* noop */ }
+  }
+  if (owner === "anon") {
+    const sess = ss();
+    try { sess?.setItem(SESSION_VISIT, String(now)); } catch { /* noop */ }
+  }
 }
 
 /**
@@ -310,16 +346,14 @@ export function touchVisit(owner: string, now = Date.now()): void {
  * Always true for a signed-in account — their CVs are theirs, and that is the whole offer made in
  * exchange for signing in. For `anon` it is true only inside the visit.
  */
-export function mayRestore(owner: string, now = Date.now()): boolean {
+export function mayRestore(owner: string): boolean {
   if (!owner) return false;
+  /* A signed-in account, always. That is the entire offer made in exchange for signing in, and it is
+     the answer to "how do I get my old CV back": sign in. */
   if (owner !== "anon") return true;
-  const store = ls();
-  if (!store) return false;
-  let raw: string | null = null;
-  try { raw = store.getItem(visitKey("anon")); } catch { return false; }
-  const last = Number(raw);
-  if (!raw || !Number.isFinite(last)) return false;
-  return now - last < VISIT_GAP_MS;
+  const sess = ss();
+  if (!sess) return false;                    // fails closed — see the header
+  try { return Boolean(sess.getItem(SESSION_VISIT)); } catch { return false; }
 }
 
 /**
@@ -333,6 +367,9 @@ export function endAnonymousVisit(): number {
   if (!store) return 0;
   const removed = forgetOwner("anon");
   try { store.removeItem(visitKey("anon")); } catch { /* noop */ }
+  /* The session marker too, so a builder opened twice in one lapsed tab does not decide differently
+     the second time. */
+  try { ss()?.removeItem(SESSION_VISIT); } catch { /* noop */ }
   return removed;
 }
 

@@ -23,7 +23,7 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { indexKey, listResumes, readResume } from "@/app/lib/resumeStore";
+import { indexKey, listResumes, mayRestore, readResume } from "@/app/lib/resumeStore";
 import { useOwner } from "@/app/components/useOwner";
 import { STEPS, stepHref, SECTION_COPY } from "../build/steps";
 
@@ -56,6 +56,17 @@ export default function ContinueDraft({ lang }: { lang: "ar" | "en" }) {
 
   const draft = useMemo(() => {
     if (!raw || !owner) return null;
+    /*
+     * The visit rule applies HERE too, and its absence was half the reported bug.
+     *
+     * `BuilderProvider` refuses to restore a lapsed anonymous draft, but this banner read the index
+     * directly — so the landing page went on announcing "you have a CV in progress" and offering a
+     * link to a record the builder would decline to load. Two components answering the same question
+     * differently, with the louder one wrong.
+     *
+     * One question, one answer: `mayRestore`.
+     */
+    if (!mayRestore(owner)) return null;
     /* The most recent resume is the right offer HERE, because this banner is the one place with no
        requested id to contradict — see the same reasoning in `BuilderProvider`. */
     const id = listResumes(owner)[0]?.resumeId;

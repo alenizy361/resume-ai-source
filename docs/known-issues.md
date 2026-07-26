@@ -82,6 +82,47 @@ their payment "needs review".
 **Fix.** The route reads `chargeableAmount()` — the function that exists precisely so retired
 plan ids stay verifiable.
 
+### F-9 · P0 · "Open the site and the previous entries are still there"
+
+Reported twice, after the fix that was supposed to prevent it.
+
+The rule asked for was plain: **no cache — signing in is what brings old data back.** What was
+built instead was a thirty-minute last-seen timestamp in localStorage, on the reasoning that
+thirty minutes covers a refresh, a phone call, a look at the advert in another app.
+
+That is a cache wearing a product rule's clothes, and it produced exactly the reported
+behaviour: open the site inside the window and the previous CV is restored.
+
+The argument used to reject `sessionStorage` at the time was that it is per-tab, so a second
+tab would read as a new visit and wipe the first. That was weaker than it looked — a second
+tab is not how this is used, and the cost of being wrong there is one clean builder, against
+a stranger's half-built CV appearing as the cost of being wrong the other way.
+
+**Second defect, same report.** `BuilderProvider` refused to restore a lapsed draft, but
+`ContinueDraft` on the landing page read the resume index directly with no such check. So the
+landing page went on announcing "you have a CV in progress" and linking to a record the
+builder would then decline to load. Two components, one question, two answers, and the louder
+one wrong.
+
+**Fix.** The visit is the TAB SESSION, marked in `sessionStorage`:
+
+| | |
+|---|---|
+| reload, or iOS reclaiming and restoring the tab | same visit — work recovered |
+| closing the tab and coming back, at any interval | new visit — clean builder |
+| signed in | the account's CVs, always |
+
+It fails **closed**: where `sessionStorage` cannot be reached, nothing is restored. `VISIT_GAP_MS`
+is deleted rather than kept, because a second definition of when a visit ends is how one
+product ends up with two answers. `ContinueDraft` now asks `mayRestore` like everything else.
+
+**Evidence.** `ops/isolation.test.mjs` (111 assertions) covers the store's answer against a
+fake sessionStorage — including that it refuses when the store is unreachable.
+`ops/visit.browser.mjs` (new, 10 assertions) runs the actual reported sequence in a browser:
+type a title, reload, confirm it survives; open a NEW tab in the same browser seconds later,
+confirm the form is empty, the record is dropped rather than skipped, and the landing banner is
+gone. The unit test could not have caught the two-components-disagreeing half.
+
 ### F-7 · P0 · Fifty backdrop blurs per page closed the browser on iOS
 
 Reported twice from a real iPhone: opening the site closes the browser.
