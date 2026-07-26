@@ -49,16 +49,16 @@ under the order's own priority rule (P0 before everything) that is the first thi
 |---|---|---|---|
 | P0-1 | Every CV has a unique `resumeId` | `DONE` (pre-existing) | `resumeStore.ts:112 newResumeId`; `ops/isolation.test.mjs` |
 | P0-2 | Every CV belongs to a `userId` | `DONE` (pre-existing) | `resumeStore.ts:83 ownerKey`, `recordKey(owner, resumeId)`; `useOwner.ts` resolves it from `/api/auth/me` |
-| P0-3 | **Saved CVs stored on the server** | see below | The gate. `BuilderState` was browser-only. |
+| P0-3 | **Saved CVs stored on the server** | `PARTIAL` | `app/lib/resumeServer.ts` + `/api/resume` + `useServerSync` built and tested (`ops/resumeserver.test.mjs`, 35 assertions against a real fake-Redis). **Not yet wired into `BuilderProvider`, and needs a Redis credential to be live.** |
 | P0-4 | New CV creates a new empty record | `DONE` (pre-existing) | `BuilderProvider.tsx` — `urlId \|\| newResumeId()`; no "current resume" concept exists |
 | P0-5 | Old CV data never appears in a new CV | `DONE` (pre-existing) | Records validate `owner`/`resumeId` against the key and quarantine on mismatch (`resumeStore.ts:131`); `ops/isolation.test.mjs` |
-| P0-6 | Browser storage is an isolated recovery draft only | see P0-3 | True in intent since the isolation work; becomes true in fact once the server is authoritative |
+| P0-6 | Browser storage is an isolated recovery draft only | `PARTIAL` | Local stays the write path by design; the server is a durable mirror. True once P0-3 is wired. |
 | P0-7 | Local draft keys include user + resume | `DONE` (pre-existing) | `ra_cv:{owner}:{resumeId}`; the seven personal stores are owner-scoped in `personalStore.ts` |
 | P0-8 | Query cache keys include user + resume | `DONE` (pre-existing) | `aiCache.ts questionKey` carries `task + contextHash + inputHash + instance`; `RequestStamp` carries `owner` and `resumeId`; `ops/aicache.test.mjs` (147 assertions) |
 | P0-9 | A late reply from one CV never updates another | `DONE` (pre-existing) | `acceptReply` checks owner → resumeId → contextHash → inputHash → revision, in that order; `useAiTask` is single-flight and aborts on unmount |
-| P0-10 | Old save responses must not overwrite newer revisions | see P0-3 | Local `writeResume` carries a `revision`; there was no server to conflict with |
-| P0-11 | Payment: success / failure / cancel / duplicate callback | audit run | see `docs/known-issues.md` |
-| P0-12 | Export: PDF, Word, watermark | audit run | see `docs/known-issues.md` |
+| P0-10 | Old save responses must not overwrite newer revisions | `DONE` (server side) | 409 + winning record, never merged. `ops/resumeserver.test.mjs`. |
+| P0-11 | Payment: success / failure / cancel / duplicate callback | `PARTIAL` | Duplicate-callback replay, the sign-in-token oracle, the key collision and the price divergence are FIXED and tested (`ops/fulfilment.test.mjs`, 25). **No webhook exists** and none of it is production-verified — `BLOCKED (no Paylink credential)`. See F-1..F-5, O-1, O-2. |
+| P0-12 | Export: PDF, Word, watermark | `PARTIAL` | The unwatermarked designed PDF is fixed (F-4). The paywall remains client-side and advisory (O-12), and Arabic detection ranges still disagree (O-11). |
 
 ## P1 — core product quality
 
