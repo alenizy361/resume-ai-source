@@ -55,7 +55,19 @@ export async function paidRequest(req: NextRequest, now = Date.now()): Promise<P
 
   /* A device pass needs no account, so it is read whether or not anyone is signed in. */
   let pass = false;
-  try { pass = !!verifyPass(req.cookies.get(ACCESS_COOKIE)?.value, now); } catch { pass = false; }
+  try { pass = !!verifyPass(req.cookies.get(ACCESS_COOKIE)?.value, now); } catch (e) {
+    /*
+     * Fails closed, and says so.
+     *
+     * `verifyPass` throws exactly one kind of error: `assertSecret` refusing to run without
+     * `ACCESS_SECRET` in production. Swallowing that silently would mean every paying customer's
+     * download quietly carries a watermark and the log gives no reason — the one failure mode of this
+     * module that looks like normal operation. A missing cookie is ordinary and logs nothing; a broken
+     * verifier is an operator's problem and has to be visible.
+     */
+    console.error("[paid] pass verification failed — treating as unpaid", { e: String(e).slice(0, 200) });
+    pass = false;
+  }
 
   if (!email) return { paid: pass, until: 0, email: "", signedIn: false };
 

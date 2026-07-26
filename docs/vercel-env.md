@@ -116,6 +116,14 @@ it does.
   `NEXT_PUBLIC_SUPPORT_EMAIL`, `NEXT_PUBLIC_BUILDER_DEFAULT`.
 - **Secrets for admin paths** — `ADMIN_SECRET`, `ACCESS_SECRET`, `HEALTH_TOKEN`.
 
+`ACCESS_SECRET` is not only an admin secret — it now governs **downloads**. `POST /api/export`
+decides the watermark from `paidRequest()`, which verifies the signed device pass with it. Without the
+variable, `verifyPass` refuses to run in production, `paidRequest` fails closed, and **every paying
+customer's PDF and Word file comes back watermarked**. That failure is logged
+(`[paid] pass verification failed`) rather than silent, because it otherwise looks exactly like normal
+free-tier operation. `/api/optimize` and `/api/auth/me` would break outright first, so a live product
+implies the variable is set — but it is now load-bearing for revenue, not just for admin routes.
+
 `NEXT_PUBLIC_SUPPORT_EMAIL` is worth setting rather than leaving: unset, the contact
 address shown to visitors is the owner's personal one.
 
