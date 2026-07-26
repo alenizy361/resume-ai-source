@@ -16,8 +16,8 @@
  * ── why the measurement is worth a round trip ──
  *
  * Every caching decision in `docs/cost.md` rests on one comparison — prefix against the model's
- * floor — and every prefix behind it was ESTIMATED at 3.594 characters per token. Defensible when
- * the nearest floor is 1.8× away; indefensible as a permanent answer when the exact figure is free.
+ * floor — and every prefix behind it was ESTIMATED. That estimate was 13% high on Haiku
+ * and it produced a wrong recommendation — see the correction in `aiEconomics.ts`.
  *
  * And it cannot be one figure. Token counts are model-specific: Sonnet 5's tokenizer produces
  * roughly 30% more tokens for the same text than Sonnet 4.6's, and Anthropic's guidance is to re-run
@@ -34,6 +34,7 @@
 
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "./aiPrompts.ts";
 import type { AiTaskType } from "./aiModels.ts";
+import { DRAFTING_DOCTRINE } from "./prompts.ts";
 
 /** The three tiers worth comparing. Their floors differ, which is the whole point. */
 export const COUNTED_MODELS = ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5"] as const;
@@ -121,12 +122,34 @@ export async function countTokensReport(): Promise<TokenCountReport> {
       };
     }
 
+    /*
+     * `/api/suggest`'s only stable text, and it is measured because the estimate put it within 2% of
+     * a floor.
+     *
+     * That route carries no `cache_control` at all, and `docs/cost.md` claims this is correct rather
+     * than an oversight — the doctrine plus a one-line shape rule is below every model's floor,
+     * Opus's 512 included. Estimated at ~368 Haiku tokens that looked settled, until the measured
+     * 1.363x tokenizer ratio put the Opus figure at ~502 against a 512 floor. A claim resting on ten
+     * tokens is a claim to measure, not to assert.
+     */
+    const doctrine = await countOnce(key, model, [{ type: "text", text: DRAFTING_DOCTRINE }]);
+    if ("error" in doctrine) failures++;
+
     models[model] = {
       floor,
       coreRules: "tokens" in core ? core.tokens : core,
       coreRulesEstimated: estimateTokens(CORE_RULES),
       coreRulesClearsFloor: "tokens" in core ? core.tokens >= floor : null,
       byTask,
+      suggestStableText: "tokens" in doctrine
+        ? {
+          promptTokens: doctrine.tokens,
+          clearsFloor: doctrine.tokens >= floor,
+          note: doctrine.tokens >= floor
+            ? "ABOVE the floor — a cache_control marker here would be honoured. /api/suggest sends none."
+            : "Below the floor — a marker there would be accepted and silently ignored, as documented.",
+        }
+        : doctrine,
     };
   }
 
@@ -136,7 +159,7 @@ export async function countTokensReport(): Promise<TokenCountReport> {
     failures,
     note: failures
       ? `${failures} count_tokens request(s) failed; treat these figures as incomplete.`
-      : "Exact, per model. These supersede the 3.594 chars/token estimate elsewhere in this report.",
+      : "Exact, per model. These supersede every estimated token figure elsewhere in this report.",
     models,
   };
 }

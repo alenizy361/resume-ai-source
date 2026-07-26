@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
 import { fromAnthropic } from "@/app/lib/usage";
-import { modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost } from "@/app/lib/aiModels";
+import {
+  modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost, canDisableThinking, thinksByDefault,
+} from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
 import { MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
@@ -346,6 +348,41 @@ export async function GET(req: NextRequest) {
       ? { ran: true, ...sug, sharedWithGlobal: true }
       : { ran: true, ...sug, ms: Date.now() - t1 };
 
+    /*
+     * ── the escalation tier, probed on purpose ──
+     *
+     * Nothing here normally touches `cfg.reasoningModel`. Escalation needs a low-confidence
+     * classification, or a schema failure, or an explicit tailoring request — so a request shape
+     * that is wrong for that model can sit broken indefinitely while every dashboard reads green.
+     * That is not hypothetical: `/api/translate` escalated to Sonnet 5 with `temperature: 0`, which
+     * that model rejects, so EVERY escalated translation was an HTTP 400 and the retry meant to
+     * rescue a bad translation had never once run.
+     *
+     * One small call proves the shape is accepted. It sends the real cached prefix with
+     * `max_tokens: 4` — roughly $0.007 on Sonnet 5, once, only when `?live=1` is passed, which
+     * already announces that it spends credit.
+     *
+     * Skipped when the reasoning model IS the fast model, because then the probe above already
+     * answered for it and a second identical call would be paying twice to learn nothing.
+     */
+    const cfg = modelConfig();
+    if (suggestProvider === "anthropic" && cfg.reasoningModel !== suggestModel) {
+      const t2 = Date.now();
+      const esc = await probeAnthropic(cfg.reasoningModel);
+      report.liveEscalation = {
+        ran: true, model: cfg.reasoningModel, ...esc, ms: Date.now() - t2,
+        why: "The escalation tier is rarely exercised, so a request shape that is wrong for it "
+          + "fails silently. A 400 here means escalated generations are broken.",
+      };
+    } else {
+      report.liveEscalation = {
+        ran: false,
+        note: cfg.reasoningModel === suggestModel
+          ? "The reasoning model is the fast model — the probe above already covered it."
+          : "The suggestion provider is not Anthropic; there is no Claude escalation tier to probe.",
+      };
+    }
+
     report.ok = keyPresent && suggestKeyPresent && out.ok === true && sug.ok === true;
     return NextResponse.json(report, { status: report.ok ? 200 : 502 });
   } catch (e) {
@@ -441,6 +478,22 @@ async function probeAnthropic(model: string): Promise<ProbeResult> {
       body: JSON.stringify({
         model,
         max_tokens: 4,
+        /*
+         * The same reasoning directive `/api/generate` sends, and the reason this line is here is a
+         * bug that hid for months in a sibling route.
+         *
+         * `/api/translate` sent `temperature: 0` unconditionally while escalating to Sonnet 5, which
+         * rejects any temperature but 1 — so every escalated translation was an HTTP 400 and nobody
+         * knew, because escalation is rare and the route logged it and moved on. A probe that sends a
+         * DIFFERENT request shape from production cannot catch that class of fault; a probe that
+         * sends the same shape catches it on the first run.
+         *
+         * `thinking: {type: "disabled"}` is a parameter this product only started sending recently
+         * and only on the escalation tier, which is exactly the shape that goes unexercised until it
+         * matters. So the probe sends it too.
+         */
+        ...(thinksByDefault(model) && canDisableThinking(model)
+          ? { thinking: { type: "disabled" } } : {}),
         /* Byte-identical to what /api/generate sends. If these two ever diverge the probe stops
            measuring production, which is the failure this whole function exists to avoid. */
         system: [

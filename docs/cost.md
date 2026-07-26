@@ -42,31 +42,35 @@ opinion. `ops/economics.test.mjs` asserts it on every `npm test`.
 more than 46% of a call. That is the ceiling on the entire caching discussion.
 
 **The cache floors are not monotonic — the small model has the high one.** Haiku 4.5 requires a
-4096-token cached prefix, Sonnet 5 needs 1024, Opus 5 needs 512. The shared prefix here is 2261
-tokens (`CORE_RULES` 1898 + one task schema ~363), so it clears Sonnet's floor and misses Haiku's.
-Below the floor the `cache_control` marker is **accepted and silently ignored** — no error, no
-warning, full price.
+4096-token cached prefix, Sonnet 5 needs 1024, Opus 5 needs 512. Measured with `count_tokens`, the
+`final_content` prefix is **2032** tokens on Haiku and **2779** on Sonnet 5 — so it clears Sonnet's
+floor and misses Haiku's. Below the floor the `cache_control` marker is **accepted and silently
+ignored** — no error, no warning, full price.
+
+**Token counts are per model, and the prefix/message split is the whole cache argument.** Everything
+above is measured, and an earlier version of this document was not. See the correction below.
 
 **A 1-hour cache TTL exists** (generally available, no beta header) at 2× the write instead of
 1.25×, reads still 0.1×. It pays off after two reads instead of one.
 
 ### Priced options, per call
 
+All figures below use `count_tokens` measurements, and the bigger models' output is scaled by their
+measured 1.363x tokenizer ratio — the same answer costs more tokens there.
+
 | Option | Cache miss | Cache hit | No caching |
 |---|---|---|---|
-| **Today** — Haiku, prefix 2261, markers ignored | — | — | **$0.005040** |
-| Pad prefix to 4100, 5-min TTL | $0.007904 | $0.003189 | — |
-| Pad prefix to 4100, **1-hour TTL** | $0.010979 | $0.003189 | — |
-| Sonnet 5 (caches immediately) | $0.016816 | $0.009015 | — |
-| Opus 5 (caches immediately) | $0.028026 | $0.015026 | — |
+| **Today** — Haiku, prefix 2032, markers ignored | — | — | **$0.005040** |
+| Pad prefix to 4100, 5-min TTL | $0.008133 | $0.003418 | — |
+| Sonnet 5 (caches immediately) | $0.022718 | $0.013131 | — |
+| Opus 5 (caches immediately) | $0.037864 | $0.021885 | — |
 
-Break-even read fractions: **60.7%** with the 5-minute TTL, **76.2%** with the 1-hour TTL. Production
-is doing **four `/api/generate` calls an hour**. Even assuming all four cluster inside one hour, that
-is 75% reads — below the 1-hour break-even, and far below with any realistic spacing.
+Break-even read fraction for padding: **65.6%**, about **35 calls an hour**. Production is doing
+**four**, so even if all four clustered inside one five-minute window the padding would not pay.
 
-**Cheapest correct setting: change nothing.** Padding the prefix is +57% at this traffic; Sonnet is
-+79% even on a cache hit; Opus is +198%. Revisit when `/api/generate` sustains roughly **30 calls an
-hour**, and `/api/health/ai` will say so itself — the `cacheDecision` field computes the verdict from
+**Cheapest correct setting: change nothing.** Padding is +61% on a miss at this traffic; Sonnet is
+**+161% even on a cache hit**; Opus is +334%. Revisit when `/api/generate` sustains roughly 35 calls
+an hour, and `/api/health/ai` will say so itself — the `cacheDecision` field computes the verdict from
 live numbers rather than repeating this paragraph.
 
 ### The AI wins that have no trade-off — all shipped
@@ -221,62 +225,60 @@ done deliberately than under pressure.
 TTL, and the logs show it working: `op=role_blueprint:cache-hit provider=cache usd=0`. `final_content`
 and `experience_package` are correctly *not* shared — they are derived from one person's own facts.
 
-**Model tiering — cheapest, but not for the obvious reason.** Every task runs on the `fast` class
-(`claude-haiku-4-5`); `claude-sonnet-5` is the configured reasoning model and no task is assigned to
-it. "Small model is cheaper" is the wrong reasoning to reach that conclusion by, because the cache
-floors cut across it. Haiku's floor is 4096 and Sonnet's is 1024, and this product's prefix sits
-**between them** — so the real comparison is uncached Haiku against Sonnet at a tenth of its input
-price:
+**Model tiering — cheapest, and now measured rather than estimated.** Every task runs on the `fast`
+class (`claude-haiku-4-5`); `claude-sonnet-5` is the configured reasoning model and no task is
+assigned to it. "Small model is cheaper" is still the wrong reasoning to reach that by, because the
+cache floors cut across it: Haiku's floor is 4096 and Sonnet's is 1024, and this product's prefix sits
+**between them**. So the real comparison is uncached Haiku against Sonnet at a tenth of its input
+price.
 
-| | Input per call |
+> ### Correction
+>
+> An earlier version of this section said Sonnet was **2.7x cheaper on input**, with a break-even at
+> **145 output tokens**. Both numbers were wrong. They came from estimated token counts; the measured
+> ones are below.
+
+| Input per call, `final_content` | Measured |
 |---|---|
-| Haiku, prefix 2261, **uncached** (floor missed) | $0.002325 |
-| Sonnet 5, same prefix, **cache read** | $0.000870 |
+| Haiku, prefix 2032 + message 293, **uncached** | $0.002325 |
+| Sonnet 5, prefix 2779 + message 399, **cache read** | $0.002031 |
 
-**On input alone the bigger model is 2.7× cheaper.** What reverses it is output: Sonnet charges
-$15/M against Haiku's $5, so each output token costs $10/M more and repays the $0.001455 input
-saving after **145 tokens**. Against Opus 5 the threshold is **44**.
+**1.14x, not 2.7x** — and the break-even collapses to **19 output tokens**. Three errors compounded,
+all flattering the bigger model:
 
-So Haiku wins only where output exceeds that, and every live task does — comfortably:
+- The real cacheable prefix is **2032**, not the estimated 2261 — less to discount.
+- The real **uncacheable** message is **293** tokens, not the 64 I had assumed. No cache touches it.
+  This was the big one: it made the cacheable share of the input look like 97% when it is **87%**.
+- Sonnet's tokenizer inflates every count by a measured **1.363x** — output as well as input, so the
+  same three summaries cost $15/M x 1.363 instead of $15/M.
 
-| `/api/generate` task | Output cap | Break-even vs Sonnet | Margin |
+Nothing in the recommendation changes; Haiku still wins, by more. But the reason the first answer was
+wrong is worth keeping: the total was never in doubt — 2032 + 293 = 2325, exactly what production
+logged, so no cost assertion could have caught it. A cache discounts the **prefix only**, so the
+prefix/message *split* is the entire argument, and I guessed the half that mattered.
+
+| `/api/generate` task | Output cap | Break-even vs Sonnet (measured) | Margin |
 |---|---|---|---|
-| `role_blueprint` | 1400 | 150 | 9.3× |
-| `experience_package` | 1100 | 146 | 7.5× |
-| `final_content` | 900 (measured 543) | 145 | 6.2× (3.7× measured) |
-| `jd_delta` | 500 | 138 | 3.6× |
+| `role_blueprint` | 1400 | 23 | 61x |
+| `experience_package` | 1100 | 19 | 58x |
+| `final_content` | 900 (measured 543) | 19 | 47x (29x measured) |
+| `jd_delta` | 500 | 15 | 33x |
 
-`cheapestModelFor` and `breakEvenOutputTokens` in `lib/aiEconomics.ts` compute this, and
-`ops/economics.test.mjs` runs them over the **live** `CORE_RULES`, `TASK_SCHEMA` and `MAX_OUTPUT` —
-so adding a short-output task to `/api/generate` fails the suite rather than quietly overpaying. The
-narrowest margin is `jd_delta` at 3.6×; a task capped under ~145 tokens would be genuinely cheaper
-on cached Sonnet.
+Opus 5 has **no crossover at all**: cached, it is dearer on input than uncached Haiku, so there is no
+output length at which it wins.
 
-Two caveats, both of which make Haiku's win larger rather than smaller — so the conclusion is a
-lower bound, not a best case.
+Two more things only measurement produced. **Sonnet 5 and Opus 5 return identical counts** for every
+task — same tokenizer, different floors and prices. And the ratio against Haiku is **1.363** on this
+product's own text, not the ~1.30 the migration guide quotes; that figure compares Sonnet 5 with
+Sonnet 4.6, a different pair. Anthropic's guidance is explicit — *"Do not apply a blanket
+multiplier"* — so `aiEconomics.ts` stores `MEASURED_PROMPT_TOKENS` and `ops/economics.test.mjs`
+recomputes every figure above from it. Refresh with `npm run ai:tokens` or
+`GET /api/health/ai?tokens=1`, both **free**.
 
-**Token counts are model-specific, and the table above reuses Haiku's.** Sonnet 5 uses a newer
-tokenizer that produces roughly 30% more tokens for the same text than Sonnet 4.6. Anthropic's own
-migration guidance is explicit about the remedy — *"Do not apply a blanket multiplier"*, re-run
-`count_tokens` against the model you will actually send to — so `aiEconomics.ts` refuses to invent
-one and instead accepts measurements, flagging any row it did not get them for. Reasoning about the
-direction of that gap is what makes the unmeasured answer usable: a larger tokenizer inflates the
-candidate's input (cached at 0.1×, so small) *and* its output (billed in full, at the higher rate).
-Applying a 1.3× factor to Sonnet moves `final_content` from $0.014370 to $0.018681 against Haiku's
-$0.006825, and drops the break-even from 145 tokens to **82**. Haiku wins by more, not less.
-
-**Run `npm run ai:tokens` to remove the estimate entirely — it bills $0.00.**
-`POST /v1/messages/count_tokens` returns a count and no completion, so nothing is billed: no output
-tokens, no input tokens. The script measures `CORE_RULES` and all four task schemas on each of the
-three models, prints the floor verdict per model, and emits a JSON block that
-`cheapestModelFor({ measured })` consumes. Unlike `npm run ai:stages`, which spends real credit,
-this one can be run as often as you like.
-
-There is no task under the threshold today. `MAX_OUTPUT` lists four names under it or near it —
-`occupation_classify` (120), `bullet_rewrite` (160), `achievement_write` (400), `ask_section` (400) —
-but `/api/generate`'s `TASKS` array accepts only the four in the table above, so three of those names
-are routed nowhere and cost nothing. (`ask_section` reaches `/api/suggest`, which is a different
-prompt shape — see below.) A dead table entry is not a saving opportunity.
+There is no task under the threshold. `MAX_OUTPUT` lists `occupation_classify` (120),
+`bullet_rewrite` (160), `achievement_write` (400) and `ask_section` (400), but `/api/generate`'s
+`TASKS` array accepts only the four above, so three of those names are routed nowhere and cost
+nothing. (`ask_section` reaches `/api/suggest`.) A dead table entry is not a saving opportunity.
 
 **`/api/suggest` has no `cache_control` at all, and that is correct.** Next to `/api/generate`'s two
 breakpoints it looks like an oversight. Its only stable text is `DRAFTING_DOCTRINE` plus a one-line

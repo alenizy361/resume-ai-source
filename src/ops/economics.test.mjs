@@ -10,9 +10,10 @@
  */
 
 import {
-  CACHE_FLOORS, MEASURED_FINAL_CONTENT, MEASURED_FINAL_CONTENT_USD, PRICES,
+  CACHE_FLOORS, MEASURED_FINAL_CONTENT, MEASURED_FINAL_CONTENT_USD, MEASURED_MESSAGE_TOKENS,
+  MEASURED_PROMPT_TOKENS, PRICES,
   breakEvenOutputTokens, breakEvenReadFraction, cacheVerdict, callCost, callsPerHourFor,
-  cheapestModelFor, estimateTokens, prefixCaches,
+  cheapestModelFor, estimateTokens, measuredShape, prefixCaches, tokenizerRatio,
 } from "../app/lib/aiEconomics.ts";
 import { packKey } from "../app/lib/aiCache.ts";
 import { CORE_RULES, TASK_SCHEMA } from "../app/lib/aiPrompts.ts";
@@ -203,20 +204,25 @@ console.log("\n── is haiku actually cheapest, per live task? ──");
    nowhere, so pricing them would be pricing a call that never happens. */
 const LIVE_TASKS = ["role_blueprint", "experience_package", "final_content", "jd_delta"];
 
-const CORE_TOKENS = estimateTokens(CORE_RULES);
-ok("the token estimator reproduces the logged prefix size", CORE_TOKENS === 1898,
-  `estimated ${CORE_TOKENS}, logged 1898`);
+/*
+ * MEASURED, not estimated, and the difference changed the answer.
+ *
+ * The estimator used to be checked against an 1898-token CORE_RULES that had itself been inferred.
+ * count_tokens says 1677 on Haiku. So this section reads `MEASURED_PROMPT_TOKENS` — refreshed for
+ * free by `npm run ai:tokens` — and the estimator is held only to being in the right neighbourhood
+ * of the thing it is now calibrated against.
+ */
+const CORE_TOKENS = MEASURED_PROMPT_TOKENS["claude-haiku-4-5"].coreRules;
+ok("CORE_RULES is measured, not estimated", CORE_TOKENS === 1677);
+ok("and the estimator is calibrated to within 3% of it",
+  Math.abs(estimateTokens(CORE_RULES) - CORE_TOKENS) / CORE_TOKENS < 0.03,
+  `estimate ${estimateTokens(CORE_RULES)} vs measured ${CORE_TOKENS}`);
 
 for (const task of LIVE_TASKS) {
   const schema = TASK_SCHEMA[task];
   ok(`${task} has a task schema to cache`, typeof schema === "string" && schema.length > 0);
 
-  const shape = {
-    model: "claude-haiku-4-5",
-    prefixTokens: CORE_TOKENS + estimateTokens(schema ?? ""),
-    messageTokens: MEASURED_FINAL_CONTENT.messageTokens,
-    outputTokens: MAX_OUTPUT[task],
-  };
+  const shape = measuredShape(task, "claude-haiku-4-5", MAX_OUTPUT[task]);
 
   /* Input-only, which is where the surprise lives and where a naive comparison stops. */
   const inHaiku = callCost({ ...shape, outputTokens: 0 }, "none");
@@ -229,7 +235,13 @@ for (const task of LIVE_TASKS) {
   ok(`${task}: its ${MAX_OUTPUT[task]}-token output cap is above the ${Math.round(be)}-token break-even`,
     MAX_OUTPUT[task] > be, `cap ${MAX_OUTPUT[task]} vs break-even ${be.toFixed(0)}`);
 
-  const { winner } = cheapestModelFor(shape, ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5"]);
+  /* Every candidate priced on ITS OWN measured counts — the whole point of the correction. */
+  const measured = Object.fromEntries(Object.keys(MEASURED_PROMPT_TOKENS).map((m) => {
+    const s = measuredShape(task, m, MAX_OUTPUT[task]);
+    return [m, { prefixTokens: s.prefixTokens, messageTokens: s.messageTokens }];
+  }));
+  const { winner } = cheapestModelFor(
+    shape, ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5"], { measured });
   ok(`${task}: cheapest model is haiku`, winner.model === "claude-haiku-4-5",
     `${winner.model} at $${winner.usd.toFixed(6)}`);
   /* Priced at what it is actually billed — no caching, whatever the markers say. */
@@ -266,9 +278,16 @@ for (const task of LIVE_TASKS) {
  * reads like one. That is the shape this product would have if the prefix were ever padded past
  * 4096: the model question would stop being interesting.
  */
-ok("above every floor, the small model wins outright — no break-even",
+/*
+ * And the prefix has to clear the floor IN THE TARGET MODEL'S OWN TOKENS, which is a trap this
+ * assertion walked into. It first used 4100 — over Haiku's 4096 floor, so "both models cache"
+ * looked obvious. But 4100 Sonnet tokens are only ~3009 Haiku tokens, comfortably UNDER the floor,
+ * so Haiku would not have cached at all. The same conflation the whole section is about, one level
+ * down. 4096 x 1.363 is the smallest Sonnet-token prefix whose Haiku equivalent clears 4096.
+ */
+ok("above every floor IN BOTH TOKENIZERS, the small model wins outright — no break-even",
   breakEvenOutputTokens(
-    { ...MEASURED_FINAL_CONTENT, model: "claude-sonnet-5", prefixTokens: 4100 },
+    { ...MEASURED_FINAL_CONTENT, model: "claude-sonnet-5", prefixTokens: Math.ceil(4096 * 1.363) + 10 },
     "claude-haiku-4-5",
   ) === Infinity);
 
@@ -330,6 +349,65 @@ console.log("\n── token counts are model-specific, and the error has a known
     { measured: { "claude-sonnet-5": { prefixTokens: 1040, messageTokens: 83 } } });
   ok("a measured count can lift a prefix over a floor the estimate missed",
     lifted.winner.mode === "read");
+}
+
+/* ─────────────── 8c. the correction itself, locked down ─────────────── */
+
+console.log("\n── measured beats estimated, and here is the size of the gap ──");
+
+/*
+ * This section exists because an estimate produced a wrong recommendation, and the wrongness was
+ * invisible: every number looked plausible and the total still matched the invoice.
+ *
+ * The split was the problem. `prefixTokens` was 2261 and `messageTokens` 64; measured, they are 2032
+ * and 293. The total is identical — 2325, the figure production logged — so no cost assertion could
+ * have caught it. But a cache only ever discounts the PREFIX, so the split is the entire argument:
+ * assuming 64 uncacheable tokens instead of 293 made the cacheable share look like 97% when it is
+ * 87%, and that turned "Sonnet is 2.7x cheaper on input" out of "Sonnet is 1.14x cheaper".
+ */
+ok("the split still reproduces the invoice", Math.abs(callCost(MEASURED_FINAL_CONTENT, "none") - 0.005040) < 1e-9);
+ok("the prefix is the measured 2032, not the inferred 2261", MEASURED_FINAL_CONTENT.prefixTokens === 2032);
+ok("the message is the derived 293, not the assumed 64", MEASURED_MESSAGE_TOKENS === 293);
+ok("prefix + message equals the logged input exactly",
+  MEASURED_FINAL_CONTENT.prefixTokens + MEASURED_FINAL_CONTENT.messageTokens === 2325);
+
+{
+  const cacheableShare = MEASURED_FINAL_CONTENT.prefixTokens
+    / (MEASURED_FINAL_CONTENT.prefixTokens + MEASURED_FINAL_CONTENT.messageTokens);
+  ok("the cacheable share of the input is ~87%, not ~97%",
+    cacheableShare > 0.86 && cacheableShare < 0.88, `${(cacheableShare * 100).toFixed(1)}%`);
+}
+
+/* Sonnet 5 and Opus 5 returned IDENTICAL counts for every task — same tokenizer. Worth asserting,
+   because it means one measurement covers both and a future divergence should be noticed. */
+for (const task of ["coreRules", ...LIVE_TASKS]) {
+  ok(`sonnet 5 and opus 5 tokenize ${task} identically`,
+    MEASURED_PROMPT_TOKENS["claude-sonnet-5"][task] === MEASURED_PROMPT_TOKENS["claude-opus-5"][task]);
+}
+
+/*
+ * The tokenizer ratio, measured on this product's own text rather than borrowed. The migration guide
+ * quotes ~30% for Sonnet 5 against Sonnet 4.6 — a different pair — and the real figure against
+ * Haiku 4.5 here is 1.363.
+ */
+ok("haiku is the baseline, ratio 1", tokenizerRatio("claude-haiku-4-5") === 1);
+{
+  const r = tokenizerRatio("claude-sonnet-5");
+  ok("the measured sonnet ratio is ~1.36, not the borrowed ~1.30", r > 1.35 && r < 1.38, r.toFixed(3));
+  ok("an unmeasured model does not silently get a ratio of its own", tokenizerRatio("claude-imaginary-9") === 1);
+}
+
+/* And the corrected verdict: the crossover is now tiny, so Haiku wins at any realistic output. */
+{
+  const be = breakEvenOutputTokens(measuredShape("final_content", "claude-haiku-4-5", 900), "claude-sonnet-5");
+  ok("the measured break-even is far below the old estimate of 145", be < 40, `${be.toFixed(0)} tokens`);
+  ok("and below every output cap in the product",
+    Object.values(MAX_OUTPUT).every((cap) => cap > be));
+
+  /* Opus 5 cached is DEARER on input than uncached Haiku, so there is no crossover at all. */
+  const opus = breakEvenOutputTokens(measuredShape("final_content", "claude-haiku-4-5", 900), "claude-opus-5");
+  ok("opus 5 has no crossover — it is dearer on input too", opus === 0, `${opus}`);
+  console.log(`   (measured break-even vs sonnet 5: ${be.toFixed(0)} output tokens; vs opus 5: none)`);
 }
 
 /* ─────────────── 9. /api/suggest cannot cache anything, on any model ─────────────── */

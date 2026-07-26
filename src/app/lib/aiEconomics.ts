@@ -31,11 +31,11 @@
  *    so until enough calls land inside a live five-minute window, padding the prefix to earn the
  *    discount costs more than not earning it.
  * 3. **A bigger model does not help HERE — but not for the reason it looks like.** Sonnet 5's floor
- *    is low enough that the current prefix caches immediately, so on INPUT alone Sonnet is 2.7×
- *    cheaper than uncached Haiku. Its output at 3× the price is what reverses that, and only above
- *    ~145 output tokens. Every live task generates far more, so Haiku wins — see
- *    `breakEvenOutputTokens` and `cheapestModelFor`, which recompute it instead of trusting this
- *    paragraph.
+ *    is low enough that the current prefix caches immediately, so on INPUT alone Sonnet is slightly
+ *    cheaper than uncached Haiku — 1.14x, measured. Its output at 3x the price reverses that above
+ *    19 output tokens, and every live task generates far more. See `breakEvenOutputTokens` and
+ *    `cheapestModelFor`, which recompute it from `MEASURED_PROMPT_TOKENS` instead of trusting this
+ *    paragraph — an earlier version of it said 2.7x and 145 tokens, from estimated counts.
  *
  * No `next/*` imports — `ops/economics.test.mjs` loads this in plain Node.
  */
@@ -207,32 +207,113 @@ export function cacheVerdict(current: CallShape): {
  */
 export const MEASURED_FINAL_CONTENT: CallShape = {
   model: "claude-haiku-4-5",
-  prefixTokens: 2261,   // CORE_RULES 1898 + final_content schema 363
-  messageTokens: 64,    // logged input 2325 − prefix
+  /* MEASURED by count_tokens, not inferred. This was 2261, computed from an estimated 1898-token
+     CORE_RULES; the real figure is 2032. */
+  prefixTokens: 2032,
+  /*
+   * And this is the correction that mattered: logged input 2325 − measured prefix 2032 = 293, where
+   * the old split assumed 64.
+   *
+   * The message is the part that CANNOT be cached — it is different on every request. Assuming it
+   * was 64 tokens made the cacheable share of the input look like 97%, when it is 87%. Since the
+   * entire argument for a caching-capable model rests on how much of the input a cache can discount,
+   * a 4.6x error in the uncacheable remainder is not a rounding detail — see the note on
+   * `breakEvenOutputTokens`.
+   */
+  messageTokens: 293,
   outputTokens: 543,
 };
 
-/** What production logged for that call, to the microdollar. */
+/** The per-request message, in Haiku tokens. Derived: logged input 2325 − measured prefix 2032. */
+export const MEASURED_MESSAGE_TOKENS = 293;
+
+/**
+ * What production logged for that call, to the microdollar.
+ *
+ * Unchanged by the correction above, and that is the check that makes the new split trustworthy:
+ * (2032 + 293) × $1/M + 543 × $5/M = $0.005040, the same figure the old (2261 + 64) split produced,
+ * because only the SPLIT was wrong and the total was always the invoice's.
+ */
 export const MEASURED_FINAL_CONTENT_USD = 0.005040;
 
 /* ─────────────────────────── sizing a prompt without calling anything ─────────────────────────── */
 
 /**
- * Characters per token for this product's prompts, CALIBRATED rather than guessed.
+ * Characters per token, recalibrated against `count_tokens` — and the first figure was wrong.
  *
- * `CORE_RULES` is 6822 characters and the logged call counted its prefix at 1898 tokens; the
- * `final_content` schema is 1305 characters against 363 tokens. 6822/1898 = 3.594 and
- * 1305/363 = 3.595 — the same ratio from two independent texts, which is what makes this a
- * measurement of English-plus-JSON-schema prose rather than the "4 chars per token" folklore.
+ * ── the correction, because it changed a recommendation ──
  *
- * Used only to decide whether a prefix clears a cache floor, where being 2% out changes nothing:
- * the nearest floor is 1.8× away from the nearest prefix. It is NOT used to price a call — every
- * price in this file comes from tokens the provider actually reported.
+ * This constant was 3.594, derived by dividing `CORE_RULES`'s 6822 characters by an 1898-token
+ * prefix that had itself been INFERRED from a logged call. Two numbers, one of them a guess, and
+ * dividing them produced something that looked like a measurement.
+ *
+ * `count_tokens` says `CORE_RULES` is **1677** tokens on Haiku 4.5, not 1898 — the estimate was 13%
+ * high. 6822/1677 = 4.067. And the ratio is model-specific: the same text is **2285** tokens on
+ * Sonnet 5 and Opus 5 (2.985 chars/token), so no single constant can serve all three.
+ *
+ * So this is now labelled for what it is — a Haiku-family approximation for text this file has not
+ * measured — and every decision below reads `MEASURED_PROMPT_TOKENS` instead. `npm run ai:tokens`
+ * or `GET /api/health/ai?tokens=1` refreshes that table for nothing.
  */
-export const CHARS_PER_TOKEN = 3.594;
+export const CHARS_PER_TOKEN = 4.067;
 
-/** Approximate token count for a prompt block, for floor comparisons only. */
+/** Rough token count for unmeasured text, Haiku-family only. Never used to price a call. */
 export const estimateTokens = (text: string): number => Math.round(text.length / CHARS_PER_TOKEN);
+
+/**
+ * Prompt tokens per model per task, MEASURED via `count_tokens` on the deployment, 2026-07-26.
+ *
+ * Each figure is the whole request as `/api/generate` assembles it — `CORE_RULES` plus the task
+ * schema plus a one-character message — so it is what the API counted, not a derived prefix
+ * presented as exact.
+ *
+ * Two things here that no estimate would have produced:
+ *
+ * 1. **Sonnet 5 and Opus 5 return identical counts.** Same tokenizer. Their floors differ (1024 vs
+ *    512) and their prices differ; their token counts do not.
+ * 2. **The ratio between the tokenizers is 1.363 on this product's own text** (2285/1677), not the
+ *    ~1.30 the migration guide quotes — that figure compares Sonnet 5 against Sonnet 4.6, which is a
+ *    different pair. Measuring beat borrowing.
+ *
+ * Refresh with `npm run ai:tokens` (needs a key) or `GET /api/health/ai?tokens=1` (uses the
+ * deployment's). Both bill nothing.
+ */
+export const MEASURED_PROMPT_TOKENS: Record<string, Record<string, number>> = {
+  "claude-haiku-4-5": {
+    coreRules: 1677, role_blueprint: 2121, experience_package: 2021, final_content: 2032, jd_delta: 1915,
+  },
+  "claude-sonnet-5": {
+    coreRules: 2285, role_blueprint: 2878, experience_package: 2755, final_content: 2779, jd_delta: 2637,
+  },
+  "claude-opus-5": {
+    coreRules: 2285, role_blueprint: 2878, experience_package: 2755, final_content: 2779, jd_delta: 2637,
+  },
+};
+
+/** Measured tokenizer ratio against the Haiku baseline. 1.0 for Haiku itself, by definition. */
+export const tokenizerRatio = (model: string): number => {
+  const base = MEASURED_PROMPT_TOKENS["claude-haiku-4-5"].coreRules;
+  const mine = MEASURED_PROMPT_TOKENS[model]?.coreRules;
+  return mine ? mine / base : 1;
+};
+
+/**
+ * The measured shape of one task on one model, ready for `callCost`.
+ *
+ * The message is scaled by the measured tokenizer ratio rather than measured directly, because the
+ * message is different on every request — there is no fixed text to count. Labelled as derived in
+ * the docs for that reason.
+ */
+export function measuredShape(task: string, model: string, outputTokens: number): CallShape {
+  const prefixTokens = MEASURED_PROMPT_TOKENS[model]?.[task];
+  if (!prefixTokens) throw new Error(`no measurement for ${task} on ${model}`);
+  return {
+    model,
+    prefixTokens,
+    messageTokens: Math.round(MEASURED_MESSAGE_TOKENS * tokenizerRatio(model)),
+    outputTokens,
+  };
+}
 
 /* ─────────────────────────── is the cheap model actually the cheap one? ─────────────────────────── */
 
@@ -241,19 +322,29 @@ export const estimateTokens = (text: string): number => Math.round(text.length /
  *
  * Haiku is a third of Sonnet's input price and a third of its output price, so "use the small
  * model" looks like it needs no thought. But Haiku's cache floor is 4096 tokens and Sonnet's is
- * 1024, and this product's prefix sits at ~2300 — between the two. So the comparison is not
- * Haiku-cached vs Sonnet-cached; it is **Haiku at full price vs Sonnet at a tenth of its input
- * price**, and on input alone Sonnet is 2.7× CHEAPER:
+ * 1024, and this product's prefix sits between the two. So the comparison is not Haiku-cached vs
+ * Sonnet-cached; it is Haiku at full price vs Sonnet at a tenth of its input price.
  *
- *   haiku,  prefix 2261 uncached   (2261 + 64) × $1  = $0.002325
- *   sonnet, prefix 2261 cache read  (226 + 64) × $3  = $0.000870
+ * ── and this is where estimating cost me a wrong answer ──
  *
- * Output is what reverses it. Sonnet charges $15/M against Haiku's $5, so every output token
- * costs $10/M more and eats the $0.001455 input saving after ~145 tokens. Above that Haiku wins;
- * below it the bigger model is genuinely cheaper.
+ * On estimated numbers that comparison said Sonnet was **2.7× cheaper on input**, with a break-even
+ * at 145 output tokens. Measured, it is barely cheaper at all:
  *
- * That is a real threshold, not a curiosity — which is why it is a function the test recomputes
- * against the live `MAX_OUTPUT` table instead of a sentence in a document that ages.
+ *   haiku,  prefix 2032 uncached    (2032 + 293) × $1 = $0.002325   ← equals the invoice exactly
+ *   sonnet, prefix 2779 cache read   (278 + 399) × $3 = $0.002031
+ *
+ * 1.14×, not 2.7×, and the break-even collapses from 145 output tokens to **19**. Three compounding
+ * errors, all in the same direction:
+ *
+ *   · the real cacheable prefix is smaller (2032, not 2261) — less to discount
+ *   · the real UNCACHEABLE message is 293 tokens, not 64 — and no cache touches it
+ *   · Sonnet's tokenizer inflates every count by a measured 1.363× — input and output alike
+ *
+ * The lesson is not "Sonnet is worse than I thought". It is that a cache argument is arithmetic on
+ * the cacheable SHARE of the input, so guessing the uncacheable remainder guesses the answer. The
+ * cheap fix was available the whole time: `count_tokens` bills nothing.
+ *
+ * Opus 5 turns out to have no crossover at all — cached, it is dearer on input than uncached Haiku.
  */
 
 /**
@@ -268,13 +359,32 @@ export function breakEvenOutputTokens(current: CallShape, altModel: string): num
   const alt = PRICES[altModel];
   if (!cur || !alt) throw new Error(`no price for ${current.model} / ${altModel}`);
 
-  const zero = { ...current, outputTokens: 0 };
-  const curInput = callCost(zero, prefixCaches(current) ? "read" : "none");
-  const altInput = callCost({ ...zero, model: altModel },
-    prefixCaches({ ...current, model: altModel }) ? "read" : "none");
+  /*
+   * The unit is a token of `current`'s tokenizer — a HAIKU-equivalent token — and getting that wrong
+   * is the same mistake this file was just corrected for, one level down.
+   *
+   * A first version compared the two models at the same nominal `outputTokens`, which quietly assumes
+   * the same answer costs the same number of tokens on both. It does not: Sonnet 5's tokenizer
+   * produces a measured 1.363x as many tokens for this product's text, on output as much as on input.
+   * So the same three summaries are ~1.363x the billed output, at $15/M instead of $5/M, and the
+   * honest penalty is $15 x 1.363 - $5 = $15.44 per million haiku-equivalent tokens rather than $10.
+   *
+   * Ignoring it put the break-even at 84 tokens instead of 19 — a factor of four, in the direction
+   * that flatters the bigger model.
+   */
+  const ratio = tokenizerRatio(altModel) / tokenizerRatio(current.model);
+  const altZero: CallShape = {
+    model: altModel,
+    prefixTokens: Math.round(current.prefixTokens * ratio),
+    messageTokens: Math.round(current.messageTokens * ratio),
+    outputTokens: 0,
+  };
+
+  const curInput = callCost({ ...current, outputTokens: 0 }, prefixCaches(current) ? "read" : "none");
+  const altInput = callCost(altZero, prefixCaches(altZero) ? "read" : "none");
 
   const inputSaving = curInput - altInput;
-  const outputPenalty = (alt.output - cur.output) / 1e6;
+  const outputPenalty = (alt.output * ratio - cur.output) / 1e6;
   if (inputSaving <= 0) return 0;                 // no input saving to spend
   if (outputPenalty <= 0) return Infinity;        // cheaper on both axes, always wins
   return inputSaving / outputPenalty;

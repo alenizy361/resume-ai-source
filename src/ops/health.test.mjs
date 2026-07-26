@@ -30,6 +30,11 @@ let pass = 0, fail = 0;
 const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
 
 const SRC = readFileSync("app/api/health/ai/route.ts", "utf8");
+/** `SRC` with comment lines removed, for assertions that must count code and not prose. */
+const CODE = SRC.split("\n")
+  .filter((l) => !l.trim().startsWith("*") && !l.trim().startsWith("//") && !l.trim().startsWith("/*"))
+  .join("\n");
+const codeMatches = (re) => CODE.match(re) || [];
 /* The free token probe lives beside the other provider code, not in the route — see section 9. */
 const TOKEN_SRC = readFileSync("app/lib/aiTokenCount.ts", "utf8");
 
@@ -108,11 +113,33 @@ ok("a plain GET does not make a model call",
 ok("and says outright that the live probe costs money",
   /spends model credit/i.test(SRC));
 /* Both probes must be bounded. The Anthropic one is allowed longer because it now sends the real
-   ~2300-token cached prefix rather than a one-line toy, and a cache WRITE is slower than a read. */
+   ~2300-token cached prefix rather than a one-line toy, and a cache WRITE is slower than a read.
+   Exact counts, not "at least": a probe added without a timeout has to fail this. */
 ok("both probes have a timeout — a health check that can hang is not one",
   (SRC.match(/setTimeout\(\(\) => ctrl\.abort\(\), 1[05]_000\)/g) || []).length === 2);
-ok("the probe asks for almost no output",
-  (SRC.match(/max_tokens: 4/g) || []).length === 2);
+/* Counted over CODE only. A `max_tokens: 4` mentioned in a comment is documentation, and counting
+   it made this assertion fail the moment the escalation probe's rationale was written down — a test
+   that punishes explaining yourself is a test that gets deleted. Same rule the secret-leak check
+   above uses: skip lines that are comments. */
+ok("the probe asks for almost no output", codeMatches(/max_tokens: 4/g).length === 2);
+
+/*
+ * The escalation tier gets its own probe, and this is the assertion that would have caught the
+ * /api/translate bug. Nothing normally reaches cfg.reasoningModel — escalation needs a low-confidence
+ * classification or a schema failure — so a request shape that is wrong for that model sits broken
+ * while every dashboard reads green. That is what happened: temperature: 0 to Sonnet 5, HTTP 400 on
+ * every escalated translation, unnoticed.
+ */
+ok("the escalation tier is probed too", /report\.liveEscalation/.test(SRC));
+ok("with the reasoning model, not the fast one", /probeAnthropic\(cfg\.reasoningModel\)/.test(SRC));
+ok("and skipped when it would duplicate the probe above",
+  /cfg\.reasoningModel !== suggestModel/.test(SRC));
+/* The probe must send the reasoning directive production sends, or it is testing a different
+   request than the one that can break. */
+ok("the probe carries the same thinking directive as /api/generate",
+  /thinksByDefault\(model\) && canDisableThinking\(model\)/.test(SRC));
+ok("and no unguarded temperature, which is the parameter that broke translate",
+  !/^\s*temperature: 0,$/m.test(SRC.slice(SRC.indexOf("async function probeAnthropic"))));
 
 /*
  * The probe has to send what production sends.
