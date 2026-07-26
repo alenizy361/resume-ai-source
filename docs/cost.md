@@ -69,12 +69,29 @@ is 75% reads — below the 1-hour break-even, and far below with any realistic s
 hour**, and `/api/health/ai` will say so itself — the `cacheDecision` field computes the verdict from
 live numbers rather than repeating this paragraph.
 
-### The two AI wins that have no trade-off — both shipped
+### The three AI wins that have no trade-off — all shipped
 
 **A cancelled generation is no longer billed.** `useAiTask` single-flights by aborting its own fetch,
 but aborting a fetch only closes the browser's end: the route went on waiting for Anthropic and paid
 in full for a completion nobody received. Tap twice, pay twice, see one answer. `/api/generate` now
 forwards `req.signal` to the provider call.
+
+**Reasoning is now switched off on the escalation model.** `max_tokens` is a hard cap on thinking
+*plus* response text. Every budget in `MAX_OUTPUT` was sized on Haiku, which does not think — 900
+tokens for three summaries, 500 for a JD delta. The escalation path routes to `claude-sonnet-5`,
+which thinks unless told not to, so an escalated call spent part of that budget reasoning, **billed
+the reasoning as output at $15/M**, and could return truncated JSON with
+`stop_reason: "max_tokens"`.
+
+The sharp end is which escalation triggers this: `schema-invalid-retry`. The rescue for invalid JSON
+was a call *more* likely to produce invalid JSON, at three times the price. `/api/generate` now sends
+`thinking: {type: "disabled"}` wherever the model both thinks by default and permits the parameter.
+Disabled rather than given headroom, deliberately: what escalation buys here is the stronger base
+model on a task that is already schema-constrained and validated on arrival, and paying $15/M for
+reasoning tokens nobody sees, behind a form field with a 30-second timeout, buys latency and cost
+instead of quality. Fable 5 and Mythos 5 reject an explicit disable, so `outputBudget()` gives those
+4× output headroom instead — unreachable today, but `ANTHROPIC_MODEL_REASONING` is an environment
+variable and a 400 behind a form field is not an acceptable way to find that out.
 
 **The shared cache key hashes meaning, not spelling.** `country` reaches the key as free text, so
 `"Saudi Arabia"`, `"السعودية"`, `"KSA"` and `"المملكة العربية السعودية"` produced **four separate
@@ -180,7 +197,27 @@ so adding a short-output task to `/api/generate` fails the suite rather than qui
 narrowest margin is `jd_delta` at 3.6×; a task capped under ~145 tokens would be genuinely cheaper
 on cached Sonnet.
 
-There is no such task today. `MAX_OUTPUT` lists four names under that threshold or near it —
+Two caveats, both of which make Haiku's win larger rather than smaller — so the conclusion is a
+lower bound, not a best case.
+
+**Token counts are model-specific, and the table above reuses Haiku's.** Sonnet 5 uses a newer
+tokenizer that produces roughly 30% more tokens for the same text than Sonnet 4.6. Anthropic's own
+migration guidance is explicit about the remedy — *"Do not apply a blanket multiplier"*, re-run
+`count_tokens` against the model you will actually send to — so `aiEconomics.ts` refuses to invent
+one and instead accepts measurements, flagging any row it did not get them for. Reasoning about the
+direction of that gap is what makes the unmeasured answer usable: a larger tokenizer inflates the
+candidate's input (cached at 0.1×, so small) *and* its output (billed in full, at the higher rate).
+Applying a 1.3× factor to Sonnet moves `final_content` from $0.014370 to $0.018681 against Haiku's
+$0.006825, and drops the break-even from 145 tokens to **82**. Haiku wins by more, not less.
+
+**Run `npm run ai:tokens` to remove the estimate entirely — it bills $0.00.**
+`POST /v1/messages/count_tokens` returns a count and no completion, so nothing is billed: no output
+tokens, no input tokens. The script measures `CORE_RULES` and all four task schemas on each of the
+three models, prints the floor verdict per model, and emits a JSON block that
+`cheapestModelFor({ measured })` consumes. Unlike `npm run ai:stages`, which spends real credit,
+this one can be run as often as you like.
+
+There is no task under the threshold today. `MAX_OUTPUT` lists four names under it or near it —
 `occupation_classify` (120), `bullet_rewrite` (160), `achievement_write` (400), `ask_section` (400) —
 but `/api/generate`'s `TASKS` array accepts only the four in the table above, so three of those names
 are routed nowhere and cost nothing. (`ask_section` reaches `/api/suggest`, which is a different
@@ -212,7 +249,14 @@ reason. An uptime monitor pointed at it would bill a call on every ping. Point m
 `/api/health/ai` without the flag; it makes no model call.
 
 **`ops/ai-stages.mjs`.** Ten real calls, roughly $0.04–0.06, and it prints the exact total at the end.
-Nothing schedules it.
+Nothing schedules it. `ops/tokens.mjs` is the opposite and worth knowing about for that reason —
+`count_tokens` returns a count and no completion, so it bills nothing and can be run freely.
+
+**An always-thinking model in `ANTHROPIC_MODEL_REASONING`.** Reasoning tokens are billed as output,
+at the escalation model's output rate. `/api/generate` disables thinking where it can, but a model
+that refuses to be told (Fable 5, Mythos 5) would bill them, and `outputBudget()` raises the ceiling
+4× to keep the answer intact — so misconfiguring that variable is a real multiplier on the most
+expensive call in the product, not a no-op.
 
 ## The order to act in
 

@@ -23,6 +23,9 @@
 import { readFileSync, existsSync } from "node:fs";
 import { TASKS, TASK_NAMES } from "../app/lib/aiTasks.ts";
 import { TASK_SCHEMA } from "../app/lib/aiPrompts.ts";
+import {
+  MAX_OUTPUT, acceptsTemperature, canDisableThinking, modelConfig, outputBudget, thinksByDefault,
+} from "../app/lib/aiModels.ts";
 
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => {
@@ -136,6 +139,57 @@ console.log("\n── the harness calls the same routes the app calls ──");
 for (const ep of ["/api/generate", "/api/optimize", "/api/translate"]) {
   ok(`the harness posts to ${ep}`, harness.includes(ep));
   ok(`${ep} is a real route`, existsSync(`app${ep}/route.ts`));
+}
+
+/* ─────────── the escalation model thinks, and max_tokens caps thinking + text ─────────── */
+
+console.log("\n── reasoning is off on the escalation model ──");
+
+/*
+ * The bug this locks down.
+ *
+ * `max_tokens` is a hard cap on thinking PLUS response text. Every budget in `MAX_OUTPUT` was sized
+ * on Haiku, which does not think: 900 tokens for three summaries, 500 for a JD delta. The
+ * escalation path routes to `claude-sonnet-5`, which thinks unless told not to — so an escalated
+ * call spent part of that budget reasoning, billed the reasoning as output at $15/M, and could
+ * return truncated JSON with `stop_reason: "max_tokens"`.
+ *
+ * Which is the sharp end: the escalation is triggered by `schema-invalid-retry`. The rescue for
+ * invalid JSON was a call MORE likely to produce invalid JSON, at three times the price.
+ */
+{
+  const route = readFileSync("app/api/generate/route.ts", "utf8");
+  ok("the request disables thinking rather than leaving the default on",
+    /thinking:\s*\{\s*type:\s*"disabled"\s*\}/.test(route));
+  ok("and only where the model needs it — not blanket",
+    /thinksByDefault\(model\)\s*&&\s*canDisableThinking\(model\)/.test(route));
+  ok("max_tokens comes from outputBudget, not the raw task cap",
+    /outputBudget\(task, route\.model\)/.test(route) && !/route\.maxOutput,/.test(route));
+
+  /* Haiku never thought, so nothing about the cheap path may change. */
+  ok("haiku is left alone", !thinksByDefault("claude-haiku-4-5")
+    && outputBudget("final_content", "claude-haiku-4-5") === MAX_OUTPUT.final_content);
+
+  /* The configured reasoning tier is the one that needed fixing. */
+  ok("the configured reasoning model DOES think by default", thinksByDefault(modelConfig().reasoningModel));
+  ok("and it can be told not to", canDisableThinking("claude-sonnet-5") && canDisableThinking("claude-opus-5"));
+
+  /*
+   * Fable 5 and Mythos 5 answer HTTP 400 to an explicit disable — thinking is unconditional. Nothing
+   * configures them, but `ANTHROPIC_MODEL_REASONING` is an environment variable, so the headroom is
+   * there instead of a 400 or a truncation behind a form field.
+   */
+  ok("an always-thinking model is not sent a disable it would reject",
+    !canDisableThinking("claude-fable-5") && !canDisableThinking("claude-mythos-5"));
+  ok("and it gets output headroom instead",
+    outputBudget("final_content", "claude-fable-5") > MAX_OUTPUT.final_content);
+
+  /* One property, one source. Two id lists would be two chances to disagree about whether a model
+     reasons — which is what `acceptsTemperature` already discovered the hard way, via a 400. */
+  for (const m of ["claude-haiku-4-5", "claude-sonnet-5", "claude-opus-5", "claude-fable-5"]) {
+    ok(`${m}: thinksByDefault is the exact inverse of acceptsTemperature`,
+      thinksByDefault(m) === !acceptsTemperature(m));
+  }
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

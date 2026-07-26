@@ -254,6 +254,58 @@ export function acceptsTemperature(model: string): boolean {
   return false;
 }
 
+/**
+ * Does this model think unless told not to?
+ *
+ * The same fact `acceptsTemperature` encodes, read the other way round, and deliberately NOT a
+ * second regex: a model rejects `temperature` *because* extended thinking is on, so two
+ * independent lists of ids would be two chances to disagree about one property.
+ *
+ * ── why this matters, and it is not a style question ──
+ *
+ * `max_tokens` is a hard cap on thinking PLUS response text. Every call in this product sends
+ * `max_tokens: MAX_OUTPUT[task]` — 900 for `final_content`, 500 for `jd_delta` — sized for a JSON
+ * payload and nothing else, because it was sized on Haiku, which does not think.
+ *
+ * The escalation path routes to `claude-sonnet-5`, which does. So an escalated call spends part of
+ * a 900-token budget on reasoning and returns a truncated answer with `stop_reason: "max_tokens"`
+ * — and those reasoning tokens are billed as output, at $15/M. That is the worse half: the
+ * escalation is TRIGGERED by `schema-invalid-retry`, so the rescue for invalid JSON was a call
+ * more likely to produce invalid JSON, at three times the price.
+ */
+export const thinksByDefault = (model: string): boolean => !acceptsTemperature(model);
+
+/**
+ * May `thinking: {type: "disabled"}` be sent to this model?
+ *
+ * Fable 5 and Mythos 5 think unconditionally and answer HTTP 400 to an explicit disable — the
+ * parameter must be omitted instead. Nothing configures them here, but `ANTHROPIC_MODEL_REASONING`
+ * is an environment variable, so "nothing configures them" is not a guarantee, and a 400 behind a
+ * form field is exactly the failure this file exists to prevent.
+ */
+export const canDisableThinking = (model: string): boolean => {
+  const m = model.toLowerCase();
+  if (m.includes("fable") || m.includes("mythos")) return false;
+  return true;
+};
+
+/**
+ * Multiplier on `max_tokens` for a model that thinks and cannot be told to stop.
+ *
+ * Only reachable by configuring an always-thinking model as the reasoning tier. Four is not a
+ * measurement — no such call has been made here — it is enough room that a truncated answer is
+ * unlikely, chosen over leaving a known truncation trap behind a comment. The ceiling costs
+ * nothing unless it is used.
+ */
+export const THINKING_HEADROOM = 4;
+
+/** `max_tokens` for one call: the task's cap, plus room for reasoning only where it is forced. */
+export function outputBudget(task: AiTaskType, model: string): number {
+  const cap = MAX_OUTPUT[task];
+  if (thinksByDefault(model) && !canDisableThinking(model)) return cap * THINKING_HEADROOM;
+  return cap;
+}
+
 export function routeModel(
   task: AiTaskType,
   opts: { escalate?: EscalationReason | null; config?: ModelConfig } = {},

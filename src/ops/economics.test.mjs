@@ -277,6 +277,61 @@ ok("above every floor, the small model wins outright — no break-even",
 ok("a model with no input saving to spend returns 0",
   breakEvenOutputTokens(MEASURED_FINAL_CONTENT, "claude-haiku-4-5") === 0);
 
+/* ─────────────── 8b. a cross-model comparison in tokens is not apples to apples ─────────────── */
+
+console.log("\n── token counts are model-specific, and the error has a known direction ──");
+
+/*
+ * Sonnet 5 uses a newer tokenizer that produces roughly 30% more tokens for the same text than
+ * Sonnet 4.6, and Anthropic's migration guidance is explicit: do not apply a blanket multiplier,
+ * re-run `count_tokens` against the model you will actually send to. `ops/tokens.mjs` does that,
+ * for free.
+ *
+ * Until it is run, the comparison above reuses Haiku's counts for every candidate. What makes that
+ * acceptable is the DIRECTION of the error, asserted here rather than asserted in prose: a bigger
+ * tokenizer inflates the candidate's input (cached at 0.1×, so small) and its output (billed in
+ * full, at the higher rate). So reusing the smaller counts flatters the bigger model — and "haiku
+ * wins" is a lower bound.
+ */
+{
+  const shape = { ...MEASURED_FINAL_CONTENT, outputTokens: MAX_OUTPUT.final_content };
+  const plain = cheapestModelFor(shape, ["claude-haiku-4-5", "claude-sonnet-5"]);
+  ok("an unmeasured candidate is flagged as unmeasured",
+    plain.ranking.every((r) => r.measured === false));
+
+  /* The same shape, with Sonnet's counts inflated the way the newer tokenizer would inflate them.
+     Haiku must not merely still win — it must win by MORE. */
+  const inflate = (n) => Math.round(n * 1.3);
+  const measured = {
+    "claude-sonnet-5": {
+      prefixTokens: inflate(shape.prefixTokens),
+      messageTokens: inflate(shape.messageTokens),
+      outputTokens: inflate(shape.outputTokens),
+    },
+  };
+  const withCounts = cheapestModelFor(shape, ["claude-haiku-4-5", "claude-sonnet-5"], { measured });
+  ok("a measured candidate is flagged as measured",
+    withCounts.ranking.find((r) => r.model === "claude-sonnet-5").measured === true);
+  ok("measuring haiku is unnecessary — it IS the baseline",
+    withCounts.ranking.find((r) => r.model === "claude-haiku-4-5").measured === false);
+
+  const gapBefore = plain.ranking[1].usd - plain.ranking[0].usd;
+  const gapAfter = withCounts.ranking[1].usd - withCounts.ranking[0].usd;
+  ok("haiku still wins once the candidate's real token counts are used",
+    withCounts.winner.model === "claude-haiku-4-5");
+  ok("and it wins by MORE — so the unmeasured answer was the pessimistic one for haiku",
+    gapAfter > gapBefore, `gap $${gapBefore.toFixed(6)} → $${gapAfter.toFixed(6)}`);
+
+  /* Measured counts must be able to change the floor verdict too, not just the price — that is the
+     whole reason a 1024-token floor and a 30% tokenizer difference interact. */
+  const nearFloor = { ...shape, model: "claude-sonnet-5", prefixTokens: 800 };
+  ok("a prefix below a floor stays below it without measurements", !prefixCaches(nearFloor));
+  const lifted = cheapestModelFor({ ...shape, prefixTokens: 800 }, ["claude-sonnet-5"],
+    { measured: { "claude-sonnet-5": { prefixTokens: 1040, messageTokens: 83 } } });
+  ok("a measured count can lift a prefix over a floor the estimate missed",
+    lifted.winner.mode === "read");
+}
+
 /* ─────────────── 9. /api/suggest cannot cache anything, on any model ─────────────── */
 
 console.log("\n── the other AI route: nothing to cache there ──");

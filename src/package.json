@@ -16,6 +16,7 @@
     "test:aiwiring": "node --experimental-strip-types ops/aiwiring.test.mjs",
     "test:economics": "node --experimental-strip-types ops/economics.test.mjs",
     "ai:stages": "node --experimental-strip-types ops/ai-stages.mjs",
+    "ai:tokens": "node --experimental-strip-types ops/tokens.mjs",
     "test:sectors": "node --experimental-strip-types ops/sectors.test.mjs",
     "test:funnel": "node --experimental-strip-types ops/funnel.test.mjs",
     "test:importcv": "node --experimental-strip-types ops/importcv.test.mjs",

@@ -285,7 +285,32 @@ export interface ModelOption {
   /** What this model would ACTUALLY be billed at, given its own floor and this prefix. */
   mode: CacheMode;
   usd: number;
+  /** True when this row used counts measured on this model rather than the baseline's. */
+  measured: boolean;
 }
+
+/**
+ * Token counts measured on one specific model, keyed by model id.
+ *
+ * ── why a comparison needs this, and why no multiplier is offered instead ──
+ *
+ * **Token counts are model-specific.** Sonnet 5 uses a newer tokenizer that produces roughly 30%
+ * more tokens for the same text than Sonnet 4.6, and Anthropic's own migration guidance is explicit
+ * about the remedy: *"Do not apply a blanket multiplier"* — re-run `count_tokens` against the model
+ * you are actually going to send to. So this file will not invent one; it accepts measurements or
+ * it says it has none.
+ *
+ * `ops/tokens.mjs` produces them, and `POST /v1/messages/count_tokens` is FREE — no completion, no
+ * output tokens, nothing billed. Exactness here costs nothing but a round trip.
+ *
+ * **When no measurement is supplied, the baseline's counts are reused and the answer is flagged
+ * `measured: false`.** The direction of that error is worth knowing rather than merely
+ * acknowledging: a bigger tokenizer inflates the candidate's input (cached at 0.1×, so small) and
+ * its output (billed in full, at the higher rate), so reusing Haiku's smaller counts makes the
+ * bigger model look BETTER than it is. Every "haiku wins" below is therefore a lower bound — the
+ * unmeasured unknown pushes in the direction that strengthens it.
+ */
+export type MeasuredTokens = Record<string, { prefixTokens: number; messageTokens: number; outputTokens?: number }>;
 
 /**
  * Price one call shape on every candidate model and return them cheapest first.
@@ -302,14 +327,30 @@ export interface ModelOption {
 export function cheapestModelFor(
   shape: CallShape,
   candidates: string[] = Object.keys(PRICES),
-  opts: { worstCase?: boolean } = {},
+  opts: { worstCase?: boolean; measured?: MeasuredTokens } = {},
 ): { winner: ModelOption; ranking: ModelOption[] } {
   const ranking = candidates.map((model): ModelOption => {
-    const s = { ...shape, model };
+    const s = shapeOn(shape, model, opts.measured);
     const mode: CacheMode = prefixCaches(s) ? (opts.worstCase ? "write" : "read") : "none";
-    return { model, mode, usd: callCost(s, mode) };
+    return { model, mode, usd: callCost(s, mode), measured: Boolean(opts.measured?.[model]) };
   }).sort((a, b) => a.usd - b.usd);
 
   if (!ranking.length) throw new Error("no candidate models");
   return { winner: ranking[0], ranking };
+}
+
+/** The shape as `model` would count it: measured if we have it, the baseline's counts if not. */
+function shapeOn(shape: CallShape, model: string, measured?: MeasuredTokens): CallShape {
+  const m = measured?.[model];
+  if (!m) return { ...shape, model };
+  return {
+    model,
+    prefixTokens: m.prefixTokens,
+    messageTokens: m.messageTokens,
+    /* Output is not measurable ahead of the call, so the baseline's figure stands unless a real
+       one is supplied. A tokenizer that inflates input inflates output too, which is the larger
+       effect at these prices — noted rather than modelled, because modelling it would be the
+       blanket multiplier this file refuses to invent. */
+    outputTokens: m.outputTokens ?? shape.outputTokens,
+  };
 }

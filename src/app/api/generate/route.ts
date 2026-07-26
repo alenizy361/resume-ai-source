@@ -3,6 +3,7 @@ import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromAnthropic } from "@/app/lib/usage";
 import {
   type AiTaskType, routeModel, qualityFloor, estimateCallCost, modelConfig, acceptsTemperature,
+  canDisableThinking, outputBudget, thinksByDefault,
   type EscalationReason,
 } from "@/app/lib/aiModels";
 import {
@@ -424,6 +425,25 @@ async function callAnthropic(
         /* Only where it is valid: a reasoning model rejects any temperature but 1, and the
            escalation path was returning HTTP 400 for exactly that reason. See `acceptsTemperature`. */
         ...(acceptsTemperature(model) ? { temperature: 0.3 } : {}),
+        /*
+         * Turn reasoning OFF on the escalation model, and this is a cost fix as much as a
+         * correctness one.
+         *
+         * `max_tokens` caps thinking plus response text together. Every budget in `MAX_OUTPUT` was
+         * sized on Haiku, which does not think — 900 tokens for three summaries and nothing else.
+         * Sonnet 5 thinks unless told not to, so an escalated call spent part of that budget
+         * reasoning, billed the reasoning as output at $15/M, and returned truncated JSON with
+         * `stop_reason: "max_tokens"`. The escalation exists to rescue invalid JSON, so the rescue
+         * was more likely to fail than the call it was rescuing.
+         *
+         * Disabled rather than given headroom on purpose. What escalation buys here is the stronger
+         * base model on a task that is already schema-constrained and validated on arrival; paying
+         * $15/M for reasoning tokens the user never sees, behind a form field with a 30-second
+         * timeout, buys latency and cost instead of quality. `outputBudget` adds the headroom for
+         * the one case where disabling is not permitted.
+         */
+        ...(thinksByDefault(model) && canDisableThinking(model)
+          ? { thinking: { type: "disabled" } } : {}),
         system: [
           { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
           { type: "text", text: TASK_SCHEMA[task] ?? "", cache_control: { type: "ephemeral" } },
@@ -620,7 +640,11 @@ export async function POST(req: NextRequest) {
   for (let step = 0; step < 3; step++) {
     const route = routeModel(task, { escalate: escalation, config: cfg });
     attempts++;
-    const out = await callAnthropic(task, route.model, message, route.maxOutput, route.timeoutMs, apiKey, req.signal);
+    /* `outputBudget`, not `route.maxOutput`: identical unless the reasoning tier is a model that
+       thinks unconditionally, in which case the task's cap would be a truncation trap. */
+    const out = await callAnthropic(
+      task, route.model, message, outputBudget(task, route.model), route.timeoutMs, apiKey, req.signal,
+    );
 
     if (!out.ok) {
       lastError = out.error; lastStatus = out.status;
