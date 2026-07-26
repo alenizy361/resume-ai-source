@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test:guards": "node --experimental-strip-types ops/interview-guards.test.mjs",
     "test:ratelimit": "node --experimental-strip-types ops/ratelimit.test.mjs",
-    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow && npm run test:stepready && npm run test:occupations && npm run test:translate && npm run test:provenance && npm run test:export && npm run test:lifecycle && npm run test:languages && npm run test:envelope && npm run test:sectors && npm run test:funnel && npm run test:aiwiring && npm run test:economics && npm run test:schemas && npm run test:isolation && npm run test:prewarm && npm run test:motion && npm run test:pdfextract && npm run test:portability && npm run test:resumeserver && npm run test:fulfilment && npm run test:paycallback && npm run test:mycvs",
+    "test": "npm run test:guards && npm run test:ratelimit && npm run test:merge && npm run test:language && npm run test:resumedoc && npm run test:draftstore && npm run test:flags && npm run test:builderdoc && npm run test:rolepacks && npm run test:suggest && npm run test:reviewchecks && npm run test:importcv && npm run test:pricing && npm run test:entitlement && npm run test:scoretext && npm run test:handoff && npm run test:i18n && npm run test:brand && npm run test:stepmap && npm run test:aitasks && npm run test:health && npm run test:aicache && npm run test:callflow && npm run test:stepready && npm run test:occupations && npm run test:translate && npm run test:provenance && npm run test:export && npm run test:lifecycle && npm run test:languages && npm run test:envelope && npm run test:sectors && npm run test:funnel && npm run test:aiwiring && npm run test:economics && npm run test:schemas && npm run test:isolation && npm run test:prewarm && npm run test:motion && npm run test:pdfextract && npm run test:portability && npm run test:resumeserver && npm run test:fulfilment && npm run test:paycallback && npm run test:mycvs && npm run test:exportrender",
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "smoke": "node ops/form-smoke.mjs",
     "test:design": "node ops/design.test.mjs",
@@ -70,7 +70,10 @@
     "test:paycallback": "node --experimental-strip-types ops/paycallback.test.mjs",
     "test:mycvs": "node --experimental-strip-types ops/mycvs.test.mjs",
     "test:mycvs:browser": "node ops/mycvs.browser.mjs",
-    "test:handoff:browser": "node ops/handoff.browser.mjs"
+    "test:handoff:browser": "node ops/handoff.browser.mjs",
+    "test:exportrender": "node --experimental-strip-types ops/exportrender.test.mjs",
+    "test:exportgate": "node --experimental-strip-types ops/exportgate.mjs",
+    "test:export:browser": "node ops/export.browser.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

@@ -3,7 +3,8 @@ import BrandOrb from "@/app/components/BrandOrb";
 import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice, toArabicDigits } from "@/app/lib/plans";
 import { type InProgress, resumesInProgress, sendToBuilder } from "@/app/lib/handoff";
-import { watermarkFromResponse } from "@/app/lib/entitlement";
+import { shouldShowWatermark, watermarkFromResponse } from "@/app/lib/entitlement";
+import { useEntitlement } from "@/app/lib/useEntitlement";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import PdfExport from "@/app/components/PdfExport";
@@ -105,6 +106,19 @@ export default function ArOptimizePage() {
    * تنتظر بدلاً من أن تستعيد مستند شخص آخر.
    */
   const owner = useOwner();
+
+  /*
+   * حكم واحد للعلامة المائية، للتنزيلين الباقيين في المتصفح.
+   *
+   * PDF و Word لم يعودا يقرران شيئاً — `POST /api/export` يبصمهما من كوكيز الطلب. الباقي في المتصفح
+   * هو تنزيل `.txt` والـPDF المصمّم (html2canvas يحتاج DOM حياً)، وكلاهما كان يقرأ
+   * `watermarkFromResponse(result)` — وهي قيمة موثوقة لحظة وصولها من الخادم، وغير موثوقة بعد إعادة
+   * التحميل لأن النتيجة تُحفَظ في localStorage وتُقرأ منه. تلك القراءة هي الثغرة التي سمّاها O-12.
+   *
+   * مركّبة بـOR: أي مصدر يستطيع طلب العلامة، ولا أحد يستطيع إزالتها.
+   */
+  const { entitlement, loading: entLoading } = useEntitlement();
+  const marked = entLoading || shouldShowWatermark(entitlement) || watermarkFromResponse(result);
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
@@ -515,12 +529,14 @@ export default function ArOptimizePage() {
                     className="rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
                     {copied ? "نُسخت" : "نسخ"}
                   </button>
-                  <button onClick={() => download("optimized-resume.txt", watermarkFromResponse(result) ? wmTxt(result.optimizedResume) : result.optimizedResume)}
+                  <button onClick={() => download("optimized-resume.txt", marked ? wmTxt(result.optimizedResume) : result.optimizedResume)}
                     className="rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
                     ↓ نص
                   </button>
-                  <PdfExport text={result.optimizedResume} label="↓ تنزيل PDF" watermark={watermarkFromResponse(result)} lang="ar" />
-                  <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" watermark={watermarkFromResponse(result)} lang="ar" />
+                  {/* بلا `watermark`: البايتات تأتي من `POST /api/export` الذي يقرر العلامة من كوكيز
+                      الطلب نفسها. كانت القيمة تُقرأ من localStorage، فتحرير قيمة منطقية واحدة يعطي ملفاً نظيفاً. */}
+                  <PdfExport text={result.optimizedResume} label="↓ تنزيل PDF" lang="ar" />
+                  <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" lang="ar" />
                   {/* نفس الاستمرارية المتاحة في الإنجليزية: تحويل السيرة إلى البناء المنظّم
                       بدل الانتهاء عند زر التنزيل. تبديل اللغة لا يجوز أن يغيّر ما يقدر عليه المنتج. */}
                   <div className="w-full">
@@ -577,7 +593,7 @@ export default function ArOptimizePage() {
                 </div>
                 {(() => {
                   const tp = TEMPLATE_CATALOG.find((x) => x.slug === tplSlug) || TEMPLATE_CATALOG[0];
-                  return <ResumeTemplate text={result.optimizedResume} name="resume" variant={tp.variant} accent={tp.accent} watermark={watermarkFromResponse(result)} fitWidth />;
+                  return <ResumeTemplate text={result.optimizedResume} name="resume" variant={tp.variant} accent={tp.accent} watermark={marked} fitWidth />;
                 })()}
               </div>
             ) : (
@@ -585,7 +601,7 @@ export default function ArOptimizePage() {
                 {result.optimizedResume}
               </div>
             )}
-            {watermarkFromResponse(result) && (
+            {marked && (
               <div className="card mt-4 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
                 <div className="chip mb-3">سيرتك جاهزة — مجاناً</div>
                 <h3 className="text-xl font-bold">
@@ -617,7 +633,7 @@ export default function ArOptimizePage() {
                       : "خطاب تعريف مفصّل على نفس إعلان الوظيفة."}
                   </p>
                 </div>
-                {watermarkFromResponse(result) ? (
+                {marked ? (
                   <Link href="/ar#pricing" className="btn-accent px-5 py-2.5 text-sm">🔒 افتح الوصول لإنشائه</Link>
                 ) : !coverLetter ? (
                   <button onClick={generateCoverLetter} disabled={coverLoading || jobDescription.trim().length < 30} className="btn-accent px-5 py-2.5 text-sm disabled:opacity-50">

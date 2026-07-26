@@ -29,13 +29,36 @@ const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else 
 
 /* ── finding the copy blocks ── */
 
-/** Brace-balanced slice starting at the `{` after `label:`, string-aware. */
+/**
+ * Brace-balanced slice starting at the `{` after `label:` — string-aware AND comment-aware.
+ *
+ * ── the comment blindness this had, and how it surfaced ──
+ *
+ * `topKeys` below already skips comments, and its docstring explains why: a note above a key left its
+ * words in the identifier buffer and the key after it was never recognised. `blockAfter` had the same
+ * blindness in a worse form. An APOSTROPHE in a comment — "the request's own cookies" — was read as
+ * the start of a string, so brace counting desynced and the returned block ran thousands of characters
+ * past the end of the copy table into the component body.
+ *
+ * It was latent because the over-run happened to stop at a `}` that produced key sets which still
+ * matched. Adding one ordinary comment moved the stopping point, and the checker then reported that
+ * the English block was "missing" `lang` and `loading` — keys that are in neither table — and that
+ * `"POST"` and `"Content-Type"` were untranslated Arabic strings. Both messages point at the wrong
+ * file, which this file's own comment already calls worse than missing the defect.
+ *
+ * Comments are therefore skipped here for exactly the same reason they are skipped there.
+ */
 function blockAfter(src, label) {
   const m = new RegExp(`\\b${label}\\s*:\\s*\\{`).exec(src);
   if (!m) return null;
   let i = m.index + m[0].length - 1, depth = 0, inStr = false, quote = "", esc = false;
+  let line = false, star = false;
   for (; i < src.length; i++) {
     const c = src[i];
+    if (line) { if (c === "\n") line = false; continue; }
+    if (star) { if (c === "*" && src[i + 1] === "/") { star = false; i++; } continue; }
+    if (!inStr && c === "/" && src[i + 1] === "/") { line = true; i++; continue; }
+    if (!inStr && c === "/" && src[i + 1] === "*") { star = true; i++; continue; }
     if (esc) { esc = false; continue; }
     if (c === "\\") { esc = true; continue; }
     if (inStr) { if (c === quote) inStr = false; continue; }
@@ -222,6 +245,36 @@ ok("no Arabic string is the English one copied over",
   ok("the block reader finds real content", Boolean(en) && en.length > 500, `${en?.length ?? 0} chars`);
   ok("and the key reader finds real keys", topKeys(en).length > 8, `${topKeys(en).length} keys`);
   ok("and the string reader finds real strings", strings(en).length > 20, `${strings(en).length} strings`);
+
+  /*
+   * ── the block reader stops at the END of the block ──
+   *
+   * It did not, and nothing here noticed. An apostrophe in a comment was read as an opening quote, so
+   * brace counting desynced and the block ran into the component body. The three checks above all
+   * passed on the over-run slice, because "more than 500 chars" and "more than 8 keys" are satisfied
+   * by too much just as well as by the right amount.
+   *
+   * So the shape is asserted against a fixture whose correct answer is known, with the two things that
+   * broke it: an apostrophe and a brace, both inside comments.
+   */
+  const fixture = `const C = {
+  en: {
+    // it's a comment with an apostrophe and a stray { brace
+    a: "one",
+    /* another one's comment, with } in it */
+    b: "two",
+  },
+  ar: { a: "واحد", b: "اثنان" },
+};
+function after() { return { notCopy: "must not be in the block" }; }`;
+  const fen = blockAfter(fixture, "en");
+  ok("a comment apostrophe does not swallow the rest of the file",
+    Boolean(fen) && !fen.includes("must not be in the block"),
+    `${fen?.length ?? 0} chars: ${JSON.stringify(fen?.slice(-40))}`);
+  ok("and the block's own keys are still read", JSON.stringify(topKeys(fen)) === '["a","b"]',
+    JSON.stringify(topKeys(fen)));
+  ok("the Arabic side reads too", JSON.stringify(topKeys(blockAfter(fixture, "ar"))) === '["a","b"]',
+    JSON.stringify(topKeys(blockAfter(fixture, "ar"))));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

@@ -327,12 +327,20 @@ export default function DesignSection({
             if (!kept) keep();
           }}
         >
-          {/* Arabic is offered Word rather than a PDF that would arrive as mojibake. */}
+          {/*
+            Arabic is offered Word rather than a PDF that would arrive as mojibake.
+
+            Neither takes a `watermark` prop any more: both fetch their bytes from
+            `POST /api/export`, which stamps the mark from the request's own signed cookies and
+            refuses to read a watermark field. `watermark` below still drives the COPY — telling the
+            user what they are about to get — and `useEntitlement` makes that a server-backed answer,
+            but it can no longer decide what is in the file.
+          */}
           {!arabicCv && (
-            <PdfExport text={cv} watermark={watermark} lang={lang} label={c.pdf} />
+            <PdfExport text={cv} lang={lang} label={c.pdf} />
           )}
           <DocxExport
-            text={cv} watermark={watermark} lang={lang} label={c.word}
+            text={cv} lang={lang} label={c.word}
             filename={arabicCv ? "resume-ar.docx" : "resume.docx"}
           />
         </div>
@@ -356,9 +364,17 @@ export default function DesignSection({
           variant={tpl.variant}
           accent={tpl.accent}
           dir={arabicCv ? "rtl" : "ltr"}
-          /* The same flag `PdfExport` and `DocxExport` already receive. This component had no such
-             prop, so the designed PDF — the ONLY PDF offered for an Arabic CV, because the plain one
-             refuses Arabic — was an unmarked paid-quality file for every free user. */
+          /*
+            The designed PDF is the one export that CANNOT move to the server: html2canvas rasterises
+            a live DOM node. So this is the last client-decided mark in the product, and the reason it
+            is acceptable is that the verdict comes from `useEntitlement` (a server call) rather than
+            from a rehydrated localStorage boolean — and that the ATS PDF and the Word file, which are
+            what an employer receives, are now stamped server-side.
+
+            This component had no such prop at all once, so the designed PDF — the ONLY PDF offered
+            for an Arabic CV, because the plain one refuses Arabic — was an unmarked paid-quality file
+            for every free user.
+          */
           watermark={watermark}
           fitWidth
         />

@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice } from "@/app/lib/plans";
 import { type InProgress, resumesInProgress, sendToBuilder } from "@/app/lib/handoff";
-import { watermarkFromResponse } from "@/app/lib/entitlement";
+import { shouldShowWatermark, watermarkFromResponse } from "@/app/lib/entitlement";
+import { useEntitlement } from "@/app/lib/useEntitlement";
 import Link from "next/link";
 import PdfExport from "@/app/components/PdfExport";
 import DocxExport from "@/app/components/DocxExport";
@@ -172,6 +173,30 @@ export default function OptimizePage() {
    * an empty owner — so the restore waits rather than restoring the wrong document.
    */
   const owner = useOwner();
+
+  /*
+   * ══════════════════════════════════════════════════════════════════════════════════
+   * ONE watermark verdict for the two exports that still happen in the browser
+   * ══════════════════════════════════════════════════════════════════════════════════
+   *
+   * The PDF and Word downloads no longer decide anything — `POST /api/export` stamps those, from the
+   * request's own cookies. What is left in the browser is the `.txt` download and the DESIGNED PDF
+   * (html2canvas needs a live DOM), and both were reading `watermarkFromResponse(result)`.
+   *
+   * That is trustworthy when `result` has just arrived — `/api/optimize` computes `watermark: !hasPass`
+   * server-side and sends it — and NOT trustworthy after a reload, because the result is persisted to
+   * localStorage and rehydrated. That rehydration is the hole O-12 named.
+   *
+   * Composed with OR, so either source can ask for a mark and neither can remove one:
+   *   - `entLoading` marks while the check is in flight, rather than showing a clean file and
+   *     taking it back
+   *   - `shouldShowWatermark(entitlement)` is server-backed (`/api/auth/me`), so a paying customer
+   *     who reloads still gets a clean file
+   *   - `watermarkFromResponse(result)` keeps the fresh server verdict, and a rehydrated result with
+   *     an edited flag can only ever ADD a mark
+   */
+  const { entitlement, loading: entLoading } = useEntitlement();
+  const marked = entLoading || shouldShowWatermark(entitlement) || watermarkFromResponse(result);
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
@@ -718,13 +743,17 @@ export default function OptimizePage() {
                         {copied ? "Copied" : "Copy"}
                       </button>
                       <button
-                        onClick={() => download("optimized-resume.txt", watermarkFromResponse(result) ? wmTxt(result.optimizedResume) : result.optimizedResume)}
+                        onClick={() => download("optimized-resume.txt", marked ? wmTxt(result.optimizedResume) : result.optimizedResume)}
                         className="rounded-lg px-4 py-2 text-sm font-semibold"
                         style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
                         ↓ .txt
                       </button>
-                      <PdfExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
-                      <DocxExport text={result.optimizedResume} watermark={watermarkFromResponse(result)} />
+                      {/* No `watermark` prop any more: the bytes come from `POST /api/export`, which
+                          decides the mark from this request's own signed cookies. The value used to be
+                          `watermarkFromResponse(result)` — and `result` is rehydrated from
+                          localStorage, so one edited boolean produced a clean file. */}
+                      <PdfExport text={result.optimizedResume} />
+                      <DocxExport text={result.optimizedResume} />
                       {/* Carries the resume across rather than just navigating. This flow
                           used to end here, at two download buttons, with nothing editable
                           section by section — the audit's "two resume data models". */}
@@ -806,7 +835,7 @@ export default function OptimizePage() {
                     </div>
                     {(() => {
                       const tp = TEMPLATE_CATALOG.find((x) => x.slug === tplSlug) || TEMPLATE_CATALOG[0];
-                      return <ResumeTemplate text={result.optimizedResume} name="optimized-resume" variant={tp.variant} accent={tp.accent} watermark={watermarkFromResponse(result)} fitWidth />;
+                      return <ResumeTemplate text={result.optimizedResume} name="optimized-resume" variant={tp.variant} accent={tp.accent} watermark={marked} fitWidth />;
                     })()}
                   </div>
                 ) : (
@@ -815,7 +844,7 @@ export default function OptimizePage() {
                     {result.optimizedResume}
                   </div>
                 )}
-                {watermarkFromResponse(result) && (
+                {marked && (
                   <div className="card mt-4 p-8 text-center" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
                     <div className="chip mb-3">Your resume is ready — free</div>
                     <h3 className="text-xl font-bold">
@@ -842,14 +871,14 @@ export default function OptimizePage() {
                     <div>
                       <h3 className="font-bold">Matching cover letter</h3>
                       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                        {watermarkFromResponse(result)
+                        {marked
                           ? "Part of the Complete Pack — unlock to generate a tailored cover letter from this job."
                           : jobDescription.trim().length < 30
                             ? "Click ‘← New scan’, add the job posting, then re-scan to generate a matching cover letter."
                             : "Generate a tailored cover letter from the same job post."}
                       </p>
                     </div>
-                    {watermarkFromResponse(result) ? (
+                    {marked ? (
                       <Link href="/#pricing" className="btn-accent px-5 py-2.5 text-sm">Unlock to generate</Link>
                     ) : !coverLetter ? (
                       <button

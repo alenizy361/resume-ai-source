@@ -645,12 +645,92 @@ this file answers cannot disagree with each other. `PdfExport` still carries its
 neither covers Extended-A or the presentation forms — one place to widen instead of two, and the same
 bug until someone widens it.
 
-### O-12 · P1 · The export paywall is advisory
+### F-20 · P1 · The PDF and Word downloads are rendered on the server — FIXED *(was O-12)*
 
-Files are generated in the browser. The `watermark` flag is persisted to localStorage with
-the optimizer result and rehydrated unverified — editing it yields clean files with no
-server call. F-4 closes the *hole*; it does not make the paywall server-enforced. Real
-enforcement needs a server-side render/export route.
+Every file this product handed out was built in the browser from a `watermark` prop. On `/optimize`
+that prop came from `watermarkFromResponse(result)`, and `result` is persisted to `localStorage` and
+rehydrated on load — so editing one boolean in devtools produced a clean, unmarked PDF and Word file
+with no server call at all. The freemium model was opt-out. F-4 had closed the case where the designed
+PDF shipped unmarked *by accident*, and said plainly that it did not make the paywall enforceable.
+
+**Fix — the bytes now come from the server.**
+
+`POST /api/export` renders both files and stamps the mark from `paidRequest(req)`. Three properties
+make that enforcement rather than a better suggestion:
+
+1. **The request cannot ask for a clean file.** There is no `watermark` field in the body type, and
+   one sent anyway is ignored. Asserted directly: a body carrying `watermark: false`, and another
+   carrying `paid: true, hasAccess: true, watermark: 0`, both come back marked.
+2. **Patching the page cannot remove a mark stamped before the response left the server.**
+3. **It fails closed.** No cookies, an unreadable session, a store that throws — all "not paid".
+
+jsPDF turned out to run fine in Node, including `getTextWidth` and rotated text, which are the two
+things the layout depends on. That was measured before anything was designed around it.
+
+**Supporting changes, each of which removes a way for the old hole to come back:**
+
+- `lib/renderPdf.ts` / `lib/renderDocx.ts` — the layouts, extracted from the click handlers. One
+  implementation serves the route and the offline fallback, and the fallback passes `watermark: true`
+  unconditionally, so a download still works on a train and can never produce a clean file. Extracting
+  them also made the layouts testable at all; they were previously unreachable behind a `doc.save()`.
+- `PdfExport` / `DocxExport` **no longer take a `watermark` prop.** The hole cannot be reintroduced by
+  a caller, because there is nothing to pass. Asserted against the source, including that no page
+  passes one.
+- `lib/paidRequest.ts` — the same eleven lines existed in `/api/optimize` and `/api/auth/me`, and the
+  export route needed them a third time. One server-side answer now, honouring all three routes to
+  access: a signed device pass, an account entitlement, and the entitlement cookie — which may only
+  ever speak for the address actually signed in, so a copied cookie unlocks nothing.
+- Both `/optimize` pages now compose the verdict for what is *left* in the browser:
+  `entLoading || shouldShowWatermark(entitlement) || watermarkFromResponse(result)`. OR, so either
+  source can ask for a mark and neither can remove one — the fresh server verdict still counts, a
+  paying customer who reloads still gets a clean file, and a rehydrated result with an edited flag can
+  only ever ADD a mark.
+
+**What is still client-side, stated rather than glossed.**
+
+- **The designed PDF.** html2canvas rasterises a live DOM node, so it cannot be produced without a
+  browser; a headless-chromium render route is out of scope. Its verdict now comes from
+  `useEntitlement` (a server call) rather than a rehydrated boolean, but a determined user can still
+  patch it. The ATS-parseable PDF and the Word file — what an employer actually receives, and the only
+  download an Arabic CV gets — are stamped server-side.
+- **The `.txt` download**, deliberately. The same text is displayed on the page; anyone can select and
+  copy it. Enforcing a mark on it server-side would be theatre.
+
+The route also does NOT expose a GET that reports the verdict, though it easily could: that would be a
+second way to ask a question `useEntitlement` already answers from the same cookies and the same store.
+`ops/exportgate.mjs` asserts the 405.
+
+**Verification.**
+
+- `ops/exportrender.test.mjs` — 43 assertions in `npm test`: both renderers marked/clean, and
+  `paidRequest` against hand-built requests (forged signature, hand-written payload, expired pass, an
+  entitlement cookie for another account, junk cookies).
+- `ops/exportgate.mjs` — 27 assertions against a running server over real HTTP, reading the **bytes**
+  rather than the `X-Watermark` header, because a route lying in its header would pass a header check.
+  Includes the paid half: a pass minted with the server's own `ACCESS_SECRET` must produce a clean
+  file, because "always watermark" would satisfy every unpaid assertion and break the product.
+- `ops/export.browser.mjs` — 14 assertions clicking the real buttons, reading the downloaded file off
+  disk, and counting `/api/export` calls — because a button that silently fell into its local fallback
+  on every click still downloads a marked file and looks fine.
+
+**Two harness bugs found and recorded, both of which made a test pass for the wrong reason:**
+
+- `docxContainsMark` used `require()` inside an ES module (throws, and the throw was swallowed by the
+  catch meant for unreadable zip members) and scanned for the bare string `"PK"` rather than the local
+  header signature. Visible symptom: two failures. Invisible one: *"the paid Word file has no footer
+  mark" passed vacuously*, because the detector could never find a mark at all. The suite now proves
+  the detector can say yes before any negative assertion is trusted.
+- `ops/i18n.test.mjs`'s `blockAfter` was comment-blind while its sibling `topKeys` was not, so an
+  apostrophe in a comment — "the request's own cookies" — was read as an opening quote and the block
+  ran thousands of characters past the copy table. Latent for as long as the over-run happened to stop
+  at a convenient brace; one ordinary comment moved the stopping point and it began reporting that
+  English was "missing" keys that are in neither table. Fixed, with a fixture asserting a comment
+  apostrophe and a comment brace no longer swallow the file.
+
+### O-12 · superseded by F-20
+
+Files were generated in the browser from a `watermark` flag rehydrated from localStorage, so editing
+one boolean produced clean files with no server call.
 
 ### O-13 · P2 · `ops/form-smoke.mjs` drives a retired route
 
