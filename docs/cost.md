@@ -175,14 +175,24 @@ inventing content, so the prose `TASK_SCHEMA` blocks stay and the route's own `v
 Three layers, none redundant: the API guarantees the container, the prompt asks for the counts, the
 validator checks them.
 
-**Built and tested; off by default.** `lib/aiSchemas.ts` holds all four schemas and
-`ops/schemas.test.mjs` asserts 53 things about them — that they stay inside the documented subset,
-that every object carries the required `additionalProperties: false`, that "off" means the parameter
-is *absent* rather than present-and-empty, and, the assertion worth having, that each schema's keys
-are derived-and-compared against the prose example so a key added to one and not the other fails a
-test. What no test here can prove is that a schema-constrained model still honours the LIMITS prose.
-That needs one real run: set `ANTHROPIC_STRUCTURED_OUTPUTS=1` on the deployment and run
-`npm run ai:stages` — about $0.05, and the harness now prints which mode it saw.
+**Built and tested; off by default, with a probe that can justify turning it on.**
+`lib/aiSchemas.ts` holds all four schemas and `ops/schemas.test.mjs` asserts 53 things about them —
+that they stay inside the documented subset, that every object carries the required
+`additionalProperties: false`, that "off" means the parameter is *absent* rather than
+present-and-empty, and, the assertion worth having, that each schema's keys are derived-and-compared
+against the prose example so a key added to one and not the other fails a test.
+
+None of that can tell you whether the **provider** accepts the schemas, and while that stays
+unanswered the switch is one nobody can justify flipping — so the 4× retry path stays reachable
+forever by default. `GET /api/health/ai?live=1` now sends one real generation with `output_config`
+attached, on `jd_delta` (the smallest schema, the smallest output cap), for about **$0.003**. It
+reports three separate facts, because they fail for different reasons: whether the request was
+**accepted** (a 400 means a malformed schema), whether the body **parsed** as JSON, and whether the
+parsed object carries **exactly** the schema's keys — a 200 whose body is prose would pass a naive
+check while the constraint did nothing.
+
+If that comes back clean, `ANTHROPIC_STRUCTURED_OUTPUTS=1` is safe to set. Counts are still not
+enforced by the schema, only the shape, so the prose LIMITS and the route's own validator both stay.
 
 ### The largest available saving, not yet taken
 

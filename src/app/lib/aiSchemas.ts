@@ -155,6 +155,17 @@ export const structuredOutputsEnabled = (): boolean =>
  */
 export function outputConfigFor(task: AiTaskType): Record<string, unknown> {
   if (!structuredOutputsEnabled()) return {};
+  return schemaRequestFor(task);
+}
+
+/**
+ * The `output_config` for one task, IGNORING the switch.
+ *
+ * Exists so the health endpoint can validate the schemas against the real API while the feature is
+ * still off — which is the only way the switch ever gets flipped for a stated reason instead of a
+ * hope. Nothing on a user path calls this; `outputConfigFor` is the gated door.
+ */
+export function schemaRequestFor(task: AiTaskType): Record<string, unknown> {
   const schema = OUTPUT_SCHEMA[task];
   if (!schema) return {};
   return { output_config: { format: { type: "json_schema", schema } } };

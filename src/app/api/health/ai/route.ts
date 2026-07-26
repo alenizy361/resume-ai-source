@@ -3,11 +3,13 @@ import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
 import { fromAnthropic } from "@/app/lib/usage";
 import {
   modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost, canDisableThinking, thinksByDefault,
+  acceptsTemperature, type AiTaskType,
 } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
 import { MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
 import { countTokensReport } from "@/app/lib/aiTokenCount";
+import { OUTPUT_SCHEMA, schemaRequestFor } from "@/app/lib/aiSchemas";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
@@ -285,6 +287,8 @@ export async function GET(req: NextRequest) {
     liveSuggest: null as unknown,
     /** Exact per-model token counts. Null unless `?tokens=1`. Bills nothing. */
     tokens: null as unknown,
+    /** Whether the API accepts our JSON Schemas. Null unless `?live=1`. */
+    liveSchema: null as unknown,
   };
 
   /*
@@ -394,6 +398,27 @@ export async function GET(req: NextRequest) {
             ? "The reasoning model is the fast model — the probe above already covered it."
             : "The suggestion provider is not Anthropic; there is no Claude escalation tier to probe.",
       };
+    }
+
+    /*
+     * ── does the API accept our JSON Schemas? ──
+     *
+     * `lib/aiSchemas.ts` is written, tested and switched OFF, because the one thing a local test
+     * cannot establish is whether the provider accepts these schemas and whether a constrained model
+     * still honours the LIMITS prose. Leaving that unanswered is how a flag stays off forever and the
+     * 4x schema-invalid retry path stays reachable.
+     *
+     * So one real call, with `output_config` attached, on the CHEAPEST task — `jd_delta`, the smallest
+     * schema and the smallest output cap. A 400 means a schema is malformed and the switch must stay
+     * off. A 200 whose body parses as the schema means it is safe to turn on.
+     *
+     * Roughly $0.003, only under `?live=1`, which already announces that it spends credit.
+     */
+    if (suggestProvider === "anthropic" && suggestKeyPresent) {
+      const t3 = Date.now();
+      report.liveSchema = { ...(await probeSchema(suggestModel)), ms: Date.now() - t3 };
+    } else {
+      report.liveSchema = { ran: false, note: "No Anthropic key on this deployment — nothing to probe." };
     }
 
     report.ok = keyPresent && suggestKeyPresent && out.ok === true && sug.ok === true;
@@ -540,5 +565,101 @@ async function probeAnthropic(model: string): Promise<ProbeResult> {
       uncachedInputTokens: u.input,
       estimatedUsd: Number(estimateCallCost(model, u).toFixed(6)),
     };
+  } finally { clearTimeout(timer); }
+}
+
+/* ─────────────────────────── the schema probe ─────────────────────────── */
+
+/**
+ * Send ONE real generation with `output_config` attached, and report whether it survived.
+ *
+ * The question this answers cannot be answered locally: `ops/schemas.test.mjs` proves the schemas sit
+ * inside Anthropic's documented subset and name the same keys as the prompts, and none of that tells
+ * you the provider will accept them. Until something does, `ANTHROPIC_STRUCTURED_OUTPUTS` is a switch
+ * nobody can justify flipping, and the schema-invalid retry — a failed Haiku call plus a Sonnet
+ * retry, about four times a clean generation — stays reachable.
+ *
+ * `jd_delta` on purpose: the smallest of the four schemas and the smallest output cap, so this is the
+ * cheapest question that still gets a real answer.
+ *
+ * Reports three separate facts rather than one boolean, because they fail for different reasons and
+ * want different fixes: whether the request was ACCEPTED (a 400 means a malformed schema), whether
+ * the body PARSED as JSON, and whether the parsed object carries exactly the schema's keys. A 200
+ * whose body is prose would pass a naive check and mean the constraint did nothing.
+ */
+async function probeSchema(model: string): Promise<Record<string, unknown>> {
+  const task: AiTaskType = "jd_delta";
+  const cfg = schemaRequestFor(task);
+  if (!Object.keys(cfg).length) return { ran: false, note: `No schema defined for ${task}.` };
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20_000);
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": String(process.env.ANTHROPIC_API_KEY),
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model,
+        /* Enough for the shape and nothing more. The point is the envelope, not the content. */
+        max_tokens: 300,
+        ...(acceptsTemperature(model) ? { temperature: 0.3 } : {}),
+        ...(thinksByDefault(model) && canDisableThinking(model) ? { thinking: { type: "disabled" } } : {}),
+        ...cfg,
+        system: [
+          { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
+          { type: "text", text: TASK_SCHEMA[task] ?? "", cache_control: { type: "ephemeral" } },
+        ],
+        messages: [{
+          role: "user",
+          content: "BASELINE: performs CT and general radiography.\n"
+            + "ADVERT: Radiology technologist. Requires SCFHS registration and 2 years of CT. "
+            + "Preferred: MRI experience.\nReturn the delta.",
+        }],
+      }),
+    });
+
+    const bodyText = await res.text().catch(() => "");
+    if (!res.ok) {
+      return {
+        ran: true, accepted: false, status: res.status, error: bodyText.slice(0, 300),
+        verdict: "The API REFUSED the schema. Keep ANTHROPIC_STRUCTURED_OUTPUTS off and fix the "
+          + "schema before turning it on.",
+      };
+    }
+
+    const data = JSON.parse(bodyText) as { content?: Array<{ text?: string }> };
+    const text = data?.content?.[0]?.text ?? "";
+    let parsed: Record<string, unknown> | null = null;
+    try { parsed = JSON.parse(text) as Record<string, unknown>; } catch { parsed = null; }
+
+    const want = Object.keys(OUTPUT_SCHEMA[task]?.properties ?? {});
+    const got = parsed ? Object.keys(parsed) : [];
+    const missing = want.filter((k) => !got.includes(k));
+    const extra = got.filter((k) => !want.includes(k));
+    const u = fromAnthropic(data);
+
+    return {
+      ran: true,
+      accepted: true,
+      status: res.status,
+      task,
+      parsedAsJson: parsed !== null,
+      keysMatch: parsed !== null && missing.length === 0 && extra.length === 0,
+      missing, extra,
+      estimatedUsd: Number(estimateCallCost(model, u).toFixed(6)),
+      verdict: parsed !== null && missing.length === 0 && extra.length === 0
+        ? "The API accepted the schema and returned exactly its keys. Safe to set "
+          + "ANTHROPIC_STRUCTURED_OUTPUTS=1 — that removes the schema-invalid retry, which costs about "
+          + "four times a clean call. Counts are still NOT enforced by the schema, only the shape, so "
+          + "the prose LIMITS and the route's validator both stay."
+        : "Accepted, but the body did not come back as the schema's keys. Do not turn it on yet.",
+    };
+  } catch (e) {
+    return { ran: true, accepted: false, error: e instanceof Error ? e.message.slice(0, 120) : "probe failed" };
   } finally { clearTimeout(timer); }
 }
