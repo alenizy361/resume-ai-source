@@ -389,9 +389,26 @@ async function callAnthropic(
   maxTokens: number,
   timeoutMs: number,
   key: string,
+  /**
+   * The CLIENT's signal, and forwarding it is the cheapest saving in this file.
+   *
+   * `useAiTask` single-flights by aborting its own fetch when the user taps again — the newest
+   * request is the one they meant. But aborting a fetch only closes the browser's end. Without
+   * this, the route went on waiting for Anthropic, the completion arrived for nobody, and it was
+   * billed in full: a user who taps twice pays twice and sees one answer.
+   *
+   * There is no trade-off to weigh here, which is rare. Cancelling a generation nobody is waiting
+   * for costs nothing, saves the whole call, and frees the function earlier.
+   */
+  clientSignal?: AbortSignal,
 ): Promise<{ ok: true; text: string; usage: unknown } | { ok: false; status: number; error: string }> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  /* Whichever fires first wins: our timeout, or the user going away. */
+  if (clientSignal) {
+    if (clientSignal.aborted) ctrl.abort();
+    else clientSignal.addEventListener("abort", () => ctrl.abort(), { once: true });
+  }
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -603,7 +620,7 @@ export async function POST(req: NextRequest) {
   for (let step = 0; step < 3; step++) {
     const route = routeModel(task, { escalate: escalation, config: cfg });
     attempts++;
-    const out = await callAnthropic(task, route.model, message, route.maxOutput, route.timeoutMs, apiKey);
+    const out = await callAnthropic(task, route.model, message, route.maxOutput, route.timeoutMs, apiKey, req.signal);
 
     if (!out.ok) {
       lastError = out.error; lastStatus = out.status;

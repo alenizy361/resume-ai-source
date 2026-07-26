@@ -4,6 +4,7 @@ import { fromAnthropic } from "@/app/lib/usage";
 import { modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
+import { MEASURED_FINAL_CONTENT, cacheVerdict } from "@/app/lib/aiEconomics";
 import { packCacheConfigured, redisPing } from "@/app/lib/packCache";
 import { redisSource } from "@/app/lib/redisEnv";
 import { ruleProvenance, staleRules } from "@/app/lib/countryRules";
@@ -156,6 +157,20 @@ export async function GET(req: NextRequest) {
       cacheFloorNote:
         "Model-dependent and not monotonic: 512 on Opus 5, 4096 on Haiku 4.5. Below it the "
         + "cache_control marker is accepted and silently ignored.",
+      /*
+       * The VERDICT, not just the boolean.
+       *
+       * `cacheablePrefix: false` is true and was being read as a fault to fix — and fixing it, at
+       * this traffic, costs 57% more per call: crossing Haiku's 4096 floor means a LONGER prefix,
+       * a write is billed at 1.25x, and at four calls an hour every call is a write. The arithmetic
+       * that shows this lives in `lib/aiEconomics.ts`, anchored to a real logged call and asserted
+       * in `ops/economics.test.mjs`, so the recommendation is recomputed when prices or the prefix
+       * change rather than remembered from a conversation.
+       *
+       * It flips on its own: raise the traffic past the stated threshold, or move the task to a
+       * tier with a lower floor, and the same function says caching is active.
+       */
+      cacheDecision: cacheVerdict(MEASURED_FINAL_CONTENT),
       schemaTokens: Object.fromEntries(
         Object.entries(TASK_SCHEMA).map(([k, v]) => [k, estimateTokens(v ?? "")]),
       ),
