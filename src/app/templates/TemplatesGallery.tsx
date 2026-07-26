@@ -166,7 +166,7 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
                 </div>
               )}
             </div>
-            <Link href={`/build?template=${t.slug}&lang=${mode}`} className="btn-accent block w-full py-2.5 text-center text-sm font-semibold">
+            <Link href={`/builder?template=${t.slug}&lang=${mode}`} className="btn-accent block w-full py-2.5 text-center text-sm font-semibold">
               {ar ? "استخدم هذا القالب ←" : "Use this template →"}
             </Link>
           </div>

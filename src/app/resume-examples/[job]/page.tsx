@@ -89,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/optimize" className="btn-accent px-6 py-3">Check my {j.title} resume free →</Link>
-          <Link href="/build" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Build one from scratch</Link>
+          <Link href="/builder" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Build one from scratch</Link>
         </div>
 
         <Section title={`Professional summary example for a ${j.title}`}>

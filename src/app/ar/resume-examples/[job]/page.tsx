@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/ar/optimize" className="btn-accent px-6 py-3">افحص سيرة {j.title} مجاناً ←</Link>
-          <Link href="/ar/build" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>ابنِ واحدة من الصفر</Link>
+          <Link href="/ar/builder" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>ابنِ واحدة من الصفر</Link>
         </div>
 
         <Section title={`مثال ملخص مهني لـ ${j.title}`}>

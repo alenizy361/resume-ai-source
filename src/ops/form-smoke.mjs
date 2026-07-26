@@ -85,7 +85,7 @@ const L = {
   },
 }[UI];
 
-/** ORDER in Builder.tsx. The rail, the cinema and this script all read the same list. */
+/** `STEPS` in components/build/steps.ts. The rail, the navigation and this script read one list. */
 const S = {
   start: 0, target: 1, blueprint: 2, personal: 3, experience: 4, education: 5,
   credentials: 6, skills: 7, languages: 8, summary: 9, review: 10, design: 11,

@@ -208,7 +208,16 @@ ok("no Arabic string is the English one copied over",
 /* The parser must actually be reading something, or the three checks above pass
    vacuously — the most dangerous outcome for a static-analysis test. */
 {
-  const probe = readFileSync("app/components/build/Builder.tsx", "utf8");
+  /*
+   * The probe file changed when `Builder.tsx` was deleted with the long-page builder, and this
+   * test is what caught it — which is the point of having it: without this block the three checks
+   * above would have gone on passing over zero files, silently, forever.
+   *
+   * `DesignSection.tsx` is the replacement because it is the largest bilingual copy block in the
+   * builder and it is load-bearing: the export step cannot be deleted without the product losing
+   * its downloads.
+   */
+  const probe = readFileSync("app/components/build/DesignSection.tsx", "utf8");
   const en = blockAfter(probe, "en");
   ok("the block reader finds real content", Boolean(en) && en.length > 500, `${en?.length ?? 0} chars`);
   ok("and the key reader finds real keys", topKeys(en).length > 8, `${topKeys(en).length} keys`);

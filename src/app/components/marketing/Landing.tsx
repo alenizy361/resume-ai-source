@@ -7,8 +7,8 @@
  * and a visitor who HAS decided is shown ten steps at once.
  *
  * So the two are separated. This page explains and offers three doors; `/builder` is the
- * journey. Nothing was deleted to make room: the long page still answers at `/build` and
- * `/ar/build`, which is what makes reverting this a two-file change.
+ * journey. The long single-page builder that used to answer at `/build` is gone — two builders
+ * reachable at once meant every fix landed twice or once, and the menu pointed at the older one.
  *
  * Deliberately a server component with no client JavaScript except the returning-visitor
  * banner. It is the product's most important page for search, every claim on it is static,

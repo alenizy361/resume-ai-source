@@ -26,7 +26,7 @@ export default function Hub() {
             <OrbBrand size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
-          <Link href="/build" className="btn-accent px-4 py-2 text-sm">Build my resume</Link>
+          <Link href="/builder" className="btn-accent px-4 py-2 text-sm">Build my resume</Link>
         </div>
       </nav>
 

@@ -57,5 +57,5 @@ export function sendToBuilder(
     // the chat's own keys untouched is what lets someone switch doors without loss.
     ...({ builder: { ...state, entry: "upload" } } as unknown as Record<string, unknown>),
   });
-  return lang === "ar" ? "/ar/build" : "/build";
+  return lang === "ar" ? "/ar/builder" : "/builder";
 }

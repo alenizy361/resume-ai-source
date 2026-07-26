@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
             <OrbBrand size={26} />
             <span className="text-[15px] font-bold tracking-tight">Sira</span>
           </Link>
-          <Link href="/build" className="btn-accent px-4 py-2 text-sm">Use this template</Link>
+          <Link href="/builder" className="btn-accent px-4 py-2 text-sm">Use this template</Link>
         </div>
       </nav>
 
@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
             <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.tagline}</p>
             <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}><strong>Best for:</strong> {t.bestFor}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/build" className="btn-accent px-6 py-3">Use this template free →</Link>
+              <Link href="/builder" className="btn-accent px-6 py-3">Use this template free →</Link>
               <Link href="/optimize" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Already have a resume? Check it</Link>
             </div>
             <div className="card mt-6 p-4 text-sm" style={{ color: "var(--muted)" }}>

@@ -1,37 +1,30 @@
-import type { Metadata } from "next";
-import Builder from "../components/build/Builder";
+import { permanentRedirect } from "next/navigation";
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
-
-// This route was already advertised in sitemap.ts and linked from app/ar/builder
-// before it existed, so shipping it here closes a live 404 as well as adding the
-// form-first builder.
-export const metadata: Metadata = {
-  title: "Build an ATS-Ready CV, Step by Step | cv.rabit.sa",
-  description:
-    "Fill in the facts; the AI writes the professional wording. Suggested skills and responsibilities for your profession, grouped and editable — nothing enters your CV until you approve it. Free, no signup.",
-  /*
-    * The long single-page builder, kept.
-    *
-    * `/` is the marketing page now and `/builder` is the guided journey, so this address
-    * is neither — it is the same twelve sections in one scroll, which some people prefer
-    * and which is the rollback target if the step routes turn out to be worse. It points
-    * its ranking at `/builder` rather than competing with it.
-    */
-  alternates: {
-    canonical: `${BASE}/builder`,
-    languages: { en: `${BASE}/builder`, ar: `${BASE}/ar/builder`, "x-default": `${BASE}/builder` },
-  },
-  robots: { index: false, follow: true },
-  openGraph: {
-    title: "Build an ATS-Ready CV, Step by Step",
-    description:
-      "You fill the facts. AI completes the professional wording — and never invents an employer, a date, a certification or a number.",
-    url: `${BASE}/build`,
-    type: "website",
-  },
-};
-
-export default function BuildPage() {
-  return <Builder lang="en" />;
+/**
+ * The long single-page builder is retired. This is what is left of it.
+ *
+ * ── why it went ──
+ *
+ * Two builders were reachable at once, and the menu pointed at this one. They were not the same
+ * product: the step routes have the prerequisite banner, the progress rail, the lifecycle label,
+ * the offline sentence and the damaged-draft hold; this page had its own reducer, its own autosave
+ * and none of that. Every fix landed twice or — more often — once, and the user who tapped
+ * "CV Builder" in the menu got whichever half had been forgotten.
+ *
+ * The rollback argument that kept it alive ("some people prefer one scroll") stopped paying for
+ * itself the moment the two behaved differently. It was also carrying a live bug nobody had hit:
+ * `DesignSection` read the builder context, which this page never provided, so finishing a CV here
+ * would have thrown — invisible because no test ever reached the last section on this route.
+ *
+ * ── what a visitor loses ──
+ *
+ * Nothing. The draft is one record in `localStorage`, shared by both surfaces, so a CV started here
+ * opens in the step routes exactly as it was left.
+ *
+ * `permanentRedirect` (308) because the decision is not provisional, and because this address was
+ * linked from the mobile menu and from every resume-example page — those links now point at
+ * `/builder`, but the ones already in someone's history do not.
+ */
+export default function BuildPage(): never {
+  permanentRedirect("/builder");
 }

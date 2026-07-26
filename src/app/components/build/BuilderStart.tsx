@@ -14,8 +14,11 @@
  */
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { track } from "@vercel/analytics";
+import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
+import { EMPTY_BUILDER } from "@/app/lib/builderDoc";
 
 import { useBuilder } from "./BuilderProvider";
 import { StartCards } from "./FormSections";
@@ -48,6 +51,29 @@ const T = {
 export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
   const { state, dispatch, resumeId, hydrated, flush } = useBuilder();
   const router = useRouter();
+  const params = useSearchParams();
+
+  /*
+   * "Use this template" from the gallery, honoured for the first time.
+   *
+   * The template pages have linked to `?template=<slug>` since they were written, and nothing has
+   * ever read it: the old long-page builder ignored the query, and the step builder never saw it
+   * because the link pointed at the other route. So a user picked a template, arrived at a builder
+   * showing the default one, and had to pick it again — which reads as the product not listening.
+   *
+   * Applied once, only for a slug the catalogue actually has, and only while the resume still has
+   * the default: a stored choice the user made inside the builder outranks a query parameter from
+   * a page they left ten minutes ago.
+   */
+  const wanted = params.get("template") ?? "";
+  const applied = useRef(false);
+  useEffect(() => {
+    if (!hydrated || applied.current || !wanted) return;
+    applied.current = true;
+    const known = TEMPLATE_CATALOG.some((x) => x.slug === wanted);
+    if (known && state.template === EMPTY_BUILDER.template) dispatch({ t: "template", slug: wanted });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, wanted]);
   const t = T[lang];
   const nav = SECTION_COPY[lang].nav;
   /* An Arabic page counts in Arabic-Indic digits. Same rule the prices already follow. */

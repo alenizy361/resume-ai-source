@@ -13,7 +13,7 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
  *
  * Reverting is this file and app/ar/page.tsx: render <Builder lang="en" /> again and the
  * previous homepage is back, because nothing was deleted to make room. The long page still
- * answers at /build and /ar/build.
+ * used to answer at /build and /ar/build; those addresses now redirect to the step builder.
  */
 export const metadata: Metadata = {
   title: "You Provide the Facts. AI Writes the Professional CV | cv.rabit.sa",

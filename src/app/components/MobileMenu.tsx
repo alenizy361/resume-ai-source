@@ -21,14 +21,14 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
   const links = ar
     ? [
         { href: "/ar/optimize", label: "افحص سيرتك" },
-        { href: "/ar/build", label: "ابنِ سيرتك" },
+        { href: "/ar/builder", label: "ابنِ سيرتك" },
         { href: "/ar#pricing", label: "الأسعار" },
         acct,
         { href: "/", label: "English" },
       ]
     : [
         { href: "/optimize", label: "Scan my resume" },
-        { href: "/build", label: "CV Builder" },
+        { href: "/builder", label: "CV Builder" },
         { href: "/#pricing", label: "Pricing" },
         acct,
         { href: "/ar", label: "عربي" },

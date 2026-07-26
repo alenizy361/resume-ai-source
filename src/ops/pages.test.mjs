@@ -94,6 +94,35 @@ for (const prof of [
     ok(`${prof.name} ${path}: no errors or hydration mismatches`, problems.length === 0, problems.slice(0, 2).join(" · "));
   }
 
+  /* ── the retired long-page builder ── */
+
+  /*
+   * `/build` and `/ar/build` were a second builder, reachable from the mobile menu and from every
+   * template page, with their own reducer and none of the step routes' prerequisite banner, rail,
+   * lifecycle label or offline handling. Retired to one product; the addresses stay as redirects
+   * because they were linked from pages people have open.
+   */
+  for (const [from, to] of [["/build", "/builder"], ["/ar/build", "/ar/builder"]]) {
+    const res = await page.goto(`${BASE}${from}`, { waitUntil: "domcontentloaded" });
+    ok(`${prof.name} ${from}: redirects to ${to}`, new URL(page.url()).pathname === to, page.url());
+    ok(`${prof.name} ${from}: and lands on a working builder`, res?.status() === 200, String(res?.status()));
+  }
+
+  /*
+   * And the template a user picked in the gallery is the one the builder starts with. That link
+   * has carried `?template=` since the gallery was written and nothing ever read it.
+   */
+  await page.evaluate(() => window.localStorage.clear());
+  await page.goto(`${BASE}/builder?template=azure`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(900);
+  const chosen = await page.evaluate(() => {
+    try {
+      const d = JSON.parse(localStorage.getItem("ra_journey_en") || "{}");
+      return d?.builder?.template ?? "";
+    } catch { return ""; }
+  });
+  ok(`${prof.name}: a template chosen in the gallery reaches the builder`, chosen === "azure", chosen);
+
   await ctx.close();
 }
 

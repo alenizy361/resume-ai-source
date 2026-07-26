@@ -137,10 +137,9 @@ export default function DesignSection({
   /**
    * Which language version is on screen, passed in rather than read from the provider.
    *
-   * This component is rendered by BOTH shells, and only one of them has a provider: the long
-   * `/build` page owns its own reducer. Reading context here worked only for as long as the long
-   * page never unlocked this section, which is not a guarantee — it is a bug waiting for a user
-   * who finishes a CV on that route.
+   * It was read from the builder context, which the long `/build` page — since retired — never
+   * provided, so finishing a CV on that route would have thrown. Passing it in keeps this component
+   * usable from any shell rather than only from the one that happens to have a provider above it.
    */
   viewLang: Lang;
   referenceDate: string;
