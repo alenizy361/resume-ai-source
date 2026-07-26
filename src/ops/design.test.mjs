@@ -292,9 +292,22 @@ for (const prof of [PROFILES[1], PROFILES[4], PROFILES[6]]) {
       await page.locator(".bd-pane-btn").nth(1).click();
       await page.waitForTimeout(500);
       ok(`${prof.name}: pressing Preview mounts it`, (await page.locator(".bd-preview").count()) === 1);
+      /*
+       * And the action bar SURVIVES the switch.
+       *
+       * It did not. While the bar lived inside the step, switching to the preview — which
+       * unmounts the step — took Back and Continue with it, so there was no way to continue from
+       * the preview at all. Found in a screenshot; this is the assertion that would have found it.
+       */
+      ok(`${prof.name}: the action bar survives switching to Preview`,
+        (await page.locator(".bd-actions").count()) === 1);
+      ok(`${prof.name}: Continue is still pressable in Preview`,
+        await page.locator(".bd-continue").isVisible());
       await page.locator(".bd-pane-btn").nth(0).click();
       await page.waitForTimeout(400);
       ok(`${prof.name}: pressing Edit unmounts it again`, (await page.locator(".bd-preview").count()) === 0);
+      ok(`${prof.name}: and the action bar is still there`,
+        (await page.locator(".bd-actions").count()) === 1);
     } else {
       ok(`${prof.name}: the preview is a column on a desktop`, previewMounted === 1, String(previewMounted));
       ok(`${prof.name}: the Edit/Preview toggle is not shown`,

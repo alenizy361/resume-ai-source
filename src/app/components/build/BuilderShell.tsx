@@ -29,9 +29,11 @@
  * mode, `ResumeTemplate` was parsing the CV and re-laying out an A4 page behind a
  * `ResizeObserver` on every keystroke, for a box nobody could see.
  *
- * **Back and Continue live in one fixed bar** (`StepActions`, rendered by the step), so they
- * cannot scroll under the browser's bottom chrome, and the page reserves exactly the bar's
- * height beneath the content rather than a guessed `pb-24`.
+ * **Back and Continue live in one fixed bar** — `StepActions`, rendered HERE rather than by the
+ * step. That placement is load-bearing: switching to the preview unmounts the step, and while the
+ * bar lived inside it the two controls vanished with it, leaving no way to continue from the
+ * preview at all. The page reserves exactly the bar's height beneath the content (`--bd-bar`)
+ * rather than the guessed `pb-24` it used to.
  */
 
 import { useEffect, useState } from "react";
@@ -43,6 +45,7 @@ import BrandOrb from "../BrandOrb";
 import useMediaQuery, { DESKTOP } from "../useMediaQuery";
 import VersionSwitch from "./VersionSwitch";
 import StepBar from "./StepBar";
+import StepActions from "./StepActions";
 import { useBuilder } from "./BuilderProvider";
 import { lifecycleLabel, lifecycleTone } from "@/app/lib/lifecycle";
 import { stepFromSlug, stepHref } from "./steps";
@@ -202,6 +205,12 @@ export default function BuilderShell({
                   </aside>
                 )}
               </div>
+
+              {/*
+                One action bar for every step, and it lives HERE rather than inside the step so
+                that switching to the preview — which unmounts the step — cannot take it away.
+              */}
+              <StepActions step={step} />
             </>
           )}
         </div>

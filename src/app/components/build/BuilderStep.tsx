@@ -4,35 +4,20 @@
  * One step of the builder, as a page.
  *
  * The section bodies are the same components the long scrolling page renders — imported,
- * not reimplemented. What this file owns is the part that only exists once a step is a
- * route: the heading, the Back and Continue rules, and the flush-before-navigate that
- * keeps the two honest.
+ * not reimplemented. What this file owns is the heading and which body belongs to which step.
  *
- * The Continue contract, in order, because the order is the whole point:
- *
- *   1. mark the step done          — so the rail and the navigation ticks agree
- *   2. flush the draft to storage  — synchronously, before anything can unmount
- *   3. navigate                    — `push`, so Back is the browser's Back
- *
- * Reversing 2 and 3 is the bug this design exists to prevent: React batches, the router
- * does not wait, and the 450 ms autosave loses the race. A user who typed a phone number
- * and pressed Continue would arrive at the next step with the field they just filled
- * missing from a cold reload.
- *
- * Back does NOT mark anything done and does not need to flush — the provider is mounted
- * by the layout, so going back one step is a re-render, not a reload, and the autosave
- * catches up on its own.
+ * Back and Continue used to be here too, and they moved to `StepActions`, rendered by the shell.
+ * The reason is structural rather than tidiness: once the mobile preview began being unmounted
+ * instead of hidden, the shell stopped rendering the step in preview mode — and the step's footer
+ * went with it, leaving no way to continue from the preview. A bar that must appear on every step
+ * cannot belong to something that is not always rendered.
  */
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { track } from "@vercel/analytics";
 
 import { type SectionId } from "@/app/lib/builderDoc";
 import { useBuilder } from "./BuilderProvider";
-import {
-  SECTION_COPY, nextStep, prevStep, stepHref, builderHome,
-} from "./steps";
+import { SECTION_COPY, stepHref } from "./steps";
 import StepGate from "./StepGate";
 import { TargetFields, PersonalFields, BlueprintBody, SkillsBody } from "./FormSections";
 import ExperienceSection from "./ExperienceSection";
@@ -42,34 +27,9 @@ import SummarySection from "./SummarySection";
 import ReviewSection from "./ReviewSection";
 import DesignSection from "./DesignSection";
 
-const T = {
-  en: { back: "Back", cont: "Save & continue", done: "Finish", start: "Start over" },
-  ar: { back: "رجوع", cont: "احفظ وواصل", done: "إنهاء", start: "ابدأ من جديد" },
-};
-
 export default function BuilderStep({ step }: { step: SectionId }) {
-  const { lang, resumeId, state, hydrated, flush, markDone } = useBuilder();
-  const router = useRouter();
-  const t = T[lang];
+  const { lang, hydrated } = useBuilder();
   const copy = SECTION_COPY[lang];
-  const arrowBack = lang === "ar" ? "→" : "←";
-  const back = prevStep(step);
-  const forward = nextStep(step);
-
-  /** Go to a step, saving first. Everything that leaves this page goes through here. */
-  const goto = (to: SectionId, completing: boolean) => {
-    if (completing) markDone(step);
-    flush();
-    router.push(stepHref(lang, resumeId, to), { scroll: false });
-  };
-
-  const onContinue = () => {
-    if (forward) { goto(forward, true); return; }
-    // The last step has nothing after it. Finishing it is still worth recording.
-    markDone(step);
-    flush();
-    track("builder_finished", { lang });
-  };
 
   return (
     <section className="bd-section bd-step">
@@ -100,30 +60,6 @@ export default function BuilderStep({ step }: { step: SectionId }) {
         )}
       </div>
 
-      {/*
-        The action bar is FIXED, not the last thing in the scroll flow.
-        
-        Back and Continue are the two controls a step exists to reach, and in the flow they sat
-        below the form — so on a long step they were off screen, and on iOS Safari the browser's
-        own bottom bar sat on top of them when they were not. Fixed to the bottom with
-        `safe-area-inset-bottom`, with the page reserving exactly its height beneath the content
-        (`--bd-bar` in build.css), they are reachable on every step at every scroll position and
-        cover nothing.
-
-        The arrow direction follows the writing direction: `←` on an Arabic page points forward.
-      */}
-      <div className="bd-actions">
-        <div className="bd-actions-in">
-          {back ? (
-            <button className="bd-back" onClick={() => goto(back, false)}>{arrowBack} {t.back}</button>
-          ) : (
-            <Link className="bd-back" href={builderHome(lang)}>{arrowBack} {t.start}</Link>
-          )}
-          <button onClick={onContinue} className="bd-continue">
-            {forward ? t.cont : t.done}
-          </button>
-        </div>
-      </div>
     </section>
   );
 }
