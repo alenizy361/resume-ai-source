@@ -449,5 +449,68 @@ console.log("\n── a corrupt value degrades to empty, never to a crash ──
   ok("remove is scoped and works", readPersonal(A, "ra_jobs") === null);
 }
 
+/* ═════════════════ the owner fast path, and the safety it must not trade ═════════════════ */
+
+/*
+ * ── the bug ──
+ *
+ * `BuilderProvider` will not hydrate without an owner and `BuilderStep` shows a skeleton until it
+ * has, so `useOwner`'s `fetch("/api/auth/me")` sat in front of the first form field. Every visitor,
+ * every load, three grey bars until a round-trip finished. Proved by blocking that endpoint in a
+ * browser: with the fetch hanging the builder showed its title and NOTHING else, indefinitely. With
+ * the fast path, seven fields.
+ *
+ * The fast path is only allowed because of `hasOwnedRecords`, so that function IS the safety
+ * property. If it ever answered `false` while a signed-in account's record was present, the builder
+ * would render `anon`'s draft to a signed-in user and the autosave would then write it — which is
+ * the original cross-account bug, reintroduced through the back door of a performance fix.
+ */
+
+console.log("\n── the owner may be guessed only when nothing can be got wrong ──");
+{
+  const { hasOwnedRecords } = await import("../app/lib/resumeStore.ts");
+  store.clear();
+  ok("an empty browser has no owned records", hasOwnedRecords() === false);
+
+  writeResume("anon", "rA", "en", cv("anonymous draft"));
+  ok("an anonymous draft alone still allows the guess", hasOwnedRecords() === false);
+
+  /* The moment a signed-in account has written anything here, the guess must stop. */
+  writeResume(A, "rB", "en", cv("alice"));
+  ok("a signed-in account's record forbids the guess", hasOwnedRecords() === true);
+
+  /* And via the index alone, because `forgetOwner` removes records and the index together but a
+     partial failure could leave either behind — the conservative answer is the safe one. */
+  store.clear();
+  store.setItem(indexKey(A), JSON.stringify([{ resumeId: "rC", lang: "en", updatedAt: 1, revision: 1, title: "x" }]));
+  ok("an index alone is enough to forbid it", hasOwnedRecords() === true);
+
+  /* Personal data under an account is NOT a resume record, and the guess only governs which draft is
+     read. Asserted so the boundary is deliberate rather than accidental. */
+  store.clear();
+  writePersonal(A, "ra_jobs", "[]");
+  ok("an unrelated personal key does not forbid it", hasOwnedRecords() === false);
+}
+
+console.log("\n── and the hook does not put the network in front of the form ──");
+{
+  const { readFileSync } = await import("node:fs");
+  const src = readFileSync("app/components/useOwner.ts", "utf8");
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+  ok("it reads local storage through useSyncExternalStore", /useSyncExternalStore\(/.test(code));
+  ok("the server snapshot is empty, so the prerender cannot claim an owner", /serverGuess\s*=\s*\(\)\s*:\s*string\s*=>\s*""/.test(code));
+  ok("the guess is gated on hasOwnedRecords", /hasOwnedRecords\(\)\s*\?\s*""\s*:\s*"anon"/.test(code));
+  /*
+   * Adoption must wait for the SERVER, even though rendering does not. Running it on the guess would
+   * file a returning account's saved CVs under `anon`. And `settled` must be state rather than a ref:
+   * when the guess said `anon` and the server confirms `anon`, React bails out of the identical
+   * update and a ref would leave this effect never running again — so no anonymous visitor's
+   * pre-scoping data would ever be adopted, which is most visitors.
+   */
+  ok("adoption waits for the server's answer", /!settled\s*\|\|/.test(code));
+  ok("and `settled` is state, so the effect re-runs on the transition", /\[settled, setSettled\] = useState/.test(code));
+  ok("with settled in the dependency list", /\}, \[owner, settled\]\)/.test(code));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

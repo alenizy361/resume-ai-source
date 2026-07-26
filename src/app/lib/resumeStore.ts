@@ -258,6 +258,35 @@ export function forgetOwner(owner: string): number {
   return doomed.length;
 }
 
+/**
+ * Has any SIGNED-IN account ever stored a resume in this browser?
+ *
+ * Synchronous, and that is the entire point. `useOwner` cannot answer "who owns this" without asking
+ * the server, and the builder cannot read a draft without an owner — so the form was waiting on a
+ * network round-trip before rendering a single field. On a phone that is seconds of grey skeleton on
+ * the first screen of the funnel.
+ *
+ * But the wait only BUYS anything when there is something to get wrong. The failure it guards against
+ * is showing one account's CV to another, and that requires a signed-in account's record to already
+ * exist here. If none does, `anon` is not a guess — it is the only possible answer, and it is
+ * available immediately from local storage.
+ *
+ * So: false means "answer `anon` now and confirm in the background"; true means "wait, correctness
+ * outranks speed". Keys are `ra_cv:{owner}:{resumeId}` and a signed-in owner is always `u_…`, so the
+ * prefix is exact rather than heuristic.
+ */
+export function hasOwnedRecords(): boolean {
+  const store = ls();
+  if (!store) return false;
+  try {
+    for (let i = 0; i < store.length; i++) {
+      const k = store.key(i);
+      if (k && (k.startsWith("ra_cv:u_") || k.startsWith("ra_cv_index:u_"))) return true;
+    }
+  } catch { /* a blocked store cannot be holding anyone's record either */ }
+  return false;
+}
+
 /** A readable name for the index, from whatever the resume has so far. */
 export function titleOf(state: BuilderState): string {
   const t = state?.target?.title?.trim();

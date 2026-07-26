@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { forgetOwner, ownerKey } from "@/app/lib/resumeStore";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { forgetOwner, hasOwnedRecords, ownerKey } from "@/app/lib/resumeStore";
 import { forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
 
 /**
@@ -14,10 +14,20 @@ import { forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
  * first account's CV. So the owner has to be KNOWN before anything is read, and it is only knowable
  * by asking the server who the session belongs to.
  *
- * Returns `""` until that answer arrives, and `BuilderProvider` waits on it. That pause is
- * deliberate: the alternative is reading `anon`, rendering it, then swapping to the account's data a
- * moment later — a visible flash of the wrong CV, and a race where the autosave writes the anonymous
- * draft into the account's key.
+ * ── and why it does not always wait for the server ──
+ *
+ * This used to return `""` until the round-trip completed, always. `BuilderProvider` will not hydrate
+ * without an owner and `BuilderStep` renders a skeleton until it has, so that fetch sat in front of
+ * the first form field: every visitor, every load, three grey bars until the network answered. It is
+ * visible in the deployment's own HTML — the body of a step page is the skeleton and nothing else.
+ *
+ * The wait only buys something when there is something to get wrong. What it guards against is
+ * showing one account's CV to another, and that requires a signed-in account's record to already be
+ * in this browser. When none is, `anon` is not a guess — it is the only possible answer, and local
+ * storage can say so with no network at all.
+ *
+ * So the answer is read from storage first and confirmed by the server after. Where a record does
+ * exist, the old behaviour stands: wait, because correctness outranks speed.
  *
  * ── sign-out ──
  *
@@ -25,8 +35,38 @@ import { forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
  * this browser. They are a recovery draft, not the only copy — `/api/resumes` holds the saved CV —
  * and leaving them behind is how the next person to use the laptop reads them.
  */
+/* `useSyncExternalStore` requires stable function identities, so these live outside the hook. */
+const NO_SUBSCRIBE = () => () => {};
+const clientGuess = (): string => (hasOwnedRecords() ? "" : "anon");
+const serverGuess = (): string => "";
+
 export function useOwner(): string {
-  const [owner, setOwner] = useState("");
+  /**
+   * What local storage alone can prove, read through `useSyncExternalStore`.
+   *
+   * This is precisely the API's purpose: an external, non-React source with a different answer on the
+   * server than on the client. It gives `""` during the prerender and the real answer on the client's
+   * FIRST render — no extra render, no `setState` inside an effect, and no hydration mismatch, all of
+   * which the obvious alternatives cost.
+   *
+   * `subscribe` is a no-op because this value cannot change without a page load: a record belonging to
+   * a signed-in account can only appear after that account has been resolved, which is the very thing
+   * being waited for.
+   */
+  const local = useSyncExternalStore(NO_SUBSCRIBE, clientGuess, serverGuess);
+
+  /** The server's answer. `""` until it arrives — and it is allowed to disagree with the guess. */
+  const [confirmed, setConfirmed] = useState("");
+  /**
+   * Whether the server has answered, as STATE rather than a ref — and the difference is a bug that
+   * nearly shipped here. When the guess already said `anon` and the server then confirms `anon`,
+   * `setConfirmed` receives an identical value, React bails out, and nothing re-renders. Held in a
+   * ref, the adoption effect below would never run again, so the pre-scoping data of every anonymous
+   * visitor — which is most visitors — would never be adopted at all.
+   */
+  const [settled, setSettled] = useState(false);
+
+  const owner = confirmed || local;
 
   useEffect(() => {
     let alive = true;
@@ -34,7 +74,12 @@ export function useOwner(): string {
       .then((r) => r.json())
       .then((d: { signedIn?: boolean; email?: string }) => {
         if (!alive) return;
-        setOwner(ownerKey(d?.signedIn ? d?.email : null));
+        setSettled(true);
+        /* Often the same value the guess already produced, in which case React bails out and nothing
+           re-renders. When it differs the owner key changes and `BuilderProvider` re-hydrates under
+           the real account — the correct outcome, and the reason its guard is keyed on `(owner, id)`
+           rather than on a boolean. */
+        setConfirmed(ownerKey(d?.signedIn ? d?.email : null));
       })
       .catch(() => {
         /*
@@ -44,7 +89,7 @@ export function useOwner(): string {
          * the connection returns and the owner resolves. Guessing the account instead would risk the
          * opposite, and the opposite is a data leak.
          */
-        if (alive) setOwner("anon");
+        if (alive) { setSettled(true); setConfirmed("anon"); }
       });
     return () => { alive = false; };
   }, []);
@@ -86,10 +131,16 @@ export function useOwner(): string {
    */
   const migrated = useRef("");
   useEffect(() => {
-    if (!owner || migrated.current === owner) return;
+    /*
+     * Gated on `settled`, not merely on `owner`. Adoption attributes the pre-scoping data to whoever
+     * is signed in, and the fast path can supply an owner before anyone has said who that is — so
+     * running here on the optimistic value would file a returning account's saved CVs under `anon`.
+     * Rendering may proceed on a guess; ownership may not.
+     */
+    if (!owner || !settled || migrated.current === owner) return;
     migrated.current = owner;
     migrateUnowned(owner);
-  }, [owner]);
+  }, [owner, settled]);
 
   return owner;
 }
