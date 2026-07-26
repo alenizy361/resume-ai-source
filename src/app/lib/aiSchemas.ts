@@ -27,14 +27,15 @@
  * schemas are rejected, and a new schema pays a one-time compilation latency (cached 24 hours after
  * that). `ops/schemas.test.mjs` asserts the subset rather than trusting this paragraph.
  *
- * ── why it is off by default ──
+ * ── ON by default, and what it took to earn that ──
  *
- * Nothing here has been sent to the API. What a test can prove is that these schemas are valid,
- * within the documented subset, and describe exactly the keys the prompts promise and the parsers
- * read — and that is asserted. What it cannot prove is that a schema-constrained model still honours
- * the LIMITS prose, which needs one real run. So `ANTHROPIC_STRUCTURED_OUTPUTS=1` turns it on and
- * `ops/ai-stages.mjs` reports which mode it ran in: roughly $0.05 to find out, and off until someone
- * spends it.
+ * A local test can prove these schemas are valid, inside the documented subset, and name exactly the
+ * keys the prompts promise and the parsers read. It cannot prove the PROVIDER accepts them. So
+ * `GET /api/health/ai?live=1` sends one real generation per schema and reports acceptance, whether the
+ * body parsed, whether the keys matched, and `stop_reason`. All four passed on production with the
+ * production caps — see `structuredOutputsEnabled` for the numbers.
+ *
+ * `ANTHROPIC_STRUCTURED_OUTPUTS=0` turns it off without a deploy.
  *
  * No `next/*` imports — the tests load this in plain Node.
  */
@@ -138,14 +139,35 @@ export const OUTPUT_SCHEMA: Partial<Record<AiTaskType, JsonSchema>> = {
 };
 
 /**
- * Is the API asked to enforce the schema?
+ * Is the API asked to enforce the schema? ON by default, since 2026-07-26.
  *
- * Off unless `ANTHROPIC_STRUCTURED_OUTPUTS` is explicitly truthy. Default-off because the schemas
- * above have never been sent — see the header. Flipping it needs one paid run of
- * `ops/ai-stages.mjs`, not a code change.
+ * ── what changed, and what it took ──
+ *
+ * This was off by default while the schemas had never been sent to the provider. They have now been
+ * sent, on production, with the production prompt and the production output caps — all four accepted,
+ * every body parsed, every key set matched exactly, `stop_reason: "end_turn"` throughout:
+ *
+ *   role_blueprint      200  373 output tokens of 1400
+ *   experience_package  200  351 of 1100
+ *   final_content       200  249 of 900
+ *   jd_delta            200   48 of 500
+ *
+ * Getting there took two corrections worth remembering. The first probe tested `jd_delta` alone and
+ * printed "safe to turn on" — a verdict about four schemas from evidence about one. The second tested
+ * all four but capped output at a flat 300, which starved `role_blueprint` (eleven keys, a nested
+ * array-of-objects) into returning truncated JSON that read exactly like a broken schema.
+ *
+ * ── the off switch stays ──
+ *
+ * `ANTHROPIC_STRUCTURED_OUTPUTS=0` disables it without a deploy. A feature that changes every
+ * generation's request shape needs a way to be switched off by someone watching a graph at 2am, and
+ * that person should not have to wait for a build.
  */
-export const structuredOutputsEnabled = (): boolean =>
-  /^(1|true|yes|on)$/i.test((process.env.ANTHROPIC_STRUCTURED_OUTPUTS ?? "").trim());
+export const structuredOutputsEnabled = (): boolean => {
+  const raw = (process.env.ANTHROPIC_STRUCTURED_OUTPUTS ?? "").trim();
+  if (!raw) return true;                          // default: on
+  return !/^(0|false|no|off)$/i.test(raw);        // anything else, including "1", leaves it on
+};
 
 /**
  * The `output_config` for one task, or `{}` to spread into a request body that should not carry one.

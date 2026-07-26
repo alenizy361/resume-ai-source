@@ -191,8 +191,29 @@ reports three separate facts, because they fail for different reasons: whether t
 parsed object carries **exactly** the schema's keys — a 200 whose body is prose would pass a naive
 check while the constraint did nothing.
 
-If that comes back clean, `ANTHROPIC_STRUCTURED_OUTPUTS=1` is safe to set. Counts are still not
-enforced by the schema, only the shape, so the prose LIMITS and the route's own validator both stay.
+**It came back clean, so it is ON by default as of 2026-07-26.** Measured on production, with the
+production prompt and the production output caps:
+
+| Task | Status | Parsed | Keys | `stop_reason` | Output used |
+|---|---|---|---|---|---|
+| `role_blueprint` | 200 | ✅ | exact | `end_turn` | 373 / 1400 |
+| `experience_package` | 200 | ✅ | exact | `end_turn` | 351 / 1100 |
+| `final_content` | 200 | ✅ | exact | `end_turn` | 249 / 900 |
+| `jd_delta` | 200 | ✅ | exact | `end_turn` | 48 / 500 |
+
+Getting there took two corrections, both worth keeping. The first probe tested `jd_delta` alone and
+printed "safe to turn on" — a verdict about four schemas from evidence about one. The second tested
+all four but capped output at a flat **300**, which starved `role_blueprint` (eleven keys, a nested
+array-of-objects) into returning truncated JSON that read *exactly* like a broken schema. Had the
+first version stood, the flag would have gone on and `role_blueprint` — the most-called task, feeding
+skills, credentials, keywords and achievement questions — would have been the one to break.
+
+`stop_reason` is now reported for that reason: without it, a refused schema, a model ignoring the
+constraint, and a response that simply ran out of room are indistinguishable from outside, and they
+need three different fixes.
+
+`ANTHROPIC_STRUCTURED_OUTPUTS=0` turns it off without a deploy. Counts are still not enforced by the
+schema, only the shape, so the prose LIMITS and the route's own validator both stay.
 
 ### The largest available saving, not yet taken
 
@@ -369,8 +390,8 @@ expensive call in the product, not a no-op.
    against the cache floors, not assumed from model size — and the two free wins are already
    shipped. `/api/health/ai` will tell you when the caching verdict stops being true, and
    `ops/economics.test.mjs` will fail if a new short-output task makes the model choice wrong.
-2. **Turn on structured outputs** — `ANTHROPIC_STRUCTURED_OUTPUTS=1`, then `npm run ai:stages` to
-   confirm the counts still hold. About $0.05 to verify, and it removes the 4×-cost retry path.
+2. ~~Turn on structured outputs~~ — **done**, verified against the live API on all four schemas and
+   on by default. The 4×-cost retry path is no longer reachable.
 3. **Pre-warm the occupation packs via the Batch API** — $0.72 once, and the biggest single
    improvement available to both cost and latency. Needs a key and Upstash credentials.
 4. **Split the root layout into two route groups** when traffic makes function duration visible, or

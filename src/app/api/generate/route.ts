@@ -454,11 +454,11 @@ async function callAnthropic(
          * outputs make "wrapped its JSON in prose" and "dropped a key" impossible rather than
          * retryable, on Haiku as well as the escalation tier.
          *
-         * Off by default: the schemas have never been sent to the API, and what a test can prove
-         * (valid subset, keys matching the prose) is not what needs proving (a constrained model
-         * still honouring the LIMITS prose). `ANTHROPIC_STRUCTURED_OUTPUTS=1` plus one run of
-         * `ops/ai-stages.mjs` settles it for about $0.05. `validate()` below stays either way — the
-         * API guarantees the container, not the counts.
+         * ON by default since 2026-07-26, after all four schemas were sent to the live API with the
+         * production prompt and the production output caps: every one accepted, every body parsed,
+         * every key set matched, `stop_reason: "end_turn"` throughout. `ANTHROPIC_STRUCTURED_OUTPUTS=0`
+         * turns it off without a deploy. `validate()` below stays either way — the API guarantees the
+         * container, not the counts.
          */
         ...outputConfigFor(task),
         system: [

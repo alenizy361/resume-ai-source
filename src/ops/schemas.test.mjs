@@ -152,28 +152,31 @@ for (const task of TASKS) {
 console.log("\n── the switch ──");
 
 /*
- * Default-off is the whole safety story here: these schemas have never been sent to the API. "Off"
- * therefore has to mean the parameter is ABSENT from the request body, not present-and-empty — a
- * malformed `output_config` would be a 400 on every generation.
+ * ON by default since the four schemas were verified against the live API — all accepted, every body
+ * parsed, every key set matching, nothing truncated. What the switch now protects is the reverse
+ * direction: a way to turn it OFF without a deploy, because a feature that changes every
+ * generation's request shape needs an off switch reachable by someone watching a graph at 2am.
  */
 delete process.env.ANTHROPIC_STRUCTURED_OUTPUTS;
-ok("off when the variable is unset", structuredOutputsEnabled() === false);
-ok("and the request carries no output_config at all",
-  Object.keys(outputConfigFor("final_content")).length === 0);
+ok("on when the variable is unset", structuredOutputsEnabled() === true);
+ok("and the request carries the schema", Boolean(outputConfigFor("final_content").output_config));
 
-for (const v of ["0", "false", "no", "off", "", "  ", "maybe"]) {
+for (const v of ["0", "false", "no", "off", "OFF", " 0 "]) {
   process.env.ANTHROPIC_STRUCTURED_OUTPUTS = v;
-  ok(`"${v}" does not enable it`, structuredOutputsEnabled() === false);
+  ok(`"${v}" turns it off`, structuredOutputsEnabled() === false);
+  /* Off must mean the parameter is ABSENT, not present-and-empty — a malformed `output_config` would
+     be a 400 on every generation, which is worse than not having the feature. */
+  ok(`"${v}" removes output_config entirely`, Object.keys(outputConfigFor("final_content")).length === 0);
 }
 
-for (const v of ["1", "true", "yes", "on", "TRUE", " on "]) {
+for (const v of ["1", "true", "yes", "on", "", "  "]) {
   process.env.ANTHROPIC_STRUCTURED_OUTPUTS = v;
-  ok(`"${v}" enables it`, structuredOutputsEnabled() === true);
+  ok(`"${v}" leaves it on`, structuredOutputsEnabled() === true);
 }
 
 /* And when on, the wire shape must be exactly what the API documents. */
 {
-  process.env.ANTHROPIC_STRUCTURED_OUTPUTS = "1";
+  delete process.env.ANTHROPIC_STRUCTURED_OUTPUTS;
   const cfg = outputConfigFor("final_content");
   ok("the wire shape is output_config.format.type = json_schema",
     cfg.output_config?.format?.type === "json_schema");
