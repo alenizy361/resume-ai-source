@@ -119,6 +119,21 @@ console.log("\n── the webhook and the browser share one implementation ─�
      pasted is a webhook that silently does not exist, which is the failure being fixed. */
   ok("the secret is checked only when configured",
     /const secret = process\.env\.PAY_WEBHOOK_SECRET;/.test(strip(webhook)) && /if \(secret\)/.test(strip(webhook)));
+
+  /*
+   * ── the header name is the merchant's choice, not ours ──
+   *
+   * The first version read `x-paylink-secret` only. That was a guess, and the account this ships to
+   * had already configured `Authorization` in the Paylink dashboard — the conventional choice. A
+   * webhook that 401s every delivery while the dashboard shows it correctly set up is the same
+   * "silently does not exist" failure this route exists to fix.
+   */
+  const wcode = strip(webhook);
+  ok("the secret is accepted from Authorization", /headers\.get\("authorization"\)/.test(wcode));
+  ok("and from a custom header", /headers\.get\("x-paylink-secret"\)/.test(wcode));
+  ok("and from the query, which a browser can test with", /searchParams\.get\("secret"\)/.test(wcode));
+  ok("a Bearer prefix is tolerated", /\^Bearer/.test(wcode));
+  ok("and the compare is constant-time", /timingSafeEqual\(given, secret\)/.test(wcode));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

@@ -53,6 +53,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fulfilOrder, readInvoice } from "@/app/lib/fulfil";
 
+/** Constant-time string compare. Node's own needs equal-length buffers, hence the length gate. */
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 export const maxDuration = 30;
 
 /**
@@ -81,10 +89,30 @@ function transactionFrom(body: unknown, req: NextRequest): string {
 async function handle(req: NextRequest) {
   const secret = process.env.PAY_WEBHOOK_SECRET;
   if (secret) {
-    const given = req.headers.get("x-paylink-secret")
+    /*
+     * ── three places the secret may arrive, and why not one ──
+     *
+     * The first version of this read `x-paylink-secret` only, which was a guess. Paylink's dashboard
+     * lets a merchant name the header themselves, and the account this ships to had already
+     * configured `Authorization` — the conventional choice, and the one a reader would assume.
+     * Insisting on our spelling would have meant a webhook that 401s every delivery while the
+     * dashboard shows it correctly configured: the exact "silently does not exist" failure this
+     * route was added to fix, wearing a different hat.
+     *
+     * `Bearer ` is stripped because a header called `Authorization` invites it, and a merchant who
+     * types the prefix is not making a mistake.
+     *
+     * The comparison is length-checked before contents so a wrong-length value cannot be
+     * distinguished by timing from a wrong-content one. This is not a high-value oracle — the route
+     * is safe without the secret at all, since nothing in the body is trusted — but constant-time is
+     * cheap and the alternative is explaining why it was not worth it.
+     */
+    const raw = req.headers.get("authorization")
+      || req.headers.get("x-paylink-secret")
       || req.nextUrl.searchParams.get("secret")
       || "";
-    if (given !== secret) {
+    const given = raw.replace(/^Bearer\s+/i, "").trim();
+    if (!timingSafeEqual(given, secret)) {
       console.warn("[pay/webhook] rejected: secret mismatch");
       return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
     }
