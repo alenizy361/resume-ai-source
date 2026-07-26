@@ -38,7 +38,7 @@ import { applyVersionToProfile } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft } from "@/app/lib/draftStore";
 import {
-  listResumes, migrateLegacy, newResumeId, readResume, writeResume,
+  endAnonymousVisit, listResumes, mayRestore, migrateLegacy, newResumeId, readResume, writeResume,
 } from "@/app/lib/resumeStore";
 import { useOwner } from "../useOwner";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
@@ -184,20 +184,46 @@ export default function BuilderProvider({
     started.current = pair;
     if (!owner) return;                 // owner unknown yet — wait rather than read `anon` and swap later
 
-    /* The shared slot, moved into a real record the first time an owner is seen. */
-    const moved = migrateLegacy(owner, lang);
+    /*
+     * ══════════════════════════════════════════════════════════════════════════════
+     * Anonymous work lasts the visit. Signing in is what saves it.
+     * ══════════════════════════════════════════════════════════════════════════════
+     *
+     * Decided here, before anything is read, because this is the only place a stored draft can
+     * become what a visitor sees. `mayRestore` is false for `anon` once the visit has lapsed —
+     * and then the old records are removed rather than merely ignored, so nothing can surface
+     * later through a path this one does not control.
+     *
+     * A signed-in account is never affected. That difference IS the offer: your CVs come back
+     * because we know whose they are.
+     */
+    const restorable = mayRestore(owner);
+    if (!restorable) endAnonymousVisit();
+
+    /* The shared slot, moved into a real record the first time an owner is seen. Skipped for a
+       lapsed anonymous visit — adopting a legacy draft would reinstate exactly what was just
+       dropped, by another route. */
+    const moved = restorable ? migrateLegacy(owner, lang) : { migrated: false, resumeId: null };
 
     /*
      * No id in the URL — /builder itself. Resolve to the owner's most recent resume if there is one,
      * otherwise mint a fresh id. This is the ONLY place "most recent" is allowed to mean anything,
      * because there is no requested resume to contradict.
      */
-    const wanted = urlId || moved.resumeId || listResumes(owner)[0]?.resumeId || newResumeId();
-    const { record, damaged } = readResume(owner, wanted);
+    const wanted = restorable
+      ? (urlId || moved.resumeId || listResumes(owner)[0]?.resumeId || newResumeId())
+      /* A lapsed visit keeps the id in the URL if there is one — the address is the user's, and
+         changing it under them would break Back — but it will find no record behind it. */
+      : (urlId || newResumeId());
+    const { record, damaged } = restorable
+      ? readResume(owner, wanted)
+      : { record: null, damaged: false };
     const saved = record?.state ?? null;
     const id = wanted;
     /* Carrying a chat draft forward is only sensible into a resume that does not exist yet. */
-    const fromChat = !saved && Boolean(readDraft(lang).profile?.role || readDraft(lang).profile?.name);
+    /* The chat draft is anonymous work too, and falls under the same rule. */
+    const fromChat = restorable && !saved
+      && Boolean(readDraft(lang).profile?.role || readDraft(lang).profile?.name);
 
     /*
      * A FRESH draft's CV language follows the interface language.

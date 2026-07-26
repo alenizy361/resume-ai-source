@@ -514,3 +514,42 @@
   border: 1px solid var(--line);
 }
 .build-root .bd-back:hover { color: var(--fg); }
+
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   The anonymous-visitor line: what signing in buys
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Deliberately quiet. It is a true and useful sentence, not a campaign — a banner here would compete
+ * with the step the person is actually doing, on the screen where they are trying to work. It sits
+ * under the save indicator because that is where someone looks to ask whether their work is safe.
+ */
+.build-root .bd-keep {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  /* The header's own measure and insets, so the sentence lines up with the brand above it rather
+     than floating at a width of its own. */
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 20px 9px;
+  padding-inline-start: max(20px, env(safe-area-inset-left));
+  padding-inline-end: max(20px, env(safe-area-inset-right));
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.build-root .bd-keep-link {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  padding-bottom: 1px;
+}
+
+@media (hover: hover) {
+  .build-root .bd-keep-link:hover { border-bottom-color: var(--accent); }
+}

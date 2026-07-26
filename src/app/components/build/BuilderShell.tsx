@@ -54,12 +54,16 @@ const CHROME = {
   en: {
     brand: "Sira",
     offline: "Offline — your work is saved on this device",
+    keepIt: "Sign in to keep this CV",
+    keepWhy: "Without an account this CV is kept on this device for this visit only.",
     edit: "Edit", preview: "Preview",
     emptyPreview: "Your CV appears here as you fill it in.",
   },
   ar: {
     brand: "سيرة",
     offline: "بلا اتصال — عملك محفوظ على جهازك",
+    keepIt: "سجّل الدخول لتحتفظ بهذه السيرة",
+    keepWhy: "بدون حساب، تبقى هذه السيرة على هذا الجهاز لهذه الزيارة فقط.",
     edit: "تعديل", preview: "معاينة",
     emptyPreview: "ستظهر سيرتك هنا وأنت تكتب.",
   },
@@ -73,7 +77,7 @@ export default function BuilderShell({
 }) {
   const t = CHROME[lang];
   const ar = lang === "ar";
-  const { state, lifecycle, online, resumeId, hydrated, previewText, cv, template } = useBuilder();
+  const { state, lifecycle, online, resumeId, owner, hydrated, previewText, cv, template } = useBuilder();
   const tone = lifecycleTone(lifecycle);
   const pathname = usePathname() || "";
   const router = useRouter();
@@ -160,6 +164,26 @@ export default function BuilderShell({
               {saveLabel}
             </span>
           </div>
+          {/*
+            ── the one thing an anonymous visitor must be told ──
+
+            Anonymous work now lasts the visit and no longer reappears weeks later, which is the
+            right behaviour and is also a promise quietly withdrawn. Saying "Saved" and nothing else
+            would be the product knowing that and letting the user find out by losing a CV.
+
+            So it is stated where the save label is — the exact place someone looks to ask "is my
+            work safe" — and it is a LINK, because the sentence is only fair if the remedy is one
+            tap away. It is not shown to a signed-in user, for whom none of it is true.
+
+            `owner` is `""` until the session is known, so nothing is claimed before there is an
+            answer: the line appears only once `anon` is established, never as a flash.
+          */}
+          {owner === "anon" && onStep && (
+            <div className="bd-keep">
+              <span>{t.keepWhy}</span>
+              <Link href={ar ? "/ar/login" : "/login"} className="bd-keep-link t-tap">{t.keepIt}</Link>
+            </div>
+          )}
         </header>
 
         <div className="bd-main">

@@ -183,9 +183,57 @@ revision 0). The first resume's reply was therefore accepted into the second and
 stamp now carries `(resumeId, owner)` and `useGenerate` aborts any in-flight request when either
 changes, so the reply is not merely refused, it is not paid for.
 
+## The anonymous-user question, answered
+
+This document has carried the same open item since it was written: the builder works without an
+account by design, so an anonymous user has no id to key a server record on, and everything
+downstream — conflict UI, multi-tab detection, cross-device sync — waited on that.
+
+The owner decided it: **anonymous work lasts the visit. Signing in is what saves it.**
+
+That is a product decision rather than a technical one, and it is a good one, because it makes the
+guarantee match what can actually be guaranteed. A browser that silently resurrects a half-built CV
+weeks later is the behaviour behind every "old data came back" report here, and on a shared device it
+is worse than annoying.
+
+### What it means in code
+
+`mayRestore(owner)` in `app/lib/resumeStore.ts` is the whole rule:
+
+- a signed-in account restores always — that is the offer made in exchange for the account;
+- `anon` restores only inside the visit, and a lapsed visit has its records **removed** rather than
+  merely skipped, so nothing can surface later through a path the rule does not control.
+
+`BuilderProvider` asks before it reads anything, and all three doors to old data are closed together:
+the resume record, the legacy `ra_journey_*` slot, and the chat draft. Closing one and leaving the
+others would make the rule look implemented while old work still walked back in.
+
+### Thirty minutes, and why there is a window at all
+
+The window is a judgement and is worth naming as one. Dropping the draft on unload would be the
+literal reading of "no cache", and it would mean a person who fills four fields, has the phone
+background the tab, and comes back loses everything — which loses the customer, not the cache.
+
+Thirty minutes covers a refresh, a phone call, a look at the job advert in another app, a train
+tunnel. It does not cover "yesterday". `sessionStorage` was the obvious alternative and is wrong: it
+is per-TAB, so opening the builder in a second tab would read as a new visit and wipe the first.
+
+The marker is stamped by `writeResume` itself rather than by a caller, so it cannot drift from the
+data it describes — and the last write on the way out is the tab closing, which is exactly the right
+definition of "when this visit ended".
+
+### The promise that was quietly withdrawn, and put back
+
+Anonymous work no longer reappears, which is correct and is also a promise being taken away. Saying
+"Saved" and nothing else would be the product knowing that and letting the user find out by losing a
+CV. So the builder now tells an anonymous visitor what the limit is, next to the save indicator —
+the exact place someone looks to ask whether their work is safe — with a link to sign in, because
+the sentence is only fair if the remedy is one tap away.
+
 ## Still open
 
-- Server-authoritative persistence with `revision` / `baseRevision` and a conflict prompt
+- Server persistence for signed-in accounts already exists at `/api/resumes`; what remains is
+  `revision` / `baseRevision` conflict resolution across devices
 - Multi-tab conflict detection
 
 ## Tests

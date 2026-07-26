@@ -466,6 +466,91 @@ console.log("\n── a corrupt value degrades to empty, never to a crash ──
  * the original cross-account bug, reintroduced through the back door of a performance fix.
  */
 
+/* ═════════════════ anonymous work lasts the visit; signing in saves it ═════════════════ */
+
+console.log("\n── an anonymous draft does not come back from a previous visit ──");
+{
+  const { mayRestore, endAnonymousVisit, touchVisit, VISIT_GAP_MS } =
+    await import("../app/lib/resumeStore.ts");
+  store.clear();
+
+  /* Nothing recorded at all: a first-ever visit has nothing to restore, and must not be treated as
+     an expired one either — the distinction matters only for what gets deleted, and there is
+     nothing to delete. */
+  ok("a browser with no history restores nothing", mayRestore("anon") === false);
+
+  writeResume("anon", "rV", "en", cv("in progress"));
+  ok("but work just done IS restorable — the visit is live", mayRestore("anon") === true);
+  ok("because writing stamps the visit", store.getItem("ra_visit:anon") !== null);
+
+  /* Inside the window: a refresh, a phone call, a look at the job advert in another app. Losing a
+     half-filled CV to any of those would lose the customer, which is why the window exists at all. */
+  touchVisit("anon", Date.now() - (VISIT_GAP_MS - 60_000));
+  ok("a gap inside the window is the same visit", mayRestore("anon") === true);
+
+  touchVisit("anon", Date.now() - (VISIT_GAP_MS + 60_000));
+  ok("a gap beyond it is a new visit", mayRestore("anon") === false);
+
+  /* And the records go, rather than merely being skipped — anything left behind could surface later
+     through a path this rule does not control. */
+  ok("ending the visit removes the anonymous records", endAnonymousVisit() >= 1);
+  ok("the draft is gone", readResume("anon", "rV").record === null);
+  ok("and so is the marker", store.getItem("ra_visit:anon") === null);
+}
+
+console.log("\n── a signed-in account is never subject to it ──");
+{
+  const { mayRestore, endAnonymousVisit, touchVisit, VISIT_GAP_MS } =
+    await import("../app/lib/resumeStore.ts");
+  store.clear();
+
+  writeResume(A, "rMine", "en", cv("alice's CV"));
+  /* The offer signing in makes, stated as an assertion: your CVs come back because we know whose
+     they are. No marker, an ancient marker, no marker at all — none of it applies. */
+  ok("an account restores with no visit marker", mayRestore(A) === true);
+  touchVisit(A, Date.now() - VISIT_GAP_MS * 100);
+  ok("and restores however long ago it was", mayRestore(A) === true);
+
+  /* The rule must not become a way to delete an account's work. */
+  writeResume("anon", "rAnon", "en", cv("anonymous"));
+  endAnonymousVisit();
+  ok("ending an anonymous visit leaves the account untouched",
+    readResume(A, "rMine").record?.state?.target?.title === "alice's CV");
+  ok("while the anonymous draft is gone", readResume("anon", "rAnon").record === null);
+
+  /* An unknown owner restores nothing — the same rule as every other read here. */
+  ok("an empty owner restores nothing", mayRestore("") === false);
+}
+
+console.log("\n── the builder applies it before it reads anything ──");
+{
+  const { readFileSync } = await import("node:fs");
+  const src = readFileSync("app/components/build/BuilderProvider.tsx", "utf8");
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+  ok("hydration asks before it reads", /const restorable = mayRestore\(owner\)/.test(code));
+  ok("and clears a lapsed visit", /if \(!restorable\) endAnonymousVisit\(\)/.test(code));
+  ok("the stored record is not even read when it may not be restored",
+    /restorable\s*\?\s*readResume\(owner, wanted\)/.test(code));
+  /* Three separate doors to the same data. Closing one and leaving the others open would make the
+     rule look implemented while old work still walked back in. */
+  ok("the legacy slot is not adopted either", /restorable \? migrateLegacy/.test(code));
+  ok("nor the chat draft", /const fromChat = restorable/.test(code));
+}
+
+console.log("\n── and the visitor is told, where they would look ──");
+{
+  const { readFileSync } = await import("node:fs");
+  const shell = readFileSync("app/components/build/BuilderShell.tsx", "utf8");
+  /*
+   * Withdrawing a promise silently is worse than not making it. The line has to name the limit AND
+   * offer the remedy, or it is a warning with no way out.
+   */
+  ok("an anonymous visitor is told the limit", /owner === "anon" && onStep/.test(shell));
+  ok("in both languages", /keepWhy: "Without an account/.test(shell) && /keepWhy: "بدون حساب/.test(shell));
+  ok("with the remedy one tap away", /bd-keep-link/.test(shell) && /\/login/.test(shell));
+  ok("and it is not shown to someone signed in", !/owner !== "anon"/.test(shell));
+}
+
 console.log("\n── the owner may be guessed only when nothing can be got wrong ──");
 {
   const { hasOwnedRecords } = await import("../app/lib/resumeStore.ts");

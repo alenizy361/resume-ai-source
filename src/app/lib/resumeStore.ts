@@ -202,6 +202,9 @@ export function writeResume(
     resumeId, lang, updatedAt: now, revision,
     title: titleOf(state),
   });
+  /* Stamped here rather than by a caller: every write is activity by definition, and a marker a
+     caller has to remember to set is a marker that drifts from the data it describes. */
+  touchVisit(owner, now);
   return revision;
 }
 
@@ -256,6 +259,81 @@ export function forgetOwner(owner: string): number {
     for (const k of doomed) store.removeItem(k);
   } catch { /* noop */ }
   return doomed.length;
+}
+
+/* ─────────────────────────── how long an anonymous draft lives ─────────────────────────── */
+
+/**
+ * The visit marker, and the product rule it encodes.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * ANONYMOUS WORK LASTS THE VISIT. SIGNING IN IS WHAT SAVES IT.
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * The builder works without an account, which is deliberate and is most of the funnel. But a browser
+ * that quietly resurrects a stranger's half-built CV weeks later is the behaviour that produced
+ * every "old data came back" report in this product — and on a shared device it is worse than
+ * annoying.
+ *
+ * So the rule is now explicit rather than emergent: an anonymous draft is a RECOVERY BUFFER for the
+ * visit in progress, not a saved document. Come back later and the builder starts clean. Sign in and
+ * your CVs are yours again, from `/api/resumes` and from the owner-scoped records that survive.
+ *
+ * ── why a gap and not "clear on unload" ──
+ *
+ * The recovery inside a visit has to keep working, and it is not optional: a person fills four
+ * fields, the phone backgrounds the tab, iOS reclaims it, they come back — losing that is losing the
+ * customer. `sessionStorage` would handle a refresh but is per-TAB, so opening the builder in a
+ * second tab would read as a new visit and wipe the first. A last-seen timestamp has neither fault.
+ *
+ * ── why thirty minutes ──
+ *
+ * It is a judgement, and it is worth naming as one. Long enough to cover a refresh, a phone call, a
+ * look at the job advert in another app, a train tunnel. Short enough that "yesterday" is never
+ * treated as "still working". Nothing breaks at the boundary — crossing it starts a clean CV, which
+ * is the intended outcome, not a failure.
+ */
+export const VISIT_GAP_MS = 30 * 60 * 1000;
+
+const visitKey = (owner: string): string => `ra_visit:${owner}`;
+
+/** Record that this owner is active now. Called on every write. */
+export function touchVisit(owner: string, now = Date.now()): void {
+  const store = ls();
+  if (!store || !owner) return;
+  try { store.setItem(visitKey(owner), String(now)); } catch { /* noop */ }
+}
+
+/**
+ * May a stored draft be restored for this owner?
+ *
+ * Always true for a signed-in account — their CVs are theirs, and that is the whole offer made in
+ * exchange for signing in. For `anon` it is true only inside the visit.
+ */
+export function mayRestore(owner: string, now = Date.now()): boolean {
+  if (!owner) return false;
+  if (owner !== "anon") return true;
+  const store = ls();
+  if (!store) return false;
+  let raw: string | null = null;
+  try { raw = store.getItem(visitKey("anon")); } catch { return false; }
+  const last = Number(raw);
+  if (!raw || !Number.isFinite(last)) return false;
+  return now - last < VISIT_GAP_MS;
+}
+
+/**
+ * Drop the anonymous keyspace, for a visit that has expired.
+ *
+ * Only `anon`. A signed-in account's records are never touched by this — the point of the rule is
+ * the difference between the two, and a function that blurred it would be the rule cancelling itself.
+ */
+export function endAnonymousVisit(): number {
+  const store = ls();
+  if (!store) return 0;
+  const removed = forgetOwner("anon");
+  try { store.removeItem(visitKey("anon")); } catch { /* noop */ }
+  return removed;
 }
 
 /**
