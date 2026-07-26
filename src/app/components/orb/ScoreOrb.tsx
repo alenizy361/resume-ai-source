@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import usePrefersReducedMotion from "../usePrefersReducedMotion";
 import AiOrb from "../AiOrb";
 
 /**
@@ -13,25 +14,40 @@ export default function ScoreOrb({
   value, size = 180, label, sub, animate = true, color: colorOverride, light = false,
 }: { value: number; size?: number; label?: string; sub?: string; animate?: boolean; color?: string; light?: boolean }) {
   const target = Math.max(0, Math.min(100, Math.round(value)));
-  const [display, setDisplay] = useState(animate ? 0 : target);
+  const [animated, setAnimated] = useState(0);
   const rafRef = useRef<number | null>(null);
 
+  /*
+   * Whether this instance animates at all is decided during RENDER, not by an effect that assigns
+   * the final value.
+   *
+   * The old version set state twice in the effect body — once for `animate={false}`, once for
+   * reduced motion — so both of those cases rendered a 0 first and the real score second. For a
+   * reduced-motion user that is exactly the flash they asked not to see.
+   *
+   * The preference comes from a subscription rather than a bare `matchMedia` read, because reading
+   * it during render would make the server (no `window`, so "animate") and a reduced-motion client
+   * ("do not") disagree about the DOM — a hydration mismatch aimed at the one user who asked for
+   * less surprise. See `usePrefersReducedMotion`.
+   */
+  const reduce = usePrefersReducedMotion();
+  const counts = animate && !reduce;
+  const display = counts ? animated : target;
+
   useEffect(() => {
-    if (!animate) { setDisplay(target); return; }
-    const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) { setDisplay(target); return; }
+    if (!counts) return;
     const dur = 1300;
     let start: number | null = null;
     const tick = (ts: number) => {
       if (start === null) start = ts;
       const p = Math.min(1, (ts - start) / dur);
       const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
-      setDisplay(Math.round(target * eased));
+      setAnimated(Math.round(target * eased));
       if (p < 1) rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [target, animate]);
+  }, [target, counts]);
 
   const color = colorOverride ?? (display < 55 ? "#E5484D" : display < 75 ? "#f59e0b" : "#22C55E");
   const stroke = Math.max(8, Math.round(size * 0.055));

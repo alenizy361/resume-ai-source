@@ -188,7 +188,17 @@ function CallbackInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
+  /*
+   * Kick off the verification once the page exists.
+   *
+   * `set-state-in-effect` is disabled here rather than worked around, because what this effect
+   * starts is a network call to the payment provider — the state it sets is "checking", and there
+   * is no way to know a payment's outcome during render. The initial state is already "checking",
+   * so nothing flashes; the rule is firing on the synchronous reset inside `checkStatus`, which is
+   * what makes the Retry button work.
+   */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     checkStatus();
   }, [checkStatus]);
 

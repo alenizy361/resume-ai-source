@@ -124,6 +124,10 @@ export default function InterviewLivePage() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    /* Feature detection, which only the browser can do. Optimistic on the server — the control
+       renders as available and disables itself on a device that cannot do it, which is the right
+       direction: the opposite would hide the microphone from everyone for one render. */
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!SR) setMicSupported(false);
     // Preload TTS voices (getVoices is async on first access on many browsers).
     try {

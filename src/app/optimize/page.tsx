@@ -152,6 +152,16 @@ export default function OptimizePage() {
 
   // Draft + result autosave: rehydrate on mount so a refresh / accidental
   // navigation never wipes what the user typed OR the result they just got.
+  /*
+   * Restoring the saved draft on first load.
+   *
+   * `set-state-in-effect` is disabled inside this effect deliberately. The draft lives in
+   * `localStorage`, which does not exist on the server, so reading it during render would make the
+   * server send an empty page and the client draw a full one — a hydration mismatch on every load.
+   * One extra render at mount is the price, and it buys a user who refreshed not losing the CV
+   * they had pasted.
+   */
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ra_optimize_draft");
@@ -174,6 +184,7 @@ export default function OptimizePage() {
       /* ignore corrupt/unavailable storage */
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     try {
@@ -757,7 +768,7 @@ export default function OptimizePage() {
                       </p>
                     </div>
                     {watermarkFromResponse(result) ? (
-                      <a href="/#pricing" className="btn-accent px-5 py-2.5 text-sm">Unlock to generate</a>
+                      <Link href="/#pricing" className="btn-accent px-5 py-2.5 text-sm">Unlock to generate</Link>
                     ) : !coverLetter ? (
                       <button
                         onClick={generateCoverLetter}
@@ -786,7 +797,7 @@ export default function OptimizePage() {
                     <div className="mt-3 rounded-lg px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}>
                       {coverError}
                       {coverPaywalled && (
-                        <a href="/#pricing" className="ml-2 font-semibold underline" style={{ color: "var(--accent)" }}>See plans →</a>
+                        <Link href="/#pricing" className="ml-2 font-semibold underline" style={{ color: "var(--accent)" }}>See plans →</Link>
                       )}
                     </div>
                   )}
@@ -880,7 +891,7 @@ export default function OptimizePage() {
               <h3 className="text-2xl font-bold">Applying to more than one job?</h3>
               <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>Get the Complete Pack — {formatPrice("complete", "en")} once, no subscription: cover letters, LinkedIn, and interview prep included.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <a href="/#pricing" className="btn-accent px-8 py-3">Get the Complete Pack — {formatPrice("complete", "en")} →</a>
+                <Link href="/#pricing" className="btn-accent px-8 py-3">Get the Complete Pack — {formatPrice("complete", "en")} →</Link>
                 <button
                   onClick={() => {
                     setResult(null); setResume(""); setJobDescription(""); setCoverLetter("");

@@ -26,7 +26,9 @@ export function useBackToForm(active: boolean, onBack: () => void) {
 export function useCountUp(target: number, durationMs = 900): number {
   const [value, setValue] = useState(0);
   useEffect(() => {
-    if (!target) { setValue(0); return; }
+    /* Nothing to animate toward. The zero is DERIVED below rather than assigned here: a
+       `setValue(0)` in an effect body is a second render to display a number we already know. */
+    if (!target) return;
     const start = performance.now();
     let raf = 0;
     const tick = (now: number) => {
@@ -38,5 +40,8 @@ export function useCountUp(target: number, durationMs = 900): number {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [target, durationMs]);
-  return value;
+
+  /* Clamped to the target so a lowered score never counts DOWN from the previous one's last
+     frame — the animation restarts, and for one frame the old higher number would still be held. */
+  return target ? Math.min(value, target) : 0;
 }

@@ -1,0 +1,102 @@
+/**
+ * Every public page, in a browser, in both languages.
+ *
+ * ── the gap this fills ──
+ *
+ * The builder has four browser suites. Everything else — the landing pages, the uploader, the
+ * account screen, login, pricing — had none, and those are the pages a visitor meets BEFORE the
+ * builder. They also share the pieces most likely to break quietly: `useLang` decides the whole
+ * direction of the page, `ScoreOrb` draws the number on the result screen, and both were rewritten
+ * to read browser state through a subscription instead of copying it into React state after mount.
+ *
+ * That rewrite is exactly the kind that a type-checker cannot catch and a unit test does not see:
+ * it either renders the same thing the server sent, or it produces a hydration mismatch that shows
+ * up as a console error and a flicker. So this checks the two things that would actually be wrong:
+ * the page renders real content, and the console stays clean.
+ *
+ * Needs the app running (`npm run dev`).
+ *
+ *   node ops/pages.test.mjs [baseUrl]
+ */
+
+import { chromium, devices } from "playwright";
+
+const BASE = process.argv[2] || "http://localhost:3141";
+
+let pass = 0, fail = 0;
+const ok = (n, c, d = "") => { if (c) { pass++; console.log(`✅ ${n}`); } else { fail++; console.log(`❌ ${n}${d ? ` — ${d}` : ""}`); } };
+
+/** path, expected direction, a string that proves the right page rendered. */
+const PAGES = [
+  ["/", "ltr", /CV|resume/i],
+  ["/ar", "rtl", /سيرة|سيرتك/],
+  ["/optimize", "ltr", /resume|upload|scan/i],
+  ["/ar/optimize", "rtl", /سيرة|ارفع|فحص/],
+  ["/pricing", "ltr", /SAR|price|plan/i],
+  ["/ar/pricing", "rtl", /ريال|الباقة|السعر/],
+  ["/account", "ltr", /account|resume|sign/i],
+  ["/ar/account", "rtl", /حساب|سير|دخول/],
+  ["/login", "ltr", /email|sign in|link/i],
+  ["/builder", "ltr", /CV|build|start/i],
+  ["/ar/builder", "rtl", /سيرة|ابدأ/],
+];
+
+const browser = await chromium.launch({
+  headless: true,
+  executablePath: process.env.CHROMIUM_PATH || "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+});
+
+for (const prof of [
+  { name: "desktop", ctx: { viewport: { width: 1440, height: 900 } } },
+  { name: "iphone-13", ctx: devices["iPhone 13"] },
+]) {
+  console.log(`\n── ${prof.name} ──`);
+  const ctx = await browser.newContext(prof.ctx);
+  const page = await ctx.newPage();
+
+  const problems = [];
+  page.on("pageerror", (e) => problems.push(`error: ${String(e).slice(0, 120)}`));
+  /*
+   * A hydration mismatch is a console error, not a thrown one — which is why it survives in
+   * products for months. Catching it here is the whole reason this suite exists.
+   */
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    const text = m.text();
+    if (/hydrat|did not match|Text content does not match/i.test(text)) problems.push(`hydration: ${text.slice(0, 160)}`);
+  });
+
+  for (const [path, dir, must] of PAGES) {
+    problems.length = 0;
+    const res = await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" }).catch(() => null);
+    await page.waitForTimeout(400);
+
+    const m = await page.evaluate(() => ({
+      text: document.body.innerText.replace(/\s+/g, " ").trim(),
+      dir: getComputedStyle(document.body).direction,
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      h1: document.querySelectorAll("h1").length,
+    }));
+
+    ok(`${prof.name} ${path}: answers 200`, res?.status() === 200, String(res?.status()));
+    /*
+     * Eighty characters, not a hundred and twenty. The first version used the larger number and
+     * failed `/login`, which renders "Your resume awaits", one sentence, an email field and a
+     * button — 103 characters, and correct. A login page is legitimately spare; the threshold is
+     * there to catch a BLANK page, and it should be set where a blank page is.
+     */
+    ok(`${prof.name} ${path}: renders real content`, m.text.length > 80, `${m.text.length} chars`);
+    ok(`${prof.name} ${path}: has something to interact with`,
+      (await page.locator("a, button, input").count()) > 0);
+    ok(`${prof.name} ${path}: is the right page`, must.test(m.text), m.text.slice(0, 70));
+    ok(`${prof.name} ${path}: reads ${dir}`, m.dir === dir, m.dir);
+    ok(`${prof.name} ${path}: does not scroll sideways`, m.overflow <= 1, `${m.overflow}px`);
+    ok(`${prof.name} ${path}: no errors or hydration mismatches`, problems.length === 0, problems.slice(0, 2).join(" · "));
+  }
+
+  await ctx.close();
+}
+
+await browser.close();
+console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
+process.exit(fail === 0 ? 0 : 1);

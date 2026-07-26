@@ -23,6 +23,11 @@ function LoginInner() {
         return;
       }
       const saved = sessionStorage.getItem("ra_login_sent");
+      /* `sessionStorage` does not exist on the server, so this cannot be read during render
+         without the server and the client disagreeing about which view to show. One extra render
+         at mount is the cost, and it buys a user who refreshed not being sent back to the form
+         they already submitted. */
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) { setEmail(saved); setState("sent"); }
     } catch { /* noop */ }
   }, [params]);

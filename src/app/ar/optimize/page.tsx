@@ -86,7 +86,15 @@ export default function ArOptimizePage() {
     return () => window.removeEventListener("beforeunload", warn);
   }, [loading]);
 
+  /*
+   * استعادة المسودة المحفوظة عند أول تحميل.
+   *
+   * قاعدة `set-state-in-effect` معطّلة داخل هذا الأثر عمداً: المسودة في `localStorage` وهو غير
+   * موجود على الخادم، فقراءتها أثناء العرض تجعل الخادم يرسم صفحة فارغة والمتصفح يرسم صفحة ممتلئة —
+   * وهذا عدم تطابق في الترطيب في كل تحميل. القراءة هنا تكلّف رسمة إضافية واحدة عند البدء فقط.
+   */
   // حفظ تلقائي للمسودة والنتيجة — التحديث أو الخروج مايضيّع شي.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ra_ar_optimize_draft");
@@ -105,6 +113,7 @@ export default function ArOptimizePage() {
       if (savedResult) setResult(JSON.parse(savedResult));
     } catch { /* تجاهل */ }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     try {
@@ -532,7 +541,7 @@ export default function ArOptimizePage() {
                   </p>
                 </div>
                 {watermarkFromResponse(result) ? (
-                  <a href="/ar#pricing" className="btn-accent px-5 py-2.5 text-sm">🔒 افتح الوصول لإنشائه</a>
+                  <Link href="/ar#pricing" className="btn-accent px-5 py-2.5 text-sm">🔒 افتح الوصول لإنشائه</Link>
                 ) : !coverLetter ? (
                   <button onClick={generateCoverLetter} disabled={coverLoading || jobDescription.trim().length < 30} className="btn-accent px-5 py-2.5 text-sm disabled:opacity-50">
                     {coverLoading ? "جارٍ الكتابة…" : "إنشاء خطاب التعريف"}
@@ -554,7 +563,7 @@ export default function ArOptimizePage() {
                 <div className="mt-3 rounded-lg px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}>
                   {coverError}
                   {coverPaywalled && (
-                    <a href="/ar#pricing" className="mr-2 font-semibold underline" style={{ color: "var(--accent)" }}>شاهد الباقات ←</a>
+                    <Link href="/ar#pricing" className="mr-2 font-semibold underline" style={{ color: "var(--accent)" }}>شاهد الباقات ←</Link>
                   )}
                 </div>
               )}
@@ -569,7 +578,7 @@ export default function ArOptimizePage() {
               <h3 className="text-2xl font-bold">تقدّم على أكثر من وظيفة؟</h3>
               <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>الحزمة الكاملة بـ {formatPrice("complete", "ar")} دفعة واحدة — خطاب تعريف ولينكدإن وتحضير مقابلة، بدون اشتراك.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <a href="/ar#pricing" className="btn-accent px-8 py-3">اشترك الآن ←</a>
+                <Link href="/ar#pricing" className="btn-accent px-8 py-3">اشترك الآن ←</Link>
                 <button onClick={() => { setResult(null); setResume(""); setJobDescription(""); setCoverLetter(""); try { localStorage.removeItem("ra_ar_optimize_draft"); } catch { /* تجاهل */ } }}
                   className="btn-ghost px-8 py-3 font-semibold" style={{ color: "var(--fg)" }}>
                   حسّن سيرة أخرى

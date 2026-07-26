@@ -36,7 +36,9 @@ export default function GlobalError({
               >
                 Try again · حاول مجدداً
               </button>
-              {/* A plain anchor, not a router link: the router is part of what may be broken. */}
+              {/* A plain anchor, not a router link: the router is part of what may be broken, and
+                  `next/link` needs it. This is the one page where a full page load is the POINT. */}
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a
                 href="/builder"
                 style={{ border: "1px solid rgba(255,255,255,.18)", color: "#e8e8ef", borderRadius: 12, padding: "12px 20px", fontSize: 14, fontWeight: 600, textDecoration: "none" }}

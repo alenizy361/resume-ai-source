@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, Suspense } from "react";
+import useLang from "./useLang";
 import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entitlement";
 import { toArabicDigits } from "@/app/lib/plans";
 import OrbBrand from "../components/OrbBrand";
@@ -80,15 +81,16 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   // fully mirrored RTL account screen. Default English; RTL only on explicit ar.
   // Starts "en" on both server and first client render so hydration matches;
   // the stored/URL language flips in right after mount (one-frame, no mismatch).
-  const [lang, setLang] = useState<"en" | "ar">(initialLang);
-  useEffect(() => {
-    try {
-      const q = new URLSearchParams(window.location.search).get("lang");
-      if (q === "ar" || q === "en") localStorage.setItem("ra_lang", q);
-      const stored = q || localStorage.getItem("ra_lang") || localStorage.getItem("ra_lang_choice");
-      if (stored === "ar") setLang("ar");
-    } catch { /* noop */ }
-  }, []);
+  /*
+   * The reader's language, from the one place that knows it.
+   *
+   * This used to be `useState` plus an effect that read the URL and storage and called `setLang` —
+   * the same code `useLang` already contains, duplicated, and rendering the English strings once
+   * before flipping. `useLang` is now a `useSyncExternalStore` read, so there is no intermediate
+   * render and no second copy of the rule about which key wins.
+   */
+  const arFromBrowser = useLang();
+  const lang: "en" | "ar" = initialLang === "ar" || arFromBrowser ? "ar" : "en";
   const t = STRINGS[lang];
   /** When /api/auth/me answered — the reference point for expiry, read outside render. */
   const [knownAt, setKnownAt] = useState(0);
@@ -116,6 +118,16 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const [jt, setJt] = useState(""); // title
   const [ju, setJu] = useState(""); // url
 
+  /*
+   * The one mount-time read of everything this browser already knows.
+   *
+   * `set-state-in-effect` is disabled for this effect deliberately, and the alternative is worse
+   * rather than merely longer. These lists live in `localStorage`, which does not exist on the
+   * server: reading them in a lazy `useState` initializer would make the server render an empty
+   * account page and the client a full one, which is a hydration mismatch on every load. Reading
+   * them here costs one extra render at mount, once, for data that then never changes without a
+   * user action.
+   */
   useEffect(() => {
     // The clock is read HERE, in the promise callback, not during render. `Date.now()` in
     // a render body — even inside useMemo, whose factory also runs during render — makes
@@ -125,6 +137,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
       .then((d) => { setMe(d); setKnownAt(Date.now()); })
       .catch(() => { setMe({ signedIn: false }); setKnownAt(Date.now()); })
       .finally(() => setLoading(false));
+    /* eslint-disable react-hooks/set-state-in-effect -- see the note above this effect. */
     try {
       const raw = localStorage.getItem("ra_published");
       if (raw) setLinks(JSON.parse(raw));
@@ -133,6 +146,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
     setResumes(getResumes());
     setJobs(getJobs());
     try { setOwned(localStorage.getItem("ra_owned") === "1"); } catch { /* noop */ }
+    /* eslint-enable react-hooks/set-state-in-effect */
     // Cloud-saved CVs (signed-in only) — survive a cleared browser.
     fetch("/api/resumes").then((r) => r.json()).then((d) => { if (d?.ok && d.signedIn && Array.isArray(d.cvs)) setCloudCvs(d.cvs); }).catch(() => {});
   }, []);
