@@ -148,10 +148,18 @@ as "has a scrolling overflow **and** more content than it shows" — not merely 
 sideways scroll; exactly one backdrop; no large gap between the document height and the lowest
 content; no unaccounted fixed overlay; no page errors.
 
+**1064 assertions, 0 failures**, across eleven sections (eight page profiles plus three builder
+profiles).
+
 In the builder: exactly one step rendered; exactly one `role="progressbar"`; the old rail and step
 column absent; the step bar has a number, a name on one line, a bar and a button; the preview is
 **not** mounted in mobile edit mode and mounts and unmounts with the toggle; the action bar is fixed
-at the bottom of the viewport, covers no field, and both controls pass a hit test; the sheet lists
+at the bottom of the viewport, is opaque, has nothing visible through it, and both controls pass a
+hit test; **the bar survives switching to Preview** — it did not, once, because it lived inside the
+step and the step is unmounted in preview mode; the last field is clear of the bar **measured from
+the bottom of the page**, which is the only position where that question means anything (measured
+from the top it compares against a field that is merely below the fold, and duly "failed" on the two
+devices whose form is longer than the viewport); the sheet lists
 eleven steps, is the only scroller while open, and closes on Escape; Continue navigates in under
 900ms to a rendered step, not a loader; browser Back and Forward work and replay nothing; a refresh
 mid-build renders the step directly.

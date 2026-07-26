@@ -315,6 +315,23 @@ for (const prof of [PROFILES[1], PROFILES[4], PROFILES[6]]) {
     }
 
     /* 9 — the action bar is fixed, above the browser chrome, and covers no field. */
+
+    /*
+     * Scrolled to the BOTTOM before measuring, and that is the whole point of the check.
+     *
+     * The first version measured at the top of the page and compared the lowest field's
+     * `getBoundingClientRect().bottom` against the bar's top edge. On the two devices where the
+     * form is longer than the viewport that comparison is meaningless — a field 900px down the
+     * page reports a bottom of 900 against a bar at 600 and is not covered, it is below the fold.
+     * It duly "failed" on iPhone 13 and Pixel 7 and passed everywhere the form happened to fit.
+     *
+     * The real question is: when the user scrolls as far as the page goes, is the last field
+     * still clear of the bar? That is what `--bd-bar` worth of bottom padding exists to
+     * guarantee, and it is only answerable from the bottom of the page.
+     */
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(300);
+
     const act = await page.evaluate(() => {
       const bar = document.querySelector(".bd-actions");
       if (!bar) return null;
