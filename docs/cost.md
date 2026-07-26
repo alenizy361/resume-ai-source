@@ -50,6 +50,26 @@ ignored** — no error, no warning, full price.
 **Token counts are per model, and the prefix/message split is the whole cache argument.** Everything
 above is measured, and an earlier version of this document was not. See the correction below.
 
+### The floor behaviour, observed rather than cited
+
+Until now the claim "below the floor the marker is accepted and silently ignored" came from the
+documentation. `GET /api/health/ai?live=1` on a preview deployment sent the **same two cached blocks**
+to two models and reported what the provider billed:
+
+| Model | Prompt | `cache_write` | `cache_read` | Uncached input | Verdict |
+|---|---|---|---|---|---|
+| Haiku 4.5 (floor 4096) | `CORE_RULES` + `role_blueprint` | **0** | 0 | **2127** | markers ignored, full price |
+| Sonnet 5 (floor 1024) | identical | **2873** | 0 | 14 | prefix cached |
+
+Same request, same markers, opposite outcomes — the non-monotonic floor, visible in the billing
+rather than inferred from a document. The 2873 also independently confirms the `count_tokens` figure
+of 2878 to within five tokens, and 2127 confirms Haiku's 2121.
+
+That run also settled a live question: `thinking: {type: "disabled"}` — a parameter this product only
+started sending, on the escalation tier that nothing normally reaches — returns **200 on Sonnet 5**.
+Given that the bug it replaced was an unacceptable `temperature` silently 400ing on that exact model,
+confirming the replacement was worth the **$0.013** the two probes cost.
+
 **A 1-hour cache TTL exists** (generally available, no beta header) at 2× the write instead of
 1.25×, reads still 0.1×. It pays off after two reads instead of one.
 
@@ -280,11 +300,21 @@ There is no task under the threshold. `MAX_OUTPUT` lists `occupation_classify` (
 `TASKS` array accepts only the four above, so three of those names are routed nowhere and cost
 nothing. (`ask_section` reaches `/api/suggest`.) A dead table entry is not a saving opportunity.
 
-**`/api/suggest` has no `cache_control` at all, and that is correct.** Next to `/api/generate`'s two
-breakpoints it looks like an oversight. Its only stable text is `DRAFTING_DOCTRINE` plus a one-line
-shape rule — **409 tokens**, measured — which is below *every* model's floor, Opus's 512 included.
-Markers there would be accepted and silently ignored on any model we could send them to. Asserted,
-so the claim decays visibly if the doctrine grows.
+**`/api/suggest` has no `cache_control` at all, and that is correct — measured, on all three models.**
+Next to `/api/generate`'s two breakpoints it looks like an oversight. Its only stable text is
+`DRAFTING_DOCTRINE` plus a one-line shape rule:
+
+| Model | Stable text | Floor | Verdict |
+|---|---|---|---|
+| Haiku 4.5 | 333 | 4096 | far below |
+| Sonnet 5 | 453 | 1024 | below |
+| Opus 5 | **453** | **512** | below, by 59 tokens |
+
+Opus is the one worth having measured. Scaling the Haiku figure by the 1.363× ratio predicted ~502
+against a 512 floor — a ten-token margin, which is not a claim, it is a coin toss. The real number is
+453, so the claim holds on every model with room to spare. Nothing changes for `/api/suggest` today;
+what changes is that the sentence no longer rests on arithmetic I did once. Asserted, so it decays
+visibly if the doctrine grows.
 
 **Output caps.** `MAX_OUTPUT` is per task (900 for `final_content`, 1400 for `role_blueprint`). Caps
 do not cost anything unless used — the measured call used 543 of 900 — so there is no saving in
@@ -306,8 +336,16 @@ reason. An uptime monitor pointed at it would bill a call on every ping. Point m
 `/api/health/ai` without the flag; it makes no model call.
 
 **`ops/ai-stages.mjs`.** Ten real calls, roughly $0.04–0.06, and it prints the exact total at the end.
-Nothing schedules it. `ops/tokens.mjs` is the opposite and worth knowing about for that reason —
-`count_tokens` returns a count and no completion, so it bills nothing and can be run freely.
+Nothing schedules it. `ops/tokens.mjs` and `?tokens=1` are the opposite and worth knowing about for
+that reason — `count_tokens` returns a count and no completion, so they bill nothing and can be run
+freely.
+
+**The escalation tier is now probed too, under `?live=1`.** One extra call on `claude-sonnet-5` with
+`max_tokens: 4`, roughly $0.008, and only when that flag is passed. It exists because nothing
+normally reaches the reasoning model — escalation needs a low-confidence classification or a schema
+failure — so a request shape that is wrong for it stays broken while every dashboard reads green.
+That is not hypothetical: it is exactly how `/api/translate` sent an unacceptable `temperature` to
+Sonnet 5 for months.
 
 **An always-thinking model in `ANTHROPIC_MODEL_REASONING`.** Reasoning tokens are billed as output,
 at the escalation model's output rate. `/api/generate` disables thinking where it can, but a model

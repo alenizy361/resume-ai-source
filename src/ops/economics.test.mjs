@@ -421,11 +421,31 @@ console.log("\n── the other AI route: nothing to cache there ──");
  * included. Adding markers there would be accepted and silently ignored.
  */
 {
-  const stable = estimateTokens(DRAFTING_DOCTRINE) + 61;  // + preamble, kind rule and language line
+  /*
+   * MEASURED via count_tokens on the deployment, because the estimate did not settle it.
+   *
+   * Scaling the Haiku figure by the 1.363x tokenizer ratio predicted ~502 tokens against Opus 5's
+   * 512 floor — a ten-token margin, which is not a claim. Measured, it is 453 on both Sonnet 5 and
+   * Opus 5 (same tokenizer) and 333 on Haiku, so the claim holds everywhere with room. Hard-coded
+   * here so that growing the doctrine past a floor fails a test instead of silently making the
+   * documentation wrong.
+   */
+  const MEASURED_SUGGEST_STABLE = { "claude-haiku-4-5": 333, "claude-sonnet-5": 453, "claude-opus-5": 453 };
+  for (const [model, tokens] of Object.entries(MEASURED_SUGGEST_STABLE)) {
+    ok(`suggest's stable text is below ${model}'s floor`, tokens < CACHE_FLOORS[model],
+      `${tokens} vs ${CACHE_FLOORS[model]}`);
+  }
+  /* Opus has the lowest floor, so it is the binding constraint — named, not left implicit. */
   const lowest = Math.min(...Object.values(CACHE_FLOORS));
-  ok("suggest's stable prefix is below the LOWEST floor of any model", stable < lowest,
-    `${stable} tokens vs floor ${lowest}`);
-  console.log(`   (${stable} stable tokens — markers there would be accepted and ignored)`);
+  ok("and below the LOWEST floor of any model", Math.max(...Object.values(MEASURED_SUGGEST_STABLE)) < lowest,
+    `${Math.max(...Object.values(MEASURED_SUGGEST_STABLE))} vs ${lowest}`);
+
+  /* The estimator must stay in the neighbourhood, or the next person's back-of-envelope check
+     disagrees with the measurement and one of them gets trusted for the wrong reason. */
+  const est = estimateTokens(DRAFTING_DOCTRINE) + 61;
+  ok("the estimate is within 15% of the Haiku measurement",
+    Math.abs(est - 333) / 333 < 0.15, `estimate ${est} vs measured 333`);
+  console.log(`   (333 on haiku, 453 on sonnet 5 and opus 5, against a 512 floor on opus)`);
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
