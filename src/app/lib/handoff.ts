@@ -1,61 +1,135 @@
 "use client";
 
 /**
- * Handing a scanned resume to the builder, instead of ending at a download button.
+ * Handing a scanned resume to the builder — through the live store, not through a migration.
  *
- * The optimizer and the builder were two products sharing a domain. Upload a CV at
- * `/optimize` and you got a score, a rewritten string and two download buttons — and
- * that was the end of the road. Nothing could be edited section by section, because the
- * flow never produced sections. The audit called this "two resume data models"; the
- * capability to fix it arrived with `parseCv` and `stateFromText`, so what was left was
- * the hand-off.
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * WHAT WAS MEASURED, BEFORE ANY OF THIS WAS CHANGED
+ * ══════════════════════════════════════════════════════════════════════════════════════
  *
- * There is no new mechanism here. `draftStore` already declares itself the store shared
- * between both doors, and `Builder` already hydrates a `builder` record from it on mount.
- * This writes that record. The hand-off IS the existing store, used the way it was
- * designed.
+ * The previous version wrote `ra_journey_{lang}` through `draftStore.writeDraft` and navigated to
+ * `/builder`. That key is the OLD single-slot scheme. `resumeStore` calls it legacy, reads it exactly
+ * once per (owner, language) through `migrateLegacy`, and renames it to `_legacy` on the way past.
  *
- * Everything imported this way is CONFIRMED, which is correct for a document the user
- * already had: it is their resume, not a suggestion about it. The one thing the rewrite
- * cannot carry is provenance — the optimizer's output is the model's wording of the
- * user's facts — so the resume text handed over is the ORIGINAL upload, not the rewrite,
- * unless the caller asks otherwise. See `sendToBuilder`.
+ * Driven in a browser against the real pages, that produced four findings:
+ *
+ *   1. **The hand-off's transport was a one-shot upgrade path.** Every scan sent to the builder
+ *      consumed `migrateLegacy` and left `ra_journey_en_legacy` behind. A migration written to run
+ *      once, for drafts that predate the current scheme, was doing duty as a live bridge — so a
+ *      resume arriving from `/optimize` was indistinguishable in storage from a legacy upgrade, and
+ *      any future change to that migration would silently break this feature.
+ *
+ *   2. **The "you already have work in the builder" confirm never fired.** It asked
+ *      `builderDraftExists(lang)`, which reads the legacy key — empty for every user whose work is
+ *      in the live store, which is every user. Measured with three completed builder steps on
+ *      screen: no dialog. A warning that cannot fire is worse than none, because it reads as a
+ *      guarantee in the code.
+ *
+ *   3. **The user's own CV was silently demoted.** The existing record survived — this was never
+ *      data loss — but `/builder` shows exactly one "continue where you left off", and after a
+ *      hand-off it pointed at the scan. An Accountant CV three steps in was nowhere on the screen.
+ *
+ *   4. **The owner was bypassed.** `writeDraft` writes an unowned key, and `migrateLegacy` then
+ *      attributes it to whoever the session resolves to. Every other write in this product carries
+ *      its owner; this one asked the migration to guess.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE REPLACEMENT
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * `writeResume(owner, id, lang, state)` — the same call the builder's own autosave makes. There is
+ * no bridge left: a scan becomes a resume record in the live store, under an owner, and the URL
+ * returned points AT it (`/builder/{id}/target`) rather than at a front door that has to work out
+ * what just happened.
+ *
+ * Nothing writes `ra_journey_*` any more. `draftStore` keeps reading it, because a draft written by
+ * the chat door before this change is still somebody's CV — but the retired key now has no live
+ * writer, which is what "do not leave both persistences active" actually asks for.
+ *
+ * ── a fresh id, and why the caller must still be told ──
+ *
+ * A hand-off never overwrites: `newResumeId` is time-plus-entropy and the record is new, so the
+ * user's in-progress CV is untouched by construction. But *untouched* is not *reachable* — the
+ * builder's start screen listed one resume until this change — so `resumesInProgress` reports what
+ * the owner already has and the caller decides between adding and replacing. That is a question the
+ * user can answer, unlike the dialog it replaces.
  */
 
-import { readDraft, writeDraft } from "./draftStore";
-import { stateFromText } from "./scoreText";
+import { listResumes, newResumeId, writeResume } from "./resumeStore.ts";
+/* Relative, not the `@/` alias: `ops/handoff.test.mjs` imports this module in plain Node, where the
+   bundler's alias does not exist. `steps.ts` itself only imports a type, which is erased. */
+import { stepHref } from "../components/build/steps.ts";
+import { stateFromText } from "./scoreText.ts";
 
-/** Does the user already have builder work here that a hand-off would replace? */
-export function builderDraftExists(lang: "ar" | "en"): boolean {
-  try {
-    const d = readDraft(lang) as unknown as { builder?: { profile?: { roles?: unknown[] } } };
-    const roles = d.builder?.profile?.roles;
-    return Array.isArray(roles) && roles.length > 0;
-  } catch { return false; }
+export interface InProgress {
+  resumeId: string;
+  title: string;
+  updatedAt: number;
 }
 
 /**
- * Put a resume into the builder's draft and return where to navigate.
+ * The resumes this owner already has here, newest first — read from the store the builder reads.
  *
- * `text` should normally be the user's ORIGINAL resume rather than the AI rewrite. The
- * rewrite is the model's phrasing of the user's facts, and the builder's whole contract
- * is that model wording arrives as a suggestion to accept — silently installing it as
- * confirmed content would launder it into fact. A caller that genuinely wants the
- * rewrite (the user pressed "keep the improved version") passes it explicitly and owns
- * that choice.
+ * Replaces `builderDraftExists(lang)`, which asked the retired key and therefore always answered
+ * "no". Returns the list rather than a boolean because the caller has to be able to NAME what it is
+ * about to sit beside: "you already have work" is not a question anyone can answer, and "you have a
+ * CV in progress — Accountant, 3 of 11 steps" is.
+ */
+export function resumesInProgress(owner: string): InProgress[] {
+  if (!owner) return [];
+  try {
+    return listResumes(owner).map((r) => ({
+      resumeId: r.resumeId,
+      title: r.title || "",
+      updatedAt: Number(r.updatedAt) || 0,
+    }));
+  } catch { return []; }
+}
+
+/**
+ * Put a scanned resume into the builder as its own record, and return where to go.
+ *
+ * `text` should normally be the user's ORIGINAL resume rather than the AI rewrite. The rewrite is
+ * the model's phrasing of the user's facts, and the builder's whole contract is that model wording
+ * arrives as a suggestion to accept — silently installing it as confirmed content would launder it
+ * into fact. A caller that genuinely wants the rewrite (the user pressed "keep the improved
+ * version") passes it explicitly and owns that choice.
+ *
+ * ── `cvLang` is not `lang`, and conflating them is the bug this product has paid for repeatedly ──
+ *
+ * `lang` is the interface the user is reading; `cvLang` is the language of the DOCUMENT, which on
+ * `/optimize` the user chose explicitly on step 3. `stateFromText` leaves `target.language` at the
+ * schema default of English, so before this a hand-off of an Arabic rewrite opened an English
+ * document — and every suggestion the builder made afterwards came back in English.
+ *
+ * `replace` overwrites an existing record instead of adding one. Offered only because the
+ * alternative — a second CV the user did not ask for — is its own kind of mess, and only ever with
+ * an id the caller obtained from `resumesInProgress`, so it cannot name a resume nobody chose.
  */
 export function sendToBuilder(
+  owner: string,
   lang: "ar" | "en",
   text: string,
-  opts: { jobAd?: string } = {},
+  opts: { jobAd?: string; cvLang?: "ar" | "en"; replace?: string } = {},
 ): string {
-  const state = stateFromText(text, opts.jobAd ?? "");
-  writeDraft(lang, {
-    profile: state.profile,
-    door: "form",
-    // Nested under `builder` because that is the key Builder.tsx hydrates, and keeping
-    // the chat's own keys untouched is what lets someone switch doors without loss.
-    ...({ builder: { ...state, entry: "upload" } } as unknown as Record<string, unknown>),
-  });
-  return lang === "ar" ? "/ar/builder" : "/builder";
+  const base = stateFromText(text, opts.jobAd ?? "");
+  const state = {
+    ...base,
+    entry: "upload" as const,
+    target: { ...base.target, language: opts.cvLang ?? lang },
+  };
+
+  /* An id the caller chose to replace, or a new one. `newResumeId` is time-plus-entropy, so the
+     new-record branch cannot collide with anything the owner already holds. */
+  const id = opts.replace || newResumeId();
+  writeResume(owner, id, lang, state);
+
+  /*
+   * Straight to the first step, not to `/builder`.
+   *
+   * The front door has to GUESS which resume the visitor means — it resolves to the most recent one
+   * — and that guess is what made a hand-off look like it had replaced the user's CV. An address
+   * that names the resume cannot be wrong about it.
+   */
+  return stepHref(lang, id, "target");
 }

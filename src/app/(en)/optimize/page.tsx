@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice } from "@/app/lib/plans";
-import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
+import { type InProgress, resumesInProgress, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import Link from "next/link";
 import PdfExport from "@/app/components/PdfExport";
@@ -254,13 +254,34 @@ export default function OptimizePage() {
    * wording of the user's facts, and the builder's contract is that model wording arrives
    * as a suggestion to accept — installing it as confirmed content would launder it into
    * fact. The rewrite is still on this page to read, copy and download.
+   *
+   * ── the dialog this replaces could not fire ──
+   *
+   * It asked `builderDraftExists("en")`, which read the retired `ra_journey_en` key — empty for
+   * every user whose builder work is in the live store, which is every user. Measured in a browser
+   * with three completed builder steps on screen: no dialog, and the start screen then showed the
+   * scan as the one CV in progress. So the choice is made visible on the page instead, where it can
+   * name what already exists rather than asking about "work" in the abstract.
    */
-  function continueInBuilder() {
+  const [inProgress, setInProgress] = useState<InProgress[]>([]);
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!owner) return;
+    setInProgress(resumesInProgress(owner));
+  }, [owner]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  function continueInBuilder(replace?: string) {
     const text = resume.trim() || result?.optimizedResume || "";
     if (!text) return;
-    if (builderDraftExists("en")
-      && !window.confirm("You already have work in the builder. Replace it with this resume?")) return;
-    const to = sendToBuilder("en", text, { jobAd: jobDescription });
+    /* `outLang` is the language the user chose for the DOCUMENT on step 3. Without it the hand-off
+       opened an English builder for an Arabic CV, and every suggestion after that came back
+       English. `"both"` resolves to English, the same rule the rest of the product follows. */
+    const to = sendToBuilder(owner, "en", text, {
+      jobAd: jobDescription,
+      cvLang: outLang === "ar" ? "ar" : "en",
+      replace,
+    });
     window.location.href = to;
   }
 
@@ -707,9 +728,36 @@ export default function OptimizePage() {
                       {/* Carries the resume across rather than just navigating. This flow
                           used to end here, at two download buttons, with nothing editable
                           section by section — the audit's "two resume data models". */}
-                      <button onClick={continueInBuilder} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
-                        Keep editing in the builder →
-                      </button>
+                      <div className="w-full">
+                        <button onClick={() => continueInBuilder()} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
+                          Keep editing in the builder →
+                        </button>
+                        {/*
+                          What already exists, named — and the choice the dead confirm dialog was
+                          pretending to offer. Adding is the default because it cannot lose anything;
+                          replacing is one tap away and says WHICH CV it would replace, which is the
+                          part a browser dialog reading "you already have work in the builder" could
+                          not tell anyone even when it fired.
+                        */}
+                        {inProgress.length > 0 && (
+                          <div className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
+                            This opens a new CV in the builder. You already have{" "}
+                            {inProgress.length === 1 ? "one" : inProgress.length}:{" "}
+                            {inProgress.slice(0, 3).map((r, i) => (
+                              <span key={r.resumeId}>
+                                {i > 0 && ", "}
+                                <button
+                                  onClick={() => continueInBuilder(r.resumeId)}
+                                  className="font-semibold underline underline-offset-2"
+                                  style={{ color: "var(--accent)" }}
+                                >
+                                  replace “{r.title || "Untitled CV"}”
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

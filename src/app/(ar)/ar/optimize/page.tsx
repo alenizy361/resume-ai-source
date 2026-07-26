@@ -1,8 +1,8 @@
 "use client";
 import BrandOrb from "@/app/components/BrandOrb";
 import { trackScanDone } from "@/app/lib/funnelClient.ts";
-import { formatPrice } from "@/app/lib/plans";
-import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
+import { formatPrice, toArabicDigits } from "@/app/lib/plans";
+import { type InProgress, resumesInProgress, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -310,12 +310,32 @@ export default function ArOptimizePage() {
    * يُسلَّم الملف الأصلي لا إعادة الصياغة: إعادة الصياغة هي صياغة النموذج لحقائق المستخدم،
    * وعقد البناء أن صياغة النموذج تصل كاقتراح يُعتمد — لا كمحتوى مؤكَّد.
    */
-  function continueInBuilder() {
+  /*
+   * الحوار الذي حُذف لم يكن قادراً على الظهور أصلاً: كان يسأل `builderDraftExists("ar")` التي تقرأ
+   * المفتاح المتقاعد `ra_journey_ar` — وهو فارغ لكل مستخدم عمله في المخزن الحالي، أي كل مستخدم.
+   * فصار الخيار معروضاً على الصفحة نفسها، حيث يستطيع تسمية ما هو موجود بالفعل.
+   */
+  const [inProgress, setInProgress] = useState<InProgress[]>([]);
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!owner) return;
+    setInProgress(resumesInProgress(owner));
+  }, [owner]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  function continueInBuilder(replace?: string) {
     const text = resume.trim() || result?.optimizedResume || "";
     if (!text) return;
-    if (builderDraftExists("ar")
-      && !window.confirm("لديك عمل في البناء بالفعل. أستبدله بهذه السيرة؟")) return;
-    window.location.href = sendToBuilder("ar", text, { jobAd: jobDescription });
+    /* لغة الوثيقة التي اختارها المستخدم في الخطوة الثالثة، لا لغة الواجهة. بدونها كان تسليم سيرة
+       إنجليزية يفتح باني سيرة عربية، وكل اقتراح بعدها يعود بالعربية.
+
+       «الاثنتان» تُحسم إلى الإنجليزية — نفس القاعدة في كل المنتج، لأن الإنجليزية هي الوثيقة
+       الأساسية في ذلك الوضع. */
+    window.location.href = sendToBuilder(owner, "ar", text, {
+      jobAd: jobDescription,
+      cvLang: outLang === "ar" ? "ar" : "en",
+      replace,
+    });
   }
 
   return (
@@ -503,9 +523,32 @@ export default function ArOptimizePage() {
                   <DocxExport text={result.optimizedResume} label="↓ تنزيل Word" filename="resume-ar.docx" watermark={watermarkFromResponse(result)} lang="ar" />
                   {/* نفس الاستمرارية المتاحة في الإنجليزية: تحويل السيرة إلى البناء المنظّم
                       بدل الانتهاء عند زر التنزيل. تبديل اللغة لا يجوز أن يغيّر ما يقدر عليه المنتج. */}
-                  <button onClick={continueInBuilder} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
-                    واصل التعديل في البناء ←
-                  </button>
+                  <div className="w-full">
+                    <button onClick={() => continueInBuilder()} className="btn-ghost px-5 py-2.5 text-sm font-semibold">
+                      واصل التعديل في البناء ←
+                    </button>
+                    {/* ما هو موجود بالفعل، مُسمّى — وهو الخيار الذي كان الحوار الميت يتظاهر بتقديمه.
+                        الإضافة هي الافتراض لأنها لا تفقد شيئاً، والاستبدال بضغطة واحدة ويقول أيّ
+                        سيرة سيستبدل. */}
+                    {inProgress.length > 0 && (
+                      <div className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
+                        هذا يفتح سيرة جديدة في البناء. لديك بالفعل{" "}
+                        {inProgress.length === 1 ? "واحدة" : toArabicDigits(inProgress.length)}:{" "}
+                        {inProgress.slice(0, 3).map((r, i) => (
+                          <span key={r.resumeId}>
+                            {i > 0 && "، "}
+                            <button
+                              onClick={() => continueInBuilder(r.resumeId)}
+                              className="font-semibold underline underline-offset-2"
+                              style={{ color: "var(--accent)" }}
+                            >
+                              استبدل «{r.title || "سيرة بلا عنوان"}»
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

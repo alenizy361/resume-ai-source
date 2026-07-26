@@ -69,7 +69,8 @@
     "test:visit:browser": "node ops/visit.browser.mjs",
     "test:paycallback": "node --experimental-strip-types ops/paycallback.test.mjs",
     "test:mycvs": "node --experimental-strip-types ops/mycvs.test.mjs",
-    "test:mycvs:browser": "node ops/mycvs.browser.mjs"
+    "test:mycvs:browser": "node ops/mycvs.browser.mjs",
+    "test:handoff:browser": "node ops/handoff.browser.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

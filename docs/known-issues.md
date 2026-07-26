@@ -538,12 +538,85 @@ nothing about what the model sees, which is the whole point of the item.
 `/interview`, `/interview-live`, `/linkedin` and both `/optimize` pages each opened on a blank
 "paste your resume" box and read none of the CVs this browser already held.
 
-### O-9 · P1 · `/optimize` is a second CV state model
+### F-19 · P1 · The hand-off writes a real resume record, and the retired key has no live writer — FIXED *(was O-9)*
 
-Flat strings plus an `OptimizeResult` DTO, its own storage keys, and a one-way bridge
-(`handoff.ts`) that writes to `ra_journey_{lang}` — a key the read path considers **retired**
-and only consults during a one-shot legacy migration, and only when the URL carries no
-`resumeId`. Live write path, retired key.
+`/optimize` held flat strings plus an `OptimizeResult` DTO, its own storage keys, and a one-way
+bridge (`handoff.ts`) that wrote `ra_journey_{lang}` — a key the read path considers **retired** and
+consults only during a one-shot legacy migration.
+
+**Measured in a browser before anything was changed.** Four findings, none of them visible in the
+code alone:
+
+1. **The transport was a one-shot upgrade path.** Every scan sent to the builder consumed
+   `migrateLegacy` and left `ra_journey_en_legacy` behind. A migration written to run once per
+   (owner, language) for pre-existing drafts was doing duty as the live bridge, so a resume arriving
+   from `/optimize` was indistinguishable in storage from a legacy upgrade.
+2. **The "you already have work in the builder" confirm never fired.** It asked
+   `builderDraftExists(lang)`, which reads the retired key — empty for every user whose work is in
+   the live store, which is every user. Driven with three completed builder steps on screen: no
+   dialog. A unit test of that function would have passed; it correctly reported what was in the
+   store it was asked about, and the defect was *which store it was asked about*.
+3. **The user's own CV was silently demoted.** Their record survived — this was never data loss —
+   but `/builder` shows one "continue where you left off", and after a hand-off it pointed at the
+   scan. An Accountant CV three steps in was nowhere on the screen.
+4. **The owner was bypassed.** `writeDraft` writes an unowned key and `migrateLegacy` then attributes
+   it to whoever the session resolves to. Every other write in this product carries its owner.
+
+**Fix — the live store, an addressed URL, and a visible choice.**
+
+`sendToBuilder(owner, lang, text, opts)` now calls `writeResume` — the same function the builder's
+own autosave calls — and returns `/builder/{resumeId}/target`. There is no bridge left to break, the
+write carries its owner, and the URL names the resume rather than leaving the front door to guess
+which one the visitor meant.
+
+`resumesInProgress(owner)` replaces `builderDraftExists(lang)` and reads the live index. It returns
+the list rather than a boolean, because the point is to be able to **name** what already exists:
+"you already have work" is not a question anyone can answer, and "replace *Accountant*" is. The
+`window.confirm` is gone — the choice sits on the page, where adding is the default (it cannot lose
+anything) and replacing is one tap that says which CV it would replace.
+
+**And the start screen now lists the index.** `resumeStore` has kept a per-owner resume index since
+it was written and nothing rendered it: `BuilderStart`, `ContinueDraft` and `BuilderProvider` all
+took `listResumes(owner)[0]`. A second resume was a record in storage with no screen able to open
+it — survivable while only the builder created resumes, and not survivable once the hand-off started
+adding one. Gated on `mayRestore(owner)`, so a lapsed anonymous visit is offered nothing, from the
+same function the provider and the landing banner use.
+
+**Plus the CV's language, which the bridge dropped.** `stateFromText` leaves `target.language` at the
+schema default of English, so a hand-off of an Arabic document opened an English builder and every
+suggestion after that came back English. Both pages now pass the `outLang` the user chose on step 3;
+`"both"` resolves to English, the same rule as everywhere else.
+
+**End state on the retired key.** `ra_journey_{lang}` now has **zero live writers** anywhere in
+`app/` — asserted by scanning every `.ts`/`.tsx` file rather than three named ones, so a fourth
+writer cannot quietly appear. `readDraft` stays, because a chat draft written before this change is
+still somebody's CV. One persistence writing, one reading old data, which is what "do not leave both
+persistences active" actually asks for.
+
+**Verification.** `ops/handoff.test.mjs` — 46 assertions (was 12) against fake storage.
+`ops/handoff.browser.mjs` — 23 assertions in Chromium: the page names the CV in progress, no browser
+dialog is used, the retired key is never written, adding leaves the existing record untouched,
+replacing creates no second CV and does overwrite the named one, the URL names the resume, the
+builder opens the scan, the start screen shows both CVs with two continue buttons, an Arabic document
+choice survives, and `/ar/optimize` does all of it too.
+
+Three of that suite's assertions failed on their first run **because of the probe, not the product**:
+`addInitScript` re-runs on every navigation and was re-seeding the index over what the hand-off had
+just written; an input's value is not part of `innerText`; and `/Radiograph/i` against the whole page
+matched `/builder`'s own SEO copy ("the skills offered to a radiographer in Riyadh"), so a list with
+one row passed a two-row assertion. Recorded because each is a way a browser test passes or fails for
+the wrong reason.
+
+**What is still not unified, and is not this item.** `/optimize` keeps its own `OptimizeResult` DTO
+and its own draft keys for the *scan* — the score, the keywords, the rewrite. That is a result
+document, not a CV state model, and merging it into `BuilderState` would put model output inside the
+confirmed-content store, which the whole suggestion bag exists to prevent. The CV itself now has one
+model and one store on both sides of the hand-off, which is what O-9 was about.
+
+### O-9 · superseded by F-19
+
+`/optimize`'s hand-off wrote `ra_journey_{lang}` — a key the read path considers retired — and was
+picked up only by the one-shot legacy migration.
 
 ### O-10 · P2 · Six declared AI tasks are unreachable
 
@@ -552,6 +625,12 @@ and only consults during a one-shot legacy migration, and only when the URL carr
 the generic control they were built for, has zero call sites. `app/lib/flags.ts` is entirely
 dead. `draftStore.writeBuilder`/`readBuilder` are dead. `POST /api/resumes` has no client
 caller.
+
+**F-19 added one to this list and left it deliberately.** `draftStore.writeDraft` now has no live
+caller either — the hand-off was its last one. It is kept rather than deleted because `writeBuilder`
+calls it and `ops/draftstore.test.mjs` documents the old record shape, which is what makes a chat
+draft written before the current scheme still readable. `ops/handoff.test.mjs` asserts that no file in
+`app/` calls it, so it cannot acquire a caller by accident.
 
 ### O-11 · P1 · Arabic detection ranges disagree across the export paths
 

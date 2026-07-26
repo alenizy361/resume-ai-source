@@ -15,11 +15,12 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
-import { EMPTY_BUILDER } from "@/app/lib/builderDoc";
+import { EMPTY_BUILDER, type SectionId } from "@/app/lib/builderDoc";
+import { listResumes, mayRestore, readResume } from "@/app/lib/resumeStore";
 
 import { useBuilder } from "./BuilderProvider";
 import { StartCards } from "./FormSections";
@@ -31,6 +32,9 @@ const T = {
     h1: "Build your CV",
     sub: "Eleven short steps. Everything the AI suggests is a suggestion until you approve it.",
     resumeHead: "Continue where you left off",
+    /* Plural, because there can be more than one — and until this screen listed them, a second
+       resume existed in storage with nothing anywhere able to open it. */
+    resumesHead: "Your CVs here",
     resumeSub: (n: number) => `${n} of ${STEPS.length} steps done`,
     resumeGo: "Continue →",
     untitled: "Untitled CV",
@@ -41,6 +45,7 @@ const T = {
     h1: "ابنِ سيرتك الذاتية",
     sub: "إحدى عشرة خطوة قصيرة. كل ما يقترحه الذكاء يظل اقتراحاً حتى تعتمده.",
     resumeHead: "واصل من حيث توقفت",
+    resumesHead: "سِيَرك هنا",
     resumeSub: (n: number) => `أكملت ${toArabicDigits(n)} من ${toArabicDigits(STEPS.length)} خطوات`,
     resumeGo: "واصل ←",
     untitled: "سيرة بلا عنوان",
@@ -130,6 +135,63 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
   const resumeAt = STEPS.find((s) => !state.sectionsDone.includes(s)) ?? STEPS[STEPS.length - 1];
   const hasDraft = hydrated && (done.length > 0 || Boolean(state.target.title || state.personal.fullName));
 
+  /*
+   * ══════════════════════════════════════════════════════════════════════════════════
+   * EVERY resume this owner has, not just the newest one
+   * ══════════════════════════════════════════════════════════════════════════════════
+   *
+   * `resumeStore` has kept a per-owner index since it was written, and until now nothing rendered
+   * it: this screen, `ContinueDraft` and `BuilderProvider` all took `listResumes(owner)[0]`. So a
+   * second resume was a record in storage with no screen anywhere able to open it.
+   *
+   * That was survivable while only the builder created resumes. It stopped being survivable when
+   * `/optimize`'s hand-off started writing a real record (see `lib/handoff.ts`): adding a CV that
+   * cannot be reached is not adding a CV, and the alternative — overwriting the one in progress —
+   * is the silent replacement the hand-off was measured doing.
+   *
+   * Read in an effect because `localStorage` does not exist during the server render, and gated on
+   * `mayRestore` so a lapsed anonymous visit is offered nothing — the same answer the provider and
+   * the landing banner give, from the same function.
+   */
+  const [saved, setSaved] = useState<Array<{ id: string; title: string; steps: number; at: SectionId }>>([]);
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!hydrated || !owner || !mayRestore(owner)) return;
+    try {
+      setSaved(listResumes(owner).map((r) => {
+        const st = readResume(owner, r.resumeId).record?.state;
+        const sections = (st?.sectionsDone ?? []).filter((s) => (STEPS as string[]).includes(s));
+        return {
+          id: r.resumeId,
+          title: r.title || st?.target.title || st?.personal.fullName || "",
+          steps: sections.length,
+          at: STEPS.find((s) => !sections.includes(s)) ?? STEPS[STEPS.length - 1],
+        };
+      }));
+    } catch { setSaved([]); }
+  }, [hydrated, owner]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  /*
+   * The live state outranks the stored index for the resume currently loaded.
+   *
+   * The index is written by autosave, so between a keystroke and the debounce it is behind by one
+   * edit. Reading the row for `resumeId` from `state` instead means the card never shows a step
+   * count the user has already passed — and it is also what stops a freshly minted, never-saved
+   * resume from being absent from its own list.
+   */
+  const rows = saved.map((r) => r.id === resumeId
+    ? { ...r, title: state.target.title || state.personal.fullName || r.title, steps: done.length, at: resumeAt }
+    : r);
+  if (hasDraft && !rows.some((r) => r.id === resumeId)) {
+    rows.unshift({
+      id: resumeId,
+      title: state.target.title || state.personal.fullName || "",
+      steps: done.length,
+      at: resumeAt,
+    });
+  }
+
   const enter = (step = STEPS[0]) => {
     /*
      * The funnel's builder step belongs HERE and not on the front door: viewing the landing page is
@@ -150,26 +212,50 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
         style={lang === "ar" ? undefined : { letterSpacing: "-0.02em" }}>{t.h1}</h1>
       <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
 
-      {hasDraft && (
-        <div className="card mt-6 p-5" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
-          <div className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.resumeHead}</div>
-          <div className="mt-1.5 text-sm font-bold">
-            {state.target.title || state.personal.fullName || t.untitled}
+      {rows.length > 0 && (
+        <div className="mt-6">
+          {/* One heading when there is one CV, another when there are several. The singular used to
+              be the only case the screen could express, which is why the second CV was invisible. */}
+          <div className="bd-label">{rows.length > 1 ? t.resumesHead : t.resumeHead}</div>
+          <div className="mt-2 flex flex-col gap-2 t-stagger">
+            {rows.map((r) => (
+              <div
+                key={r.id}
+                className="card p-5 t-enter"
+                style={r.id === resumeId
+                  ? { borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }
+                  : undefined}
+              >
+                {/* `dir="auto"` — the title comes from the CV, which may be in either script
+                    whatever the interface is set to. */}
+                <div className="text-sm font-bold" dir="auto">{r.title || t.untitled}</div>
+                <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+                  {t.resumeSub(r.steps)} · {nav[r.at]}
+                </div>
+                <button
+                  onClick={() => {
+                    track("builder_resumed", { at: r.at });
+                    /*
+                     * `flush()` before leaving, because the resume being left may hold an
+                     * un-debounced edit — and then navigate by id rather than through `enter()`,
+                     * which only ever knew about the currently loaded resume.
+                     */
+                    flush();
+                    trackStep("builderStarted", { at: r.at, resumed: "1" });
+                    router.push(stepHref(lang, r.id, r.at), { scroll: false });
+                  }}
+                  className="btn-accent t-tap mt-4 rounded-xl px-5 py-2.5 text-sm font-bold"
+                >
+                  {t.resumeGo}
+                </button>
+              </div>
+            ))}
           </div>
-          <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-            {t.resumeSub(done.length)} · {nav[resumeAt]}
-          </div>
-          <button
-            onClick={() => { track("builder_resumed", { at: resumeAt }); enter(resumeAt); }}
-            className="btn-accent t-tap mt-4 rounded-xl px-5 py-2.5 text-sm font-bold"
-          >
-            {t.resumeGo}
-          </button>
         </div>
       )}
 
       <div className="mt-8">
-        {hasDraft && <div className="bd-label">{t.fresh}</div>}
+        {rows.length > 0 && <div className="bd-label">{t.fresh}</div>}
         <StartCards
           lang={lang} state={state} dispatch={dispatch} owner={owner}
           /* `?entry=upload` comes from the home page's upload card. One addressable entry per
@@ -179,7 +265,7 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
         />
       </div>
 
-      {!hasDraft && (
+      {rows.length === 0 && (
         <button onClick={() => enter()} className="btn-accent t-tap mt-6 rounded-xl px-5 py-2.5 text-sm font-bold">
           {t.firstStep}
         </button>
