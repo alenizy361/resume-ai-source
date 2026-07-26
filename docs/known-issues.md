@@ -413,3 +413,38 @@ which `ops/funnel.test.mjs` does not currently assert against a browser.
 **Not a proven cause of the iOS crash.** It is a real weight problem worth fixing on its own
 terms — on pages whose only purpose is organic search, where payload is a ranking input — but the
 two crash causes that were measured and fixed were GPU-side (F-7, F-8, F-10), not JavaScript.
+
+### O-16 · P3 · The old design leaves dead CSS, but nothing of it is running
+
+Raised as a hypothesis for the iOS crash — "maybe the old design is still running in the
+background". Checked directly, and it is not. Measured on the pages that crash, 390px viewport:
+
+| what | `/resume-examples` | `/…/registered-nurse` | `/` |
+|---|---|---|---|
+| infinite animations | 3 | 6 | 3 |
+| …and they are | `bo-pulse`, `bo-breathe`, `bo-spin` — the one orb, three per orb | same, two orbs | same |
+| `position: fixed` elements | 1 | 1 | 1 |
+| …and it is | `.space-backdrop` | | |
+| `will-change` declarations | 0 | 0 | 0 |
+| scroll timelines | 0 (after F-10) | 0 | 0 |
+
+`.space-backdrop` was read line by line as part of this. It is one fixed element with five
+static layers of tiled radial gradients: no JavaScript, no `filter`, no animation, one paint.
+Its own comment records what it replaced — a `<canvas>` cosmos on a rAF loop, a second rAF loop
+lerping a light toward the pointer, per-page ambient blocks, `.aurora-bg`, and a grain overlay.
+That removal was real; none of it came back.
+
+**What the old design does leave** is roughly **4.6 KB of dead rules** in `globals.css` (of
+35.6 KB) — `reveal-aurora`, `stage-orb`, `breathe`, `dock`, `float-slow`, `marquee`, `ia-*`,
+`improved-banner`, `aurora-burst`, `gold-stamp`, `reveal-pop`, `reveal-rise`. Their class names
+appear in no `className` in the codebase. `scanSweep` is the one exception: it is referenced
+from `ScanDemo.tsx` as an inline `animation`, which is why a plain class-name sweep must not be
+the only check before deleting any of them.
+
+Dead stylesheet rules cost parse time and nothing else — they are not composited, not animated,
+and not in the DOM. So this is a tidiness item, not a performance one, and deliberately filed
+P3 rather than dressed up as a fix.
+
+**Left undone on purpose.** Deleting them is safe only with a check that each is unreferenced
+by inline styles and string concatenation as well as by `className`, and that check is the work.
+Doing it carelessly is how a live control loses its animation months later.
