@@ -408,15 +408,21 @@ export async function GET(req: NextRequest) {
      * still honours the LIMITS prose. Leaving that unanswered is how a flag stays off forever and the
      * 4x schema-invalid retry path stays reachable.
      *
-     * So one real call, with `output_config` attached, on the CHEAPEST task — `jd_delta`, the smallest
-     * schema and the smallest output cap. A 400 means a schema is malformed and the switch must stay
-     * off. A 200 whose body parses as the schema means it is safe to turn on.
+     * So one real call per schema, with `output_config` attached. A 400 on any of them means that
+     * schema is malformed and the switch must stay off; all four accepted, each returning exactly its
+     * own keys, is what makes turning it on defensible.
      *
-     * Roughly $0.003, only under `?live=1`, which already announces that it spends credit.
+     * ALL FOUR, not just the cheapest. The first version of this probed `jd_delta` alone and reported
+     * "safe to turn on" — a verdict about four schemas drawn from evidence about one. They are built
+     * from the same three helpers, which is an argument and not a measurement: the four differ in
+     * nesting, and `role_blueprint` is the only one carrying a `number` field and an array-of-objects
+     * whose own property is an array.
+     *
+     * Roughly $0.012 for the set, only under `?live=1`, which already announces that it spends credit.
      */
     if (suggestProvider === "anthropic" && suggestKeyPresent) {
       const t3 = Date.now();
-      report.liveSchema = { ...(await probeSchema(suggestModel)), ms: Date.now() - t3 };
+      report.liveSchema = { ...(await probeSchemas(suggestModel)), ms: Date.now() - t3 };
     } else {
       report.liveSchema = { ran: false, note: "No Anthropic key on this deployment — nothing to probe." };
     }
@@ -587,8 +593,7 @@ async function probeAnthropic(model: string): Promise<ProbeResult> {
  * the body PARSED as JSON, and whether the parsed object carries exactly the schema's keys. A 200
  * whose body is prose would pass a naive check and mean the constraint did nothing.
  */
-async function probeSchema(model: string): Promise<Record<string, unknown>> {
-  const task: AiTaskType = "jd_delta";
+async function probeSchema(model: string, task: AiTaskType): Promise<Record<string, unknown>> {
   const cfg = schemaRequestFor(task);
   if (!Object.keys(cfg).length) return { ran: false, note: `No schema defined for ${task}.` };
 
@@ -614,11 +619,21 @@ async function probeSchema(model: string): Promise<Record<string, unknown>> {
           { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
           { type: "text", text: TASK_SCHEMA[task] ?? "", cache_control: { type: "ephemeral" } },
         ],
+        /*
+         * One short prompt for every task, and deliberately not a per-task fixture.
+         *
+         * What is under test is the ENVELOPE — does the provider accept this schema, and does the body
+         * come back as its keys. A realistic per-task input would test the model's judgement too, at
+         * four times the reading, and that is `ops/ai-stages.mjs`'s job. Here a thin prompt is a
+         * feature: if the shape holds with almost nothing to say, it holds.
+         */
         messages: [{
           role: "user",
-          content: "BASELINE: performs CT and general radiography.\n"
+          content: "OCCUPATION: radiology technologist\nCOUNTRY: sa\nCV LANGUAGE: en\n"
+            + "BASELINE: performs CT and general radiography.\n"
             + "ADVERT: Radiology technologist. Requires SCFHS registration and 2 years of CT. "
-            + "Preferred: MRI experience.\nReturn the delta.",
+            + "Preferred: MRI experience.\n"
+            + "Answer in the schema. Keep every list to one short entry.",
         }],
       }),
     });
@@ -653,13 +668,51 @@ async function probeSchema(model: string): Promise<Record<string, unknown>> {
       missing, extra,
       estimatedUsd: Number(estimateCallCost(model, u).toFixed(6)),
       verdict: parsed !== null && missing.length === 0 && extra.length === 0
-        ? "The API accepted the schema and returned exactly its keys. Safe to set "
-          + "ANTHROPIC_STRUCTURED_OUTPUTS=1 — that removes the schema-invalid retry, which costs about "
-          + "four times a clean call. Counts are still NOT enforced by the schema, only the shape, so "
-          + "the prose LIMITS and the route's validator both stay."
-        : "Accepted, but the body did not come back as the schema's keys. Do not turn it on yet.",
+        ? "Accepted, and the body came back as exactly this schema's keys."
+        : "Accepted, but the body did not come back as this schema's keys.",
     };
   } catch (e) {
     return { ran: true, accepted: false, error: e instanceof Error ? e.message.slice(0, 120) : "probe failed" };
   } finally { clearTimeout(timer); }
+}
+
+/**
+ * Every schema, each in its own call, with one verdict over the set.
+ *
+ * Sequential rather than parallel: four requests behind an operator's page load do not need
+ * concurrency, and a burst against a rate limit would turn a diagnostic into a 429 that reads like a
+ * malformed schema — the exact confusion this probe exists to remove.
+ *
+ * `allAccepted` requires every task to have been accepted AND to have returned its own keys. One
+ * failure is enough to keep the switch off, because a task whose schema 400s does not fall back to
+ * prose: it fails the generation outright, which is worse than the retry the switch would remove.
+ */
+async function probeSchemas(model: string): Promise<Record<string, unknown>> {
+  const tasks: AiTaskType[] = ["role_blueprint", "experience_package", "final_content", "jd_delta"];
+  const byTask: Record<string, unknown> = {};
+  let allAccepted = true;
+  let usd = 0;
+
+  for (const task of tasks) {
+    const r = await probeSchema(model, task);
+    byTask[task] = r;
+    if (!(r.accepted === true && r.keysMatch === true)) allAccepted = false;
+    if (typeof r.estimatedUsd === "number") usd += r.estimatedUsd;
+  }
+
+  return {
+    ran: true,
+    model,
+    allAccepted,
+    estimatedUsd: Number(usd.toFixed(6)),
+    byTask,
+    verdict: allAccepted
+      ? "All four schemas were accepted and each returned exactly its own keys. Safe to set "
+        + "ANTHROPIC_STRUCTURED_OUTPUTS=1 — that removes the schema-invalid retry, which costs about "
+        + "four times a clean call. Counts are still NOT enforced by the schema, only the shape, so the "
+        + "prose LIMITS and the route's own validator both stay."
+      : "At least one schema was refused or did not come back as its keys. Keep "
+        + "ANTHROPIC_STRUCTURED_OUTPUTS off and fix that schema first — a refused schema fails the "
+        + "generation outright rather than falling back to prose.",
+  };
 }
