@@ -64,26 +64,95 @@ function timingSafeEqual(a: string, b: string): boolean {
 export const maxDuration = 30;
 
 /**
- * The transaction reference, from wherever this provider happens to put it.
+ * The transaction reference, found without knowing what this provider calls it.
  *
- * Paylink's callback shape has varied across their API versions and their docs show more than one
- * spelling, so several are accepted rather than one guessed. It costs nothing to read four keys, and
- * the alternative is a webhook that silently ignores every delivery because the field was
- * `transactionNo` and we looked for `transaction_no`.
+ * ── why this is a search and not a field name ──
  *
- * A query parameter is accepted too: it is the form that can be tested with a plain browser request,
- * and there is nothing to protect — the number is not a credential, it is a lookup key.
+ * The first version read four guessed keys: `transactionNo`, `transaction_no`, `transactionId`,
+ * `orderNumber`. That is a guess about someone else's JSON, and the failure mode if the guess is
+ * wrong is the worst one available here — every delivery answers 400, the dashboard shows a
+ * correctly configured webhook, and nobody learns that paid orders are going unfulfilled. Exactly
+ * the silent nothing this route was added to eliminate.
+ *
+ * Paylink's own docs would settle it. They are unreachable from this environment: the egress policy
+ * refuses `developer.paylink.sa` at the CONNECT stage, and the GitHub code search that could read a
+ * community SDK is out of this session's repository scope. So rather than guess harder, the code
+ * stops needing the answer.
+ *
+ * Any key whose name contains "transaction" wins; failing that, one that looks like our own order
+ * number. The search is recursive because a provider that nests the payload under `data` or
+ * `invoice` is ordinary, and a top-level-only reader would find nothing in a body that plainly
+ * contains the value.
+ *
+ * ── and the value is validated, not merely found ──
+ *
+ * A tolerant search must not become a credulous one. Whatever is found is used only as a LOOKUP KEY
+ * against Paylink's own `getInvoice`, so a wrong pick cannot grant anything — it produces a 200
+ * saying nothing was found. The character class keeps obvious rubbish out of a URL path.
  */
+const TXN_SHAPE = /^[A-Za-z0-9_-]{4,64}$/;
+
 function transactionFrom(body: unknown, req: NextRequest): string {
-  const q = req.nextUrl.searchParams.get("transactionNo") || req.nextUrl.searchParams.get("transaction_no");
-  if (q) return q;
-  const b = (body ?? {}) as Record<string, unknown>;
+  /* A query parameter first: it is the form a plain browser request can carry, which makes the
+     dashboard's own Test button and a manual re-check possible. */
   for (const k of ["transactionNo", "transaction_no", "transactionId", "orderNumber"]) {
-    const v = b[k];
-    if (typeof v === "string" && v.trim()) return v.trim();
-    if (typeof v === "number") return String(v);
+    const v = req.nextUrl.searchParams.get(k);
+    if (v && TXN_SHAPE.test(v)) return v;
   }
-  return "";
+
+  /* Then the body, by MEANING rather than by name. `seen` guards against a cyclic payload; the
+     depth cap stops a hostile body making this walk forever. */
+  const seen = new Set<object>();
+  let fallback = "";
+
+  const walk = (node: unknown, depth: number): string => {
+    if (depth > 6 || node === null || typeof node !== "object") return "";
+    if (seen.has(node as object)) return "";
+    seen.add(node as object);
+
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+      const flat = typeof value === "string" ? value.trim()
+        : typeof value === "number" ? String(value) : "";
+      if (flat && TXN_SHAPE.test(flat)) {
+        const name = key.toLowerCase();
+        if (name.includes("transaction")) return flat;
+        /* Our own order numbers are `RA-<plan>-<ts>-<rand>`. Kept as a fallback rather than a match,
+           because a transaction reference is what `getInvoice` wants. */
+        if (!fallback && (name.includes("order") || flat.startsWith("RA-"))) fallback = flat;
+      }
+      if (value && typeof value === "object") {
+        const found = walk(value, depth + 1);
+        if (found) return found;
+      }
+    }
+    return "";
+  };
+
+  return walk(body, 0) || fallback;
+}
+
+/**
+ * The shape of what actually arrived, logged once per delivery.
+ *
+ * Since the docs cannot be read from here, production is where the real payload shape becomes
+ * known — and the first genuine delivery should teach it rather than being consumed silently.
+ *
+ * KEY NAMES ONLY, never values. A payment webhook carries a customer's name, mobile number and
+ * email, and a log line is the wrong place for any of them. The names are enough to confirm the
+ * search above found the right field, or to fix it in one commit if it did not.
+ */
+function shapeOf(body: unknown): string {
+  if (!body || typeof body !== "object") return typeof body;
+  const names: string[] = [];
+  const walk = (node: unknown, prefix: string, depth: number) => {
+    if (depth > 3 || !node || typeof node !== "object") return;
+    for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+      names.push(prefix + k);
+      if (v && typeof v === "object") walk(v, `${prefix}${k}.`, depth + 1);
+    }
+  };
+  walk(body, "", 0);
+  return names.slice(0, 40).join(",");
 }
 
 async function handle(req: NextRequest) {
@@ -123,7 +192,11 @@ async function handle(req: NextRequest) {
 
   const transactionNo = transactionFrom(body, req);
   if (!transactionNo) {
-    return NextResponse.json({ ok: false, error: "no transactionNo" }, { status: 400 });
+    /* The shape is logged here above all: a delivery this route could not read is the one case where
+       the payload's field names are the whole diagnosis, and without them the next attempt is another
+       guess. */
+    console.error("[pay/webhook] no transaction reference found", { shape: shapeOf(body), query: req.nextUrl.search });
+    return NextResponse.json({ ok: false, error: "no transaction reference" }, { status: 400 });
   }
 
   let inv;
@@ -142,7 +215,13 @@ async function handle(req: NextRequest) {
    * expected answer when the buyer's browser got there first, and is the system working. Returning an
    * error for it would have Paylink retrying a completed order for hours.
    */
-  console.log("[pay/webhook]", { transactionNo, orderNumber: inv.orderNumber, paid: inv.paid, plan: inv.plan, outcome: outcome.done ? "fulfilled" : outcome.reason });
+  console.log("[pay/webhook]", {
+    transactionNo, orderNumber: inv.orderNumber, paid: inv.paid, plan: inv.plan,
+    outcome: outcome.done ? "fulfilled" : outcome.reason,
+    /* Names only — see `shapeOf`. This is how the real payload shape gets confirmed from a live
+       delivery, given the documentation is unreachable from the build environment. */
+    shape: shapeOf(body),
+  });
   return NextResponse.json({ ok: true, paid: inv.paid, plan: inv.plan, fulfilled: outcome.done });
 }
 
