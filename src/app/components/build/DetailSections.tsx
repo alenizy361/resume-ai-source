@@ -187,7 +187,7 @@ export function CredentialsBlock({ lang, cv, state, dispatch, referenceDate }: {
         {/* Stated once for the group: every one of these came from the same role pack, so a "why"
             button on each chip would open the same sentence n times. See `sharedWhy`. */}
         <p className="bd-why-note mb-1.5 text-xs">{whySentence(lang, "occupation")}</p>
-        <div className="bd-chips mb-4">
+        <div className="bd-chips t-stagger mb-4">
           {offers.map((o) => (
             <SuggestionChip
               key={o.title.en}
@@ -320,7 +320,7 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
       {suggestions.length > 0 && (
         <>
         <p className="bd-why-note mb-1.5 text-xs">{whySentence(lang, "occupation")}</p>
-        <div className="bd-chips mb-4">
+        <div className="bd-chips t-stagger mb-4">
           {suggestions.map((n) => (
             <SuggestionChip
               key={n}

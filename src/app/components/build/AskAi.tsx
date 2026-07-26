@@ -71,7 +71,7 @@ export default function AskAi({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="mt-4 flex items-center gap-2 rounded-full px-3 text-xs font-semibold"
+        className="t-tap mt-4 flex items-center gap-2 rounded-full px-3 text-xs font-semibold"
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
         <BrandOrb variant="button" size={18} />
@@ -93,7 +93,7 @@ export default function AskAi({
             the back button. */}
         <button
           onClick={ai.busy ? ai.cancel : send} disabled={!ai.busy && !q.trim()}
-          className="rounded-xl px-3 text-xs font-bold disabled:opacity-40"
+          className={`t-tap rounded-xl px-3 text-xs font-bold disabled:opacity-40${ai.busy ? " t-busy" : ""}`}
           style={{ background: ai.busy ? "var(--surface)" : "var(--accent)",
                    color: ai.busy ? "var(--muted)" : "#fff",
                    border: ai.busy ? "1px solid var(--line)" : undefined,

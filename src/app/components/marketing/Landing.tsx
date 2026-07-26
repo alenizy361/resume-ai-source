@@ -197,8 +197,16 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
         </div>
       </nav>
 
-      {/* ── hero ── */}
-      <section className="mx-auto max-w-3xl px-6 pb-4 pt-10">
+      {/*
+        ── hero ──
+
+        `t-hero` staggers these five children — eyebrow, headline, description, the returning-visitor
+        banner, the three doors — 60ms apart. It moves them WITHOUT fading them, and that is not a
+        stylistic choice: this `<h1>` is the page's Largest Contentful Paint element, and LCP does not
+        count an element painted at zero opacity. A fade here would add its delay and duration to the
+        one number that decides where the page ranks. See `t-hero` in transitions.css.
+      */}
+      <section className="t-hero mx-auto max-w-3xl px-6 pb-4 pt-10">
         <div className="chip mb-5">{t.eyebrow}</div>
         <h1 className="text-4xl font-extrabold leading-[1.12] tracking-tight sm:text-5xl">
           {t.h1a}<br />

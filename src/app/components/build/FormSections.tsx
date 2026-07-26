@@ -573,7 +573,7 @@ export function SkillsBody(p: Common) {
         <div key={label} className="mt-3">
           {label && <div className="bd-label">{label}</div>}
           {shared && <p className="bd-why-note mb-1.5 text-xs">{shared}</p>}
-          <div className="bd-chips">
+          <div className="bd-chips t-stagger">
             {items.map((it) => (
               <SuggestionChip
                 key={it.id}

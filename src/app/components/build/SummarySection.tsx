@@ -323,7 +323,7 @@ export default function SummarySection({
 
       <button
         onClick={ai.busy ? ai.cancel : write}
-        className="flex items-center gap-2 rounded-full px-3 text-xs font-bold"
+        className={`t-tap flex items-center gap-2 rounded-full px-3 text-xs font-bold${ai.busy ? " t-busy" : ""}`}
         style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
       >
         <BrandOrb variant="button" size={20} busy={ai.busy} />

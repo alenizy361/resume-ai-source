@@ -60,7 +60,9 @@
     "test:export": "node --experimental-strip-types ops/export.test.mjs",
     "test:lifecycle": "node --experimental-strip-types ops/lifecycle.test.mjs",
     "test:languages": "node --experimental-strip-types ops/languages.test.mjs",
-    "test:envelope": "node --experimental-strip-types ops/envelope.test.mjs"
+    "test:envelope": "node --experimental-strip-types ops/envelope.test.mjs",
+    "test:motion:browser": "node ops/motion.browser.mjs",
+    "test:aifeedback:browser": "node ops/aifeedback.browser.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

@@ -423,6 +423,13 @@ function RoleCard({
         <div className="bd-label">{c.suggested}</div>
         {!ready && <p className="text-xs" style={{ color: "var(--faint)" }}>{c.needBoth}</p>}
 
+        {/*
+          The rows are wrapped rather than staggered where they sit, because `t-stagger` addresses
+          EVERY child of its container — un-wrapped, the section label and the "fill both fields
+          first" line would have been given animation delays as well, and the label would have
+          arrived 60ms after the heading it belongs to.
+        */}
+        <div className="t-stagger">
         {visible.map((it) => (
           <div key={it.id} className="bd-sug">
             <span className="bd-sug-badge">{it.source === "ai" ? c.aiBadge : c.packBadge}</span>
@@ -469,6 +476,7 @@ function RoleCard({
             </div>
           </div>
         ))}
+        </div>
 
         {offered.length > 6 && !showAll && (
           <button onClick={() => setShowAll(true)} className="btn-ghost mt-2 rounded-full px-3 text-xs">
@@ -479,7 +487,8 @@ function RoleCard({
         {ready && (
           <button
             onClick={ai.busy ? ai.cancel : () => suggest(true)}
-            className="mt-3 flex items-center gap-2 rounded-full px-3 text-xs font-bold"
+            className={`t-tap mt-3 flex items-center gap-2 rounded-full px-3 text-xs font-bold${
+              ai.busy ? " t-busy" : ""}`}
             style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
           >
             <BrandOrb variant="button" size={20} busy={ai.busy && ai.task === "duties_draft"} />
@@ -490,7 +499,7 @@ function RoleCard({
           <>
             <button
               onClick={askForAchievement} disabled={ai.busy}
-              className="ms-2 mt-3 rounded-full px-3 text-xs font-bold"
+              className="t-tap ms-2 mt-3 rounded-full px-3 text-xs font-bold"
               style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
             >
               {c.achieve}
@@ -565,7 +574,7 @@ function Pill({ label, onClick, primary, disabled }: {
   return (
     <button
       onClick={onClick} disabled={disabled}
-      className="rounded-full px-2.5 text-[11px] font-semibold disabled:opacity-40"
+      className="t-tap rounded-full px-2.5 text-[11px] font-semibold disabled:opacity-40"
       style={{ minHeight: 32, ...(primary
         ? { background: "var(--accent)", color: "#fff" }
         : { border: "1px solid var(--line)", color: "var(--muted)" }) }}
@@ -579,7 +588,7 @@ function IconBtn({ label, onClick, disabled }: { label: string; onClick: () => v
   return (
     <button
       onClick={onClick} disabled={disabled} aria-label={label}
-      className="rounded-md px-1.5 text-[11px] disabled:opacity-25"
+      className="t-tap rounded-md px-1.5 text-[11px] disabled:opacity-25"
       style={{ minHeight: 28, border: "1px solid var(--line)", color: "var(--muted)" }}
     >
       {label}

@@ -507,12 +507,26 @@
   background: var(--accent);
 }
 .build-root .bd-continue:hover { background: var(--accent-deep); }
-/* The press has to be felt. A button that looks the same before and after a tap is the
-   "everything looks flat and dead" complaint — 120ms and a 1px drop is enough. */
-.build-root .bd-continue:active,
-.build-root .bd-back:active { transform: translateY(1px); }
-.build-root .bd-continue,
-.build-root .bd-back { transition: background .15s var(--ez), color .15s var(--ez), transform .12s var(--ez); }
+/*
+ * ── the press, and the rule that was quietly cancelling it ──
+ *
+ * This used to be `transform: translateY(1px)` here, with a comment saying 1px was enough. It was
+ * not — that is precisely the control the complaint named ("Continue, Save, Generate — you press
+ * them and nothing happens visually"). Worse, it was actively harmful: both buttons also carry
+ * `.t-tap`, whose `:active` is `scale(0.97)`, and `.build-root .bd-continue:active` out-specifies
+ * `.t-tap:active`. So the shared press state was being overwritten by a weaker one, on the two most
+ * pressed buttons in the product, by a rule that read as though it were adding feedback.
+ *
+ * Both rules are gone, including the `transition` — and that one had to go too, for the same reason
+ * in reverse. `.build-root .bd-continue` out-specifies `.t-tap`, so a transition list here that
+ * omitted `transform` would leave the press snapping on and off instead of easing. `.t-tap` already
+ * lists background-color, border-color, color and transform, which is every property either button
+ * changes.
+ *
+ * `.t-tap` now owns the press and its timing for every control that carries it, which is the point
+ * of having a motion layer at all — one definition of what a press looks like, not eleven that each
+ * specificity-fight the others.
+ */
 
 /* ── step framing ─────────────────────────────────────────── */
 

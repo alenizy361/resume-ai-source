@@ -40,6 +40,10 @@ const CSS = readFileSync("app/transitions.css", "utf8");
  */
 const decls = CSS.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
 
+/* A missing file reads as empty rather than throwing, so an assertion about its contents FAILS with
+   its own name instead of taking the whole suite down with a stack trace. */
+const read = (p) => { try { return readFileSync(p, "utf8"); } catch { return ""; } };
+
 /* ─────────── 1. only composited properties are animated ─────────── */
 
 console.log("\n── nothing animated here can trigger layout ──");
@@ -155,7 +159,6 @@ console.log("\n── prefers-reduced-motion removes decoration, never informati
 console.log("\n── every effect is used, and used where something happens ──");
 
 {
-  const read = (p) => { try { return readFileSync(p, "utf8"); } catch { return ""; } };
   const chip = read("app/components/build/SuggestionChip.tsx");
   const bar = read("app/components/build/StepBar.tsx");
   const shell = read("app/components/build/BuilderShell.tsx");
@@ -203,15 +206,126 @@ console.log("\n── every effect is used, and used where something happens ─
   /* The sheet had no entrance at all. */
   ok("the steps sheet enters", /t-sheet/.test(bar) && /t-scrim/.test(bar));
 
-  /* Nothing here should be defined and unused — an effect with no gesture is maintenance with no
-     payoff, which is the reason this is 8 effects and not the reference's 18. */
+  /*
+   * Nothing here should be defined and unused — an effect with no gesture is maintenance with no
+   * payoff, which is the reason this is a dozen effects and not the reference's 18.
+   *
+   * ── the scan reads the whole app, and it did not always ──
+   *
+   * This used to list `app/components/build` only, which was true while every effect was a builder
+   * effect. It stopped being true the moment motion reached the landing page and the catalogue, and
+   * a scan with the wrong root does not report that an effect is unused — it reports that a USED
+   * effect is unused, which is a failing test with nothing wrong behind it. Worse in the other
+   * direction: had the sweep been narrowed again later, a genuinely dead effect in the builder would
+   * still have been caught, so the fault would have looked like a flake rather than a hole.
+   *
+   * So it walks `app` entirely. Slower by a few milliseconds, and it cannot go stale when a
+   * component moves.
+   */
   const classes = [...new Set([...decls.matchAll(/^\.(t-[a-z-]+)/gm)].map((m) => m[1]))];
-  const all = readdirSync("app/components/build")
-    .filter((f) => f.endsWith(".tsx"))
-    .map((f) => read(join("app/components/build", f))).join("\n")
-    + read("app/components/build/FormSections.tsx");
+  const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) return walk(p);
+    return e.isFile() && /\.(tsx|ts|css)$/.test(e.name) && p !== "app/transitions.css" ? [p] : [];
+  });
+  const scanned = walk("app");
+  /* A scan that found nothing would pass this assertion vacuously — the same failure mode that
+     `ops/draftstore.test.mjs` shipped with earlier this session. */
+  ok("the usage scan actually read the app", scanned.length > 50, `${scanned.length} files`);
+  const all = scanned.map(read).join("\n");
   const unused = classes.filter((c) => !all.includes(c));
   ok("no effect is defined and never used", unused.length === 0, unused.join(", "));
+}
+
+/* ─────────── 6. the four traps in the scroll-driven and press work ─────────── */
+
+console.log("\n── the entrance cannot switch off the press, and cannot cost the metric ──");
+
+{
+  const BUILD = read("app/build.css");
+  const GLOBALS = read("app/globals.css");
+
+  /*
+   * ── trap 1: a filling animation outranks a normal declaration ──
+   *
+   * `.card` gets a scroll-driven entrance and, one section later, a hover lift and an `:active`
+   * press. Written as `transform: translateY(20px) → none` with `animation-fill-mode: both`, the
+   * entrance holds `transform: none` for the rest of the page's life and BEATS both gestures in the
+   * cascade — so the same commit that added the press feedback would have removed it, on every card
+   * in the product, invisibly.
+   *
+   * `translate` is an independent transform property: it composes with `transform` instead of
+   * replacing it. This asserts the entrance keyframes never touch `transform`.
+   */
+  const entrance = [...decls.matchAll(/@keyframes\s+(t-enter-in|t-enter-scroll|t-hero-in)[^{]*\{([\s\S]*?)\n\}/g)];
+  ok("all three entrance keyframes exist", entrance.length === 3, `${entrance.length} found`);
+  const usesTransform = entrance.filter(([, name, body]) => /transform\s*:/.test(body)).map(([, n]) => n);
+  ok("the entrance moves with `translate`, so it cannot cancel a press",
+    usesTransform.length === 0, usesTransform.join(", "));
+
+  /*
+   * ── trap 2: LCP does not count an element painted at zero opacity ──
+   *
+   * The landing page's `<h1>` is its Largest Contentful Paint element and it sits inside `t-hero`.
+   * A fade there moves this page's LCP later by the delay plus the duration — on the page the whole
+   * no-advertising strategy depends on. The hero therefore rises WITHOUT fading.
+   */
+  const hero = entrance.find(([, n]) => n === "t-hero-in")?.[2] ?? "";
+  ok("the hero entrance does not animate opacity", hero !== "" && !/opacity\s*:/.test(hero));
+
+  /*
+   * ── trap 3: content that needs an animation to exist ──
+   *
+   * The obvious way to write a scroll reveal is `opacity: 0` in the base rule. On a browser without
+   * scroll-driven animations that leaves the page permanently BLANK, with no error. So the hidden
+   * start must exist ONLY inside `@supports`, and the base state must be the finished one.
+   */
+  const gateAt = decls.indexOf("@supports (animation-timeline: view())");
+  ok("the scroll entrance is behind an @supports gate", gateAt !== -1);
+  /* Matching the closing braces is what a first attempt did, and it is brittle to indentation. What
+     actually matters is that no `animation-timeline` is declared BEFORE the gate opens — a second one
+     added above it would be exactly the unguarded case this protects against. */
+  const timelines = [...decls.matchAll(/animation-timeline\s*:/g)].map((m) => m.index);
+  ok("and no timeline is declared outside it",
+    gateAt !== -1 && timelines.every((i) => i > gateAt), `${timelines.length} declarations`);
+  ok("and nothing outside it hides a card",
+    !/^\s*\.card\s*\{[^}]*opacity:\s*0/m.test(decls));
+
+  /*
+   * ── trap 3b: a range the document may not be long enough to complete ──
+   *
+   * `entry` runs from "the element's top touches the bottom of the scrollport" to "the element is
+   * fully inside it" — min(element height, viewport height), not element PLUS viewport. Asking for a
+   * fixed 240px of it left the last card on /pricing stuck at 73% opacity forever, because the page
+   * had already run out of scroll. `entry 100%` is the one end point always reachable: an element on
+   * screen has been scrolled to by definition. The motion finishes early via a keyframe plateau
+   * instead, which is checked here so the pixel version cannot come back.
+   */
+  const range = decls.match(/animation-range:\s*([^;]+);/)?.[1]?.trim() ?? "";
+  ok("the scroll range ends somewhere the document can always reach",
+    range === "entry 0% entry 100%", range || "no animation-range");
+  const scrollKf = entrance.find(([, n]) => n === "t-enter-scroll")?.[2] ?? "";
+  ok("and the motion is finished before the range is", /^\s*55%/m.test(scrollKf));
+
+  /*
+   * ── trap 4: a stronger selector elsewhere silently replacing the shared press ──
+   *
+   * `.build-root .bd-continue:active` out-specifies `.t-tap:active`, so a `transform` written there
+   * does not ADD to the shared press state, it replaces it — which is exactly what had happened on
+   * the two most pressed buttons in the product, under a comment claiming to add feedback.
+   */
+  ok("build.css does not out-specify the shared press",
+    !/\.build-root[^{]*:active[^{]*\{[^}]*transform/.test(BUILD.replace(/\/\*[\s\S]*?\*\//g, "")));
+
+  /* And the ghost's counterpart: `.btn-ghost` needs `transform` in ITS transition, because this file
+     is @import-ed at the top of globals.css and loses every same-specificity tie to it. */
+  const ghost = GLOBALS.replace(/\/\*[\s\S]*?\*\//g, "").match(/\.btn-ghost\s*\{([^}]*)\}/)?.[1] ?? "";
+  ok("the ghost button can ease its press", /transition:[^;]*transform/.test(ghost));
+
+  /* The two infinite animations are the only thing saying a request is still open, so the guard must
+     replace them rather than merely stopping them — a stopped ring mid-fade is invisible. */
+  const guard = decls.slice(decls.indexOf("prefers-reduced-motion: reduce"));
+  ok("the busy ring survives reduced motion as a static ring", /\.t-busy::after\s*\{[^}]*opacity/.test(guard));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

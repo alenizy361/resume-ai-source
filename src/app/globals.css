@@ -260,7 +260,10 @@ body {
 .btn-ghost {
   border: 1px solid var(--line);
   border-radius: 12px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  /* `transform` is in this list for the press state defined in `transitions.css` §11. Without it the
+     squeeze snaps on and off instead of easing — and it has to be added HERE, because that file is
+     `@import`ed at the top of this one and loses every same-specificity tie to it. */
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.12s ease;
   display: inline-block;
 }
 .btn-ghost:hover {

@@ -29,7 +29,7 @@
    was right and it left the product plain. This puts motion back at the places a person is actually
    doing something, and nowhere else.
 
-   ── why 9 effects and not the reference's 18 ──
+   ── why 12 effects and not the reference's 18 ──
 
    An effect with no gesture behind it is decoration that still has to be maintained. Each one here
    is named for the moment it serves, and if a moment is not in this product the effect is not here.
@@ -234,6 +234,352 @@
   .t-lift:hover { transform: translateY(-2px); }
 }
 
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   9. t-enter — content arriving as you scroll to it, with no JavaScript at all
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * ── the one technique that makes this affordable ──
+ *
+ * "Reveal on scroll" normally means an `IntersectionObserver`: a JS callback per element, firing
+ * during the exact window INP measures, on 357 catalogue pages whose entire purpose is search
+ * traffic. That is the trade this file exists to refuse.
+ *
+ * `animation-timeline: view()` is the same effect with none of it. The browser drives the animation
+ * from the element's own position in the scrollport, on the compositor, with no main-thread work and
+ * no observer. It is the reason the product can look alive and still be cheap.
+ *
+ * ── the degradation, which had to be got right first ──
+ *
+ * The obvious way to write this is `opacity: 0` in the base rule and let the animation bring it back.
+ * On a browser without scroll-driven animations that leaves the page BLANK — every card invisible,
+ * permanently, with no error. Content that depends on an animation to exist is not a progressive
+ * enhancement, it is a bug waiting for the wrong browser.
+ *
+ * So the base state is the FINISHED state. The hidden start exists only inside `@supports`, and only
+ * when motion is welcome. Unsupported, or reduced-motion: the content is simply there.
+ *
+ * ── the stagger is free ──
+ *
+ * Each element gets its own `view()` timeline, driven by its own position. A grid of cards therefore
+ * arrives in reading order because that is the order they cross the viewport — no `nth-child` delays,
+ * no counting, and it stays correct when the grid reflows to one column on a phone.
+ *
+ * ── why every `.card` and not an opt-in class ──
+ *
+ * Same argument as section 10: a class that must be remembered at 120 call sites is a class that is
+ * present at some of them. Cards are the product's unit of content — the three doors on the landing
+ * page, the responsibilities on every catalogue page, the plans, the templates — so "content arrives
+ * as you reach it" and "cards arrive as you reach them" are the same sentence here.
+ *
+ * A card already on screen at load is at the END of its own range, not the start, so nothing above
+ * the fold fades in on arrival and there is no first-paint flash.
+ */
+
+/*
+ * ── `translate`, not `transform`, and this is a correctness fix rather than a style ──
+ *
+ * A filling animation BEATS a normal declaration in the cascade. An entrance written as
+ * `transform: translateY(20px) → none` with `both` therefore holds `transform: none` for the rest of
+ * the page's life — so every hover lift and every `:active` press on the same element silently stops
+ * working. Applying this to all cards would have removed the press feedback that section 11 exists
+ * to add, on the same elements, in the same commit.
+ *
+ * `translate` is an independent transform property: it composes WITH `transform` instead of
+ * replacing it. The entrance owns `translate`, the gestures own `transform`, and neither can
+ * overwrite the other.
+ */
+@keyframes t-enter-in {
+  from { opacity: 0; translate: 0 20px; }
+  to   { opacity: 1; translate: none; }
+}
+
+/*
+ * The scroll-driven entrance has its own keyframes, and the plateau is the whole point.
+ *
+ * ── what a fixed pixel range did, measured ──
+ *
+ * This was `animation-range: entry 0% entry 240px` — a fixed reveal distance, chosen so a 60px chip
+ * and a 900px panel would behave alike. A browser sweep across nine pages found the flaw: the LAST
+ * card on `/pricing` and on `/ar/pricing` was stuck at 73% opacity, permanently, with the page
+ * scrolled all the way down.
+ *
+ * The reason is that `entry` is not as long as I assumed. It runs from "the element's top edge
+ * touches the bottom of the scrollport" to "the element is fully inside it" — a length of
+ * min(element height, viewport height), NOT element + viewport. For a 110px card that is 110px of
+ * scroll. Asking for 240px of it means the range extends past the document's own end, so a card
+ * near the bottom of a short page can never reach 100% — there is no more page to scroll.
+ *
+ * ── why the plateau, rather than simply a shorter range ──
+ *
+ * `entry 100%` is the one end point that is always reachable: it is the moment the element is fully
+ * on screen, and an element that is on screen has been scrolled to by definition. So the RANGE ends
+ * there, and the visible motion is finished early inside it by the keyframes — settled at 55%, held
+ * for the rest.
+ *
+ * That also fixes what the fixed distance was invented to fix. On a card taller than the viewport
+ * the range is capped at the viewport height rather than growing with the element, so the reveal
+ * cannot stretch across two screenfuls of reading.
+ */
+@keyframes t-enter-scroll {
+  0%   { opacity: 0; translate: 0 20px; }
+  55%  { opacity: 1; translate: none; }
+  100% { opacity: 1; translate: none; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .t-enter,
+    .card {
+      animation: t-enter-scroll linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   10. cards — which of them move is decided by what they ARE, not by a class
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * ── the problem with `.card-hover` ──
+ *
+ * It was opt-in and hover-only. Opt-in meant most of the 120-odd cards in this product never got
+ * it, because remembering a second class at every call site is a thing nobody does; hover-only
+ * meant that even the ones that did were completely inert on a phone, which is where this is read.
+ *
+ * ── and why this is a selector and not a prop ──
+ *
+ * The honest rule is: a card that can be pressed should move, and a card that is a box of text
+ * should not. That distinction already exists in the markup and needs no new class — an offer is
+ * an `<a>`, a chooser is a `<button>`, a picker is a `<label>`, and a paragraph in a box is a
+ * `<div>`. So the element type decides, every existing call site is covered without being edited,
+ * and a future card is right by default.
+ *
+ * The reverse — lifting every `.card` — is what makes an interface feel like it is lying: a FAQ
+ * answer that rises under the pointer is promising a click that does not exist.
+ */
+a.card,
+button.card,
+label.card,
+.card[role="button"] {
+  /* Not cosmetic, and not for the mouse — see `.t-tap` for why iOS needs it to render `:active`. */
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  a.card:hover,
+  button.card:hover,
+  label.card:hover,
+  .card[role="button"]:hover {
+    transform: translateY(-3px);
+    border-color: rgba(139, 92, 246, 0.42);
+    box-shadow: 0 24px 60px -30px rgba(139, 92, 246, 0.45);
+  }
+}
+
+/* The half a phone could never reach. `scale` rather than a drop, because a card is a large target
+   and 3px of travel on something 300px wide is not visible; a 1% squeeze is. */
+a.card:active,
+button.card:active,
+label.card:active,
+.card[role="button"]:active {
+  transform: translateY(-1px) scale(0.988);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   11. the press — the complaint this whole file exists to answer
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Reported as the single most irritating thing about the product: "Continue, Save, Generate — you
+ * press them and nothing happens visually. The user has to FEEL that they pressed."
+ *
+ * `.t-tap` was the answer and it was applied where it was remembered, which was the builder. The
+ * two shared button classes — used on the landing page, the pricing page, all 357 catalogue pages,
+ * the login, the upload — had a hover lift and no press state at all. On a phone that means they
+ * had no state at all, since there is no hover on a touch screen.
+ *
+ * ── the two details that make this work rather than merely exist ──
+ *
+ * `:not(:disabled)` is not decoration. A pointer press on a desktop is ALSO a hover, and this file
+ * is `@import`ed at the top of `globals.css`, so at equal specificity the hover rule defined later
+ * wins and the press is never seen. The extra pseudo-class outranks it — and it is the correct
+ * thing to say anyway, because a disabled button that squeezes under the finger is claiming to have
+ * accepted something it has refused.
+ *
+ * The transform is a scale and not a drop, for the same reason as the cards: `translateY` on a wide
+ * button reads as a wobble, whereas a squeeze reads as pressure.
+ */
+/*
+ * The `transition` lists for these two live with the components in `globals.css`, not here, and that
+ * is deliberate rather than an oversight: this file is `@import`ed at the TOP of `globals.css`, so a
+ * `transition` written here at the same specificity is simply overwritten by the component's own,
+ * further down. It would have looked like the fix and done nothing.
+ *
+ * `.btn-ghost` was in fact missing `transform` from its list, so its press would have snapped on and
+ * off. That was corrected where its transition actually is.
+ */
+.btn-accent:not(:disabled):active,
+.btn-ghost:not(:disabled):active {
+  transform: scale(0.97);
+  /* The lift comes off at the same moment, so the button visibly goes DOWN rather than shrinking
+     while still floating. Without this the hover shadow keeps it hovering under the finger. */
+  box-shadow: 0 4px 12px -6px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+/* Disabled means disabled: no lift, no press, and a pointer that says so. */
+.btn-accent:disabled,
+.btn-ghost:disabled { cursor: not-allowed; transform: none; }
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   12. t-stagger — a list that arrives in order rather than all at once
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * For the moment a set of AI suggestions comes back. Ten chips appearing in one frame is a flash
+ * the eye reads as a redraw; the same ten arriving 60ms apart is the system handing them over, and
+ * it is the difference between "the screen changed" and "it answered me".
+ *
+ * ── why `nth-child` and not an inline `--i` ──
+ *
+ * An index passed from React would be one inline `style` object per chip, allocated on every render
+ * of a list that re-renders on every keystroke in the field above it. `nth-child` costs nothing at
+ * runtime and cannot get out of step with the DOM. Ten is the cap because ten is the most any
+ * section here offers; anything beyond it shares the last delay rather than arriving a second later,
+ * which is the failure mode of an uncapped stagger.
+ *
+ * ── and why an animation rather than `@starting-style` ──
+ *
+ * `@starting-style` cannot be delayed per child: it describes the value at first render, not a
+ * timeline. A keyframe with `both` holds the FROM state through the delay, which is exactly what a
+ * stagger needs — a chip that has not arrived yet must be invisible rather than half-drawn.
+ */
+.t-stagger > * {
+  animation: t-enter-in var(--t-slow) var(--t-out) both;
+}
+.t-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.t-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.t-stagger > *:nth-child(3) { animation-delay: 120ms; }
+.t-stagger > *:nth-child(4) { animation-delay: 180ms; }
+.t-stagger > *:nth-child(5) { animation-delay: 240ms; }
+.t-stagger > *:nth-child(6) { animation-delay: 300ms; }
+.t-stagger > *:nth-child(7) { animation-delay: 360ms; }
+.t-stagger > *:nth-child(8) { animation-delay: 420ms; }
+.t-stagger > *:nth-child(9) { animation-delay: 480ms; }
+.t-stagger > *:nth-child(n + 10) { animation-delay: 540ms; }
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   13. t-work — the system is thinking, and says so without a spinner
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * The other half of the same complaint: "there is no sense that the AI is working". A request took
+ * three to eight seconds and the only sign was one line of grey text, so the button looked broken
+ * and got pressed again — which cancels the first call, because `useAiTask` is single-flight, and
+ * makes the wait longer.
+ *
+ * ── the ring, on the control that is working ──
+ *
+ * A pulse that leaves the button and fades, so the eye is drawn to the thing it pressed rather than
+ * to a spinner somewhere else. `transform` and `opacity` on a pseudo-element — nothing reflows, and
+ * it sits under the label because it is `border` on a box behind the text, not a shadow on the text.
+ *
+ * `position: relative` is set here rather than assumed: the buttons this lands on are styled by
+ * three different files and only one of them happened to be positioned.
+ */
+.t-busy { position: relative; }
+.t-busy::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(139, 92, 246, 0.55);
+  /* The ring is decoration over a live control; it must never take the tap. */
+  pointer-events: none;
+  animation: t-busy-ring 1.5s var(--t-ease) infinite;
+}
+
+@keyframes t-busy-ring {
+  0%   { transform: scale(1);    opacity: 0.75; }
+  70%  { transform: scale(1.09); opacity: 0; }
+  100% { transform: scale(1.09); opacity: 0; }
+}
+
+/*
+ * ── and the shape of the answer, before the answer ──
+ *
+ * Placeholder rows the width of the chips that are coming, with a light sweeping across them. It
+ * says two things a spinner cannot: that something is expected HERE, and roughly how much of it.
+ * The page therefore does not jump when the real chips land in the same place.
+ *
+ * The sweep is a `translateX` of a gradient inside an `overflow: hidden` box — a composited
+ * transform, not an animated `background-position`, which repaints the whole box every frame.
+ */
+.t-ghost {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.t-ghost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(196, 181, 253, 0.18) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: t-ghost-sweep 1.25s linear infinite;
+}
+
+/* `100%` of the element's own width, so a short chip sweeps quickly and a long one slowly — which is
+   what makes a row of them look like one light passing over, rather than several. */
+@keyframes t-ghost-sweep {
+  to { transform: translateX(100%); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   14. t-hero — the page arriving, at zero cost to the metric that pays for it
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * The eyebrow, then the headline, then the description, then the three doors — the sequence the
+ * brief asks for, and the one place in the product where the first impression is the whole job.
+ *
+ * ── why this one does NOT fade ──
+ *
+ * `t-stagger` would have been the obvious reuse and it is the wrong tool here, for a reason that is
+ * specific to this element and easy to miss.
+ *
+ * Largest Contentful Paint does not count an element that is painted at `opacity: 0`. The landing
+ * page's `<h1>` IS the LCP element. So a staggered fade would have moved this page's LCP later by
+ * the delay plus the duration — roughly a third of a second added to the exact number that decides
+ * where the page ranks, on the page the entire no-advertising strategy depends on. An animation that
+ * costs traffic is not a nice entrance; it is the thing this file was written to refuse.
+ *
+ * A rise WITHOUT a fade has none of that. The text is painted at full opacity on the first frame, so
+ * LCP is recorded at the same instant it would have been with no animation at all, and `translate`
+ * is composited so nothing reflows and CLS is untouched. The sequence still reads as a sequence —
+ * what the eye follows here is the movement, not the opacity.
+ *
+ * 12px and 60ms apart: enough to be a sequence, short enough that a returning visitor is not made to
+ * watch it.
+ */
+.t-hero > * {
+  animation: t-hero-in var(--t-slow) var(--t-out) both;
+}
+.t-hero > *:nth-child(1) { animation-delay: 0ms; }
+.t-hero > *:nth-child(2) { animation-delay: 60ms; }
+.t-hero > *:nth-child(3) { animation-delay: 120ms; }
+.t-hero > *:nth-child(4) { animation-delay: 180ms; }
+.t-hero > *:nth-child(n + 5) { animation-delay: 240ms; }
+
+@keyframes t-hero-in {
+  from { translate: 0 12px; }
+  to   { translate: none; }
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════════════
    THE GUARD
    ══════════════════════════════════════════════════════════════════════════════════════
@@ -245,16 +591,35 @@
    Nothing here carries meaning that only the motion conveys — the chip still turns violet, the tick
    still appears, the sheet is still there — so removing all of it removes decoration and no
    information.
+
+   The two INFINITE animations are the exception that proves it: `t-busy` and `t-ghost` are the only
+   thing on screen saying a request is still open, so switching them off would remove information.
+   They are replaced by a static version of themselves — a steady ring and a steady grey row — which
+   still answers "is it working" without anything moving.
    ══════════════════════════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
   .t-tap, .t-land, .t-pop, .t-reveal, .t-scrim, .t-sheet,
-  .t-shake, .t-swap, .t-lift {
+  .t-shake, .t-swap, .t-lift, .t-enter, .card, .t-stagger > *, .t-hero > *,
+  .btn-accent, .btn-ghost, .t-busy::after, .t-ghost::after {
     animation: none !important;
     transition: none !important;
   }
   .t-tap:active, .t-lift:hover { transform: none; }
-  /* `@starting-style` sets the pre-transition value; with the transition gone the element would be
-     stuck at it, so the settled values are restated. */
-  .t-reveal, .t-sheet, .t-scrim, .t-land { opacity: 1; transform: none; }
+  a.card:hover, button.card:hover, label.card:hover, .card[role="button"]:hover,
+  a.card:active, button.card:active, label.card:active, .card[role="button"]:active,
+  .btn-accent:not(:disabled):active, .btn-ghost:not(:disabled):active { transform: none; }
+  /* `@starting-style` sets the pre-transition value, and a `both` keyframe holds its FROM state;
+     with the animation gone either would strand the element at the invisible end. So every settled
+     value is restated. */
+  .t-reveal, .t-sheet, .t-scrim, .t-land, .t-enter, .card, .t-stagger > *, .t-hero > * {
+    opacity: 1;
+    transform: none;
+    /* The entrance rises with `translate`, not `transform` — see `t-enter-in`. Restating only
+       `transform` here would leave every card 20px low and look like a layout bug. */
+    translate: none;
+  }
+  /* The ring stops travelling and simply stays on. */
+  .t-busy::after { opacity: 0.6; transform: none; }
+  .t-ghost::after { display: none; }
 }

@@ -156,10 +156,14 @@ export default function EnglishVersion() {
         <button
           onClick={() => void run()}
           disabled={phase === "working" || fresh}
-          className="btn-accent rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-45"
+          className={`btn-accent t-tap rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-45${
+            phase === "working" ? " t-busy" : ""}`}
         >
           <span className="inline-flex items-center gap-2">
-            <BrandOrb variant="button" size={16} />
+            {/* The ring and the faster pulse are the only things on screen that keep saying "still
+                working" while a translation runs. The button is disabled during it, which without
+                them reads as broken rather than busy. */}
+            <BrandOrb variant="button" size={16} busy={phase === "working"} />
             {phase === "working" ? c.working : stored ? c.remake : c.make}
           </span>
         </button>

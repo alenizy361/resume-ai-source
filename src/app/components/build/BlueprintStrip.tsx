@@ -246,10 +246,11 @@ export default function BlueprintStrip({
       <button
         onClick={busy ? gen.cancel : () => void ask()}
         disabled={noTitle}
-        className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+        className={`t-tap flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold disabled:opacity-40${
+          busy ? " t-busy" : ""}`}
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
-        <BrandOrb variant="button" size={16} />
+        <BrandOrb variant="button" size={16} busy={busy} />
         {label}
       </button>
 
@@ -262,7 +263,18 @@ export default function BlueprintStrip({
 
       {noTitle && <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{c.needTitle}</p>}
 
-      {busy && <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{c.thinking}</p>}
+      {busy && (
+        <>
+          <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{c.thinking}</p>
+          {/* Chip-shaped placeholders in the place the chips will land, so the block does not grow
+              under the reader's thumb when the answer arrives. See `.t-ghost`. */}
+          <div className="bd-chips mt-3" aria-hidden>
+            {[104, 78, 140, 96, 120, 84].map((w, i) => (
+              <span key={i} className="t-ghost" style={{ width: w, height: 36 }} />
+            ))}
+          </div>
+        </>
+      )}
 
       {/* A refusal is amber, not red: a budget ceiling is not a fault, and colouring it like one
           teaches the user to distrust real errors. */}
@@ -281,7 +293,7 @@ export default function BlueprintStrip({
               than as a button on each of twenty-five of them. `showWhy={false}` for the same
               reason — see `sharedWhy` in `lib/provenance.ts`. */}
           <p className="bd-why-note mt-3 text-xs">{whySentence(lang, "ai")}</p>
-          <div className="bd-chips mt-2">
+          <div className="bd-chips t-stagger mt-2">
             {visible.map((item) => (
               <SuggestionChip
                 key={item.text}

@@ -17,6 +17,24 @@
  * The empty state is not decoration. A model that returns nothing usable for an unusual job
  * title is the normal case, not a failure, and saying "nothing to add here" is what stops a
  * user waiting for a second attempt that will also return nothing.
+ *
+ * ── the waiting state, which was one line of grey text ──
+ *
+ * Reported as the worst thing in the product: "there is no sense that the AI is working". The
+ * request takes three to eight seconds and the only sign was the word "Writing…". So the button
+ * looked broken and got pressed again — and `useAiTask` is single-flight, so the second press
+ * CANCELS the first and the wait starts over. The absent feedback was not merely cosmetic; it was
+ * making the thing it failed to describe take longer.
+ *
+ * Three signals now, and each says something the others cannot:
+ *
+ *   the orb pulses faster   — the control you pressed is the thing that is busy
+ *   a ring leaves the button — it is still busy NOW, this second, not merely once
+ *   ghost chips hold the space — an answer is expected HERE, and roughly this much of it
+ *
+ * The ghosts are the one that stops the layout jumping: the real chips land in the space the
+ * ghosts were already occupying, so the page does not grow under the reader's thumb when the
+ * reply arrives.
  */
 
 import { type TaskName, type TaskInput } from "@/app/lib/aiTasks";
@@ -49,10 +67,12 @@ export default function AiStrip({
     <div className="mt-3">
       <button
         onClick={ai.busy ? ai.cancel : () => void ai.run(task, input)}
-        className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
+        className={`t-tap flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold${ai.busy ? " t-busy" : ""}`}
         style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
       >
-        <BrandOrb variant="button" size={16} />
+        {/* The orb was already built to say this — `is-busy` speeds its pulse and lifts its glow —
+            and the one call site that most needed it was not passing the prop. */}
+        <BrandOrb variant="button" size={16} busy={ai.busy} />
         {ai.busy ? c.stop : items.length ? c.again : c.ask}
       </button>
 
@@ -67,9 +87,25 @@ export default function AiStrip({
         </p>
       )}
 
+      {/*
+        The shape of the answer, before the answer. Five, because five is about what these tasks
+        return and the point is to reserve roughly the right amount of room, not to promise an
+        exact count. `aria-hidden` — the status line above already says "Writing…", and a screen
+        reader announcing five empty boxes is noise, not information.
+      */}
+      {ai.busy && (
+        <div className="bd-chips mt-3" aria-hidden>
+          {[92, 128, 74, 150, 106].map((w, i) => (
+            <span key={i} className="t-ghost" style={{ width: w, height: 36 }} />
+          ))}
+        </div>
+      )}
+
       {items.length > 0 && (
         <>
-          <div className="bd-chips mt-3">
+          {/* `t-stagger` is on the container, so the chips arrive in reading order about 60ms
+              apart — the difference between the screen changing and the system answering. */}
+          <div className="bd-chips t-stagger mt-3">
             {items.map((text) => (
               <button key={text} className="bd-chip t-tap" onClick={() => onPick(text)}>+ {text}</button>
             ))}
