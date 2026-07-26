@@ -29,6 +29,8 @@
  * contexts hash differently depending on property insertion order, and every cache misses.
  */
 
+import { countryCode } from "./countryRules.ts";
+
 /* ─────────────────────────── versions ─────────────────────────── */
 
 /**
@@ -102,16 +104,67 @@ export interface CareerContext {
   cvLang: "ar" | "en";
 }
 
-/** Lower-cased and trimmed, so "Radiology Technologist " and "radiology technologist" share. */
+/**
+ * The context, reduced to what actually distinguishes two answers.
+ *
+ * ── the money this saves ──
+ *
+ * Lower-casing and trimming was not enough, and the gap cost real money that nothing reported.
+ * `country` arrives as free text — the field is a text input — so "Saudi Arabia", "السعودية" and
+ * "KSA" hashed to THREE different keys for content that is identical. Measured before the fix: six
+ * spellings of one country produced four cache entries, and each extra entry is a full-price
+ * generation of something the cache already held.
+ *
+ * `seniority` had the same fault across languages: an Arabic interface sends "متوسط" where an
+ * English one sends "Mid", and both can be building an English CV, so `cvLang` does not separate
+ * them either.
+ *
+ * So the key hashes the MEANING rather than the spelling: the country through `countryCode`, which
+ * already folds Arabic orthography and matches substrings because `countryRules.ts` needed exactly
+ * this, and the seniority through the closed set the form itself offers.
+ *
+ * ── why collapsing keys is safe ──
+ *
+ * Merging two keys is only wrong if the two contexts should produce different answers. They cannot:
+ * the prompt is built from this same normalized context, so two requests that normalize together
+ * were always going to receive the same generation. This makes the cache find what it already had.
+ *
+ * Changing the key retires existing entries — one regeneration per live pack, which is what
+ * `PROMPT_VERSION` being in the key is for.
+ */
 export function normalizeContext(c: Partial<CareerContext>): CareerContext {
   const s = (v: string | undefined) => (v ?? "").trim().toLowerCase();
+  /*
+   * `countryCode` answers "" for a country it has no rules for. Falling back to the trimmed text is
+   * deliberate: an unplaceable country keeps a stable key of its own rather than being collapsed
+   * with every other unplaceable one, which would serve Egypt's pack to someone in Jordan.
+   */
+  const country = countryCode(c.country ?? "") || s(c.country);
   return {
     occupation: s(c.occupation),
     specialization: s(c.specialization),
-    seniority: s(c.seniority),
-    country: s(c.country),
+    seniority: canonicalSeniority(c.seniority),
+    country,
     cvLang: c.cvLang === "ar" ? "ar" : "en",
   };
+}
+
+/**
+ * The four levels the form offers, in either language, mapped to one token each.
+ *
+ * `FormSections` renders exactly ["Entry","Mid","Senior","Lead"] and
+ * ["مبتدئ","متوسط","أول/خبير","قيادي"], so this is a closed set rather than a guess at free text.
+ * Anything outside it passes through lower-cased — an imported CV's odd value stays stable instead
+ * of being silently filed under "mid".
+ */
+function canonicalSeniority(v: string | undefined): string {
+  const t = (v ?? "").trim().toLowerCase();
+  if (!t) return "";
+  if (/^(entry|junior)/.test(t) || t.startsWith("مبتدئ")) return "entry";
+  if (/^mid/.test(t) || t.startsWith("متوسط")) return "mid";
+  if (/^senior/.test(t) || t.startsWith("أول") || t.startsWith("اول") || t.includes("خبير")) return "senior";
+  if (/^(lead|principal|head)/.test(t) || t.startsWith("قيادي")) return "lead";
+  return t;
 }
 
 export function contextHash(c: Partial<CareerContext>): string {

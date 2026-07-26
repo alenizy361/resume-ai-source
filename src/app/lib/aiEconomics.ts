@@ -57,9 +57,28 @@ export const CACHE_FLOORS: Record<string, number> = {
   "claude-opus-5": 512,
 };
 
-/** Anthropic's multipliers: a write costs 1.25× input, a read 0.1×. */
-export const CACHE_WRITE_MULTIPLIER = 1.25;
+/**
+ * Anthropic's multipliers. A read is 0.1× at either TTL; the write is what differs.
+ *
+ * The 1-hour TTL is generally available, and it changes the arithmetic for a low-traffic product
+ * more than anything else in this file. With a five-minute window, four calls an hour means four
+ * writes and no reads — which is why padding the prefix looked like a 57% regression. With an hour,
+ * the first call writes and the rest read. The write costs 2× instead of 1.25×, so it pays off after
+ * two reads instead of one, and two reads inside an hour is an easy bar.
+ *
+ * Quoting a break-even without naming the window is how a cost decision gets made on the wrong half
+ * of the data — which is what happened here first time round.
+ */
 export const CACHE_READ_MULTIPLIER = 0.1;
+export const CACHE_WRITE_MULTIPLIER = 1.25;    // 5-minute TTL
+export const CACHE_WRITE_MULTIPLIER_1H = 2.0;  // 1-hour TTL, generally available
+
+/**
+ * The Batch API is half price and stacks with caching. Asynchronous, so no form field can use it —
+ * its value here is pre-generating the SHARED occupation packs, which are already cross-user and
+ * already cached in Redis without a TTL.
+ */
+export const BATCH_DISCOUNT = 0.5;
 
 export type CacheMode = "none" | "write" | "read";
 

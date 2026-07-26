@@ -13,6 +13,7 @@ import {
   CACHE_FLOORS, MEASURED_FINAL_CONTENT, MEASURED_FINAL_CONTENT_USD, PRICES,
   breakEvenReadFraction, cacheVerdict, callCost, callsPerHourFor, prefixCaches,
 } from "../app/lib/aiEconomics.ts";
+import { packKey } from "../app/lib/aiCache.ts";
 
 let pass = 0, fail = 0;
 const ok = (n, c, d = "") => {
@@ -129,6 +130,54 @@ ok("an unpriced model throws rather than guessing", (() => {
   try { callCost({ ...MEASURED_FINAL_CONTENT, model: "claude-imaginary-9" }, "none"); return false; }
   catch { return true; }
 })());
+
+/* ─────────────────── 7. the cache key hashes meaning, not spelling ─────────────────── */
+
+console.log("\n── the cache key collapses synonyms and nothing else ──");
+
+/*
+ * This is a cost test, not a correctness one, which is why it lives here.
+ *
+ * `country` reaches the key as free text and `seniority` arrives in whichever language the
+ * interface is in. Before normalisation, six spellings of Saudi Arabia produced FOUR cache entries
+ * and the same level in two languages produced two — and every extra entry is a full-price
+ * generation of content the cache already held.
+ */
+{
+  const base = {
+    occupation: "radiology-technologist", specialization: "",
+    seniority: "Mid", cvLang: "en", modelVersion: "v1",
+  };
+
+  const sameCountry = ["Saudi Arabia", "السعودية", "KSA", "saudi arabia", "Saudi Arabia ", "المملكة العربية السعودية"]
+    .map((country) => packKey({ ...base, country }));
+  ok("six spellings of one country share one key", new Set(sameCountry).size === 1,
+    `${new Set(sameCountry).size} keys`);
+
+  const sameLevel = ["Mid", "متوسط"].map((seniority) => packKey({ ...base, country: "sa", seniority }));
+  ok("the same level in Arabic and English shares one key", new Set(sameLevel).size === 1);
+
+  /* And the collapse must stop exactly there. A key that merges two DIFFERENT markets would serve
+     Egypt's credentials to someone applying in Jordan, which is worse than paying twice. */
+  const different = ["Saudi Arabia", "UAE", "Egypt", "Qatar"].map((country) => packKey({ ...base, country }));
+  ok("four different countries keep four keys", new Set(different).size === 4,
+    `${new Set(different).size} keys`);
+
+  const levels = ["Entry", "Mid", "Senior", "Lead"].map((seniority) => packKey({ ...base, country: "sa", seniority }));
+  ok("four different levels keep four keys", new Set(levels).size === 4, `${new Set(levels).size} keys`);
+
+  const arLevels = ["مبتدئ", "متوسط", "أول/خبير", "قيادي"].map((seniority) => packKey({ ...base, country: "sa", seniority }));
+  ok("the Arabic level names map onto the English ones in order",
+    JSON.stringify(levels) === JSON.stringify(arLevels));
+
+  /* An unplaceable country must not be collapsed with every other unplaceable one. */
+  const unknown = ["Nowhereland", "Elbonia"].map((country) => packKey({ ...base, country }));
+  ok("two unknown countries keep two keys", new Set(unknown).size === 2);
+
+  /* The occupation still separates packs — the thing the cache is actually keyed on. */
+  ok("a different occupation is a different key",
+    packKey({ ...base, country: "sa" }) !== packKey({ ...base, country: "sa", occupation: "accountant" }));
+}
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
