@@ -7,7 +7,7 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "ATS Resume Checker — Score Your Resume Against Any Job (Free)",
   description:
-    "Free ATS resume checker with a transparent scoring rubric. Paste your resume and a job description for an instant ATS match score, missing keywords, and an honest rewrite in 10 seconds.",
+    "A free ATS resume checker with a transparent rubric: your match score, the keywords you are missing, and what to fix first.",
   keywords: "ATS resume checker, ATS resume scanner, resume ATS score, applicant tracking system checker, resume keyword checker",
   alternates: { canonical: `${BASE}/ats-resume-checker` },
   openGraph: { title: "ATS Resume Checker — Free Instant Score", description: "Get your ATS match score and a rewritten, keyword-optimized resume in 60 seconds.", type: "website" },

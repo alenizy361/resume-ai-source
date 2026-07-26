@@ -5,6 +5,7 @@ import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
+import { getJobAr } from "../../lib/jobs-ar";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -16,11 +17,32 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   const { job } = await params;
   const j = getJob(job);
   if (!j) return {};
+  const hasAr = Boolean(getJobAr(job));
   return {
     title: `${j.title} Resume Example & ATS Keywords (2026)`,
-    description: `Free ${j.title} resume example plus the exact ATS keywords and skills recruiters scan for. Build or optimize your ${j.title} resume in 60 seconds.`,
+    /* Kept under 155 characters: the job title is interpolated, and the longest of them —
+       "Customer Service Representative" — added 31 characters to every one of these. */
+    description: `A free ${j.title} resume example with the ATS keywords and skills recruiters scan for.`,
     keywords: `${j.title} resume example, resume for ${j.title}, ${j.title} resume skills, resume keywords for ${j.title}, ${j.title} CV example`,
-    alternates: { canonical: `${BASE}/resume-examples/${j.slug}` },
+    /*
+     * Reciprocal alternates, and only when the Arabic page for THIS job exists.
+     *
+     * The Arabic pages have declared their English twin since they were written; the English side
+     * never declared back, so Google was discarding the pair — an hreflang that is not returned is
+     * ignored, and the two pages then compete for the same intent instead of serving two languages.
+     * Guarded on `getJobAr`, because the two catalogues do not cover the same jobs and pointing at
+     * an Arabic page that does not exist would be worse than pointing at nothing.
+     */
+    alternates: hasAr
+      ? {
+        canonical: `${BASE}/resume-examples/${j.slug}`,
+        languages: {
+          en: `${BASE}/resume-examples/${j.slug}`,
+          ar: `${BASE}/ar/resume-examples/${j.slug}`,
+          "x-default": `${BASE}/resume-examples/${j.slug}`,
+        },
+      }
+      : { canonical: `${BASE}/resume-examples/${j.slug}` },
     openGraph: { title: `${j.title} Resume Example & Skills (2026)`, description: `The ATS keywords, skills, and a full example for a ${j.title} resume.`, type: "article" },
   };
 }

@@ -24,7 +24,7 @@ export async function generateMetadata(
   if (!id) return { title: "Not found" };
   const title = SECTION_COPY.en.sections[id];
   return {
-    title: `${title} — Build your CV | cv.rabit.sa`,
+    title: `${title} — Build your CV | Sira`,
     description: SECTION_COPY.en.subs[id],
     // Every step holds one person's draft. There is nothing here for a search engine,
     // and eleven near-identical indexed pages per visitor would dilute /builder.

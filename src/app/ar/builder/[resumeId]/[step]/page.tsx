@@ -12,7 +12,7 @@ export async function generateMetadata(
   const id = stepFromSlug(step);
   if (!id) return { title: "غير موجود" };
   return {
-    title: `${SECTION_COPY.ar.sections[id]} — ابنِ سيرتك | cv.rabit.sa`,
+    title: `${SECTION_COPY.ar.sections[id]} — ابنِ سيرتك | سيرة`,
     description: SECTION_COPY.ar.subs[id],
     // One person's draft. Nothing here for a search engine.
     robots: { index: false, follow: false },

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
 
+import { getJobAr } from "../../lib/jobs-ar";
+
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export function generateStaticParams() {
@@ -16,10 +18,29 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   const { job } = await params;
   const j = getJob(job);
   if (!j) return { title: "Not found" };
+  const hasAr = Boolean(getJobAr(job));
   return {
-    title: `${j.title} Cover Letter Example & Template (2026) | Sira`,
-    description: `A proven ${j.title} cover letter structure with a fill-in template, the keywords hiring systems look for, and the mistakes to avoid — plus an AI generator.`,
-    alternates: { canonical: `${BASE}/cover-letter-examples/${j.slug}` },
+    /* Brand suffix dropped: with it, a third of these ran past 65 characters and were truncated
+       exactly where the brand sat. See `resume-skills/[job]` for the measurement. */
+    title: `${j.title} Cover Letter Example (2026)`,
+    description: `A ${j.title} cover letter structure with a fill-in template, the keywords hiring systems look for, and the mistakes to avoid.`,
+    /*
+     * Reciprocal alternates. The Arabic twin has always declared this page as its `en` alternate;
+     * without the return declaration Google discards the pair, and the two language versions then
+     * compete for one intent instead of serving two audiences. Guarded on the Arabic catalogue
+     * actually having this job — an alternate pointing at a page that does not exist invalidates
+     * the whole cluster.
+     */
+    alternates: hasAr
+      ? {
+        canonical: `${BASE}/cover-letter-examples/${j.slug}`,
+        languages: {
+          en: `${BASE}/cover-letter-examples/${j.slug}`,
+          ar: `${BASE}/ar/cover-letter-examples/${j.slug}`,
+          "x-default": `${BASE}/cover-letter-examples/${j.slug}`,
+        },
+      }
+      : { canonical: `${BASE}/cover-letter-examples/${j.slug}` },
   };
 }
 

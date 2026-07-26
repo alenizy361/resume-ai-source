@@ -5,9 +5,9 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 /** The Arabic homepage. See app/page.tsx for why it explains the product rather than being it. */
 export const metadata: Metadata = {
-  title: "أنشئ سيرة ذاتية تعبر أنظمة الفرز — أنت تكتب الحقائق والذكاء يصوغها | cv.rabit.sa",
+  title: "منشئ سيرة ذاتية بالذكاء الاصطناعي متوافقة مع ATS | سيرة",
   description:
-    "منشئ سيرة ذاتية خطوة بخطوة للسوق السعودي والخليجي. الذكاء يقترح مهارات ومهام مهنتك، وأنت تعتمد كل سطر. لا يختلق جهة عمل ولا تاريخاً ولا شهادة ولا رقماً. مجاناً، بلا تسجيل، بالعربية والإنجليزية.",
+    "منشئ سيرة ذاتية خطوة بخطوة للسوق السعودي. الذكاء يقترح مهارات مهنتك وأنت تعتمد كل سطر — بلا اختلاق. مجاناً، بالعربية والإنجليزية.",
   alternates: {
     canonical: `${BASE}/ar`,
     languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },

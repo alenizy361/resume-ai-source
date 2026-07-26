@@ -10,7 +10,7 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "Resume Templates — ATS-Safe, RTL & English | Sira",
   description:
-    "Browse professional, ATS-safe resume templates in Arabic (RTL) and English. Pick a design, then let AI fill it with your real experience — no fabricated facts. Free to start.",
+    "ATS-safe CV templates in Arabic (RTL) and English — single column, standard headings, parseable by every tracking system.",
   alternates: {
     canonical: `${BASE}/templates`,
     languages: { en: `${BASE}/templates`, ar: `${BASE}/ar/templates`, "x-default": `${BASE}/templates` },

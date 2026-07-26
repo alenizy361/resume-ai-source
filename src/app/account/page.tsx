@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AccountClient from "../components/AccountClient";
 
 export const metadata: Metadata = {
-  title: "Account — your resumes & scans | cv.rabit.sa",
+  title: "Your CVs and scans — Sira",
   robots: { index: false, follow: false },
 };
 

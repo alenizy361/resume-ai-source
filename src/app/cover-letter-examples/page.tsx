@@ -11,6 +11,11 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "Cover Letter Examples & Templates by Job (2026) | Sira",
   description: "Free cover letter examples and fill-in templates for 50 jobs — the structure, keywords, and mistakes to avoid, plus an AI generator tailored to any posting.",
+  /*
+   * No `languages` here on purpose: there is no Arabic COVER-LETTER HUB, only Arabic pages for
+   * individual jobs. Declaring an alternate to a page that does not exist is worse than declaring
+   * none — it sends a crawler to a 404 and invalidates the cluster.
+   */
   alternates: { canonical: `${BASE}/cover-letter-examples` },
 };
 

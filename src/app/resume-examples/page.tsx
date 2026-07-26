@@ -12,7 +12,19 @@ export const metadata: Metadata = {
   title: "Resume Examples & ATS Keywords by Job Title (2026) — Free",
   description: "Free resume examples for 50+ job titles, each with the exact ATS keywords, skills, and bullet examples recruiters scan for. Build or optimize yours in 60 seconds.",
   keywords: "resume examples, resume example by job, ATS resume examples, resume samples, cv examples",
-  alternates: { canonical: `${BASE}/resume-examples` },
+  /*
+   * The Arabic twin declares this page as its `en` alternate. Without the reciprocal declaration
+   * here, Google discards BOTH — an hreflang that is not returned is not a signal, it is noise,
+   * and the two pages then compete with each other for the same intent in two languages.
+   */
+  alternates: {
+    canonical: `${BASE}/resume-examples`,
+    languages: {
+      en: `${BASE}/resume-examples`,
+      ar: `${BASE}/ar/resume-examples`,
+      "x-default": `${BASE}/resume-examples`,
+    },
+  },
 };
 
 export default function Hub() {

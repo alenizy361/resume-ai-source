@@ -6,6 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
 
+import { getJobAr } from "../../lib/jobs-ar";
+
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export function generateStaticParams() {
@@ -16,10 +18,32 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   const { job } = await params;
   const j = getJob(job);
   if (!j) return { title: "Not found" };
+  const hasAr = Boolean(getJobAr(job));
   return {
-    title: `Top ${j.title} Skills for Your Resume (2026) — ATS Keywords | Sira`,
+    /*
+     * The brand suffix is dropped from these templated titles, deliberately.
+     *
+     * Measured: with "| Sira" appended, 47 of the 60 skills pages ran past 65 characters and were
+     * truncated in the result — and what gets cut is the END, which is where the brand was. A
+     * suffix that is only ever shown when the title is short enough not to need it is costing the
+     * page its most specific words for nothing.
+     */
+    title: `${j.title} Skills for a Resume — ATS Keywords (2026)`,
     description: `The ${j.atsKeywords.length} keywords ATS software scans for in ${j.title} resumes, the skills recruiters shortlist for, and how to present them honestly.`,
-    alternates: { canonical: `${BASE}/resume-skills/${j.slug}` },
+    /*
+     * Reciprocal alternates — see `cover-letter-examples/[job]` for why a one-way hreflang is
+     * worse than none. Guarded on the Arabic catalogue having this job.
+     */
+    alternates: hasAr
+      ? {
+        canonical: `${BASE}/resume-skills/${j.slug}`,
+        languages: {
+          en: `${BASE}/resume-skills/${j.slug}`,
+          ar: `${BASE}/ar/resume-skills/${j.slug}`,
+          "x-default": `${BASE}/resume-skills/${j.slug}`,
+        },
+      }
+      : { canonical: `${BASE}/resume-skills/${j.slug}` },
   };
 }
 
