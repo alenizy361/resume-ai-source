@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { forgetOwner, hasOwnedRecords, ownerKey } from "@/app/lib/resumeStore";
-import { forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
+import { adoptAnonymousResumes, forgetOwner, hasOwnedRecords, ownerKey } from "@/app/lib/resumeStore";
+import { adoptAnonymous, forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
 
 /**
  * Who owns the drafts in this browser right now.
@@ -108,6 +108,25 @@ export function useOwner(): string {
   useEffect(() => {
     if (!owner) return;
     const before = previous.current;
+    /*
+     * ── signing IN: the anonymous work becomes this account's ──
+     *
+     * The transition `anon` → a real account is the payment flow's normal path, not an edge case:
+     * checkout does not require an account, and `/api/pay/verify` signs the buyer in afterwards so
+     * their access follows them to another device. Before this, that switch orphaned everything
+     * they had done — the CV in the builder, the optimiser draft, the saved texts, the scan history,
+     * the job list — because every key is `${base}:${owner}` and nothing moved `:anon` across.
+     *
+     * The buyer saw "payment received" on a screen whose data had just become unreachable.
+     *
+     * Neither adoption overwrites: where the account already holds a value, the account's own wins.
+     * A returning customer's saved CVs are theirs, and anonymous work done in this browser
+     * beforehand is a contribution, not a replacement.
+     */
+    if (before === "anon" && owner !== "anon") {
+      adoptAnonymousResumes(owner);
+      adoptAnonymous(owner);
+    }
     if (before && before !== owner && before !== "anon") {
       forgetOwner(before);
       /*

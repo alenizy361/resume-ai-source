@@ -470,6 +470,97 @@ console.log("\n── a corrupt value degrades to empty, never to a crash ──
  * the original cross-account bug, reintroduced through the back door of a performance fix.
  */
 
+/* ═════════════════ signing in adopts the anonymous work ═════════════════ */
+
+console.log("\n── paying anonymously then being signed in must not orphan the buyer's data ──");
+{
+  const { adoptAnonymousResumes, listResumes, readResume, writeResume: wr, newResumeId: nid, ownerKey: ok2 } =
+    await import("../app/lib/resumeStore.ts");
+  const { adoptAnonymous, scopedKey } = await import("../app/lib/personalStore.ts");
+
+  store.clear();
+  const ACC = ok2("buyer@example.com");
+
+  /*
+   * The reported sequence: a buyer builds anonymously, pays, and `/api/pay/verify` signs them in.
+   * The owner changes from `anon` to `u_<base64>` mid-session, and every key is `${base}:${owner}`.
+   */
+  const anonId = nid();
+  wr("anon", anonId, "en", cv("Built before paying"));
+  store.setItem(scopedKey("anon", "ra_optimize_draft"), "the pasted CV");
+  store.setItem(scopedKey("anon", "ra_jobs"), '[{"employer":"A hospital"}]');
+
+  const movedResumes = adoptAnonymousResumes(ACC);
+  const movedKeys = adoptAnonymous(ACC);
+
+  ok("the anonymous resume moves to the account", movedResumes === 1, String(movedResumes));
+  ok("under the SAME resumeId, so an open URL still resolves",
+    readResume(ACC, anonId).record?.state?.target?.title === "Built before paying");
+  /* The record carries its owner; a raw copy would still say `anon` inside and be quarantined on
+     read — losing exactly what this was meant to save. */
+  ok("and the record's own owner was rewritten, not just its key",
+    readResume(ACC, anonId).record?.owner === ACC);
+  ok("it appears in the account's index", listResumes(ACC).some((r) => r.resumeId === anonId));
+
+  ok("the personal stores move too", movedKeys.length === 2, movedKeys.join(", "));
+  ok("the optimiser draft is readable under the account",
+    store.getItem(scopedKey(ACC, "ra_optimize_draft")) === "the pasted CV");
+
+  /* And the anonymous keyspace is emptied — adopting without removing turns a data-loss bug into a
+     data-leak one for the next anonymous visitor in this browser. */
+  ok("nothing is left under anon", listResumes("anon").length === 0);
+  ok("nor any anonymous personal key", store.getItem(scopedKey("anon", "ra_jobs")) === null);
+}
+
+console.log("\n── but the account is the authority, not the anonymous session ──");
+{
+  const { adoptAnonymousResumes, readResume, writeResume: wr, newResumeId: nid, ownerKey: ok2 } =
+    await import("../app/lib/resumeStore.ts");
+  const { adoptAnonymous, scopedKey } = await import("../app/lib/personalStore.ts");
+
+  store.clear();
+  const ACC = ok2("returning@example.com");
+  const id = nid();
+
+  /* A returning customer already has this resume and this draft. Anonymous work in the same browser
+     must never replace them. */
+  wr(ACC, id, "en", cv("The account's own CV"));
+  store.setItem(scopedKey(ACC, "ra_optimize_draft"), "the account's draft");
+  wr("anon", id, "en", cv("Anonymous work"));
+  store.setItem(scopedKey("anon", "ra_optimize_draft"), "anonymous draft");
+
+  adoptAnonymousResumes(ACC);
+  adoptAnonymous(ACC);
+
+  ok("the account's resume is not overwritten",
+    readResume(ACC, id).record?.state?.target?.title === "The account's own CV");
+  ok("nor its personal draft",
+    store.getItem(scopedKey(ACC, "ra_optimize_draft")) === "the account's draft");
+  /* Not adopted, and still removed: an anonymous value the account has a better answer for is
+     still anonymous data sitting in a shared browser. */
+  ok("and the anonymous copy is gone rather than left behind",
+    store.getItem(scopedKey("anon", "ra_optimize_draft")) === null);
+
+  ok("adopting into `anon` is refused outright", adoptAnonymousResumes("anon") === 0);
+  ok("and so is adopting into nobody", adoptAnonymous("").length === 0);
+
+  /* These blocks wrote anonymous resumes, and every write stamps the tab-session visit marker. The
+     visit block below opens by asserting that a browser with NO marker restores nothing — so leaving
+     it set makes a correct assertion fail on state this block created. Cleaned up here rather than
+     defended against there, because the mess is this block's. */
+  store.clear();
+  session.clear();
+}
+
+/* And the wiring: the one moment this is correct is the TRANSITION, never on mount. */
+{
+  const { readFileSync } = await import("node:fs");
+  const src = readFileSync("app/components/useOwner.ts", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  ok("useOwner adopts on the anon → account transition",
+    /before === "anon" && owner !== "anon"/.test(src));
+  ok("and calls both halves", /adoptAnonymousResumes\(owner\)/.test(src) && /adoptAnonymous\(owner\)/.test(src));
+}
+
 /* ═════════════════ anonymous work lasts the visit; signing in saves it ═════════════════ */
 
 console.log("\n── an anonymous draft does not come back from a previous visit ──");

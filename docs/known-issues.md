@@ -264,7 +264,43 @@ no allow-list, and the endpoint is unauthenticated and unrate-limited.
 changing where a payment provider returns to is not something to ship without being able to
 run one real transaction against it, and no Paylink credential is available here.
 
-### O-3 · P0 · Paying loses the user's own data
+### F-11 · P0 · Paying lost the buyer's own data — FIXED
+
+*(was O-3)*
+
+A buyer almost always pays anonymously: checkout does not require an account, deliberately,
+because requiring one beforehand loses most of the funnel. `/api/pay/verify` then signs them in
+so their access follows them to another device.
+
+So the owner changed mid-session from `anon` to `u_<base64 email>` — and every personal key is
+`${base}:${owner}`. The buyer's CV in the builder, their optimiser draft, their saved CV texts,
+their scan history and their job list were all still filed under `:anon`, unreachable, on the
+very screen that says "payment received". `migrateUnowned` did not help: it adopts the
+*pre-scoping* keys with no owner suffix at all, which is an older and different problem.
+
+**Fix.** `adoptAnonymousResumes(owner)` in `resumeStore` and `adoptAnonymous(owner)` in
+`personalStore`, called from `useOwner` on the `anon` → account **transition** — the only moment
+it is correct. On mount it would file whatever is in the anonymous keyspace under whoever happens
+to be signed in, which is how a shared laptop mixes two people's data.
+
+Three rules make it safe:
+
+- **Ids are kept**, so a URL the buyer has open or bookmarked still resolves.
+- **The account is the authority.** Where it already holds a value, its own wins — a returning
+  customer's saved CVs are theirs, and anonymous work in the same browser is a contribution, not
+  a replacement.
+- **The anonymous keyspace is emptied**, adopted or not. Leaving it would hand one person's work
+  to the next anonymous visitor in that browser: a data-loss bug turned into a data-leak one.
+
+The resumes are re-written through `writeResume` rather than copied as raw strings, because a
+record CARRIES its owner — a copied record would still say `anon` inside, and `readResume` would
+refuse and quarantine it, silently losing exactly what this set out to save. Asserted directly.
+
+**Evidence.** `ops/isolation.test.mjs`, now 126 assertions, including the full reported sequence,
+the returning-customer collision case, and that `useOwner` wires it to the transition rather than
+to mount.
+
+### O-3 · superseded by F-11
 
 The buyer typically pays anonymously (`owner` = `anon`). `/api/pay/verify` auto-signs them
 in, so the next `/api/auth/me` returns `u_<base64>`. Every personal key is `${base}:${owner}`,

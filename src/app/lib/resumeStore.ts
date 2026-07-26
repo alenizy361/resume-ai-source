@@ -357,6 +357,48 @@ export function mayRestore(owner: string): boolean {
 }
 
 /**
+ * Move the anonymous resumes into an account that has just signed in.
+ *
+ * The resume half of `personalStore.adoptAnonymous`, and it exists for the same reported failure:
+ * a buyer pays anonymously, `/api/pay/verify` signs them in, the owner changes from `anon` to
+ * `u_<base64 email>` — and everything they had built in this browser was addressed `ra_cv:anon:*`.
+ *
+ * ── the ids are kept ──
+ *
+ * A resume keeps its `resumeId` across the move, so a URL the user has open, or has bookmarked, or
+ * pressed Back to, still resolves. Minting new ids would break every one of those and gain nothing.
+ * The id was never a secret and was never account-scoped; the KEY is.
+ *
+ * ── collisions cannot happen, and are handled anyway ──
+ *
+ * `newResumeId` is time-plus-random, so an anonymous id colliding with one the account already has
+ * is not a real scenario. If it ever did, the account's record wins and the anonymous one is
+ * dropped, matching the rule in `adoptAnonymous`: the account is the authority.
+ *
+ * ── and the anonymous keyspace is emptied ──
+ *
+ * `forgetOwner("anon")` at the end, so nothing is left for the next anonymous visitor in this
+ * browser to inherit. Adopting without removing would turn a data-loss bug into a data-leak one.
+ */
+export function adoptAnonymousResumes(owner: string, now = Date.now()): number {
+  const store = ls();
+  if (!store || !owner || owner === "anon") return 0;
+  let moved = 0;
+  for (const summary of listResumes("anon")) {
+    const { record } = readResume("anon", summary.resumeId);
+    if (!record) continue;
+    if (readResume(owner, summary.resumeId).record) continue;   // the account's own wins
+    /* Written through `writeResume` rather than by copying the raw string: the record CARRIES its
+       owner, and a copied record would still say `anon` inside — which `readResume` would then
+       refuse and quarantine, silently losing exactly what this function set out to save. */
+    writeResume(owner, summary.resumeId, record.lang, record.state, { now });
+    moved++;
+  }
+  if (moved) forgetOwner("anon");
+  return moved;
+}
+
+/**
  * Drop the anonymous keyspace, for a visit that has expired.
  *
  * Only `anon`. A signed-in account's records are never touched by this — the point of the rule is

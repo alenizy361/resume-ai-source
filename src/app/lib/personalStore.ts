@@ -181,6 +181,64 @@ export function migrateUnowned(owner: string): PersonalKey[] {
 }
 
 /**
+ * Hand anonymous work to the account that just signed in.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE BUG THIS CLOSES: PAYING LOST THE BUYER'S OWN DATA
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * A buyer almost always pays anonymously — the checkout does not require an account, deliberately,
+ * because requiring one before payment loses most of the funnel. `/api/pay/verify` then signs them
+ * in automatically so their paid access follows them to any device.
+ *
+ * So the owner changes, mid-session, from `anon` to `u_<base64 email>`. And every personal key is
+ * `${base}:${owner}` (see `scopedKey`). The moment that switch happened, the buyer's optimiser
+ * draft, their saved CV texts, their scan history and their job list were all still filed under
+ * `:anon` — unreachable, on the very screen that says "payment received".
+ *
+ * `migrateUnowned` did not help: it adopts the pre-scoping keys, the ones with no owner suffix at
+ * all, which is a different and older problem. Nothing moved `:anon` to an account.
+ *
+ * ── why this is an adoption and not a copy ──
+ *
+ * The anonymous entries are REMOVED after being adopted. Leaving them would mean the next person to
+ * use the same browser anonymously inherits them, which is the cross-account leak the whole
+ * owner-scoping exercise exists to prevent — and it would be a worse bug than the one being fixed.
+ *
+ * ── and why it never overwrites ──
+ *
+ * If the account already holds a value for a key, the account's own wins and the anonymous one is
+ * dropped. A returning customer's saved CVs are theirs; work done anonymously in this browser before
+ * they signed in must not replace them. The asymmetry is deliberate: the account is the authority,
+ * anonymous work is a contribution.
+ *
+ * Callers: `useOwner`, on the transition from `anon` to a real account — the only moment this is
+ * correct. Running it on mount would file whatever is in the anonymous keyspace under whoever
+ * happens to be signed in, which is how a shared laptop mixes two people's data.
+ */
+export function adoptAnonymous(owner: string): PersonalKey[] {
+  const store = ls();
+  if (!store || !owner || owner === "anon") return [];
+  const adopted: PersonalKey[] = [];
+  for (const base of PERSONAL_KEYS) {
+    const from = scopedKey("anon", base);
+    let raw: string | null = null;
+    try { raw = store.getItem(from); } catch { continue; }
+    if (raw === null) continue;
+    try {
+      if (store.getItem(scopedKey(owner, base)) === null) {
+        store.setItem(scopedKey(owner, base), raw);
+        adopted.push(base);
+      }
+      /* Removed whether or not it was adopted: an anonymous value the account already has a better
+         answer for is still anonymous data sitting in a shared browser. */
+      store.removeItem(from);
+    } catch { /* quota or a locked store; the anonymous key stays and the next sign-in retries */ }
+  }
+  return adopted;
+}
+
+/**
  * Remove everything belonging to one owner. For sign-out.
  *
  * Scans rather than iterating `PERSONAL_KEYS`, so a key retired from that list in a future version is
