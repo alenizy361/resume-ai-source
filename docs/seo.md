@@ -232,6 +232,32 @@ URL, and an hreflang pair whose two members are one page is a contradiction rath
   than publishing nothing. The funnel events shipped in this pass are the first data that could
   eventually support one — after they have run long enough to mean something.
 
+## Verifying ownership in Search Console
+
+Two ways, and the first needs no code.
+
+**A DNS TXT record on `rabit.sa`** (a *Domain* property) is the better one: it covers every
+subdomain and both protocols, so `cv.rabit.sa` and anything added later are verified once. Nothing
+in this repository is involved.
+
+**A meta tag** (a *URL-prefix* property) is the fallback for when DNS is not to hand. It is now an
+environment variable rather than a commit:
+
+```
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<token from Search Console>
+NEXT_PUBLIC_BING_SITE_VERIFICATION=<token from Bing Webmaster Tools>   # optional
+```
+
+Set it in the Vercel dashboard and redeploy. Both are read in `app/layout.tsx`. The Google variable
+accepts **several tokens, comma-separated** — adding a second property must not evict the first, and
+a second person needing their own access is a normal thing rather than a migration.
+
+Unset means no tag at all, which is asserted: with neither variable set the home page renders zero
+`google-site-verification` or `msvalidate.01` meta tags.
+
+Then: submit `sitemap.xml`, and request indexing for `/`, `/ar`, `/optimize`, `/ar/optimize`,
+`/builder`, `/ar/builder` — six URLs, not more. The rest arrives from the sitemap.
+
 ## What to do next, in order
 
 1. **Read the funnel before writing more pages.** The instrumentation shipped in this pass; give it

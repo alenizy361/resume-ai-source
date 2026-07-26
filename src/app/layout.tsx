@@ -25,6 +25,37 @@ export const metadata: Metadata = {
     siteName: "Sira",
   },
   twitter: { card: "summary_large_image", title: "Sira — Honest AI Resume Optimization", description: "Free ATS score + a no-fabrication rewrite in 10 seconds." },
+  /*
+   * Search-console ownership, as an environment variable rather than a code change.
+   *
+   * Verifying a property needs a token that only the person logged into Search Console can see, so
+   * the alternative was a commit-per-token: paste it into this file, push, wait for a deploy, click
+   * verify. That is three failure points (a typo lands in git history, the deploy is the slow part,
+   * and the token ends up committed) for a value that is not a secret but is not source either.
+   *
+   * `verification.google` accepts one token or several. Several matters: adding a second property —
+   * `cv.rabit.sa` alongside `rabit.sa`, or a colleague's own access — must not evict the first, and
+   * a comma-separated variable keeps both meta tags on the page.
+   *
+   * Bing is included because it costs one line and Bing Webmaster Tools can import from Search
+   * Console; a property that cannot be verified cannot be imported into.
+   *
+   * ── which method to use ──
+   *
+   * A DNS TXT record on `rabit.sa` (a Domain property) is better than this and needs no code at all:
+   * it covers every subdomain and both protocols, so `cv.rabit.sa` and anything added later are
+   * verified once. This exists for the URL-prefix path, which is what someone reaches for when they
+   * do not control DNS or want it working in the next two minutes.
+   */
+  verification: {
+    google: (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "")
+      .split(",").map((t) => t.trim()).filter(Boolean),
+    other: {
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION.trim() }
+        : {}),
+    },
+  },
 };
 
 
