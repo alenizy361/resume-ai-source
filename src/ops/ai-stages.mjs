@@ -338,6 +338,26 @@ for (const r of ledger) {
     + (r.cached ? "cache" : `$${r.usd.toFixed(6)}`),
   );
 }
+/*
+ * Which mode the DEPLOYMENT ran in, not this script.
+ *
+ * `output_config.format` is set server-side from `ANTHROPIC_STRUCTURED_OUTPUTS`, so the only honest
+ * thing to print is what this harness knows: whether the variable is set HERE. When it is verified
+ * against the live site the answer that matters is the deployment's, which is why this says where it
+ * read the flag rather than asserting a mode.
+ */
+const structured = /^(1|true|yes|on)$/i.test((process.env.ANTHROPIC_STRUCTURED_OUTPUTS ?? "").trim());
+console.log(`\nStructured outputs: ${structured ? "ON" : "OFF"} in this shell's environment.`);
+console.log(
+  structured
+    ? "  If the target deployment also has ANTHROPIC_STRUCTURED_OUTPUTS set, the API enforced the\n"
+      + "  schema on every call above. Check that the LIMITS still held — counts are NOT enforced by\n"
+      + "  the schema, only the shape."
+    : "  The API was asked for JSON in prose only. Set ANTHROPIC_STRUCTURED_OUTPUTS=1 on the\n"
+      + "  deployment and re-run to compare: the schema-invalid retry, which re-sends the request to\n"
+      + "  the escalation model at roughly 4x a clean call, is what it removes.",
+);
+
 console.log(`\nTOTAL SPENT: $${spent.toFixed(6)} across ${ledger.length} calls`);
 
 const dead = ledger.filter((r) => r.status !== 200);

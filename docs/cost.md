@@ -128,6 +128,38 @@ orthography and substrings, because `countryRules.ts` needed exactly this — an
 the closed set the form offers. Asserted both ways: six spellings of one country collapse to one key,
 and four genuinely different countries stay four.
 
+### The retry that costs four times a clean call — schemas built, switch off
+
+The most expensive thing `/api/generate` can do is fail to parse its own answer. A malformed brace
+raises `schema-invalid-retry`, which re-sends the whole request to `claude-sonnet-5`:
+
+| | |
+|---|---|
+| Clean `final_content` on Haiku | $0.005040 |
+| Failed Haiku call (billed in full) + Sonnet retry | **$0.019410** |
+
+Nearly 4×, for a response whose *content* was probably fine. **Structured outputs remove that class
+of failure instead of retrying it** — `output_config: {format: {type: "json_schema", schema}}`
+constrains the response so "wrapped its JSON in prose" and "dropped a key" stop being possible. It is
+supported on **Claude Haiku 4.5**, which is what makes it a saving rather than a reason to move up a
+tier.
+
+What it does *not* do is enforce size. The documented JSON Schema subset has no `minItems`/`maxItems`,
+no string or numeric bounds — so "exactly 3 summaries", "12–15 skills in total", "one improved bullet
+per line the user wrote and NOT ONE MORE" are inexpressible. Those are the rules that stop the model
+inventing content, so the prose `TASK_SCHEMA` blocks stay and the route's own `validate()` stays.
+Three layers, none redundant: the API guarantees the container, the prompt asks for the counts, the
+validator checks them.
+
+**Built and tested; off by default.** `lib/aiSchemas.ts` holds all four schemas and
+`ops/schemas.test.mjs` asserts 53 things about them — that they stay inside the documented subset,
+that every object carries the required `additionalProperties: false`, that "off" means the parameter
+is *absent* rather than present-and-empty, and, the assertion worth having, that each schema's keys
+are derived-and-compared against the prose example so a key added to one and not the other fails a
+test. What no test here can prove is that a schema-constrained model still honours the LIMITS prose.
+That needs one real run: set `ANTHROPIC_STRUCTURED_OUTPUTS=1` on the deployment and run
+`npm run ai:stages` — about $0.05, and the harness now prints which mode it saw.
+
 ### The largest available saving, not yet taken
 
 The Batch API is **half price** and stacks with caching. It is asynchronous, so no form field can use
@@ -287,11 +319,13 @@ expensive call in the product, not a no-op.
    against the cache floors, not assumed from model size — and the two free wins are already
    shipped. `/api/health/ai` will tell you when the caching verdict stops being true, and
    `ops/economics.test.mjs` will fail if a new short-output task makes the model choice wrong.
-2. **Pre-warm the occupation packs via the Batch API** — $0.72 once, and the biggest single
+2. **Turn on structured outputs** — `ANTHROPIC_STRUCTURED_OUTPUTS=1`, then `npm run ai:stages` to
+   confirm the counts still hold. About $0.05 to verify, and it removes the 4×-cost retry path.
+3. **Pre-warm the occupation packs via the Batch API** — $0.72 once, and the biggest single
    improvement available to both cost and latency. Needs a key and Upstash credentials.
-3. **Split the root layout into two route groups** when traffic makes function duration visible, or
+4. **Split the root layout into two route groups** when traffic makes function duration visible, or
    before any paid campaign.
-4. **Re-read this file against the bill** once there is a bill. Every number here is either
+5. **Re-read this file against the bill** once there is a bill. Every number here is either
    reproducible from `ops/economics.test.mjs` or a link below.
 
 ## Sources

@@ -11,6 +11,7 @@ import {
   blueprintMessage, experienceMessage, finalMessage, jdDeltaMessage,
 } from "@/app/lib/aiPrompts";
 import { packKey, jdDeltaKey, normalizeContext } from "@/app/lib/aiCache";
+import { outputConfigFor } from "@/app/lib/aiSchemas";
 import { readPack, writePack, packCacheConfigured } from "@/app/lib/packCache";
 import { extractJsonValue, hasMetric, scrubSuggestion } from "@/app/lib/suggestShapes";
 import { credentialsFor, countryCode } from "@/app/lib/countryRules";
@@ -444,6 +445,22 @@ async function callAnthropic(
          */
         ...(thinksByDefault(model) && canDisableThinking(model)
           ? { thinking: { type: "disabled" } } : {}),
+        /*
+         * Let the API enforce the shape, when it is switched on.
+         *
+         * The escalation this saves is the expensive one: `schema-invalid-retry` re-sends the whole
+         * request to Sonnet 5, so one malformed brace costs the failed Haiku call plus a Sonnet call
+         * — about four times a clean generation, for content that was probably fine. Structured
+         * outputs make "wrapped its JSON in prose" and "dropped a key" impossible rather than
+         * retryable, on Haiku as well as the escalation tier.
+         *
+         * Off by default: the schemas have never been sent to the API, and what a test can prove
+         * (valid subset, keys matching the prose) is not what needs proving (a constrained model
+         * still honouring the LIMITS prose). `ANTHROPIC_STRUCTURED_OUTPUTS=1` plus one run of
+         * `ops/ai-stages.mjs` settles it for about $0.05. `validate()` below stays either way — the
+         * API guarantees the container, not the counts.
+         */
+        ...outputConfigFor(task),
         system: [
           { type: "text", text: CORE_RULES, cache_control: { type: "ephemeral" } },
           { type: "text", text: TASK_SCHEMA[task] ?? "", cache_control: { type: "ephemeral" } },
