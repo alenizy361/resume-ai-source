@@ -226,15 +226,38 @@ gets it free.
 |---|---|
 | `role_blueprint`, standard | $0.006329 |
 | `role_blueprint`, batch (−50%) | $0.003165 |
-| Pre-warming 113 catalogue occupations × 2 languages | **$0.72, once** |
+| Pre-warming the catalogue — 111 entries × 4 seniority levels × 1 country | **$1.43, once** |
 
 After that every visitor's first blueprint is a $0 cache hit instead of a $0.0063 call — and arrives
 instantly instead of after four seconds, so it is a product improvement as well as a cost one.
 
-**Not built.** It needs an Anthropic key and Upstash credentials, neither of which exists in this
-sandbox, and shipping a batch job I could not run once would be worse than shipping nothing. The
-cache-key fix above is the prerequisite and is done: pre-warming a fragmented key space would have
-warmed the wrong keys.
+> ### Correction to the price
+>
+> This said **$0.72**, from "113 occupations × 2 languages". Both halves were wrong. The catalogue is
+> **111 entries in total** — 50 English plus 61 Arabic, 27 slugs appearing in both — not 113 per
+> language. And the pack key includes **seniority**, a dimension that estimate ignored completely, so
+> one occupation is four packs. 111 × 4 × 1 country = **444 packs at $0.0032 = $1.43**.
+>
+> `ops/prewarm.test.mjs` now asserts the estimate stays above $1, because an estimate drifting back
+> under it means the seniority dimension was dropped again.
+
+**Built and run.** `/api/admin/prewarm` has four verbs, because the Batch API is asynchronous and that
+is what buys the discount: `?plan=1` is free and prints the bill, `?submit=1` is a dry run that only
+spends with `&confirm=1`, `?status=<id>` polls, `?collect=<id>` writes the results into Redis.
+HEALTH_TOKEN gated, 404 rather than 401 — a 401 confirms the existence of an admin path that can spend
+money.
+
+The property the whole spend rests on is that a warmed key equals the key `/api/generate` looks up.
+That route computes `packKey({ ...normalizeContext(ctx), modelVersion: cfg.version })`, so `prewarm.ts`
+calls those same two functions rather than reproducing the format, and the test rebuilds the key *the
+route's way* and compares. If they ever drift, the pre-warm warms keys nobody reads and the invoice is
+pure waste with no error to notice it by.
+
+Two limits, stated rather than hidden. **`specialization` is free text** and cannot be enumerated, so a
+request carrying one still pays for its own key — this warms the common shape, not every shape. And the
+**country default is a judgement, not a measurement**: `popularPacks()` would answer it from real hit
+counts and currently answers nothing, so the default is the market the product is built for, and it is a
+parameter for when there is data.
 
 ### Reading a scanned CV — the second per-user cost, and it is opt-in
 
@@ -416,7 +439,7 @@ expensive call in the product, not a no-op.
    `ops/economics.test.mjs` will fail if a new short-output task makes the model choice wrong.
 2. ~~Turn on structured outputs~~ — **done**, verified against the live API on all four schemas and
    on by default. The 4×-cost retry path is no longer reachable.
-3. **Pre-warm the occupation packs via the Batch API** — $0.72 once, and the biggest single
+3. ~~Pre-warm the occupation packs via the Batch API~~ — **done**, $1.43 once, the biggest single
    improvement available to both cost and latency. Needs a key and Upstash credentials.
 4. **Split the root layout into two route groups** when traffic makes function duration visible, or
    before any paid campaign.
