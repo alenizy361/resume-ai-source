@@ -258,6 +258,76 @@ Unset means no tag at all, which is asserted: with neither variable set the home
 Then: submit `sitemap.xml`, and request indexing for `/`, `/ar`, `/optimize`, `/ar/optimize`,
 `/builder`, `/ar/builder` — six URLs, not more. The rest arrives from the sitemap.
 
+## The site became static (pass three)
+
+Every page was server-rendered on demand. Not one of them needed to be.
+
+`app/layout.tsx` read the request path to decide `lang` and `dir`:
+
+```ts
+const pathname = (await headers()).get("x-pathname") || "";
+const isArabic = pathname === "/ar" || pathname.startsWith("/ar/");
+```
+
+`headers()` is a dynamic API, and a dynamic API in the ROOT layout makes every route beneath it
+dynamic — and every route in the app is beneath it. One line, whole site.
+
+Measured by building with the line removed:
+
+| | static (○) | prerendered SSG (●) | dynamic (ƒ) |
+|---|---|---|---|
+| with `headers()` | 5 | 0 | 80 |
+| without | **46** | **9** | 30 |
+
+Of the 30 remaining, 25 are `/api` route handlers, which are supposed to run per request. The five
+pages left are the five that genuinely vary: a builder step for one resume (×2 languages), a score by
+id (×2), and a published CV by slug.
+
+So 55 route entries — covering all 382 indexed pages — moved from a server function per page view to
+HTML on a CDN. TTFB is the front half of LCP and LCP is a ranking input, which for a product growing
+on organic search alone is the entire argument.
+
+### How
+
+`<html>` can only be written by a root layout, so varying `lang` per language means two root layouts,
+which means route groups. `app/(en)` and `app/(ar)`, with the `ar` URL segment kept inside its group
+(`app/(ar)/ar/...`) — a group's name is not part of the URL, so **every address is unchanged**, which
+for 382 indexed pages is the only acceptable outcome. Verified by fetching both languages of every
+top-level route plus the redirects; `lang`/`dir` are still correct on every one, now without a request.
+
+The shell they share is `app/components/RootShell.tsx`. It is shared rather than copied because this
+file's own history says what copying costs: the JSON-LD used to be one English object served on every
+route, so Arabic pages emitted English FAQ answers and English prices to Google. Duplicating it to
+split the layout would have re-introduced that slowly.
+
+`proxy.ts` no longer sets `x-pathname` — nothing reads it — so it no longer rewrites the request on
+every page view. It only redirects legacy `?lang=` URLs now.
+
+### What it cost, stated plainly
+
+One masked bug, now fixed: `/builder` and `/ar/builder` could never have been prerendered, because
+`BuilderStart` reads `useSearchParams()` with no Suspense boundary. Nothing had reported it, because
+nothing had ever tried to prerender them.
+
+One regression that is not fixed: a URL matching nothing in EITHER group — `/nope`, `/pricing/nope` —
+has no root layout Next can choose, so it gets the framework's bare error document instead of the
+designed 404. **The status code is 404 in every case**, so no crawler is misled and nothing about
+ranking is affected; what is lost is the page a person sees after a typo. Arabic is unaffected —
+`app/(ar)/ar/[...missing]` catches those and renders the Arabic 404 properly.
+
+Two fixes were tried and neither works in Next 16.2.10 under Turbopack. A root-level catch-all
+mirroring the Arabic one: the route builds, but a probe page placed there was never reached for
+`/nope`, `/pricing/nope` or `/a/b/c` — Next cannot assign an unmatched top-level URL to a group, which
+is the same reason the fallback happens at all. And `experimental.globalNotFound` with
+`app/global-not-found.tsx`, which is the framework's documented answer for multiple root layouts: the
+flag is recognised (`✓ globalNotFound` in the build output) and the artifact is correct —
+`.next/server/app/_not-found.html` contains the designed page with `<html lang="en" dir="ltr">` and
+its stylesheet — but the router serves the built-in 404 instead. Not the middleware: removing
+`proxy.ts` entirely changes nothing.
+
+The flag and the file are kept. They cost nothing, they are correct, and they will take effect when
+the router catches up.
+
 ## What to do next, in order
 
 1. **Read the funnel before writing more pages.** The instrumentation shipped in this pass; give it

@@ -134,18 +134,54 @@ eq("empty strings never leave a dangling separator",
  * locked and would otherwise show a stale preview to someone who just paid to unlock it.
  */
 {
-  const { readFileSync, existsSync } = await import("node:fs");
+  const { readFileSync, readdirSync } = await import("node:fs");
 
   /** Every key that holds work the user would lose. */
   const SACRED = [draftKey("ar"), draftKey("en")];
 
-  /** Pages that clear storage, and what each is allowed to clear. */
-  const CLEARERS = ["app/pay/callback/page.tsx", "app/optimize/page.tsx"];
+  /**
+   * Pages that clear storage, and what each is allowed to clear.
+   *
+   * FOUND rather than listed. The paths were hardcoded as `app/pay/callback/page.tsx` and
+   * `app/optimize/page.tsx`, and the route-group split moved both under `app/(en)/` — at which point
+   * `existsSync` returned false for each, the loop body never ran, and the guard would have passed
+   * while checking nothing. It failed instead, because of the `scanned >= 1` assertion below, which is
+   * the only reason this was noticed at all.
+   *
+   * Discovering them by name means the guard survives the next move too, and means a THIRD page that
+   * starts clearing storage is covered without anyone remembering to add it here.
+   */
+  const CLEARERS = (() => {
+    const out = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        const full = `${dir}/${e.name}`;
+        /*
+         * `app/lib` is excluded, and the distinction is the point of the rule rather than an
+         * exception to it. `personalStore.removePersonal` and `flags.ts` remove keys built from a
+         * variable BY DESIGN — a store whose keys carry an owner cannot name them literally. The
+         * rule below refuses computed removals in FLOWS, where indirection means a grep cannot see
+         * which key is going away. Including the storage layer made the guard fail on the one file
+         * whose job it is, which is how a good rule gets deleted for crying wolf.
+         *
+         * The storage layer is covered instead by its TYPE: `removePersonal`'s second parameter is
+         * the `PersonalKey` union and no draft key is in it, so a draft removal will not compile.
+         * The `removePersonal(…, "ra_journey…")` check below is the belt to that braces.
+         */
+        if (e.isDirectory() && full !== "app/lib") walk(full);
+        else if (/\.(ts|tsx)$/.test(e.name)) {
+          const src = readFileSync(full, "utf8");
+          if (/localStorage\s*\.\s*(removeItem|clear)|removePersonal\(/.test(src)) out.push(full);
+        }
+      }
+    };
+    walk("app");
+    return out;
+  })();
 
   const violations = [];
   let scanned = 0;
   for (const file of CLEARERS) {
-    if (!existsSync(file)) continue;
     scanned++;
     const src = readFileSync(file, "utf8");
     for (const key of SACRED) {
@@ -189,8 +225,10 @@ eq("empty strings never leave a dangling separator",
    * and better, and the test failed anyway. A test pinned to one function's name reports a refactor as
    * a regression, and the next person's cheapest way out is to delete it.
    */
-  if (existsSync("app/pay/callback/page.tsx")) {
-    const pay = readFileSync("app/pay/callback/page.tsx", "utf8");
+  const payCallback = CLEARERS.find((f) => f.includes("pay/callback/page.tsx"));
+  ok("the payment callback was found among the clearing pages", Boolean(payCallback), CLEARERS.join(" · "));
+  if (payCallback) {
+    const pay = readFileSync(payCallback, "utf8");
     const clears = (key) =>
       pay.includes(`removeItem("${key}")`) || new RegExp(`removePersonal\\([^,]+,\\s*"${key}"\\)`).test(pay);
     ok("payment still clears the stale locked scan results", clears("ra_optimize_result"));

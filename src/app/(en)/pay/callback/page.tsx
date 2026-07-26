@@ -1,0 +1,309 @@
+"use client";
+
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { trackStep } from "@/app/lib/funnelClient.ts";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import AuroraBurst from "@/app/components/orb/AuroraBurst";
+import { useOwner } from "@/app/components/useOwner";
+import { removePersonal, writePersonal } from "@/app/lib/personalStore";
+
+function CallbackInner() {
+  const params = useSearchParams();
+  const ar = params.get("lang") === "ar";
+  const t = ar
+    ? {
+        checking: "\u062c\u0627\u0631\u064d \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062f\u0641\u0639\u2026",
+        paidTitle: "\u062a\u0645 \u0627\u0644\u062f\u0641\u0639 \u0628\u0646\u062c\u0627\u062d",
+        failedTitle: "\u0644\u0645 \u064a\u0643\u062a\u0645\u0644 \u0627\u0644\u062f\u0641\u0639",
+        // \u062a\u0645 \u0627\u0644\u062f\u0641\u0639 \u2014 \u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629 (\u0644\u0644\u0645\u0634\u062a\u0631\u064a \u0627\u0644\u0645\u062e\u0635\u0648\u0645 \u0645\u0646\u0647 \u0628\u0645\u0628\u0644\u063a \u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642 \u2014 \u0644\u0627 \u0646\u0642\u0648\u0644 \u0644\u0647 \u201c\u0641\u0634\u0644\u201d)
+        reviewTitle: "\u062a\u0645 \u0627\u0644\u062f\u0641\u0639 \u2014 \u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629",
+        contactSupport: "\u0631\u0627\u0633\u0644\u0646\u0627",
+        pendingTitle: "\u062c\u0627\u0631\u064d \u0645\u0639\u0627\u0644\u062c\u0629 \u0627\u0644\u062f\u0641\u0639",
+        pendingMsg: "\u062f\u0641\u0639\u062a\u0643 \u0642\u064a\u062f \u0627\u0644\u0645\u0639\u0627\u0644\u062c\u0629 \u0648\u0644\u0645 \u062a\u0643\u062a\u0645\u0644 \u0628\u0639\u062f. \u0644\u0627 \u062a\u062f\u0641\u0639 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u2014 \u0627\u0636\u063a\u0637 \u201c\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629\u201d \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a.",
+        refresh: "\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629",
+        wait: "\u0644\u062d\u0638\u0629 \u0645\u0646 \u0641\u0636\u0644\u0643.",
+        noTx: "\u0644\u0645 \u064a\u0635\u0644\u0646\u0627 \u0631\u0642\u0645 \u0627\u0644\u0639\u0645\u0644\u064a\u0629.",
+        confirmed: (o: string) => `\u062a\u0645 \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 ${o}.`,
+        amountMismatch: "\u0627\u0644\u0645\u0628\u0644\u063a \u0627\u0644\u0645\u062f\u0641\u0648\u0639 \u0644\u0627 \u064a\u0637\u0627\u0628\u0642 \u0633\u0639\u0631 \u0627\u0644\u0628\u0627\u0642\u0629. \u0625\u0630\u0627 \u062e\u064f\u0635\u0645 \u0645\u0646\u0643\u060c \u0631\u0627\u0633\u0644\u0646\u0627 \u0648\u0633\u0646\u062d\u0644\u0647\u0627 \u0641\u0648\u0631\u0627\u064b.",
+        statusLine: (st: string) => `\u062d\u0627\u0644\u0629 \u0627\u0644\u062f\u0641\u0639: ${st || "\u063a\u064a\u0631 \u0645\u0643\u062a\u0645\u0644\u0629"}.`,
+        verifyFail: "\u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u062f\u0641\u0639. \u0625\u0630\u0627 \u062e\u064f\u0635\u0645 \u0645\u0646\u0643 \u0627\u0644\u0645\u0628\u0644\u063a\u060c \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627.",
+        monthlyMsg: "\u0643\u0644 \u0634\u064a\u0621 \u062c\u0627\u0647\u0632 \u2014 \u0634\u0643\u0631\u0627\u064b \u0644\u0643! \u0648\u0635\u0648\u0644\u0643 \u063a\u064a\u0631 \u0627\u0644\u0645\u062d\u062f\u0648\u062f \u0645\u0641\u0639\u0651\u0644 \u0644\u0645\u062f\u0629 \u0663\u0660 \u064a\u0648\u0645\u0627\u064b.",
+        completeMsg: "\u0643\u0644 \u0634\u064a\u0621 \u062c\u0627\u0647\u0632 \u2014 \u0634\u0643\u0631\u0627\u064b \u0644\u0643! \u0627\u0644\u062d\u0632\u0645\u0629 \u0627\u0644\u0643\u0627\u0645\u0644\u0629 \u0645\u0641\u0639\u0651\u0644\u0629: \u0627\u0644\u0633\u064a\u0631\u0629 + \u062e\u0637\u0627\u0628 \u0627\u0644\u062a\u0639\u0631\u064a\u0641 + \u0644\u064a\u0646\u0643\u062f\u0625\u0646 + \u062a\u062d\u0636\u064a\u0631 \u0627\u0644\u0645\u0642\u0627\u0628\u0644\u0629\u060c \u0648\u0635\u0648\u0644 \u0643\u0627\u0645\u0644 \u0644\u0645\u062f\u0629 \u0669\u0660 \u064a\u0648\u0645\u0627\u064b.",
+        singleMsg: "\u0643\u0644 \u0634\u064a\u0621 \u062c\u0627\u0647\u0632 \u2014 \u0634\u0643\u0631\u0627\u064b \u0644\u0643! \u0628\u0627\u0642\u062a\u0643 \u0645\u0641\u0639\u0651\u0644\u0629 \u0644\u0645\u062f\u0629 \u0662\u0664 \u0633\u0627\u0639\u0629.",
+        start: "\u0627\u0628\u062f\u0623 \u0627\u0644\u062a\u062d\u0633\u064a\u0646 \u2190",
+        back: "\u0627\u0644\u0631\u062c\u0648\u0639 \u0644\u0644\u0623\u0633\u0639\u0627\u0631",
+        vaultTitle: "\u0627\u0644\u062e\u0632\u0646\u0629",
+        yoursForever: "\u0633\u064a\u0631\u062a\u0643 \u0645\u0644\u0643\u0643 \u0627\u0644\u0622\u0646 \u2014 \u0644\u0644\u0623\u0628\u062f.",
+        receipt: "\u0627\u0644\u0625\u064a\u0635\u0627\u0644",
+        orderNo: "\u0631\u0642\u0645 \u0627\u0644\u0639\u0645\u0644\u064a\u0629",
+        downloadReceipt: "\u062d\u0645\u0651\u0644 \u0627\u0644\u0625\u064a\u0635\u0627\u0644",
+        neverLost: "\u062f\u0641\u0639\u062a\u0643 \u0645\u0627 \u062a\u0645\u0651\u062a \u2014 \u062c\u0631\u0651\u0628 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649\u060c \u0648\u0633\u064a\u0631\u062a\u0643 \u0645\u062d\u0641\u0648\u0638\u0629 \u0639\u0646\u062f\u0643 \u0645\u0627 \u062a\u0631\u0648\u062d.",
+        ownedStamp: "\u0645\u0645\u0644\u0648\u0643\u0629 \u2713",
+      }
+    : {
+        checking: "Confirming your payment…",
+        paidTitle: "Payment successful",
+        failedTitle: "Payment not completed",
+        // For a charged buyer whose amount didn't match — don't tell them it "failed".
+        reviewTitle: "Payment received — needs review",
+        contactSupport: "Contact support",
+        pendingTitle: "Payment processing",
+        pendingMsg: "Your payment is still being processed and hasn't completed yet. Don't pay again — tap “Refresh status” in a moment.",
+        refresh: "Refresh status",
+        wait: "Please wait a moment.",
+        noTx: "No transaction reference was returned.",
+        confirmed: (o: string) => `Order ${o} confirmed.`,
+        amountMismatch: "The amount paid didn't match the plan price. If you were charged, contact support and we'll sort it out.",
+        statusLine: (st: string) => `Payment status: ${st || "not completed"}.`,
+        verifyFail: "We couldn't verify the payment. If you were charged, contact support.",
+        monthlyMsg: "You're all set — thank you! Your unlimited access is active for the next 30 days. Optimize as many resumes as you need.",
+        completeMsg: "You're all set — thank you! Your Complete Pack is active: resume + cover letter + LinkedIn + interview prep, full access for 90 days.",
+        singleMsg: "You're all set — thank you! Your single optimization pass is active for the next 24 hours.",
+        start: "Start optimizing →",
+        back: "Back to pricing",
+        vaultTitle: "The Vault",
+        yoursForever: "Your resume is yours now — forever.",
+        receipt: "Receipt",
+        orderNo: "Order no.",
+        downloadReceipt: "Download receipt",
+        neverLost: "Payment didn't go through — try again. Your work is safe with you, nothing is lost.",
+        ownedStamp: "Owned ✓",
+      };
+  const [state, setState] = useState<"checking" | "paid" | "failed" | "pending">("checking");
+  const [detail, setDetail] = useState("");
+  const [plan, setPlan] = useState<"single" | "complete" | "monthly" | "">("");
+  const [orderNo, setOrderNo] = useState("");
+  const [burst, setBurst] = useState(false);
+  // A charged-but-mismatched buyer is a support case, not a failure — soften the
+  // title. showSupport surfaces a real support channel wherever we ask them to reach out.
+  const [review, setReview] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
+
+  // One-time SAR value per plan — used for ad conversion tracking.
+  const PLAN_VALUE: Record<string, number> = { single: 35, complete: 99, monthly: 75 };
+
+  // Google Ads conversion tracking — fires ONLY on a confirmed payment so ad
+  // spend is measured against real revenue, not clicks. Fully dormant until the
+  // account's conversion ID/label are set as env vars (no ID → nothing loads,
+  // zero effect on the page), so this can ship now and activate with no redeploy.
+  function reportPurchase(paidPlan: "single" | "complete" | "monthly", orderId: string) {
+    const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;        // e.g. AW-1234567890
+    const label = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONV_LABEL; // e.g. AbC-D_efg123
+    if (!adsId || !label) return;
+    const value = PLAN_VALUE[paidPlan] ?? 35;
+    try {
+      const w = window as unknown as { gtag?: (...a: unknown[]) => void; dataLayer?: unknown[] };
+      if (!w.gtag) {
+        const s = document.createElement("script");
+        s.async = true;
+        s.src = `https://www.googletagmanager.com/gtag/js?id=${adsId}`;
+        document.head.appendChild(s);
+        w.dataLayer = w.dataLayer || [];
+        w.gtag = function gtag(...args: unknown[]) { w.dataLayer!.push(args); };
+        w.gtag("js", new Date());
+        w.gtag("config", adsId);
+      }
+      w.gtag("event", "conversion", {
+        send_to: `${adsId}/${label}`,
+        value,
+        currency: "SAR",
+        transaction_id: orderId, // dedupes repeat views of the callback
+      });
+    } catch { /* tracking must never break the confirmation page */ }
+  }
+
+  // Meta Pixel Purchase — fires only on a confirmed payment. No-op unless the
+  // pixel is loaded (NEXT_PUBLIC_META_PIXEL_ID set), so it's safe to ship now.
+  function reportMetaPurchase(paidPlan: "single" | "complete" | "monthly", orderId: string) {
+    const value = PLAN_VALUE[paidPlan] ?? 35;
+    try {
+      const w = window as unknown as { fbq?: (...a: unknown[]) => void };
+      if (typeof w.fbq !== "function") return;
+      w.fbq("track", "Purchase", { value, currency: "SAR", content_name: paidPlan, order_id: orderId });
+    } catch { /* never break the confirmation page */ }
+  }
+
+  // Statuses that mean the payment is definitively over and unsuccessful. Anything
+  // else that isn't "paid" (pending, processing, under_process, unknown/blank) is
+  // still IN PROGRESS — we must NOT call it "failed", or we'd nudge the buyer into
+  // paying a second time for a charge that may still land.
+  const isDeadStatus = (status: string) =>
+    /cancel|declin|fail|expir|refund|void|error|reject/i.test(status || "");
+
+  /* Whose purchase this is. `writePersonal` is a no-op while this is empty, and the stamp is
+     cosmetic — the entitlement is server-side — so a missed stamp on a flaky connection costs a gold
+     border, not access. */
+  const owner = useOwner();
+
+  const checkStatus = useCallback(() => {
+    const tx = params.get("transactionNo") || params.get("TransactionNo");
+    if (!tx) {
+      setState("failed");
+      setDetail(t.noTx);
+      return;
+    }
+    setState("checking");
+    setDetail("");
+    setReview(false);
+    setShowSupport(false);
+    fetch(`/api/pay/verify?transactionNo=${encodeURIComponent(tx)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.paid && d.amountOk !== false) {
+          const paidPlan = d.plan === "complete" ? "complete" : d.plan === "monthly" ? "monthly" : "single";
+          setState("paid");
+          setPlan(paidPlan);
+          /* The end of the organic funnel. Reported once per confirmed payment, with the entry
+             page the session began on — which is the only way to know whether three hundred
+             content pages earn anything. The plan name is an enum; no amount, no order id. */
+          trackStep("paid", { plan: paidPlan });
+          setOrderNo(String(d.orderNumber || tx));
+          setDetail(t.confirmed(d.orderNumber || tx));
+          /*
+           * Mark this ACCOUNT as an owner — every later visit shows the gold stamp.
+           *
+           * It used to say "this device", and the key said so too: `ra_owned` with no owner in it, so
+           * the next person to sign in on a shared browser inherited the purchase. The entitlement
+           * itself is server-side and was never at risk; what leaked was the stamp, which is exactly
+           * the kind of "cosmetic" bug that tells a user they own something they do not.
+           */
+          writePersonal(owner, "ra_owned", "\"1\"");
+          setBurst(true);
+          setTimeout(() => setBurst(false), 2400);
+          // Measure this sale against ad spend (each no-op until its env vars are set).
+          reportPurchase(paidPlan, d.orderNumber || tx);
+          reportMetaPurchase(paidPlan, d.orderNumber || tx);
+          // Old results were generated locked (pre-payment) — clear them so the
+          // next scan comes back complete instead of showing the stale preview.
+          removePersonal(owner, "ra_optimize_result");
+          removePersonal(owner, "ra_ar_optimize_result");
+        } else if (d.paid && d.amountOk === false) {
+          // Charged, but the amount didn't cover the plan — a support case, not a retry.
+          setState("failed");
+          setReview(true);
+          setShowSupport(true);
+          setDetail(t.amountMismatch);
+        } else if (isDeadStatus(d.status)) {
+          setState("failed");
+          setDetail(t.statusLine(d.status));
+        } else {
+          // Not paid yet, but not dead either — keep it as "pending" and let the
+          // buyer re-poll instead of showing a scary "failed" + pay-again path.
+          setState("pending");
+          setDetail(t.pendingMsg);
+        }
+      })
+      .catch(() => {
+        // A network/verify blip is not a failed payment — let them retry the check.
+        setState("pending");
+        setShowSupport(true);
+        setDetail(t.verifyFail);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, owner]);
+
+  /*
+   * Kick off the verification once the page exists.
+   *
+   * `set-state-in-effect` is disabled here rather than worked around, because what this effect
+   * starts is a network call to the payment provider — the state it sets is "checking", and there
+   * is no way to know a payment's outcome during render. The initial state is already "checking",
+   * so nothing flashes; the rule is firing on the synchronous reset inside `checkStatus`, which is
+   * what makes the Retry button work.
+   */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    checkStatus();
+  }, [checkStatus]);
+
+  function downloadReceipt() {
+    const lines = [
+      "cv.rabit.sa", "───────────────", t.paidTitle,
+      `${t.orderNo}: ${orderNo}`,
+      `${ar ? "الباقة" : "Plan"}: ${plan || "single"}`,
+      `SAR ${PLAN_VALUE[plan || "single"] ?? 35}`,
+      "───────────────", t.yoursForever,
+    ];
+    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `receipt-${orderNo || "cv-rabit"}.txt`; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // COSMOS (making/paying) until success, then GLASS (owning). Failure stays a
+  // calm cosmos — never a scary red world — and never implies work was lost.
+  const paid = state === "paid";
+  const orbState = paid ? "done" : state === "failed" ? "locked" : "golden";
+
+  // رابط becomes the Vault: golden while confirming (with a 🔒), opens to a
+  // green(🔓) on success, dims (locked) on failure.
+
+  return (
+    <main dir={ar ? "rtl" : "ltr"} lang={ar ? "ar" : "en"}
+      className="relative flex min-h-dvh items-center justify-center px-6"
+      style={{ background: paid ? "var(--glass-bg)" : "var(--bg)", color: paid ? "var(--glass-text)" : "var(--fg)", transition: "background 0.9s var(--smooth)" }}>
+
+      <div className={`relative mt-24 w-full max-w-md rounded-3xl p-10 text-center ${paid ? "glass-surface" : ""}`}
+        style={paid ? undefined : { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(245,184,64,0.25)", backdropFilter: "blur(10px)" }}>
+
+        {/* aurora burst emitted from رابط the moment the lock opens */}
+        {burst && <div className="pointer-events-none absolute inset-x-0" style={{ top: "-96px" }}><AuroraBurst /></div>}
+
+        <h1 className="text-2xl font-extrabold">
+          {state === "checking" ? t.checking : paid ? t.paidTitle : state === "pending" ? t.pendingTitle : review ? t.reviewTitle : t.failedTitle}
+        </h1>
+        <p className="mt-3 text-sm" style={{ color: paid ? "var(--glass-muted)" : "var(--muted)" }}>
+          {state === "failed" && !review ? t.neverLost : detail || t.wait}
+        </p>
+        {showSupport && (
+          <p className="mt-3 text-sm">
+            <a href="mailto:alanziabdulaziz4@gmail.com?subject=Payment%20issue" className="font-semibold underline" style={{ color: paid ? "var(--gold)" : "var(--accent)" }}>
+              {t.contactSupport}
+            </a>
+          </p>
+        )}
+
+        {paid && (
+          <>
+            <div className="mt-5 flex items-center justify-center">
+              <span className="gold-stamp">{t.ownedStamp}</span>
+            </div>
+            <p className="mt-4 text-lg font-bold">{t.yoursForever}</p>
+            <p className="mt-2 text-sm" style={{ color: "var(--glass-muted)" }}>
+              {plan === "complete" ? t.completeMsg : plan === "monthly" ? t.monthlyMsg : t.singleMsg}
+            </p>
+
+            {/* receipt */}
+            <div className="mt-6 rounded-2xl p-4 text-start" style={{ background: "rgba(11,18,32,0.05)", border: "1px solid rgba(11,18,32,0.1)" }}>
+              <div className="mb-2 font-mono text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--glass-muted)" }}>{t.receipt}</div>
+              <div className="flex items-center justify-between text-sm"><span style={{ color: "var(--glass-muted)" }}>{t.orderNo}</span><span dir="ltr" className="font-mono font-semibold">{orderNo}</span></div>
+              <div className="flex items-center justify-between text-sm"><span style={{ color: "var(--glass-muted)" }}>SAR</span><span className="font-mono font-semibold">{PLAN_VALUE[plan || "single"] ?? 35}</span></div>
+              <button onClick={downloadReceipt} className="mt-3 w-full rounded-lg py-2 text-xs font-bold" style={{ background: "rgba(11,18,32,0.06)", color: "var(--glass-text)" }}>↓ {t.downloadReceipt}</button>
+            </div>
+
+            <Link href={ar ? "/ar/optimize" : "/optimize"} className="mt-6 inline-block rounded-xl px-8 py-3 font-bold" style={{ background: "linear-gradient(135deg,#8b5cf6,#7c3aed)", color: "#ffffff" }}>{t.start}</Link>
+          </>
+        )}
+        {state === "pending" && (
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <button onClick={checkStatus} className="rounded-xl px-8 py-3 font-bold" style={{ background: "var(--gold)", color: "#3a2708" }}>{t.refresh}</button>
+            <Link href={ar ? "/ar#pricing" : "/#pricing"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>{t.back}</Link>
+          </div>
+        )}
+        {state === "failed" && (
+          <Link href={ar ? "/ar#pricing" : "/#pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}>{t.back}</Link>
+        )}
+      </div>
+    </main>
+  );
+}
+
+export default function PayCallback() {
+  return (
+    <Suspense fallback={<main className="min-h-dvh" style={{ background: "var(--bg)" }} />}>
+      <CallbackInner />
+    </Suspense>
+  );
+}

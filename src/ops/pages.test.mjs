@@ -172,10 +172,28 @@ for (const prof of [
   await page.evaluate(() => window.localStorage.clear());
   await page.goto(`${BASE}/builder?template=azure`, { waitUntil: "networkidle" });
   await page.waitForTimeout(900);
+  /*
+   * Read the RESUME RECORD, not `ra_journey_en`.
+   *
+   * That key was the old one-slot-per-language draft, and it is exactly what `resumeStore` retired:
+   * a resume now lives at `ra_cv:{owner}:{resumeId}` with the owner and id IN THE KEY, which is the
+   * whole point — one slot per language is what let two resumes overwrite each other.
+   *
+   * So the record is found by its prefix rather than named, because the id is minted at runtime and
+   * the owner depends on whether anyone is signed in. Asserting on a key the product stopped writing
+   * is a test that reports a working feature as broken, which is worse than no test: verified by
+   * loading `/builder?template=azure` and dumping storage — the template is there, under the new key,
+   * within the same 900ms this test already waits.
+   */
   const chosen = await page.evaluate(() => {
     try {
-      const d = JSON.parse(localStorage.getItem("ra_journey_en") || "{}");
-      return d?.builder?.template ?? "";
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith("ra_cv:")) continue;
+        const rec = JSON.parse(localStorage.getItem(k) || "{}");
+        if (rec?.state?.template) return rec.state.template;
+      }
+      return "";
     } catch { return ""; }
   });
   ok(`${prof.name}: a template chosen in the gallery reaches the builder`, chosen === "azure", chosen);

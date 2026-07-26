@@ -1,0 +1,60 @@
+import type { Metadata } from "next";
+import PageBody from "@/app/components/seo/PageBody";
+
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
+
+export const metadata: Metadata = {
+  title: "AI Interview Prep — Likely Questions & Strong Answers | Sira",
+  description: "Paste your resume and the job description — get the 8 most likely interview questions with strong personalized answers, plus the red flags to prepare for.",
+  alternates: { canonical: `${BASE}/interview` },
+};
+
+/**
+ * 53 words in the server response before this — the tool is a client component. The section below
+ * is server-rendered, and it also carries the only internal link to `/interview-live`, which the
+ * crawl found orphaned: a page nothing links to is a page a crawler reaches last and a person
+ * never reaches at all.
+ */
+export default function InterviewLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <PageBody
+        heading="What to prepare, and in what order"
+        intro={[
+          "Most interview preparation fails in the same way: hours spent on questions nobody asks, and no answer ready for the one the CV obviously invites. An interviewer reads the same document a recruiter did, and the questions come from what is in it — a gap between two jobs, a title that changed, a skill claimed once and never explained.",
+          "This tool reads your CV against the advert and produces the questions that document actually provokes, with an answer built from your own experience rather than a template. It also names the weak points a careful interviewer will find, which is the part most preparation skips.",
+        ]}
+        stepsHeading="How to use it"
+        steps={[
+          { title: "Paste the CV and the advert", body: "Both. The questions change completely depending on what the employer emphasised." },
+          { title: "Answer the uncomfortable ones first", body: "The gap, the short tenure, the missing certification. Those are the questions that decide the interview." },
+          { title: "Say your answers out loud", body: "A prepared answer that has never been spoken comes out at twice the length it should. The live practice page is for exactly this." },
+          { title: "Prepare two questions of your own", body: "Ending with none reads as indifference, and the questions you ask are read as closely as the ones you answer." },
+        ]}
+        faqHeading="Questions people ask"
+        faq={[
+          {
+            q: "How do I explain a gap in my employment?",
+            a: "Briefly, factually, and without apology — then move to what you did with the time. An interviewer is checking whether you can discuss it calmly, not auditing the months.",
+          },
+          {
+            q: "What should I say about salary?",
+            a: "Ask what range the role is budgeted at before naming a number. In the Saudi market total package matters more than base — housing and transport allowances are usually stated separately.",
+          },
+          {
+            q: "Do I need to bring a printed CV?",
+            a: "Bring two. Panels frequently have one copy between three people, and the person who arrives with spares is remembered for the right reason.",
+          },
+        ]}
+        relatedHeading="Related"
+        related={[
+          { href: "/interview-live", label: "Practise answering out loud" },
+          { href: "/optimize", label: "Check your CV against the advert" },
+          { href: "/builder", label: "Build a CV" },
+          { href: "/cover-letter-examples", label: "Cover letter examples" },
+        ]}
+      />
+    </>
+  );
+}
