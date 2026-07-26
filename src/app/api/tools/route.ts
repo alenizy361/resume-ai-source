@@ -11,8 +11,28 @@ export const maxDuration = 300;
  * Outputs are small, so these run non-streaming and fit well inside the time cap.
  */
 
-const PROMPTS: Record<string, (a: string, b: string) => string> = {
-  linkedin: (profile, targetRole) => `You are a LinkedIn optimization expert. Rewrite this person's LinkedIn presence for the target role.
+/**
+ * ── the language these prompts never had ──
+ *
+ * Both were English-only text and the route read no language field, so a LinkedIn headline, an About
+ * section and eight interview questions came back in English regardless of the CV or the interface.
+ *
+ * Latent rather than live — the two pages that call this are English today — but latent in the
+ * direction the product is growing. An Arabic LinkedIn profile is the normal case for this market,
+ * and "we will add Arabic pages later" is exactly when a hardcoded prompt language becomes a bug
+ * nobody remembers introducing.
+ *
+ * Stated as its own line rather than folded into the persona sentence, because a rule the model can
+ * skim past is a rule it skims past. The JSON KEYS stay English in both cases: they are a wire
+ * format the caller destructures, not content, and translating them would break the reader.
+ */
+const LANG_RULE = (lang: "ar" | "en") =>
+  lang === "ar"
+    ? `\n\nOUTPUT LANGUAGE: Write every VALUE in Arabic. Keep the JSON keys exactly as given in English. Keep proper nouns — employers, product names, certifications — in their original script.`
+    : `\n\nOUTPUT LANGUAGE: Write every value in English.`;
+
+const PROMPTS: Record<string, (a: string, b: string, lang: "ar" | "en") => string> = {
+  linkedin: (profile, targetRole, lang) => `You are a LinkedIn optimization expert. Rewrite this person's LinkedIn presence for the target role.
 
 CURRENT PROFILE / RESUME TEXT:
 ${profile}
@@ -26,9 +46,9 @@ Return ONLY a JSON object:
   "skills": ["<the 10-15 skills they should list, ordered by relevance to the target role — only skills their background supports>"],
   "tips": ["<3-4 specific profile tips, e.g. banner, featured section, activity>"]
 }
-Never invent employers or achievements. No text outside the JSON.`,
+Never invent employers or achievements. No text outside the JSON.${LANG_RULE(lang)}`,
 
-  interview: (resume, jobDescription) => `You are an interview coach. Based on this resume and job description, prepare the candidate.
+  interview: (resume, jobDescription, lang) => `You are an interview coach. Based on this resume and job description, prepare the candidate.
 
 RESUME:
 ${resume}
@@ -43,7 +63,7 @@ Return ONLY a JSON object:
   ],
   "redFlags": ["<2-3 weaknesses in their profile the interviewer may probe, with one-line advice each>"]
 }
-Provide 8 questions: 2 intro/behavioral, 4 role-specific technical/skills, 2 about gaps in their background. No text outside the JSON.`,
+Provide 8 questions: 2 intro/behavioral, 4 role-specific technical/skills, 2 about gaps in their background. No text outside the JSON.${LANG_RULE(lang)}`,
 };
 
 function extractJson(text: string): string {
@@ -91,7 +111,10 @@ function repairJson(s: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { mode, inputA, inputB } = await req.json();
+    const { mode, inputA, inputB, lang: rawLang } = await req.json();
+    /* Defaults to English because that is what both callers got implicitly before, so nothing changes
+       for them until they send it. An Arabic page added later gets Arabic by asking for it. */
+    const lang: "ar" | "en" = rawLang === "ar" ? "ar" : "en";
     const promptFn = PROMPTS[mode];
     if (!promptFn) return NextResponse.json({ error: "Unknown tool." }, { status: 400 });
     if (!inputA?.trim() || inputA.length < 50) {
@@ -138,7 +161,7 @@ export async function POST(req: NextRequest) {
             max_tokens: 3200, // interview returns 8 Q&A — 2200 truncated it, yielding invalid/empty JSON
             messages: [
               { role: "system", content: "You respond with a single valid JSON object and nothing else. Never include unescaped quotes inside JSON string values." },
-              { role: "user", content: promptFn(String(inputA).slice(0, 8000), String(inputB).slice(0, 4000)) },
+              { role: "user", content: promptFn(String(inputA).slice(0, 8000), String(inputB).slice(0, 4000), lang) },
             ],
           }),
         });

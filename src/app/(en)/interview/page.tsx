@@ -36,7 +36,7 @@ export default function InterviewPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           signal: ctrl.signal,
-          body: JSON.stringify({ mode: "interview", inputA: resume, inputB: jd }),
+          body: JSON.stringify({ mode: "interview", inputA: resume, inputB: jd , lang: "en" }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || `Server ${res.status}`);

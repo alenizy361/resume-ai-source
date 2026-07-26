@@ -31,7 +31,7 @@ export default function LinkedInPage() {
       const res = await fetch("/api/tools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "linkedin", inputA: profile, inputB: targetRole }),
+        body: JSON.stringify({ mode: "linkedin", inputA: profile, inputB: targetRole , lang: "en" }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");

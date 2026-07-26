@@ -358,7 +358,28 @@ export const TASKS: Record<TaskName, TaskSpec> = {
     retries: 1,
     timeoutRetries: 1,
     validate: (i) => str(i.resume).length > 40 ? null : "cv-too-short",
-    body: (i) => ({ resume: str(i.resume), jobDescription: str(i.jobAd), lang: i.lang ?? "en" }),
+    /*
+     * ── the key this used to send was both ignored AND wrong ──
+     *
+     * It was `lang: i.lang ?? "en"`. Two faults, stacked. `/api/optimize` reads `uiLang` and
+     * `outLang` and nothing called `lang`, so the field was discarded — and `outLang` then defaulted
+     * to English inside the route. Any caller reaching this task through `runTask` got an English
+     * rewrite of an Arabic CV.
+     *
+     * And even the discarded value was the wrong one: `i.lang` is the INTERFACE language, while the
+     * CV's own language is `i.cvLang`. `TaskInput`'s own documentation says so.
+     *
+     * Masked because the two live `/optimize` pages bypass `runTask` and post `outLang` themselves.
+     * A defect reachable only through the typed, shared path — the one a new caller would use.
+     */
+    body: (i) => ({
+      resume: str(i.resume),
+      jobDescription: str(i.jobAd),
+      /* The advice's language follows the reader; the RESUME's follows the document. Two decisions,
+         and collapsing them is what returned a fully Arabic CV to an English request once already. */
+      uiLang: i.lang ?? "en",
+      outLang: i.cvLang ?? i.lang ?? "en",
+    }),
     // The optimize route returns a whole result object; the caller reads its fields.
     parse: (raw) => (raw && typeof raw === "object") ? raw : null,
   },

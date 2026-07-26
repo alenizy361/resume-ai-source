@@ -95,5 +95,77 @@ console.log("\n── /api/cover-letter writes in the CV's language, not the mod
   ok("the builder derives it from the CV's language", /outLang: arabicCv \? "ar" : "en"/.test(design));
 }
 
+/* ── the two that were masked, and the one that was latent ────────────────────────── */
+console.log("\n── the CV's language reaches every route that writes CV content ──");
+{
+  const { readFileSync } = await import("node:fs");
+  const strip = (t) => t.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+
+  /*
+   * ── O-5: /api/optimize's Anthropic branch dropped both language arguments ──
+   *
+   * It called `PROMPT(resume, jobDescription)` while the NVIDIA branch beside it passed four
+   * arguments, and it accepted `extra` without ever concatenating it. Two consequences, live the
+   * moment `AI_PROVIDER=anthropic` is set: `outLang` undefined falls to the prompt's English branch,
+   * so a user who chose Arabic gets English; and `extra` is where `LANGUAGE_RETRY` arrives, so the
+   * retry re-sent a byte-identical prompt and the model was never told what it got wrong.
+   *
+   * Masked by the default provider being NVIDIA — the kind of defect that appears the day someone
+   * flips one environment variable, with nothing in the diff to explain it.
+   */
+  const opt = strip(readFileSync("app/api/optimize/route.ts", "utf8"));
+  ok("the Anthropic branch takes both languages",
+    /async function callAnthropic\(\s*resume: string, jobDescription: string, uiLang\?: string, outLang\?: string, extra = ""/.test(opt));
+  ok("and passes them to the prompt",
+    /PROMPT\(resume, jobDescription, uiLang, outLang\)/.test(opt));
+  ok("and finally concatenates `extra`, so the retry says something new",
+    /PROMPT\(resume, jobDescription, uiLang, outLang\) \+ extra/.test(opt));
+  ok("the retry site passes them through",
+    /callAnthropic\(resume, jd, uiLang, outLang, extra\)/.test(opt));
+  /* Both providers must now receive the same four things, or the bug returns on one of them. */
+  ok("neither provider is called with fewer arguments than the other",
+    !/callAnthropic\(resume, jd, extra\)/.test(opt));
+
+  /*
+   * ── O-6: `ats_review` sent a key the route does not read, containing the wrong language ──
+   *
+   * `lang: i.lang ?? "en"` — discarded by the route, which reads `uiLang`/`outLang`, so `outLang`
+   * defaulted to English inside it. And the discarded value was the INTERFACE language, where the
+   * CV's own is `i.cvLang`; `TaskInput`'s own documentation says so.
+   *
+   * Reachable only through `runTask` — the typed, shared path a new caller would use — because the
+   * two live `/optimize` pages bypass it and post `outLang` themselves.
+   */
+  const tasks = strip(readFileSync("app/lib/aiTasks.ts", "utf8"));
+  const atsBody = tasks.slice(tasks.indexOf('endpoint: "/api/optimize"'), tasks.indexOf('endpoint: "/api/optimize"') + 700);
+  ok("ats_review sends uiLang", /uiLang: i\.lang \?\? "en"/.test(atsBody));
+  ok("and outLang from the CV, not the interface", /outLang: i\.cvLang \?\? i\.lang \?\? "en"/.test(atsBody));
+  ok("and no longer sends a key the route ignores", !/\blang: i\.lang \?\? "en"[,}]/.test(atsBody));
+
+  /*
+   * ── O-7: /api/tools was English-only ──
+   *
+   * Both prompts were English text and the route read no language, so a LinkedIn headline, an About
+   * section and eight interview questions came back in English regardless of the CV or the interface.
+   * Latent — both callers are English pages today — but latent in the direction the product grows.
+   */
+  const tools = readFileSync("app/api/tools/route.ts", "utf8");
+  const tcode = strip(tools);
+  ok("/api/tools reads a language", /rawLang === "ar" \? "ar" : "en"/.test(tcode));
+  ok("both prompts take it", /\(a: string, b: string, lang: "ar" \| "en"\) => string/.test(tcode));
+  /* `[^)]*` stopped at the first `)` — the call nests `String(inputA).slice(...)`, so the naive
+     class never reached the argument being asserted. A regex that cannot match the real call is a
+     failing test with nothing wrong behind it. */
+  ok("and it reaches the model", /promptFn\([\s\S]*?, lang\)/.test(tcode));
+  ok("the rule is its own line, not folded into the persona", /OUTPUT LANGUAGE/.test(tools));
+  /* The JSON keys are a wire format the caller destructures, not content — translating them would
+     break the reader rather than serve them. */
+  ok("the JSON keys stay English", /Keep the JSON keys exactly as given in English/.test(tools));
+  for (const f of ["app/(en)/linkedin/page.tsx", "app/(en)/interview/page.tsx"]) {
+    ok(`${f.split("/").slice(-2).join("/")} declares its language`,
+      /lang: "en"/.test(readFileSync(f, "utf8")));
+  }
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

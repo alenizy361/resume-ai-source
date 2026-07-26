@@ -432,7 +432,27 @@ async function streamNvidia(
   return full;
 }
 
-async function callAnthropic(resume: string, jobDescription: string, extra = ""): Promise<string> {
+/**
+ * ── the two arguments this dropped, and what that cost ──
+ *
+ * It was `callAnthropic(resume, jobDescription, extra)`, and inside it called
+ * `PROMPT(resume, jobDescription)` — no `uiLang`, no `outLang` — while accepting `extra` and never
+ * concatenating it. The NVIDIA branch beside it passes all four. Two consequences, both live the
+ * moment `AI_PROVIDER=anthropic` is set:
+ *
+ *   · `outLang` undefined means `resumeLangRule` falls to its English branch, which says the resume
+ *     "must ALWAYS be 100% professional ENGLISH". A user who explicitly chose Arabic gets English.
+ *
+ *   · `extra` is where `LANGUAGE_RETRY` arrives. Dropped, the retry re-sends a byte-identical prompt,
+ *     so the model is never told what it got wrong. The comment at the retry site — "Attempt 1 tells
+ *     the model exactly what it got wrong last time" — was simply false on this provider.
+ *
+ * Masked today only because the default provider is NVIDIA. It is the kind of defect that appears
+ * the day someone flips one environment variable, with nothing in the diff to explain it.
+ */
+async function callAnthropic(
+  resume: string, jobDescription: string, uiLang?: string, outLang?: string, extra = "",
+): Promise<string> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY is not set");
   /* `AI_MODEL` also names the NVIDIA model this route defaults to, where a `meta/…` id is correct —
@@ -453,7 +473,7 @@ async function callAnthropic(resume: string, jobDescription: string, extra = "")
     body: JSON.stringify({
       model,
       max_tokens: 4096,
-      messages: [{ role: "user", content: PROMPT(resume, jobDescription) }],
+      messages: [{ role: "user", content: PROMPT(resume, jobDescription, uiLang, outLang) + extra }],
       /*
        * Reasoning off — and note this is EXTENDED thinking, not the `{"t":"think"}` lines this route
        * streams to the user. Those are the model's prose analysis, which is the product; this is
@@ -584,7 +604,7 @@ export async function POST(req: NextRequest) {
             // Attempt 1 tells the model exactly what it got wrong last time.
             const extra = attempt > 0 && langMiss ? LANGUAGE_RETRY(outLang) : "";
             const raw = await (PROVIDER === "anthropic"
-              ? callAnthropic(resume, jd, extra)
+              ? callAnthropic(resume, jd, uiLang, outLang, extra)
               : streamNvidia(resume, jd, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang, extra));
 
             if (!raw.trim()) throw new Error("Empty response from AI provider");

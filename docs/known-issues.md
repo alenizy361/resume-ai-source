@@ -404,20 +404,70 @@ The prompt never names an output language and no call site sends one. An Arabic 
 an English cover letter and vice versa, decided by the model. This is a **paid** feature.
 Three call sites: `DesignSection.tsx:243`, both `/optimize` pages.
 
-### O-5 · P1 · `/api/optimize`'s Anthropic branch drops the language arguments
+### F-15 · P1 · `/api/optimize`'s Anthropic branch now receives both languages — FIXED *(was O-5)*
+
+`callAnthropic(resume, jobDescription, extra)` called `PROMPT(resume, jobDescription)` — no
+`uiLang`, no `outLang` — while accepting `extra` and never concatenating it. The NVIDIA branch
+beside it passed all four. Two consequences, live the moment `AI_PROVIDER=anthropic` is set:
+
+- `outLang` undefined falls to the prompt's English branch, which says the resume "must ALWAYS be
+  100% professional ENGLISH". A user who explicitly chose Arabic gets English.
+- `extra` is where `LANGUAGE_RETRY` arrives. Dropped, the retry re-sent a byte-identical prompt, so
+  the model was never told what it got wrong. The comment at the retry site — *"Attempt 1 tells the
+  model exactly what it got wrong last time"* — was false on this provider.
+
+Masked by the default provider being NVIDIA: the kind of defect that appears the day someone flips
+one environment variable, with nothing in the diff to explain it.
+
+**Evidence.** `ops/language.test.mjs` asserts both branches now receive the same four arguments, so
+it cannot regress on one provider only.
+
+### O-5 · superseded by F-15
 
 `callAnthropic` calls `PROMPT(resume, jobDescription)` without `uiLang`/`outLang`, and never
 concatenates its `extra` argument. Under `AI_PROVIDER=anthropic` a user who chose Arabic
 gets English, and the language-retry instruction never reaches the model — so the retry
 sends a byte-identical prompt. Currently masked because the default provider is NVIDIA.
 
-### O-6 · P1 · `ats_review` sends a key the route does not read, containing the wrong language
+### F-16 · P1 · `ats_review` sends the CV's language, in a key the route reads — FIXED *(was O-6)*
+
+`aiTasks.ts` sent `lang: i.lang ?? "en"`. Two faults, stacked: `/api/optimize` reads `uiLang` and
+`outLang` and nothing called `lang`, so the field was discarded and `outLang` defaulted to English
+inside the route — and even the discarded value was the **interface** language, where the CV's own is
+`i.cvLang`, as `TaskInput`'s own documentation says.
+
+Any caller reaching this task through `runTask` got an English rewrite of an Arabic CV. Masked
+because the two live `/optimize` pages bypass `runTask` and post `outLang` themselves — a defect
+reachable only through the typed, shared path, which is the one a new caller would use.
+
+**Fix.** `uiLang: i.lang`, `outLang: i.cvLang ?? i.lang`. The advice's language follows the reader;
+the resume's follows the document. Collapsing them is what returned a fully Arabic CV to an English
+request once already.
+
+### O-6 · superseded by F-16
 
 `aiTasks.ts:361` sends `lang: i.lang ?? "en"` — the **UI** language. `/api/optimize` reads
 only `uiLang`/`outLang`, so the field is discarded and `outLang` defaults to English. Masked
 only because the live pages bypass `runTask` and post `outLang` themselves.
 
-### O-7 · P1 · `/api/tools` is English-only
+### F-17 · P1 · `/api/tools` takes a language — FIXED *(was O-7)*
+
+Both prompts were English text and the route read no language field, so a LinkedIn headline, an
+About section and eight interview questions came back in English regardless of the CV or the
+interface.
+
+Latent rather than live — both callers are English pages today — but latent in the direction the
+product is growing. An Arabic LinkedIn profile is the normal case for this market, and "we will add
+the Arabic pages later" is exactly when a hardcoded prompt language becomes a bug nobody remembers
+introducing.
+
+**Fix.** `lang` on the request, an `OUTPUT LANGUAGE` rule on its own line in both prompts, and both
+callers declaring `"en"` explicitly rather than inheriting it by accident.
+
+The JSON **keys** stay English deliberately: they are a wire format the caller destructures, not
+content, and translating them would break the reader rather than serve them.
+
+### O-7 · superseded by F-17
 
 Both prompts are hardcoded English and the route reads no language. LinkedIn headline/About
 and the eight interview questions always return English regardless of CV or UI language.
