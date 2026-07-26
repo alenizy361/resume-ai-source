@@ -5,6 +5,7 @@ import OrbBrand from "../components/OrbBrand";
 import OrbSceneSetter from "../components/orb/OrbSceneSetter";
 import Link from "next/link";
 import { JOBS, CATEGORIES } from "../lib/jobs";
+import { copyFor, sectorForCategory, sectorsFor } from "../lib/sectors.ts";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -53,9 +54,35 @@ export default function Hub() {
       </section>
 
       <div className="mx-auto max-w-4xl px-6 pb-16">
-        {CATEGORIES.map((cat) => (
+        {/*
+          Browse by sector, above the profession list rather than below it. A visitor who knows the
+          industry but not the job title had nowhere to go before this; a crawler had no signal that
+          the professions under one heading belonged together beyond the heading itself.
+        */}
+        <section className="mb-12">
+          <h2 className="mb-3 text-xl font-bold tracking-tight">Browse by sector</h2>
+          <div className="flex flex-wrap gap-2">
+            {sectorsFor("en").map((s) => (
+              <Link key={s.slug} href={`/resume-examples/category/${s.slug}`}
+                className="rounded-lg px-3.5 py-2 text-sm font-semibold"
+                style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>
+                {copyFor(s, "en")!.name}
+              </Link>
+            ))}
+            <Link href="/resume-examples/category" className="rounded-lg px-3.5 py-2 text-sm font-semibold text-accent"
+              style={{ border: "1px solid var(--line)" }}>All sectors →</Link>
+          </div>
+        </section>
+
+        {CATEGORIES.map((cat) => {
+          const sector = sectorForCategory(cat, "en");
+          return (
           <div key={cat} className="mb-10">
-            <h2 className="mb-4 text-xl font-bold tracking-tight">{cat}</h2>
+            <h2 className="mb-4 text-xl font-bold tracking-tight">
+              {sector
+                ? <Link href={`/resume-examples/category/${sector.slug}`} style={{ color: "var(--fg)" }}>{cat}</Link>
+                : cat}
+            </h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {JOBS.filter((j) => j.category === cat).map((j) => (
                 <Link key={j.slug} href={`/resume-examples/${j.slug}`} className="card card-hover p-4">
@@ -65,7 +92,8 @@ export default function Hub() {
               ))}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>

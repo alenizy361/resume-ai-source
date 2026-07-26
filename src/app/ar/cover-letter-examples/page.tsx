@@ -9,12 +9,17 @@ import { copyFor, sectorForCategory, sectorsFor } from "../../lib/sectors.ts";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
+/** The second orphaned set — sixty-one Arabic cover-letter pages with no index above them. */
 export const metadata: Metadata = {
-  title: "أمثلة سير ذاتية عربية لكل مهنة + كلمات ATS (2026)",
-  description: "دليل أمثلة السير الذاتية العربية لكل مهنة — كلمات ATS، المهارات، ونماذج جاهزة. اختر مهنتك وابنِ سيرتك المتوافقة مع أنظمة التوظيف مجاناً.",
+  title: "نماذج خطابات تعريف عربية لكل مهنة (2026)",
+  description: "خطاب تعريف جاهز للتخصيص لكل مهنة، بهيكل من أربع فقرات وأمثلة صياغة — واضح ومختصر بلا مبالغات.",
   alternates: {
-    canonical: `${BASE}/ar/resume-examples`,
-    languages: { ar: `${BASE}/ar/resume-examples`, en: `${BASE}/resume-examples`, "x-default": `${BASE}/resume-examples` },
+    canonical: `${BASE}/ar/cover-letter-examples`,
+    languages: {
+      ar: `${BASE}/ar/cover-letter-examples`,
+      en: `${BASE}/cover-letter-examples`,
+      "x-default": `${BASE}/cover-letter-examples`,
+    },
   },
 };
 
@@ -33,13 +38,17 @@ export default function Hub() {
       </nav>
 
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="chip mb-4">أمثلة السير الذاتية</div>
-        <h1 className="text-4xl font-extrabold tracking-tight">أمثلة سير ذاتية عربية لكل مهنة</h1>
+        <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
+          <Link href="/ar" style={{ color: "var(--faint)" }}>الرئيسية</Link> ‹ خطابات التعريف
+        </div>
+        <div className="chip mb-4">خطابات التعريف</div>
+        <h1 className="text-4xl font-extrabold tracking-tight">نماذج خطابات تعريف لكل مهنة</h1>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          اختر مهنتك لترى نموذج سيرة ذاتية كاملاً، كلمات ATS التي تفحصها أنظمة التوظيف، المهارات، وخطاب تعريف جاهز — ثم ابنِ سيرتك مجاناً.
+          خطاب التعريف في السوق السعودي يُقرأ سريعاً أو لا يُقرأ أصلاً، فالمكسب كله في أول سطرين: الوظيفة المحدّدة
+          التي تتقدّم لها، وسبب واحد ملموس يجعلك مناسباً لها. اختر مهنتك لترى هيكلاً من أربع فقرات ونموذجاً
+          تُبدِّل فيه الأقواس بحقائقك — وليس نصاً يُنسَخ كما هو.
         </p>
 
-        {/* التصفّح حسب القطاع — لمن يعرف مجاله ولا يعرف المسمّى الذي يبحث عنه. */}
         <section className="mt-10">
           <h2 className="mb-3 text-xl font-bold">تصفّح حسب القطاع</h2>
           <div className="flex flex-wrap gap-2">
@@ -50,30 +59,27 @@ export default function Hub() {
                 {copyFor(s, "ar")!.name}
               </Link>
             ))}
-            <Link href="/ar/resume-examples/category" className="rounded-lg px-3.5 py-2 text-sm font-semibold text-accent"
-              style={{ border: "1px solid var(--line)" }}>كل القطاعات →</Link>
           </div>
         </section>
 
         {AR_CATEGORIES.map((cat) => {
           const sector = sectorForCategory(cat, "ar");
           return (
-          <section key={cat} className="mt-10">
-            <h2 className="mb-4 text-xl font-bold">
-              {sector
-                ? <Link href={`/ar/resume-examples/category/${sector.slug}`} style={{ color: "var(--fg)" }}>{cat}</Link>
-                : cat}
-            </h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {JOBS_AR.filter((j) => j.category === cat).map((j) => (
-                <Link key={j.slug} href={`/ar/resume-examples/${j.slug}`}
-                  className="card card-hover p-4" style={{ color: "var(--fg)" }}>
-                  <div className="font-bold">{j.title}</div>
-                  <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>مثال سيرة · مهارات · خطاب تعريف</div>
-                </Link>
-              ))}
-            </div>
-          </section>
+            <section key={cat} className="mt-10">
+              <h2 className="mb-4 text-xl font-bold">
+                {sector
+                  ? <Link href={`/ar/resume-examples/category/${sector.slug}`} style={{ color: "var(--fg)" }}>{cat}</Link>
+                  : cat}
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {JOBS_AR.filter((j) => j.category === cat).map((j) => (
+                  <Link key={j.slug} href={`/ar/cover-letter-examples/${j.slug}`} className="card card-hover p-4" style={{ color: "var(--fg)" }}>
+                    <div className="font-bold">{j.title}</div>
+                    <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>هيكل · نموذج جاهز · أخطاء شائعة</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
           );
         })}
       </div>
@@ -81,7 +87,7 @@ export default function Hub() {
       <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
         <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("ar")}</p>
       </footer>
-          <HubLinks ar current="/ar/resume-examples" />
+      <HubLinks ar current="/ar/cover-letter-examples" />
     </main>
   );
 }

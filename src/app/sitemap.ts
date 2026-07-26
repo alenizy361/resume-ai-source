@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { JOB_SLUGS } from "./lib/jobs";
 import { AR_SLUGS } from "./lib/jobs-ar";
 import { TEMPLATE_SLUGS } from "./lib/templates";
+import { sectorSlugs } from "./lib/sectors.ts";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -11,7 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/ats-resume-checker", "/jobscan-alternative", "/free-resume-checker",
     "/resume-examples", "/resume-templates",
     "/cover-letter-examples", "/resume-skills",
+    "/resume-examples/category", "/ar/resume-examples/category",
     "/ar", "/ar/optimize", "/ar/resume-examples", "/interview-live",
+    // The Arabic skills and cover-letter hubs. Their 122 profession pages were in this sitemap
+    // with no index page above them — reachable by a crawler, orphaned for a reader.
+    "/ar/resume-skills", "/ar/cover-letter-examples",
     "/privacy", "/terms",
     // The builder's two landings. The step pages under them are one visitor's draft and
     // are noindex; only the entry points belong in a sitemap.
@@ -25,13 +30,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const arExamplePages = AR_SLUGS.map((slug) => `/ar/resume-examples/${slug}`);
   const arSkillPages = AR_SLUGS.map((slug) => `/ar/resume-skills/${slug}`);
   const arCoverPages = AR_SLUGS.map((slug) => `/ar/cover-letter-examples/${slug}`);
+  /*
+   * Sector pages, and the list comes from the same gate the routes use — `sectorSlugs` applies the
+   * minimum-professions rule, so a sector too thin to publish cannot end up in the sitemap
+   * pointing at a 404. The two languages publish different sets on purpose.
+   */
+  const sectorPages = sectorSlugs("en").map((slug) => `/resume-examples/category/${slug}`);
+  const arSectorPages = sectorSlugs("ar").map((slug) => `/ar/resume-examples/category/${slug}`);
 
   return [
     ...routes, ...examplePages, ...coverPages, ...skillPages, ...templatePages,
     ...arExamplePages, ...arSkillPages, ...arCoverPages,
+    ...sectorPages, ...arSectorPages,
   ].map((path) => ({
     url: `${BASE}${path}`,
     changeFrequency: "weekly",
-    priority: path === "" ? 1 : /\/(resume-examples|cover-letter-examples|resume-skills)\//.test(path) ? 0.7 : 0.8,
+    /* Sector pages are hubs, not leaves: they sit under /resume-examples/ but rank for a broader
+       query and pass link equity down, so they keep the hub priority rather than the leaf one. */
+    priority: path === "" ? 1
+      : /\/category(\/|$)/.test(path) ? 0.8
+        : /\/(resume-examples|cover-letter-examples|resume-skills)\//.test(path) ? 0.7 : 0.8,
   }));
 }

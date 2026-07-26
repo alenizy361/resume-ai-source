@@ -6,6 +6,7 @@ import Link from "next/link";
  */
 const EN: [string, string][] = [
   ["Resume examples", "/resume-examples"],
+  ["By sector", "/resume-examples/category"],
   ["Skills by job", "/resume-skills"],
   ["Templates", "/resume-templates"],
   ["Template gallery", "/templates"],
@@ -21,6 +22,9 @@ const AR: [string, string][] = [
   ["الرئيسية", "/ar"],
   ["افحص سيرتك", "/ar/optimize"],
   ["أمثلة السير", "/ar/resume-examples"],
+  ["حسب القطاع", "/ar/resume-examples/category"],
+  ["المهارات لكل مهنة", "/ar/resume-skills"],
+  ["خطابات التعريف", "/ar/cover-letter-examples"],
   ["القوالب", "/templates"],
   ["تحضير المقابلة", "/ar/interview"],
   ["الأسعار", "/pricing"],

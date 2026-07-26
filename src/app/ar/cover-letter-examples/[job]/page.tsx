@@ -3,6 +3,7 @@ import { copyright } from "@/app/lib/brand";
 import OrbBrand from "../../../components/OrbBrand";
 import OrbSceneSetter from "../../../components/orb/OrbSceneSetter";
 import Link from "next/link";
+import SectorLink from "../../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
 import { JOBS_AR, AR_SLUGS, getJobAr } from "../../../lib/jobs-ar";
 import { getJob } from "../../../lib/jobs";
@@ -124,6 +125,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
                 <Link key={s.slug} href={`/ar/cover-letter-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
               ))}
             </div>
+            <SectorLink category={j.category} lang="ar" className="mt-4 inline-block text-sm font-semibold text-accent" />
           </section>
         )}
       </article>

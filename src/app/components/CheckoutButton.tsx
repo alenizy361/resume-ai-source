@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { trackStep } from "@/app/lib/funnelClient.ts";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import AiOrb from "./AiOrb";
 import GoldField from "./orb/GoldField";
@@ -150,7 +151,10 @@ export default function CheckoutButton({
 
   return (
     <>
-      <button onClick={() => setOpen(true)}
+      {/* The funnel step for "opened checkout", fired on the click that opens the sheet rather
+          than on the invoice call: an abandoned checkout is the number worth knowing, and the
+          invoice never gets created for the people who abandon at the first field. */}
+      <button onClick={() => { trackStep("checkoutStarted", { plan }); setOpen(true); }}
         className={variant === "accent" ? "btn-accent block w-full py-3 text-center" : "btn-ghost block w-full py-3 text-center font-semibold"}
         style={variant === "ghost" ? { color: "var(--fg)" } : undefined}>{label}</button>
 

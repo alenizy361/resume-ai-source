@@ -3,6 +3,7 @@ import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../../components/OrbBrand";
 import OrbSceneSetter from "../../../components/orb/OrbSceneSetter";
 import Link from "next/link";
+import SectorLink from "../../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
 import { JOBS_AR, AR_SLUGS, getJobAr } from "../../../lib/jobs-ar";
 import { getJob } from "../../../lib/jobs";
@@ -179,7 +180,10 @@ export default async function Page({ params }: { params: Promise<{ job: string }
               <Link key={s.slug} href={`/ar/resume-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
             ))}
           </div>
-          <Link href="/ar/resume-examples" className="mt-4 inline-block text-sm font-semibold text-accent">كل أمثلة السير ←</Link>
+          <div className="mt-4 flex flex-wrap gap-4">
+            <SectorLink category={j.category} lang="ar" className="text-sm font-semibold text-accent" />
+            <Link href="/ar/resume-examples" className="text-sm font-semibold text-accent">كل أمثلة السير ←</Link>
+          </div>
         </Section>
       </article>
 

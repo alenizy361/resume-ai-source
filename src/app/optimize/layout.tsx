@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import FunnelBeacon from "@/app/components/seo/FunnelBeacon";
 import PageBody from "../components/seo/PageBody";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
   title: "ATS Resume Checker — Free Score & Missing Keywords | Sira",
-  description: "Paste your resume and a job description for a free ATS match score, the keywords you are missing, and an honest rewrite that invents nothing. Works in Arabic and English.",
+  description: "Paste your resume and a job posting for a free ATS match score, the missing keywords, and an honest rewrite. Arabic and English.",
   alternates: {
     canonical: `${BASE}/optimize`,
     languages: { en: `${BASE}/optimize`, ar: `${BASE}/ar/optimize`, "x-default": `${BASE}/optimize` },
@@ -66,6 +67,9 @@ export default function OptimizeLayout({ children }: { children: React.ReactNode
           { href: "/ar/optimize", label: "افحص سيرتك بالعربية" },
         ]}
       />
+      {/* The funnel step for "reached the tool". The entry page it is attributed to was
+          stamped by the beacon in the root layout on whichever page began the session. */}
+      <FunnelBeacon step="toolOpened" />
     </>
   );
 }

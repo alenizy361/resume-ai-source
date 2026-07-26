@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { fitTitle } from "../lib/seoTitle.ts";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import SeoLanding from "../components/SeoLanding";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
-  title: `The Best Jobscan Alternative (2026) — Same ATS Scan, From ${formatPrice("single", "en")} (${PLANS.single.priceUsd})`,
+  /* Two interpolated prices ran this to 70 characters, and what gets cut is the price — the whole
+     reason someone searching for an alternative clicked. `fitTitle` appends it only if it fits. */
+  title: fitTitle("The Best Jobscan Alternative (2026)",
+    ` — Same ATS Scan From ${formatPrice("single", "en")}`),
   description:
-    `Looking for a cheaper Jobscan alternative? Get the same ATS match score and keyword analysis plus a full AI rewrite — from ${formatPrice("single", "en")} (${PLANS.single.priceUsd}) one-time, no $49.95/mo subscription.`,
+    `The same ATS match score and keyword analysis, plus a full rewrite — from ${formatPrice("single", "en")} (${PLANS.single.priceUsd}) once, with no monthly subscription.`,
   keywords: "Jobscan alternative, cheaper than Jobscan, Jobscan vs, ATS resume tool, resume optimizer alternative",
   alternates: { canonical: `${BASE}/jobscan-alternative` },
   openGraph: { title: "The Best Jobscan Alternative (2026)", description: `Same ATS scan and keyword match, plus a full rewrite — from ${formatPrice("single", "en")} (${PLANS.single.priceUsd}), no subscription.`, type: "website" },

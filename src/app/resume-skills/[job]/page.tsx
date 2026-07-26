@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { fitTitle } from "../../lib/seoTitle.ts";
 import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
+import SectorLink from "../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
 
@@ -28,7 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
      * suffix that is only ever shown when the title is short enough not to need it is costing the
      * page its most specific words for nothing.
      */
-    title: `${j.title} Skills for a Resume — ATS Keywords (2026)`,
+    /* Four of these ran past 65 characters on the longest job names. See `fitTitle`. */
+    title: fitTitle(`${j.title} Skills for a Resume`, " — ATS Keywords", " (2026)"),
     description: `The ${j.atsKeywords.length} keywords ATS software scans for in ${j.title} resumes, the skills recruiters shortlist for, and how to present them honestly.`,
     /*
      * Reciprocal alternates — see `cover-letter-examples/[job]` for why a one-way hreflang is
@@ -177,6 +180,7 @@ EXPERIENCE (example bullet)
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>
             <Link href={`/cover-letter-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} cover letter</Link>
+            <SectorLink category={j.category} lang="en" className="btn-ghost px-4 py-2 font-semibold" style={{ color: "var(--accent)" }} />
             {related.map((r) => (
               <Link key={r.slug} href={`/resume-skills/${r.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--muted)" }}>{r.title} skills</Link>
             ))}

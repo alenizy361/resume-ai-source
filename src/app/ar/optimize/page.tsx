@@ -1,5 +1,6 @@
 "use client";
 import AiOrb from "../../components/AiOrb";
+import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice } from "@/app/lib/plans";
 import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
@@ -258,6 +259,9 @@ export default function ArOptimizePage() {
       }
       if (!got) throw new Error("لم يكتمل التحليل — حاول مرة أخرى.");
       setResult(got);
+      /* The funnel's middle step: a visitor who arrived from search and actually finished a
+         scan. Carries the score BAND, never the resume or the job description. */
+      trackScanDone(got.matchScore);
       try {
         addScan({
           score: got.matchScore,

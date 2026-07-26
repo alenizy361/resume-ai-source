@@ -16,7 +16,16 @@ export const metadata: Metadata = {
    * individual jobs. Declaring an alternate to a page that does not exist is worse than declaring
    * none — it sends a crawler to a 404 and invalidates the cluster.
    */
-  alternates: { canonical: `${BASE}/cover-letter-examples` },
+  /* Reciprocal now that the Arabic hub exists. Declared one way it is discarded, and the
+     two languages compete for one intent instead of serving two audiences. */
+  alternates: {
+    canonical: `${BASE}/cover-letter-examples`,
+    languages: {
+      en: `${BASE}/cover-letter-examples`,
+      ar: `${BASE}/ar/cover-letter-examples`,
+      "x-default": `${BASE}/cover-letter-examples`,
+    },
+  },
 };
 
 export default function CoverLetterHub() {

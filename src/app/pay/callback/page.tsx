@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, Suspense } from "react";
+import { trackStep } from "@/app/lib/funnelClient.ts";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import GoldField from "../../components/orb/GoldField";
@@ -148,6 +149,10 @@ function CallbackInner() {
           const paidPlan = d.plan === "complete" ? "complete" : d.plan === "monthly" ? "monthly" : "single";
           setState("paid");
           setPlan(paidPlan);
+          /* The end of the organic funnel. Reported once per confirmed payment, with the entry
+             page the session began on — which is the only way to know whether three hundred
+             content pages earn anything. The plan name is an enum; no amount, no order id. */
+          trackStep("paid", { plan: paidPlan });
           setOrderNo(String(d.orderNumber || tx));
           setDetail(t.confirmed(d.orderNumber || tx));
           // Mark this device as an owner — every later visit shows the gold stamp.

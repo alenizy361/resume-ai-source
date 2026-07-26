@@ -3,6 +3,7 @@ import { copyright } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
+import SectorLink from "../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
 
@@ -165,6 +166,7 @@ Sincerely,
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>
             <Link href={`/resume-skills/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} skills for your resume</Link>
+            <SectorLink category={j.category} lang="en" className="btn-ghost px-4 py-2 font-semibold" style={{ color: "var(--accent)" }} />
             {related.map((r) => (
               <Link key={r.slug} href={`/cover-letter-examples/${r.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--muted)" }}>{r.title} cover letter</Link>
             ))}

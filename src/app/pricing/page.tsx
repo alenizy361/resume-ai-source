@@ -10,7 +10,9 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "Pricing — One-time, No Subscription | Sira",
   description:
-    `Simple one-time pricing: ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. Every feature is included in both — the only difference is how long access lasts. No subscription; 7-day money-back guarantee on the 90-day pack.`,
+    /* Two interpolated prices pushed this to 274 characters. Every feature is in both packs, so
+       the sentence that matters is the difference between them — the rest is on the page. */
+    `${formatPrice("single", "en")} for 24 hours or ${formatPrice("complete", "en")} for 90 days. Every feature in both packs — only the access period differs. No subscription.`,
   alternates: {
     canonical: `${BASE}/pricing`,
     languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { fitTitle } from "../../lib/seoTitle.ts";
 import { copyright, salaryBasis } from "@/app/lib/brand";
 import OrbBrand from "../../components/OrbBrand";
 import OrbSceneSetter from "../../components/orb/OrbSceneSetter";
 import Link from "next/link";
+import SectorLink from "../../components/seo/SectorLink";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "../../lib/jobs";
 import { getJobAr } from "../../lib/jobs-ar";
@@ -19,7 +21,9 @@ export async function generateMetadata({ params }: { params: Promise<{ job: stri
   if (!j) return {};
   const hasAr = Boolean(getJobAr(job));
   return {
-    title: `${j.title} Resume Example & ATS Keywords (2026)`,
+    /* The year and the keyword phrase are appended only when the job name leaves room — see
+       `fitTitle`. "Customer Service Representative" made this template 68 characters. */
+    title: fitTitle(`${j.title} Resume Example`, " & ATS Keywords", " (2026)"),
     /* Kept under 155 characters: the job title is interpolated, and the longest of them —
        "Customer Service Representative" — added 31 characters to every one of these. */
     description: `A free ${j.title} resume example with the ATS keywords and skills recruiters scan for.`,
@@ -193,7 +197,10 @@ export default async function Page({ params }: { params: Promise<{ job: string }
               <Link key={s.slug} href={`/resume-examples/${s.slug}`} className="rounded-lg px-3 py-1.5 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{s.title}</Link>
             ))}
           </div>
-          <Link href="/resume-examples" className="mt-4 inline-block text-sm font-semibold text-accent">See all resume examples →</Link>
+          <div className="mt-4 flex flex-wrap gap-4">
+            <SectorLink category={j.category} lang="en" className="text-sm font-semibold text-accent" />
+            <Link href="/resume-examples" className="text-sm font-semibold text-accent">See all resume examples →</Link>
+          </div>
         </Section>
       </article>
 

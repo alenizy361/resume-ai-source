@@ -11,7 +11,16 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "Resume Skills by Job (2026) — ATS Keywords for 50 Roles | Sira",
   description: "The exact skills and ATS keywords to put on your resume, role by role — plus a free scanner that shows which ones your resume is missing.",
-  alternates: { canonical: `${BASE}/resume-skills` },
+  /* Reciprocal now that the Arabic hub exists. Declared one way it is discarded, and the
+     two languages compete for one intent instead of serving two audiences. */
+  alternates: {
+    canonical: `${BASE}/resume-skills`,
+    languages: {
+      en: `${BASE}/resume-skills`,
+      ar: `${BASE}/ar/resume-skills`,
+      "x-default": `${BASE}/resume-skills`,
+    },
+  },
 };
 
 export default function ResumeSkillsHub() {

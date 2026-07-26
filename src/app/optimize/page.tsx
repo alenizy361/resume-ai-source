@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { trackScanDone } from "@/app/lib/funnelClient.ts";
 import { formatPrice } from "@/app/lib/plans";
 import { builderDraftExists, sendToBuilder } from "@/app/lib/handoff";
 import { watermarkFromResponse } from "@/app/lib/entitlement";
@@ -359,6 +360,9 @@ export default function OptimizePage() {
       }
       if (!got) throw new Error("The analysis didn't complete. Please try again.");
       setResult(got);
+      /* The funnel's middle step: a visitor who arrived from search and actually finished a
+         scan. Carries the score BAND, never the resume or the job description. */
+      trackScanDone(got.matchScore);
       setTab("resume");
       // Record in device-local history (account page lists these).
       try {

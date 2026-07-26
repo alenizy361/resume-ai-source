@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { track } from "@vercel/analytics";
+import { trackStep } from "@/app/lib/funnelClient.ts";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { EMPTY_BUILDER } from "@/app/lib/builderDoc";
 
@@ -85,6 +86,12 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
   const hasDraft = hydrated && (done.length > 0 || Boolean(state.target.title || state.personal.fullName));
 
   const enter = (step = STEPS[0]) => {
+    /*
+     * The funnel's builder step belongs HERE and not on the front door: viewing the landing page is
+     * a page view, and every path into the builder — resume, a start card, the first-step button —
+     * goes through this one function, so one call covers all of them and cannot drift apart.
+     */
+    trackStep("builderStarted", { at: step, resumed: step === STEPS[0] ? "0" : "1" });
     flush();
     router.push(stepHref(lang, resumeId, step), { scroll: false });
   };

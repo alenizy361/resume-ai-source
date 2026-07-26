@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FunnelBeacon from "@/app/components/seo/FunnelBeacon";
 import PageBody from "../../components/seo/PageBody";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -74,6 +75,9 @@ export default function ArOptimizeLayout({ children }: { children: React.ReactNo
           { href: "/optimize", label: "Check your CV in English" },
         ]}
       />
+      {/* The funnel step for "reached the tool". The entry page it is attributed to was
+          stamped by the beacon in the root layout on whichever page began the session. */}
+      <FunnelBeacon step="toolOpened" />
     </>
   );
 }

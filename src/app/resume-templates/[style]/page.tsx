@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: { params: Promise<{ style: st
   if (!t) return {};
   return {
     title: `Free ${t.name} Resume Template (2026) — ATS-Friendly`,
-    description: `${t.tagline} Free ${t.keyword} you can fill in and download in minutes. ATS score: ${t.atsScore}/100.`,
+    /* The tagline is per-template and the two longest pushed this past 165 characters. The score
+       is the part a reader can only get here, so it stays and the filler goes. */
+    description: `${t.tagline} Free, fill in and download in minutes. ATS score: ${t.atsScore}/100.`,
     keywords: `${t.keyword}, free ${t.keyword}, ${t.name.toLowerCase()} cv template, resume template ${t.name.toLowerCase()}`,
     alternates: { canonical: `${BASE}/resume-templates/${t.slug}` },
     openGraph: { title: `Free ${t.name} Resume Template`, description: t.tagline, type: "website" },

@@ -10,7 +10,7 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export const metadata: Metadata = {
   title: "الأسعار — دفعة واحدة، بدون اشتراك | سيرة",
   description:
-    `أسعار بسيطة بدفعة واحدة: ${formatPrice("single", "ar")} لوصول كامل ٢٤ ساعة أو ${formatPrice("complete", "ar")} لـ ٩٠ يوماً. كل المزايا في الباقتين — الفرق الوحيد مدة الوصول. بدون اشتراك، وضمان استرداد ٧ أيام على الحزمة الكاملة.`,
+    `${formatPrice("single", "ar")} لـ٢٤ ساعة أو ${formatPrice("complete", "ar")} لـ٩٠ يوماً. كل المزايا في الباقتين — الفرق مدة الوصول فقط. بدون اشتراك.`,
   alternates: {
     canonical: `${BASE}/ar/pricing`,
     languages: { en: `${BASE}/pricing`, ar: `${BASE}/ar/pricing`, "x-default": `${BASE}/pricing` },

@@ -3,6 +3,7 @@ import { PLANS, planPrice, formatPrice } from "./lib/plans";
 import { BRAND, brandName } from "./lib/brand";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
+import FunnelBeacon from "./components/seo/FunnelBeacon";
 import OrbProvider from "./components/orb/OrbProvider";
 import "./globals.css";
 
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: "Sira — Honest AI Resume Optimizer (No-Fabrication Engine)",
   description:
-    "Optimize your resume with AI in 10 seconds. Free ATS match score, missing keywords, and a rewritten resume aligned to any job description — without inventing a single fact you didn't provide.",
+    /* 165 characters is where Google cuts. The old one ran to 191 and lost the clause that is
+       the entire product claim: that nothing is invented. */
+    "Free ATS match score, the keywords you are missing, and a resume rewritten for the job — inventing nothing you did not provide. Arabic and English.",
   keywords: "resume optimizer, ATS resume, AI resume writer, resume checker, ATS resume checker, job application, cover letter generator",
   openGraph: {
     title: "Sira — Honest AI Resume Optimization in 10 Seconds",
@@ -139,6 +142,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <OrbProvider>{children}</OrbProvider>
         <div className="grain-overlay" aria-hidden="true" />
         <Analytics />
+        {/* Records which page the visitor arrived on, once per tab. Every later funnel step
+            reports itself with that entry attached — see `lib/funnel.ts`. */}
+        <FunnelBeacon />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataFor(isArabic ? "ar" : "en")) }} />
         {META_PIXEL_ID && (
           <script
