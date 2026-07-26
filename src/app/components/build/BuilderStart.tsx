@@ -15,7 +15,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { track } from "@vercel/analytics";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
@@ -49,7 +49,52 @@ const T = {
   },
 };
 
+/**
+ * What the static HTML contains while the interactive start is still resolving.
+ *
+ * ── why this exists at all ──
+ *
+ * `BuilderStart` reads `useSearchParams()`, which is a client-only value. Without a Suspense
+ * boundary above it, `/builder` and `/ar/builder` cannot be prerendered — the build fails outright
+ * with `missing-suspense-with-csr-bailout`. Both pages were being rendered on demand instead, and
+ * nothing said so, because `headers()` in the root layout had already opted every route out of
+ * static generation. Removing that made the real error visible.
+ *
+ * The heading and the subtitle are here rather than in a spinner for two reasons. They are the same
+ * strings the real component renders, so the prerendered response carries the page's actual `h1` —
+ * which is what a crawler reads and what LCP measures. And reserving the height of the cards below
+ * keeps the swap from moving anything, because a fallback shorter than its content is CLS by
+ * construction, on the one route the whole funnel starts at.
+ */
+function StartFallback({ lang }: { lang: "ar" | "en" }) {
+  const t = T[lang];
+  return (
+    <div className="mx-auto max-w-3xl">
+      <h1 className="text-2xl font-extrabold leading-snug"
+        style={lang === "ar" ? undefined : { letterSpacing: "-0.02em" }}>{t.h1}</h1>
+      <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
+      {/* The two start cards plus their button, reserved. `aria-hidden` because there is nothing
+          here to read yet, and a screen reader announcing an empty box is worse than silence. */}
+      <div className="mt-8" style={{ minHeight: 320 }} aria-hidden />
+    </div>
+  );
+}
+
+/**
+ * The start screen, wrapped in the boundary the search-params read requires.
+ *
+ * Exported as the default so every caller gets the boundary — the two pages that render this had no
+ * reason to know about it, and a boundary a caller has to remember is one a caller will forget.
+ */
 export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
+  return (
+    <Suspense fallback={<StartFallback lang={lang} />}>
+      <BuilderStartInner lang={lang} />
+    </Suspense>
+  );
+}
+
+function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
   const { state, dispatch, resumeId, owner, hydrated, flush } = useBuilder();
   const router = useRouter();
   const params = useSearchParams();
