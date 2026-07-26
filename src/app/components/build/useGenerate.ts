@@ -28,7 +28,7 @@
  * everything else.
  */
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   type CareerContext, type GenerationStore,
   contextHash, hashOf, readCache, writeCache, acceptReply, dedupe, newRequestId,
@@ -113,15 +113,53 @@ export function useGenerate(opts: {
   store: GenerationStore | undefined;
   ledger: ResumeLedger | undefined;
   revision: number;
+  /**
+   * Which resume this hook is generating for, and whose it is.
+   *
+   * Not decoration on the stamp. The provider is NOT remounted when the user switches resumes —
+   * `BuilderProvider` re-hydrates inside an effect keyed on `(owner, resumeId)` — so this hook, its
+   * `inflight` controller and any request already on the wire all survive the switch.
+   */
+  resumeId: string;
+  owner: string;
   /** Persist both, in one dispatch — they change together and must not diverge. */
   onCommit: (next: { store: GenerationStore; ledger: ResumeLedger }) => void;
 }): UseGenerate {
-  const { lang, context, store, ledger: rawLedger, revision, onCommit } = opts;
+  const { lang, context, store, ledger: rawLedger, revision, resumeId, owner, onCommit } = opts;
   const ledger = rawLedger ?? EMPTY_LEDGER;
   const [res, setRes] = useState<GenOutcome>({ state: "idle" });
   const [task, setTask] = useState<GenTask | null>(null);
   const inflight = useRef<AbortController | null>(null);
   const cHash = useMemo(() => contextHash(context), [context]);
+
+  /*
+   * ── stop the previous resume's request when the resume changes ──
+   *
+   * The stamp already refuses a reply that arrives for the wrong resume, so nothing corrupt can be
+   * written without this. What this adds is that the request is not paid for at all: aborting closes
+   * the connection, and the provider bills for a completion nobody will read otherwise.
+   *
+   * A ref rather than state for the previous identity — comparing during render and aborting there
+   * would be a side effect in render, and `setState` from it is the pattern the React lint rule
+   * rejects. The comparison happens in an effect, which is where an abort belongs.
+   */
+  const identity = `${owner}::${resumeId}`;
+  const lastIdentity = useRef(identity);
+  useEffect(() => {
+    if (lastIdentity.current === identity) return;
+    lastIdentity.current = identity;
+    if (inflight.current) {
+      inflight.current.abort();
+      inflight.current = null;
+    }
+    /*
+     * And the visible state is reset. Carrying "loading" or an error sentence across a switch would
+     * describe the resume the user just left — a spinner on a document nothing is being generated for,
+     * which is the kind of thing that gets read as the app being stuck.
+     */
+    setRes({ state: "idle" });
+    setTask(null);
+  }, [identity]);
 
   const peek = useCallback((t: GenTask, input: Record<string, unknown>, instance?: string) => {
     const hit = readCache<Record<string, unknown>>(store, t, cHash, hashOf(input), instance);
@@ -177,7 +215,7 @@ export function useGenerate(opts: {
     const ctrl = new AbortController();
     inflight.current = ctrl;
 
-    const stamp = { requestId: newRequestId(), task: t, contextHash: cHash, inputHash, revision };
+    const stamp = { requestId: newRequestId(), task: t, contextHash: cHash, inputHash, revision, resumeId, owner };
 
     /* ── 3. de-duplication across components ── */
     let leader = false;
@@ -185,7 +223,7 @@ export function useGenerate(opts: {
     let httpError: { status: number; message: string } | null = null;
 
     try {
-      const shared = await dedupe(t, inputHash, async () => {
+      const shared = await dedupe({ task: t, contextHash: cHash, inputHash, instance }, async () => {
         const r = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -227,7 +265,7 @@ export function useGenerate(opts: {
     }
 
     /* ── 4. the stamp ── */
-    if (!acceptReply(stamp, { contextHash: cHash, inputHash, revision })) {
+    if (!acceptReply(stamp, { contextHash: cHash, inputHash, revision, resumeId, owner })) {
       /*
        * The reply is for a resume that no longer exists in this shape. Dropped silently: the user
        * has already moved on and telling them a request they never saw was discarded is noise.
@@ -273,7 +311,7 @@ export function useGenerate(opts: {
       });
     }
     return out;
-  }, [store, ledger, cHash, revision, context, lang, onCommit]);
+  }, [store, ledger, cHash, revision, context, lang, resumeId, owner, onCommit]);
 
   return {
     state: res.state,

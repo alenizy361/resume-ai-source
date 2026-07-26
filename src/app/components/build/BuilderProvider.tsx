@@ -40,7 +40,7 @@ import { readDraft } from "@/app/lib/draftStore";
 import {
   listResumes, migrateLegacy, newResumeId, readResume, writeResume,
 } from "@/app/lib/resumeStore";
-import { useOwner } from "./useOwner";
+import { useOwner } from "../useOwner";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import {
   type BuilderState, type SectionId, EMPTY_BUILDER, migrateBuilder, cvLang,
@@ -65,6 +65,15 @@ interface BuilderContextValue {
   lang: "ar" | "en";
   /** The id in the URL, once resolved against storage. Empty until hydration finishes. */
   resumeId: string;
+  /**
+   * Whose browser this is, as `resumeStore.ownerKey` computes it. Empty until `/api/auth/me` answers.
+   *
+   * On the context because sections write personal data of their own — `DesignSection` saves the
+   * finished CV text, `ImportPanel` lists previously saved ones — and every one of those keys needs an
+   * owner in it. Reaching for `useOwner()` inside each section would mean a second fetch per section
+   * and, worse, a moment where two components disagree about who is signed in.
+   */
+  owner: string;
   state: BuilderState;
   dispatch: React.Dispatch<Action>;
   save: SaveState;
@@ -414,6 +423,10 @@ export default function BuilderProvider({
     store: state.generations,
     ledger: state.ledger,
     revision: state.revision ?? 0,
+    /* The identity a reply is checked against, and what an in-flight request is abandoned on. This
+       provider is not remounted when the resume changes, so the hook has no other way to know. */
+    resumeId,
+    owner,
     onCommit: commitAi,
   });
 
@@ -423,9 +436,9 @@ export default function BuilderProvider({
   }, []);
 
   const value = useMemo<BuilderContextValue>(() => ({
-    lang, resumeId, state, dispatch, save, lifecycle, online, flush, hydrated,
+    lang, resumeId, owner, state, dispatch, save, lifecycle, online, flush, hydrated,
     previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, state, save, lifecycle, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
+  }), [lang, resumeId, owner, state, save, lifecycle, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

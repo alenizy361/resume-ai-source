@@ -156,7 +156,25 @@ export default function SummarySection({
    */
   const { gen } = useBuilder();
   const digest = useMemo(() => confirmedDigest(state), [state]);
-  const finalInput = useMemo(() => ({ digest, target: state.target.title }), [digest, state.target.title]);
+  /*
+   * ── the advert belongs in the key, and was missing from it ──
+   *
+   * `payload` sends `jobAd: state.target.jobAdText` and the model tailors every summary to it. The
+   * key had `digest` and the target title only, and the advert is in neither: `jobAdText` is not part
+   * of a `CareerContext`, so it is absent from the context hash too.
+   *
+   * The consequence was a silent one, and it undid the product's main claim. Paste one advert,
+   * generate three summaries — cached. Replace it with a different advert at a different company and
+   * generate again: same digest, same title, same context, so the cache answered instantly with the
+   * summaries written for the FIRST advert. Tailoring appeared to work and had stopped.
+   *
+   * The whole text, not a length or a fingerprint of it: two adverts of equal length are not
+   * interchangeable, and only the hash is ever stored.
+   */
+  const finalInput = useMemo(
+    () => ({ digest, target: state.target.title, jobAd: state.target.jobAdText ?? "" }),
+    [digest, state.target.title, state.target.jobAdText],
+  );
 
   const write = useCallback(async () => {
     const out = await gen.run({

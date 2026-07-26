@@ -69,7 +69,7 @@ function session(ctx) {
       if (!verdict.allow) return { source: "refused", reason: verdict.reason };
 
       const stamp = { requestId: `q${this.calls.length}`, task, contextHash: cHash, inputHash, revision: this.revision };
-      const { result, leader } = await dedupe(task, inputHash, async () => {
+      const { result, leader } = await dedupe({ task, contextHash: cHash, inputHash, instance }, async () => {
         this.calls.push({ task, inputHash });
         return { generated: task };
       });

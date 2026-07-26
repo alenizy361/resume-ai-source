@@ -397,6 +397,20 @@ export interface RequestStamp {
   contextHash: string;
   inputHash: string;
   revision: number;
+  /**
+   * Which resume, and whose.
+   *
+   * These were not here, and their absence was a real path to a mixed CV. The provider is not
+   * remounted when the user switches resumes — hydration re-keys inside an effect — so an in-flight
+   * request survives the switch, and the three checks above cannot see it: two fresh resumes for the
+   * same job title have the same context hash, the same input hash and the same revision 0. The reply
+   * for the first was therefore accepted into the second, and its cost charged there.
+   *
+   * `owner` for the same reason one step out: signing out and into another account on a shared browser
+   * is a switch the resume id alone would not catch when both accounts hold a resume of that id.
+   */
+  resumeId: string;
+  owner: string;
 }
 
 /** Monotonic, collision-free enough for one session, and not `Math.random` — see below. */
@@ -416,8 +430,12 @@ export function newRequestId(): string {
  */
 export function acceptReply(
   stamp: RequestStamp,
-  now: { contextHash: string; inputHash: string; revision: number },
+  now: { contextHash: string; inputHash: string; revision: number; resumeId: string; owner: string },
 ): boolean {
+  /* Identity first: it is the cheapest comparison and the only one whose failure means the reply
+     belongs to a DIFFERENT DOCUMENT rather than to an older version of this one. */
+  if (stamp.owner !== now.owner) return false;
+  if (stamp.resumeId !== now.resumeId) return false;
   if (stamp.contextHash !== now.contextHash) return false;
   if (stamp.inputHash !== now.inputHash) return false;
   if (stamp.revision !== now.revision) return false;
@@ -455,12 +473,42 @@ const inflight = new Map<string, Promise<unknown>>();
  */
 export interface DedupeResult<T> { result: T; leader: boolean }
 
+/**
+ * The identity of a question, and the reason it is an object rather than a list of strings.
+ *
+ * ── the bug this shape exists to have prevented ──
+ *
+ * `dedupe` used to take `(task, inputHash)`, and the career context was not in the key. For
+ * `role_blueprint` the context IS the question — the occupation, the country, the level — while the
+ * input is `{ confirmedSkills: [] }`, identical on every new resume. So two resumes open in one tab,
+ * one for a nurse and one for an accountant, both firing their automatic blueprint on mount, produced
+ * ONE request: the second became a follower and rendered the nurse's skills under the accountant.
+ *
+ * Nothing could have caught that downstream. The answer was well-formed, the cost was right, the
+ * ledger was right; only the content belonged to a different resume.
+ *
+ * So the key is now the CACHE SLOT plus the input hash — the same four components `readCache` compares
+ * before it will reuse an entry. That gives one invariant worth more than the fix: a follower is only
+ * ever a caller who would have written the identical cache slot. And it is an object because a
+ * positional call is what allowed a component to be left out silently; adding a fifth component now
+ * fails to compile at every call site instead.
+ */
+export interface QuestionKey {
+  task: string;
+  contextHash: string;
+  inputHash: string;
+  instance?: string;
+}
+
+export function questionKey(q: QuestionKey): string {
+  return `${slotOf(q.task, q.contextHash, q.instance)}:${q.inputHash}`;
+}
+
 export function dedupe<T>(
-  task: string,
-  inputHash: string,
+  q: QuestionKey,
   run: () => Promise<T>,
 ): Promise<DedupeResult<T>> {
-  const key = `${task}:${inputHash}`;
+  const key = questionKey(q);
   const existing = inflight.get(key);
   if (existing) return (existing as Promise<T>).then((result) => ({ result, leader: false }));
   const p = run().finally(() => { inflight.delete(key); });

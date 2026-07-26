@@ -129,7 +129,12 @@
   min-height: 36px; padding: 6px 12px; border-radius: 999px;
   font-size: .82rem; cursor: pointer;
   background: var(--surface); border: 1px solid var(--line); color: var(--muted);
-  transition: all .16s var(--ez);
+  /*
+   * Named properties, not `all`. `transition: all` animates every animatable property including the
+   * LAYOUT ones — a change to padding or font-size anywhere would start animating the row's geometry,
+   * which is CLS on the busiest screen in the product. The tap feedback itself is `.t-tap`.
+   */
+  transition: background-color .16s var(--ez), border-color .16s var(--ez), color .16s var(--ez);
 }
 .build-root .bd-chip.on {
   background: rgba(139, 92, 246, .14);

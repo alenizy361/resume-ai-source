@@ -17,6 +17,8 @@ import GapFiller from "../components/GapFiller";
 import CheckoutButton from "../components/CheckoutButton";
 import AuthNav from "../components/AuthNav";
 import { addScan, saveResume } from "../lib/localdata";
+import { useOwner } from "../components/useOwner";
+import { readPersonalJson, removePersonal, writePersonal } from "../lib/personalStore";
 import { useBackToForm, useCountUp } from "../lib/resultUx";
 
 interface OptimizeResult {
@@ -160,53 +162,56 @@ export default function OptimizePage() {
    * One extra render at mount is the price, and it buys a user who refreshed not losing the CV
    * they had pasted.
    */
+  /*
+   * ── whose draft this is ──
+   *
+   * The two keys below hold the full text of a pasted CV and the complete analysis of it, and neither
+   * was scoped: on a shared browser the next account to open this page had the previous person's CV
+   * already in the textarea. `""` until `/api/auth/me` answers, and `readPersonal` returns nothing for
+   * an empty owner — so the restore waits rather than restoring the wrong document.
+   */
+  const owner = useOwner();
+
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("ra_optimize_draft");
-      if (saved) {
-        const d = JSON.parse(saved);
-        if (typeof d.resume === "string") setResume(d.resume);
-        if (typeof d.jobDescription === "string") setJobDescription(d.jobDescription);
-        // Persist the MODE too — a paid user's post-payment rescan must not
-        // silently drop the job description because mode reset to "general".
-        // Only restore target mode when the SAVED mode was target AND a JD is
-        // present — leftover JD text alone must not force target mode on a
-        // draft the user had explicitly set to general review.
-        if (d.mode === "target" && typeof d.jobDescription === "string" && d.jobDescription.trim().length >= 30) {
-          setMode("target");
-        }
+    if (!owner) return;
+    const d = readPersonalJson<{ resume?: unknown; jobDescription?: unknown; mode?: unknown } | null>(
+      owner, "ra_optimize_draft", null);
+    if (d) {
+      if (typeof d.resume === "string") setResume(d.resume);
+      if (typeof d.jobDescription === "string") setJobDescription(d.jobDescription);
+      // Persist the MODE too — a paid user's post-payment rescan must not
+      // silently drop the job description because mode reset to "general".
+      // Only restore target mode when the SAVED mode was target AND a JD is
+      // present — leftover JD text alone must not force target mode on a
+      // draft the user had explicitly set to general review.
+      if (d.mode === "target" && typeof d.jobDescription === "string" && d.jobDescription.trim().length >= 30) {
+        setMode("target");
       }
-      const savedResult = localStorage.getItem("ra_optimize_result");
-      if (savedResult) setResult(JSON.parse(savedResult));
-    } catch {
-      /* ignore corrupt/unavailable storage */
     }
-  }, []);
+    const savedResult = readPersonalJson<OptimizeResult | null>(owner, "ra_optimize_result", null);
+    if (savedResult) setResult(savedResult);
+  }, [owner]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    try {
-      if (resume || jobDescription) {
-        localStorage.setItem("ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
-      } else {
-        // Both fields emptied — clear the saved draft so a refresh doesn't
-        // resurrect stale text the user just deleted.
-        localStorage.removeItem("ra_optimize_draft");
-      }
-    } catch {
-      /* storage full or blocked — non-fatal */
+    /* No owner yet means no write. Writing under `""` would be a key nothing ever reads back, and the
+       user's next keystroke would appear to save while actually going nowhere. */
+    if (!owner) return;
+    if (resume || jobDescription) {
+      writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+    } else {
+      // Both fields emptied — clear the saved draft so a refresh doesn't
+      // resurrect stale text the user just deleted.
+      removePersonal(owner, "ra_optimize_draft");
     }
-  }, [resume, jobDescription, mode]);
+  }, [owner, resume, jobDescription, mode]);
 
   useEffect(() => {
-    try {
-      if (result) localStorage.setItem("ra_optimize_result", JSON.stringify(result));
-      else localStorage.removeItem("ra_optimize_result");
-    } catch {
-      /* non-fatal */
-    }
-  }, [result]);
+    if (!owner) return;
+    if (result) writePersonal(owner, "ra_optimize_result", JSON.stringify(result));
+    else removePersonal(owner, "ra_optimize_result");
+  }, [owner, result]);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -364,7 +369,7 @@ export default function OptimizePage() {
       setTab("resume");
       // Record in device-local history (account page lists these).
       try {
-        addScan({
+        addScan(owner, {
           score: got.matchScore,
           mode,
           jobTitle: mode === "target" ? (jobDescription.split("\n")[0].slice(0, 80) || "Targeted scan") : "General review",
@@ -372,7 +377,7 @@ export default function OptimizePage() {
           result: got,
         });
         if (!got.locked && got.optimizedResume) {
-          saveResume({ title: guessResumeTitle(got.optimizedResume), source: "optimized", text: got.optimizedResume });
+          saveResume(owner, { title: guessResumeTitle(got.optimizedResume), source: "optimized", text: got.optimizedResume });
         }
       } catch { /* noop */ }
     } catch (err) {
@@ -413,7 +418,10 @@ export default function OptimizePage() {
               onClick={() => {
                 // Carry the draft across the language switch — separate storage
                 // keys otherwise make it look like the user's text vanished.
-                try { localStorage.setItem("ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode })); localStorage.setItem("ra_lang", "ar"); } catch { /* noop */ }
+                writePersonal(owner, "ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+                  /* `ra_lang` stays unscoped on purpose — it is a device preference and must survive a
+                     sign-out. See `DEVICE_KEYS` in `lib/personalStore.ts`. */
+                  try { localStorage.setItem("ra_lang", "ar"); } catch { /* noop */ }
               }}>
               عربي
             </Link>
@@ -897,7 +905,7 @@ export default function OptimizePage() {
                   onClick={() => {
                     setResult(null); setResume(""); setJobDescription(""); setCoverLetter("");
                     setCoverError(""); setUploadedName(""); setMode("general");
-                    try { localStorage.removeItem("ra_optimize_draft"); } catch { /* noop */ }
+                    removePersonal(owner, "ra_optimize_draft");
                   }}
                   className="btn-ghost px-8 py-3 font-semibold" style={{ color: "var(--fg)" }}>
                   Optimize another

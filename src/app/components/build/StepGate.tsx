@@ -78,7 +78,10 @@ export default function StepGate({ step }: { step: SectionId }) {
 
   return (
     <div
-      className="mb-5 rounded-2xl p-4"
+      /* `t-reveal` rather than `t-shake`: this card appears because a PREVIOUS step is incomplete, not
+         because the user just did something wrong here. A shake is a rebuke and there is nothing to
+         rebuke — they have only arrived. */
+      className="mb-5 rounded-2xl p-4 t-reveal"
       style={{ background: "rgba(252,211,77,.07)", border: "1px solid rgba(252,211,77,.28)" }}
     >
       <p className="text-sm font-semibold" style={{ color: "#fcd34d" }}>{c.head}</p>

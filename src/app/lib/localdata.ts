@@ -8,7 +8,24 @@
  * never stored on our servers") and needs no signup. The data model mirrors
  * the planned Upstash schema (u:<email>:scans / :resumes / :jobs) so a later
  * server sync is a transport swap, not a redesign.
+ *
+ * ── every function takes an owner, and that is not optional ──
+ *
+ * These three lists were keyed on nothing: `ra_saved_resumes`, `ra_scan_history`, `ra_jobs`. On a
+ * shared browser the second account read the first account's saved CVs — full text, ten of them —
+ * their complete ATS analyses, and the list of companies they had applied to with their private notes.
+ * The comment above says the schema "mirrors the planned Upstash schema `u:<email>:…`", and that is
+ * exactly what was missing: the `u:<email>` half.
+ *
+ * `SavedResume.userId` existed and made this look handled. It never was — the field was written and
+ * never read, so nothing filtered on it. A record that knows whose it is, in a store that does not,
+ * is worse than neither, because it reads like protection.
+ *
+ * The owner comes from `useOwner()`, which returns `""` until the server has said who the session
+ * belongs to. Every read here returns empty for `""` rather than falling back — see `readPersonal`.
  */
+
+import { readPersonalJson, writePersonalList } from "./personalStore.ts";
 
 export interface ScanEntry {
   id: string;
@@ -67,60 +84,43 @@ export interface JobEntry {
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-function read<T>(key: string): T[] {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function write<T>(key: string, list: T[], cap: number) {
-  try {
-    localStorage.setItem(key, JSON.stringify(list.slice(0, cap)));
-  } catch {
-    /* storage full — drop oldest and retry once */
-    try {
-      localStorage.setItem(key, JSON.stringify(list.slice(0, Math.max(1, Math.floor(cap / 2)))));
-    } catch { /* give up silently */ }
-  }
-}
-
 // ── Scan history (cap 10) ──
-export function addScan(e: Omit<ScanEntry, "id" | "ts">) {
-  const list = read<ScanEntry>("ra_scan_history");
+export function addScan(owner: string, e: Omit<ScanEntry, "id" | "ts">) {
+  const list = getScans(owner);
   list.unshift({ ...e, id: uid(), ts: Date.now() });
-  write("ra_scan_history", list, 10);
+  writePersonalList(owner, "ra_scan_history", list, 10);
 }
-export const getScans = () => read<ScanEntry>("ra_scan_history");
-export function removeScan(id: string) {
-  write("ra_scan_history", getScans().filter((s) => s.id !== id), 10);
+export const getScans = (owner: string): ScanEntry[] =>
+  readPersonalJson<ScanEntry[]>(owner, "ra_scan_history", []);
+export function removeScan(owner: string, id: string) {
+  writePersonalList(owner, "ra_scan_history", getScans(owner).filter((s) => s.id !== id), 10);
 }
 
 // ── Saved resumes (cap 10) ──
-export function saveResume(e: Omit<SavedResume, "id" | "ts">) {
-  const list = read<SavedResume>("ra_saved_resumes");
+export function saveResume(owner: string, e: Omit<SavedResume, "id" | "ts">) {
+  const list = getResumes(owner);
   // Replace an identical-text duplicate instead of stacking copies.
   const filtered = list.filter((r) => r.text !== e.text);
   filtered.unshift({ ...e, id: uid(), ts: Date.now() });
-  write("ra_saved_resumes", filtered, 10);
+  writePersonalList(owner, "ra_saved_resumes", filtered, 10);
 }
-export const getResumes = () => read<SavedResume>("ra_saved_resumes");
-export function removeResume(id: string) {
-  write("ra_saved_resumes", getResumes().filter((r) => r.id !== id), 10);
+export const getResumes = (owner: string): SavedResume[] =>
+  readPersonalJson<SavedResume[]>(owner, "ra_saved_resumes", []);
+export function removeResume(owner: string, id: string) {
+  writePersonalList(owner, "ra_saved_resumes", getResumes(owner).filter((r) => r.id !== id), 10);
 }
 
 // ── Job tracker (cap 50) ──
-export function addJob(e: Omit<JobEntry, "id" | "ts">) {
-  const list = read<JobEntry>("ra_jobs");
+export function addJob(owner: string, e: Omit<JobEntry, "id" | "ts">) {
+  const list = getJobs(owner);
   list.unshift({ ...e, id: uid(), ts: Date.now() });
-  write("ra_jobs", list, 50);
+  writePersonalList(owner, "ra_jobs", list, 50);
 }
-export const getJobs = () => read<JobEntry>("ra_jobs");
-export function updateJob(id: string, patch: Partial<JobEntry>) {
-  write("ra_jobs", getJobs().map((j) => (j.id === id ? { ...j, ...patch } : j)), 50);
+export const getJobs = (owner: string): JobEntry[] =>
+  readPersonalJson<JobEntry[]>(owner, "ra_jobs", []);
+export function updateJob(owner: string, id: string, patch: Partial<JobEntry>) {
+  writePersonalList(owner, "ra_jobs", getJobs(owner).map((j) => (j.id === id ? { ...j, ...patch } : j)), 50);
 }
-export function removeJob(id: string) {
-  write("ra_jobs", getJobs().filter((j) => j.id !== id), 50);
+export function removeJob(owner: string, id: string) {
+  writePersonalList(owner, "ra_jobs", getJobs(owner).filter((j) => j.id !== id), 50);
 }

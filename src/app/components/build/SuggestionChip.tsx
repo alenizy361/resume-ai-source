@@ -65,6 +65,19 @@ export default function SuggestionChip({
 }) {
   const c = WHY_LABEL[lang];
   const [openWhy, setOpenWhy] = useState(false);
+  /*
+   * ── the product's core gesture, which had no feedback ──
+   *
+   * Tapping a suggested skill or duty to accept it is THE interaction in this builder; everything else
+   * is typing. Until now the chip simply vanished from the list, and on a phone — where the finger
+   * covers the chip — it was easy to be unsure the tap had landed at all.
+   *
+   * So the chip acknowledges itself for one frame before the parent removes it. Purely visual: `onAdd`
+   * still fires immediately, so nothing is delayed and a fast double-tap cannot lose an item. If the
+   * parent unmounts the chip first the animation never runs, which is the correct outcome — the item
+   * moved, which is feedback of its own.
+   */
+  const [accepted, setAccepted] = useState(false);
   const why = whySentence(lang, source, reason);
 
   return (
@@ -72,8 +85,12 @@ export default function SuggestionChip({
       {/* The controls live INSIDE the pill, the way a confirmed skill's remove already does. Two
           circles floating beside every chip read as separate objects and cost a row each on a
           390px screen — a phone screenshot is what settled it. */}
-      <span className="bd-chip">
-        <button type="button" className="bd-chip-add" onClick={onAdd}>
+      <span className={`bd-chip${accepted ? " t-accept" : ""}`}>
+        <button
+          type="button"
+          className="bd-chip-add t-tap"
+          onClick={() => { setAccepted(true); onAdd(); }}
+        >
           + {text}
           {suffix}
         </button>
@@ -83,7 +100,7 @@ export default function SuggestionChip({
         {showWhy && (
           <button
             type="button"
-            className="bd-chip-aux"
+            className="bd-chip-aux t-tap"
             onClick={() => setOpenWhy((v) => !v)}
             aria-expanded={openWhy}
             aria-label={`${c.why} ${text}`}
@@ -95,7 +112,7 @@ export default function SuggestionChip({
         {onReject && (
           <button
             type="button"
-            className="bd-chip-aux"
+            className="bd-chip-aux t-tap"
             onClick={onReject}
             aria-label={`${c.reject}: ${text}`}
             title={c.reject}

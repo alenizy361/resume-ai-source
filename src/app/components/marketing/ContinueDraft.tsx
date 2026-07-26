@@ -24,7 +24,7 @@
 import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { indexKey, listResumes, readResume } from "@/app/lib/resumeStore";
-import { useOwner } from "@/app/components/build/useOwner";
+import { useOwner } from "@/app/components/useOwner";
 import { STEPS, stepHref, SECTION_COPY } from "../build/steps";
 
 const T = {

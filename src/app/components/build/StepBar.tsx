@@ -103,7 +103,12 @@ export default function StepBar({
   return (
     <>
       <div className="bd-stepbar">
-        <span className="bd-stepbar-num" aria-hidden>{t.of(done, n)}</span>
+        {/*
+          `key` on the value is the entire mechanism: when `done` changes React remounts the span, the
+          animation restarts, and a number that quietly became a different number now registers. No JS
+          beyond this prop — see `t-pop` in transitions.css.
+        */}
+        <span key={done} className="bd-stepbar-num t-pop" aria-hidden>{t.of(done, n)}</span>
         <div className="bd-stepbar-mid">
           <span className="bd-stepbar-name">{copy.nav[step]}</span>
           {/*
@@ -126,7 +131,7 @@ export default function StepBar({
         </div>
         <button
           type="button"
-          className="bd-stepbar-btn"
+          className="bd-stepbar-btn t-tap"
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-haspopup="dialog"
@@ -136,14 +141,14 @@ export default function StepBar({
       </div>
 
       {open && (
-        <div className="bd-sheet-scrim" onClick={() => setOpen(false)}>
+        <div className="bd-sheet-scrim t-scrim" onClick={() => setOpen(false)}>
           <div
             ref={sheetRef}
             tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-label={t.steps}
-            className="bd-sheet"
+            className="bd-sheet t-sheet"
             dir={ar ? "rtl" : "ltr"}
             onClick={(e) => e.stopPropagation()}
           >

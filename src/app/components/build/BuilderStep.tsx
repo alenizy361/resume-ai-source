@@ -84,7 +84,7 @@ function Skeleton() {
  */
 function StepContent({ step }: { step: SectionId }) {
   const {
-    lang, resumeId, state, dispatch, cv, previewText, viewLang, today, flush,
+    lang, resumeId, owner, state, dispatch, cv, previewText, viewLang, today, flush,
   } = useBuilder();
   const router = useRouter();
 
@@ -141,6 +141,7 @@ function StepContent({ step }: { step: SectionId }) {
       return (
         <DesignSection
           lang={lang} state={state} cv={previewText} viewLang={viewLang} referenceDate={today}
+          owner={owner}
           onRecord={(patch) => dispatch({ t: "record", ...patch })}
           onTemplate={(slug) => dispatch({ t: "template", slug })}
           onJump={jump}

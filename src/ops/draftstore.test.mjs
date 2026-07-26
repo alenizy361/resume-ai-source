@@ -160,6 +160,15 @@ eq("empty strings never leave a dangling separator",
     /* A removal built from a variable cannot be checked by name, so it is refused outright — the
        check must not be defeatable by indirection it cannot see. */
     if (/removeItem\((?!["\`])/.test(src)) violations.push(`${file} removes a computed key`);
+    /*
+     * The same rule for the owner-scoped remover, which is how these files delete things now.
+     *
+     * In practice `removePersonal` cannot be pointed at a builder draft — its second parameter is the
+     * `PersonalKey` union and `ra_journey_*` is not in it, so TypeScript refuses at the call site,
+     * which is a stronger guarantee than this grep. Checked anyway, because that union could be
+     * widened by someone who has never read this file.
+     */
+    if (/removePersonal\([^,]+,\s*["`]ra_journey/.test(src)) violations.push(`${file} removes a draft key`);
   }
 
   ok("the files that clear storage were actually read", scanned >= 1, `${scanned} files`);
@@ -169,12 +178,24 @@ eq("empty strings never leave a dangling separator",
   ok("the draft keys are the ones the builder really uses",
     draftKey("ar") === "ra_journey_ar" && draftKey("en") === "ra_journey_en");
 
-  /* Payment DOES legitimately clear the optimizer's locked results — asserted so that removing that
-     behaviour is also a visible decision rather than an accident. */
+  /*
+   * Payment DOES legitimately clear the optimizer's locked results — asserted so that removing that
+   * behaviour is also a visible decision rather than an accident. A result generated before payment is
+   * a locked preview, and leaving it means the first thing a paying customer sees is the teaser they
+   * just paid to get past.
+   *
+   * Written against the BEHAVIOUR rather than against `removeItem("ra_optimize_result")`, which is what
+   * it used to assert and which broke the moment the key became owner-scoped — the clearing was intact
+   * and better, and the test failed anyway. A test pinned to one function's name reports a refactor as
+   * a regression, and the next person's cheapest way out is to delete it.
+   */
   if (existsSync("app/pay/callback/page.tsx")) {
     const pay = readFileSync("app/pay/callback/page.tsx", "utf8");
-    ok("payment still clears the stale locked scan results",
-      pay.includes('removeItem("ra_optimize_result")'));
+    const clears = (key) =>
+      pay.includes(`removeItem("${key}")`) || new RegExp(`removePersonal\\([^,]+,\\s*"${key}"\\)`).test(pay);
+    ok("payment still clears the stale locked scan results", clears("ra_optimize_result"));
+    /* Both languages. The Arabic one was cleared beside it and would have been just as stale. */
+    ok("in Arabic too", clears("ra_ar_optimize_result"));
   }
 }
 

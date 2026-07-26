@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Motion, CSS-only, applied at real gestures. See the file header for why nothing here uses JS. */
+@import "./transitions.css";
 
 /*
  * ══════════════════════════════════════════════════════════════════════════════

@@ -15,10 +15,11 @@
  *   node --experimental-strip-types ops/aicache.test.mjs
  */
 
+import { readFileSync } from "node:fs";
 import {
   hashOf, normalizeContext, contextHash, packKey, jdDeltaKey,
   slotOf, readCache, writeCache, changedFields, tasksToInvalidate, invalidate,
-  acceptReply, newRequestId, dedupe, inflightCount, resetInflight,
+  acceptReply, newRequestId, dedupe, questionKey, inflightCount, resetInflight,
   PROMPT_VERSION, RULES_VERSION, AI_CACHE_TASKS,
 } from "../app/lib/aiCache.ts";
 import {
@@ -246,7 +247,7 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
 /* ─────────────────────────── stale replies ─────────────────────────── */
 
 {
-  const now = { contextHash: "aaaa", inputHash: "bbbb", revision: 4 };
+  const now = { contextHash: "aaaa", inputHash: "bbbb", revision: 4, resumeId: "cv-1", owner: "u-1" };
   const stamp = { requestId: "r1", task: "role_blueprint", ...now };
 
   ok("a matching reply is written", acceptReply(stamp, now));
@@ -270,6 +271,39 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   ok("a reply claiming a future revision is refused",
     !acceptReply({ ...stamp, revision: 9 }, now));
 
+  /*
+   * ── the identity clauses, and the case that motivated them ──
+   *
+   * The three checks above were the whole function, and they cannot see a resume SWITCH. The builder's
+   * provider is not remounted when the user opens a different resume — it re-hydrates inside an effect
+   * — so a request already on the wire outlives the switch. Two resumes created for the same job title
+   * agree on all three: same context hash, same input hash, both at revision 0. So the first resume's
+   * reply was accepted into the second, and charged to it.
+   */
+  ok("a reply for a different resume is refused",
+    !acceptReply({ ...stamp, resumeId: "cv-2" }, now));
+  ok("a reply for a different owner is refused",
+    !acceptReply({ ...stamp, owner: "u-2" }, now));
+  ok("two fresh resumes with identical context, input and revision are still told apart",
+    !acceptReply(
+      { requestId: "r2", task: "role_blueprint", contextHash: "same", inputHash: "same", revision: 0, resumeId: "cv-a", owner: "u-1" },
+      { contextHash: "same", inputHash: "same", revision: 0, resumeId: "cv-b", owner: "u-1" },
+    ));
+  /* Signing out and into another account on a shared browser, where both hold a resume of that id. */
+  ok("the same resume id under two accounts is two documents",
+    !acceptReply(
+      { requestId: "r3", task: "role_blueprint", contextHash: "s", inputHash: "s", revision: 1, resumeId: "cv-x", owner: "alice" },
+      { contextHash: "s", inputHash: "s", revision: 1, resumeId: "cv-x", owner: "bob" },
+    ));
+
+  /*
+   * A missing identity must not read as a match. `undefined === undefined` is true, so a caller that
+   * simply forgot to pass the fields would sail through every clause above — which is precisely how
+   * this function passed its own tests for one run after the clauses were added.
+   */
+  ok("an unstamped reply is refused rather than silently accepted",
+    !acceptReply({ requestId: "r4", task: "role_blueprint", contextHash: "aaaa", inputHash: "bbbb", revision: 4 }, now));
+
   ok("request ids are unique and monotonic", newRequestId() !== newRequestId());
 }
 
@@ -281,7 +315,7 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   const slow = () => new Promise((r) => setTimeout(() => { calls++; r("done"); }, 30));
 
   /* Ten rapid clicks on the same task with the same input. */
-  const results = await Promise.all(Array.from({ length: 10 }, () => dedupe("role_blueprint", "i1", slow)));
+  const results = await Promise.all(Array.from({ length: 10 }, () => dedupe({ task: "role_blueprint", contextHash: "c1", inputHash: "i1" }, slow)));
   ok("ten simultaneous identical requests cost one call", calls === 1, String(calls));
   ok("and every caller gets the answer", results.every((r) => r.result === "done"));
 
@@ -300,8 +334,47 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
   /* Different inputs are different questions and must not be collapsed. */
   resetInflight();
   calls = 0;
-  await Promise.all([dedupe("role_blueprint", "i1", slow), dedupe("role_blueprint", "i2", slow)]);
+  await Promise.all([dedupe({ task: "role_blueprint", contextHash: "c1", inputHash: "i1" }, slow), dedupe({ task: "role_blueprint", contextHash: "c1", inputHash: "i2" }, slow)]);
   ok("two different inputs are two calls", calls === 2, String(calls));
+
+  /*
+   * ── the half the input hash cannot see ──
+   *
+   * This is the case the first version of `dedupe` got wrong, and it was the worst kind of wrong:
+   * correct cost, correct ledger, well-formed answer, wrong resume's content.
+   *
+   * For `role_blueprint` the question lives entirely in the CONTEXT — occupation, country, level —
+   * and the input is `{ confirmedSkills: [] }`, byte-identical on every new resume. So a nurse and an
+   * accountant open in one tab, each firing the automatic blueprint on mount, shared one request and
+   * the second rendered the first's skills.
+   */
+  resetInflight();
+  calls = 0;
+  await Promise.all([
+    dedupe({ task: "role_blueprint", contextHash: "nurse", inputHash: "i1" }, slow),
+    dedupe({ task: "role_blueprint", contextHash: "accountant", inputHash: "i1" }, slow),
+  ]);
+  ok("two occupations asking the same task with the same input are TWO calls", calls === 2, String(calls));
+
+  /* Same for an instance: two roles on one CV are two questions even when their inputs match. */
+  resetInflight();
+  calls = 0;
+  await Promise.all([
+    dedupe({ task: "experience_package", contextHash: "c1", inputHash: "i1", instance: "role-a" }, slow),
+    dedupe({ task: "experience_package", contextHash: "c1", inputHash: "i1", instance: "role-b" }, slow),
+  ]);
+  ok("two role instances are two calls", calls === 2, String(calls));
+
+  /*
+   * And the invariant that makes the above true by construction rather than by four examples: the
+   * de-duplication key IS the cache slot plus the input hash. So a follower is only ever a caller
+   * that would have written the identical cache entry.
+   */
+  const q = { task: "experience_package", contextHash: "cx", inputHash: "ih", instance: "r1" };
+  ok("the dedupe key is the cache slot plus the input hash",
+    questionKey(q) === `${slotOf(q.task, q.contextHash, q.instance)}:${q.inputHash}`,
+    questionKey(q));
+  ok("and the context hash is really in it", questionKey(q).includes("cx"));
 
   /*
    * A rejected promise must be evicted. Left in the map, it makes every later caller inherit a
@@ -309,10 +382,10 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
    */
   resetInflight();
   const boom = () => Promise.reject(new Error("nope"));
-  await dedupe("x", "i1", boom).catch(() => {});
+  await dedupe({ task: "x", contextHash: "c1", inputHash: "i1" }, boom).catch(() => {});
   ok("a failed request does not linger in the map", inflightCount() === 0);
   let second = false;
-  await dedupe("x", "i1", async () => { second = true; }).catch(() => {});
+  await dedupe({ task: "x", contextHash: "c1", inputHash: "i1" }, async () => { second = true; }).catch(() => {});
   ok("and the next caller gets a fresh attempt", second);
 }
 
@@ -538,6 +611,49 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
      variables, so a hard-coded list would stop covering an override without saying so. */
   ok("an unknown model is treated as a reasoning one — the safe direction",
     !acceptsTemperature("claude-something-new"));
+}
+
+/* ─────────── the key must cover everything the request sends ─────────── */
+
+console.log("\n── nothing the model is told may be missing from the key ──");
+
+/*
+ * ── the rule, and why it needs a test in the SOURCE ──
+ *
+ * A cache key has to name every input that can change the answer. Leave one out and the cache is not
+ * merely less effective — it is confidently wrong, and wrong in the way users cannot report, because
+ * regenerating returns the same stale answer and looks like the model simply disagreeing with them.
+ *
+ * Two call sites had this fault. Neither is reachable from a unit test, because the omission is in a
+ * `useMemo` inside a component, so the assertions are on the text of the call site. That is a weaker
+ * kind of test and it is the kind available.
+ */
+{
+  const summary = readFileSync("app/components/build/SummarySection.tsx", "utf8");
+  const experience = readFileSync("app/components/build/ExperienceSection.tsx", "utf8");
+  const code = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+  const sumInput = code(summary).match(/const finalInput = useMemo\([\s\S]*?\);/)?.[0] ?? "";
+  const pkgInput = code(experience).match(/const pkgInput = useMemo\([\s\S]*?\}\), \[[^\]]*\]\);/)?.[0] ?? "";
+
+  ok("the summary's input key was found", sumInput.length > 0);
+  /*
+   * The advert is what `final_content` tailors to, and it is in neither the context hash (a
+   * `CareerContext` has no advert) nor the digest of confirmed facts. Without it: paste one advert,
+   * generate, replace it with another employer's advert, generate again — and the cache returns the
+   * summaries written for the first one. The product's central claim, silently false on the second try.
+   */
+  ok("the summary key includes the job advert", /jobAd/.test(sumInput), sumInput.slice(0, 120));
+  ok("and the advert it keys on is the one it sends",
+    /jobAd:\s*state\.target\.jobAdText/.test(sumInput) && /jobAd:\s*state\.target\.jobAdText/.test(code(summary)));
+
+  ok("the experience package's input key was found", pkgInput.length > 0);
+  /*
+   * `payload.experience.current` is `!role.end.trim()` and it decides the TENSE of every suggested
+   * duty. Absent from the key, filling in an end date left the present-tense set cached.
+   */
+  ok("the experience key includes whether the role is current", /current/.test(pkgInput), pkgInput.slice(0, 160));
+  ok("and it keys on the boolean, not the raw date — correcting a month must not discard the entry",
+    /current:\s*!role\.end\.trim\(\)/.test(pkgInput) && !/end:\s*role\.end/.test(pkgInput));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

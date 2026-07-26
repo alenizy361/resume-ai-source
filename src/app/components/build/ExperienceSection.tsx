@@ -153,10 +153,21 @@ function RoleCard({
    * `ops/callflow.test.mjs` caught before this was wired to anything.
    */
   const { gen } = useBuilder();
+  /*
+   * `current` is in the key because it is in the request: `payload.experience.current` is
+   * `!role.end.trim()`, and it decides the tense of every suggested duty — a job you still hold is
+   * described in the present, one you left in the past. The key had no end date in it, so filling one
+   * in on a role whose duties were already generated left the cache serving the present-tense set,
+   * and the fix a user would reach for — regenerate — returned exactly the same lines.
+   *
+   * The boolean, not the date: two different end dates produce the same past tense, and keying on the
+   * raw date would throw away a valid cache entry every time somebody corrected a month.
+   */
   const pkgInput = useMemo(() => ({
     title: role.title, department: role.department ?? "", company: role.company,
     tools: role.bullets.length, bullets: role.bullets, target: target.title,
-  }), [role.title, role.department, role.company, role.bullets, target.title]);
+    current: !role.end.trim(),
+  }), [role.title, role.department, role.company, role.bullets, target.title, role.end]);
   const pkg = gen.peek("experience_package", pkgInput, role.id);
   /* Memoised because a fresh `[]` on every render would change the identity of every callback
      that depends on it, which is a re-render loop wearing a helpful disguise. */

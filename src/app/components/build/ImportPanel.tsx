@@ -102,9 +102,11 @@ const C = {
 type Picks = { roles: boolean[]; skills: boolean; education: boolean; certs: boolean; langs: boolean };
 
 export default function ImportPanel({
-  lang, onImport,
+  lang, owner, onImport,
 }: {
   lang: Lang;
+  /** Whose saved CVs to list. Empty until the session is known, which lists nothing — correctly. */
+  owner: string;
   /** Hands the confirmed subset to the reducer. The panel never touches state itself. */
   onImport: (cv: ParsedCv) => void;
 }) {
@@ -135,7 +137,7 @@ export default function ImportPanel({
    */
   const [saved, setSaved] = useState<SavedResume[] | null>(null);
   const look = () => {
-    try { setSaved(getResumes().slice(0, 5)); } catch { setSaved([]); }
+    try { setSaved(getResumes(owner).slice(0, 5)); } catch { setSaved([]); }
   };
 
   function openSaved(entry: SavedResume) {
@@ -271,7 +273,7 @@ export default function ImportPanel({
       />
       <button
         onClick={() => input.current?.click()} disabled={busy}
-        className="btn-ghost mt-3 rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+        className="btn-ghost mt-3 rounded-xl px-4 text-sm font-semibold t-tap disabled:opacity-50"
       >
         {busy ? c.reading : c.pick}
       </button>
@@ -307,7 +309,9 @@ export default function ImportPanel({
         </div>
       )}
 
-      {err && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+      {/* Keyed on the message so a SECOND failure shakes again — an unchanged element would not
+          re-run the animation, and "it failed again" is exactly what needs to register. */}
+      {err && <p key={err} className="mt-2 text-xs t-shake" style={{ color: "#fca5a5" }}>{err}</p>}
 
       {/*
         ── the paste box, which the error message used to point away from ──
@@ -336,7 +340,7 @@ export default function ImportPanel({
           <button
             onClick={() => imageInput.current?.click()}
             disabled={ocrBusy || busy}
-            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold t-tap disabled:opacity-50"
           >
             {ocrBusy ? c.ocrBusy : c.ocrOpen}
           </button>
@@ -354,7 +358,7 @@ export default function ImportPanel({
       )}
 
       {!parsed && showPaste && (
-        <div className="mt-3">
+        <div className="mt-3 t-reveal">
           <label className="bd-label" htmlFor="cv-paste">{c.pasteLabel}</label>
           <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.pasteSub}</p>
           <textarea
@@ -370,7 +374,7 @@ export default function ImportPanel({
           <button
             onClick={readPasted}
             disabled={!pasted.trim()}
-            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-50"
+            className="btn-ghost mt-2 rounded-xl px-4 text-sm font-semibold t-tap disabled:opacity-50"
           >
             {c.pasteGo}
           </button>

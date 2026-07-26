@@ -130,6 +130,11 @@ export default function BuilderShell({
    * while the user is looking at it — unmounted, not hidden, so nothing parses the CV or
    * observes a box that is off screen.
    */
+  /* One expression, named, so the `key` above and the text below cannot disagree. */
+  const saveLabel = lifecycle === "invalidResume" ? lifecycleLabel(lifecycle, lang)
+    : !online ? t.offline
+      : lifecycleLabel(lifecycle, lang);
+
   const showPreview = onStep && (isDesktop || mobileView === "preview");
   const showForm = !onStep || isDesktop || mobileView === "edit";
 
@@ -149,10 +154,10 @@ export default function BuilderShell({
               the one to print. The draft is safe offline — every write is local — so that
               sentence says where it is rather than apologising.
             */}
-            <span className={`bd-save${tone !== "quiet" ? " err" : ""}`}>
-              {lifecycle === "invalidResume" ? lifecycleLabel(lifecycle, lang)
-                : !online ? t.offline
-                : lifecycleLabel(lifecycle, lang)}
+            {/* Keyed on the label so React remounts it when the words change: Saving → Saved reads as a
+                transition rather than a silent substitution. `t-swap` is a fade-and-rise, no layout. */}
+            <span key={saveLabel} className={`bd-save t-swap${tone !== "quiet" ? " err" : ""}`}>
+              {saveLabel}
             </span>
           </div>
         </header>

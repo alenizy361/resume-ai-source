@@ -71,7 +71,7 @@ export default function AiStrip({
         <>
           <div className="bd-chips mt-3">
             {items.map((text) => (
-              <button key={text} className="bd-chip" onClick={() => onPick(text)}>+ {text}</button>
+              <button key={text} className="bd-chip t-tap" onClick={() => onPick(text)}>+ {text}</button>
             ))}
           </div>
           <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{note || c.unchecked}</p>

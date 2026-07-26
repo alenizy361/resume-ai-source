@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { useOwner } from "./useOwner";
+import { readPersonalJson, writePersonal } from "@/app/lib/personalStore";
 
 /** Publishes the given resume text to a public /r/{slug} link and shows it
  *  with a copy button. Published links (slug + unpublish token) are persisted
@@ -37,22 +39,27 @@ export default function PublishLink({ text, name, role, ar = false }: { text: st
         failed: "Could not publish.",
       };
 
+  /*
+   * ── the publish list is owner-scoped, and this one is a capability, not just data ──
+   *
+   * Each entry carries the UNPUBLISH TOKEN: whoever holds it can take that CV off the public web.
+   * Stored under a key with no owner, the next account on a shared browser inherited both the list of
+   * someone else's live CVs and the power to pull them down. That is the sharpest of the seven stores
+   * this scoping fixed, and it looked like the mildest.
+   */
+  const owner = useOwner();
+
   function remember(entry: { slug: string; url: string; token: string }) {
-    try {
-      const raw = localStorage.getItem("ra_published");
-      const list = raw ? JSON.parse(raw) : [];
-      list.unshift({ ...entry, created: new Date().toISOString() });
-      localStorage.setItem("ra_published", JSON.stringify(list.slice(0, 20)));
-    } catch { /* noop */ }
+    if (!owner) return;
+    const list = readPersonalJson<Array<Record<string, unknown>>>(owner, "ra_published", []);
+    list.unshift({ ...entry, created: new Date().toISOString() });
+    writePersonal(owner, "ra_published", JSON.stringify(list.slice(0, 20)));
   }
 
   function forget(s: string) {
-    try {
-      const raw = localStorage.getItem("ra_published");
-      if (!raw) return;
-      const list = (JSON.parse(raw) as { slug: string }[]).filter((e) => e.slug !== s);
-      localStorage.setItem("ra_published", JSON.stringify(list));
-    } catch { /* noop */ }
+    if (!owner) return;
+    const list = readPersonalJson<{ slug: string }[]>(owner, "ra_published", []).filter((e) => e.slug !== s);
+    writePersonal(owner, "ra_published", JSON.stringify(list));
   }
 
   async function publish() {

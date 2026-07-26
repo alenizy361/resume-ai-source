@@ -50,7 +50,7 @@ const T = {
 };
 
 export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
-  const { state, dispatch, resumeId, hydrated, flush } = useBuilder();
+  const { state, dispatch, resumeId, owner, hydrated, flush } = useBuilder();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -116,7 +116,7 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
           </div>
           <button
             onClick={() => { track("builder_resumed", { at: resumeAt }); enter(resumeAt); }}
-            className="btn-accent mt-4 rounded-xl px-5 py-2.5 text-sm font-bold"
+            className="btn-accent t-tap mt-4 rounded-xl px-5 py-2.5 text-sm font-bold"
           >
             {t.resumeGo}
           </button>
@@ -126,7 +126,7 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
       <div className="mt-8">
         {hasDraft && <div className="bd-label">{t.fresh}</div>}
         <StartCards
-          lang={lang} state={state} dispatch={dispatch}
+          lang={lang} state={state} dispatch={dispatch} owner={owner}
           /* `?entry=upload` comes from the home page's upload card. One addressable entry per
              door means the landing can point at the right one instead of at another product. */
           openImport={params.get("entry") === "upload"}
@@ -135,7 +135,7 @@ export default function BuilderStart({ lang }: { lang: "ar" | "en" }) {
       </div>
 
       {!hasDraft && (
-        <button onClick={() => enter()} className="btn-accent mt-6 rounded-xl px-5 py-2.5 text-sm font-bold">
+        <button onClick={() => enter()} className="btn-accent t-tap mt-6 rounded-xl px-5 py-2.5 text-sm font-bold">
           {t.firstStep}
         </button>
       )}

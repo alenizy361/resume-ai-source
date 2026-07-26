@@ -1,0 +1,243 @@
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   MOTION — CSS only, and every effect earns its place at a real gesture
+   ══════════════════════════════════════════════════════════════════════════════════════
+
+   Built after transitions.dev: semantic custom properties on `:root`, effects namespaced under
+   `t-*`, one `prefers-reduced-motion` guard at the end, and no JavaScript at all.
+
+   ── why CSS-only is not a style preference here ──
+
+   The goal for this product is organic search, with no ad spend. Core Web Vitals are a ranking
+   input, so motion that costs INP or CLS is motion that costs traffic — it works directly against
+   the thing it is decorating.
+
+   That rules out most of what "add nice animations" usually means:
+
+     · no JS scroll listeners, no rAF loops, no IntersectionObserver reveals — every one is main-thread
+       work during the interaction window INP measures
+     · no animating width, height, top, left, margin or padding — those are LAYOUT, and layout that
+       moves after paint is CLS
+     · no animating `filter: blur()` — re-rasterised every frame
+     · no animation library — a resume builder does not need a 40KB dependency to fade a panel
+
+   What is left is genuinely free: `transform` and `opacity` are composited, so the compositor runs
+   them off the main thread and they cost neither INP nor CLS. Everything below is one of those two,
+   plus `color`/`background` where nothing moves.
+
+   This is also the second half of a job started earlier this session, when the old cinematic layer
+   came out — the blocking page transition, the canvas cosmos, the 1100ms step reveal. Removing that
+   was right and it left the product plain. This puts motion back at the places a person is actually
+   doing something, and nowhere else.
+
+   ── why 8 effects and not the reference's 18 ──
+
+   An effect with no gesture behind it is decoration that still has to be maintained. Each one here
+   is named for the moment it serves, and if a moment is not in this product the effect is not here.
+   One was written and deleted on exactly that ground — see section 2.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Three durations, because a person perceives these three things differently.
+     Anything above ~200ms on a tap starts to feel like waiting rather than responding. */
+  --t-fast: 120ms;      /* a tap acknowledging itself */
+  --t-base: 180ms;      /* something appearing or leaving */
+  --t-slow: 260ms;      /* a sheet, which travels further */
+
+  /* Standard easing for things settling into place, and a spring-ish one for confirmations.
+     The overshoot is what makes an accepted suggestion feel accepted rather than merely changed. */
+  --t-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* How far things travel. Small on purpose: a big entrance reads as slow. */
+  --t-rise: 8px;
+  --t-sheet-rise: 16px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   1. t-tap — a control acknowledges the finger before anything else happens
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * The cheapest honesty in a mobile UI: on a slow connection the only immediate truth is that the tap
+ * registered. `:active` needs no JS and cannot be late.
+ */
+.t-tap {
+  transition: transform var(--t-fast) var(--t-ease), background-color var(--t-fast) var(--t-ease),
+              border-color var(--t-fast) var(--t-ease), color var(--t-fast) var(--t-ease);
+}
+.t-tap:active { transform: scale(0.97); }
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   2. t-accept — the product's core gesture
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Tapping a suggested skill or duty to accept it is THE interaction in this builder — everything else
+ * is typing. It had no feedback: the chip changed colour and that was all, so on a phone it was easy
+ * to be unsure whether the tap landed.
+ *
+ * A brief overshoot, then settle. `transform` only, so the chip does not reflow the row it sits in and
+ * the ones after it do not shift — a chip that nudged its neighbours would be CLS on the busiest
+ * screen in the product.
+ */
+.t-accept { animation: t-accept-pop var(--t-base) var(--t-spring); }
+
+@keyframes t-accept-pop {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/*
+ * A companion tick was written here and removed again. The only ✓ in the builder is the step marker
+ * inside the steps sheet (`StepBar`), and the sheet is shut at the moment a step completes — so the
+ * animation would fire on sheet-open, twelve at once, for steps finished minutes ago. That is motion
+ * reporting nothing, which is the one thing this file refuses to carry.
+ */
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   3. t-pop — a number that changed should look like it changed
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * For the step counter and the ATS score. A figure that silently becomes a different figure is a
+ * change the eye misses; the same figure arriving with a small pop is one it does not.
+ *
+ * Keyed by React on the value, so remounting restarts the animation — which is the whole trick, and
+ * it needs no JS beyond a `key` prop.
+ */
+.t-pop { animation: t-pop-in var(--t-base) var(--t-spring); }
+
+@keyframes t-pop-in {
+  0% { transform: scale(0.72); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   4. t-reveal — a panel that was not there a moment ago
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * `@starting-style` is what makes this work with a React conditional render and no JS: the browser
+ * applies the starting values on the first frame the element exists, then transitions to the settled
+ * ones. Before it, animating an entrance required either a library or a two-render dance.
+ *
+ * Where it is unsupported the element simply appears — the correct degradation, since the content is
+ * never hidden by the effect.
+ */
+.t-reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--t-base) var(--t-out), transform var(--t-base) var(--t-out);
+}
+
+@starting-style {
+  .t-reveal { opacity: 0; transform: translateY(var(--t-rise)); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   5. t-sheet — the steps menu, which had no entrance at all
+   ────────────────────────────────────────────────────────────────────────────── */
+
+.t-scrim {
+  opacity: 1;
+  transition: opacity var(--t-base) var(--t-ease);
+}
+@starting-style { .t-scrim { opacity: 0; } }
+
+/*
+ * Rises from the bottom on a phone, because that is where a bottom sheet comes from and matching the
+ * platform's idiom is most of what makes an interface feel native rather than translated.
+ */
+.t-sheet {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--t-slow) var(--t-out), transform var(--t-slow) var(--t-out);
+}
+@starting-style {
+  .t-sheet { opacity: 0; transform: translateY(var(--t-sheet-rise)); }
+}
+
+/* On a wide screen it is centred, so it should scale rather than rise — a centred panel sliding up
+   reads as a mistake. */
+@media (min-width: 640px) {
+  .t-sheet { transform: scale(1); }
+  @starting-style { .t-sheet { opacity: 0; transform: scale(0.97); } }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   6. t-shake — a refusal
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * For the step gate and a field that would not accept what was typed. Deliberately small and
+ * deliberately once: a shake is a rebuke, and a big or repeating one is a rebuke that reads as a
+ * malfunction.
+ *
+ * `translateX` only, so nothing reflows around it.
+ */
+.t-shake { animation: t-shake-x 200ms var(--t-ease); }
+
+@keyframes t-shake-x {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   7. t-swap — a label whose text is now different
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * The save indicator, which moves through Saving → Saved. Keyed on the text so React remounts it and
+ * the animation restarts. A crossfade would need two stacked copies and a measured height; a short
+ * fade-and-rise of the single new label costs one element and no layout.
+ */
+.t-swap { animation: t-swap-in var(--t-fast) var(--t-out) both; }
+
+@keyframes t-swap-in {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+   8. t-lift — a card that can be chosen
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Hover only, and inside `@media (hover: hover)` so a touch device never gets a stuck hover state
+ * after a tap — which is what happens when this is written without the guard.
+ */
+@media (hover: hover) {
+  .t-lift {
+    transition: transform var(--t-base) var(--t-out), border-color var(--t-base) var(--t-ease);
+  }
+  .t-lift:hover { transform: translateY(-2px); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   THE GUARD
+   ══════════════════════════════════════════════════════════════════════════════════════
+
+   Not a courtesy. `prefers-reduced-motion` is set by people for whom motion causes nausea or
+   triggers migraine, and by anyone on a device where it costs battery.
+
+   Everything is switched off rather than shortened. A 1ms version of a shake is still a shake.
+   Nothing here carries meaning that only the motion conveys — the chip still turns violet, the tick
+   still appears, the sheet is still there — so removing all of it removes decoration and no
+   information.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .t-tap, .t-accept, .t-pop, .t-reveal, .t-scrim, .t-sheet,
+  .t-shake, .t-swap, .t-lift {
+    animation: none !important;
+    transition: none !important;
+  }
+  .t-tap:active, .t-lift:hover { transform: none; }
+  /* `@starting-style` sets the pre-transition value; with the transition gone the element would be
+     stuck at it, so the settled values are restated. */
+  .t-reveal, .t-sheet, .t-scrim { opacity: 1; transform: none; }
+}

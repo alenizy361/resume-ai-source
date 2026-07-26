@@ -5,6 +5,8 @@ import { trackStep } from "@/app/lib/funnelClient.ts";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import AuroraBurst from "../../components/orb/AuroraBurst";
+import { useOwner } from "../../components/useOwner";
+import { removePersonal, writePersonal } from "@/app/lib/personalStore";
 
 function CallbackInner() {
   const params = useSearchParams();
@@ -129,6 +131,11 @@ function CallbackInner() {
   const isDeadStatus = (status: string) =>
     /cancel|declin|fail|expir|refund|void|error|reject/i.test(status || "");
 
+  /* Whose purchase this is. `writePersonal` is a no-op while this is empty, and the stamp is
+     cosmetic — the entitlement is server-side — so a missed stamp on a flaky connection costs a gold
+     border, not access. */
+  const owner = useOwner();
+
   const checkStatus = useCallback(() => {
     const tx = params.get("transactionNo") || params.get("TransactionNo");
     if (!tx) {
@@ -153,8 +160,15 @@ function CallbackInner() {
           trackStep("paid", { plan: paidPlan });
           setOrderNo(String(d.orderNumber || tx));
           setDetail(t.confirmed(d.orderNumber || tx));
-          // Mark this device as an owner — every later visit shows the gold stamp.
-          try { localStorage.setItem("ra_owned", "1"); } catch { /* noop */ }
+          /*
+           * Mark this ACCOUNT as an owner — every later visit shows the gold stamp.
+           *
+           * It used to say "this device", and the key said so too: `ra_owned` with no owner in it, so
+           * the next person to sign in on a shared browser inherited the purchase. The entitlement
+           * itself is server-side and was never at risk; what leaked was the stamp, which is exactly
+           * the kind of "cosmetic" bug that tells a user they own something they do not.
+           */
+          writePersonal(owner, "ra_owned", "\"1\"");
           setBurst(true);
           setTimeout(() => setBurst(false), 2400);
           // Measure this sale against ad spend (each no-op until its env vars are set).
@@ -162,10 +176,8 @@ function CallbackInner() {
           reportMetaPurchase(paidPlan, d.orderNumber || tx);
           // Old results were generated locked (pre-payment) — clear them so the
           // next scan comes back complete instead of showing the stale preview.
-          try {
-            localStorage.removeItem("ra_optimize_result");
-            localStorage.removeItem("ra_ar_optimize_result");
-          } catch { /* non-fatal */ }
+          removePersonal(owner, "ra_optimize_result");
+          removePersonal(owner, "ra_ar_optimize_result");
         } else if (d.paid && d.amountOk === false) {
           // Charged, but the amount didn't cover the plan — a support case, not a retry.
           setState("failed");
@@ -189,7 +201,7 @@ function CallbackInner() {
         setDetail(t.verifyFail);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, owner]);
 
   /*
    * Kick off the verification once the page exists.

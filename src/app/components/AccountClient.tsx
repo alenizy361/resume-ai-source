@@ -13,6 +13,10 @@ import {
   getResumes, removeResume, type SavedResume,
   getJobs, addJob, updateJob, removeJob, type JobEntry, type JobStatus,
 } from "../lib/localdata";
+import { forgetOwner, ownerKey } from "@/app/lib/resumeStore";
+import {
+  forgetPersonal, migrateUnowned, readPersonalJson, removePersonal, writePersonal,
+} from "@/app/lib/personalStore";
 
 interface Me {
   signedIn: boolean;
@@ -134,19 +138,37 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
       .then((d) => { setMe(d); setKnownAt(Date.now()); })
       .catch(() => { setMe({ signedIn: false }); setKnownAt(Date.now()); })
       .finally(() => setLoading(false));
-    /* eslint-disable react-hooks/set-state-in-effect -- see the note above this effect. */
-    try {
-      const raw = localStorage.getItem("ra_published");
-      if (raw) setLinks(JSON.parse(raw));
-    } catch { /* noop */ }
-    setScans(getScans());
-    setResumes(getResumes());
-    setJobs(getJobs());
-    try { setOwned(localStorage.getItem("ra_owned") === "1"); } catch { /* noop */ }
-    /* eslint-enable react-hooks/set-state-in-effect */
     // Cloud-saved CVs (signed-in only) — survive a cleared browser.
     fetch("/api/resumes").then((r) => r.json()).then((d) => { if (d?.ok && d.signedIn && Array.isArray(d.cvs)) setCloudCvs(d.cvs); }).catch(() => {});
   }, []);
+
+  /*
+   * ── nothing personal is read until we know whose it is ──
+   *
+   * These six lists used to be read in the mount effect above, beside the `/api/auth/me` call and
+   * therefore BEFORE its answer. They were keyed on nothing, so on a shared browser this page showed
+   * the previous account's saved CVs — full text — their scan history, their job applications, their
+   * published links WITH the unpublish tokens, and their paid-entitlement flag.
+   *
+   * The owner comes from the `me` this page already fetched rather than from `useOwner()`, which would
+   * be a second request to the same endpoint on the same page. Empty until it resolves, and every
+   * reader in `personalStore` returns nothing for an empty owner — so the first render shows an empty
+   * dashboard for a moment instead of somebody else's.
+   */
+  const owner = me ? ownerKey(me.signedIn ? me.email : null) : "";
+
+  useEffect(() => {
+    if (!owner) return;
+    /* Adopt the pre-scoping values, once. Never overwrites; retires rather than deletes. */
+    migrateUnowned(owner);
+    /* eslint-disable react-hooks/set-state-in-effect -- see the note above the mount effect. */
+    setLinks(readPersonalJson<{ slug: string; url: string; token: string }[]>(owner, "ra_published", []));
+    setScans(getScans(owner));
+    setResumes(getResumes(owner));
+    setJobs(getJobs(owner));
+    setOwned(readPersonalJson<string>(owner, "ra_owned", "") === "1");
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [owner]);
 
   async function deleteCloudCv(id: string) {
     try {
@@ -160,6 +182,16 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
     setSigningOut(true);
     try {
       await fetch("/api/auth/logout", { method: "POST" });
+      /*
+       * Clear this account's local data HERE, on the page the sign-out actually happens on.
+       *
+       * `useOwner` clears on the owner TRANSITION, which is correct but only fires somewhere that uses
+       * it — the builder. Someone who signs out from this page and closes the tab would have left the
+       * next person their saved CVs, their scan history and their publish tokens. The server copy at
+       * `/api/resumes` is what makes this safe to delete: the browser holds a recovery draft, not the
+       * only copy.
+       */
+      if (owner && owner !== "anon") { forgetOwner(owner); forgetPersonal(owner); }
       router.push("/");
       router.refresh();
     } finally {
@@ -185,22 +217,18 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
     }
     const next = links.filter((l) => l.slug !== slug);
     setLinks(next);
-    try { localStorage.setItem("ra_published", JSON.stringify(next)); } catch { /* noop */ }
+    writePersonal(owner, "ra_published", JSON.stringify(next));
   }
 
   function openScan(s: ScanEntry) {
     // Restore the result into the right optimizer and navigate to it.
-    try {
-      localStorage.setItem(s.lang === "ar" ? "ra_ar_optimize_result" : "ra_optimize_result", JSON.stringify(s.result));
-    } catch { /* noop */ }
+    writePersonal(owner, s.lang === "ar" ? "ra_ar_optimize_result" : "ra_optimize_result", JSON.stringify(s.result));
     router.push(s.lang === "ar" ? "/ar/optimize" : "/optimize");
   }
 
   function loadResume(r: SavedResume) {
-    try {
-      localStorage.setItem("ra_optimize_draft", JSON.stringify({ resume: r.text, jobDescription: "", mode: "general" }));
-      localStorage.removeItem("ra_optimize_result");
-    } catch { /* noop */ }
+    writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume: r.text, jobDescription: "", mode: "general" }));
+    removePersonal(owner, "ra_optimize_result");
     router.push("/optimize");
   }
 
@@ -217,8 +245,8 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   function submitJob(e: React.FormEvent) {
     e.preventDefault();
     if (!jc.trim() && !jt.trim()) return;
-    addJob({ company: jc.trim(), title: jt.trim(), url: ju.trim(), status: "saved", note: "" });
-    setJobs(getJobs());
+    addJob(owner, { company: jc.trim(), title: jt.trim(), url: ju.trim(), status: "saved", note: "" });
+    setJobs(getJobs(owner));
     setJc(""); setJt(""); setJu("");
     setShowJobForm(false);
   }
@@ -352,14 +380,14 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                   </div>
                   <select
                     value={j.status}
-                    onChange={(e) => { updateJob(j.id, { status: e.target.value as JobStatus }); setJobs(getJobs()); }}
+                    onChange={(e) => { updateJob(owner, j.id, { status: e.target.value as JobStatus }); setJobs(getJobs(owner)); }}
                     className="rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none"
                     style={{ background: "var(--bg)", border: "1px solid var(--line)", color: STATUS_COLORS[j.status] }}>
                     {(Object.keys(STATUS_LABELS) as JobStatus[]).map((st) => (
                       <option key={st} value={st}>{STATUS_LABELS[st]}</option>
                     ))}
                   </select>
-                  <button onClick={() => { removeJob(j.id); setJobs(getJobs()); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
+                  <button onClick={() => { removeJob(owner, j.id); setJobs(getJobs(owner)); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
                 </li>
               ))}
             </ul>
@@ -381,7 +409,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                     <div className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>{new Date(s.ts).toLocaleString()}</div>
                   </div>
                   <button onClick={() => openScan(s)} className="btn-ghost shrink-0 px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.open}</button>
-                  <button onClick={() => { removeScan(s.id); setScans(getScans()); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
+                  <button onClick={() => { removeScan(owner, s.id); setScans(getScans(owner)); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
                 </li>
               ))}
             </ul>
@@ -419,7 +447,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                   </div>
                   <button onClick={() => loadResume(r)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>Optimize</button>
                   <button onClick={() => downloadText("resume.txt", r.text)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--fg)" }}>↓ .txt</button>
-                  <button onClick={() => { removeResume(r.id); setResumes(getResumes()); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
+                  <button onClick={() => { removeResume(owner, r.id); setResumes(getResumes(owner)); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
                 </li>
               ))}
             </ul>

@@ -250,5 +250,204 @@ console.log("\n── personal responses carry a private cache policy ──");
     /public/.test(readFileSync("app/api/og/route.tsx", "utf8") + globals) || true);
 }
 
+/* ═════════════════════ the OTHER seven stores ═════════════════════ */
+
+/*
+ * ── what `resumeStore` did not cover ──
+ *
+ * Everything above is about the builder draft. Seven other keys held more of a person than the draft
+ * does and were keyed on nothing at all: the full text of up to ten saved CVs, ten complete ATS
+ * analyses, fifty job applications with private notes, the CV pasted into the optimiser, its analysis,
+ * the published links WITH their unpublish tokens, and the paid-entitlement flag.
+ *
+ * Fixing the builder and leaving those is the version of this work that looks finished and is not.
+ */
+
+console.log("\n── the other personal stores are owner-scoped too ──");
+
+const {
+  PERSONAL_KEYS, DEVICE_KEYS, scopedKey, retiredKey,
+  readPersonal, writePersonal, removePersonal, readPersonalJson, writePersonalList,
+  migrateUnowned, forgetPersonal,
+} = await import("../app/lib/personalStore.ts");
+
+const {
+  addJob, getJobs, removeJob, updateJob,
+  addScan, getScans, removeScan,
+  saveResume, getResumes, removeResume,
+} = await import("../app/lib/localdata.ts");
+
+{
+  store.clear();
+  const B2 = ownerKey("second@example.com");
+
+  saveResume(A, { title: "Alice CV", source: "built", text: "ALICE FULL TEXT" });
+  saveResume(B2, { title: "Bob CV", source: "built", text: "BOB FULL TEXT" });
+
+  ok("each account sees only its own saved CV",
+    getResumes(A).length === 1 && getResumes(A)[0].text === "ALICE FULL TEXT"
+    && getResumes(B2).length === 1 && getResumes(B2)[0].text === "BOB FULL TEXT");
+  /* The assertion that would have caught the original bug directly. */
+  ok("no account can read the other's CV text",
+    !JSON.stringify(getResumes(B2)).includes("ALICE FULL TEXT"));
+
+  addScan(A, { score: 71, mode: "general", jobTitle: "Nurse", lang: "en", result: { secret: "alice" } });
+  addJob(A, { company: "Aramco", title: "Nurse", url: "", status: "saved", note: "private note" });
+  ok("scan history is scoped", getScans(A).length === 1 && getScans(B2).length === 0);
+  ok("the job tracker is scoped", getJobs(A).length === 1 && getJobs(B2).length === 0);
+  ok("and a private note does not cross", !JSON.stringify(getJobs(B2)).includes("private note"));
+
+  /* Removing works through the owner too — a delete that ignored the owner would delete nothing, or
+     worse, the other account's row. */
+  removeResume(A, getResumes(A)[0].id);
+  ok("delete removes only the caller's row", getResumes(A).length === 0 && getResumes(B2).length === 1);
+  updateJob(A, getJobs(A)[0].id, { status: "applied" });
+  ok("update is scoped", getJobs(A)[0].status === "applied");
+  removeJob(A, getJobs(A)[0].id);
+  removeScan(A, getScans(A)[0].id);
+  ok("scan and job deletes are scoped", getScans(A).length === 0 && getJobs(A).length === 0);
+}
+
+console.log("\n── an unknown owner reads nothing, and never the unowned key ──");
+{
+  store.clear();
+  /*
+   * The single most important assertion in this file.
+   *
+   * `useOwner` returns `""` until `/api/auth/me` answers, so every one of these pages renders at least
+   * once with no owner. A fallback to the unowned key at that moment is exactly how the previous
+   * person's CV appears on screen for a second — and a fallback is the obvious, helpful-looking thing
+   * to write.
+   */
+  store.setItem("ra_saved_resumes", JSON.stringify([{ id: "x", ts: 1, title: "leftover", source: "built", text: "SOMEONE ELSE" }]));
+  ok("an empty owner reads nothing at all", getResumes("").length === 0);
+  ok("and it does not fall back to the unowned key",
+    !JSON.stringify(getResumes("")).includes("SOMEONE ELSE"));
+  ok("an empty owner cannot write either", writePersonal("", "ra_jobs", "[]") === false);
+  ok("nor read a raw value", readPersonal("", "ra_jobs") === null);
+
+  /* A different owner is not a fallback either — the point of scoping. */
+  ok("another owner sees nothing of it", getResumes(ownerKey("nobody@example.com")).length === 0);
+}
+
+console.log("\n── the pre-scoping values are adopted once, and retired not deleted ──");
+{
+  store.clear();
+  store.setItem("ra_saved_resumes", JSON.stringify([{ id: "l1", ts: 1, title: "legacy", source: "built", text: "LEGACY TEXT" }]));
+  store.setItem("ra_owned", "1");
+
+  const adopted = migrateUnowned(A);
+  ok("the legacy values are adopted", adopted.includes("ra_saved_resumes") && adopted.includes("ra_owned"));
+  ok("and readable under the owner", getResumes(A)[0]?.text === "LEGACY TEXT");
+  ok("the unowned key no longer answers", store.getItem("ra_saved_resumes") === null);
+  /* Renamed, not deleted: it is somebody's only copy and this attribution is a judgement, not a fact. */
+  ok("the bytes survive under a retired name",
+    store.getItem(retiredKey("ra_saved_resumes"))?.includes("LEGACY TEXT") === true);
+
+  /* Second run is a no-op, and must not overwrite newer data. */
+  saveResume(A, { title: "newer", source: "built", text: "NEWER" });
+  store.setItem("ra_saved_resumes", JSON.stringify([{ id: "l2", ts: 1, title: "again", source: "built", text: "STALE" }]));
+  migrateUnowned(A);
+  ok("a second migration never overwrites what is already scoped",
+    !JSON.stringify(getResumes(A)).includes("STALE"));
+
+  /* And the anon keyspace stays separate — the same decision `migrateLegacy` made for the builder. */
+  store.clear();
+  store.setItem("ra_jobs", JSON.stringify([{ id: "j", ts: 1, company: "X", title: "Y", url: "", status: "saved", note: "" }]));
+  migrateUnowned("anon");
+  ok("an anonymous visitor's data is adopted under `anon`", getJobs("anon").length === 1);
+  ok("and signing in afterwards does not inherit it", getJobs(A).length === 0);
+}
+
+console.log("\n── signing out takes the account's data with it ──");
+{
+  store.clear();
+  const B2 = ownerKey("second@example.com");
+  saveResume(A, { title: "a", source: "built", text: "A TEXT" });
+  addJob(A, { company: "c", title: "t", url: "", status: "saved", note: "" });
+  writePersonal(A, "ra_published", JSON.stringify([{ slug: "s", url: "u", token: "SECRET-TOKEN" }]));
+  saveResume(B2, { title: "b", source: "built", text: "B TEXT" });
+  writeResume(A, "rSO", "en", cv("draft"));
+
+  const removed = forgetPersonal(A);
+  ok("the departing account's personal keys are removed", removed >= 3, String(removed));
+  ok("its saved CVs are gone", getResumes(A).length === 0);
+  /*
+   * The publish token is a CAPABILITY, not just data: whoever holds it can take that CV off the
+   * public web. Of the seven stores this was the one that mattered most and looked like it mattered
+   * least.
+   */
+  ok("and the unpublish tokens with them",
+    !JSON.stringify([...store.map.entries()]).includes("SECRET-TOKEN"));
+  ok("the other account is untouched", getResumes(B2).length === 1);
+  /* `forgetPersonal` is the personal half only — the draft is `forgetOwner`'s job, and `useOwner`
+     calls both. Asserted so the division stays visible rather than becoming a surprise. */
+  ok("the builder draft is a separate call's responsibility",
+    store.getItem(recordKey(A, "rSO")) !== null);
+  ok("and forgetOwner finishes the job", forgetOwner(A) >= 1 && store.getItem(recordKey(A, "rSO")) === null);
+}
+
+console.log("\n── no personal key escapes the scoping list ──");
+{
+  const { readFileSync, readdirSync, statSync } = await import("node:fs");
+  const { join } = await import("node:path");
+
+  /* Every literal storage key the app names, gathered from source. */
+  const files = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir)) {
+      const p = join(dir, e);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (/\.(ts|tsx)$/.test(e)) files.push(p);
+    }
+  };
+  walk("app");
+
+  const found = new Set();
+  for (const f of files) {
+    const src = readFileSync(f, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+    for (const m of src.matchAll(/(?:local|session)Storage\.(?:get|set|remove)Item\(\s*["'`](ra_[a-z_]+)["'`]/g)) {
+      found.add(m[1]);
+    }
+  }
+
+  /*
+   * The list this test exists to keep honest. A new key added to a component joins neither
+   * `PERSONAL_KEYS` nor `DEVICE_KEYS` by default, and the failure mode of forgetting is silent — the
+   * key simply works, unscoped, until someone shares a laptop. So the omission is what fails here.
+   */
+  const known = new Set([...PERSONAL_KEYS, ...DEVICE_KEYS]);
+  const unclassified = [...found].filter((k) => !known.has(k));
+  ok("every literal storage key is classified as personal or device-level",
+    unclassified.length === 0, unclassified.join(", "));
+
+  /* And the direction that matters: no personal key is still addressed WITHOUT an owner. A raw
+     `localStorage.setItem("ra_saved_resumes", …)` anywhere would defeat every assertion above. */
+  const rawPersonal = [...found].filter((k) => PERSONAL_KEYS.includes(k));
+  ok("no personal key is read or written directly by name",
+    rawPersonal.length === 0, rawPersonal.join(", "));
+  ok("the device-level keys are the only ones addressed directly",
+    [...found].every((k) => DEVICE_KEYS.includes(k)), [...found].join(", "));
+
+  /* The scoped key really carries the owner — a `scopedKey` that dropped it would pass everything
+     above by making all owners equal. */
+  ok("a scoped key contains the owner", scopedKey(A, "ra_jobs").includes(A));
+  ok("and two owners produce two keys", scopedKey(A, "ra_jobs") !== scopedKey("anon", "ra_jobs"));
+}
+
+console.log("\n── a corrupt value degrades to empty, never to a crash ──");
+{
+  store.clear();
+  store.setItem(scopedKey(A, "ra_jobs"), "{not json");
+  ok("unparseable JSON reads as the fallback", getJobs(A).length === 0);
+  store.setItem(scopedKey(A, "ra_jobs"), "null");
+  ok("a stored null reads as the fallback too", readPersonalJson(A, "ra_jobs", []).length === 0);
+  ok("a list write caps its length",
+    writePersonalList(A, "ra_jobs", Array.from({ length: 90 }, (_, i) => ({ id: String(i) })), 50)
+    && readPersonalJson(A, "ra_jobs", []).length === 50);
+  removePersonal(A, "ra_jobs");
+  ok("remove is scoped and works", readPersonal(A, "ra_jobs") === null);
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

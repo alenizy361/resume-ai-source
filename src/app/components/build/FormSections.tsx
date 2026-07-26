@@ -70,7 +70,18 @@ export function Field({
 
 /* ───────────────────────── sections ───────────────────────── */
 
-export function StartCards(p: Common & { onPicked: () => void; openImport?: boolean }) {
+export function StartCards(p: Common & {
+  onPicked: () => void;
+  openImport?: boolean;
+  /**
+   * Whose browser this is, as `resumeStore.ownerKey` computes it, or `""` while the answer is still in
+   * flight. Only this one of the `Common` components needs it — it renders `ImportPanel`, which lists
+   * previously saved CVs, and that list is owner-scoped (`lib/personalStore.ts`). It is a prop here
+   * rather than a field on `Common` so the four sections that store nothing personal are not made to
+   * carry an owner they have no use for.
+   */
+  owner: string;
+}) {
   /*
    * `openImport` is how the home page's "I already have a CV" card arrives here.
    *
@@ -87,7 +98,7 @@ export function StartCards(p: Common & { onPicked: () => void; openImport?: bool
     <>
       <div className="bd-grid two">
         <button
-          className="card card-hover p-4 text-start"
+          className="card card-hover t-lift t-tap p-4 text-start"
           onClick={() => {
             p.dispatch({ t: "entry", v: "new" });
             track("builder_entry_selected", { entry: "new" });
@@ -107,7 +118,7 @@ export function StartCards(p: Common & { onPicked: () => void; openImport?: bool
           own traffic; it is simply no longer the builder's front door for a file.
         */}
         <button
-          className="card card-hover p-4 text-start"
+          className="card card-hover t-lift t-tap p-4 text-start"
           onClick={() => {
             setShowImport(true);
             track("builder_entry_selected", { entry: "upload" });
@@ -128,6 +139,7 @@ export function StartCards(p: Common & { onPicked: () => void; openImport?: bool
       {showImport && (
         <ImportPanel
           lang={p.lang}
+          owner={p.owner}
           onImport={(cv) => {
             p.dispatch({ t: "import", cv, lang: p.lang });
             p.dispatch({ t: "entry", v: "upload" });

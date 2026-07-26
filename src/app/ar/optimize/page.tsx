@@ -17,6 +17,8 @@ import GapFiller from "../../components/GapFiller";
 import CheckoutButton from "../../components/CheckoutButton";
 import AuthNav from "../../components/AuthNav";
 import { addScan, saveResume } from "../../lib/localdata";
+import { useOwner } from "../../components/useOwner";
+import { readPersonalJson, removePersonal, writePersonal } from "../../lib/personalStore";
 import { useBackToForm, useCountUp } from "../../lib/resultUx";
 
 interface OptimizeResult {
@@ -93,44 +95,52 @@ export default function ArOptimizePage() {
    * وهذا عدم تطابق في الترطيب في كل تحميل. القراءة هنا تكلّف رسمة إضافية واحدة عند البدء فقط.
    */
   // حفظ تلقائي للمسودة والنتيجة — التحديث أو الخروج مايضيّع شي.
+  /*
+   * ── لمن هذه المسودة ──
+   *
+   * المفتاحان أدناه يحملان النص الكامل للسيرة الملصوقة وتحليلها الكامل، ولم يكن أيٌّ منهما مرتبطاً
+   * بصاحبه: على متصفح مشترك، الحساب التالي الذي يفتح هذه الصفحة يجد سيرة الشخص السابق جاهزة في
+   * الحقل. القيمة `""` حتى يجيب `/api/auth/me`، و`readPersonal` لا يقرأ شيئاً لمالك فارغ — فالاستعادة
+   * تنتظر بدلاً من أن تستعيد مستند شخص آخر.
+   */
+  const owner = useOwner();
+
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("ra_ar_optimize_draft");
-      if (saved) {
-        const d = JSON.parse(saved);
-        if (typeof d.resume === "string") setResume(d.resume);
-        if (typeof d.jobDescription === "string") setJobDescription(d.jobDescription);
-        // نحفظ الوضع أيضاً — عشان إعادة الفحص بعد الدفع ما تسقط إعلان الوظيفة.
-        // نرجّع وضع «التخصيص» فقط إذا كان الوضع المحفوظ فعلاً «target» ومعه إعلان —
-        // وجود نص إعلان قديم وحده ما يفرض وضع التخصيص على مسودة اختار فيها المستخدم «تقييم عام».
-        if (d.mode === "target" && typeof d.jobDescription === "string" && d.jobDescription.trim().length >= 30) {
-          setMode("target");
-        }
+    if (!owner) return;
+    const d = readPersonalJson<{ resume?: unknown; jobDescription?: unknown; mode?: unknown } | null>(
+      owner, "ra_ar_optimize_draft", null);
+    if (d) {
+      if (typeof d.resume === "string") setResume(d.resume);
+      if (typeof d.jobDescription === "string") setJobDescription(d.jobDescription);
+      // نحفظ الوضع أيضاً — عشان إعادة الفحص بعد الدفع ما تسقط إعلان الوظيفة.
+      // نرجّع وضع «التخصيص» فقط إذا كان الوضع المحفوظ فعلاً «target» ومعه إعلان —
+      // وجود نص إعلان قديم وحده ما يفرض وضع التخصيص على مسودة اختار فيها المستخدم «تقييم عام».
+      if (d.mode === "target" && typeof d.jobDescription === "string" && d.jobDescription.trim().length >= 30) {
+        setMode("target");
       }
-      const savedResult = localStorage.getItem("ra_ar_optimize_result");
-      if (savedResult) setResult(JSON.parse(savedResult));
-    } catch { /* تجاهل */ }
-  }, []);
+    }
+    const savedResult = readPersonalJson<OptimizeResult | null>(owner, "ra_ar_optimize_result", null);
+    if (savedResult) setResult(savedResult);
+  }, [owner]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    try {
-      if (resume || jobDescription) {
-        localStorage.setItem("ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
-      } else {
-        // فرّغ المستخدم الحقلين — نحذف المسودة المحفوظة حتى لا يعيد التحديث نصاً حذفه للتو.
-        localStorage.removeItem("ra_ar_optimize_draft");
-      }
-    } catch { /* تجاهل */ }
-  }, [resume, jobDescription, mode]);
+    /* لا مالك بعد يعني لا كتابة: الكتابة تحت `""` مفتاح لا يقرأه أحد، فتبدو المسودة محفوظة وهي ليست. */
+    if (!owner) return;
+    if (resume || jobDescription) {
+      writePersonal(owner, "ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+    } else {
+      // فرّغ المستخدم الحقلين — نحذف المسودة المحفوظة حتى لا يعيد التحديث نصاً حذفه للتو.
+      removePersonal(owner, "ra_ar_optimize_draft");
+    }
+  }, [owner, resume, jobDescription, mode]);
 
   useEffect(() => {
-    try {
-      if (result) localStorage.setItem("ra_ar_optimize_result", JSON.stringify(result));
-      else localStorage.removeItem("ra_ar_optimize_result");
-    } catch { /* تجاهل */ }
-  }, [result]);
+    if (!owner) return;
+    if (result) writePersonal(owner, "ra_ar_optimize_result", JSON.stringify(result));
+    else removePersonal(owner, "ra_ar_optimize_result");
+  }, [owner, result]);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -261,7 +271,7 @@ export default function ArOptimizePage() {
          scan. Carries the score BAND, never the resume or the job description. */
       trackScanDone(got.matchScore);
       try {
-        addScan({
+        addScan(owner, {
           score: got.matchScore,
           mode,
           jobTitle: mode === "target" ? (jobDescription.split("\n")[0].slice(0, 80) || "فحص مخصص") : "تقييم عام",
@@ -269,7 +279,7 @@ export default function ArOptimizePage() {
           result: got,
         });
         if (!got.locked && got.optimizedResume) {
-          saveResume({ title: `محسّنة — ${new Date().toLocaleDateString("ar-SA")}`, source: "optimized", text: got.optimizedResume });
+          saveResume(owner, { title: `محسّنة — ${new Date().toLocaleDateString("ar-SA")}`, source: "optimized", text: got.optimizedResume });
         }
       } catch { /* noop */ }
     } catch (err) {
@@ -315,7 +325,12 @@ export default function ArOptimizePage() {
           </Link>
           <div className="flex items-center gap-5">
             <Link href="/optimize" className="rounded-lg px-3 py-2 text-sm" style={{ color: "var(--muted)", border: "1px solid var(--line)" }}
-              onClick={() => { try { localStorage.setItem("ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode })); localStorage.setItem("ra_lang", "en"); } catch { /* noop */ } }}>
+              onClick={() => {
+                writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+                /* `ra_lang` يبقى بلا مالك عن قصد: تفضيل جهاز يجب أن يبقى بعد الخروج — انظر
+                   `DEVICE_KEYS` في `lib/personalStore.ts`. */
+                try { localStorage.setItem("ra_lang", "en"); } catch { /* noop */ }
+              }}>
               English
             </Link>
             <AuthNav ar />
@@ -580,7 +595,7 @@ export default function ArOptimizePage() {
               <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--muted)" }}>الحزمة الكاملة بـ {formatPrice("complete", "ar")} دفعة واحدة — خطاب تعريف ولينكدإن وتحضير مقابلة، بدون اشتراك.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <Link href="/ar#pricing" className="btn-accent px-8 py-3">اشترك الآن ←</Link>
-                <button onClick={() => { setResult(null); setResume(""); setJobDescription(""); setCoverLetter(""); try { localStorage.removeItem("ra_ar_optimize_draft"); } catch { /* تجاهل */ } }}
+                <button onClick={() => { setResult(null); setResume(""); setJobDescription(""); setCoverLetter(""); removePersonal(owner, "ra_ar_optimize_draft"); }}
                   className="btn-ghost px-8 py-3 font-semibold" style={{ color: "var(--fg)" }}>
                   حسّن سيرة أخرى
                 </button>

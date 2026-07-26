@@ -69,11 +69,11 @@ export default function StepActions({ step }: { step: SectionId }) {
     <div className="bd-actions">
       <div className="bd-actions-in">
         {back ? (
-          <button className="bd-back" onClick={() => goto(back, false)}>{arrow} {t.back}</button>
+          <button className="bd-back t-tap" onClick={() => goto(back, false)}>{arrow} {t.back}</button>
         ) : (
-          <Link className="bd-back" href={builderHome(lang)}>{arrow} {t.start}</Link>
+          <Link className="bd-back t-tap" href={builderHome(lang)}>{arrow} {t.start}</Link>
         )}
-        <button onClick={onContinue} className="bd-continue">
+        <button onClick={onContinue} className="bd-continue t-tap">
           {forward ? t.cont : t.done}
         </button>
       </div>

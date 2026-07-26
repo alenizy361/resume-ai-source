@@ -128,10 +128,12 @@ const C = {
 };
 
 export default function DesignSection({
-  lang, state, cv, viewLang, referenceDate, onTemplate, onJump, onTailorCopy, onRecord,
+  lang, state, cv, viewLang, referenceDate, owner, onTemplate, onJump, onTailorCopy, onRecord,
 }: {
   lang: Lang;
   state: BuilderState;
+  /** Whose browser this is. The saved-CV list is keyed on it — see `lib/personalStore.ts`. */
+  owner: string;
   /** The assembled resume text — the same string every export path already takes. */
   cv: string;
   /**
@@ -220,7 +222,7 @@ export default function DesignSection({
        * "stale score" problem does not arise for a number attached to a frozen document.
        */
       const report = review(state, referenceDate);
-      saveResume({
+      saveResume(owner, {
         title, source: "built", text: cv,
         sourceType: state.entry || "new",
         status: critical.length ? "draft" : "ready",

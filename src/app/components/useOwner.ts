@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { forgetOwner, ownerKey } from "@/app/lib/resumeStore";
+import { forgetPersonal, migrateUnowned } from "@/app/lib/personalStore";
 
 /**
  * Who owns the drafts in this browser right now.
@@ -62,8 +63,32 @@ export function useOwner(): string {
   useEffect(() => {
     if (!owner) return;
     const before = previous.current;
-    if (before && before !== owner && before !== "anon") forgetOwner(before);
+    if (before && before !== owner && before !== "anon") {
+      forgetOwner(before);
+      /*
+       * The other seven stores, which sign-out used to leave behind entirely: the saved CVs' full
+       * text, the scan history, the job tracker, the optimiser draft, and — worst of the set — the
+       * publish tokens, which are capabilities and would have let the next person take the departed
+       * account's public CV offline.
+       */
+      forgetPersonal(before);
+    }
     previous.current = owner;
+  }, [owner]);
+
+  /*
+   * Adopt the pre-scoping values into this owner's keyspace, once.
+   *
+   * Runs for `anon` too, and deliberately: most visitors are anonymous, and the whole existing store
+   * of a person who never signed in belongs under `anon` rather than being stranded. `migrateUnowned`
+   * never overwrites and retires rather than deletes, so a second run is a no-op and nothing is lost
+   * if this attribution turns out to be the wrong one.
+   */
+  const migrated = useRef("");
+  useEffect(() => {
+    if (!owner || migrated.current === owner) return;
+    migrated.current = owner;
+    migrateUnowned(owner);
   }, [owner]);
 
   return owner;

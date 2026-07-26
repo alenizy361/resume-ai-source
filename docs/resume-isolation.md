@@ -42,12 +42,34 @@ handed to the next.
 |---|---|---|
 | `ra_journey_{lang}` | one per language | **the bug.** Migrated to `ra_cv:{owner}:{resumeId}`, then retired to `ra_journey_{lang}_legacy` |
 | `ra_journey_{lang}_damaged` | one per language | superseded by `ra_cv_bad:{owner}:{resumeId}` |
-| `ra_published` | global | no owner — a publish list survives a sign-out. **Not yet fixed** |
-| `ra_owned` | global | an entitlement flag with no owner. **Not yet fixed**, and the server is the real check |
-| `ra_optimize_result`, `ra_ar_optimize_result` | global | one person's ATS analysis. **Not yet fixed** |
-| `ra_optimize_draft` | global | pasted CV text. **Not yet fixed** |
+| `ra_published` | global | slugs **and unpublish tokens** for live public CVs. Fixed — `ra_published:{owner}` |
+| `ra_owned` | global | an entitlement flag with no owner. Fixed — `ra_owned:{owner}`; the server is still the real check |
+| `ra_optimize_result`, `ra_ar_optimize_result` | global | one person's ATS analysis. Fixed — `…:{owner}` |
+| `ra_optimize_draft`, `ra_ar_optimize_draft` | global | pasted CV text and the job advert. Fixed — `…:{owner}` |
+| `ra_saved_resumes` | global | **full text of up to ten finished CVs**, with scores. Fixed — `…:{owner}` |
+| `ra_scan_history` | global | ten complete ATS analyses, each embedding its result. Fixed — `…:{owner}` |
+| `ra_jobs` | global | up to fifty applications: company, role, private notes. Fixed — `…:{owner}` |
 | `ra_lang`, `ra_lang_choice` | global | a language preference. Correctly global — no CV content |
+| `ra_login_sent` | global | a rate-limit breadcrumb, set before anyone is signed in. Correctly global |
+| `ra_flag_builder` | global | a local feature-flag override, for development. Correctly global |
 | `ra_funnel_entry` (sessionStorage) | per tab | referrer class and page family only. No CV content. Fine |
+
+The last three columns of that table are now enforced rather than described: `PERSONAL_KEYS` and
+`DEVICE_KEYS` in `app/lib/personalStore.ts` are the two lists, and `ops/isolation.test.mjs` walks every
+`.ts`/`.tsx` file under `app/` collecting literal `ra_*` storage keys and fails if one belongs to
+neither list, or if a personal key is addressed by name anywhere outside the store.
+
+### The three that were missed the first time round
+
+The original audit listed four unowned keys and called the builder draft the bug. It missed
+`ra_saved_resumes`, `ra_scan_history` and `ra_jobs` — which between them hold more of a person than the
+draft does. `SavedResume` even carries a `userId` field, written and never read, so the store *looked*
+account-aware while nothing filtered on it. A record that knows whose it is, in a store that does not,
+is worse than neither: it reads like protection.
+
+`ra_published` is the sharpest of the set and looked the mildest. Each entry carries the **unpublish
+token**, which is a capability rather than data — the second account on a shared browser inherited both
+the list of someone else's live CVs and the power to take them offline.
 
 ## There is no query-cache library
 
@@ -126,20 +148,70 @@ unsaved work, and it is now correctly isolated.** The remaining items — server
 concurrency, conflict UI, multi-tab detection, cross-device sync — all sit downstream of that decision
 and are not claimed as done.
 
+## The AI cache keys, which were a second family of the same bug
+
+The storage audit above is about what is stored. The generation cache is about what is *asked*, and
+three of its keys were incomplete in exactly the way that produces confident wrong answers.
+
+**The de-duplication key omitted the career context.** `dedupe(task, inputHash)` shared one in-flight
+request between every caller asking the same task with the same input — and for `role_blueprint` the
+question lives entirely in the context (occupation, country, level) while the input is
+`{ confirmedSkills: [] }`, byte-identical on every new resume. Two resumes open in one tab, one for a
+nurse and one for an accountant, both firing their automatic blueprint on mount: one request, and the
+second rendered the nurse's skills under the accountant. Nothing downstream could catch it — the answer
+was well-formed, the cost was right, the ledger was right, only the content belonged to another resume.
+The key is now the cache slot plus the input hash, which gives the invariant that a follower is only
+ever a caller that would have written the identical cache entry.
+
+**`final_content` did not key on the job advert.** The payload sends `jobAd: state.target.jobAdText`
+and the model tailors every summary to it; the key had the confirmed-facts digest and the target title,
+and `jobAdText` is not part of a `CareerContext` either. So: paste an advert, generate three summaries,
+replace it with a different employer's advert, generate again — and the cache answers instantly with
+the summaries written for the first one. The product's central claim, silently false on the second try,
+and regenerating could not fix it.
+
+**`experience_package` did not key on whether the role is current.**
+`payload.experience.current` is `!role.end.trim()` and it decides the tense of every suggested duty.
+Filling in an end date on a role whose duties were already generated left the present-tense set cached.
+Keyed on the boolean rather than the date, so correcting a month does not discard a valid entry.
+
+**Stale-response rejection now includes identity.** `acceptReply` checked context hash, input hash and
+revision, none of which can see a resume *switch*: `BuilderProvider` is not remounted when the user
+opens a different resume — it re-hydrates inside an effect — so a request already on the wire outlives
+the switch, and two fresh resumes for the same job title agree on all three (same hashes, both at
+revision 0). The first resume's reply was therefore accepted into the second and charged to it. The
+stamp now carries `(resumeId, owner)` and `useGenerate` aborts any in-flight request when either
+changes, so the reply is not merely refused, it is not paid for.
+
 ## Still open
 
 - Server-authoritative persistence with `revision` / `baseRevision` and a conflict prompt
 - Multi-tab conflict detection
-- `ra_published`, `ra_owned`, `ra_optimize_*` still lack an owner
-- Request cancellation on resume switch (`AbortController` per resume) and stale-response rejection by
-  `(resumeId, owner, revision, contextHash)` — the store now makes the check possible; the call sites
-  do not yet perform it
 
 ## Tests
 
-`ops/isolation.test.mjs`, 43 assertions against a fake `localStorage`, so failures point at the key
+`ops/isolation.test.mjs`, **78 assertions** against a fake `localStorage`, so failures point at the key
 scheme rather than at a rendered screen: two resumes never mix; an unknown id yields nothing; two
 accounts in one browser stay separate; sign-out removes the departed owner; a mismatched record is
 quarantined; revisions advance; delete removes exactly one; the legacy slot migrates once and never
 overwrites a newer record; no generic key is ever written; private routes carry a private policy and
 the policy is not global.
+
+Then, for the other seven stores: each account sees only its own saved CV text; scan history and the
+job tracker are scoped and a private note does not cross; delete, update and remove are all
+owner-scoped; **an empty owner reads nothing and never falls back to the unowned key** — the single
+most important one, because every page renders at least once before `/api/auth/me` answers and a
+fallback there is exactly how the previous person's CV appears on screen; the pre-scoping values are
+adopted once, retired rather than deleted, and never overwrite newer data; an anonymous visitor's data
+lands under `anon` and signing in does not inherit it; sign-out takes the publish tokens with it; no
+literal `ra_*` key escapes classification; and a corrupt value degrades to empty rather than crashing a
+page.
+
+`ops/aicache.test.mjs`, 147 assertions, covers the cache-key family: two occupations asking the same
+task with the same input are two calls; two role instances are two calls; the dedupe key is provably
+the cache slot plus the input hash; a reply for a different resume or a different owner is refused;
+two fresh resumes with identical context, input and revision are still told apart; an *unstamped* reply
+is refused rather than silently accepted — which is how these clauses passed their own tests for one
+run after being added, since `undefined === undefined`. Plus source-level assertions that the summary's
+key names the job advert it sends and the experience key names `current`, because those omissions live
+in a `useMemo` inside a component and no unit test can reach them.
