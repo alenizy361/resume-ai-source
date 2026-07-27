@@ -2079,6 +2079,73 @@ const CUSTOMER_SERVICE: RolePack = {
   ],
 };
 
+/*
+ * Confirmed missing entirely — a launch-readiness audit found the builder had no cached pack for
+ * this title at all, and it is a common enough profession that the gap was worth naming on its own
+ * (F-45 in `docs/known-issues.md`). Structured the same way every other pack here is: grouped
+ * suggestions, confirmable duties, credentials that are offered rather than assumed.
+ */
+const GRAPHIC_DESIGNER: RolePack = {
+  slug: "graphic-designer",
+  title: { en: "Graphic Designer", ar: "مصمم جرافيك" },
+  aliases: [
+    "Graphic Designer", "Visual Designer", "Brand Designer", "Digital Designer",
+    "مصمم جرافيك", "مصممة جرافيك", "مصمم غرافيك", "مصمم بصري", "مصمم هوية بصرية",
+  ],
+  groups: [
+    {
+      label: { en: "Design Software", ar: "برامج التصميم" },
+      items: [
+        { en: "Adobe Photoshop", ar: "أدوبي فوتوشوب" },
+        { en: "Adobe Illustrator", ar: "أدوبي إلستريتور" },
+        { en: "Adobe InDesign", ar: "أدوبي إنديزاين" },
+        { en: "Figma", ar: "فيجما" },
+      ],
+    },
+    {
+      label: { en: "Brand & Print", ar: "الهوية والطباعة" },
+      items: [
+        { en: "Brand identity design", ar: "تصميم الهوية البصرية" },
+        { en: "Logo design", ar: "تصميم الشعارات" },
+        { en: "Print-ready artwork", ar: "تجهيز الملفات للطباعة" },
+        { en: "Typography", ar: "الطباعة والخط" },
+      ],
+    },
+    {
+      label: { en: "Digital & Social", ar: "الرقمي والتواصل الاجتماعي" },
+      items: [
+        { en: "Social media design", ar: "تصميم محتوى التواصل الاجتماعي" },
+        { en: "Marketing collateral", ar: "المواد التسويقية" },
+        { en: "UI mockups", ar: "نماذج واجهات المستخدم" },
+        { en: "Motion graphics", ar: "الرسوم المتحركة" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Designed visual assets for print and digital channels aligned to brand guidelines.", ar: "صمّم أصولاً بصرية للطباعة والقنوات الرقمية بما يتوافق مع دليل الهوية." },
+    { en: "Created and maintained brand identity elements including logos and style guides.", ar: "أنشأ عناصر الهوية البصرية بما فيها الشعارات ودليل الأسلوب وحافظ عليها." },
+    { en: "Prepared print-ready artwork and coordinated with printers on production specs.", ar: "جهّز ملفات جاهزة للطباعة ونسّق مع المطابع حول مواصفات الإنتاج." },
+    { en: "Designed layouts for marketing materials including brochures and social posts.", ar: "صمّم تخطيطات للمواد التسويقية بما فيها الكتيبات ومنشورات التواصل الاجتماعي." },
+    { en: "Collaborated with marketing and product teams to translate briefs into visuals.", ar: "تعاون مع فرق التسويق والمنتج لترجمة الطلبات إلى تصاميم بصرية." },
+    { en: "Reviewed and revised designs based on stakeholder feedback before final delivery.", ar: "راجع التصاميم وعدّلها بناءً على ملاحظات أصحاب المصلحة قبل التسليم النهائي." },
+    { en: "Maintained an organized library of design assets, templates and fonts.", ar: "حافظ على مكتبة منظمة لأصول التصميم والقوالب والخطوط." },
+    { en: "Selected typography, color palettes and imagery consistent with brand identity.", ar: "اختار الخطوط والألوان والصور بما يتسق مع الهوية البصرية." },
+    { en: "Delivered design files in formats suited to each production and web requirement.", ar: "سلّم ملفات التصميم بصيغ تناسب متطلبات كل جهة إنتاج أو موقع." },
+    { en: "Presented design concepts to stakeholders and incorporated revisions.", ar: "عرض مفاهيم التصميم على أصحاب المصلحة وأدمج التعديلات المطلوبة." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Adobe Certified Professional", ar: "شهادة أدوبي المعتمدة" } },
+    { kind: "training", title: { en: "Brand Identity Design Training", ar: "تدريب تصميم الهوية البصرية" } },
+    { kind: "training", title: { en: "UI/UX Design Fundamentals", ar: "أساسيات تصميم واجهات وتجربة المستخدم" } },
+    { kind: "membership", title: { en: "Graphic Design Association Membership", ar: "عضوية جمعية التصميم الجرافيكي" } },
+  ],
+  keywords: [
+    "Graphic Design", "Photoshop", "Illustrator", "InDesign", "Figma", "Brand Identity",
+    "Typography", "Print Design", "Social Media Design", "Portfolio",
+    "تصميم جرافيك", "الهوية البصرية", "تصميم الشعارات", "المواد التسويقية",
+  ],
+};
+
 const ROLE_PACKS: RolePack[] = [
   RADIOLOGY_TECHNOLOGIST,
   ACCOUNTANT,
@@ -2105,6 +2172,7 @@ const ROLE_PACKS: RolePack[] = [
   PROJECT_MANAGER,
   SALES_REPRESENTATIVE,
   CUSTOMER_SERVICE,
+  GRAPHIC_DESIGNER,
 ];
 
 /** A copy, so a caller sorting for display cannot reorder the packs for everyone. */

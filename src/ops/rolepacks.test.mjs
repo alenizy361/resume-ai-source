@@ -66,7 +66,7 @@ function walk(pack) {
 
 /* ── the packs exist and are distinct ── */
 
-eq("twenty-five packs ship", packs.length, 25);
+eq("twenty-six packs ship", packs.length, 26);
 {
   const slugs = packs.map((p) => p.slug);
   eq("every slug is unique", slugs.length, new Set(slugs).size);

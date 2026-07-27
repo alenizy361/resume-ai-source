@@ -2458,3 +2458,49 @@ contain zero `#pricing` references and a real `/pricing` link; `AuthNav`'s "Unlo
 `/pricing` itself renders real plan content. Builder languages step, live: the bilingual suggestion
 chip is offered, clicking it adds the language, and the same chip is confirmed GONE from the
 suggestion row afterward — the exact reported symptom, reproduced then fixed.
+
+### F-49 · P1/P2 · `<html lang>` never followed the four query-param-only pages, `/career-plan` shipped no metadata, "Graphic Designer" had no suggestion pack — FIXED
+
+Three more independently-verified findings from the same audit, fixed together.
+
+**`/interview`, `/interview-live`, `/linkedin` and `/career-plan` have no real Arabic route — `/ar/*`
+soft-redirects to `?lang=ar` on the same `(en)`-route-group page — and `<html lang>`/`dir` never
+followed.** `RootShell.tsx` writes `<html lang>` once, statically, per route group, a deliberate
+tradeoff documented at length there (5 static pages → 46 if it read a request header instead) that is
+correct for the 99% of routes with a genuine per-language page. These four pages are the exception that
+tradeoff doesn't cover: `useLang()` correctly flips every visible string to Arabic once it resolves
+`?lang=ar`, but the DOCUMENT never agreed — screen readers, spell-check, and font/number shaping all
+kept reading a fully Arabic, right-to-left page as English. Fixed by adding a client-only effect inside
+`useLang()` itself (`app/components/useLang.ts`) that sets `document.documentElement.lang`/`dir` to
+match the hook's own resolved answer. This does not touch `RootShell.tsx` or the route architecture at
+all: it's a no-op everywhere `<html lang>` is already correct (every page in a real `(ar)` route group
+resolves `ar === true` here too, so setting it to what it already is changes nothing), and the fix
+exactly where it was wrong.
+
+**`/career-plan` had no `metadata` export at all** — confirmed live: it served whatever generic default
+the root layout falls back to, on a route that IS listed in `sitemap.ts`. No sibling `layout.tsx` existed
+to hold one. Fixed by adding `app/(en)/career-plan/layout.tsx` with a real `title`/`description` (drawn
+from the page's own H1 and lede, not invented copy) and a canonical pointing at `/career-plan`. No `ar`
+alternate, matching `interview-live/layout.tsx`'s own documented reasoning: this is one bilingual client
+component behind one URL switching language client-side via `?lang=ar`, and the canonical already strips
+that query — declaring a separate language edition would point an hreflang pair at the same page.
+
+**"Graphic Designer" — a common profession — had no cached suggestion pack.** `app/lib/rolePacks.ts`
+carried 25 packs and no `graphic-designer` entry, so anyone entering that title got none of the
+pre-written duty/skill/credential suggestions every other common role gets. Added a full
+`GRAPHIC_DESIGNER` pack (bilingual title + 5 aliases, 3 groups of 4 items each — Design Software, Brand
+& Print, Digital & Social — 10 duties, 4 credentials, 14 keywords), findable by both the English and
+Arabic title. `ops/rolepacks.test.mjs`'s hardcoded pack-count assertion bumped from 25 to 26 to match, and
+the new pack was checked against the suite's existing invariants (no digits or percent signs — including
+Arabic-Indic and Eastern Arabic-Indic digit ranges — in any string; every `.ar` field is real Arabic
+script; ≥2 groups with ≥4 items; ≥4 credentials; ≥10 keywords with at least one Arabic and one Latin
+keyword) rather than being exempted from any of them.
+
+**Verification.** `npx tsc --noEmit` clean. `node --experimental-strip-types ops/rolepacks.test.mjs` —
+376/376 assertions. `npm test` — 48/48 suites, 0 failed. `npm run lint` — zero new issues on touched
+files. `npm run build` clean. Live Playwright against the real bundled app: `<html lang>`/`dir` correctly
+resolve to `ar`/`rtl` after hydration on all four affected routes when loaded with `?lang=ar`, stay
+`en`/`ltr` on their English default, and the real `/ar` homepage route (which never needed this fix) is
+unaffected — 10/10 checks. `findRolePack("Graphic Designer")` and `findRolePack("مصمم جرافيك")` both
+resolve to the new `graphic-designer` pack; `allRolePacks().length === 26`, confirmed with a direct Node
+check.
