@@ -1383,6 +1383,702 @@ const LABORATORY_TECHNOLOGIST: RolePack = {
   ],
 };
 
+/*
+ * The eleven below round out the rest of `occupations.ts`'s 29-occupation taxonomy: the remaining
+ * engineering disciplines, the finance occupation that shares SOCPA with accountant but is a
+ * distinct role, and the IT/admin/sales families, which had no pack of any kind before this. None
+ * of the IT/admin/sales credentials are Saudi government licences — there is no such requirement
+ * for these roles — so they list widely recognized professional certifications instead, the same
+ * category `CASHIER`/`ADMINISTRATIVE_ASSISTANT`/`SALES_MANAGER` already use.
+ */
+
+const MECHANICAL_ENGINEER: RolePack = {
+  slug: "mechanical-engineer",
+  title: { en: "Mechanical Engineer", ar: "مهندس ميكانيكي" },
+  aliases: [
+    "Mechanical Engineer", "Design Engineer", "HVAC Engineer", "Maintenance Engineer",
+    "مهندس ميكانيكي", "مهندسة ميكانيكية", "مهندس تصميم ميكانيكي", "مهندس صيانة",
+  ],
+  groups: [
+    {
+      label: { en: "Design & Analysis", ar: "التصميم والتحليل" },
+      items: [
+        { en: "Mechanical design", ar: "التصميم الميكانيكي" },
+        { en: "Thermal analysis", ar: "التحليل الحراري" },
+        { en: "Stress analysis", ar: "تحليل الإجهادات" },
+        { en: "HVAC systems", ar: "أنظمة التكييف والتهوية" },
+      ],
+    },
+    {
+      label: { en: "Software & Standards", ar: "البرمجيات والمعايير" },
+      items: [
+        { en: "AutoCAD", ar: "أوتوكاد" },
+        { en: "SolidWorks", ar: "سوليدوركس" },
+        { en: "Finite element analysis", ar: "التحليل بالعناصر المحددة" },
+        { en: "ASME / ISO standards", ar: "معايير ASME وISO" },
+      ],
+    },
+    {
+      label: { en: "Maintenance & Operations", ar: "الصيانة والتشغيل" },
+      items: [
+        { en: "Preventive maintenance", ar: "الصيانة الوقائية" },
+        { en: "Equipment troubleshooting", ar: "تشخيص أعطال المعدات" },
+        { en: "Project coordination", ar: "تنسيق المشاريع" },
+        { en: "Safety compliance", ar: "الامتثال لمتطلبات السلامة" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Designed mechanical components and systems in accordance with applicable engineering standards.", ar: "صمّم مكونات وأنظمة ميكانيكية وفق المعايير الهندسية المعتمدة." },
+    { en: "Performed thermal and stress analysis to verify component performance and safety margins.", ar: "أجرى التحليل الحراري وتحليل الإجهادات للتحقق من أداء المكونات وهوامش الأمان." },
+    { en: "Reviewed and approved mechanical drawings for compliance with design specifications.", ar: "راجع المخططات الميكانيكية واعتمدها للتأكد من مطابقتها لمواصفات التصميم." },
+    { en: "Coordinated with HVAC contractors on system installation and commissioning.", ar: "نسّق مع مقاولي التكييف والتهوية بشأن تركيب الأنظمة وتشغيلها." },
+    { en: "Conducted preventive maintenance planning to reduce equipment downtime.", ar: "خطط للصيانة الوقائية لتقليل توقف المعدات عن العمل." },
+    { en: "Diagnosed and resolved mechanical equipment faults.", ar: "شخّص أعطال المعدات الميكانيكية وأصلحها." },
+    { en: "Prepared technical specifications and bills of materials for mechanical projects.", ar: "أعدّ المواصفات الفنية وقوائم المواد للمشاريع الميكانيكية." },
+    { en: "Monitored site installation activities to verify adherence to approved designs.", ar: "راقب أعمال التركيب في الموقع للتحقق من الالتزام بالتصاميم المعتمدة." },
+    { en: "Performed finite element analysis to validate component and assembly designs.", ar: "أجرى التحليل بالعناصر المحددة للتحقق من تصاميم المكونات والتجميعات." },
+    { en: "Ensured compliance with applicable engineering codes and safety regulations.", ar: "ضمن الامتثال للأكواد الهندسية وأنظمة السلامة المعمول بها." },
+    { en: "Collaborated with cross-functional teams on project design and delivery.", ar: "تعاون مع فرق متعددة التخصصات في تصميم المشاريع وتسليمها." },
+    { en: "Prepared engineering reports and documentation for project milestones.", ar: "أعدّ التقارير الهندسية والتوثيق لمراحل المشروع." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "Saudi Council of Engineers Professional Accreditation", ar: "الاعتماد المهني — الهيئة السعودية للمهندسين" }, issuer: "Saudi Council of Engineers" },
+    { kind: "certification", title: { en: "Project Management Certification", ar: "شهادة إدارة المشاريع" } },
+    { kind: "training", title: { en: "HVAC Systems Training", ar: "تدريب أنظمة التكييف والتهوية" } },
+    { kind: "certification", title: { en: "Computer-Aided Design (CAD) Certificate", ar: "شهادة التصميم بمساعدة الحاسوب" } },
+  ],
+  keywords: [
+    "Mechanical Engineer", "Mechanical Design", "HVAC", "Thermal Analysis", "SolidWorks", "AutoCAD",
+    "Finite Element Analysis", "Saudi Council of Engineers",
+    "مهندس ميكانيكي", "التصميم الميكانيكي", "التكييف والتهوية", "الاعتماد المهني",
+  ],
+};
+
+const ELECTRICAL_ENGINEER: RolePack = {
+  slug: "electrical-engineer",
+  title: { en: "Electrical Engineer", ar: "مهندس كهربائي" },
+  aliases: [
+    "Electrical Engineer", "Power Systems Engineer", "Electrical Design Engineer", "Instrumentation Engineer",
+    "مهندس كهربائي", "مهندسة كهربائية", "مهندس أنظمة القدرة", "مهندس تصميم كهربائي",
+  ],
+  groups: [
+    {
+      label: { en: "Design & Analysis", ar: "التصميم والتحليل" },
+      items: [
+        { en: "Electrical system design", ar: "تصميم الأنظمة الكهربائية" },
+        { en: "Power distribution", ar: "توزيع الطاقة" },
+        { en: "Load calculations", ar: "حسابات الأحمال" },
+        { en: "Circuit design", ar: "تصميم الدوائر الكهربائية" },
+      ],
+    },
+    {
+      label: { en: "Software & Standards", ar: "البرمجيات والمعايير" },
+      items: [
+        { en: "AutoCAD Electrical", ar: "أوتوكاد للكهرباء" },
+        { en: "ETAP", ar: "إيتاب" },
+        { en: "Saudi Electricity standards", ar: "معايير الكهرباء السعودية" },
+        { en: "PLC programming", ar: "برمجة وحدات التحكم المنطقي" },
+      ],
+    },
+    {
+      label: { en: "Testing & Maintenance", ar: "الفحص والصيانة" },
+      items: [
+        { en: "System testing", ar: "فحص الأنظمة" },
+        { en: "Preventive maintenance", ar: "الصيانة الوقائية" },
+        { en: "Fault diagnosis", ar: "تشخيص الأعطال" },
+        { en: "Safety compliance", ar: "الامتثال لمتطلبات السلامة" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Designed electrical distribution systems in accordance with applicable codes and standards.", ar: "صمّم أنظمة توزيع كهربائية وفق الأكواد والمعايير المعتمدة." },
+    { en: "Performed load calculations to size electrical panels and distribution equipment.", ar: "أجرى حسابات الأحمال لتحديد سعة اللوحات الكهربائية ومعدات التوزيع." },
+    { en: "Reviewed and approved electrical drawings for compliance with project specifications.", ar: "راجع المخططات الكهربائية واعتمدها للتأكد من مطابقتها لمواصفات المشروع." },
+    { en: "Programmed and configured PLC systems for industrial automation.", ar: "برمج وضبط أنظمة التحكم المنطقي للأتمتة الصناعية." },
+    { en: "Conducted system testing and commissioning of electrical installations.", ar: "أجرى فحص وتشغيل التركيبات الكهربائية." },
+    { en: "Diagnosed and resolved electrical faults in equipment and systems.", ar: "شخّص الأعطال الكهربائية في الأجهزة والأنظمة وأصلحها." },
+    { en: "Coordinated with contractors on electrical installation and commissioning.", ar: "نسّق مع المقاولين بشأن تركيب الأنظمة الكهربائية وتشغيلها." },
+    { en: "Monitored preventive maintenance programs to reduce equipment downtime.", ar: "راقب برامج الصيانة الوقائية لتقليل توقف المعدات." },
+    { en: "Prepared technical specifications and bills of materials for electrical projects.", ar: "أعدّ المواصفات الفنية وقوائم المواد للمشاريع الكهربائية." },
+    { en: "Ensured compliance with Saudi Electricity Company standards and safety regulations.", ar: "ضمن الامتثال لمعايير الشركة السعودية للكهرباء وأنظمة السلامة." },
+    { en: "Collaborated with civil and mechanical teams on integrated system design.", ar: "تعاون مع الفرق المدنية والميكانيكية في تصميم الأنظمة المتكاملة." },
+    { en: "Prepared engineering reports and documentation for project milestones.", ar: "أعدّ التقارير الهندسية والتوثيق لمراحل المشروع." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "Saudi Council of Engineers Professional Accreditation", ar: "الاعتماد المهني — الهيئة السعودية للمهندسين" }, issuer: "Saudi Council of Engineers" },
+    { kind: "certification", title: { en: "Project Management Certification", ar: "شهادة إدارة المشاريع" } },
+    { kind: "training", title: { en: "Electrical Safety Training", ar: "تدريب السلامة الكهربائية" } },
+    { kind: "certification", title: { en: "PLC Programming Certificate", ar: "شهادة برمجة وحدات التحكم المنطقي" } },
+  ],
+  keywords: [
+    "Electrical Engineer", "Power Distribution", "Load Calculations", "PLC", "AutoCAD Electrical",
+    "ETAP", "Saudi Council of Engineers",
+    "مهندس كهربائي", "توزيع الطاقة", "حسابات الأحمال", "الاعتماد المهني",
+  ],
+};
+
+const INDUSTRIAL_ENGINEER: RolePack = {
+  slug: "industrial-engineer",
+  title: { en: "Industrial Engineer", ar: "مهندس صناعي" },
+  aliases: [
+    "Industrial Engineer", "Process Engineer", "Manufacturing Engineer", "Production Engineer",
+    "مهندس صناعي", "مهندسة صناعية", "مهندس عمليات", "مهندس إنتاج",
+  ],
+  groups: [
+    {
+      label: { en: "Process & Systems", ar: "العمليات والأنظمة" },
+      items: [
+        { en: "Process improvement", ar: "تحسين العمليات" },
+        { en: "Workflow analysis", ar: "تحليل تدفق العمل" },
+        { en: "Capacity planning", ar: "تخطيط الطاقة الإنتاجية" },
+        { en: "Quality management systems", ar: "أنظمة إدارة الجودة" },
+      ],
+    },
+    {
+      label: { en: "Tools & Methods", ar: "الأدوات والمنهجيات" },
+      items: [
+        { en: "Lean manufacturing", ar: "التصنيع الرشيق" },
+        { en: "Six Sigma", ar: "سيكس سيجما" },
+        { en: "Simulation software", ar: "برمجيات المحاكاة" },
+        { en: "Statistical process control", ar: "ضبط العمليات الإحصائي" },
+      ],
+    },
+    {
+      label: { en: "Operations", ar: "العمليات التشغيلية" },
+      items: [
+        { en: "Production scheduling", ar: "جدولة الإنتاج" },
+        { en: "Inventory management", ar: "إدارة المخزون" },
+        { en: "Safety compliance", ar: "الامتثال لمتطلبات السلامة" },
+        { en: "Cost analysis", ar: "تحليل التكاليف" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Analyzed production workflows to identify and eliminate inefficiencies.", ar: "حلّل تدفقات الإنتاج لتحديد أوجه القصور والتخلص منها." },
+    { en: "Designed process improvements using lean manufacturing and Six Sigma methodologies.", ar: "صمّم تحسينات للعمليات باستخدام منهجيات التصنيع الرشيق وسيكس سيجما." },
+    { en: "Developed capacity plans to align production output with demand.", ar: "وضع خطط الطاقة الإنتاجية لمواءمة الإنتاج مع الطلب." },
+    { en: "Implemented statistical process control to monitor and improve quality.", ar: "طبّق ضبط العمليات الإحصائي لمراقبة الجودة وتحسينها." },
+    { en: "Coordinated with production teams on scheduling and resource allocation.", ar: "نسّق مع فرق الإنتاج بشأن الجدولة وتوزيع الموارد." },
+    { en: "Conducted time-and-motion studies to standardize work processes.", ar: "أجرى دراسات الوقت والحركة لتوحيد إجراءات العمل." },
+    { en: "Managed inventory levels to balance holding cost against production continuity.", ar: "أدار مستويات المخزون لموازنة تكلفة التخزين مع استمرارية الإنتاج." },
+    { en: "Prepared cost analyses to support process and equipment investment decisions.", ar: "أعدّ تحليلات التكلفة لدعم قرارات الاستثمار في العمليات والمعدات." },
+    { en: "Developed and maintained quality management system documentation.", ar: "طوّر وثائق نظام إدارة الجودة وحافظ عليها." },
+    { en: "Used simulation software to model and evaluate proposed process changes.", ar: "استخدم برمجيات المحاكاة لنمذجة التغييرات المقترحة على العمليات وتقييمها." },
+    { en: "Monitored safety compliance across production and warehouse operations.", ar: "راقب الامتثال لمتطلبات السلامة في عمليات الإنتاج والمستودعات." },
+    { en: "Collaborated with cross-functional teams on continuous-improvement initiatives.", ar: "تعاون مع فرق متعددة التخصصات في مبادرات التحسين المستمر." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "Saudi Council of Engineers Professional Accreditation", ar: "الاعتماد المهني — الهيئة السعودية للمهندسين" }, issuer: "Saudi Council of Engineers" },
+    { kind: "certification", title: { en: "Six Sigma Green Belt", ar: "شهادة الحزام الأخضر في سيكس سيجما" } },
+    { kind: "certification", title: { en: "Lean Manufacturing Certificate", ar: "شهادة التصنيع الرشيق" } },
+    { kind: "training", title: { en: "Quality Management Systems Training", ar: "تدريب أنظمة إدارة الجودة" } },
+  ],
+  keywords: [
+    "Industrial Engineer", "Process Improvement", "Lean Manufacturing", "Six Sigma", "Capacity Planning",
+    "Saudi Council of Engineers",
+    "مهندس صناعي", "تحسين العمليات", "التصنيع الرشيق", "الاعتماد المهني",
+  ],
+};
+
+const AUDITOR: RolePack = {
+  slug: "auditor",
+  title: { en: "Auditor", ar: "مراجع حسابات" },
+  aliases: [
+    "Auditor", "Internal Auditor", "External Auditor", "Audit Associate",
+    "مراجع حسابات", "مراجعة حسابات", "مدقق حسابات", "مراجع داخلي",
+  ],
+  groups: [
+    {
+      label: { en: "Audit & Assurance", ar: "المراجعة والتأكيد" },
+      items: [
+        { en: "Risk assessment", ar: "تقييم المخاطر" },
+        { en: "Internal controls testing", ar: "اختبار الضوابط الداخلية" },
+        { en: "Substantive testing", ar: "الاختبارات الجوهرية" },
+        { en: "Audit planning", ar: "تخطيط المراجعة" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Audit management software", ar: "برمجيات إدارة المراجعة" },
+        { en: "ERP systems", ar: "أنظمة تخطيط الموارد" },
+        { en: "Data analytics tools", ar: "أدوات تحليل البيانات" },
+        { en: "Excel", ar: "إكسل" },
+      ],
+    },
+    {
+      label: { en: "Compliance & Reporting", ar: "الامتثال والتقارير" },
+      items: [
+        { en: "Regulatory compliance", ar: "الامتثال التنظيمي" },
+        { en: "Audit reporting", ar: "إعداد تقارير المراجعة" },
+        { en: "Fraud detection", ar: "كشف الاحتيال" },
+        { en: "Working-paper documentation", ar: "توثيق أوراق العمل" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Planned and executed audit engagements in accordance with applicable auditing standards.", ar: "خطط لمهام المراجعة ونفذها وفق معايير المراجعة المعتمدة." },
+    { en: "Assessed internal controls and identified areas of financial and operational risk.", ar: "قيّم الضوابط الداخلية وحدد مجالات المخاطر المالية والتشغيلية." },
+    { en: "Performed substantive testing on financial statement balances and transactions.", ar: "أجرى اختبارات جوهرية على أرصدة القوائم المالية والمعاملات." },
+    { en: "Documented audit findings and working papers to support conclusions.", ar: "وثّق نتائج المراجعة وأوراق العمل لدعم الاستنتاجات." },
+    { en: "Prepared audit reports summarizing findings and recommendations for management.", ar: "أعدّ تقارير المراجعة الموجزة للنتائج والتوصيات لإدارة الشركة." },
+    { en: "Reviewed financial statements for accuracy and compliance with accounting standards.", ar: "راجع القوائم المالية للتأكد من دقتها ومطابقتها للمعايير المحاسبية." },
+    { en: "Identified control weaknesses and recommended process improvements.", ar: "حدد نقاط الضعف في الضوابط واقترح تحسينات للعمليات." },
+    { en: "Coordinated with client staff to gather audit evidence and documentation.", ar: "نسّق مع موظفي العميل لجمع أدلة المراجعة والمستندات." },
+    { en: "Used data analytics tools to identify unusual transactions and trends.", ar: "استخدم أدوات تحليل البيانات لتحديد المعاملات والاتجاهات غير المعتادة." },
+    { en: "Monitored compliance with regulatory requirements and internal policies.", ar: "راقب الامتثال للمتطلبات التنظيمية والسياسات الداخلية." },
+    { en: "Assisted in fraud investigations and forensic accounting reviews.", ar: "ساعد في تحقيقات الاحتيال ومراجعات المحاسبة الجنائية." },
+    { en: "Maintained audit files in accordance with quality-control and confidentiality requirements.", ar: "حافظ على ملفات المراجعة وفق متطلبات ضبط الجودة والسرية." },
+  ],
+  credentials: [
+    { kind: "membership", title: { en: "SOCPA Fellowship / Membership", ar: "عضوية الهيئة السعودية للمراجعين والمحاسبين" }, issuer: "Saudi Organization for Chartered and Professional Accountants" },
+    { kind: "certification", title: { en: "Certified Internal Auditor (CIA)", ar: "شهادة المراجع الداخلي المعتمد" } },
+    { kind: "certification", title: { en: "Certified Public Accountant (CPA)", ar: "شهادة المحاسب القانوني المعتمد" } },
+    { kind: "training", title: { en: "Fraud Examination Training", ar: "تدريب فحص الاحتيال" } },
+  ],
+  keywords: [
+    "Auditor", "Internal Audit", "Risk Assessment", "Internal Controls", "Audit Reporting", "SOCPA",
+    "مراجع حسابات", "تقييم المخاطر", "الضوابط الداخلية", "عضوية الهيئة السعودية",
+  ],
+};
+
+const SOFTWARE_DEVELOPER: RolePack = {
+  slug: "software-developer",
+  title: { en: "Software Developer", ar: "مطوّر برمجيات" },
+  aliases: [
+    "Software Developer", "Software Engineer", "Backend Developer", "Frontend Developer", "Full Stack Developer",
+    "مطوّر برمجيات", "مطورة برمجيات", "مهندس برمجيات", "مطور واجهات",
+  ],
+  groups: [
+    {
+      label: { en: "Development", ar: "التطوير" },
+      items: [
+        { en: "Application development", ar: "تطوير التطبيقات" },
+        { en: "API design", ar: "تصميم واجهات برمجة التطبيقات" },
+        { en: "Database design", ar: "تصميم قواعد البيانات" },
+        { en: "Code review", ar: "مراجعة الأكواد" },
+      ],
+    },
+    {
+      label: { en: "Tools & Practices", ar: "الأدوات والممارسات" },
+      items: [
+        { en: "Version control (Git)", ar: "إدارة الإصدارات (جِت)" },
+        { en: "CI/CD pipelines", ar: "خطوط التكامل والنشر المستمر" },
+        { en: "Unit testing", ar: "الاختبار البرمجي" },
+        { en: "Agile / Scrum", ar: "أجايل وسكرم" },
+      ],
+    },
+    {
+      label: { en: "Infrastructure", ar: "البنية التحتية" },
+      items: [
+        { en: "Cloud platforms", ar: "منصات الحوسبة السحابية" },
+        { en: "Containerization", ar: "الحاويات البرمجية" },
+        { en: "Performance optimization", ar: "تحسين الأداء" },
+        { en: "Security best practices", ar: "أفضل ممارسات الأمان" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Designed and developed software applications to meet business requirements.", ar: "صمّم تطبيقات برمجية وطوّرها لتلبية متطلبات العمل." },
+    { en: "Built and maintained RESTful APIs for internal and external integrations.", ar: "بنى واجهات برمجة تطبيقات RESTful وصانها للتكاملات الداخلية والخارجية." },
+    { en: "Wrote and maintained unit and integration tests to ensure code quality.", ar: "كتب اختبارات وحدة وتكامل وصانها لضمان جودة الكود." },
+    { en: "Participated in code reviews and provided constructive feedback to peers.", ar: "شارك في مراجعة الأكواد وقدّم ملاحظات بناءة للزملاء." },
+    { en: "Designed database schemas and optimized queries for performance.", ar: "صمّم مخططات قواعد البيانات وحسّن الاستعلامات لتحسين الأداء." },
+    { en: "Deployed applications using CI/CD pipelines and cloud infrastructure.", ar: "نشر التطبيقات باستخدام خطوط التكامل والنشر المستمر والبنية السحابية." },
+    { en: "Debugged and resolved production issues to minimize downtime.", ar: "شخّص وأصلح مشكلات بيئة الإنتاج لتقليل وقت التوقف." },
+    { en: "Collaborated with product managers and designers on feature specifications.", ar: "تعاون مع مديري المنتج والمصممين على مواصفات الميزات." },
+    { en: "Followed secure coding practices to protect against common vulnerabilities.", ar: "التزم بممارسات البرمجة الآمنة للحماية من الثغرات الشائعة." },
+    { en: "Participated in Agile ceremonies including sprint planning and retrospectives.", ar: "شارك في فعاليات أجايل بما يشمل تخطيط السبرنت والمراجعات الرجعية." },
+    { en: "Documented technical designs and maintained internal knowledge bases.", ar: "وثّق التصاميم الفنية وحافظ على قواعد المعرفة الداخلية." },
+    { en: "Mentored junior developers on coding standards and best practices.", ar: "وجّه المطورين المبتدئين حول معايير البرمجة وأفضل الممارسات." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "AWS Certified Developer", ar: "شهادة مطوّر أمازون ويب سيرفيسز" } },
+    { kind: "certification", title: { en: "Microsoft Certified: Azure Developer", ar: "شهادة مايكروسوفت المعتمدة لمطوري أزور" } },
+    { kind: "training", title: { en: "Agile / Scrum Training", ar: "تدريب أجايل وسكرم" } },
+    { kind: "certification", title: { en: "Certified Kubernetes Application Developer (CKAD)", ar: "شهادة مطوّر تطبيقات كوبرنيتيس المعتمد" } },
+  ],
+  keywords: [
+    "Software Developer", "API Design", "CI/CD", "Git", "Cloud Computing", "Unit Testing", "Agile",
+    "مطوّر برمجيات", "تصميم واجهات البرمجة", "إدارة الإصدارات", "الحوسبة السحابية",
+  ],
+};
+
+const IT_SUPPORT: RolePack = {
+  slug: "it-support",
+  title: { en: "IT Support Specialist", ar: "أخصائي دعم تقني" },
+  aliases: [
+    "IT Support Specialist", "Help Desk Technician", "Technical Support Engineer", "IT Support Technician",
+    "أخصائي دعم تقني", "فني دعم فني", "مهندس دعم تقني", "فني حاسب آلي",
+  ],
+  groups: [
+    {
+      label: { en: "Support & Troubleshooting", ar: "الدعم واستكشاف الأعطال" },
+      items: [
+        { en: "Hardware troubleshooting", ar: "استكشاف أعطال الأجهزة" },
+        { en: "Software troubleshooting", ar: "استكشاف أعطال البرمجيات" },
+        { en: "Network troubleshooting", ar: "استكشاف أعطال الشبكة" },
+        { en: "Ticket management", ar: "إدارة تذاكر الدعم" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Active Directory", ar: "الدليل النشط" },
+        { en: "Remote support tools", ar: "أدوات الدعم عن بعد" },
+        { en: "ITSM platforms", ar: "منصات إدارة خدمات تقنية المعلومات" },
+        { en: "Windows / macOS administration", ar: "إدارة أنظمة ويندوز وماك" },
+      ],
+    },
+    {
+      label: { en: "Operations", ar: "العمليات" },
+      items: [
+        { en: "User onboarding", ar: "إعداد المستخدمين الجدد" },
+        { en: "Asset management", ar: "إدارة الأصول التقنية" },
+        { en: "Security compliance", ar: "الامتثال الأمني" },
+        { en: "Documentation", ar: "التوثيق" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Diagnosed and resolved hardware, software and network issues for end users.", ar: "شخّص مشكلات الأجهزة والبرمجيات والشبكة للمستخدمين وأصلحها." },
+    { en: "Managed support tickets from creation through resolution within service-level targets.", ar: "أدار تذاكر الدعم من إنشائها حتى حلها ضمن أهداف مستوى الخدمة." },
+    { en: "Set up and configured workstations, accounts and access for new employees.", ar: "أعدّ وضبط محطات العمل والحسابات والصلاحيات للموظفين الجدد." },
+    { en: "Administered user accounts and permissions through Active Directory.", ar: "أدار حسابات المستخدمين وصلاحياتهم عبر الدليل النشط." },
+    { en: "Provided remote and on-site technical support to staff across departments.", ar: "قدّم دعماً فنياً عن بعد وفي الموقع للموظفين في مختلف الإدارات." },
+    { en: "Maintained inventory of IT assets, including hardware and software licences.", ar: "حافظ على جرد الأصول التقنية بما يشمل الأجهزة وتراخيص البرمجيات." },
+    { en: "Escalated complex issues to senior IT staff or vendors when required.", ar: "صعّد المشكلات المعقدة لكبار موظفي تقنية المعلومات أو الموردين عند الحاجة." },
+    { en: "Applied security patches and updates to maintain system integrity.", ar: "طبّق تحديثات الأمان للحفاظ على سلامة الأنظمة." },
+    { en: "Documented troubleshooting steps and solutions in the knowledge base.", ar: "وثّق خطوات استكشاف الأعطال وحلولها في قاعدة المعرفة." },
+    { en: "Trained end users on new systems, software and IT policies.", ar: "درّب المستخدمين على الأنظمة والبرمجيات والسياسات التقنية الجديدة." },
+    { en: "Monitored network and system performance to identify potential issues.", ar: "راقب أداء الشبكة والأنظمة لتحديد المشكلات المحتملة." },
+    { en: "Ensured compliance with IT security policies and data-protection practices.", ar: "ضمن الامتثال لسياسات الأمان التقني وممارسات حماية البيانات." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "CompTIA A+", ar: "شهادة CompTIA A+" } },
+    { kind: "certification", title: { en: "Microsoft Certified: Modern Desktop Administrator", ar: "شهادة مايكروسوفت لمسؤول سطح المكتب الحديث" } },
+    { kind: "training", title: { en: "ITIL Foundation Training", ar: "تدريب أساسيات ITIL" } },
+    { kind: "certification", title: { en: "CompTIA Network+", ar: "شهادة CompTIA Network+" } },
+  ],
+  keywords: [
+    "IT Support", "Help Desk", "Technical Support", "Active Directory", "Troubleshooting", "ITIL",
+    "أخصائي دعم تقني", "استكشاف الأعطال", "الدليل النشط", "دعم فني",
+  ],
+};
+
+const NETWORK_ENGINEER: RolePack = {
+  slug: "network-engineer",
+  title: { en: "Network Engineer", ar: "مهندس شبكات" },
+  aliases: [
+    "Network Engineer", "Network Administrator", "Systems Network Engineer", "Network Security Engineer",
+    "مهندس شبكات", "مهندسة شبكات", "مسؤول شبكات", "مدير شبكات",
+  ],
+  groups: [
+    {
+      label: { en: "Network Design & Operations", ar: "تصميم الشبكات وتشغيلها" },
+      items: [
+        { en: "Network architecture", ar: "بنية الشبكة" },
+        { en: "Routing and switching", ar: "التوجيه والتحويل" },
+        { en: "Firewall configuration", ar: "إعداد جدران الحماية" },
+        { en: "VPN management", ar: "إدارة الشبكات الافتراضية الخاصة" },
+      ],
+    },
+    {
+      label: { en: "Tools & Systems", ar: "الأدوات والأنظمة" },
+      items: [
+        { en: "Network monitoring tools", ar: "أدوات مراقبة الشبكة" },
+        { en: "Cisco / Juniper platforms", ar: "منصات سيسكو وجونيبر" },
+        { en: "Network management software", ar: "برمجيات إدارة الشبكة" },
+        { en: "SD-WAN", ar: "الشبكات الواسعة المعرّفة بالبرمجيات" },
+      ],
+    },
+    {
+      label: { en: "Security & Compliance", ar: "الأمان والامتثال" },
+      items: [
+        { en: "Network security", ar: "أمان الشبكات" },
+        { en: "Intrusion detection", ar: "كشف الاختراقات" },
+        { en: "Disaster recovery planning", ar: "التخطيط للتعافي من الكوارث" },
+        { en: "Documentation", ar: "التوثيق" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Designed and implemented network architecture to support organizational requirements.", ar: "صمّم بنية الشبكة ونفذها لدعم متطلبات المؤسسة." },
+    { en: "Configured and maintained routers, switches and firewalls.", ar: "أعدّ الموجهات والمحولات وجدران الحماية وصانها." },
+    { en: "Monitored network performance and resolved connectivity issues.", ar: "راقب أداء الشبكة وحلّ مشكلات الاتصال." },
+    { en: "Managed VPN connections for remote and site-to-site access.", ar: "أدار اتصالات الشبكات الافتراضية الخاصة للوصول عن بعد وبين المواقع." },
+    { en: "Implemented network security measures, including firewalls and intrusion detection.", ar: "طبّق تدابير أمان الشبكة بما يشمل جدران الحماية وكشف الاختراقات." },
+    { en: "Conducted network capacity planning to support growth and performance needs.", ar: "خطط لسعة الشبكة لدعم النمو ومتطلبات الأداء." },
+    { en: "Troubleshot and resolved hardware and software network faults.", ar: "شخّص أعطال الشبكة في الأجهزة والبرمجيات وأصلحها." },
+    { en: "Maintained documentation of network topology, configurations and procedures.", ar: "حافظ على توثيق بنية الشبكة وإعداداتها وإجراءاتها." },
+    { en: "Coordinated with vendors and service providers on network infrastructure projects.", ar: "نسّق مع الموردين ومزودي الخدمة في مشاريع البنية التحتية للشبكة." },
+    { en: "Developed and tested disaster-recovery and business-continuity plans.", ar: "طوّر واختبر خطط التعافي من الكوارث واستمرارية الأعمال." },
+    { en: "Applied firmware and security updates to network equipment.", ar: "طبّق تحديثات البرامج الثابتة والأمان على معدات الشبكة." },
+    { en: "Provided technical support and training to IT staff on network systems.", ar: "قدّم الدعم الفني والتدريب لموظفي تقنية المعلومات حول أنظمة الشبكة." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Cisco Certified Network Associate (CCNA)", ar: "شهادة سيسكو المعتمدة لمهندسي الشبكات" } },
+    { kind: "certification", title: { en: "Cisco Certified Network Professional (CCNP)", ar: "شهادة سيسكو الاحترافية للشبكات" } },
+    { kind: "certification", title: { en: "CompTIA Network+", ar: "شهادة CompTIA Network+" } },
+    { kind: "training", title: { en: "Network Security Training", ar: "تدريب أمان الشبكات" } },
+  ],
+  keywords: [
+    "Network Engineer", "Routing", "Switching", "Firewall", "VPN", "Cisco", "Network Security",
+    "مهندس شبكات", "التوجيه والتحويل", "جدران الحماية", "أمان الشبكات",
+  ],
+};
+
+const HR_SPECIALIST: RolePack = {
+  slug: "hr-specialist",
+  title: { en: "Human Resources Specialist", ar: "أخصائي موارد بشرية" },
+  aliases: [
+    "Human Resources Specialist", "HR Specialist", "HR Generalist", "HR Coordinator",
+    "أخصائي موارد بشرية", "أخصائية موارد بشرية", "منسق موارد بشرية", "مسؤول موارد بشرية",
+  ],
+  groups: [
+    {
+      label: { en: "Recruitment & Onboarding", ar: "التوظيف والاستقطاب" },
+      items: [
+        { en: "Recruitment", ar: "التوظيف" },
+        { en: "Candidate screening", ar: "فرز المرشحين" },
+        { en: "Onboarding", ar: "إعداد الموظفين الجدد" },
+        { en: "Offer negotiation", ar: "التفاوض على العروض" },
+      ],
+    },
+    {
+      label: { en: "HR Operations", ar: "العمليات الإدارية للموارد البشرية" },
+      items: [
+        { en: "Payroll coordination", ar: "تنسيق الرواتب" },
+        { en: "HRIS systems", ar: "أنظمة معلومات الموارد البشرية" },
+        { en: "Employee records management", ar: "إدارة سجلات الموظفين" },
+        { en: "GOSI / Saudization compliance", ar: "الامتثال للتأمينات الاجتماعية والسعودة" },
+      ],
+    },
+    {
+      label: { en: "Employee Relations", ar: "علاقات الموظفين" },
+      items: [
+        { en: "Performance management", ar: "إدارة الأداء" },
+        { en: "Policy administration", ar: "تطبيق السياسات" },
+        { en: "Employee engagement", ar: "مشاركة الموظفين" },
+        { en: "Conflict resolution", ar: "حل النزاعات" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Managed the full recruitment cycle from job posting through offer negotiation.", ar: "أدار دورة التوظيف الكاملة من نشر الوظيفة حتى التفاوض على العرض." },
+    { en: "Screened resumes and conducted initial candidate interviews.", ar: "فرز السير الذاتية وأجرى المقابلات الأولية للمرشحين." },
+    { en: "Coordinated new-employee onboarding, including documentation and orientation.", ar: "نسّق إعداد الموظفين الجدد بما يشمل التوثيق والتعريف بالمؤسسة." },
+    { en: "Maintained employee records in the human resources information system.", ar: "حافظ على سجلات الموظفين في نظام معلومات الموارد البشرية." },
+    { en: "Administered company policies and ensured consistent application across departments.", ar: "طبّق سياسات الشركة وضمن تطبيقها بشكل متسق عبر الإدارات." },
+    { en: "Coordinated with payroll to ensure accurate and timely processing of compensation.", ar: "نسّق مع قسم الرواتب لضمان معالجة التعويضات بدقة وفي وقتها." },
+    { en: "Supported performance-management processes, including reviews and improvement plans.", ar: "دعم عمليات إدارة الأداء بما يشمل التقييمات وخطط التحسين." },
+    { en: "Ensured compliance with GOSI and Saudization requirements.", ar: "ضمن الامتثال لمتطلبات التأمينات الاجتماعية ونطاقات السعودة." },
+    { en: "Addressed employee relations issues and facilitated conflict resolution.", ar: "تعامل مع قضايا علاقات الموظفين وسهّل حل النزاعات." },
+    { en: "Organized employee-engagement initiatives and internal communications.", ar: "نظّم مبادرات مشاركة الموظفين والتواصل الداخلي." },
+    { en: "Prepared HR reports and metrics for management review.", ar: "أعدّ تقارير ومؤشرات الموارد البشرية لمراجعة الإدارة." },
+    { en: "Advised managers on labour-law compliance and HR best practices.", ar: "قدّم المشورة للمدراء بشأن الامتثال لنظام العمل وأفضل ممارسات الموارد البشرية." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Professional in Human Resources (PHR)", ar: "شهادة المتخصص المهني في الموارد البشرية" } },
+    { kind: "certification", title: { en: "SHRM Certified Professional (SHRM-CP)", ar: "شهادة SHRM المهنية المعتمدة" } },
+    { kind: "training", title: { en: "Saudi Labour Law Training", ar: "تدريب نظام العمل السعودي" } },
+    { kind: "training", title: { en: "Recruitment & Talent Acquisition Training", ar: "تدريب التوظيف واستقطاب المواهب" } },
+  ],
+  keywords: [
+    "HR Specialist", "Recruitment", "Onboarding", "GOSI", "Saudization", "Employee Relations", "HRIS",
+    "أخصائي موارد بشرية", "التوظيف", "السعودة", "علاقات الموظفين",
+  ],
+};
+
+const PROJECT_MANAGER: RolePack = {
+  slug: "project-manager",
+  title: { en: "Project Manager", ar: "مدير مشروع" },
+  aliases: [
+    "Project Manager", "Program Manager", "PMO Analyst", "Project Coordinator",
+    "مدير مشروع", "مديرة مشروع", "منسق مشاريع", "محلل مكتب إدارة المشاريع",
+  ],
+  groups: [
+    {
+      label: { en: "Planning & Execution", ar: "التخطيط والتنفيذ" },
+      items: [
+        { en: "Project planning", ar: "تخطيط المشاريع" },
+        { en: "Scope management", ar: "إدارة النطاق" },
+        { en: "Schedule management", ar: "إدارة الجدول الزمني" },
+        { en: "Risk management", ar: "إدارة المخاطر" },
+      ],
+    },
+    {
+      label: { en: "Tools & Methods", ar: "الأدوات والمنهجيات" },
+      items: [
+        { en: "Microsoft Project", ar: "مايكروسوفت بروجكت" },
+        { en: "Agile / Scrum", ar: "أجايل وسكرم" },
+        { en: "Jira", ar: "جيرا" },
+        { en: "Gantt charts", ar: "مخططات جانت" },
+      ],
+    },
+    {
+      label: { en: "Stakeholder & Delivery", ar: "أصحاب المصلحة والتسليم" },
+      items: [
+        { en: "Stakeholder communication", ar: "التواصل مع أصحاب المصلحة" },
+        { en: "Budget tracking", ar: "متابعة الميزانية" },
+        { en: "Vendor coordination", ar: "التنسيق مع الموردين" },
+        { en: "Status reporting", ar: "تقارير الحالة" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Developed project plans defining scope, timeline, resources and deliverables.", ar: "وضع خطط المشاريع محددة النطاق والجدول الزمني والموارد والمخرجات." },
+    { en: "Managed project schedules and tracked progress against milestones.", ar: "أدار الجداول الزمنية للمشاريع وتابع التقدم مقارنة بالمعالم الرئيسية." },
+    { en: "Identified and mitigated project risks throughout the project lifecycle.", ar: "حدد مخاطر المشروع وخفف منها طوال دورة حياة المشروع." },
+    { en: "Coordinated cross-functional teams to ensure timely project delivery.", ar: "نسّق بين الفرق متعددة التخصصات لضمان تسليم المشروع في وقته." },
+    { en: "Tracked project budgets and reported variances to stakeholders.", ar: "تابع ميزانيات المشاريع وأبلغ أصحاب المصلحة بالانحرافات." },
+    { en: "Facilitated project meetings, including kickoffs, status updates and retrospectives.", ar: "أدار اجتماعات المشروع بما يشمل الانطلاقة وتحديثات الحالة والمراجعات الرجعية." },
+    { en: "Managed stakeholder communications and expectations throughout the project.", ar: "أدار تواصل أصحاب المصلحة وتوقعاتهم طوال المشروع." },
+    { en: "Coordinated with vendors and external partners on deliverables and timelines.", ar: "نسّق مع الموردين والشركاء الخارجيين بشأن المخرجات والجداول الزمنية." },
+    { en: "Prepared and delivered project status reports to leadership.", ar: "أعدّ تقارير حالة المشروع وقدّمها للإدارة العليا." },
+    { en: "Managed scope changes through a formal change-control process.", ar: "أدار التغييرات في نطاق المشروع من خلال عملية ضبط تغيير رسمية." },
+    { en: "Applied Agile and traditional project-management methodologies as appropriate.", ar: "طبّق منهجيات أجايل والإدارة التقليدية للمشاريع بحسب الحاجة." },
+    { en: "Conducted post-project reviews to capture lessons learned.", ar: "أجرى مراجعات ما بعد المشروع لتوثيق الدروس المستفادة." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Project Management Professional (PMP)", ar: "شهادة إدارة المشاريع الاحترافية" } },
+    { kind: "certification", title: { en: "Certified ScrumMaster (CSM)", ar: "شهادة سكرم ماستر المعتمدة" } },
+    { kind: "training", title: { en: "Structured Project Management Methodology Training", ar: "تدريب منهجية إدارة المشاريع الهيكلية" } },
+    { kind: "certification", title: { en: "PMI Agile Certified Practitioner (PMI-ACP)", ar: "شهادة PMI للممارس المعتمد في أجايل" } },
+  ],
+  keywords: [
+    "Project Manager", "Project Planning", "Risk Management", "Agile", "Scrum", "PMP", "Stakeholder Management",
+    "مدير مشروع", "تخطيط المشاريع", "إدارة المخاطر", "أجايل",
+  ],
+};
+
+const SALES_REPRESENTATIVE: RolePack = {
+  slug: "sales-representative",
+  title: { en: "Sales Representative", ar: "مندوب مبيعات" },
+  aliases: [
+    "Sales Representative", "Sales Executive", "Account Executive", "Business Development Representative",
+    "مندوب مبيعات", "مندوبة مبيعات", "تنفيذي مبيعات", "مسؤول تطوير أعمال",
+  ],
+  groups: [
+    {
+      label: { en: "Sales Activities", ar: "أنشطة المبيعات" },
+      items: [
+        { en: "Lead generation", ar: "توليد العملاء المحتملين" },
+        { en: "Client meetings", ar: "اجتماعات العملاء" },
+        { en: "Product presentations", ar: "عروض المنتجات" },
+        { en: "Closing deals", ar: "إتمام الصفقات" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "CRM software", ar: "برمجيات إدارة علاقات العملاء" },
+        { en: "Sales pipeline tracking", ar: "متابعة قنوات المبيعات" },
+        { en: "Quotation software", ar: "برمجيات إعداد عروض الأسعار" },
+        { en: "Sales reporting tools", ar: "أدوات تقارير المبيعات" },
+      ],
+    },
+    {
+      label: { en: "Account Management", ar: "إدارة الحسابات" },
+      items: [
+        { en: "Customer relationship management", ar: "إدارة علاقات العملاء" },
+        { en: "Contract negotiation", ar: "التفاوض على العقود" },
+        { en: "After-sales follow-up", ar: "متابعة ما بعد البيع" },
+        { en: "Sales reporting", ar: "تقارير المبيعات" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Identified and qualified new sales leads through prospecting and referrals.", ar: "حدد وأهّل عملاء محتملين جدد من خلال التنقيب والإحالات." },
+    { en: "Conducted client meetings and product presentations to drive sales.", ar: "أجرى اجتماعات مع العملاء وقدّم عروض المنتجات لتحقيق المبيعات." },
+    { en: "Negotiated pricing and contract terms with prospective customers.", ar: "تفاوض على الأسعار وشروط العقود مع العملاء المحتملين." },
+    { en: "Maintained accurate records of customer interactions in the CRM system.", ar: "حافظ على سجلات دقيقة لتفاعلات العملاء في نظام إدارة علاقات العملاء." },
+    { en: "Managed a portfolio of accounts and built long-term customer relationships.", ar: "أدار محفظة من الحسابات وبنى علاقات طويلة الأمد مع العملاء." },
+    { en: "Prepared and delivered sales quotations and proposals to clients.", ar: "أعدّ عروض الأسعار والمقترحات وقدّمها للعملاء." },
+    { en: "Followed up with customers post-sale to ensure satisfaction and repeat business.", ar: "تابع مع العملاء بعد البيع لضمان رضاهم وتكرار التعامل." },
+    { en: "Tracked sales activity and pipeline progress against monthly targets.", ar: "تابع نشاط المبيعات وتقدم قناة المبيعات مقارنة بالأهداف الشهرية." },
+    { en: "Collaborated with the marketing team on lead-generation campaigns.", ar: "تعاون مع فريق التسويق في حملات توليد العملاء المحتملين." },
+    { en: "Resolved customer concerns and escalated complex issues appropriately.", ar: "حلّ مخاوف العملاء وصعّد المشكلات المعقدة عند الحاجة." },
+    { en: "Prepared sales reports summarizing performance and market feedback.", ar: "أعدّ تقارير المبيعات الموجزة للأداء وملاحظات السوق." },
+    { en: "Stayed current on product knowledge and competitor offerings.", ar: "واكب المعرفة بالمنتجات وعروض المنافسين." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Sales and Marketing Professional Membership", ar: "عضوية مهنية في المبيعات والتسويق" } },
+    { kind: "certification", title: { en: "CRM Software Proficiency Certificate", ar: "شهادة إتقان برمجيات إدارة علاقات العملاء" } },
+    { kind: "training", title: { en: "Negotiation Skills Training", ar: "تدريب مهارات التفاوض" } },
+    { kind: "training", title: { en: "Consultative Selling Training", ar: "تدريب البيع الاستشاري" } },
+  ],
+  keywords: [
+    "Sales Representative", "Lead Generation", "CRM", "Negotiation", "Account Management",
+    "Sales Pipeline", "Client Relationship Management",
+    "مندوب مبيعات", "توليد العملاء المحتملين", "إدارة علاقات العملاء", "التفاوض", "قناة المبيعات",
+  ],
+};
+
+const CUSTOMER_SERVICE: RolePack = {
+  slug: "customer-service",
+  title: { en: "Customer Service Representative", ar: "ممثل خدمة عملاء" },
+  aliases: [
+    "Customer Service Representative", "Customer Support Specialist", "Call Center Agent", "Client Services Representative",
+    "ممثل خدمة عملاء", "ممثلة خدمة عملاء", "أخصائي دعم عملاء", "موظف مركز اتصال",
+  ],
+  groups: [
+    {
+      label: { en: "Customer Support", ar: "دعم العملاء" },
+      items: [
+        { en: "Inbound call handling", ar: "التعامل مع المكالمات الواردة" },
+        { en: "Complaint resolution", ar: "حل الشكاوى" },
+        { en: "Order processing", ar: "معالجة الطلبات" },
+        { en: "Live chat support", ar: "دعم الدردشة المباشرة" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "CRM software", ar: "برمجيات إدارة علاقات العملاء" },
+        { en: "Ticketing systems", ar: "أنظمة تذاكر الدعم" },
+        { en: "Call center software", ar: "برمجيات مراكز الاتصال" },
+        { en: "Knowledge base tools", ar: "أدوات قاعدة المعرفة" },
+      ],
+    },
+    {
+      label: { en: "Quality & Service", ar: "الجودة والخدمة" },
+      items: [
+        { en: "Customer satisfaction", ar: "رضا العملاء" },
+        { en: "Service-level compliance", ar: "الالتزام بمستوى الخدمة" },
+        { en: "Upselling", ar: "البيع الإضافي" },
+        { en: "Product knowledge", ar: "معرفة المنتج" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Responded to customer inquiries via phone, email and live chat in a timely manner.", ar: "رد على استفسارات العملاء عبر الهاتف والبريد الإلكتروني والدردشة المباشرة في وقتها." },
+    { en: "Resolved customer complaints and escalated unresolved issues appropriately.", ar: "حلّ شكاوى العملاء وصعّد المشكلات غير المحلولة عند الحاجة." },
+    { en: "Processed customer orders, returns and exchanges accurately.", ar: "عالج طلبات العملاء والمرتجعات والاستبدالات بدقة." },
+    { en: "Maintained detailed records of customer interactions in the CRM system.", ar: "حافظ على سجلات مفصلة لتفاعلات العملاء في نظام إدارة علاقات العملاء." },
+    { en: "Provided product information and guidance to assist customer decision-making.", ar: "قدّم معلومات المنتج والإرشاد لمساعدة العملاء على اتخاذ القرار." },
+    { en: "Met service-level targets for response time and resolution rate.", ar: "حقق أهداف مستوى الخدمة لوقت الاستجابة ومعدل الحل." },
+    { en: "Identified upselling and cross-selling opportunities during customer interactions.", ar: "حدد فرص البيع الإضافي والبيع المتقاطع خلال التفاعل مع العملاء." },
+    { en: "Collected and reported customer feedback to improve products and services.", ar: "جمع ملاحظات العملاء وأبلغ بها لتحسين المنتجات والخدمات." },
+    { en: "Followed company policies and procedures when handling customer accounts.", ar: "التزم بسياسات الشركة وإجراءاتها عند التعامل مع حسابات العملاء." },
+    { en: "De-escalated difficult customer situations while maintaining professionalism.", ar: "خفّف من التصعيد في المواقف الصعبة مع العملاء مع الحفاظ على الاحترافية." },
+    { en: "Trained new team members on customer-service procedures and systems.", ar: "درّب أعضاء الفريق الجدد على إجراءات وأنظمة خدمة العملاء." },
+    { en: "Contributed to team targets for customer satisfaction and retention.", ar: "ساهم في تحقيق أهداف الفريق لرضا العملاء والاحتفاظ بهم." },
+  ],
+  credentials: [
+    { kind: "certification", title: { en: "Customer Service Excellence Certificate", ar: "شهادة التميز في خدمة العملاء" } },
+    { kind: "training", title: { en: "Conflict Resolution Training", ar: "تدريب حل النزاعات" } },
+    { kind: "training", title: { en: "Call Center Operations Training", ar: "تدريب عمليات مراكز الاتصال" } },
+    { kind: "certification", title: { en: "CRM Software Proficiency Certificate", ar: "شهادة إتقان برمجيات إدارة علاقات العملاء" } },
+  ],
+  keywords: [
+    "Customer Service", "Complaint Resolution", "CRM", "Call Center", "Customer Satisfaction",
+    "Ticketing Systems", "Service Level Agreement",
+    "ممثل خدمة عملاء", "حل الشكاوى", "رضا العملاء", "مركز الاتصال", "إدارة التذاكر",
+  ],
+};
+
 const ROLE_PACKS: RolePack[] = [
   RADIOLOGY_TECHNOLOGIST,
   ACCOUNTANT,
@@ -1398,6 +2094,17 @@ const ROLE_PACKS: RolePack[] = [
   DENTIST,
   PHYSIOTHERAPIST,
   LABORATORY_TECHNOLOGIST,
+  MECHANICAL_ENGINEER,
+  ELECTRICAL_ENGINEER,
+  INDUSTRIAL_ENGINEER,
+  AUDITOR,
+  SOFTWARE_DEVELOPER,
+  IT_SUPPORT,
+  NETWORK_ENGINEER,
+  HR_SPECIALIST,
+  PROJECT_MANAGER,
+  SALES_REPRESENTATIVE,
+  CUSTOMER_SERVICE,
 ];
 
 /** A copy, so a caller sorting for display cannot reorder the packs for everyone. */
