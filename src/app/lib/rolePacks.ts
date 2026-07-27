@@ -786,6 +786,319 @@ const ADMINISTRATIVE_ASSISTANT: RolePack = {
   ],
 };
 
+/*
+ * The four packs below fill the widest gap `ops/verify-jobs.mjs`'s sibling audit found: every one
+ * of these occupations already carries a `CredentialRule` in `countryRules.ts` — the product could
+ * already tell a teacher, engineer, pharmacist or lawyer which licence exists for them — but had no
+ * duties, skills or ATS keywords to offer alongside it, so anyone in these four professions fell
+ * through to the generic, non-occupation-specific suggestion path. Credential titles and issuers
+ * below are copied verbatim from the matching `CredentialRule` so the two files cannot drift apart
+ * and say two different things about the same licence.
+ */
+
+const TEACHER: RolePack = {
+  slug: "teacher",
+  title: { en: "Teacher", ar: "معلم" },
+  aliases: [
+    "Teacher",
+    "School Teacher",
+    "Classroom Teacher",
+    "Subject Teacher",
+    "Mathematics Teacher",
+    "Science Teacher",
+    "English Teacher",
+    "Arabic Teacher",
+    "Primary School Teacher",
+    "Secondary School Teacher",
+    "معلم",
+    "معلمة",
+    "مدرس",
+    "مدرسة",
+    "معلم رياضيات",
+    "معلم علوم",
+    "معلم لغة إنجليزية",
+    "معلم مرحلة ابتدائية",
+    "معلم مرحلة متوسطة",
+    "معلم مرحلة ثانوية",
+  ],
+  groups: [
+    {
+      label: { en: "Subjects & Curriculum", ar: "المواد والمنهج" },
+      items: [
+        { en: "Lesson planning", ar: "التخطيط للدروس" },
+        { en: "Curriculum alignment", ar: "مواءمة المنهج الدراسي" },
+        { en: "Differentiated instruction", ar: "التدريس المتمايز" },
+        { en: "Subject-matter expertise", ar: "التمكن من المادة العلمية" },
+        { en: "Cross-curricular integration", ar: "الدمج بين المواد الدراسية" },
+      ],
+    },
+    {
+      label: { en: "Classroom & Assessment", ar: "إدارة الصف والتقييم" },
+      items: [
+        { en: "Classroom management", ar: "إدارة الصف" },
+        { en: "Formative assessment", ar: "التقييم التكويني" },
+        { en: "Summative assessment", ar: "التقييم الختامي" },
+        { en: "Individualized student support", ar: "الدعم الفردي للطلاب" },
+        { en: "Behavior management", ar: "إدارة السلوك" },
+        { en: "Parent communication", ar: "التواصل مع أولياء الأمور" },
+      ],
+    },
+    {
+      label: { en: "Systems & Tools", ar: "الأنظمة والأدوات" },
+      items: [
+        { en: "Learning management systems", ar: "أنظمة إدارة التعلم" },
+        { en: "Digital curriculum platforms", ar: "منصات المناهج الرقمية" },
+        { en: "Gradebook & attendance systems", ar: "أنظمة الدرجات والحضور" },
+        { en: "Educational technology", ar: "تقنيات التعليم" },
+        { en: "Remote & blended learning tools", ar: "أدوات التعلم عن بعد والمدمج" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Planned and delivered lessons aligned with the approved curriculum and learning objectives.", ar: "خطط للدروس ونفذها بما يتوافق مع المنهج المعتمد والأهداف التعليمية." },
+    { en: "Assessed student progress through formative and summative evaluation methods.", ar: "قيّم تقدم الطلاب من خلال أساليب التقييم التكويني والختامي." },
+    { en: "Differentiated instruction to address a range of learning styles and abilities within the classroom.", ar: "نوّع أساليب التدريس لتلبية أنماط التعلم وقدرات الطلاب المختلفة داخل الصف." },
+    { en: "Managed classroom behaviour and maintained a productive learning environment.", ar: "أدار سلوك الطلاب وحافظ على بيئة تعليمية منتجة." },
+    { en: "Communicated student progress and concerns with parents and guardians.", ar: "تواصل مع أولياء الأمور بشأن تقدم الطلاب واهتماماتهم." },
+    { en: "Prepared instructional materials, worksheets and assessments aligned with the curriculum.", ar: "أعدّ المواد التعليمية وأوراق العمل والاختبارات المتوافقة مع المنهج." },
+    { en: "Integrated digital learning platforms and educational technology into daily instruction.", ar: "دمج منصات التعلم الرقمي والتقنيات التعليمية في التدريس اليومي." },
+    { en: "Participated in curriculum planning meetings and professional development sessions.", ar: "شارك في اجتماعات التخطيط للمنهج وجلسات التطوير المهني." },
+    { en: "Provided individualized support to students requiring additional academic assistance.", ar: "قدّم دعماً فردياً للطلاب المحتاجين لمساعدة أكاديمية إضافية." },
+    { en: "Maintained accurate records of student attendance, grades and behavioural notes.", ar: "حافظ على سجلات دقيقة لحضور الطلاب ودرجاتهم وملاحظاتهم السلوكية." },
+    { en: "Supervised students during school activities, examinations and extracurricular events.", ar: "أشرف على الطلاب خلال الأنشطة المدرسية والاختبارات والفعاليات اللاصفية." },
+    { en: "Coordinated with fellow teachers and school leadership on student support plans.", ar: "نسّق مع زملائه المعلمين وإدارة المدرسة بشأن خطط دعم الطلاب." },
+  ],
+  credentials: [
+    { kind: "licence", title: { en: "Professional Teaching Licence", ar: "الرخصة المهنية للمعلمين" }, issuer: "Education & Training Evaluation Commission (ETEC)" },
+    { kind: "certification", title: { en: "Teaching Methodology Certificate", ar: "شهادة طرق التدريس" } },
+    { kind: "training", title: { en: "Classroom Management Training", ar: "تدريب إدارة الصف" } },
+    { kind: "training", title: { en: "First Aid & School Safety Training", ar: "تدريب الإسعافات الأولية والسلامة المدرسية" } },
+  ],
+  keywords: [
+    "Teacher", "Lesson Planning", "Curriculum", "Classroom Management", "Formative Assessment",
+    "Differentiated Instruction", "Learning Management System", "Student Engagement", "ETEC",
+    "Professional Teaching Licence",
+    "معلم", "التخطيط للدروس", "إدارة الصف", "التقييم التكويني", "الرخصة المهنية",
+  ],
+};
+
+const CIVIL_ENGINEER: RolePack = {
+  slug: "civil-engineer",
+  title: { en: "Civil Engineer", ar: "مهندس مدني" },
+  aliases: [
+    "Civil Engineer",
+    "Structural Engineer",
+    "Site Engineer",
+    "Civil Design Engineer",
+    "Construction Engineer",
+    "مهندس مدني",
+    "مهندسة مدنية",
+    "مهندس إنشائي",
+    "مهندس موقع",
+    "مهندس تصميم مدني",
+  ],
+  groups: [
+    {
+      label: { en: "Design & Analysis", ar: "التصميم والتحليل" },
+      items: [
+        { en: "Structural design", ar: "التصميم الإنشائي" },
+        { en: "Site planning", ar: "تخطيط الموقع" },
+        { en: "Quantity takeoff", ar: "حصر الكميات" },
+        { en: "Drawing review", ar: "مراجعة المخططات" },
+        { en: "Load calculations", ar: "حسابات الأحمال" },
+      ],
+    },
+    {
+      label: { en: "Software & Standards", ar: "البرمجيات والمعايير" },
+      items: [
+        { en: "AutoCAD", ar: "أوتوكاد" },
+        { en: "Revit / BIM", ar: "ريفيت / نمذجة معلومات البناء" },
+        { en: "Saudi Building Code", ar: "كود البناء السعودي" },
+        { en: "Structural analysis software", ar: "برامج التحليل الإنشائي" },
+        { en: "Contract documentation", ar: "وثائق العقود" },
+      ],
+    },
+    {
+      label: { en: "Site & Compliance", ar: "الموقع والامتثال" },
+      items: [
+        { en: "Site supervision", ar: "الإشراف على الموقع" },
+        { en: "Safety compliance", ar: "الامتثال لمتطلبات السلامة" },
+        { en: "Quality control", ar: "ضبط الجودة" },
+        { en: "Contractor coordination", ar: "التنسيق مع المقاولين" },
+        { en: "Progress reporting", ar: "تقارير سير العمل" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Prepared structural designs and calculations in accordance with applicable building codes.", ar: "أعدّ التصاميم والحسابات الإنشائية وفق أكواد البناء المعتمدة." },
+    { en: "Reviewed and approved construction drawings for compliance with design specifications.", ar: "راجع مخططات التنفيذ واعتمدها للتأكد من مطابقتها لمواصفات التصميم." },
+    { en: "Supervised on-site construction activities to verify adherence to approved plans.", ar: "أشرف على أعمال التنفيذ في الموقع للتحقق من الالتزام بالمخططات المعتمدة." },
+    { en: "Coordinated with architects, contractors and subcontractors throughout the project lifecycle.", ar: "نسّق مع المعماريين والمقاولين ومقاولي الباطن طوال مراحل المشروع." },
+    { en: "Conducted quantity takeoffs and supported cost estimation for project phases.", ar: "أجرى حصر الكميات ودعم عمليات تقدير التكاليف لمراحل المشروع." },
+    { en: "Monitored site safety practices and enforced compliance with applicable regulations.", ar: "راقب ممارسات السلامة في الموقع وفرض الالتزام بالأنظمة المعمول بها." },
+    { en: "Prepared progress reports and communicated project status to stakeholders.", ar: "أعدّ تقارير سير العمل وأبلغ أصحاب المصلحة بحالة المشروع." },
+    { en: "Reviewed material submittals and shop drawings against project specifications.", ar: "راجع طلبات اعتماد المواد ومخططات الورشة مقارنة بمواصفات المشروع." },
+    { en: "Investigated site conditions and recommended engineering solutions to design or construction issues.", ar: "درس ظروف الموقع واقترح حلولاً هندسية لمشكلات التصميم أو التنفيذ." },
+    { en: "Performed quality-control inspections on structural and civil works.", ar: "أجرى فحوصات ضبط الجودة على الأعمال الإنشائية والمدنية." },
+    { en: "Maintained project documentation, including technical reports and correspondence.", ar: "حافظ على توثيق المشروع بما يشمل التقارير الفنية والمراسلات." },
+    { en: "Coordinated permit and regulatory-approval submissions with relevant authorities.", ar: "نسّق تقديم طلبات التراخيص والموافقات النظامية مع الجهات المختصة." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "Saudi Council of Engineers Professional Accreditation", ar: "الاعتماد المهني — الهيئة السعودية للمهندسين" }, issuer: "Saudi Council of Engineers" },
+    { kind: "certification", title: { en: "Project Management Certification", ar: "شهادة إدارة المشاريع" } },
+    { kind: "training", title: { en: "Construction Safety Training", ar: "تدريب السلامة في مواقع الإنشاء" } },
+    { kind: "certification", title: { en: "Computer-Aided Design (CAD) Certificate", ar: "شهادة التصميم بمساعدة الحاسوب" } },
+  ],
+  keywords: [
+    "Civil Engineer", "Structural Design", "AutoCAD", "Revit", "BIM", "Site Supervision",
+    "Saudi Building Code", "Quantity Takeoff", "Quality Control", "Saudi Council of Engineers",
+    "مهندس مدني", "التصميم الإنشائي", "الإشراف على الموقع", "كود البناء السعودي",
+  ],
+};
+
+const PHARMACIST: RolePack = {
+  slug: "pharmacist",
+  title: { en: "Pharmacist", ar: "صيدلي" },
+  aliases: [
+    "Pharmacist",
+    "Clinical Pharmacist",
+    "Hospital Pharmacist",
+    "Community Pharmacist",
+    "Retail Pharmacist",
+    "صيدلي",
+    "صيدلانية",
+    "صيدلي إكلينيكي",
+    "صيدلي مستشفى",
+  ],
+  groups: [
+    {
+      label: { en: "Clinical & Dispensing", ar: "الصرف والرعاية الإكلينيكية" },
+      items: [
+        { en: "Prescription review", ar: "مراجعة الوصفات الطبية" },
+        { en: "Medication dispensing", ar: "صرف الأدوية" },
+        { en: "Patient counseling", ar: "إرشاد المرضى" },
+        { en: "Drug-interaction checking", ar: "فحص التداخلات الدوائية" },
+        { en: "Dosage verification", ar: "التحقق من الجرعات" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Pharmacy information systems", ar: "أنظمة معلومات الصيدلية" },
+        { en: "Electronic prescribing", ar: "الوصفات الإلكترونية" },
+        { en: "Inventory management systems", ar: "أنظمة إدارة المخزون" },
+        { en: "Automated dispensing systems", ar: "أنظمة الصرف الآلي" },
+      ],
+    },
+    {
+      label: { en: "Compliance & Safety", ar: "الامتثال والسلامة" },
+      items: [
+        { en: "Controlled-substance handling", ar: "التعامل مع المواد الخاضعة للرقابة" },
+        { en: "Storage-condition monitoring", ar: "مراقبة ظروف التخزين" },
+        { en: "Adverse-event reporting", ar: "الإبلاغ عن الأحداث الدوائية الضارة" },
+        { en: "Regulatory compliance", ar: "الامتثال التنظيمي" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Reviewed prescriptions for accuracy, appropriateness and potential drug interactions before dispensing.", ar: "راجع الوصفات الطبية للتأكد من دقتها وملاءمتها واحتمالية وجود تداخلات دوائية قبل الصرف." },
+    { en: "Dispensed medications in accordance with prescriber instructions and pharmacy protocols.", ar: "صرف الأدوية وفق تعليمات الطبيب المعالج وبروتوكولات الصيدلية." },
+    { en: "Counseled patients on proper medication use, dosage and potential side effects.", ar: "أرشد المرضى حول الاستخدام الصحيح للأدوية والجرعات والآثار الجانبية المحتملة." },
+    { en: "Monitored medication storage conditions to maintain product integrity and safety.", ar: "راقب ظروف تخزين الأدوية للحفاظ على سلامتها وفعاليتها." },
+    { en: "Maintained accurate records of controlled substances in accordance with regulatory requirements.", ar: "حافظ على سجلات دقيقة للمواد الخاضعة للرقابة وفق المتطلبات النظامية." },
+    { en: "Collaborated with physicians and healthcare staff on medication therapy management.", ar: "تعاون مع الأطباء والكادر الطبي في إدارة العلاج الدوائي." },
+    { en: "Identified and reported adverse drug reactions and medication errors.", ar: "رصد الأعراض الدوائية الضارة وأخطاء الأدوية وأبلغ عنها." },
+    { en: "Managed pharmacy inventory, including stock levels, expiry tracking and reordering.", ar: "أدار مخزون الصيدلية بما يشمل مستويات المخزون وتتبع تواريخ الصلاحية وإعادة الطلب." },
+    { en: "Verified insurance and formulary coverage for prescribed medications.", ar: "تحقق من التغطية التأمينية وقوائم الأدوية المعتمدة للوصفات." },
+    { en: "Ensured compliance with pharmacy regulations and health-authority standards.", ar: "ضمن الامتثال لأنظمة الصيدلة ومعايير الجهات الصحية." },
+    { en: "Trained and supervised pharmacy technicians and support staff.", ar: "درّب فنيي الصيدلة والكادر المساند وأشرف عليهم." },
+    { en: "Participated in medication-safety and quality-improvement initiatives.", ar: "شارك في مبادرات سلامة الأدوية وتحسين الجودة." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "SCFHS Professional Classification & Registration", ar: "التصنيف والتسجيل المهني — الهيئة السعودية للتخصصات الصحية" }, issuer: "SCFHS" },
+    { kind: "certification", title: { en: "Basic Life Support (BLS)", ar: "دعم الحياة الأساسي" } },
+    { kind: "training", title: { en: "Medication Safety Training", ar: "تدريب سلامة الأدوية" } },
+    { kind: "training", title: { en: "Clinical Pharmacy Training", ar: "تدريب الصيدلة الإكلينيكية" } },
+  ],
+  keywords: [
+    "Pharmacist", "Prescription Review", "Medication Dispensing", "Patient Counseling",
+    "Drug Interactions", "Pharmacy Information System", "Controlled Substances", "SCFHS",
+    "صيدلي", "صرف الأدوية", "إرشاد المرضى", "التصنيف والتسجيل المهني",
+  ],
+};
+
+const LAWYER: RolePack = {
+  slug: "lawyer",
+  title: { en: "Lawyer", ar: "محامٍ" },
+  aliases: [
+    "Lawyer",
+    "Attorney",
+    "Legal Counsel",
+    "Associate Lawyer",
+    "Corporate Lawyer",
+    "Litigation Lawyer",
+    "محامٍ",
+    "محامية",
+    "مستشار قانوني",
+    "محامي شركات",
+  ],
+  groups: [
+    {
+      label: { en: "Practice Areas", ar: "مجالات الممارسة" },
+      items: [
+        { en: "Contract drafting", ar: "صياغة العقود" },
+        { en: "Corporate law", ar: "القانون التجاري" },
+        { en: "Litigation", ar: "التقاضي" },
+        { en: "Regulatory compliance", ar: "الامتثال التنظيمي" },
+        { en: "Dispute resolution", ar: "تسوية النزاعات" },
+      ],
+    },
+    {
+      label: { en: "Legal Research & Drafting", ar: "البحث القانوني والصياغة" },
+      items: [
+        { en: "Legal research", ar: "البحث القانوني" },
+        { en: "Legal memoranda", ar: "المذكرات القانونية" },
+        { en: "Due diligence", ar: "الفحص النافي للجهالة" },
+        { en: "Contract negotiation", ar: "التفاوض على العقود" },
+      ],
+    },
+    {
+      label: { en: "Systems & Processes", ar: "الأنظمة والإجراءات" },
+      items: [
+        { en: "Case management systems", ar: "أنظمة إدارة القضايا" },
+        { en: "Electronic court filing", ar: "التقاضي الإلكتروني" },
+        { en: "Document review platforms", ar: "منصات مراجعة المستندات" },
+        { en: "Legal research databases", ar: "قواعد بيانات البحث القانوني" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Drafted, reviewed and negotiated commercial contracts on behalf of clients.", ar: "صاغ العقود التجارية وراجعها وتفاوض بشأنها نيابة عن العملاء." },
+    { en: "Conducted legal research to support case strategy and client advice.", ar: "أجرى أبحاثاً قانونية لدعم استراتيجية القضايا وتقديم المشورة للعملاء." },
+    { en: "Represented clients in negotiations, hearings and dispute-resolution proceedings.", ar: "مثّل العملاء في المفاوضات والجلسات وإجراءات تسوية النزاعات." },
+    { en: "Prepared legal memoranda and opinions on matters of corporate and regulatory law.", ar: "أعدّ المذكرات والآراء القانونية في مسائل القانون التجاري والتنظيمي." },
+    { en: "Reviewed corporate documents and conducted due diligence for transactions.", ar: "راجع المستندات التجارية وأجرى الفحص النافي للجهالة للصفقات." },
+    { en: "Advised clients on compliance with applicable laws and regulations.", ar: "قدّم المشورة للعملاء بشأن الامتثال للأنظمة والقوانين المعمول بها." },
+    { en: "Managed case files and coordinated filings through the electronic court system.", ar: "أدار ملفات القضايا ونسّق تقديم المرافعات عبر نظام التقاضي الإلكتروني." },
+    { en: "Liaised with courts, government authorities and opposing counsel on case matters.", ar: "تواصل مع المحاكم والجهات الحكومية والأطراف المقابلة بشأن القضايا." },
+    { en: "Drafted pleadings, motions and other litigation documents.", ar: "صاغ اللوائح والمذكرات وغيرها من مستندات التقاضي." },
+    { en: "Advised on contract disputes and recommended risk-mitigation strategies.", ar: "قدّم المشورة بشأن النزاعات التعاقدية واقترح استراتيجيات لتخفيف المخاطر." },
+    { en: "Maintained client confidentiality and adhered to professional conduct standards.", ar: "حافظ على سرية معلومات العملاء والتزم بمعايير السلوك المهني." },
+    { en: "Coordinated with external counsel and cross-border legal teams on multi-jurisdictional matters.", ar: "نسّق مع مستشارين قانونيين خارجيين وفرق قانونية عابرة للحدود في القضايا متعددة الاختصاصات." },
+  ],
+  credentials: [
+    { kind: "licence", title: { en: "Practising Licence — Saudi Bar Association", ar: "ترخيص المحاماة — الهيئة السعودية للمحامين" }, issuer: "Saudi Bar Association" },
+    { kind: "membership", title: { en: "Bar Association Membership", ar: "عضوية الهيئة السعودية للمحامين" } },
+    { kind: "training", title: { en: "Commercial Arbitration Training", ar: "تدريب التحكيم التجاري" } },
+    { kind: "certification", title: { en: "Legal Drafting Certificate", ar: "شهادة الصياغة القانونية" } },
+  ],
+  keywords: [
+    "Lawyer", "Attorney", "Legal Counsel", "Contract Drafting", "Litigation", "Due Diligence",
+    "Legal Research", "Saudi Bar Association",
+    "محامٍ", "صياغة العقود", "التقاضي", "ترخيص المحاماة",
+  ],
+};
+
 const ROLE_PACKS: RolePack[] = [
   RADIOLOGY_TECHNOLOGIST,
   ACCOUNTANT,
@@ -793,6 +1106,10 @@ const ROLE_PACKS: RolePack[] = [
   REGISTERED_NURSE,
   SALES_MANAGER,
   ADMINISTRATIVE_ASSISTANT,
+  TEACHER,
+  CIVIL_ENGINEER,
+  PHARMACIST,
+  LAWYER,
 ];
 
 /** A copy, so a caller sorting for display cannot reorder the packs for everyone. */
