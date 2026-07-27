@@ -22,11 +22,17 @@ const EN: [string, string][] = [
 /*
  * Arabic parity, fixed.
  *
- * This set used to omit the ATS-checker trio and LinkedIn entirely (no Arabic page ever existed
- * for the former, so they're still absent here — adding fake links would be worse than the gap),
- * and its "Templates"/"Pricing" entries pointed at `/templates` and `/pricing` — the ENGLISH
- * routes, with no `/ar` prefix — which dropped an Arabic-reading visitor into the English UI from
- * a link on an Arabic page. Every entry below is a route that actually exists in Arabic.
+ * This set used to omit the ATS-checker trio and LinkedIn entirely, and its "Templates"/"Pricing"
+ * entries pointed at `/templates` and `/pricing` — the ENGLISH routes, with no `/ar` prefix — which
+ * dropped an Arabic-reading visitor into the English UI from a link on an Arabic page. Every entry
+ * up to the ATS trio below is a route that actually exists in Arabic.
+ *
+ * The ATS-checker trio has no Arabic PAGE — translating three SEO landing pages is real,
+ * scoped-out content work, not a navigation fix. But the earlier choice to omit them entirely left
+ * an Arabic-reading visitor with literally no path to three real tools, which is worse than sending
+ * them to an English page with an Arabic label: the label tells them what they're clicking before
+ * they land, same as any bilingual site linking out to an unlocalised resource. So they're listed,
+ * pointed at the English routes, and marked "(EN)" rather than pretending they're Arabic pages.
  */
 const AR: [string, string][] = [
   ["الرئيسية", "/ar"],
@@ -41,6 +47,9 @@ const AR: [string, string][] = [
   ["محسّن لينكدإن", "/ar/linkedin"],
   ["الأسعار", "/ar/pricing"],
   ["حسابي", "/ar/account"],
+  ["فحص ATS (EN)", "/ats-resume-checker"],
+  ["فحص مجاني (EN)", "/free-resume-checker"],
+  ["بديل Jobscan (EN)", "/jobscan-alternative"],
 ];
 
 export default function HubLinks({ current, ar = false }: { current?: string; ar?: boolean }) {

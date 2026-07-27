@@ -74,6 +74,7 @@ const C = {
     prep: "Interview preparation",
     prepSub: "Likely questions for this role, and how to answer them from your own CV.",
     prepGo: "Open interview prep",
+    prepLiveGo: "Practise a live mock interview",
     keep: "Keep this version",
     keepSub: "Saved on this device only — it is never uploaded. Find it under My resumes.",
     keepGo: "Save to my resumes",
@@ -115,6 +116,7 @@ const C = {
     prep: "التحضير للمقابلة",
     prepSub: "الأسئلة المتوقعة لهذا الدور، وكيف تجيبها من سيرتك نفسها.",
     prepGo: "افتح التحضير للمقابلة",
+    prepLiveGo: "جرّب مقابلة تجريبية مباشرة",
     keep: "احفظ هذه النسخة",
     keepSub: "تُحفظ على جهازك فقط — لا تُرفع إلى أي مكان. تجدها في «سيرَبي المحفوظة».",
     keepGo: "احفظ في سيري",
@@ -464,17 +466,29 @@ export default function DesignSection({
         <p className="mt-1.5 text-xs" style={{ color: "var(--faint)" }}>{c.againNote}</p>
       </div>
 
-      {/* ── interview prep: an existing page, linked rather than rebuilt ── */}
+      {/* ── interview prep: two existing pages, linked rather than rebuilt ──
+          Two genuinely different depths (Q&A prep vs. a scored live mock interview), so both
+          get their own link here rather than picking one — the same "one entry, two depths"
+          choice HubLinks and /interview's own related-links block already make. */}
       <div className="mt-6">
         <div className="bd-label">{c.prep}</div>
         <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{c.prepSub}</p>
-        <Link
-          href={ar ? "/ar/interview" : "/interview"}
-          onClick={() => track("builder_interview_prep", {})}
-          className="btn-ghost inline-flex items-center rounded-xl px-4 text-sm font-semibold"
-        >
-          {c.prepGo}
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={ar ? "/ar/interview" : "/interview"}
+            onClick={() => track("builder_interview_prep", {})}
+            className="btn-ghost inline-flex items-center rounded-xl px-4 text-sm font-semibold"
+          >
+            {c.prepGo}
+          </Link>
+          <Link
+            href={ar ? "/ar/interview-live" : "/interview-live"}
+            onClick={() => track("builder_interview_live", {})}
+            className="btn-ghost inline-flex items-center rounded-xl px-4 text-sm font-semibold"
+          >
+            {c.prepLiveGo}
+          </Link>
+        </div>
       </div>
     </div>
   );

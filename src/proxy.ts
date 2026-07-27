@@ -16,15 +16,25 @@ import type { NextRequest } from "next/server";
 //
 // Removing it also means this proxy no longer rewrites the request on every page view. It only
 // redirects legacy `?lang=` URLs and otherwise gets out of the way.
+/*
+ * `/interview` and `/linkedin` are deliberately NOT in this list, and that is not an omission —
+ * they were here once and it produced a live infinite-redirect loop. Both have a real `/ar/*`
+ * ROUTE but no real `/ar/*` PAGE: `app/(ar)/ar/interview/page.tsx` and `.../ar/linkedin/page.tsx`
+ * are one-line stubs whose only job is `redirect("/interview?lang=ar")`. With these two in
+ * AR_TWINS, that redirect landed back here, matched the rule, and bounced straight back to
+ * `/ar/interview` — forever. A visitor clicking `HubLinks`' own "تحضير المقابلة" link (which
+ * points at `/ar/interview`) hit `ERR_TOO_MANY_REDIRECTS` instead of the interview page. The
+ * canonicalization this list exists for only makes sense for a route with distinct Arabic
+ * content to canonicalize TO — these two have none, so leaving `?lang=ar` alone and letting the
+ * shared component's own `useLang()` read it is correct, not a gap.
+ */
 const AR_TWINS: RegExp[] = [
   /^\/$/,
   /^\/optimize$/,
-  /^\/interview$/,
   /^\/account$/,
   /^\/build$/,
   /^\/builder$/,
   /^\/journey$/,
-  /^\/linkedin$/,
   /^\/login$/,
   /^\/pricing$/,
   /^\/templates$/,

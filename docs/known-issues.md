@@ -1199,3 +1199,65 @@ decided unilaterally, not a gap closed.
 
 **Verification.** `npx tsc --noEmit`, `npm test` (including the new `ops/jobsverification.test.mjs`,
 now registered in the `test` script), `npm run build` all clean.
+
+### F-29 · P0 · `/ar/interview` and `/ar/linkedin` looped forever — FIXED
+
+Found while finally writing the Playwright cross-page nav/CTA consistency pass the IA-redesign
+plan's own Verification section asked for and never got (see below) — a real audit against the
+plan surfaced two things it committed to that weren't actually true yet.
+
+**The redirect loop.** `proxy.ts`'s `AR_TWINS` list 308-redirects `?lang=ar` on a matched path to
+its `/ar/*` twin, so `/interview?lang=ar` → `/ar/interview`. But `/interview` and `/linkedin` were
+in that list despite having no real `/ar/*` PAGE — `app/(ar)/ar/interview/page.tsx` and its
+`linkedin` twin are one-line stubs whose only job is `redirect("/interview?lang=ar")`. Put the two
+together: `/ar/interview` (a direct hit, from `HubLinks`' own Arabic link) → stub redirects to
+`/interview?lang=ar` → proxy matches the rule and redirects back to `/ar/interview` → forever. A
+visitor clicking "تحضير المقابلة" or "محسّن لينكدإن" from the Arabic nav got
+`ERR_TOO_MANY_REDIRECTS`, not the tool. Fixed by removing both from `AR_TWINS` — they have nothing
+for the canonicalization to canonicalize TO, so leaving `?lang=ar` alone and letting `useLang()`
+read it directly is correct, not a gap. Confirmed with `curl -sL -w '%{num_redirects}'`: 1 redirect
+each, not a loop, on a freshly booted server.
+
+**The missing verification pass.** The IA-redesign plan's own Verification section asked for "a
+Playwright pass comparing nav markup/labels across a sample of pages before/after" — never written.
+Added `ops/navconsistency.browser.mjs`: loads ~25 pages across the migrated surfaces and asserts
+every one renders `PageShell`'s shared header structure, the right-language brand link, and — where
+one is expected — the exact `NAV_CTA` label/href rather than a page's own string. It is what caught
+two smaller, real drifts from the plan while being built:
+
+  - `SectorPage.tsx` had its own hardcoded `cta`/`ctaHref` (identical text to `NAV_CTA`, but a
+    second place it was defined) instead of calling `navCta()` — fixed, now imports and uses it.
+  - `HubLinks`' Arabic set was missing the ATS-checker trio entirely, on the reasoning that none of
+    the three has an Arabic page to link to. That left an Arabic-reading visitor with literally no
+    path to three real tools — worse than a clearly-labelled link to the English page, which is what
+    every other bilingual site does for an unlocalised resource. Added, labelled "(EN)".
+
+Also, while it was open: the builder's export step (`DesignSection.tsx`) linked only to
+`/interview`, not `/interview-live` — the plan's "one entry, two depths" chooser now shows both.
+
+**Getting the test itself right took several dead ends worth recording, because each one produced
+a plausible-looking false failure:**
+  - `next dev` compiles a route on its first hit, not at boot — a cold hit routinely exceeded a
+    30–45s navigation timeout while the same route's second hit was instant. Fixed with an explicit
+    warm-up pass before any assertion runs.
+  - `HubLinks` renders on most sampled pages and the App Router prefetches its links by default —
+    over 60 unrequested background `GET`s to a single route were measured in one run, contending
+    with `next dev`'s single compile queue against the navigations the test actually asked for.
+    Fixed by aborting anything carrying Next's prefetch header for the test's browser context.
+  - `useLang()` (used by `/interview`/`/linkedin`) falls back to a stored `localStorage` preference
+    when no `?lang=` is present — correct for a real visitor, but this suite drives one shared tab
+    through dozens of URLs, so an earlier `?lang=ar` hit polluted a later plain-path assertion.
+    Fixed by clearing storage before every navigation.
+  - Those same two pages are client components: `useLang()`'s `useSyncExternalStore` hook renders
+    the SSR-safe English default on first paint and corrects to the query param via an effect after
+    hydration — by design, to avoid a hydration mismatch. `domcontentloaded` could catch that one
+    JS tick before the correction. Fixed by polling for the brand link to settle instead of a fixed
+    delay.
+  - None of the above is a repo problem: a `next dev` instance run through ~10 heavy Playwright
+    cycles in this session hit its own memory threshold and auto-restarted mid-request, producing
+    real (if transient) 404s. Confirmed via the dev server's own log line and a clean rerun against
+    a freshly started instance, which passed 98/98.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` clean. `curl -sL` confirms the
+redirect chain resolves in one hop for both routes. `node ops/navconsistency.browser.mjs` passed
+98/98 against a freshly started dev server.

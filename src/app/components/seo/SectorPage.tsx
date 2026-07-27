@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HubLinks from "../HubLinks";
 import PageShell from "../PageShell";
+import { navCta } from "@/app/lib/brand.ts";
 import {
   type Lang, type Sector, copyFor, professions, sectorsFor, sharedKeywords, sharedCerts,
 } from "@/app/lib/sectors.ts";
@@ -37,8 +38,6 @@ interface Labels {
   hub: string;
   indexHref: string;
   index: string;
-  cta: string;
-  ctaHref: string;
   build: string;
   buildHref: string;
   professionsHeading: (n: number) => string;
@@ -64,7 +63,6 @@ const L: Record<Lang, Labels> = {
     homeHref: "/", home: "Home",
     hubHref: "/resume-examples", hub: "Resume Examples",
     indexHref: "/resume-examples/category", index: "By sector",
-    cta: "Scan my resume free →", ctaHref: "/optimize",
     build: "Build one from scratch", buildHref: "/builder",
     professionsHeading: (n) => `${n} professions in this sector`,
     keywordsHeading: "Keywords that recur across this sector",
@@ -86,7 +84,6 @@ const L: Record<Lang, Labels> = {
     homeHref: "/ar", home: "الرئيسية",
     hubHref: "/ar/resume-examples", hub: "أمثلة السير",
     indexHref: "/ar/resume-examples/category", index: "حسب القطاع",
-    cta: "افحص سيرتي مجاناً →", ctaHref: "/ar/optimize",
     build: "ابنِ سيرة من الصفر", buildHref: "/ar/builder",
     professionsHeading: (n) => `${n} مهنة في هذا القطاع`,
     keywordsHeading: "كلمات تتكرّر في هذا القطاع",
@@ -112,10 +109,9 @@ function jobHref(lang: Lang, kind: "resume-examples" | "resume-skills" | "cover-
 }
 
 function Chrome({ lang, children }: { lang: Lang; children: React.ReactNode }) {
-  const l = L[lang];
   const rtl = lang === "ar";
   return (
-    <PageShell lang={lang} cta={{ href: l.ctaHref, label: l.cta }} bleed>
+    <PageShell lang={lang} cta={navCta(lang)} bleed>
       {children}
       <HubLinks ar={rtl} />
     </PageShell>
@@ -186,7 +182,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
         ))}
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href={l.ctaHref} className="btn-accent px-6 py-3">{l.cta}</Link>
+          <Link href={navCta(lang).href} className="btn-accent px-6 py-3">{navCta(lang).label}</Link>
           <Link href={l.buildHref} className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>{l.build}</Link>
         </div>
 
