@@ -54,8 +54,11 @@ export const ENTRY_KEY = "ra_funnel_entry";
 
 /* ─────────────────── classification ─────────────────── */
 
-const SEARCH = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|ecosia|brave|baidu)\./i;
-const SOCIAL = /(^|\.)(x|twitter|t|facebook|fb|instagram|linkedin|lnkd|reddit|youtube|tiktok|snapchat|whatsapp|telegram|pinterest)\./i;
+/* Exported, not just used locally: `funnelBootstrap.ts` reconstructs the client-side entry stamp
+   by reading these functions' OWN source via `Function.prototype.toString()`, and a free variable
+   referencing an unexported const would vanish from that source — see the header there. */
+export const SEARCH = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|ecosia|brave|baidu)\./i;
+export const SOCIAL = /(^|\.)(x|twitter|t|facebook|fb|instagram|linkedin|lnkd|reddit|youtube|tiktok|snapchat|whatsapp|telegram|pinterest)\./i;
 
 /**
  * A referring URL reduced to one word.
@@ -118,6 +121,87 @@ export function stamp(path: string, referrer: string, selfHost: string): Entry {
     lang: pageLang(clean),
     from: referrerClass(referrer, selfHost),
   };
+}
+
+/**
+ * `stamp`, again — bodily, not by calling it. This is what `funnelBootstrap.ts` extracts.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * WHY A SECOND COPY EXISTS, WHEN THE WHOLE ARCHITECTURE IS BUILT AGAINST DUPLICATION
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * The first version of `funnelBootstrap.ts` called `.toString()` on `stamp`, `pageFamily`,
+ * `pageSlug`, `pageLang` and `referrerClass` separately and reassembled them under their own names.
+ * It read correctly out of plain Node. Built through NEXT'S OWN minifier and inspected in the actual
+ * served HTML, it was broken: production minification renames each top-level function's free
+ * variables independently, so `stamp`'s compiled body called `pageFamily` under ITS minified name
+ * (say `h`), while the reassembled script declared it as `var pageFamily = …` — a name `stamp`'s
+ * body never referred to. The result was a script that parsed, ran, and threw `ReferenceError`
+ * inside the `try/catch` that wraps it — silently, exactly the failure mode the earlier attempt at
+ * this item reported and could not diagnose. Building and reading the REAL output is what caught it
+ * here before it shipped a second time.
+ *
+ * A minifier's scope-aware renaming is only consistent WITHIN one function's own body — nested
+ * declarations and their call sites inside a single function are always renamed together, because
+ * that is what makes the rename correct at all. So this function inlines every helper `stamp` calls
+ * as a value or a local closure, entirely inside its own body, with nothing left at module scope for
+ * a per-function extraction to lose track of. `.toString()` on this ONE function is self-contained
+ * by construction, independent of whatever the minifier renamed anything to.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * WHAT STOPS THIS FROM BEING THE DRIFT THE ORIGINAL DESIGN WARNED AGAINST
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * `ops/funnel.test.mjs` runs this function and `stamp` against the same large matrix of inputs —
+ * every case in the page-family table, every referrer class, both languages — and asserts
+ * byte-identical output. An edit to `pageFamily` that is not mirrored here fails that test
+ * immediately, on the next `npm test`, rather than drifting silently into a dashboard where a wrong
+ * classification looks exactly like a right one. That is a weaker guarantee than one function no
+ * extraction can desync — it is the strongest one available on the far side of a minification
+ * boundary that renames per function rather than per module.
+ */
+export function standaloneEntryStamp(path: string, referrer: string, selfHost: string): Entry {
+  const search = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|ecosia|brave|baidu)\./i;
+  const social = /(^|\.)(x|twitter|t|facebook|fb|instagram|linkedin|lnkd|reddit|youtube|tiktok|snapchat|whatsapp|telegram|pinterest)\./i;
+
+  const family = (p: string): PageFamily => {
+    const q = p.replace(/^\/ar(?=\/|$)/, "") || "/";
+    if (q === "/") return "home";
+    if (/^\/resume-examples\/category\/[^/]+$/.test(q)) return "sector";
+    if (q === "/resume-examples/category") return "sector-index";
+    if (/^\/resume-examples\/[^/]+$/.test(q)) return "profession";
+    if (/^\/resume-skills\/[^/]+$/.test(q)) return "skills";
+    if (/^\/cover-letter-examples\/[^/]+$/.test(q)) return "cover-letter";
+    if (/^\/resume-templates\/[^/]+$/.test(q) || q === "/templates") return "template";
+    if (["/resume-examples", "/resume-skills", "/cover-letter-examples", "/resume-templates"].includes(q)) return "hub";
+    if (["/optimize", "/linkedin", "/interview", "/interview-live", "/ats-resume-checker", "/free-resume-checker", "/jobscan-alternative"].includes(q)) return "tool";
+    if (q === "/builder" || q.startsWith("/builder/")) return "builder";
+    if (q === "/pricing") return "pricing";
+    return "other";
+  };
+
+  const lang = (p: string): "ar" | "en" => (/^\/ar(\/|$)/.test(p) ? "ar" : "en");
+
+  const slug = (p: string): string => {
+    const f = family(p);
+    if (!["sector", "profession", "skills", "cover-letter", "template"].includes(f)) return "";
+    const segments = p.split("/").filter(Boolean);
+    return segments[segments.length - 1] ?? "";
+  };
+
+  const from = (referrerUrl: string, selfHostArg: string): ReferrerClass => {
+    if (!referrerUrl) return "direct";
+    let host: string;
+    try { host = new URL(referrerUrl).hostname; } catch { return "direct"; }
+    if (!host) return "direct";
+    if (selfHostArg && (host === selfHostArg || host.endsWith(`.${selfHostArg}`))) return "internal";
+    if (search.test(host)) return "search";
+    if (social.test(host)) return "social";
+    return "external";
+  };
+
+  const clean = path.split(/[?#]/)[0] || "/";
+  return { path: clean, family: family(clean), slug: slug(clean), lang: lang(clean), from: from(referrer, selfHost) };
 }
 
 /* ─────────────────── event names ─────────────────── */

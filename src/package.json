@@ -75,7 +75,9 @@
     "test:exportgate": "node --experimental-strip-types ops/exportgate.mjs",
     "test:export:browser": "node ops/export.browser.mjs",
     "test:cvheadings": "node --experimental-strip-types ops/cvheadings.test.mjs",
-    "test:cls:browser": "node ops/cls.browser.mjs"
+    "test:cls:browser": "node ops/cls.browser.mjs",
+    "test:funnelbootstrap:browser": "node ops/funnelbootstrap.browser.mjs",
+    "jsweight": "node ops/jsweight.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

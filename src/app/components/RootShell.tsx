@@ -47,8 +47,7 @@
 
 import { PLANS, planPrice, formatPrice } from "@/app/lib/plans";
 import { BRAND, brandName } from "@/app/lib/brand";
-import { Analytics } from "@vercel/analytics/next";
-import FunnelBeacon from "@/app/components/seo/FunnelBeacon";
+import { funnelBootstrapScript } from "@/app/lib/funnelBootstrap";
 import SpaceBackdrop from "@/app/components/SpaceBackdrop";
 import "@/app/globals.css";
 
@@ -179,10 +178,27 @@ export default function RootShell({
         */}
         <SpaceBackdrop />
         {children}
-        <Analytics />
-        {/* Records which page the visitor arrived on, once per tab. Every later funnel step
-            reports itself with that entry attached — see `lib/funnel.ts`. */}
-        <FunnelBeacon />
+        {/*
+          ══════════════════════════════════════════════════════════════════════════════════
+          Analytics + the funnel entry stamp, as plain scripts — not React client components.
+          ══════════════════════════════════════════════════════════════════════════════════
+
+          This used to be `<Analytics />` (from `@vercel/analytics/next`) and `<FunnelBeacon />`
+          (`app/components/seo/FunnelBeacon.tsx`), both `"use client"`. Either one, anywhere in a
+          page's tree, requires React's client runtime to hydrate that page — not "some extra JS",
+          the whole runtime — and this is the ROOT layout every route shares, so it put that cost on
+          all 357 static catalogue pages that would otherwise ship none. See F-23.
+
+          Order matters: the queue stub has to exist before `funnelBootstrapScript()` can call
+          `window.va`, and the real analytics script is `defer`, so it always runs after both inline
+          scripts regardless of source order — but writing it in between is honest about intent.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: funnelBootstrapScript() }} />
+        <script defer src="/_vercel/insights/script.js" />
+        {/* The three tool pages that still need a `step` beyond the landing stamp — interview-live,
+            /optimize — render the React `FunnelBeacon` themselves, in their own layouts. Those pages
+            already ship real client JS for the tool itself, so the hydration cost this section
+            exists to avoid does not apply to them. */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredDataFor(lang)) }} />
         {META_PIXEL_ID && (
           <script

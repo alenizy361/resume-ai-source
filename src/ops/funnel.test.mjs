@@ -18,7 +18,7 @@
  */
 
 import {
-  ENTRY_KEY, FUNNEL, pageFamily, pageLang, pageSlug, referrerClass, stamp, stepPayload,
+  ENTRY_KEY, FUNNEL, pageFamily, pageLang, pageSlug, referrerClass, stamp, standaloneEntryStamp, stepPayload,
 } from "../app/lib/funnel.ts";
 import { JOB_SLUGS } from "../app/lib/jobs.ts";
 import { sectorSlugs } from "../app/lib/sectors.ts";
@@ -165,6 +165,47 @@ ok("every funnel event name is unique", new Set(names).size === names.length);
 ok("every funnel event is prefixed so it groups in a dashboard", names.every((n) => n.startsWith("funnel_")));
 ok("the six steps of the funnel are all named", names.length === 6, `${names.length}`);
 eq("the storage key is namespaced like the rest of this product's keys", ENTRY_KEY, "ra_funnel_entry");
+
+/* ─────────────────── standaloneEntryStamp agrees with stamp on everything ─────────────────── */
+
+/**
+ * `standaloneEntryStamp` (`lib/funnel.ts`) is a second, deliberately self-contained implementation of
+ * `stamp` — inlined, not composed of `pageFamily`/`pageSlug`/`pageLang`/`referrerClass` by calling
+ * them — because `funnelBootstrap.ts` extracts it via `Function.prototype.toString()` into a root-
+ * layout `<script>`, and Next's production minifier renames each top-level function's free variables
+ * independently. A per-function `.toString()` extraction of the COMPOSED version read correctly out
+ * of plain Node and threw a silent `ReferenceError` in the actual built HTML — the exact failure this
+ * whole item exists to fix, reproduced by an earlier draft of the fix. See the long note beside
+ * `standaloneEntryStamp` for the full account.
+ *
+ * A genuine second implementation is exactly the drift risk this repository's standing rule warns
+ * against, so it is not left on trust: every case in `CASES` above, crossed with every referrer class
+ * this file already tests, is run through BOTH functions and required to agree byte for byte. An edit
+ * to `pageFamily` that is not mirrored in `standaloneEntryStamp` fails here, on the next `npm test` —
+ * not months later in a dashboard where a wrong classification looks exactly like a right one.
+ */
+console.log("\n── standaloneEntryStamp: the version a minifier cannot desync from itself ──");
+{
+  const REFERRERS = [
+    ["", "cv.rabit.sa"],
+    ["https://www.google.com/", "cv.rabit.sa"],
+    ["https://x.com/someone", "cv.rabit.sa"],
+    ["https://cv.rabit.sa/resume-examples", "cv.rabit.sa"],
+    ["https://some-blog.example/post", "cv.rabit.sa"],
+    ["not a url", "cv.rabit.sa"],
+  ];
+  let checked = 0;
+  for (const [path] of CASES) {
+    for (const [referrer, selfHost] of REFERRERS) {
+      const a = stamp(path, referrer, selfHost);
+      const b = standaloneEntryStamp(path, referrer, selfHost);
+      /* `eq` above is `===`, which two distinct objects never satisfy — compared by content instead. */
+      eq(`${path} × ${JSON.stringify(referrer)}`, JSON.stringify(b), JSON.stringify(a));
+      checked++;
+    }
+  }
+  ok(`a real matrix was actually checked`, checked === CASES.length * REFERRERS.length, String(checked));
+}
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

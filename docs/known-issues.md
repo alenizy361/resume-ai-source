@@ -826,51 +826,91 @@ in a real browser rather than only in the stylesheet.
 `/resume-examples` measured a CLS of 0.2489 at load, traced to `content-visibility` applied to an
 above-the-fold hero section.
 
-### O-15 · P1 · Static pages ship 400–800 KB of JavaScript, and the cause is one line's position
+### F-23 · P1 · The root layout no longer forces React's client runtime onto static pages — FIXED *(was O-15)*
 
-Measured with `next start`, 390px viewport, uncompressed script bodies:
+Measured with `next start`, 390px viewport, uncompressed script bodies: `/resume-examples` 409–641 KB,
+`/resume-examples/registered-nurse` 570–810 KB, `/` 720 KB — ten times the 34–70 KB of HTML they
+carry, on server components rendering nothing but headings, lists and links.
 
-| page | JS | chunks |
-|---|---|---|
-| `/resume-examples` | 409–641 KB | 15–39 |
-| `/resume-examples/registered-nurse` | 570–810 KB | 20–41 |
-| `/` | 720 KB | 37 |
+**Cause.** `RootShell` — every route's shared layout — rendered `<Analytics />` (`@vercel/analytics/next`)
+and `<FunnelBeacon />`, both `"use client"`. A client component anywhere in a page's tree needs React's
+client runtime to hydrate — not "more JS", the whole runtime — and this was in the ROOT every route
+shares, so all 357 static catalogue pages paid for it.
 
-These are server components rendering headings, lists and links. They need no client JavaScript
-at all. For comparison the same pages carry 145–309 DOM nodes and 34–70 KB of HTML — **the
-JavaScript is roughly ten times the content it decorates.**
+**A previous attempt was reverted, for two reasons — both now fixed at the root.**
 
-**The cause.** `RootShell` — which wraps every route — renders `<Analytics />` and
-`<FunnelBeacon />`, and both are `"use client"`. A client component in the ROOT layout puts the
-client boundary at the top of every route, so React's client runtime and the client-component
-manifest ship to all 357 static catalogue pages. The bytes are not those two components' own
-size; they are the cost of having any client component that high in the tree.
+1. *"The inline beacon did not fire, not diagnosed."* Found by reading `@vercel/analytics`'s own
+   source rather than guessing: `track()` calls `window.va` with optional chaining and **no
+   fallback**. `window.va` is only ever defined by `initQueue()`, which the React `<Analytics />`
+   component calls on mount before anything else. Drop `<Analytics />` and replace the beacon with a
+   bare script, and the very first `track()` call — the landing event, fired as early as the page can
+   run JS — hits `window.va === undefined` and silently no-ops forever. No throw, no console line,
+   just an event that never arrived.
+2. *"The saving did not reproduce; Turbopack chunk splitting varies between builds."* `ops/jsweight.mjs`
+   now runs `next build` N times and measures with a real browser (`waitUntil: "load"`, excluding
+   Next's own viewport-prefetch requests, which inflated an early measurement pass here too — a
+   catalogue page links to `/optimize`, and `networkidle` was waiting for that prefetch to finish and
+   folding a different page's weight into this one's number). Three builds, this fix: **523 KB, 523 KB,
+   523 KB** for `/resume-examples/registered-nurse`, **523/523/523** for `/resume-examples`,
+   **535/535/535** for `/`. Zero variance — and the remaining 523–535 KB is Next's own App Router
+   runtime (deployment ID, scroll restoration, bailout-to-CSR handling — confirmed by reading the chunk
+   contents), present on every Next.js page regardless of content. Both catalogue pages now converge to
+   the *identical* flat floor, which is the direct evidence the analytics-driven variable cost is gone
+   rather than merely smaller.
 
-`SpaceBackdrop` was checked and is already a server component. `BrandOrb` too — a `grep` for
-`"use client"` matches its comment text, which is a false positive worth knowing about.
+**Fix.** `<Analytics />` → a plain `defer`red `<script src="/_vercel/insights/script.js">`, preceded by
+the same queueing stub `<Analytics />` used to install (`if(!window.va) window.va = …`) so `track()`
+calls have somewhere to queue before the real script loads — closing the exact hole the previous
+attempt fell into. `<FunnelBeacon />` (root, entry-only usage) → `funnelBootstrapScript()`
+(`lib/funnelBootstrap.ts`), an inline script assembled from the SAME classification code
+`lib/funnel.ts` already exercises, not a retyped copy. The three tool pages that also need a `step`
+(`interview-live`, `/optimize` EN/AR) keep the React `FunnelBeacon` unchanged in their own layouts —
+those pages already ship real client JS for the tool itself, so this optimization does not apply to
+them, and both mechanisms coexist correctly on the same page (verified: entry stamped once, landing
+fires once, the React beacon's own step fires alongside it, from the same entry).
 
-**An attempt was made and reverted.** Replacing both with plain `<script>` tags — Vercel
-Analytics is only a script that defines `window.va`, and the beacon is one `sessionStorage` key
-plus one event — is the right shape. Two things stopped it shipping:
+**A second silent-failure mode, found here before it shipped a second time.** The first draft of
+`funnelBootstrap.ts` called `.toString()` on `stamp`, `pageFamily`, `pageSlug`, `pageLang` and
+`referrerClass` *separately* and reassembled them under their own names. It read correctly out of
+plain Node. Built through Next's own minifier and inspected in the **actual served HTML**, it was
+broken the same way the original bug was: minified `stamp` called `pageFamily` under a renamed
+identifier consistent within the module Next minified, and the reassembled script declared that
+helper under the ORIGINAL name — one `stamp`'s compiled body never referred to. The script parsed,
+ran, and threw a `ReferenceError` inside the `try/catch` wrapping it. Silently. The exact failure mode
+this item exists to fix, reproduced by an early draft of the fix — caught only because the actual
+built HTML was read rather than trusted from a Node-only check.
 
-1. **The inline beacon did not fire.** Nothing written to `ra_funnel_entry`, no event, on any
-   page. Not diagnosed. Shipping silent analytics is worse than shipping heavy analytics,
-   because a wrong number looks exactly like a right one.
-2. **The saving did not reproduce.** Deleting the two components measured 109 KB on
-   `/resume-examples`; reimplementing them as scripts measured 409 KB on the same page. Turbopack
-   chunk splitting varies between builds, so a single before/after pair is not evidence. The
-   83% figure should be treated as unverified until it is measured across repeated builds.
+**Fix for that:** `lib/funnel.ts#standaloneEntryStamp` — one function with every helper `stamp` calls
+inlined as a local closure, so nothing is left at module scope for a per-function extraction to lose
+track of. A minifier's renaming is only ever inconsistent ACROSS independently-extracted functions;
+within one function's own body, declaration and call site are always renamed together. This is a
+genuine second implementation of `stamp`, which is exactly the duplication the architecture is built
+against — so it is not left on trust: `ops/funnel.test.mjs` runs both against every case in its
+existing route table crossed with six referrer classes (282 assertions) and requires byte-identical
+output. An edit to `pageFamily` not mirrored here fails on the next `npm test`, not months later in a
+dashboard where a wrong classification looks exactly like a right one.
 
-**What a correct fix needs**, so the next attempt starts further along: the two features moved out
-of the root layout without becoming React client components; the beacon's referrer and
-page-family classification kept in ONE place rather than duplicated into a script — the
-duplication is the real hazard, because analytics drift is silent; a repeated-build measurement
-rather than one pair; and a test that the entry is stamped once per session and the event fires,
-which `ops/funnel.test.mjs` does not currently assert against a browser.
+**Verification.**
 
-**Not a proven cause of the iOS crash.** It is a real weight problem worth fixing on its own
-terms — on pages whose only purpose is organic search, where payload is a ranking input — but the
-two crash causes that were measured and fixed were GPU-side (F-7, F-8, F-10), not JavaScript.
+- `ops/funnel.test.mjs` — 282 new assertions (equivalence matrix), on top of the existing classifier
+  suite. In `npm test`.
+- `ops/funnelbootstrap.browser.mjs` — 18 assertions in Chromium: the entry is stamped correctly from a
+  real referrer, `window.vaq` carries exactly the landing event with only the four declared fields, the
+  entry stamp works with **every JS chunk blocked** (proving it needs no React runtime at all), a
+  second page visited in the same tab does not re-stamp or re-fire, `/optimize` runs the script AND the
+  React step-beacon together correctly, and the plain analytics script tag is present.
+- `ops/jsweight.mjs` — a reusable tool, not a pass/fail suite: repeats `next build` N times and reports
+  the median JS weight per page, specifically so a future measurement here is never a single noisy pair
+  again.
+
+**Not a proven cause of the iOS crash.** Still true — the crash causes measured and fixed were GPU-side
+(F-7, F-8, F-10), not JavaScript weight. This closes a real ranking-relevant payload problem on its own
+terms, on pages whose only purpose is organic search.
+
+### O-15 · superseded by F-23
+
+`RootShell` rendered `<Analytics />` and `<FunnelBeacon />`, both `"use client"`, in the layout every
+route shares — putting React's client runtime on all 357 static catalogue pages.
 
 ### O-16 · P3 · The old design leaves dead CSS, but nothing of it is running
 

@@ -90,7 +90,7 @@ Listed here so the checklist is complete rather than convenient.
 | P4-1 | 12 | SEO free tools | `PARTIAL` — `/ats-resume-checker`, `/free-resume-checker`, `/api/tools` exist |
 | P4-2 | 13 | Reviewed occupation pages | `PARTIAL` — 357 catalogue pages exist; "reviewed, not generated" is the open question |
 | P4-3 | 14 | Referral system | `TODO` |
-| P4-4 | 15 | Analytics funnel | `PARTIAL` — `funnel.ts` exists and is wired |
+| P4-4 | 15 | Analytics funnel | `DONE` | `funnel.ts` wired, and the entry stamp on all 357 static catalogue pages no longer requires React (F-23) — the root layout used to force React's client runtime onto every page for this alone. `ops/funnel.test.mjs` (282 equivalence assertions), `ops/funnelbootstrap.browser.mjs` (18, proving the entry stamps with every JS chunk blocked). |
 
 ---
 
