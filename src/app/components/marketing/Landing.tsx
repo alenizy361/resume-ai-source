@@ -39,6 +39,7 @@
 
 import Link from "next/link";
 import BrandOrb from "../BrandOrb";
+import CinematicIntro from "./CinematicIntro";
 import ContinueDraft from "./ContinueDraft";
 import DemoWalkthrough from "./DemoWalkthrough";
 import ProfessionDemo from "./ProfessionDemo";
@@ -278,6 +279,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
   return (
     <main dir={ar ? "rtl" : "ltr"} lang={lang} className="landing-root min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <CinematicIntro lang={lang} />
       <nav className="ps-header">
         <div className="ps-header-in">
           <Link href={p || "/"} className="ps-brand">

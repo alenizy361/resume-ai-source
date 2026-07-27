@@ -2056,3 +2056,100 @@ new canvas orb (this sandbox is Chromium-only, the same standing limitation ever
 file has flagged); real 60fps measurement of the orb's rAF loop (no profiler available here — the
 loop is a handful of gradient fills on a capped-DPR canvas plus ~10 particles, well within budget on
 paper, but "measured 60fps" was not literally produced as a number).
+
+### F-43 · P0 · Phase 1 of the cinematic Career-OS experience: orb state machine, skippable intro — FIXED, PARTIAL
+
+Direction: a much larger brief than F-38 through F-42 — a 30-second cinematic intro (black screen →
+orb wakes → three-phrase headline → CTA), the orb as a stateful "AI assistant" reused across the
+whole authenticated app (dormant/awakening/idle/thinking/analyzing/listening/suggestion/success/
+warning/sleeping), a scroll-driven "camera" turning every section into a cinematic scene, a
+Mission-Control dashboard redesign, an orb-as-interviewer redesign of the interview page, and a
+public/authenticated navigation split. The brief itself phased this ("Phase 1" through "Phase 5")
+and said not to wait for approval between technical substeps.
+
+**This entry covers Phase 1 only** — the orb state machine and the cinematic intro, both shipped and
+verified. Phases 2–5 (the scroll-camera story scenes, Mission Control, the interview redesign, the
+nav split, wiring orb states into the authenticated app) are NOT done and are not claimed as done;
+see "Explicitly not done" below.
+
+**One request flagged, not silently complied with or silently dropped.** Scene 4 asks for
+scroll-position-driven camera effects — background lighting, depth, and section transforms tied
+continuously to scroll position. That is the exact shape of what `transitions.css` §9 documents
+removing after three real iPhone crash reports (`animation-timeline: view()`, a live scroll binding
+held for the page's life). Told to the user directly rather than implemented or ignored: this pass
+keeps the existing one-time, mount-triggered section reveals (`.t-enter`, fire once via
+`@starting-style`, nothing attached afterward) — the same reveal system F-38 through F-42 already
+use — rather than reintroducing a scroll-linked binding.
+
+**`OrbCore.tsx` gained a `state` prop** (`OrbState`: the ten values above). An `energy` value (how
+bright/fast the internal plasma is) and an optional color `tint` (success green, warning amber) each
+EASE toward a per-state target every drawn frame — hoisted into component-level refs
+(`energyValRef`/`tintValRef`/`tintAmtRef`) that persist across the effect's re-runs, specifically so
+a transition BETWEEN states (idle → thinking → success) eases smoothly from wherever it actually
+was, rather than snapping — the effect now depends on `[size, state]` and restarts (fresh blob
+phases, fresh particles — a deliberate, minor, infrequent reshuffle) on every state change, instead
+of reading a ref inside a single eternal loop, so a `prefers-reduced-motion` viewer still draws
+exactly one settled frame per state change (not a live loop polling forever for a change that may
+never come) while STILL seeing state changes reflected, just without motion getting there.
+`BrandOrb` passes `orbState` through only for `variant="hero"` — every other variant (30+
+server-rendered call sites) is untouched, unaware this prop exists.
+
+**`CinematicIntro.tsx`** — a decorative overlay, not a replacement: `Landing.tsx`'s real `<h1>`,
+lede, and CTA are unchanged and always server-rendered underneath; a crawler or a screen reader that
+never runs this component's JS gets the complete page (verified: raw HTML fetch, no browser, still
+contains the real headline and CTA text). Sequence: the orb (`OrbCore` at 180px, `state="awakening"`)
+grows in via a one-time CSS scale/opacity keyframe, three phrases cross-fade on staggered
+`animation-delay`s (the same nth-child-ladder mechanism `.t-stagger`/`.t-hero` already use
+elsewhere — no `filter: blur()` animated anywhere, per this codebase's own ban), then a CTA fades
+in. Skippable four ways from the first frame (click anywhere, Escape, a labeled autofocused Skip
+button, or the CTA itself), auto-continues after ~5.6s if untouched, never traps focus, never
+autoplays audio. Shown once per `sessionStorage`-scoped tab session; never shown at all under
+`prefers-reduced-motion`.
+
+**Two real bugs found during verification, both fixed:**
+1. **The intro silently never appeared, in dev only.** React 18 StrictMode (on by default in dev,
+   off in production builds) double-invokes mount effects — run, cleanup, run again. The intro's
+   effect read `sessionStorage`, and if not yet seen, WROTE the seen-flag and showed the intro. On
+   the double-invoke's second pass, it read back the FIRST pass's own write and concluded "already
+   seen" — so the intro would decide to show, then immediately un-decide, netting out to never
+   showing, but only in dev (production never double-invokes). Fixed with a `useRef` guard so the
+   real decision is made exactly once per component instance; the redundant second invocation sees
+   the guard already set and leaves the first invocation's state untouched.
+2. **The black scrim rendered translucent in a screenshot, real page content bleeding through, on a
+   FRESH page load with no interaction yet** — despite `getComputedStyle` reporting fully correct
+   values (`opacity: 1`, opaque `background`). This is the same category of bug as F-41's mobile
+   walkthrough finding: a Chromium headless-capture paint artifact tied to a CSS
+   transition/`@starting-style` fade-in, not a logic error — confirmed by three tests: (a) forcibly
+   disabling all animation/transition site-wide fixed it instantly; (b) a single real mouse-move
+   event on the already-loaded page fixed it without any code change; (c) it never reproduced with
+   the fade-in removed. Given this element is the very first thing every visitor sees, the fade-in
+   entrance was removed entirely rather than kept on the theory that it's "probably fine for real
+   users" — the scrim now appears fully opaque INSTANTLY on mount, with no transition to race. The
+   fade-OUT on dismiss keeps its transition, since dismissal only ever follows a genuine user
+   interaction (click/Escape/Skip/CTA) — by definition a moment the compositor has already done
+   real work, unlike a transition racing the very first paint.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed. `npm run lint` — 0
+issues in every file this pass touched (`OrbCore.tsx`, `BrandOrb.tsx`, `CinematicIntro.tsx`,
+`Landing.tsx`, `marketing.css`); pre-existing unrelated issues elsewhere untouched. `npm run build`
+clean. `axe-core` run live against both `/` and `/ar` WITH the intro overlay showing: zero
+violations, both languages. Live-browser checks, both languages, desktop (1440×1000) and mobile
+(390×844, DPR 3): raw HTML (no JS) still contains the real headline/CTA; a fresh visit shows the
+intro; Skip, Escape-equivalent CTA click, and a plain reload-in-same-session all behave correctly
+(skip dismisses and reveals the real hero with no residual click-blocking element; same-session
+reload does not replay it); `prefers-reduced-motion` never shows the intro at all; no horizontal
+overflow at any tested size; zero console/page errors; the main (non-intro) hero orb, unaffected by
+the `OrbCore` refactor, still renders its full plasma detail with no regression.
+
+**Explicitly not done this pass** (Phases 2–5 of the brief, honestly flagged rather than silently
+implied as covered by "Phase 1 shipped"):
+- The eight cinematic product scenes (Career Profile / Job Description / Tailoring / Career Road /
+  Mission Control / Interview / Pricing / Final) as their own animated, scroll-choreographed demo
+  components.
+- Redesigning `/account` into "Mission Control," redesigning the interview page around the orb as
+  interviewer, and wiring `OrbState` into the builder, dashboard, notifications, or any authenticated
+  surface — the orb component now CAN express all ten states; nothing outside the landing page's own
+  intro/hero calls it with anything but the default `idle` yet.
+- The public/authenticated navigation split described in the brief.
+- Any change to `/pricing`, `/interview`, `/interview-live`, `/account`, or any authenticated route —
+  none of those files were touched this pass.

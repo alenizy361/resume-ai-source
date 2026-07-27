@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import OrbCore from "./OrbCore";
+import OrbCore, { type OrbState } from "./OrbCore";
 
 /**
  * The black pulsing orb — one component, four jobs, no client bundle.
@@ -64,6 +64,14 @@ export default function BrandOrb({
   size = 26,
   variant = "logo",
   busy = false,
+  /**
+   * The orb's expression — `OrbCore`'s state machine (thinking/analyzing/success/…). Only takes
+   * effect on `variant="hero"`, the only variant that renders `OrbCore` at all; every other
+   * variant keeps its plain, state-less CSS pulse (still speeds up via `busy`, unrelated
+   * mechanism, sitewide, no client JS involved). Defaults to `"idle"` — the orb before anything
+   * has asked it to react to anything.
+   */
+  orbState = "idle",
   className = "",
   style,
 }: {
@@ -71,6 +79,7 @@ export default function BrandOrb({
   variant?: OrbVariant;
   /** A live AI call. Speeds the pulse and lifts the glow — no spinner, no extra layer. */
   busy?: boolean;
+  orbState?: OrbState;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -89,7 +98,7 @@ export default function BrandOrb({
       {variant === "hero" && <span className="bo-corona" />}
       <span className="bo-glow" />
       {variant === "hero" ? (
-        <OrbCore size={size} />
+        <OrbCore size={size} state={orbState} />
       ) : (
         <span className="bo-sphere">
           <span className="bo-crescent" />

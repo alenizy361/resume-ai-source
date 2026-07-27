@@ -591,3 +591,108 @@
   .magnetic:hover, .magnetic:active { transform: none; }
   .hero-particles i { animation: none; opacity: 0.6; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   CINEMATIC INTRO — a one-time, skippable, session-scoped takeover before the real hero
+   ══════════════════════════════════════════════════════════════════════════════════════
+
+   `CinematicIntro.tsx` never mounts under `prefers-reduced-motion` or on a repeat visit this
+   session — this CSS only ever runs for a first-time visitor who has motion enabled, and even
+   then it is gone in ~5.5s or on the first click/Escape/Skip/CTA press. `--z-dialog` (defined in
+   globals.css's own z-index scale) keeps it above the sticky header without inventing a new
+   layer name for a one-off.
+
+   Deliberately NO `@starting-style` fade-IN on mount — an earlier version had `.intro-scrim`
+   transition from `opacity:0`, and a headless-browser screenshot taken shortly after mount caught
+   it stuck translucent (correct computed `opacity:1`/`background`, wrong painted pixels — a real
+   mouse move fixed it, confirming a capture-timing artifact, not a logic bug — but this element is
+   the very first thing every visitor sees, so the fade-in simply isn't worth that risk). It
+   appears fully opaque INSTANTLY. The fade-OUT on dismiss keeps its transition, because dismissal
+   only ever follows a real user interaction (click, Escape, Skip, the CTA) — by definition a
+   moment the compositor has already had real work to do, unlike an animation racing the very
+   first paint.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+.intro-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dialog, 80);
+  background: #05030a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 1;
+}
+.intro-scrim.intro-leaving { opacity: 0; transition: opacity 500ms ease; }
+
+.intro-skip {
+  position: absolute;
+  top: max(20px, env(safe-area-inset-top));
+  inset-inline-end: max(20px, env(safe-area-inset-right));
+  font: 600 14px/1 inherit;
+  color: var(--muted, #a9b6c7);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line, rgba(148, 163, 184, 0.18));
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+@media (hover: hover) { .intro-skip:hover { color: var(--fg, #f8fafc); border-color: var(--line-strong, rgba(167, 139, 250, 0.34)); } }
+
+.intro-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  cursor: default;
+}
+.intro-orb {
+  scale: 0.15;
+  opacity: 0;
+  animation: intro-orb-grow 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes intro-orb-grow {
+  0% { scale: 0.06; opacity: 0; }
+  40% { opacity: 1; }
+  100% { scale: 1; opacity: 1; }
+}
+
+.intro-lines {
+  display: grid;
+  margin-top: 34px;
+  min-height: 1.4em;
+}
+.intro-line {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-size: clamp(22px, 4vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--fg, #f8fafc);
+  opacity: 0;
+  animation: intro-line-cycle 1500ms ease-out both;
+}
+@keyframes intro-line-cycle {
+  0% { opacity: 0; translate: 0 10px; }
+  12% { opacity: 1; translate: 0 0; }
+  78% { opacity: 1; translate: 0 0; }
+  100% { opacity: 0; translate: 0 -8px; }
+}
+
+.intro-cta {
+  margin-top: 40px;
+  padding: 14px 30px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #fff;
+  font: 700 16px/1 inherit;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  animation: intro-cta-in 600ms ease-out 4000ms both;
+}
+@keyframes intro-cta-in {
+  from { opacity: 0; translate: 0 8px; }
+  to { opacity: 1; translate: 0 0; }
+}
