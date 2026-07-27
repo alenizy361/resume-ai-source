@@ -52,12 +52,34 @@ export const HEADINGS_AR = [
 /**
  * The Arabic character range, written ONCE.
  *
- * U+0600–U+06FF plus U+0750–U+077F (Arabic Supplement). Two functions below need it and they must
- * not answer differently about the same character — a presence test and a majority test disagreeing
- * on what "Arabic" means is a bug that only shows up on a mixed-script CV, which in this market is
- * most of them.
+ * Five blocks: U+0600–06FF (Arabic), U+0750–077F (Supplement), U+08A0–08FF (Extended-A), and the two
+ * presentation-form blocks U+FB50–FDFF / U+FE70–FEFF. The last two matter more than their names
+ * suggest: `importCv.ts` documents that some PDF producers emit Arabic as pre-shaped presentation-form
+ * glyphs rather than the standard block, and normalizes them away on import with NFKC. Detection here
+ * runs on text this codebase does NOT control the origin of — pasted into `/optimize`, typed into the
+ * builder, copied from somewhere that never went through that normalization — so a presentation-form
+ * CV reached `hasArabic` as an apparently-Latin string. The failure mode was the exact one this file's
+ * header warns about: jsPDF rendering it as mojibake with no refusal, because `pdfRefusesArabic`
+ * (`renderPdf.ts`) answered false.
+ *
+ * One constant for both functions below, so a presence test and a majority test cannot disagree about
+ * the same character — that disagreement is itself a bug class, on a mixed-script CV, which in this
+ * market is most of them.
  */
-const ARABIC_RANGE = "؀-ۿݐ-ݿ";
+/*
+ * Each segment is one Unicode block, generated from its numeric boundaries and byte-compared against
+ * this literal before it was pasted in — a hand-typed run of presentation-form glyphs is exactly the
+ * kind of text a diff and a font both render ambiguously. `ops/cvheadings.test.mjs` re-derives the
+ * same string from the codepoints on every run, so a future edit that mistypes a boundary fails loudly
+ * instead of silently narrowing the range the way the first draft of this line did (it dropped
+ * FC00–FD3F from Presentation Forms-A by transcribing visually instead of by codepoint).
+ */
+const ARABIC_RANGE =
+  "؀-ۿ" +  // U+0600–06FF  Arabic
+  "ݐ-ݿ" +  // U+0750–077F  Arabic Supplement
+  "ࢠ-ࣿ" +  // U+08A0–08FF  Arabic Extended-A
+  "ﭐ-﷿" +  // U+FB50–FDFF  Arabic Presentation Forms-A
+  "ﹰ-﻿";   // U+FE70–FEFF  Arabic Presentation Forms-B
 
 /** Anything with Arabic letters in it. */
 export function hasArabic(s: string): boolean {

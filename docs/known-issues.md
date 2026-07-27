@@ -632,18 +632,38 @@ calls it and `ops/draftstore.test.mjs` documents the old record shape, which is 
 draft written before the current scheme still readable. `ops/handoff.test.mjs` asserts that no file in
 `app/` calls it, so it cannot acquire a caller by accident.
 
-### O-11 · P1 · Arabic detection ranges disagree across the export paths
+### F-21 · P1 · The Arabic detector covers Extended-A and both presentation-form blocks — FIXED *(was O-11)*
 
-`PdfExport` tests U+0600–06FF; `cvHeadings.hasArabic` tests U+0600–06FF plus U+0750–077F.
-Neither covers Arabic Extended-A or the presentation forms that `importCv.ts` itself
-documents PDF producers as emitting. Text in those ranges passes the PDF guard and renders
-as mojibake with no warning, and Word lays it out left-to-right with the Latin font.
+`PdfExport` used to carry its own `[؀-ۿ]` literal, testing only U+0600–06FF; `cvHeadings.hasArabic`
+tested that plus U+0750–077F. Neither covered Arabic Extended-A (U+08A0–08FF) or the two
+presentation-form blocks (U+FB50–FDFF, U+FE70–FEFF) that `importCv.ts` itself documents some PDF
+producers as emitting — pre-shaped glyphs rather than the standard block. Text in those ranges passed
+the text-PDF guard silently and rendered as mojibake with no warning.
 
-**Narrowed by F-18, not closed.** `cvHeadings.ts` now holds the range in one constant
-(`ARABIC_RANGE`), shared by `hasArabic` and the new `dominantScript`, so the two script questions
-this file answers cannot disagree with each other. `PdfExport` still carries its own literal, and
-neither covers Extended-A or the presentation forms — one place to widen instead of two, and the same
-bug until someone widens it.
+F-18/F-20's rewrite of the export path had already closed the first half: `PdfExport` now imports
+`pdfRefusesArabic` from `renderPdf.ts`, which reads `hasArabic` from `cvHeadings.ts` — one function,
+not two disagreeing literals.
+
+**This closes the second half.** `ARABIC_RANGE` in `cvHeadings.ts` now covers all five blocks. Each
+segment was generated from its numeric codepoint boundaries and byte-compared against the literal
+before being pasted in — the first draft, transcribed by eye through a chat interface, silently
+dropped U+FC00–FD3F from Presentation Forms-A, which is exactly the failure mode a hand-typed Unicode
+range invites and the reason the comparison exists.
+
+**Verification.** `ops/cvheadings.test.mjs` — 46 assertions: every block's first, last and three
+interior codepoints are detected; the codepoint immediately outside each block is not; the gaps
+between blocks are excluded; a real presentation-form string (`"ﺏﺱﻡ"`, shaped بسم) is recognised as
+Arabic — the concrete case that used to reach jsPDF as mojibake with no refusal; and the existing
+majority-script behaviour (`dominantScript`) is unchanged.
+
+**A wider duplication found, not fixed here.** At least eleven other files carry their own inline
+`[؀-ۿ]`-style literal rather than importing `hasArabic`/`dominantScript`:
+`ResumeTemplate.tsx` (×2), `r/[slug]/page.tsx`, `optimize/page.tsx`, `api/generate/route.ts`,
+`languages.ts`, `resumeLang.ts`, `aiModels.ts`, `translate.ts`, `interviewGuards.ts`, `aiPrompts.ts`.
+None of them independently covers Extended-A or the presentation forms, so each is the same latent
+gap this item closed, in a different file. Out of scope for this pass — it is a consolidation across
+eleven call sites with eleven different surrounding contexts, not a boundary widening — and worth its
+own item rather than being rushed alongside one.
 
 ### F-20 · P1 · The PDF and Word downloads are rendered on the server — FIXED *(was O-12)*
 
@@ -743,6 +763,11 @@ names the cause instead of failing with "waiting for event download".
   at a convenient brace; one ordinary comment moved the stopping point and it began reporting that
   English was "missing" keys that are in neither table. Fixed, with a fixture asserting a comment
   apostrophe and a comment brace no longer swallow the file.
+
+### O-11 · superseded by F-21
+
+`PdfExport` and `cvHeadings.hasArabic` tested different ranges, and neither covered Arabic Extended-A
+or the presentation-form blocks.
 
 ### O-12 · superseded by F-20
 
