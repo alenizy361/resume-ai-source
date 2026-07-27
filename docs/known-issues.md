@@ -1477,3 +1477,92 @@ this is being shipped on typecheck + test + production-build verification, with 
 honestly recorded as inconclusive rather than claimed. The generation call itself needs
 `NVIDIA_API_KEY`, which this environment does not have — not live-verified against the model, same
 constraint as every other AI-dependent feature this session.
+
+### F-36 · P4 · SEO free tools: two new tools built, seven audited and scoped — PARTIAL
+
+The order names exactly 9 tools: ATS CV Checker, Job Description Keyword Extractor, Professional
+Summary Generator, Experience Bullet Generator, Arabic CV Error Checker, Resume Length Checker, Job
+Match Checker, Arabic to English CV Translator, PDF Text Readability Checker — each required to give
+real value before registration, have a unique URL, have real Arabic AND English landing pages, link
+to the builder, keep CV content out of URLs/analytics, and use noindex on private result pages.
+
+**A research pass audited all 9 against the existing codebase first**, per this session's standing
+rule against building a second copy of something that already exists under a different name. Result:
+three tools (Professional Summary Generator, Experience Bullet Generator, Arabic→English CV
+Translator) already have fully-built, production-hardened engines (`/api/suggest`'s `summary`/
+`duties`/`variants` kinds; `/api/translate`'s 395-line bidirectional, glossary-first, fact-invariance
+-checked engine) — but every one is trapped inside another flow (the builder's per-field AI-suggest
+UI, the builder's "Create English version" action) with no standalone indexable page. Two tools (ATS
+CV Checker, Job Match Checker) are the same underlying capability (`/api/optimize`'s real match
+score) already positioned as separate EN-only landing pages (`/ats-resume-checker`,
+`/jobscan-alternative`) that compute nothing themselves and only funnel into `/optimize` — real gap
+there is a missing Arabic page, not new logic. One tool (Resume Length Checker) partially exists at
+the wrong granularity: `reviewChecks.ts` flags long individual bullets and long summaries, but there
+is no whole-document length/page-count check. Two tools (Arabic CV Error Checker, and the
+whole-document half of Resume Length Checker) are genuinely net-new logic with nothing to extract.
+
+**Built this pass: PDF Text Readability Checker and Job Description Keyword Extractor**, the two
+with the clearest scope and the lowest risk of duplicating existing functionality.
+
+`/pdf-readability-checker` + `/ar/pdf-readability-checker` wrap the exact extraction step
+`/api/extract` already runs on a builder import (unpdf for PDF, mammoth for DOCX) — no new backend
+route. It surfaces, as a user-facing verdict, two signals that already existed only as an internal
+422/log line: a file returning under 20 chars of text (already a 422 from `/api/extract`) reads as
+"not readable"; a file whose extracted text is long but has no line breaks (previously only
+`console.error`-logged as the `mergePages` flattening symptom) reads as "partially readable." The
+extracted text preview is shown so the user can see exactly what a screening system would see.
+Nothing is stored — the file is sent once for extraction and never saved — and no CV content reaches
+a URL or analytics event (`FunnelBeacon`'s `toolOpened` step carries no page content, matching every
+other tool page's convention).
+
+`/jd-keyword-extractor` + `/ar/jd-keyword-extractor` add a `jd-keywords` mode to the existing
+`/api/tools` endpoint (its fourth mode, alongside `linkedin`/`interview`/`interview-feedback`/
+`career-plan`), reusing its retry loop, JSON repair, and rate limiter. Unlike `/api/optimize`'s
+keyword split, this tool takes only a job description — no resume required — because knowing what a
+posting scans for is useful before a candidate has decided how to frame their own CV against it.
+Every extracted term must appear in (or closely paraphrase) the pasted text; the prompt is
+explicit that it must never assume a skill the posting doesn't actually mention.
+
+**Both new tools follow the `/ar/optimize` "real page" pattern, not the `/ar/linkedin` "redirect
+stub" pattern** — found during the audit to be the deliberate distinction this codebase already
+draws: a stub only works when the tool's own SEO value already lives on one URL with a UI-language
+toggle (`/linkedin`, `/interview`, `/career-plan`), but Phase 12 is explicitly about indexability, so
+a stub here would ship half the phase's own requirement. Each of the two new tools has its own
+`layout.tsx` per language with unique `<title>`/description/canonical/hreflang metadata and
+genuinely-authored (not translated) Arabic prose via the shared `PageBody` component — matching
+`/optimize`'s own documented reasoning that a translated page is a duplicate in a search engine's
+eyes, and an Arabic reader deserves examples from their own market rather than a mirrored sentence.
+
+**Also fixed while in this area:** `/career-plan` (F-35, shipped last pass) was missing from
+`app/sitemap.ts` — an oversight from that pass, added now. `HubLinks` (both languages) gained entries
+for both new tools.
+
+**What remains, honestly scoped, not attempted this pass:**
+- Arabic landing page for the ATS/Job-Match positioning (`/ar/ats-resume-checker` or equivalent) —
+  the English `SeoLanding` component is EN-only by construction (`lang="en"` hardcoded); giving it
+  real Arabic parity is a bigger job than the marketing-copy pages that use it suggest, and was not
+  started.
+- Standalone Professional Summary Generator and Experience Bullet Generator pages wrapping
+  `/api/suggest` — the engine exists, the page does not.
+- Standalone Arabic→English CV Translator page wrapping `/api/translate` — same situation, and the
+  route's own header comment currently states it is "only reachable from an explicit 'Create English
+  version' action," which would need updating once a standalone caller exists.
+- Arabic CV Error Checker — genuinely new logic (no existing Latin-in-Arabic or RTL-specific
+  validation anywhere in the codebase).
+- Whole-document Resume Length Checker — genuinely new logic (only per-bullet/per-summary length
+  checks exist today).
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean — all four
+new routes (`/pdf-readability-checker`, `/ar/pdf-readability-checker`, `/jd-keyword-extractor`,
+`/ar/jd-keyword-extractor`) compile as static routes in the production build. Live browser
+verification was attempted (`fuser -k 3141/tcp` first, confirmed `✓ Ready in 387ms`), and this time
+the stalled first-compile symptom from F-35 was actively diagnosed rather than left unexplained: `ps
+aux` during the stall showed the `next-server` process at 300%+ CPU and 3.3GB RSS — genuinely
+compute-bound, not hung or a zombie process — on a 4-core sandbox. The compile did not finish within
+the time available in this pass. This narrows, but does not close, F-35's open question: a brand-new
+route's first Turbopack dev-compile appears to be genuinely CPU-bound and slow in this sandbox,
+distinct from the stale-port symptom F-32/F-33 already fixed. Shipped on typecheck + test +
+production-build verification; the live click-through (including the PDF-upload round trip, which
+needs no AI credential and could be fully end-to-end verified if the compile completes) remains
+undone and is recorded here rather than assumed. The `jd-keywords` generation call itself separately
+needs `NVIDIA_API_KEY`, which this environment does not have.

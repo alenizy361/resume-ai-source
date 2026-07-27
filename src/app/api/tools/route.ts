@@ -104,6 +104,22 @@ Return ONLY a JSON object:
   "interviewPrepAreas": ["<topics or question types to prepare for in interviews for this target role>"]
 }
 Never recommend a specific paid course, bootcamp, or training platform by name — describe the skill or credential area only, never a vendor. Base every item on the stated current and target roles; do not invent employers, dates, or achievements the candidate does not have. No text outside the JSON.${LANG_RULE(lang)}`,
+
+  "jd-keywords": (jobDescription, roleTitle, lang) => `You are an ATS keyword analyst. Extract exactly what an applicant tracking system would scan for in this job posting — nothing invented, nothing from outside the text below.
+
+JOB DESCRIPTION:
+${jobDescription}
+${roleTitle?.trim() ? `\nROLE TITLE (for context only): ${roleTitle}` : ""}
+
+Return ONLY a JSON object:
+{
+  "hardSkills": ["<specific hard/technical skills named in the posting>"],
+  "tools": ["<named tools, software, platforms, or systems mentioned>"],
+  "certifications": ["<certifications, licenses, or qualifications the posting names or clearly requires>"],
+  "softSkills": ["<soft/interpersonal skills the posting names, e.g. stakeholder management, communication>"],
+  "mustHave": ["<the 5-8 terms from the lists above that appear most central to this posting — repeated, in the title, or listed as a requirement rather than a nice-to-have>"]
+}
+Every item must be a term or phrase that actually appears in the job description (or a very close synonym of one) — never a skill you assume the role needs but the posting does not mention. No text outside the JSON.${LANG_RULE(lang)}`,
 };
 
 function extractJson(text: string): string {
@@ -157,14 +173,17 @@ export async function POST(req: NextRequest) {
     const lang: "ar" | "en" = rawLang === "ar" ? "ar" : "en";
     const promptFn = PROMPTS[mode];
     if (!promptFn) return NextResponse.json({ error: "Unknown tool." }, { status: 400 });
-    const minA = mode === "career-plan" ? 10 : 50;
+    const minA = mode === "career-plan" ? 10 : mode === "jd-keywords" ? 40 : 50;
     if (!inputA?.trim() || inputA.length < minA) {
       return NextResponse.json({
         error: mode === "career-plan" ? "Please fill in your current and target role."
+          : mode === "jd-keywords" ? "Please paste the full job description."
           : "Please provide more detail (paste your resume or profile).",
       }, { status: 400 });
     }
-    if (!inputB?.trim() || inputB.length < 3) {
+    // jd-keywords' second field (role title) is a hint, not a requirement — the endpoint's
+    // generic 3-char floor exists for the other modes' resume/answer/timeline fields.
+    if (mode !== "jd-keywords" && (!inputB?.trim() || inputB.length < 3)) {
       return NextResponse.json({
         error: mode === "linkedin" ? "Please enter your target role."
           : mode === "interview-feedback" ? "Please write out your answer first."
@@ -210,7 +229,7 @@ export async function POST(req: NextRequest) {
             max_tokens: 3200, // interview returns 8 Q&A — 2200 truncated it, yielding invalid/empty JSON
             messages: [
               { role: "system", content: "You respond with a single valid JSON object and nothing else. Never include unescaped quotes inside JSON string values." },
-              { role: "user", content: promptFn(String(inputA).slice(0, 8000), String(inputB).slice(0, 4000), lang) },
+              { role: "user", content: promptFn(String(inputA).slice(0, 8000), String(inputB ?? "").slice(0, 4000), lang) },
             ],
           }),
         });
@@ -242,6 +261,9 @@ export async function POST(req: NextRequest) {
         } else if (mode === "career-plan") {
           const hasSkills = Array.isArray(candidate.transferableSkills) || Array.isArray(candidate.missingSkills);
           if (!hasSkills) throw new Error("No usable career plan in response");
+        } else if (mode === "jd-keywords") {
+          const hasAny = Array.isArray(candidate.hardSkills) || Array.isArray(candidate.tools) || Array.isArray(candidate.mustHave);
+          if (!hasAny) throw new Error("No usable keywords in response");
         }
         parsed = candidate;
       } catch (e) {
@@ -309,6 +331,16 @@ export async function POST(req: NextRequest) {
         learningAreas: arr(parsed.learningAreas),
         cvChanges: arr(parsed.cvChanges),
         interviewPrepAreas: arr(parsed.interviewPrepAreas),
+      });
+    }
+    if (mode === "jd-keywords") {
+      const arr = (v: unknown) => (Array.isArray(v) ? v : []).map(String).filter(Boolean);
+      return NextResponse.json({
+        hardSkills: arr(parsed.hardSkills),
+        tools: arr(parsed.tools),
+        certifications: arr(parsed.certifications),
+        softSkills: arr(parsed.softSkills),
+        mustHave: arr(parsed.mustHave),
       });
     }
     return NextResponse.json(parsed);

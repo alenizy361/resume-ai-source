@@ -18,6 +18,8 @@ const EN: [string, string][] = [
   ["Mock interview", "/interview-live"],
   ["LinkedIn optimizer", "/linkedin"],
   ["Career plan", "/career-plan"],
+  ["PDF readability checker", "/pdf-readability-checker"],
+  ["Job keyword extractor", "/jd-keyword-extractor"],
   ["Pricing", "/pricing"],
 ];
 /*
@@ -47,6 +49,8 @@ const AR: [string, string][] = [
   ["مقابلة مباشرة", "/ar/interview-live"],
   ["محسّن لينكدإن", "/ar/linkedin"],
   ["خطة مسيرتك المهنية", "/ar/career-plan"],
+  ["فحص قابلية قراءة PDF", "/ar/pdf-readability-checker"],
+  ["مستخرج كلمات الإعلان", "/ar/jd-keyword-extractor"],
   ["الأسعار", "/ar/pricing"],
   ["حسابي", "/ar/account"],
   ["فحص ATS (EN)", "/ats-resume-checker"],
