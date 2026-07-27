@@ -355,6 +355,20 @@ ok("the fixture translates every source item and invents none",
   ok("the skills render in English", rendered.skills === good["profile.skills"]);
 
   /*
+   * Caught live, not by this suite originally: `assembleResume` (what every preview and export
+   * actually reads) does not read `roles` for the experience section at all — it reads `wovenLines`,
+   * a separately-cached flat rendering. Translating `roles` and leaving `wovenLines` untouched would
+   * produce a "version" whose every OTHER section is English and whose experience section — the one a
+   * recruiter reads first — is still verbatim Arabic. `rolesToLines` is the same derivation
+   * `mergeProfile.ts` itself uses to keep the two in sync after any other edit.
+   */
+  ok("wovenLines is rederived from the TRANSLATED roles, not left stale",
+    rendered.wovenLines.some((line) => line.includes(good["r1.b1"])),
+    rendered.wovenLines.join(" | "));
+  ok("the woven header carries the translated title, still with the untranslated employer",
+    rendered.wovenLines[0].includes(good["r1.title"]) && rendered.wovenLines[0].includes("مستشفى الملك فهد"));
+
+  /*
    * THE ASSERTION. Facts that were never translatable must survive a render untouched — the employer,
    * the dates, the location. They are absent from the item map by construction, so this holds because
    * there is nowhere for a translation to put them, not because a rule remembers to skip them.
@@ -413,6 +427,52 @@ ok("the fixture translates every source item and invents none",
   ok("the English version reads left to right", versionDir("en") === "ltr");
   ok("and the Arabic one right to left", versionDir("ar") === "rtl");
 }
+
+/* ─────────────────────── the content wins over the dropdown ─────────────────────── */
+
+/*
+ * The exact bug a launch-readiness audit caught live: a user authors a CV in Arabic, then switches
+ * `target.language` to English expecting the document to follow. Nothing auto-translates — that is
+ * this feature's own rule — but the ONE thing that must still work is that the translator stays
+ * reachable and pointed the right direction, because `target.language` no longer describes what the
+ * confirmed text actually is.
+ */
+{
+  const mismatched = { ...CV, target: { ...CV.target, language: "en" } };
+  const src = buildTranslationSource(mismatched, "en", ["health"]);
+  ok("sourceLanguage follows the CONTENT, not target.language, when they disagree",
+    src.sourceLanguage === "ar", src.sourceLanguage);
+
+  /* And the ordinary case is untouched: a genuinely English CV is still detected as English. */
+  const englishCv = {
+    ...CV,
+    target: { ...CV.target, language: "en" },
+    profile: {
+      ...CV.profile,
+      summary: "Diagnostic radiographer experienced in general and CT imaging.",
+      skills: "General X-ray, Computed Tomography, Patient Positioning",
+      education: "BSc Radiologic Sciences — King Saud University, 2018",
+      roles: [{ ...CV.profile.roles[0], bullets: ["Performed general X-ray and CT examinations to approved protocols."] }],
+    },
+  };
+  ok("a genuinely English CV still detects as English",
+    buildTranslationSource(englishCv, "en", ["health"]).sourceLanguage === "en");
+
+  /* An empty draft has no text to read a script from — the dropdown is the only signal there is. */
+  const empty = { ...EMPTY_BUILDER, target: { ...EMPTY_TARGET, language: "en" } };
+  ok("an empty draft falls back to target.language",
+    buildTranslationSource(empty, "en", []).sourceLanguage === "en");
+}
+
+/*
+ * NOT covered here, on purpose: whether the reducer in `app/components/build/builderState.ts` actually
+ * stores a dispatched `{t:"version",...}`/`{t:"viewVersion",...}` action. That file imports its
+ * siblings via the `@/app/lib/*` alias, which only Next.js's own bundler resolves — every other file
+ * this suite imports (`translate.ts`, `builderDoc.ts`) uses relative imports specifically so a plain
+ * `node --experimental-strip-types` run can reach it, and `builderState.ts` follows its directory's
+ * own convention (components use `@/`) instead. That reducer path is verified live, against the real
+ * bundled app, in `ops/translate.browser.mjs`.
+ */
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

@@ -34,7 +34,7 @@ import {
 import { track } from "@vercel/analytics";
 
 import { assembleResume } from "@/app/lib/mergeProfile";
-import { applyVersionToProfile } from "@/app/lib/translate";
+import { applyVersionToProfile, buildTranslationSource } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft } from "@/app/lib/draftStore";
 import {
@@ -94,8 +94,18 @@ interface BuilderContextValue {
   hydrated: boolean;
   /** The assembled CV text, debounced — the preview and the exports both read this. */
   previewText: string;
-  /** The document's AUTHORING language, which is not the interface's. */
+  /** The document's DECLARED authoring language — `target.language`, which is not the interface's. */
   cv: "ar" | "en";
+  /**
+   * The document's ACTUAL script, detected from the confirmed content itself.
+   *
+   * Usually equals `cv` — but not always: a user can author in Arabic and only afterwards switch
+   * `target.language` to English, and nothing here auto-translates on that switch (see
+   * `EnglishVersion.tsx`). `docLang` is what tells `shown` below "this text is still Arabic", so a
+   * created translation is recognised as the alternate even when it happens to share `cv`'s language
+   * code — see `translate.ts`'s `buildTranslationSource` for the detector itself.
+   */
+  docLang: "ar" | "en";
   /** The language currently being previewed and exported. Equals `cv` unless a version is selected. */
   viewLang: "ar" | "en";
   /** The profile as the active version renders it. Wording swapped, facts identical. */
@@ -456,6 +466,14 @@ export default function BuilderProvider({
      change, so binding it to raw keystrokes re-lays out an A4 page per letter. */
   const [previewText, setPreviewText] = useState("");
   const cv = cvLang(state.target);
+  /* See the `docLang` doc comment on `BuilderContextValue` — the CONTENT's real script, not the
+     dropdown's. Depends on the whole `state` (same as `career` below) rather than hand-picking the
+     few fields `buildTranslationSource` actually reads — this is a small linear scan, the same order
+     of cost `careerContext(state)` already pays on every state change in this file. */
+  const docLang: "ar" | "en" = useMemo(
+    () => buildTranslationSource(state, "en").sourceLanguage,
+    [state],
+  );
 
   /*
    * Which version the preview and the exports render.
@@ -473,8 +491,16 @@ export default function BuilderProvider({
     : state.activeVersion === "ar" ? "ar"
     : cv;
   const shown = useMemo(
-    () => (viewLang === cv ? state.profile : applyVersionToProfile(state.profile, state.versions?.[viewLang])),
-    [state.profile, state.versions, viewLang, cv],
+    /*
+     * Compared against `docLang`, not `cv`. `cv` is the user's DECLARED target — when a user authors
+     * in Arabic and later flips `target.language` to English, `cv` becomes "en" too, and comparing
+     * against `cv` here would treat the still-Arabic `state.profile` as if it were already the
+     * document being asked for and never apply a stored "en" translation meant to replace it. Compare
+     * against what the content ACTUALLY is instead, so a translation that shares a language code with
+     * `cv` is still recognised as the alternate, not the original.
+     */
+    () => (viewLang === docLang ? state.profile : applyVersionToProfile(state.profile, state.versions?.[viewLang])),
+    [state.profile, state.versions, viewLang, docLang],
   );
   const resumeRtl = viewLang === "ar";
   useEffect(() => {
@@ -515,8 +541,8 @@ export default function BuilderProvider({
 
   const value = useMemo<BuilderContextValue>(() => ({
     lang, resumeId, owner, state, dispatch, save, lifecycle, online, flush, hydrated,
-    previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, owner, state, save, lifecycle, online, flush, hydrated, previewText, cv, viewLang, shown, progress, template, today, markDone, gen, career]);
+    previewText, cv, docLang, viewLang, shown, progress, template, today, markDone, gen, career,
+  }), [lang, resumeId, owner, state, save, lifecycle, online, flush, hydrated, previewText, cv, docLang, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

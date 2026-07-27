@@ -481,6 +481,10 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       return s.sectionsDone.includes(a.section)
         ? s
         : { ...s, sectionsDone: [...s.sectionsDone, a.section] };
+    case "version":
+      return { ...s, versions: { ...(s.versions ?? {}), [a.lang]: a.version } };
+    case "viewVersion":
+      return a.lang === s.activeVersion ? s : { ...s, activeVersion: a.lang };
     default:
       return s;
   }

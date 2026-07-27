@@ -29,6 +29,7 @@
 
 import { hashOf } from "./aiCache.ts";
 import { GLOSSARY_VERSION, lookup, render } from "./glossary.ts";
+import { type Role, rolesToLines } from "./resumeDoc.ts";
 import type { BuilderState } from "./builderDoc.ts";
 
 /* ─────────────────────────── the translatable document ─────────────────────────── */
@@ -71,6 +72,31 @@ export interface TranslationSource {
 const clean = (v: unknown): string => (typeof v === "string" ? v.trim() : "");
 
 /**
+ * Which script the CONFIRMED CONTENT is actually written in — as opposed to `target.language`, the
+ * dropdown that records what the user WANTS the final document to be.
+ *
+ * Those two can disagree, and the disagreement is exactly the case this exists for: a user authors a
+ * profile in Arabic, then switches `target.language` to English expecting the document to follow.
+ * Nothing auto-translates (this product's own rule — see the file header), so the confirmed text is
+ * still Arabic. Trusting `target.language` alone for `sourceLanguage` would tell `/api/translate`
+ * "translate from English", which is false, and would make `sourceLanguage === targetLanguage` for an
+ * English target — the exact condition `/api/translate` rejects outright. Detecting the real script
+ * keeps the translator offered, and pointed the right direction, regardless of what the dropdown says.
+ *
+ * A majority test, same heuristic `validateTranslation`'s own "still untranslated" check already uses —
+ * a CV legitimately mixes scripts (an Arabic bullet naming "PACS"), so "contains any Arabic" would
+ * misfire on a properly English CV that keeps a handful of Latin technical terms.
+ */
+function detectScript(items: SourceItem[]): "ar" | "en" | null {
+  const text = items.map((i) => i.text).join(" ");
+  if (!text) return null;
+  const arabic = [...text].filter((ch) => /[؀-ۿ]/.test(ch)).length;
+  const latin = [...text].filter((ch) => /[A-Za-z]/.test(ch)).length;
+  if (arabic === 0 && latin === 0) return null;
+  return arabic >= latin ? "ar" : "en";
+}
+
+/**
  * Proper names that must survive translation untouched.
  *
  * Employers and institutions come from the confirmed roles and education; the person's name from
@@ -109,7 +135,6 @@ export function buildTranslationSource(
   targetLanguage: "ar" | "en",
   families: string[] = [],
 ): TranslationSource {
-  const sourceLanguage: "ar" | "en" = s.target.language === "ar" ? "ar" : "en";
   const items: SourceItem[] = [];
   const push = (section: TranslatableSection, id: string, text: unknown) => {
     const t = clean(text);
@@ -134,6 +159,10 @@ export function buildTranslationSource(
   s.credentials
     .filter((c) => c.status === "confirmed")
     .forEach((c) => push("credentials", `cred.${c.id}`, c.title));
+
+  /* The declared language is the fallback for a still-empty draft, where there is no text yet to read
+     a script from — not the primary source of truth once real content exists. */
+  const sourceLanguage: "ar" | "en" = detectScript(items) ?? (s.target.language === "ar" ? "ar" : "en");
 
   return {
     sourceLanguage,
@@ -397,7 +426,7 @@ export function translationEscalation(
 export function applyVersionToProfile<
   P extends {
     role: string; summary: string; education: string; skills: string; languages: string;
-    roles: Array<{ id?: string; title: string; bullets: string[] }>;
+    roles: Role[]; wovenLines: string[];
   },
 >(profile: P, version: { items: Record<string, string> } | null | undefined): P {
   if (!version) return profile;
@@ -406,6 +435,17 @@ export function applyVersionToProfile<
     return typeof v === "string" && v.trim() ? v : fallback;
   };
 
+  const roles = profile.roles.map((r, i) => {
+    const rid = r.id || `role${i}`;
+    return {
+      ...r,
+      title: t(`${rid}.title`, r.title),
+      /* Employer, location and dates are absent from the item map by construction — they were never
+         translatable — so they survive without needing a rule that says so. */
+      bullets: r.bullets.map((b, j) => t(`${rid}.b${j}`, b)),
+    };
+  });
+
   return {
     ...profile,
     role: t("target.title", profile.role),
@@ -413,16 +453,16 @@ export function applyVersionToProfile<
     education: t("profile.education", profile.education),
     skills: t("profile.skills", profile.skills),
     languages: t("profile.languages", profile.languages),
-    roles: profile.roles.map((r, i) => {
-      const rid = r.id || `role${i}`;
-      return {
-        ...r,
-        title: t(`${rid}.title`, r.title),
-        /* Employer, location and dates are absent from the item map by construction — they were never
-           translatable — so they survive without needing a rule that says so. */
-        bullets: r.bullets.map((b, j) => t(`${rid}.b${j}`, b)),
-      };
-    }),
+    roles,
+    /*
+     * `assembleResume` — what the preview and every export actually reads — does not read `roles` at
+     * all for the experience section; it reads this flat, pre-woven text. Translating `roles` above
+     * and stopping there would leave a version whose EVERY other section is English and whose
+     * experience section is still verbatim Arabic, in the one place a recruiter reads first. Rederived
+     * from the just-translated `roles`, the same way the reducer keeps it in sync after any other edit
+     * (see `mergeProfile.ts`'s own `n.wovenLines = rolesToLines(n.roles)`).
+     */
+    wovenLines: rolesToLines(roles),
   };
 }
 

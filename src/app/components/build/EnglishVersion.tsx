@@ -75,23 +75,32 @@ const C = {
 type Phase = "idle" | "working" | "done" | "error";
 
 export default function EnglishVersion() {
-  const { lang, state, dispatch, cv } = useBuilder();
+  const { lang, state, dispatch, docLang } = useBuilder();
   const c = C[lang];
   const [phase, setPhase] = useState<Phase>("idle");
   const [problems, setProblems] = useState<string[]>([]);
 
-  /* Only offered on an Arabic CV. On an English one there is nothing to translate FROM. */
-  const applicable = cv === "ar";
-
+  /* `docLang`, not `cv`: the title's own script is what decides which dictionary matches it, and a
+     user who authored in Arabic but set `target.language` to English still typed an Arabic title. */
   const families = useMemo(() => {
-    const f = resolveOccupation(state.target.title, { cvLang: cv }).family;
+    const f = resolveOccupation(state.target.title, { cvLang: docLang }).family;
     return f === "unknown" ? [] : [f];
-  }, [state.target.title, cv]);
+  }, [state.target.title, docLang]);
 
   const src = useMemo(
     () => buildTranslationSource(state, "en", families),
     [state, families],
   );
+
+  /*
+   * Offered whenever the CONFIRMED CONTENT is actually Arabic — not whenever `target.language` says
+   * "ar". Those two can disagree: a user who authors in Arabic and only afterwards switches the
+   * language dropdown to English still has an Arabic document, and that is precisely when this
+   * translator is needed most. `src.sourceLanguage` is `buildTranslationSource`'s own script
+   * detection over the real text (see `translate.ts`), so this follows the content, not the toggle.
+   * On an already-English CV there is nothing to translate FROM, so it stays hidden — same as before.
+   */
+  const applicable = src.sourceLanguage === "ar" && src.items.length > 0;
 
   const stored = state.versions?.en ?? null;
   const fresh = translationFresh(stored, src);

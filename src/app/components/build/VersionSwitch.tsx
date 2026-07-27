@@ -24,14 +24,16 @@ import { useBuilder } from "./BuilderProvider";
 const LABEL: Record<string, string> = { ar: "العربية", en: "English" };
 
 export default function VersionSwitch() {
-  const { state, dispatch, cv, viewLang } = useBuilder();
+  const { state, dispatch, docLang, viewLang } = useBuilder();
 
   /*
-   * The authoring language first, always. It is the document; the others are renderings of it, and
-   * listing them in storage order would put a translation before the original on some CVs and not
-   * others.
+   * The DOCUMENT's actual language first, always — `docLang`, not `cv`. They usually agree, but not
+   * when a user authored in Arabic and only afterwards set `target.language` to English: the stored
+   * translation is then keyed "en", same as `cv`, and comparing against `cv` here would filter it
+   * OUT of the list as if it were the original rather than the alternate. `docLang` is what the
+   * confirmed text actually is, so the original is identified correctly either way.
    */
-  const available = [cv, ...Object.keys(state.versions ?? {}).filter((l) => l !== cv)];
+  const available = [docLang, ...Object.keys(state.versions ?? {}).filter((l) => l !== docLang)];
   if (available.length < 2) return null;
 
   return (
@@ -51,7 +53,7 @@ export default function VersionSwitch() {
             {LABEL[l] ?? l}
             {/* The original is named as such. Without it, a user looking at two tabs has no way to
                 know which one their edits go into. */}
-            {l === cv && <span className="ms-1 opacity-60">·</span>}
+            {l === docLang && <span className="ms-1 opacity-60">·</span>}
           </button>
         );
       })}

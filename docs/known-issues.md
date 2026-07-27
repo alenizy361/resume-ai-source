@@ -2266,3 +2266,88 @@ fake avatar), Scene 8 (pricing), and the Final scene remain Phase 4; the public/
 navigation split and wiring `OrbState` into the builder/dashboard/interview/notifications remain
 Phase 5. Scene 4's scroll-camera request remains declined for the same crash-tested reason stated in
 F-43/F-44.
+
+### F-46 · P0 · An Arabic-authored CV set to "English" stayed Arabic — three stacked bugs, one behind the other — FIXED
+
+Direction: a launch-readiness audit (delivered as a structured P0/P1/P2 report, verified claim by
+claim before any fix — see the verification pass earlier in this session) found that a CV authored in
+Arabic, with `target.language` switched to English, produced an English-labelled document whose name,
+city, education, and hand-written summary stayed in Arabic — only fresh AI-generated content honored
+the language setting. Verified CONFIRMED by reading the actual translation pipeline before touching
+it: `EnglishVersion.tsx`'s "Create English version" — the ONE feature built to solve exactly this — was
+gated on `cv === "ar"` (`cv` = `target.language`), so switching the dropdown to English made the widget
+that could fix the mismatch disappear at the exact moment it was needed.
+
+**The fix that was needed is a single sentence — the fix that was SAFE took three, because two more
+bugs were sitting behind the first one, invisible until the first was cleared:**
+
+1. **`buildTranslationSource`'s `sourceLanguage` now follows the CONTENT, not `target.language`**
+   (`translate.ts`, new `detectScript()` — the same majority-script heuristic `validateTranslation`'s
+   own "still untranslated" check already used, reused rather than reinvented). `EnglishVersion.tsx`'s
+   `applicable` gate now reads `src.sourceLanguage === "ar"`, so the translator is offered whenever the
+   confirmed text is actually Arabic, regardless of what the dropdown currently says.
+
+2. **The reducer had no `case` for `"version"` or `"viewVersion"` at all.** `app/components/build/
+   builderState.ts`'s `reducer` fell through both to `default: return s` — dispatching either action
+   was a silent no-op. This means the ORIGINAL, always-intended flow (`target.language` left as `"ar"`,
+   press "Create English version") was ALSO completely non-functional before this fix: the API call
+   would succeed, and `state.versions` would never be written, so nothing would ever render and the
+   version switcher would never appear. Not something the audit found or could have found by testing
+   the reported scenario — found while fixing it, because this file's `@/app/lib/*` imports make it
+   unreachable from a plain `node` unit test (see the note in `ops/translate.test.mjs`), so it had never
+   been exercised by anything.
+
+3. **Even with the version stored, `cv === "en"` and the stored translation's key (`"en"`) collided.**
+   `viewLang === cv` was the "is this the original or a translated alternate" check throughout
+   `BuilderProvider.tsx`/`VersionSwitch.tsx` — when a user's `target.language` was ALREADY `"en"` (the
+   audit's exact scenario), the stored English translation shared `cv`'s language code, so the check
+   always concluded "this is the original" and the translation was never applied to the rendered
+   preview or export, and the version switcher — gated on `Object.keys(state.versions).filter(l => l
+   !== cv)` — always came back empty and never appeared, no matter how correct the stored translation
+   was. Fixed with a new `docLang` on `BuilderContextValue`: the CONTENT's actual detected script
+   (reusing #1's detector), threaded through `shown`'s comparison and `VersionSwitch`'s `available` list
+   in place of `cv`. A useful side effect: once a translation exists, the default view (no explicit
+   switch needed) now correctly shows it whenever `docLang` and the requested `cv` disagree — the
+   document ends up in the language the user actually asked for without an extra tap.
+
+**A fourth bug, found only by watching the FULL pipeline end-to-end live, not by reading any one
+function:** `applyVersionToProfile` translated `roles[].title`/`roles[].bullets`, but `assembleResume`
+— what every preview and every export actually reads — pulls the experience section from
+`profile.wovenLines`, a SEPARATELY cached flat rendering that `applyVersionToProfile` never touched.
+Every other section would correctly render in English while the experience section — the one a
+recruiter reads first — stayed verbatim Arabic. Fixed by rederiving `wovenLines` from the
+just-translated `roles` inside `applyVersionToProfile` itself, via the same `rolesToLines` the reducer
+already uses to keep the two in sync after any other edit.
+
+**Why a live browser test, not just a unit suite.** `ops/translate.test.mjs`'s pure-function tests
+proved bug #1's detector and the `applyVersionToProfile`/`wovenLines` fix, but could not have caught
+bugs #2 or #3 — both are wiring defects in `app/components/build/`, files a plain `node` run cannot
+import (`@/` aliases, resolved only by Next's bundler). A new `ops/translate.browser.mjs` drives the
+REAL bundled app: seeds a builder draft with Arabic content and `target.language: "en"` directly into
+`localStorage` (matching `resumeStore.ts`'s own key format), intercepts `POST /api/translate` with a
+canned faithful translation (no Anthropic key needed — this tests the client wiring, not translation
+quality), clicks "Create English version" for real, and confirms — in order — the button appears, the
+request fires, the reducer actually stores the result, the version switcher appears with two DISTINCT
+options despite the language-code collision, and the Design step's export preview shows the English
+version by default, employer name preserved in Arabic exactly as `applyVersionToProfile` guarantees.
+9/9 pass. A second live pass confirmed the original `target.language: "ar"` flow is unaffected.
+
+**A test-authoring bug found and fixed along the way, worth naming so it isn't repeated:**
+`ops/translate.browser.mjs`'s first draft used `page.goto()` to move from the Review step to Design —
+which re-runs the browser context's `addInitScript` on every navigation, silently RE-SEEDING the
+pristine untranslated record over whatever the app had just autosaved, and made a correct fix look
+broken. Fixed by clicking the step sheet's own link (a real client-side transition, matching how a
+user actually moves between builder steps and how `BuilderProvider` is documented to survive
+navigation) instead of a hard reload.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed (`ops/translate.test.mjs`
+now 93 assertions, up from 88). `npm run lint` — zero issues in every touched file. `npm run build`
+clean. `ops/translate.browser.mjs` — 9/9 live, against the real bundled app, no Anthropic key required.
+A second live run confirmed the pre-existing Arabic-`target.language` flow is unaffected.
+
+**Explicitly not done this pass**: `personal.fullName`/city/country are still never translated — this
+is unchanged, INTENDED behaviour (`protectedNames` deliberately freezes the person's own name; the
+audit's own suggested remedy was "offer an English display name instead of forcing translation", which
+is what not-translating-it already does) and was not touched. The `languageMismatch` review-step
+warning (`reviewChecks.ts`) still only warns rather than links directly to the fixed "Create English
+version" action — a smaller, separate polish item, not fixed here.
