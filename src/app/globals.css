@@ -358,47 +358,6 @@ body {
 /* floorlight — the faint light pooled under the moon */
 /* mini orbs (nav, inline, chips): halos + field are sub-pixel noise — hide them */
 
-/* ── REVEAL — the download step: dark glass + aurora, bento template cards ── */
-.reveal-aurora {
-  position: absolute;
-  inset: -10% -10% auto -10%;
-  height: 60vh;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(40% 55% at 22% 20%, rgba(139, 92, 246, 0.28), transparent 70%),
-    radial-gradient(38% 50% at 82% 12%, rgba(236, 72, 153, 0.22), transparent 70%),
-    radial-gradient(45% 55% at 60% 40%, rgba(245, 158, 11, 0.12), transparent 72%);
-  filter: blur(30px);
-}
-/* a template choice — a tiny paper in a glass frame; lifts + glows when picked */
-.tpl-card {
-  position: relative;
-  border-radius: 14px;
-  padding: 7px;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  /* No blur, same reason as `.card` above: a template gallery renders one of these per template,
-     so the cost scales with the catalogue while the visual gain is a blurred flat background. */
-  transition: transform 0.22s var(--smooth, ease), border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-  cursor: pointer;
-}
-.tpl-card:hover { transform: translateY(-3px); border-color: rgba(139, 92, 246, 0.4); }
-.tpl-card.is-active {
-  border-color: rgba(139, 92, 246, 0.75);
-  background: rgba(139, 92, 246, 0.12);
-  box-shadow: 0 16px 40px -14px rgba(139, 92, 246, 0.6), inset 0 0 0 1px rgba(139, 92, 246, 0.4);
-}
-.tpl-card.is-active .tpl-check {
-  position: absolute; top: 5px; inset-inline-end: 5px;
-  width: 17px; height: 17px; border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 800; z-index: 2;
-  box-shadow: 0 2px 8px -1px rgba(124, 58, 237, 0.7);
-}
-@media (prefers-reduced-motion: reduce) { .tpl-card { transition: none; } }
-
 /* ── LIGHT SURFACE — the glass/document world ──────────────────────────────
    The black-moon eclipse reads as a black hole on white. On a light surface we
    swap the core for a luminous violet marble and drop the eclipse drama (corona,
@@ -679,12 +638,6 @@ main {
   100% { transform: translate(var(--bx), var(--by)) scale(1.4); opacity: 0; }
 }
 
-/* Radio pulse (login magic link sent) */
-@keyframes radio-wave {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.6); opacity: 0; }
-}
-
 /* Permanent gold "owned" stamp */
 .gold-stamp {
   display: inline-flex;
@@ -701,70 +654,6 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
   .aurora-burst span { animation: none; }
-}
-
-/* ── Advisor THEATER (full-screen state machine, ChatGPT-voice style) ── */
-.stage-orb { position: fixed; left: 50%; z-index: 30; pointer-events: none; }
-/* concentric aurora pulse rings (STATE 3 thinking) */
-.breathe { animation: breathe 2.8s ease-in-out infinite; }
-@keyframes breathe { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
-/* floating glass input bar */
-.dock {
-  position: fixed; left: 50%; transform: translateX(-50%);
-  bottom: max(20px, env(safe-area-inset-bottom));
-  width: min(640px, calc(100vw - 32px)); z-index: 40;
-  /* FLOATING by law — nothing on this site sits still like Android chrome */
-  animation: dock-float 6.5s ease-in-out infinite;
-}
-/* the aurora it carries — colored light leaking around the pill's edges,
-   circling slowly (the Apple-Intelligence glow from the reference) */
-@property --dock-aura-a { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
-.dock::before {
-  content: "";
-  position: absolute;
-  inset: -9px -16px;
-  border-radius: 36px;
-  background: conic-gradient(from var(--dock-aura-a), #8b5cf6, #22d3ee, #f59e0b, #ec4899, #8b5cf6);
-  filter: blur(24px);
-  opacity: 0.42;
-  z-index: -1;
-  animation: dock-aura 10s linear infinite;
-}
-@keyframes dock-aura { to { --dock-aura-a: 360deg; } }
-/* light pooled beneath it */
-.dock::after {
-  content: "";
-  position: absolute;
-  left: 8%; right: 8%; bottom: -12px;
-  height: 26px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(139,92,246,0.45), transparent 70%);
-  filter: blur(14px);
-  z-index: -1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .dock::before { animation: none; }
-}
-@keyframes dock-float {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
-}
-/* it floats to invite you — and SETTLES the moment you reach for it */
-.dock:hover, .dock:focus-within { animation-play-state: paused; }
-/* perpetual ambient float for landing objects */
-.float-slow { animation: float-slow 7s ease-in-out infinite; }
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .dock, .float-slow { animation: none; }
-}
-/* ── THE STAGE — the world's own light: a silver bloom crowning the orb's
-   position + a vignette so the void has edges. Replaces the old cyan/violet
-   aurora blobs (color chaos → monochrome harmony). ── */
-@media (prefers-reduced-motion: reduce) {
-  .breathe { animation: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

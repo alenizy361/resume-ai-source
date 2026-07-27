@@ -632,6 +632,14 @@ calls it and `ops/draftstore.test.mjs` documents the old record shape, which is 
 draft written before the current scheme still readable. `ops/handoff.test.mjs` asserts that no file in
 `app/` calls it, so it cannot acquire a caller by accident.
 
+**F-23's dead-CSS audit (O-16) added one more.** `AtsMarquee.tsx` — the "ATS systems we beat" logo
+strip, styled correctly with `.marquee`/`.marquee-track` and a real `marqueeScroll` keyframe — is
+defined, exports a working component, and is imported by nothing. It is not deleted, and neither is
+its CSS: unlike the six tasks above, this looks finished and ready to place on the landing page, and
+deleting the styling would leave a landmine for whoever wires it in. `ops/deadcss.test.mjs` asserts
+it is STILL unimported — if that assertion starts failing, it means someone wired it in, which is
+good news the test should be updated to reflect, not a regression to fix.
+
 ### F-21 · P1 · The Arabic detector covers Extended-A and both presentation-form blocks — FIXED *(was O-11)*
 
 `PdfExport` used to carry its own `[؀-ۿ]` literal, testing only U+0600–06FF; `cvHeadings.hasArabic`
@@ -912,10 +920,10 @@ terms, on pages whose only purpose is organic search.
 `RootShell` rendered `<Analytics />` and `<FunnelBeacon />`, both `"use client"`, in the layout every
 route shares — putting React's client runtime on all 357 static catalogue pages.
 
-### O-16 · P3 · The old design leaves dead CSS, but nothing of it is running
+### F-24 · P3 · The genuinely dead CSS is gone; the wrongly-accused CSS was left alone — FIXED *(was O-16)*
 
 Raised as a hypothesis for the iOS crash — "maybe the old design is still running in the
-background". Checked directly, and it is not. Measured on the pages that crash, 390px viewport:
+background". Checked directly, and it was not. Measured on the pages that crash, 390px viewport:
 
 | what | `/resume-examples` | `/…/registered-nurse` | `/` |
 |---|---|---|---|
@@ -932,17 +940,43 @@ Its own comment records what it replaced — a `<canvas>` cosmos on a rAF loop, 
 lerping a light toward the pointer, per-page ambient blocks, `.aurora-bg`, and a grain overlay.
 That removal was real; none of it came back.
 
-**What the old design does leave** is roughly **4.6 KB of dead rules** in `globals.css` (of
-35.6 KB) — `reveal-aurora`, `stage-orb`, `breathe`, `dock`, `float-slow`, `marquee`, `ia-*`,
-`improved-banner`, `aurora-burst`, `gold-stamp`, `reveal-pop`, `reveal-rise`. Their class names
-appear in no `className` in the codebase. `scanSweep` is the one exception: it is referenced
-from `ScanDemo.tsx` as an inline `animation`, which is why a plain class-name sweep must not be
-the only check before deleting any of them.
+**The original dead-rule list was wrong, and re-checking it directly is what this closes.** O-16
+named `reveal-aurora`, `stage-orb`, `breathe`, `dock`, `float-slow`, `marquee`, `ia-*`,
+`improved-banner`, `aurora-burst`, `gold-stamp`, `reveal-pop`, `reveal-rise` as dead — "their class
+names appear in no `className` in the codebase." Re-audited from nothing rather than trusted:
+`ia-*` is `InterviewerAvatar.tsx`'s whole face, live on `/interview-live`. `marquee` is
+`AtsMarquee.tsx` (styled correctly, though the COMPONENT itself is unimported — see O-10).
+`gold-stamp` is `AccountClient.tsx` and the payment callback page. `improved-banner`/`reveal-pop`/`reveal-rise`
+are `ResultCoaching.tsx`, live on `/optimize`. `aurora-burst` is its own component, live on
+`/pay/callback`. The list had been accurate when written; the product grew after it was written and
+nothing re-ran the check. Trusting it would have deleted six live controls' animations — the exact
+outcome its own closing line warned about, which is why it was filed "left undone on purpose"
+instead of shipped on faith.
 
-Dead stylesheet rules cost parse time and nothing else — they are not composited, not animated,
-and not in the DOM. So this is a tidiness item, not a performance one, and deliberately filed
-P3 rather than dressed up as a fix.
+**What was genuinely dead**, all from the retired full-screen "Advisor THEATER" chat interface and an
+old template picker, both superseded earlier this session: `.reveal-aurora`, `.tpl-card` (+
+`.is-active`, `.tpl-check` — both compound selectors, unreachable without `.tpl-card`), `.stage-orb`,
+`.breathe`, `.dock` (+ `::before`/`::after`, the `--dock-aura-a` custom property, `dock-aura`,
+`dock-float`), `.float-slow`, `@keyframes radio-wave`. Zero references anywhere in `app/` —
+checked past the traps that make a naive sweep wrong in both directions: `BrandOrb.tsx` builds its
+class as `` `bo-${variant}` ``, a template literal, so grepping for the literal string `"bo-button"`
+finds nothing and a naive scanner would delete a live orb variant; and a keyframe is referenced from
+CSS (`animation: iaFloat …`), not from a `.tsx` file, so scanning only `.tsx`/`.ts` for a keyframe's
+name — or worse, a substring match with no word boundary — reported `.breathe` as "alive" because
+`InterviewerAvatar.tsx` has "breathes slowly" in a docstring comment.
 
-**Left undone on purpose.** Deleting them is safe only with a check that each is unreferenced
-by inline styles and string concatenation as well as by `className`, and that check is the work.
-Doing it carelessly is how a live control loses its animation months later.
+**111 lines removed, 850 → 739.** `AtsMarquee.tsx`'s CSS was deliberately spared despite the
+component itself being unimported — see the new O-10 entry — because deleting styling out from
+under a component that looks finished and ready to wire in is how a live control loses its animation
+months later, which is exactly the risk this item was filed to avoid in the other direction.
+
+**Verification.** `ops/deadcss.test.mjs` — 36 assertions: every removed selector and keyframe is
+confirmed gone; every selector the ORIGINAL list wrongly called dead is confirmed still defined AND
+still has a real consumer reachable from a real page (not just a string match — `ResultCoaching`
+is checked to actually render from `/optimize`, `AuroraBurst` from `/pay/callback`); the
+`bo-${variant}` template-literal trap is asserted explicitly, including that the unstyled `"logo"`
+default correctly has no dedicated override; `AtsMarquee` is asserted to still be unimported, so if
+that ever starts failing it means someone wired it in — good news the test should be updated to
+reflect, not a regression. Confirmed in a browser too: `.ia-face`/`.ia-idle` still animate on
+`/interview-live`, `.brand-orb.bo-logo .bo-glow` still runs `bo-pulse` on `/`. `npm run build` and
+`ops/motion.test.mjs` (49) both clean after the deletion.
