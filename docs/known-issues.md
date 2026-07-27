@@ -2223,3 +2223,46 @@ scroll-camera treatment (still not implemented, and per F-43's own note, will no
 `transitions.css` §9's crash-tested no-scroll-linked-JS rule; one-time triggered reveals remain the
 substitute); Career Road, Mission Control, Interview-as-orb, Pricing, and Final scenes (Phases 3–4);
 any change to the authenticated app, navigation split, or non-landing routes (Phase 5).
+
+### F-45 · P0 · Phase 3 of the cinematic Career-OS experience: the Career Road and Mission Control — FIXED, PARTIAL
+
+Direction: the brief's Scene 5 ("Career Road — a large visual journey") and Scene 6 ("Career
+Mission Control dashboard, not an accounting dashboard"). Both scenes already had a close
+equivalent shipped on the landing page (F-40's six-stop journey timeline, F-41's dashboard
+preview) — this pass is a visual reframing of those two existing, already-tested sections rather
+than new components, matching this brief's own instruction not to add sections where an existing
+one already carries the content.
+
+**Career Road** — the old `.timeline`, a plain vertical list with a thin left-hand line and small
+dot markers, is replaced by `.road`: the same six stops (Discover/Build/Tailor/Apply/Interview/Get
+hired, unchanged copy, both languages) as numbered, iconed circles VISIBLY connected by a line
+running through each circle's own center — horizontal on desktop (six across, in the section's
+widened `max-w-[1200px]` container), rotating to the old vertical arrangement on mobile via one
+media query, same connecting-line mechanism in both orientations. `.t-stagger` on the row gives a
+one-time staggered rise on mount — deliberately NOT `.t-materialize`, which this codebase reserves
+for an AI answer arriving (see `transitions.css` §15's own doctrine comment); a road diagram is not
+that, so pairing them would misuse the class's meaning even though it's visually available.
+
+**Mission Control** — the existing dashboard-preview panel (`.dash`: two progress rings, three stat
+cards, a next-action banner) gains a header bar (`.mc-bar`): a small static `BrandOrb` (the `logo`
+CSS-only variant — zero client JS, no `orbState`, same as every other non-hero call site), a title
+("Sira Mission Control" / "لوحة تحكم سيرة"), the "illustrative example" disclosure moved up from the
+footer into this bar, and a small pulsing green dot on the trailing edge suggesting a live system
+rather than a static mockup. Kicker/heading copy reframed toward "command center" language in both
+languages. No new data, no new claims — the same illustrative numbers F-41 already labeled as such.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed (the new emoji/Arabic
+strings in `journey` pass the i18n suite without changes — icons are non-text glyphs, not
+untranslated words). `npm run lint` — zero issues in `Landing.tsx`/`marketing.css`. `npm run build`
+clean, page count unchanged. Live-browser checks against the local dev server (still not
+`cv.rabit.sa` — same standing limitation as F-42 through F-44), both languages, desktop
+(1440×1200) and mobile (390×844): the road's connecting line and RTL mirroring both render
+correctly, Arabic-Indic numerals appear in the node badges, the Mission Control header bar and its
+live dot render correctly in both writing directions, zero horizontal overflow at mobile width in
+either section.
+
+**Explicitly not done this pass**: Scene 7 (Interview experience with the orb as interviewer — no
+fake avatar), Scene 8 (pricing), and the Final scene remain Phase 4; the public/authenticated
+navigation split and wiring `OrbState` into the builder/dashboard/interview/notifications remain
+Phase 5. Scene 4's scroll-camera request remains declined for the same crash-tested reason stated in
+F-43/F-44.

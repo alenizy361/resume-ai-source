@@ -98,19 +98,20 @@ const C = {
     demoHead: "What Sira already knows about your profession.",
     demoLede: "Pick a job title. This appears instantly — before any AI call, before any waiting.",
 
-    journeyKicker: "The journey",
-    journeyHead: "Discover → Get hired.",
+    journeyKicker: "The career road",
+    journeyHead: "Discover → Get hired. One connected road.",
     journey: [
-      ["Discover", "Tell it the job you're aiming for — it already knows the shape of that profession."],
-      ["Build", "Your master resume, confirmed fact by fact, rendering beside you."],
-      ["Tailor", "One posting, one matched version — the master stays untouched."],
-      ["Apply", "Tracked, with the exact resume version you sent."],
-      ["Interview", "Prepped from that resume, not a generic question bank."],
-      ["Get hired", "One connected path — not six tabs that don't know each other."],
-    ] as [string, string][],
+      ["🧭", "Discover", "Tell it the job you're aiming for — it already knows the shape of that profession."],
+      ["📄", "Build", "Your master resume, confirmed fact by fact, rendering beside you."],
+      ["🎯", "Tailor", "One posting, one matched version — the master stays untouched."],
+      ["📤", "Apply", "Tracked, with the exact resume version you sent."],
+      ["🎤", "Interview", "Prepped from that resume, not a generic question bank."],
+      ["🏆", "Get hired", "One connected path — not six tabs that don't know each other."],
+    ] as [string, string, string][],
 
-    dashKicker: "Your career dashboard",
-    dashHead: "Your whole search, one screen.",
+    dashKicker: "Mission control",
+    dashHead: "Your whole job search, tracked from one command center.",
+    dashBarTitle: "Sira Mission Control",
     dashRings: [
       ["Resume score", 87],
       ["ATS match", 91],
@@ -206,19 +207,20 @@ const C = {
     demoHead: "ما تعرفه سيرة عن مهنتك مسبقاً.",
     demoLede: "اختر مسمى وظيفياً. هذا يظهر فوراً — قبل أي استدعاء للذكاء، وبلا انتظار.",
 
-    journeyKicker: "الرحلة",
-    journeyHead: "اكتشف ← احصل على الوظيفة.",
+    journeyKicker: "طريق المسيرة المهنية",
+    journeyHead: "اكتشف ← احصل على الوظيفة. طريق واحد متصل.",
     journey: [
-      ["اكتشف", "أخبرها بالوظيفة التي تستهدفها — فهي تعرف شكل تلك المهنة مسبقاً."],
-      ["ابنِ", "سيرتك الرئيسية، مؤكدة حقيقةً حقيقة، تُرسم أمامك."],
-      ["خصّص", "إعلان واحد، نسخة مطابقة واحدة — والرئيسية تبقى كما هي."],
-      ["قدّم", "متتبَّع، مع نسخة السيرة التي أرسلتها بالضبط."],
-      ["قابِل", "تحضير مبني من تلك السيرة، لا من بنك أسئلة عام."],
-      ["اُقبَل", "مسار واحد متصل — لا ستة تبويبات لا تعرف بعضها."],
-    ] as [string, string][],
+      ["🧭", "اكتشف", "أخبرها بالوظيفة التي تستهدفها — فهي تعرف شكل تلك المهنة مسبقاً."],
+      ["📄", "ابنِ", "سيرتك الرئيسية، مؤكدة حقيقةً حقيقة، تُرسم أمامك."],
+      ["🎯", "خصّص", "إعلان واحد، نسخة مطابقة واحدة — والرئيسية تبقى كما هي."],
+      ["📤", "قدّم", "متتبَّع، مع نسخة السيرة التي أرسلتها بالضبط."],
+      ["🎤", "قابِل", "تحضير مبني من تلك السيرة، لا من بنك أسئلة عام."],
+      ["🏆", "اُقبَل", "مسار واحد متصل — لا ستة تبويبات لا تعرف بعضها."],
+    ] as [string, string, string][],
 
-    dashKicker: "لوحتك المهنية",
-    dashHead: "بحثك كله في شاشة واحدة.",
+    dashKicker: "لوحة التحكم المهنية",
+    dashHead: "بحثك كله، متتبَّع من مركز تحكم واحد.",
+    dashBarTitle: "لوحة تحكم سيرة",
     dashRings: [
       ["تقييم السيرة", 87],
       ["تطابق ATS", 91],
@@ -412,15 +414,24 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
         </div>
       </section>
 
-      {/* ══════════ 6. CAREER JOURNEY ══════════ */}
+      {/* ══════════ 6. CAREER ROAD — the same six-stop journey, now a visible connected road ══════════ */}
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.journeyKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.journeyHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "24ch" }}>{t.journeyHead}</h2>
 
-          <div className="timeline">
-            {t.journey.map(([head, body]) => (
-              <div key={head} className="t-item"><b>{head}</b><p>{body}</p></div>
+          <div className="road t-stagger">
+            {t.journey.map(([icon, head, body], i) => (
+              <div key={head} className="road-node">
+                <div className="road-node-circle" aria-hidden>
+                  <span>{icon}</span>
+                  <i className="road-node-num">{ar ? toArabicDigits(i + 1) : i + 1}</i>
+                </div>
+                <div className="road-node-body">
+                  <b>{head}</b>
+                  <p>{body}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -433,6 +444,14 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
           <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.dashHead}</h2>
 
           <div className="dash">
+            <div className="mc-bar">
+              <BrandOrb size={30} />
+              <div className="mc-bar-title">
+                <b>{t.dashBarTitle}</b>
+                <span>{t.dashNote}</span>
+              </div>
+              <span className="mc-live-dot" aria-hidden />
+            </div>
             <div className="dash-grid">
               {t.dashRings.map(([label, pct]) => (
                 <div key={label} className="dash-card dash-card-ring">
@@ -457,7 +476,6 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
               </div>
             </div>
             <div className="dash-foot">
-              <span className="dash-note">{t.dashNote}</span>
               <Link href={`${p}/account`} className="text-sm font-semibold" style={{ color: "var(--accent-bright, var(--accent))" }}>{t.dashCta}</Link>
             </div>
           </div>
