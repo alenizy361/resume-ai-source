@@ -8,10 +8,19 @@ import AuthNav from "@/app/components/AuthNav";
 import { navCta } from "@/app/lib/brand";
 import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
+type Category = "behavioral" | "technical" | "gap";
 interface InterviewResult {
-  questions: { q: string; why: string; answer: string }[];
+  questions: { q: string; why: string; answer: string; category: Category }[];
   redFlags: string[];
 }
+interface FeedbackResult {
+  strength: string; weaknesses: string[]; missingEvidence: string[]; revisedOpening: string;
+}
+/** The four fields a STAR answer is built from. Assembled into one paragraph, never sent
+    anywhere until the candidate asks for feedback on it. */
+interface StarDraft { situation: string; task: string; action: string; result: string }
+const EMPTY_STAR: StarDraft = { situation: "", task: "", action: "", result: "" };
+const starText = (d: StarDraft) => [d.situation, d.task, d.action, d.result].filter((s) => s.trim()).join(" ");
 
 const inputStyle = { background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" };
 
@@ -24,6 +33,12 @@ export default function InterviewPage() {
   const [error, setError] = useState("");
   const [open, setOpen] = useState<number | null>(0);
   const [copied, setCopied] = useState(false);
+  /* Per-question practice state — a STAR draft, whether the practice panel is open, and any
+     feedback fetched for it. Keyed by question index; only ever touches the one question the
+     candidate is actually practising. */
+  const [practicing, setPracticing] = useState<Record<number, boolean>>({});
+  const [stars, setStars] = useState<Record<number, StarDraft>>({});
+  const [feedback, setFeedback] = useState<Record<number, FeedbackResult | "loading" | "error">>({});
   /*
    * The CV the user chose from their own, when they chose one.
    *
@@ -87,6 +102,34 @@ export default function InterviewPage() {
         : lastErr || "Something went wrong. Tap Retry.");
     }
     setLoading(false);
+  }
+
+  /*
+   * Feedback on the candidate's OWN answer — not another AI-written model answer. Reuses
+   * `/api/tools` (same retry/rate-limit/JSON-repair machinery as the questions themselves) under
+   * a new "interview-feedback" mode rather than a separate endpoint.
+   */
+  async function getFeedback(i: number, question: string) {
+    const draft = starText(stars[i] ?? EMPTY_STAR);
+    if (draft.trim().length < 10) return;
+    setFeedback((f) => ({ ...f, [i]: "loading" }));
+    try {
+      const res = await fetch("/api/tools", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "interview-feedback",
+          inputA: `Question: ${question}\n\nCandidate's background:\n${resume.slice(0, 3000)}`,
+          inputB: draft,
+          lang: outLangFor(picked, resume, ar),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || (!data.strength && !Array.isArray(data.weaknesses))) throw new Error(data.error || "empty");
+      setFeedback((f) => ({ ...f, [i]: data as FeedbackResult }));
+    } catch {
+      setFeedback((f) => ({ ...f, [i]: "error" }));
+    }
   }
 
   return (
@@ -161,23 +204,114 @@ export default function InterviewPage() {
                 {copied ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ الكل" : "Copy all")}
               </button>
             </div>
-            {result.questions.map((item, i) => (
-              <div key={i} className="card overflow-hidden">
-                <button onClick={() => setOpen(open === i ? null : i)} className="flex w-full items-start justify-between gap-3 p-5 text-left">
-                  <div>
-                    <div className="text-sm font-bold">{i + 1}. {item.q}</div>
-                    <div className="mt-1 font-mono text-xs" style={{ color: "var(--faint)" }}>{item.why}</div>
+            {(["behavioral", "technical", "gap"] as Category[]).map((cat) => {
+              const idxs = result.questions.map((_, i) => i).filter((i) => result.questions[i].category === cat);
+              if (!idxs.length) return null;
+              const catLabel = {
+                behavioral: ar ? "أسئلة سلوكية" : "Behavioral questions",
+                technical: ar ? "أسئلة تقنية" : "Technical questions",
+                /* This IS "missing-evidence questions" — the ones the model itself flagged as
+                   probing something thin or absent in the candidate's own background. */
+                gap: ar ? "أسئلة عن نقاط ينقصها الدليل" : "Questions about your gaps",
+              }[cat];
+              return (
+                <div key={cat}>
+                  <div className="bd-label mb-2 mt-6 first:mt-0">{catLabel}</div>
+                  <div className="space-y-3">
+                    {idxs.map((i) => {
+                      const item = result.questions[i];
+                      const fb = feedback[i];
+                      const draft = stars[i] ?? EMPTY_STAR;
+                      return (
+                        <div key={i} className="card overflow-hidden">
+                          <button onClick={() => setOpen(open === i ? null : i)} className="flex w-full items-start justify-between gap-3 p-5 text-left">
+                            <div>
+                              <div className="text-sm font-bold">{item.q}</div>
+                              <div className="mt-1 font-mono text-xs" style={{ color: "var(--faint)" }}>{item.why}</div>
+                            </div>
+                            <span className="mt-0.5 font-mono text-accent">{open === i ? "−" : "+"}</span>
+                          </button>
+                          {open === i && (
+                            <div className="border-t px-5 py-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "rgba(244,245,243,0.85)", background: "rgba(139,92,246,0.03)" }}>
+                              <div className="mb-1 font-mono text-xs uppercase tracking-wider text-accent">{ar ? "إجابة قوية" : "Strong answer"}</div>
+                              {item.answer}
+
+                              <button
+                                onClick={() => setPracticing((p) => ({ ...p, [i]: !p[i] }))}
+                                className="mt-4 rounded-lg px-3 py-1.5 text-xs font-semibold"
+                                style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}
+                              >
+                                {practicing[i] ? (ar ? "إخفاء التمرين" : "Hide practice") : (ar ? "بناء إجابتك أنت (STAR) ←" : "Build your own answer (STAR) →")}
+                              </button>
+
+                              {practicing[i] && (
+                                <div className="mt-4 rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+                                  <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>
+                                    {ar ? "اكتب إجابتك الحقيقية بأسلوب STAR — لن يخترع أي شيء نيابة عنك." : "Write your OWN real answer in the STAR structure — nothing is invented for you."}
+                                  </p>
+                                  {([
+                                    ["situation", ar ? "الموقف — أين ومتى؟" : "Situation — where and when?"],
+                                    ["task", ar ? "المهمة — ما المطلوب منك؟" : "Task — what was required of you?"],
+                                    ["action", ar ? "الإجراء — ما الذي فعلته أنت تحديداً؟" : "Action — what did YOU specifically do?"],
+                                    ["result", ar ? "النتيجة — ماذا حدث؟" : "Result — what happened?"],
+                                  ] as [keyof StarDraft, string][]).map(([field, label]) => (
+                                    <div key={field} className="mb-2">
+                                      <label className="mb-1 block text-[11px] font-semibold" style={{ color: "var(--muted)" }}>{label}</label>
+                                      <textarea
+                                        value={draft[field]}
+                                        onChange={(e) => setStars((s) => ({ ...s, [i]: { ...(s[i] ?? EMPTY_STAR), [field]: e.target.value } }))}
+                                        rows={2}
+                                        className="w-full resize-none rounded-lg px-3 py-2 text-xs focus:outline-none"
+                                        style={inputStyle}
+                                      />
+                                    </div>
+                                  ))}
+                                  <button
+                                    onClick={() => getFeedback(i, item.q)}
+                                    disabled={starText(draft).trim().length < 10 || fb === "loading"}
+                                    className="btn-accent mt-2 w-full py-2 text-xs disabled:cursor-not-allowed disabled:opacity-40"
+                                  >
+                                    {fb === "loading" ? (ar ? "جارٍ التقييم…" : "Getting feedback…") : (ar ? "قيّم إجابتي" : "Get feedback on my answer")}
+                                  </button>
+
+                                  {fb && fb !== "loading" && fb !== "error" && (
+                                    <div className="mt-3 space-y-2 text-xs" style={{ color: "var(--muted)" }}>
+                                      <div><span className="font-semibold" style={{ color: "var(--accent)" }}>{ar ? "نقطة قوة: " : "Strength: "}</span>{fb.strength}</div>
+                                      {fb.weaknesses.length > 0 && (
+                                        <div>
+                                          <span className="font-semibold" style={{ color: "#fbbf24" }}>{ar ? "نقاط للتحسين:" : "To improve:"}</span>
+                                          <ul className="mt-1 space-y-1 ps-4" style={{ listStyle: "disc" }}>
+                                            {fb.weaknesses.map((w, wi) => <li key={wi}>{w}</li>)}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      {fb.missingEvidence.length > 0 && (
+                                        <div>
+                                          <span className="font-semibold" style={{ color: "#f87171" }}>{ar ? "دليل ناقص:" : "Missing evidence:"}</span>
+                                          <ul className="mt-1 space-y-1 ps-4" style={{ listStyle: "disc" }}>
+                                            {fb.missingEvidence.map((m, mi) => <li key={mi}>{m}</li>)}
+                                          </ul>
+                                        </div>
+                                      )}
+                                      {fb.revisedOpening && (
+                                        <div><span className="font-semibold" style={{ color: "var(--accent)" }}>{ar ? "بداية أقوى: " : "Stronger opening: "}</span>“{fb.revisedOpening}”</div>
+                                      )}
+                                    </div>
+                                  )}
+                                  {fb === "error" && (
+                                    <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{ar ? "تعذّر التقييم — حاول مرة أخرى." : "Couldn't get feedback — try again."}</p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                  <span className="mt-0.5 font-mono text-accent">{open === i ? "−" : "+"}</span>
-                </button>
-                {open === i && (
-                  <div className="border-t px-5 py-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "rgba(244,245,243,0.85)", background: "rgba(139,92,246,0.03)" }}>
-                    <div className="mb-1 font-mono text-xs uppercase tracking-wider text-accent">{ar ? "إجابة قوية" : "Strong answer"}</div>
-                    {item.answer}
-                  </div>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
 
             {result.redFlags?.length > 0 && (
               <div className="card p-6" style={{ borderColor: "rgba(248,113,113,0.25)" }}>

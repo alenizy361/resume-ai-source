@@ -1357,3 +1357,39 @@ earlier in this session (the same class of dev-server resource pressure F-29 doc
 defect: `npm run build`, the production compiler, succeeded cleanly on the same code moments
 earlier). Relying on the clean production build, typecheck, and full test suite for this pass;
 flagged here rather than silently claimed as browser-verified.
+
+### F-33 · P2 · Interview preparation: STAR builder, weak-answer feedback, gap questions — FIXED
+
+`/interview` already generated 8 questions with model answers; the order named three things it
+did not have: a STAR answer builder, feedback on the candidate's OWN (weak) answer, and questions
+that specifically probe missing evidence, surfaced as their own thing rather than folded into
+generic "red flags."
+
+**The gap questions were already being generated, just not labelled.** The prompt already asked
+for "2 about gaps in their background" as part of the 8 — it just never told the caller WHICH two.
+Added a `category: "behavioral" | "technical" | "gap"` field per question (`/api/tools`'s
+`interview` prompt and its response normalizer), and the page now groups questions under three
+headings instead of one flat list. The "gap" group IS the missing-evidence questions the order
+asked for; no second generation pass needed.
+
+**STAR builder.** Four fields — Situation, Task, Action, Result — client-side only, assembled into
+one paragraph. Nothing here calls the model; it exists so the candidate has somewhere to write
+their OWN answer before asking for feedback on it, which is the next piece.
+
+**Weak-answer feedback.** New `interview-feedback` mode on the SAME `/api/tools` endpoint the
+questions themselves use — same retry loop, same JSON-repair, same rate limiter, so this is not a
+new subsystem, just a new prompt. Takes the question + the candidate's own STAR-assembled answer,
+returns one genuine strength, 2-4 specific weaknesses, and — the honesty-critical field —
+`missingEvidence`: claims that would land better with a specific example, described as what kind
+of detail is missing, never invented for the candidate. A `revisedOpening` line is built only from
+facts already present in the candidate's own answer or resume, matching the same no-fabrication
+contract every other AI surface in this product already enforces.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` all clean. Confirmed in a real
+browser against a correctly-started dev server (the earlier F-32 entry's hang turned out to be a
+stale process still bound to the port from an earlier session, not a code issue — `fuser -k
+3141/tcp` then a clean restart loaded normally) that the form renders with no real console errors
+(the only "errors" were `/_vercel/insights/script.js` 404s, expected in local dev and already
+filtered by this project's own test suites, e.g. `form-smoke.mjs`). The generation and feedback
+calls themselves need `NVIDIA_API_KEY`, which this environment does not have — not live-verified
+against the model, same constraint as every other AI-dependent feature this session.

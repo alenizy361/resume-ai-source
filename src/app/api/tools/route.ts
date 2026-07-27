@@ -59,11 +59,28 @@ ${jobDescription}
 Return ONLY a JSON object:
 {
   "questions": [
-    {"q": "<likely interview question>", "why": "<why they'll ask it, one line>", "answer": "<a strong 3-5 sentence answer using THIS candidate's real background (STAR style where relevant). Where they lack the skill, give an honest bridging answer.>"}
+    {"q": "<likely interview question>", "category": "<one of exactly: behavioral, technical, gap>", "why": "<why they'll ask it, one line>", "answer": "<a strong 3-5 sentence answer using THIS candidate's real background (STAR style where relevant). Where they lack the skill, give an honest bridging answer.>"}
   ],
   "redFlags": ["<2-3 weaknesses in their profile the interviewer may probe, with one-line advice each>"]
 }
-Provide 8 questions: 2 intro/behavioral, 4 role-specific technical/skills, 2 about gaps in their background. No text outside the JSON.${LANG_RULE(lang)}`,
+Provide 8 questions: 2 "behavioral" (intro/motivation/teamwork), 4 "technical" (role-specific skills), 2 "gap" (probing something missing or thin in their background — these are the questions a candidate has the LEAST evidence for, so the "answer" for a gap question must be an honest bridging answer, never a claim of experience they don't have). No text outside the JSON.${LANG_RULE(lang)}`,
+
+  "interview-feedback": (context, userAnswer, lang) => `You are an interview coach reviewing a candidate's OWN spoken or written answer during their practice session — not writing the answer for them. Be honest and specific; never invent facts about the candidate that are not already in their own answer or background below.
+
+CONTEXT (the question they were asked, and their background):
+${context}
+
+THEIR ANSWER (as they actually said it):
+${userAnswer}
+
+Return ONLY a JSON object:
+{
+  "strength": "<one thing genuinely strong about this specific answer, one sentence>",
+  "weaknesses": ["<specific, actionable critique of THIS answer — vague, no structure, missing outcome, rambling, too short, etc. 2-4 items>"],
+  "missingEvidence": ["<claims in their answer that would land better with a specific example, number, or outcome — describe what kind of detail is missing, never invent the number or example for them. Empty array if none.>"],
+  "revisedOpening": "<a one-sentence stronger opening line for this answer, built only from facts already present in their answer or the background above>"
+}
+No text outside the JSON.${LANG_RULE(lang)}`,
 };
 
 function extractJson(text: string): string {
@@ -121,7 +138,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Please provide more detail (paste your resume or profile)." }, { status: 400 });
     }
     if (!inputB?.trim() || inputB.length < 3) {
-      return NextResponse.json({ error: mode === "linkedin" ? "Please enter your target role." : "Please paste the job description." }, { status: 400 });
+      return NextResponse.json({
+        error: mode === "linkedin" ? "Please enter your target role."
+          : mode === "interview-feedback" ? "Please write out your answer first."
+          : "Please paste the job description.",
+      }, { status: 400 });
     }
     if (inputA.length > 8000 || inputB.length > 4000) {
       return NextResponse.json({ error: "Input too long." }, { status: 400 });
@@ -187,6 +208,8 @@ export async function POST(req: NextRequest) {
           }
         } else if (mode === "linkedin") {
           if (!candidate.headline && !candidate.about) throw new Error("No usable LinkedIn content");
+        } else if (mode === "interview-feedback") {
+          if (!candidate.strength && !Array.isArray(candidate.weaknesses)) throw new Error("No usable feedback in response");
         }
         parsed = candidate;
       } catch (e) {
@@ -206,7 +229,14 @@ export async function POST(req: NextRequest) {
       const questions = rawQ
         .map((x) => {
           const it = (x ?? {}) as Record<string, unknown>;
-          return { q: String(it.q ?? it.question ?? ""), why: String(it.why ?? it.reason ?? ""), answer: String(it.answer ?? it.a ?? "") };
+          const cat = String(it.category ?? "");
+          return {
+            q: String(it.q ?? it.question ?? ""), why: String(it.why ?? it.reason ?? ""),
+            answer: String(it.answer ?? it.a ?? ""),
+            // An unrecognised or missing category still has to render somewhere — grouped with
+            // the questions the model itself framed as "role-specific", the least surprising bucket.
+            category: (["behavioral", "technical", "gap"].includes(cat) ? cat : "technical") as "behavioral" | "technical" | "gap",
+          };
         })
         .filter((it) => it.q);
       const redFlags = (Array.isArray(parsed.redFlags) ? parsed.redFlags : []).map(String);
@@ -219,6 +249,14 @@ export async function POST(req: NextRequest) {
         about: String(parsed.about ?? ""),
         skills: (Array.isArray(parsed.skills) ? parsed.skills : []).map(String),
         tips: (Array.isArray(parsed.tips) ? parsed.tips : []).map(String),
+      });
+    }
+    if (mode === "interview-feedback") {
+      return NextResponse.json({
+        strength: String(parsed.strength ?? ""),
+        weaknesses: (Array.isArray(parsed.weaknesses) ? parsed.weaknesses : []).map(String),
+        missingEvidence: (Array.isArray(parsed.missingEvidence) ? parsed.missingEvidence : []).map(String),
+        revisedOpening: String(parsed.revisedOpening ?? ""),
       });
     }
     return NextResponse.json(parsed);
