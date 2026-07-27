@@ -277,7 +277,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
   const tplsStat = ar ? toArabicDigits(TEMPLATE_CATALOG.length) : String(TEMPLATE_CATALOG.length);
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} lang={lang} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+    <main dir={ar ? "rtl" : "ltr"} lang={lang} className="landing-root min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
       <nav className="ps-header">
         <div className="ps-header-in">
           <Link href={p || "/"} className="ps-brand">
@@ -285,28 +285,28 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <span>{ar ? "سيرة" : "Sira"}</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href={ar ? "/" : "/ar"} className="text-xs font-semibold" style={{ color: "var(--muted)" }}>
+            <Link href={ar ? "/" : "/ar"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>
               {t.ar}
             </Link>
-            <Link href={`${p}/builder`} className="btn-accent px-4 py-2 text-sm">{t.ctaPrimary}</Link>
+            <Link href={`${p}/builder`} className="btn-accent px-4 py-2.5 text-[16px]">{t.ctaPrimary}</Link>
           </div>
         </div>
       </nav>
 
       {/* ══════════ 1. HERO — the promise, the orb, and a live mockup instead of static text ══════════ */}
       <section className="cosmos-glow relative overflow-hidden px-6 pb-16 pt-12 sm:pt-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="t-hero">
             <div className="chip">{t.eyebrow}</div>
             <h1
-              className="mt-5 font-extrabold leading-[0.98] tracking-tight"
-              style={{ fontSize: "clamp(2.5rem,6vw,5.2rem)", letterSpacing: "-0.03em", maxWidth: "16ch" }}
+              className="mt-5 font-extrabold tracking-tight"
+              style={{ fontSize: "clamp(2.75rem,6vw,4.75rem)", lineHeight: 1.04, letterSpacing: "-0.04em", maxWidth: "16ch" }}
             >
               {t.h1a}
               <br />
               <span
                 style={{
-                  background: "linear-gradient(100deg,#e9d8ff,#c4b5fd 45%,var(--accent) 85%)",
+                  background: "linear-gradient(100deg,#e9d8ff,#c4b5fd 45%,var(--accent-bright,var(--accent)) 85%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
@@ -315,14 +315,14 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
                 {t.h1b}
               </span>
             </h1>
-            <p className="mt-6 max-w-[46ch] text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.lede}</p>
+            <p className="mt-6 max-w-[64ch] leading-relaxed" style={{ color: "var(--body, var(--muted))", fontSize: 18 }}>{t.lede}</p>
 
             <ContinueDraft lang={lang} />
 
             <div>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={`${p}/builder`} className="btn-accent magnetic px-8 py-4 text-[15px]">{t.ctaPrimary} →</Link>
-                <a href="#demo" className="btn-ghost magnetic px-7 py-4 text-[15px]">{t.ctaSecondary}</a>
+                <Link href={`${p}/builder`} className="btn-accent magnetic px-8 py-4 text-[16px]">{t.ctaPrimary} →</Link>
+                <a href="#demo" className="btn-ghost magnetic px-7 py-4 text-[16px]">{t.ctaSecondary}</a>
               </div>
               <div className="trustlite">
                 {t.trustlite(packsStat).map(([n, label]) => (
@@ -347,10 +347,10 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
       {/* ══════════ 2. LIVE PRODUCT DEMO ══════════ */}
       <section id="demo" className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.walkKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.walkHead}</h2>
-          <p className="mt-3 max-w-[56ch] text-base leading-relaxed" style={{ color: "var(--muted)" }}>{t.walkLede}</p>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.walkHead}</h2>
+          <p className="mt-3 max-w-[56ch] text-lg leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{t.walkLede}</p>
 
           <DemoWalkthrough lang={lang} />
         </div>
@@ -360,13 +360,13 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-4xl">
           <div className="section-kicker">{t.cmpKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.cmpHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.cmpHead}</h2>
 
           <div className="compare">
             <div className="compare-row head">
               <div>{t.cmpFeature}</div>
               <div>{t.cmpOld}</div>
-              <div style={{ color: "var(--accent)" }}>{t.cmpSira}</div>
+              <div style={{ color: "var(--accent-bright, var(--accent))" }}>{t.cmpSira}</div>
             </div>
             {t.cmpRows.map(([feat, old, sira]) => (
               <div key={feat} className="compare-row">
@@ -381,16 +381,19 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
       {/* ══════════ 4. HOW IT WORKS — three cards, one line each ══════════ */}
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.howKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em" }}>{t.howHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.howHead}</h2>
 
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {t.how.map(([icon, head, body]) => (
-              <div key={head} className="card p-7">
-                <div style={{ fontSize: 24 }} aria-hidden>{icon}</div>
-                <h3 className="mt-4 text-lg font-bold" style={{ letterSpacing: "-0.01em" }}>{head}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {t.how.map(([icon, head, body], i) => (
+              <div key={head} className="card p-8">
+                <div className="flex items-center justify-between">
+                  <span className="how-step-num" aria-hidden>{ar ? toArabicDigits(i + 1) : String(i + 1).padStart(2, "0")}</span>
+                  <span style={{ fontSize: 22 }} aria-hidden>{icon}</span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold" style={{ letterSpacing: "-0.01em" }}>{head}</h3>
+                <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{body}</p>
               </div>
             ))}
           </div>
@@ -399,10 +402,10 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
       {/* ══════════ 5. INTERACTIVE PROFESSION EXAMPLE ══════════ */}
       <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.demoKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.demoHead}</h2>
-          <p className="mt-3 max-w-[56ch] text-base leading-relaxed" style={{ color: "var(--muted)" }}>{t.demoLede}</p>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.demoHead}</h2>
+          <p className="mt-3 max-w-[56ch] text-lg leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{t.demoLede}</p>
 
           <ProfessionDemo lang={lang} />
         </div>
@@ -412,7 +415,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-3xl">
           <div className="section-kicker">{t.journeyKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em" }}>{t.journeyHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.journeyHead}</h2>
 
           <div className="timeline">
             {t.journey.map(([head, body]) => (
@@ -426,7 +429,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-5xl">
           <div className="section-kicker">{t.dashKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.dashHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.dashHead}</h2>
 
           <div className="dash">
             <div className="dash-grid">
@@ -448,13 +451,13 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <div className="dash-next">
               <div className="ic" aria-hidden>→</div>
               <div>
-                <b style={{ fontSize: 13.5 }}>{t.dashNextLabel}</b>
-                <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2 }}>{t.dashNext}</div>
+                <b style={{ fontSize: 16 }}>{t.dashNextLabel}</b>
+                <div style={{ fontSize: 14.5, color: "var(--muted)", marginTop: 3 }}>{t.dashNext}</div>
               </div>
             </div>
             <div className="dash-foot">
               <span className="dash-note">{t.dashNote}</span>
-              <Link href={`${p}/account`} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.dashCta}</Link>
+              <Link href={`${p}/account`} className="text-sm font-semibold" style={{ color: "var(--accent-bright, var(--accent))" }}>{t.dashCta}</Link>
             </div>
           </div>
         </div>
@@ -472,9 +475,9 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
       {/* ══════════ 9. TRUST — honest numbers, no borrowed quotes ══════════ */}
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.trustKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.trustHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.trustHead}</h2>
 
           <div className="trust-grid">
             {t.trust(packsStat, tplsStat).map(([n, body], i) => (
@@ -495,7 +498,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-3xl text-center">
           <div className="section-kicker">{t.faqKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em" }}>{t.faqHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.faqHead}</h2>
         </div>
         <FaqAccordion items={t.faq.map(([q, a]) => ({ q, a }))} />
       </section>
@@ -505,13 +508,13 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
         <div className="mx-auto flex max-w-2xl flex-col items-center">
           <BrandOrb variant="hero" size={72} />
           <h2 className="mt-7 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,4.4vw,3.4rem)", letterSpacing: "-0.025em" }}>{t.finalHead}</h2>
-          <p className="mt-3 text-base" style={{ color: "var(--muted)" }}>{t.finalSub}</p>
-          <Link href={`${p}/builder`} className="btn-accent magnetic mt-8 px-9 py-4 text-[15px]">{t.ctaPrimary} →</Link>
+          <p className="mt-3 text-lg" style={{ color: "var(--body, var(--muted))" }}>{t.finalSub}</p>
+          <Link href={`${p}/builder`} className="btn-accent magnetic mt-8 px-9 py-4 text-[16px]">{t.ctaPrimary} →</Link>
         </div>
       </section>
 
       <footer className="px-6 py-12" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4">
           <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright(lang)}</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             {t.footLinks.map(([label, href]) => (

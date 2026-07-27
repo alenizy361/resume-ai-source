@@ -579,30 +579,32 @@ main {
   animation-delay: -2.3s; /* starts mid-cycle, out of phase with the glow from the first frame */
 }
 /*
- * The ring — a circle flattened to an ellipse and tilted, the standard CSS "Saturn" construction.
- * Sits BEHIND the sphere (earlier in paint order, no z-index needed) so the sphere's own opaque
- * fill naturally occludes the ring's middle third; only the two side "wings" show, which is what
- * reads as a ring viewed at an angle rather than a halo. One `transform: rotate`, nothing else
- * animates on it — a static gradient border, so this costs one compositor layer, not a repaint.
+ * `OrbCore` (a canvas, `app/components/OrbCore.tsx`) draws the hero variant's core in place of the
+ * flat CSS sphere+crescent — this is the "no white rotating ring, no cheap loader" fix. What used to
+ * be a CSS "Saturn ring" construction here (a flattened, tilted ellipse with a near-white gradient
+ * stop) is gone; the canvas draws its own rim light directly, in purple/blue/cyan, never white.
+ *
+ * `.orb-core-wrap` carries TWO independent motions on the same element: this breathing `scale` and
+ * a JS-driven mouse-follow `translate` (set directly on `el.style.translate` by `OrbCore.tsx`).
+ * `scale` and `translate` are independent CSS transform properties — animating one here cannot
+ * silently overwrite the other, the same reasoning `transitions.css` documents for `translate` vs
+ * `transform` on card entrances. Using the `transform` shorthand for either would make the CSS
+ * animation's computed value win every frame, and the mouse-follow would visibly do nothing.
  */
-.brand-orb.bo-hero .bo-ring {
-  position: absolute;
-  inset: -18% -46%;
-  border-radius: 50%;
-  border: 1.5px solid transparent;
-  background:
-    linear-gradient(90deg, transparent, rgba(196,181,253,0.65) 20%, rgba(226,232,245,0.85) 50%, rgba(196,181,253,0.65) 80%, transparent) border-box;
-  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  transform: rotate(-11deg) scaleY(0.28);
-  opacity: 0.8;
-  animation: bo-ring-spin 40s linear infinite;
+.orb-core-wrap {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  animation: orb-core-breathe 3.6s ease-in-out infinite;
+  will-change: scale;
 }
-@keyframes bo-ring-spin {
-  from { transform: rotate(-11deg) scaleY(0.28); }
-  to   { transform: rotate(349deg) scaleY(0.28); }
+@keyframes orb-core-breathe {
+  0%, 100% { scale: 0.97; }
+  50%      { scale: 1.04; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .orb-core-wrap { animation: none; scale: 1; }
+}
+
 @keyframes bo-hero-glow {
   0%, 100% { transform: scale(1);    opacity: 0.7; }
   50%      { transform: scale(1.22); opacity: 1; }

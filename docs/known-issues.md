@@ -1935,3 +1935,124 @@ across several page loads (different beats, different points in the 2200ms cycle
 Desktop 1440px: hero live-cycling card, CTA hover (magnetic lift), and dashboard rings all screenshot
 correctly; no horizontal overflow on desktop or mobile. Diagnostic scripts were scratch-only and
 deleted after use, per convention.
+
+### F-42 · P0 · Full visual-system pass: high-contrast palette, real typography scale, a volumetric orb, decluttered sections — FIXED
+
+Direction after F-41 shipped: the page reads "faded, low contrast, text-heavy, crowded, small,
+flat, difficult to scan, no clear hierarchy" — not a content complaint (F-38 through F-41 already
+did the structural/demonstrative work), a VISUAL SYSTEM complaint, with an exact color palette,
+type scale, spacing scale, and orb spec supplied, and an explicit instruction not to add sections,
+text, or cards. A companion complaint: the hero orb "looks washed out and resembles a white
+rotating ring."
+
+**Blocked from the literal instruction to verify on `https://cv.rabit.sa/` directly** — this
+sandbox's egress policy denies that host (confirmed 403 from the proxy on both a real headless
+browser and `WebFetch`; per this environment's own rules, reported rather than routed around, via
+`AskUserQuestion`). Worked instead against the local dev server, which runs the same code that
+merges to `main` and deploys to that URL — every claim below is a LOCAL verification; the
+production URL itself was never opened this pass.
+
+**Color system — scoped, not global.** A new `.landing-root` class on `Landing.tsx`'s `<main>`
+redefines the exact custom-property names the rest of the site already reads (`--bg`, `--fg`,
+`--muted`, `--faint`, `--line`, `--accent`, `--accent-deep`) to the requested deep palette
+(`#070a12` page bg, `#0f1626`/`#141d30` card tiers, solid-hex text tokens instead of the old
+translucent-white `--muted`/`--faint`, `rgba(148,163,184,.18)` borders). Every existing rule that
+already does `color: var(--muted)` picks up the new values with zero edits — and every OTHER page
+(`/builder`, `/optimize`, `/templates`, …) is provably unaffected, because the global `:root`
+tokens in `globals.css` were never touched. `.card`/`.chip`/`.ps-header` get small scoped overrides
+for the same reason — `.card` in particular goes from a 3.5%-white wash (invisible as a boundary)
+to a solid, bordered panel.
+
+**Typography — every sub-14px "meaningful" label bumped, hero/section scale retuned to the brief's
+own numbers.** Swept `marketing.css` for every kicker, tag, and micro-label under 14px (there were
+over a dozen: `.section-kicker` 11→14, `.pill` 12.5→14, `.walk-tag`/`.walk-step`/`.walk-note`,
+`.compare-row.head`, `.dash-card .lbl`, `.dash-note`, `.score-num span`, `.demo-col .k`, `.demo-note`
+— all now ≥14px) and every body-copy paragraph under ~16px (`.duty-list li`, `.walk-line`,
+`.faq-a p`, `.t-item p`, `.trust-stat span`, the hero lede, walkthrough/profession-demo subheads —
+now 15–18px). Hero `<h1>`: `clamp(2.75rem,6vw,4.75rem)` = 44–76px, `letter-spacing:-0.04em`,
+matching the brief's desktop 52–76px range (kept the floor at 44 rather than 52, since 52px singly
+at narrow mobile widths would itself violate the mobile 40–46px band the same brief states two
+lines later — the two numbers conflict at the low end, and mobile legibility won). Section
+`<h2>`s: `clamp(1.9rem,3.8vw,3rem)` caps exactly at the requested 48px (previously uncapped at
+51.2px). "How it works" card titles: `text-xl font-semibold` (20px/600), matching the card-title
+spec exactly.
+
+**The orb — a new `OrbCore.tsx` canvas component, used ONLY by the `hero` variant.** This is the
+literal complaint's fix. `BrandOrb.tsx`'s `logo`/`button`/`decor` variants (30+ server-rendered call
+sites sitewide) are UNCHANGED — still the plain CSS sphere, still zero client JS, per that
+component's own long-standing "no client bundle for a circle" doctrine. Only `variant="hero"` (two
+call sites, both in `Landing.tsx`) now renders `OrbCore`: a `"use client"` canvas that draws a deep
+obsidian base, 3–4 independently-drifting purple/blue/cyan plasma blobs (own phase and speed per
+blob, not a single value scaling), an inward-drawn particle field, a specular highlight, and a rim
+light gradient that is purple→cyan→blue and NEVER white — replacing the old `.bo-ring` (a flattened,
+tilted ellipse with a `rgba(226,232,245,0.85)` near-white gradient stop — literally the "white
+rotating ring" being complained about) and `.bo-crescent`, both removed from the hero render path;
+`.bo-ring`'s now-fully-dead CSS (only that one call site ever used it) was deleted rather than left
+unreachable. `devicePixelRatio` capped at 2, rAF paused while `document.hidden`, one static frame
+under `prefers-reduced-motion` (no loop). The breathing pulse (0.97→1.04, 3.6s) is a CSS `scale`
+animation on the wrapper — NOT redrawn in canvas — composed with a JS-driven desktop-only
+mouse-follow that sets `translate` on the same element: `scale` and `translate` are independent
+CSS transform properties precisely so the two motions (one CSS, one JS) don't fight over a shared
+`transform` and silently cancel each other, the same reasoning `transitions.css` already documents
+for card entrances. Verified live: two frames captured ~1.4s apart show the plasma blobs at visibly
+different positions and `getComputedStyle(...).animationName` reads `orb-core-breathe` under normal
+motion and `none` under `prefers-reduced-motion: reduce`.
+
+**Decluttering, without adding sections/text/cards.**
+- Hero: `ContinueDraft` (a returning visitor's "resume in progress" banner) was a full bordered
+  `.card` competing with the primary/secondary CTAs directly above it — now a single quiet text
+  line with a small live dot, same information, same link, a fraction of the visual weight.
+- Profession demo (the most crowded section — up to 15 chips + 5 responsibilities visible at once
+  in one screenshot taken this pass): `ProfessionDemo.tsx` rewritten to add a second tab row
+  (Modalities / Systems / Typical responsibilities / Certificates …) so only ONE category is ever on
+  screen, capped at 6 chips or 3 responsibilities with a real "Show N more" toggle (state resets on
+  profession or category switch) — verified in a live browser, both languages, both desktop and
+  390px mobile.
+- "How it works" step numbers: large gradient-text `01`/`02`/`03` (Arabic-Indic digits in `/ar`, via
+  the existing `toArabicDigits`) now lead each card, ahead of the emoji — "make the step number
+  visually obvious," literally.
+- Container width: `max-w-6xl` (1152px) → `max-w-[1200px]` on every full-width section, inside the
+  brief's 1180–1240px range.
+- Card hover: landing-scoped override tightens the shared `.card-hover` to a 4px lift, 200ms, and a
+  purple-tinted shadow, matching the brief's numbers without touching the shared global rule other
+  pages use.
+- Hero load sequence: `.t-hero`'s per-child stagger (only ever used on this page) moved from 60ms to
+  90ms steps, inside the brief's 80–120ms range. The orb column gained its own mount-in (fade +
+  `scale: 0.92→1`, the same `@starting-style` mechanism `transitions.css`'s primitives use) so it
+  animates in ahead of the text column, per the brief's own load-sequence order.
+- Added a scoped `:focus-visible` ring (`.landing-root a/button`) — none existed anywhere on this
+  page before; a small, additive, landing-only accessibility fix, not a sitewide focus-ring change.
+
+**Explicit deviations from the literal brief, and why:**
+- "How it works" stayed at 3 cards, not 4 — the product only has three real named steps
+  (`Name the job` / `Confirm the facts` / `Review and send`); inventing a fourth would be exactly
+  the fabrication this codebase's own doctrine forbids, for a purely cosmetic card count.
+- The trust section stayed at 4 stats, not "three concise principles" — all four
+  (occupations modeled, languages, facts invented, templates) are real, already-verified product
+  facts; dropping one to hit a round number would be removing true information to match a template.
+- No pricing section was added to the homepage. It doesn't have one today (pricing lives at
+  `/pricing`, linked from the footer) — adding one would violate this same brief's own "without
+  adding more sections" instruction, so the homepage's hierarchy stops at Trust → FAQ → Final CTA,
+  as it already did.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — all 48 suites, 0 failed. `npm run lint` —
+253 pre-existing problems (36 errors, 217 warnings), confirmed via `grep` to be zero in every file
+this pass touched (`Landing.tsx`, `BrandOrb.tsx`, `OrbCore.tsx`, `ContinueDraft.tsx`,
+`ProfessionDemo.tsx`, `globals.css`, `marketing.css`, `transitions.css`) — pre-existing elsewhere,
+not introduced or fixed here. `npm run build` clean, full page count unchanged. `axe-core` run live
+against both `/` and `/ar`: one real violation found (the comparison table's "Sira" column header,
+15px bold `#7c3aed` on `#0a0f1c` = 3.35:1, below the 4.5:1 normal-text floor) and fixed by switching
+it to `--accent-bright`; re-run after the fix: **zero violations, both languages.** A second,
+independent WCAG-formula pass over the full token palette (18 foreground/background pairs across
+every background tier) confirms every pair clears its required ratio, several by a wide margin.
+Screenshots captured at 1440×1000, 390×844, and 430×932 (both DPR-3 mobile), English and Arabic — no
+horizontal overflow at any of the five. RTL verified separately: profession-demo category tabs and
+their active-underline sit correctly on the right, "Show N more" mirrors, `01`/`02`/`03` render as
+Arabic-Indic `١`/`٢`/`٣`.
+
+**Not verified this pass, honestly:** the actual production origin (network-blocked, see above —
+check `https://cv.rabit.sa/` directly after this merges and deploys); Safari/WebKit rendering of the
+new canvas orb (this sandbox is Chromium-only, the same standing limitation every prior pass in this
+file has flagged); real 60fps measurement of the orb's rAF loop (no profiler available here — the
+loop is a handful of gradient fills on a capped-DPR canvas plus ~10 particles, well within budget on
+paper, but "measured 60fps" was not literally produced as a number).

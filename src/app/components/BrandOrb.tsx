@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import OrbCore from "./OrbCore";
 
 /**
  * The black pulsing orb — one component, four jobs, no client bundle.
@@ -79,15 +80,21 @@ export default function BrandOrb({
       className={`brand-orb bo-${variant}${busy ? " is-busy" : ""} ${className}`}
       style={{ ["--bo-size" as string]: `${size}px`, ...style }}
     >
-      {/* Order is paint order: corona behind everything, then the ring (a flattened ellipse
-          BEHIND the sphere so the sphere occludes its middle third — the classic "planet with
-          rings, viewed at an angle" read), then glow, then the sphere and its crescent on top. */}
+      {/* Order is paint order: corona behind everything (the outer bloom — already tinted violet/
+          cyan, never white, so it stays), then glow, then the core on top.
+          `hero` swaps the flat CSS sphere+crescent for `OrbCore`'s canvas-drawn volumetric core —
+          the fix for "looks like a washed-out white rotating ring". Every other variant (nav logo,
+          AI-button, card decoration) keeps the plain CSS sphere: those 30+ server-rendered call
+          sites must not gain a client bundle just to draw a small circle. */}
       {variant === "hero" && <span className="bo-corona" />}
-      {variant === "hero" && <span className="bo-ring" />}
       <span className="bo-glow" />
-      <span className="bo-sphere">
-        <span className="bo-crescent" />
-      </span>
+      {variant === "hero" ? (
+        <OrbCore size={size} />
+      ) : (
+        <span className="bo-sphere">
+          <span className="bo-crescent" />
+        </span>
+      )}
     </span>
   );
 }

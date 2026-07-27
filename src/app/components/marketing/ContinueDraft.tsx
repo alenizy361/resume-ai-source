@@ -83,18 +83,17 @@ export default function ContinueDraft({ lang }: { lang: "ar" | "en" }) {
 
   if (!draft) return null;
 
+  /*
+   * A quiet tertiary link, not a card — this used to be a full bordered `.card` competing
+   * visually with the hero's primary/secondary CTAs right above it. Same information (there is a
+   * draft, what it's called, where it stopped), same destination, a fraction of the visual weight:
+   * one line of text with a small live dot, not a second decision on the page.
+   */
   return (
-    <Link
-      href={draft.href}
-      className="card card-hover mt-6 flex items-center justify-between gap-4 p-4"
-      style={{ borderColor: "rgba(52,211,153,0.4)", background: "rgba(52,211,153,0.05)" }}
-    >
-      <span>
-        <span className="block text-xs font-semibold" style={{ color: "#6ee7b7" }}>{T[lang].head}</span>
-        <span className="mt-0.5 block text-sm font-bold">{draft.label}</span>
-        <span className="mt-0.5 block text-xs" style={{ color: "var(--muted)" }}>{draft.at}</span>
-      </span>
-      <span className="flex-none text-sm font-bold" style={{ color: "#6ee7b7" }}>{T[lang].go}</span>
+    <Link href={draft.href} className="mt-5 inline-flex items-center gap-2 text-[15px] font-medium" style={{ color: "var(--muted)" }}>
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", flex: "none" }} />
+      <span>{T[lang].head}: <b style={{ color: "var(--fg)", fontWeight: 700 }}>{draft.label}</b></span>
+      <span style={{ color: "#6ee7b7", fontWeight: 700 }}>{T[lang].go}</span>
     </Link>
   );
 }
