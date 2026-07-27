@@ -74,7 +74,8 @@
     "test:exportrender": "node --experimental-strip-types ops/exportrender.test.mjs",
     "test:exportgate": "node --experimental-strip-types ops/exportgate.mjs",
     "test:export:browser": "node ops/export.browser.mjs",
-    "test:cvheadings": "node --experimental-strip-types ops/cvheadings.test.mjs"
+    "test:cvheadings": "node --experimental-strip-types ops/cvheadings.test.mjs",
+    "test:cls:browser": "node ops/cls.browser.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.4",

@@ -38,7 +38,8 @@ export default function Hub() {
         </p>
 
         {/* التصفّح حسب القطاع — لمن يعرف مجاله ولا يعرف المسمّى الذي يبحث عنه. */}
-        <section className="t-enter mt-10">
+        {/* `t-no-cv`: on screen from the first frame — see the note in transitions.css and F-22. */}
+        <section className="t-enter t-no-cv mt-10">
           <h2 className="mb-3 text-xl font-bold">تصفّح حسب القطاع</h2>
           <div className="flex flex-wrap gap-2">
             {sectorsFor("ar").map((s) => (

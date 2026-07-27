@@ -340,6 +340,37 @@
   .t-enter { opacity: 0; translate: 0 12px; }
 }
 
+/*
+ * ── `content-visibility` costs CLS on a section that is visible from the first frame ──
+ *
+ * Measured on `/resume-examples`: 0.2489 at load, the edge of Google's "poor" threshold, on a page
+ * whose entire purpose is organic search. One shift entry, sourced to the container and the first
+ * card row — not the animation, and not the catalogue below the fold that `content-visibility` exists
+ * to skip.
+ *
+ * The cause is `contain-intrinsic-size: auto 500px` on the page's own hero `.t-enter` section. That
+ * placeholder height is right for a card row deep in a 7.8-screen catalogue, which is genuinely
+ * off-screen at load and genuinely benefits from deferred layout. It is wrong for a hero that is
+ * on screen from the first paint: the browser still renders it at the 500px placeholder before it can
+ * measure the real content (a chip, a heading, one paragraph — a few hundred px shorter), and the
+ * collapse from placeholder to real height IS a layout shift, measured whether or not anything was
+ * skipped. `content-visibility` only pays for itself on content nobody sees yet; applying it to
+ * content everybody sees immediately is pure cost.
+ *
+ * `/ar/resume-examples` confirmed it: its hero is plain markup, no `.t-enter`, and its CLS is a
+ * sixth of the English page's — the residual 0.0398 traced to `mt-10`, its own near-top `.t-enter`
+ * "browse by sector" section, the same mechanism at smaller scale.
+ *
+ * `.t-no-cv` resets `content-visibility` back to its initial value on an element that also has
+ * `.t-enter` — used together (`className="t-enter t-no-cv ..."`) on any section that is inside the
+ * INITIAL viewport at load. The entrance transition is unchanged; only the deferred-rendering half is
+ * opted out, because that half is the one with nothing to defer.
+ */
+.t-enter.t-no-cv {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
 /* ──────────────────────────────────────────────────────────────────────────────
    10. cards — which of them move is decided by what they ARE, not by a class
    ────────────────────────────────────────────────────────────────────────────── */

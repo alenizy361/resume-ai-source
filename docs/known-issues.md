@@ -784,28 +784,47 @@ Worth fixing rather than deleting: it is the one harness that runs with `/api/su
 which is what proves the form still works with the AI switched off. That is the product's stated
 thesis and nothing else asserts it end to end.
 
-### O-14 · P1 · `/resume-examples` has a CLS of 0.25 at load
+### F-22 · P1 · `/resume-examples` no longer shifts at load — FIXED *(was O-14)*
 
-Found while verifying that `content-visibility` had not introduced layout shift. It had not —
-the figure is **identical with and without it**, so this is pre-existing:
+Measured at 0.2489 CLS — the edge of Google's "poor" threshold — on the page whose entire purpose is
+organic search. The Arabic twin shifted a sixth as much (0.0398), which was the clue: something
+language-specific in the header area, not the layout itself, since the Arabic hero uses different
+markup.
 
-| page | CLS at load | after a full scroll down and back |
+**Cause.** `content-visibility: auto` + `contain-intrinsic-size: auto 500px` on `.t-enter`
+(`transitions.css`), applied to the page's own HERO section — content on screen from the first frame.
+`content-visibility` exists to skip layout and paint for content that is genuinely off-screen; applied
+to content everyone sees immediately, the browser still renders it at the 500px placeholder before it
+can measure the real (shorter) content — a chip, a heading, one paragraph — and the collapse from
+placeholder to real height IS a layout shift, whether or not anything was actually skipped. The
+English page wrapped its hero in `.t-enter`; the Arabic page's hero is plain markup with no
+`content-visibility` at all, and its residual 0.0398 traced to its OWN near-top `.t-enter` section
+("browse by sector") — the same mechanism, smaller only because that section sits lower and closer to
+its natural height.
+
+**Fix.** `.t-no-cv`, a modifier that resets `content-visibility` on an element that keeps `.t-enter`'s
+opacity/translate transition — for sections that are inside the initial viewport and therefore have
+nothing to defer. Applied to the English hero, the English "browse by sector" section, and the
+Arabic equivalent. The per-category card blocks were never `.t-enter` at all; they only *appeared* in
+Chrome's shift-source report because they were pushed down by the hero collapsing above them — fixing
+the actual source removed their shift too, with no change to those blocks themselves.
+
+| page | CLS before | CLS after |
 |---|---|---|
-| `/resume-examples` | **0.2489** | 0.2489 |
-| `/ar/resume-examples` | 0.0398 | 0.0398 |
-| `/resume-examples/registered-nurse`, `/`, `/pricing` | 0.0000 | 0.0000 |
+| `/resume-examples` | 0.2489 | **0.0000** |
+| `/ar/resume-examples` | 0.0398 | **0.0000** |
 
-Google's threshold for "good" is 0.1 and "poor" starts at 0.25, so the English catalogue index
-is at the edge of poor — on a page whose entire purpose is organic search, which is the
-product's only acquisition channel.
+**Verification.** `ops/cls.browser.mjs` — 10 assertions against the real `LayoutShift` entries the
+browser reports (the same signal Search Console reads), not a CSS-source check: a CSS assertion would
+catch a removed `.t-no-cv` class but not a *new* section added above the fold without it, which is how
+this actually regresses. Covers both pages named in the original measurement, the three pages already
+at zero (to catch a regression elsewhere), and that `.t-no-cv` reports `content-visibility: visible`
+in a real browser rather than only in the stylesheet.
 
-One shift entry, sourced to `mx-auto max-w-4xl px-6 pb-16` and `mb-10` — a container and a
-block near the top, not the card grid. The Arabic equivalent shifts by a sixth as much, which
-points at something language-specific in the header area rather than at the layout itself.
+### O-14 · superseded by F-22
 
-Not fixed here: this turn's budget went to the crash. It is cheap to investigate — one page,
-one shift entry, a named source — and it is worth doing before more catalogue pages are added,
-because whatever causes it is in a shared template.
+`/resume-examples` measured a CLS of 0.2489 at load, traced to `content-visibility` applied to an
+above-the-fold hero section.
 
 ### O-15 · P1 · Static pages ship 400–800 KB of JavaScript, and the cause is one line's position
 
