@@ -1099,6 +1099,290 @@ const LAWYER: RolePack = {
   ],
 };
 
+/*
+ * The next four complete the SCFHS credential rule's own occupation list: `sa-scfhs-registration`
+ * already named physician, dentist, physiotherapist and laboratory technologist alongside
+ * radiographer/nurse/pharmacist, but only the latter three had a pack until now.
+ */
+
+const PHYSICIAN: RolePack = {
+  slug: "physician",
+  title: { en: "Physician", ar: "طبيب" },
+  aliases: [
+    "Physician",
+    "General Practitioner",
+    "Medical Doctor",
+    "Attending Physician",
+    "Resident Physician",
+    "طبيب",
+    "طبيبة",
+    "طبيب عام",
+    "طبيب مقيم",
+  ],
+  groups: [
+    {
+      label: { en: "Clinical Practice", ar: "الممارسة الإكلينيكية" },
+      items: [
+        { en: "Patient examination", ar: "فحص المرضى" },
+        { en: "Diagnosis", ar: "التشخيص" },
+        { en: "Treatment planning", ar: "وضع الخطة العلاجية" },
+        { en: "Prescribing medication", ar: "وصف الأدوية" },
+        { en: "Patient counseling", ar: "إرشاد المرضى" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Electronic medical records", ar: "السجلات الطبية الإلكترونية" },
+        { en: "Clinical decision support systems", ar: "أنظمة دعم القرار الإكلينيكي" },
+        { en: "Order entry systems", ar: "أنظمة إدخال الطلبات الطبية" },
+        { en: "Telemedicine platforms", ar: "منصات الطب عن بعد" },
+      ],
+    },
+    {
+      label: { en: "Safety & Compliance", ar: "السلامة والامتثال" },
+      items: [
+        { en: "Infection control", ar: "مكافحة العدوى" },
+        { en: "Patient safety protocols", ar: "بروتوكولات سلامة المرضى" },
+        { en: "Clinical documentation", ar: "التوثيق الإكلينيكي" },
+        { en: "Case referral", ar: "إحالة الحالات" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Examined patients and took detailed medical histories to inform diagnosis.", ar: "فحص المرضى وأخذ التاريخ المرضي التفصيلي للمساعدة في التشخيص." },
+    { en: "Diagnosed medical conditions based on clinical findings and diagnostic tests.", ar: "شخّص الحالات الطبية بناءً على النتائج الإكلينيكية والفحوصات التشخيصية." },
+    { en: "Developed and adjusted treatment plans in coordination with the care team.", ar: "وضع خططاً علاجية وعدّلها بالتنسيق مع الفريق الطبي." },
+    { en: "Prescribed medications in accordance with clinical guidelines and patient history.", ar: "وصف الأدوية وفق الإرشادات الإكلينيكية والتاريخ المرضي للمريض." },
+    { en: "Documented patient encounters accurately in the electronic medical record.", ar: "وثّق زيارات المرضى بدقة في السجل الطبي الإلكتروني." },
+    { en: "Referred patients to specialists when a case required care outside the physician's scope.", ar: "أحال المرضى إلى الأخصائيين عندما تطلبت الحالة رعاية تتجاوز نطاق الطبيب العام." },
+    { en: "Counseled patients and families on diagnosis, treatment options and preventive care.", ar: "أرشد المرضى وأسرهم حول التشخيص وخيارات العلاج والرعاية الوقائية." },
+    { en: "Collaborated with nurses, pharmacists and allied health staff on patient care.", ar: "تعاون مع الممرضين والصيادلة والكادر الطبي المساند في رعاية المرضى." },
+    { en: "Followed infection-control and patient-safety protocols in all clinical settings.", ar: "التزم ببروتوكولات مكافحة العدوى وسلامة المرضى في جميع البيئات الإكلينيكية." },
+    { en: "Participated in case discussions and clinical rounds.", ar: "شارك في مناقشات الحالات والجولات الإكلينيكية." },
+    { en: "Ordered and interpreted diagnostic tests to support clinical decision-making.", ar: "طلب الفحوصات التشخيصية وفسّر نتائجها لدعم اتخاذ القرار الإكلينيكي." },
+    { en: "Maintained continuing medical education to stay current with clinical practice.", ar: "واصل التعليم الطبي المستمر لمواكبة تطورات الممارسة الإكلينيكية." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "SCFHS Professional Classification & Registration", ar: "التصنيف والتسجيل المهني — الهيئة السعودية للتخصصات الصحية" }, issuer: "SCFHS" },
+    { kind: "certification", title: { en: "Basic Life Support (BLS)", ar: "دعم الحياة الأساسي" } },
+    { kind: "certification", title: { en: "Advanced Cardiac Life Support (ACLS)", ar: "الدعم المتقدم لحياة القلب" } },
+    { kind: "training", title: { en: "Infection Control Training", ar: "تدريب مكافحة العدوى" } },
+  ],
+  keywords: [
+    "Physician", "Diagnosis", "Treatment Planning", "Patient Care", "Electronic Medical Records",
+    "Clinical Documentation", "SCFHS",
+    "طبيب", "التشخيص", "الخطة العلاجية", "التصنيف والتسجيل المهني",
+  ],
+};
+
+const DENTIST: RolePack = {
+  slug: "dentist",
+  title: { en: "Dentist", ar: "طبيب أسنان" },
+  aliases: [
+    "Dentist",
+    "General Dentist",
+    "Dental Practitioner",
+    "Dental Surgeon",
+    "طبيب أسنان",
+    "طبيبة أسنان",
+    "جراح أسنان",
+  ],
+  groups: [
+    {
+      label: { en: "Clinical Procedures", ar: "الإجراءات الإكلينيكية" },
+      items: [
+        { en: "Oral examination", ar: "فحص الفم" },
+        { en: "Restorative dentistry", ar: "طب الأسنان الترميمي" },
+        { en: "Extractions", ar: "خلع الأسنان" },
+        { en: "Preventive care", ar: "الرعاية الوقائية" },
+        { en: "Treatment planning", ar: "وضع الخطة العلاجية" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Dental practice management software", ar: "برمجيات إدارة عيادات الأسنان" },
+        { en: "Digital radiography", ar: "التصوير الشعاعي الرقمي" },
+        { en: "Electronic patient records", ar: "السجلات الإلكترونية للمرضى" },
+        { en: "Intraoral scanning", ar: "المسح الضوئي داخل الفم" },
+      ],
+    },
+    {
+      label: { en: "Safety & Compliance", ar: "السلامة والامتثال" },
+      items: [
+        { en: "Infection control", ar: "مكافحة العدوى" },
+        { en: "Sterilization protocols", ar: "بروتوكولات التعقيم" },
+        { en: "Patient safety", ar: "سلامة المرضى" },
+        { en: "Radiation safety", ar: "السلامة الإشعاعية" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Examined patients' oral health and diagnosed dental conditions.", ar: "فحص الصحة الفموية للمرضى وشخّص الحالات السنية." },
+    { en: "Performed restorative procedures, including fillings and crowns.", ar: "أجرى إجراءات ترميمية شملت الحشوات والتيجان." },
+    { en: "Extracted teeth when clinically indicated, following approved protocols.", ar: "خلع الأسنان عند الحاجة السريرية وفق البروتوكولات المعتمدة." },
+    { en: "Developed treatment plans based on clinical and radiographic findings.", ar: "وضع خطط علاجية بناءً على النتائج الإكلينيكية والشعاعية." },
+    { en: "Provided preventive care and oral hygiene education to patients.", ar: "قدّم الرعاية الوقائية وثقّف المرضى حول نظافة الفم." },
+    { en: "Interpreted dental radiographs to support diagnosis and treatment.", ar: "فسّر الأشعة السنية لدعم التشخيص والعلاج." },
+    { en: "Maintained sterilization and infection-control standards in the clinic.", ar: "حافظ على معايير التعقيم ومكافحة العدوى في العيادة." },
+    { en: "Documented patient treatment accurately in the practice management system.", ar: "وثّق علاج المرضى بدقة في نظام إدارة العيادة." },
+    { en: "Referred patients to specialists for procedures beyond general practice.", ar: "أحال المرضى إلى الأخصائيين للإجراءات التي تتجاوز نطاق طب الأسنان العام." },
+    { en: "Coordinated with dental assistants and hygienists during procedures.", ar: "نسّق مع مساعدي ومختصي صحة الأسنان أثناء الإجراءات." },
+    { en: "Managed patient anxiety and comfort during dental procedures.", ar: "تعامل مع قلق المرضى وراحتهم أثناء الإجراءات السنية." },
+    { en: "Advised patients on treatment options, costs and expected outcomes.", ar: "قدّم المشورة للمرضى حول خيارات العلاج وتكاليفه ونتائجه المتوقعة." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "SCFHS Professional Classification & Registration", ar: "التصنيف والتسجيل المهني — الهيئة السعودية للتخصصات الصحية" }, issuer: "SCFHS" },
+    { kind: "certification", title: { en: "Basic Life Support (BLS)", ar: "دعم الحياة الأساسي" } },
+    { kind: "training", title: { en: "Infection Control Training", ar: "تدريب مكافحة العدوى" } },
+    { kind: "training", title: { en: "Radiation Safety Training", ar: "تدريب السلامة الإشعاعية" } },
+  ],
+  keywords: [
+    "Dentist", "Restorative Dentistry", "Oral Examination", "Dental Radiography", "Infection Control",
+    "SCFHS",
+    "طبيب أسنان", "طب الأسنان الترميمي", "مكافحة العدوى", "التصنيف والتسجيل المهني",
+  ],
+};
+
+const PHYSIOTHERAPIST: RolePack = {
+  slug: "physiotherapist",
+  title: { en: "Physiotherapist", ar: "أخصائي علاج طبيعي" },
+  aliases: [
+    "Physiotherapist",
+    "Physical Therapist",
+    "Rehabilitation Therapist",
+    "أخصائي علاج طبيعي",
+    "أخصائية علاج طبيعي",
+    "معالج طبيعي",
+  ],
+  groups: [
+    {
+      label: { en: "Assessment & Treatment", ar: "التقييم والعلاج" },
+      items: [
+        { en: "Patient assessment", ar: "تقييم المرضى" },
+        { en: "Manual therapy", ar: "العلاج اليدوي" },
+        { en: "Therapeutic exercise", ar: "التمارين العلاجية" },
+        { en: "Mobility training", ar: "تدريب الحركة" },
+        { en: "Post-operative rehabilitation", ar: "إعادة التأهيل بعد العمليات" },
+      ],
+    },
+    {
+      label: { en: "Modalities", ar: "الوسائل العلاجية" },
+      items: [
+        { en: "Electrotherapy", ar: "العلاج الكهربائي" },
+        { en: "Hydrotherapy", ar: "العلاج المائي" },
+        { en: "Heat and cold therapy", ar: "العلاج بالحرارة والبرودة" },
+        { en: "Ultrasound therapy", ar: "العلاج بالموجات فوق الصوتية" },
+      ],
+    },
+    {
+      label: { en: "Systems & Safety", ar: "الأنظمة والسلامة" },
+      items: [
+        { en: "Electronic patient records", ar: "السجلات الإلكترونية للمرضى" },
+        { en: "Progress tracking systems", ar: "أنظمة تتبع التقدم العلاجي" },
+        { en: "Patient safety protocols", ar: "بروتوكولات سلامة المرضى" },
+        { en: "Infection control", ar: "مكافحة العدوى" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Assessed patients' physical function and mobility to develop treatment plans.", ar: "قيّم الوظيفة الجسدية والحركة للمرضى لوضع خطط العلاج." },
+    { en: "Delivered manual therapy and therapeutic exercise programs.", ar: "قدّم العلاج اليدوي وبرامج التمارين العلاجية." },
+    { en: "Guided patients through post-operative and post-injury rehabilitation.", ar: "وجّه المرضى خلال إعادة التأهيل بعد العمليات والإصابات." },
+    { en: "Applied electrotherapy, hydrotherapy and other modalities as clinically indicated.", ar: "طبّق العلاج الكهربائي والمائي ووسائل أخرى حسب الحاجة السريرية." },
+    { en: "Monitored and documented patient progress against treatment goals.", ar: "راقب ووثّق تقدم المرضى مقارنة بأهداف العلاج." },
+    { en: "Educated patients and families on home exercise programs and injury prevention.", ar: "ثقّف المرضى وأسرهم حول برامج التمارين المنزلية والوقاية من الإصابات." },
+    { en: "Adjusted treatment plans based on patient response and progress.", ar: "عدّل خطط العلاج بناءً على استجابة المريض وتقدمه." },
+    { en: "Coordinated with physicians and other allied health staff on patient care.", ar: "نسّق مع الأطباء والكادر الطبي المساند في رعاية المرضى." },
+    { en: "Maintained accurate clinical documentation in the patient record.", ar: "حافظ على توثيق إكلينيكي دقيق في سجل المريض." },
+    { en: "Followed infection-control and patient-safety protocols during sessions.", ar: "التزم ببروتوكولات مكافحة العدوى وسلامة المرضى خلال الجلسات." },
+    { en: "Assessed and fitted patients for mobility aids and assistive devices.", ar: "قيّم المرضى وجهّزهم بأدوات الحركة والمساعدة." },
+    { en: "Participated in multidisciplinary case conferences.", ar: "شارك في اجتماعات الحالات متعددة التخصصات." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "SCFHS Professional Classification & Registration", ar: "التصنيف والتسجيل المهني — الهيئة السعودية للتخصصات الصحية" }, issuer: "SCFHS" },
+    { kind: "certification", title: { en: "Basic Life Support (BLS)", ar: "دعم الحياة الأساسي" } },
+    { kind: "training", title: { en: "Manual Therapy Training", ar: "تدريب العلاج اليدوي" } },
+    { kind: "training", title: { en: "Infection Control Training", ar: "تدريب مكافحة العدوى" } },
+  ],
+  keywords: [
+    "Physiotherapist", "Physical Therapy", "Rehabilitation", "Manual Therapy", "Therapeutic Exercise",
+    "SCFHS",
+    "أخصائي علاج طبيعي", "إعادة التأهيل", "العلاج اليدوي", "التصنيف والتسجيل المهني",
+  ],
+};
+
+const LABORATORY_TECHNOLOGIST: RolePack = {
+  slug: "laboratory-technologist",
+  title: { en: "Laboratory Technologist", ar: "فني مختبر" },
+  aliases: [
+    "Laboratory Technologist",
+    "Medical Laboratory Technologist",
+    "Lab Technician",
+    "Clinical Laboratory Scientist",
+    "فني مختبر",
+    "فنية مختبر",
+    "أخصائي مختبر طبي",
+    "محلل مختبر",
+  ],
+  groups: [
+    {
+      label: { en: "Testing & Analysis", ar: "الفحص والتحليل" },
+      items: [
+        { en: "Specimen collection", ar: "جمع العينات" },
+        { en: "Sample processing", ar: "معالجة العينات" },
+        { en: "Hematology testing", ar: "فحوصات أمراض الدم" },
+        { en: "Microbiology testing", ar: "الفحوصات الميكروبيولوجية" },
+        { en: "Biochemistry testing", ar: "الفحوصات الكيميائية الحيوية" },
+      ],
+    },
+    {
+      label: { en: "Systems", ar: "الأنظمة" },
+      items: [
+        { en: "Laboratory information systems", ar: "أنظمة معلومات المختبر" },
+        { en: "Automated analyzers", ar: "أجهزة التحليل الآلي" },
+        { en: "Quality control software", ar: "برمجيات ضبط الجودة" },
+        { en: "Barcode specimen tracking", ar: "تتبع العينات بالباركود" },
+      ],
+    },
+    {
+      label: { en: "Quality & Safety", ar: "الجودة والسلامة" },
+      items: [
+        { en: "Quality control", ar: "ضبط الجودة" },
+        { en: "Calibration", ar: "معايرة الأجهزة" },
+        { en: "Biosafety protocols", ar: "بروتوكولات السلامة الحيوية" },
+        { en: "Result verification", ar: "التحقق من النتائج" },
+      ],
+    },
+  ],
+  duties: [
+    { en: "Collected and processed patient specimens according to laboratory protocols.", ar: "جمع عينات المرضى وعالجها وفق بروتوكولات المختبر." },
+    { en: "Performed hematology, biochemistry and microbiology testing on patient samples.", ar: "أجرى فحوصات أمراض الدم والكيمياء الحيوية والميكروبيولوجيا على عينات المرضى." },
+    { en: "Operated and maintained automated laboratory analyzers.", ar: "شغّل أجهزة التحليل المختبري الآلية وصانها." },
+    { en: "Verified test results for accuracy before release to the requesting physician.", ar: "تحقق من دقة نتائج الفحوصات قبل إرسالها للطبيب الطالب." },
+    { en: "Performed quality-control checks and calibration on laboratory equipment.", ar: "أجرى فحوصات ضبط الجودة ومعايرة أجهزة المختبر." },
+    { en: "Documented test results and specimen data in the laboratory information system.", ar: "وثّق نتائج الفحوصات وبيانات العينات في نظام معلومات المختبر." },
+    { en: "Followed biosafety and infection-control protocols when handling specimens.", ar: "التزم ببروتوكولات السلامة الحيوية ومكافحة العدوى عند التعامل مع العينات." },
+    { en: "Escalated critical or abnormal results to clinical staff promptly.", ar: "صعّد النتائج الحرجة أو غير الطبيعية للكادر الطبي فوراً." },
+    { en: "Maintained inventory of laboratory reagents and supplies.", ar: "حافظ على مخزون كواشف ومستلزمات المختبر." },
+    { en: "Troubleshot equipment malfunctions and coordinated repairs with biomedical engineering.", ar: "شخّص أعطال الأجهزة ونسّق إصلاحها مع الهندسة الطبية." },
+    { en: "Participated in proficiency testing and laboratory accreditation activities.", ar: "شارك في اختبارات الكفاءة وأنشطة اعتماد المختبر." },
+    { en: "Trained new staff on laboratory procedures and safety protocols.", ar: "درّب الموظفين الجدد على إجراءات المختبر وبروتوكولات السلامة." },
+  ],
+  credentials: [
+    { kind: "registration", title: { en: "SCFHS Professional Classification & Registration", ar: "التصنيف والتسجيل المهني — الهيئة السعودية للتخصصات الصحية" }, issuer: "SCFHS" },
+    { kind: "certification", title: { en: "Basic Life Support (BLS)", ar: "دعم الحياة الأساسي" } },
+    { kind: "training", title: { en: "Biosafety Training", ar: "تدريب السلامة الحيوية" } },
+    { kind: "training", title: { en: "Laboratory Quality Control Training", ar: "تدريب ضبط الجودة المخبرية" } },
+  ],
+  keywords: [
+    "Laboratory Technologist", "Specimen Collection", "Hematology", "Microbiology", "Biochemistry",
+    "Quality Control", "SCFHS",
+    "فني مختبر", "الفحوصات الميكروبيولوجية", "ضبط الجودة", "التصنيف والتسجيل المهني",
+  ],
+};
+
 const ROLE_PACKS: RolePack[] = [
   RADIOLOGY_TECHNOLOGIST,
   ACCOUNTANT,
@@ -1110,6 +1394,10 @@ const ROLE_PACKS: RolePack[] = [
   CIVIL_ENGINEER,
   PHARMACIST,
   LAWYER,
+  PHYSICIAN,
+  DENTIST,
+  PHYSIOTHERAPIST,
+  LABORATORY_TECHNOLOGIST,
 ];
 
 /** A copy, so a caller sorting for display cannot reorder the packs for everyone. */
