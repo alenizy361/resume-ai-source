@@ -20,7 +20,7 @@ import { track } from "@vercel/analytics";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { EMPTY_BUILDER, type SectionId } from "@/app/lib/builderDoc";
-import { listResumes, mayRestore, readResume } from "@/app/lib/resumeStore";
+import { listResumes, mayRestore, newResumeId, readResume, writeResume } from "@/app/lib/resumeStore";
 
 import { useBuilder } from "./BuilderProvider";
 import { StartCards } from "./FormSections";
@@ -40,6 +40,10 @@ const T = {
     untitled: "Untitled CV",
     fresh: "Or start something new",
     firstStep: "Start →",
+    /* "Duplicate and tailor": clone this CV into a new one before customising it for a
+       different job, so the original stays intact for the application it already fits. */
+    duplicate: "Duplicate → tailor for a job",
+    copySuffix: " (copy)",
   },
   ar: {
     h1: "ابنِ سيرتك الذاتية",
@@ -51,6 +55,8 @@ const T = {
     untitled: "سيرة بلا عنوان",
     fresh: "أو ابدأ من جديد",
     firstStep: "ابدأ ←",
+    duplicate: "نسخ ← وخصّصها لوظيفة",
+    copySuffix: " (نسخة)",
   },
 };
 
@@ -192,6 +198,30 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
     });
   }
 
+  /*
+   * Duplicate and tailor: clone a saved CV under a fresh id, so a second job application
+   * can diverge from the original without touching the resume that already fits its job.
+   *
+   * Reads the stored record rather than `state`, so duplicating a row other than the one
+   * currently loaded copies THAT resume's own content, not whatever is live in the reducer.
+   * Lands on the target step — tailoring starts with the job, which is the whole point.
+   */
+  const duplicate = (id: string) => {
+    const { record } = readResume(owner, id);
+    if (!record) return;
+    const copyId = newResumeId();
+    const copyTitle = record.state.target.title
+      ? `${record.state.target.title}${t.copySuffix}`
+      : record.state.target.title;
+    writeResume(owner, copyId, record.lang, {
+      ...record.state,
+      target: { ...record.state.target, title: copyTitle },
+    });
+    track("builder_duplicated", { source: id });
+    trackStep("builderStarted", { at: STEPS[0], resumed: "1" });
+    router.push(stepHref(lang, copyId, STEPS[0]), { scroll: false });
+  };
+
   const enter = (step = STEPS[0]) => {
     /*
      * The funnel's builder step belongs HERE and not on the front door: viewing the landing page is
@@ -248,6 +278,17 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
                 >
                   {t.resumeGo}
                 </button>
+                {/* Only for a resume actually on disk — the in-progress row for `resumeId` before
+                    its first write has nothing to read a copy from yet. */}
+                {saved.some((s) => s.id === r.id) && (
+                  <button
+                    onClick={() => duplicate(r.id)}
+                    className="t-tap mt-4 ms-2 rounded-xl px-5 py-2.5 text-sm font-bold"
+                    style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+                  >
+                    {t.duplicate}
+                  </button>
+                )}
               </div>
             ))}
           </div>

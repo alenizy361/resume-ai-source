@@ -1145,3 +1145,57 @@ terms is still owed, same as any machine-drafted legal copy.
 Confirmed in a browser: `/terms` and `/privacy` render `dir="ltr"` with full English prose (375 and
 430 words respectively, not a summary); `/ar/terms` and `/ar/privacy` render `dir="rtl"` with the
 original Arabic text intact; the header language toggle navigates correctly between each pair.
+
+### F-28 · P0/P2 · `master-implementation-checklist.md` had gone stale, and three real gaps in it — FIXED/PARTIAL
+
+Re-auditing the P0-P4 checklist against the actual code turned up two kinds of drift: rows the
+checklist under-claimed, and rows it over-claimed. Neither was safe to leave as-is — a status doc a
+reader can't trust is worse than no status doc.
+
+**P0-3/P0-6, server-side CV persistence — the checklist was wrong, not the code.** It read "Not yet
+wired into `BuilderProvider`", but `BuilderProvider.tsx` has called `useServerSync` since `b59dd89`,
+committed well before this pass and unrelated to it. All 35 `ops/resumeserver.test.mjs` assertions
+pass; both rows corrected to `DONE`.
+
+**P2-1 (job description → tailored CV) and P3-2/P3-3/P3-5 (interview prep, LinkedIn, resume health)
+— same pattern, four more rows.** Each was left `PARTIAL` citing a fix (F-18, or the feature's own
+existence) as if it were the residual gap. It wasn't: `/optimize`'s `mode: "target"` already
+produces a fully rewritten, auto-saved CV from a job description; `/interview`, `/interview-live`
+and `/linkedin` are feature-complete and CV-aware; `reviewChecks.ts`'s 5-dimension score is rendered
+twice over (`ReviewSection.tsx` live in the builder, `AccountClient.tsx` persisted per resume). All
+five corrected to `DONE`. See the checklist for file:line evidence per row.
+
+**P2-2, duplicate and tailor — an actual gap, now closed.** `resumeServer.ts`'s
+`duplicateServerResume` and `POST /api/resume` existed with zero client callers — a primitive with
+no door. Added to `/builder`'s start screen (`BuilderStart.tsx`): each saved CV gets a "Duplicate →
+tailor for a job" action that clones the local record under a fresh id (title suffixed
+"(copy)"/"(نسخة)") and lands on the target step. The clone reaches the server through the existing
+mirror, not a direct call to the duplicate endpoint — one write path stays one write path.
+
+**P4-2, reviewed occupation pages — the real content gap, given tooling instead of content.** The
+357 SEO catalogue pages assert salary/demand/certification claims with zero provenance tracking,
+unlike `countryRules.ts`'s credential rules (which at least carry `status: "encoded"`). Building
+`app/lib/jobsVerification.ts` + `ops/verify-jobs.mjs` — the `verify-rules.mjs` pattern applied to
+the salary line specifically, the highest-risk unsourced figure — gives this the same bookkeeping:
+111 entries (50 EN + 61 AR), every one starting honestly `unverified`, a recorded verdict
+auto-invalidated if the salary text is later edited. `ops/jobsverification.test.mjs`, 11 assertions.
+**This does not perform the review** — a person still has to check ~111 figures against real market
+data — it makes that review trackable, which it was not before.
+
+**P2-3, Saudi occupation knowledge base — confirmed as a real, larger, and deliberately NOT
+attempted gap.** Only 6 of 29 resolvable occupations have a `RolePack`; `countryRules.ts` covers
+Saudi Arabia only despite the lookup already supporting 9 other markets. Closing this is
+data-entry-shaped but not data-entry-*risk*: each pack asserts specific professional duties and
+credentials as fact, for a live product read by real job seekers, and this codebase already treats
+that category of claim carefully everywhere else (`DRAFTING_DOCTRINE`'s ban on invented numbers,
+`countryRules.ts`'s own encoded/verified split, F-27's "not human-reviewed" flag on the legal
+pages). Mass-authoring 23 new occupation packs from general knowledge, unsourced, was judged the
+same risk as those and was not done blind in this pass. Left `PARTIAL`, correctly described.
+
+**P3-4 (career plan) and P4-3 (referral system) are untouched, on purpose.** Both are one-line
+checklist entries with no defined scope, and P4-3 additionally touches money mechanics on a live
+payment-enabled product. Neither was attempted — inventing scope for either would be a new feature
+decided unilaterally, not a gap closed.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (including the new `ops/jobsverification.test.mjs`,
+now registered in the `test` script), `npm run build` all clean.
