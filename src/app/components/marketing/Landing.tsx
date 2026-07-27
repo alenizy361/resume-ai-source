@@ -63,8 +63,6 @@ const C = {
       ["0", "facts invented"],
       ["2", "languages, one engine"],
     ] as [string, string][],
-    mockTag: "Example · tailoring",
-    mockScore: "ATS match after tailoring",
 
     walkKicker: "See it work",
     walkHead: "One walkthrough. The whole product.",
@@ -111,12 +109,15 @@ const C = {
 
     dashKicker: "Your career dashboard",
     dashHead: "Your whole search, one screen.",
+    dashRings: [
+      ["Resume score", 87],
+      ["ATS match", 91],
+    ] as [string, number][],
     dashCards: [
-      ["Resume score", "87", true],
-      ["ATS match", "91", true],
-      ["Applications", "12", false],
-      ["Interviews", "3", false],
-    ] as [string, string, boolean][],
+      ["Applications", "12"],
+      ["Interviews", "3"],
+      ["Tailored versions", "4"],
+    ] as [string, string][],
     dashNextLabel: "Next recommended action",
     dashNext: "Prepare for your ABC Trading interview — 6 questions ready.",
     dashNote: "Illustrative example — not live account data",
@@ -170,8 +171,6 @@ const C = {
       ["٠", "حقائق مختلقة"],
       ["٢", "لغتان بمحرك واحد"],
     ] as [string, string][],
-    mockTag: "مثال · التخصيص",
-    mockScore: "تطابق ATS بعد التخصيص",
 
     walkKicker: "شاهدها تعمل",
     walkHead: "جولة واحدة. المنتج كله.",
@@ -218,12 +217,15 @@ const C = {
 
     dashKicker: "لوحتك المهنية",
     dashHead: "بحثك كله في شاشة واحدة.",
+    dashRings: [
+      ["تقييم السيرة", 87],
+      ["تطابق ATS", 91],
+    ] as [string, number][],
     dashCards: [
-      ["تقييم السيرة", "٨٧", true],
-      ["تطابق ATS", "٩١", true],
-      ["الطلبات", "١٢", false],
-      ["المقابلات", "٣", false],
-    ] as [string, string, boolean][],
+      ["الطلبات", "١٢"],
+      ["المقابلات", "٣"],
+      ["نسخ مخصصة", "٤"],
+    ] as [string, string][],
     dashNextLabel: "الخطوة الموصى بها الآن",
     dashNext: "استعد لمقابلة شركة ABC — ٦ أسئلة جاهزة.",
     dashNote: "مثال توضيحي — ليست بيانات حساب حقيقية",
@@ -319,8 +321,8 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
             <div>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={`${p}/builder`} className="btn-accent px-8 py-4 text-[15px]">{t.ctaPrimary} →</Link>
-                <a href="#demo" className="btn-ghost px-7 py-4 text-[15px]">{t.ctaSecondary}</a>
+                <Link href={`${p}/builder`} className="btn-accent magnetic px-8 py-4 text-[15px]">{t.ctaPrimary} →</Link>
+                <a href="#demo" className="btn-ghost magnetic px-7 py-4 text-[15px]">{t.ctaSecondary}</a>
               </div>
               <div className="trustlite">
                 {t.trustlite(packsStat).map(([n, label]) => (
@@ -330,23 +332,15 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             </div>
           </div>
 
-          <div className="hero-orb-col order-first mx-auto w-full lg:order-last" aria-hidden>
-            <div className="flex items-center justify-center h-[190px] sm:h-[240px] lg:h-[400px]">
+          <div className="hero-orb-col order-first mx-auto w-full lg:order-last">
+            <div className="relative flex items-center justify-center h-[190px] sm:h-[240px] lg:h-[400px]" aria-hidden>
+              <div className="hero-particles"><i /><i /><i /></div>
               <BrandOrb variant="hero" size={440} style={{ maxWidth: "clamp(140px,40vw,440px)", maxHeight: "clamp(140px,40vw,440px)" }} />
             </div>
-            <div className="hero-mockup">
-              <div className="hero-mockup-head">
-                <span className="hero-mockup-tag">{t.mockTag}</span>
-                <span className="hero-mockup-dot" />
-              </div>
-              <div className="hero-mockup-line" style={{ width: "72%" }} />
-              <div className="hero-mockup-line hl" style={{ width: "92%" }} />
-              <div className="hero-mockup-line" style={{ width: "55%" }} />
-              <div className="hero-mockup-score">
-                <b>91</b>
-                <span>{t.mockScore}</span>
-              </div>
-            </div>
+            {/* The hero-side preview — the same eight-beat DemoWalkthrough data, compact and
+                auto-cycling on its own faster tempo, so "a live animated product preview" is
+                true beside the headline rather than a single static card. */}
+            <DemoWalkthrough lang={lang} compact />
           </div>
         </div>
       </section>
@@ -436,8 +430,16 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
 
           <div className="dash">
             <div className="dash-grid">
-              {t.dashCards.map(([label, value, isScore]) => (
-                <div key={label} className={`dash-card${isScore ? " score" : ""}`}>
+              {t.dashRings.map(([label, pct]) => (
+                <div key={label} className="dash-card dash-card-ring">
+                  <div className="ring" style={{ ["--pct" as string]: pct }}>
+                    <span>{pct}</span>
+                  </div>
+                  <div className="lbl">{label}</div>
+                </div>
+              ))}
+              {t.dashCards.map(([label, value]) => (
+                <div key={label} className="dash-card">
                   <div className="lbl">{label}</div>
                   <b>{value}</b>
                 </div>
@@ -504,7 +506,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
           <BrandOrb variant="hero" size={72} />
           <h2 className="mt-7 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,4.4vw,3.4rem)", letterSpacing: "-0.025em" }}>{t.finalHead}</h2>
           <p className="mt-3 text-base" style={{ color: "var(--muted)" }}>{t.finalSub}</p>
-          <Link href={`${p}/builder`} className="btn-accent mt-8 px-9 py-4 text-[15px]">{t.ctaPrimary} →</Link>
+          <Link href={`${p}/builder`} className="btn-accent magnetic mt-8 px-9 py-4 text-[15px]">{t.ctaPrimary} →</Link>
         </div>
       </section>
 

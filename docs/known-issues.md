@@ -1874,3 +1874,64 @@ right-to-left, dashboard arrow flipped via `scaleX(-1)`, Arabic-Indic digits fro
 The one thing NOT verified live is the builder's own six call sites playing the new arrival — that
 needs an AI key this sandbox does not have; the class composition is the same one the landing
 plays, and `ops/aifeedback.browser.mjs` (needs a running app + key) remains the live check.
+
+### F-41 · P0 · Hero-side live preview, dashboard progress rings, magnetic CTAs — plus a real mobile rendering bug found and fixed — FIXED
+
+Follow-up direction after F-40 (two further "premium AI product" briefs, largely already satisfied
+by F-38/F-39/F-40's shipped structure): resolved via `AskUserQuestion` on the three points that
+would have reversed documented architecture (Framer Motion, a scroll-drawn timeline line,
+fabricated testimonials) — all three answers kept the existing CSS-only, no-fabrication approach.
+What was left as genuinely new: the hero's static mockup card should be a real auto-cycling
+preview, not one frozen frame; the dashboard's two score cards should read as progress rings; a
+felt "magnetic" hover on the landing's own CTAs; a few drifting particles near the orb.
+
+**Shipped:**
+- `DemoWalkthrough.tsx` gained a `compact` prop: the same eight-beat data and interval logic,
+  rendered as a smaller card (tag + lines + mini progress row, no tab strip) at a faster 2200ms
+  tempo, placed under the hero orb — `<DemoWalkthrough lang={lang} compact />`. One data source, one
+  timer implementation; only the JSX around it is thinner.
+- Dashboard's Resume Score / ATS Match cards became CSS-only conic-gradient rings (`.ring`, `--pct`
+  custom property, `.ring::after` punching the donut hole — no SVG, no JS), plus a fifth "Tailored
+  Versions" stat card.
+- `.magnetic`: hover-only lift+scale, `@media (hover: hover)` guarded (same convention as `.t-lift`,
+  avoids a stuck hover state on touch), applied only to the landing's own 3 CTA buttons — not the
+  shared global `.btn-accent`/`.btn-ghost` used sitewide. Not a true cursor-following magnetic
+  effect (that needs a `pointermove` listener); this is a lift approximation.
+- `.hero-particles`: 3 small dots with independent slow `translate`-only drift, layered near the orb.
+
+**A real bug, found by this session's own "verify in a real browser" discipline.** The desktop
+screenshots looked correct; the mobile (iPhone-13 viewport) screenshot of the new compact hero
+preview did not — the card's header and progress bar rendered, but the three materializing
+`.walk-line` rows were completely blank, and stayed blank after a 3.5s settle (ruling out a
+mid-animation capture). This was NOT a computed-style bug: `getComputedStyle` on the actual
+`.walk-line` elements reported everything correct — `opacity: 1`, right colors, right
+`animation-fill-mode: both`, right layout rects. A screenshot taken at the exact same instant as
+that diagnostic still showed the content area empty. Systematically narrowed with one variable at a
+time: forcibly disabling all CSS animation (`* { animation: none !important }`) made the content
+render correctly every time; the identical `.t-stagger.t-materialize.walk-line` construct rendered
+correctly on the SAME mobile page for the full (non-compact) walkthrough further down, which is not
+nested inside the hero's stack of always-animating layers (`.cosmos-glow`'s `isolation: isolate`,
+the orb's own glow/corona/ring loops, the starfield tile). Swapping `translate`/`scale` for the
+`transform` shorthand, removing the per-child `animation-delay` stagger, and forcing
+`position: static` on the card each changed the failure pattern without reliably fixing it — this
+points to a genuine Chromium headless/mobile-emulation compositing quirk (a delayed CSS animation,
+inside several nested stacking contexts that are themselves next to other constantly-animating
+layers, sometimes never gets composited into a paintable frame even though it is logically
+"settled") rather than anything wrong in this codebase's CSS. Chasing the exact Chromium mechanism
+further was not a good use of time against a real, user-visible blank-content risk.
+
+**Fix:** the compact hero preview's lines no longer carry `t-stagger`/`t-materialize` — they render
+immediately, unanimated, on each 2.2s card remount. `DemoWalkthrough.tsx` documents why at the call
+site. The full walkthrough, the profession demo, and all six real builder AI-arrival sites keep the
+materialize animation unchanged — they were verified working, on both desktop and this same mobile
+viewport, and are not near the orb's layer stack. The auto-cycling card swap (tag, lines, progress
+dots, every 2.2s) still delivers a genuinely live, non-static preview beside the headline; only the
+individual per-line arrival flourish was removed, and only from this one location.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean. Live in a
+real browser, iPhone-13 viewport: the exact "Paste a Job Posting" beat that previously rendered
+blank now shows all three lines, both immediately after load and after a 3.5s settle; re-checked
+across several page loads (different beats, different points in the 2200ms cycle) with no recurrence.
+Desktop 1440px: hero live-cycling card, CTA hover (magnetic lift), and dashboard rings all screenshot
+correctly; no horizontal overflow on desktop or mobile. Diagnostic scripts were scratch-only and
+deleted after use, per convention.

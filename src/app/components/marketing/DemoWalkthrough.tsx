@@ -61,7 +61,7 @@ const T = {
   ar: { step: (n: number, of: number) => `الخطوة ${n} من ${of}`, tag: "مثال", note: "مثال توضيحي — وكل خطوة قدرة حقيقية في المنتج." },
 };
 
-export default function DemoWalkthrough({ lang }: { lang: "ar" | "en" }) {
+export default function DemoWalkthrough({ lang, compact = false }: { lang: "ar" | "en"; compact?: boolean }) {
   const beats = BEATS[lang];
   const t = T[lang];
   const [active, setActive] = useState(0);
@@ -74,11 +74,41 @@ export default function DemoWalkthrough({ lang }: { lang: "ar" | "en" }) {
     const id = setInterval(() => {
       if (document.hidden) return;
       setActive((a) => (a + 1) % beats.length);
-    }, 3600);
+    }, compact ? 2200 : 3600);
     return () => clearInterval(id);
-  }, [beats.length, epoch]);
+  }, [beats.length, epoch, compact]);
 
   const beat = beats[active];
+
+  /*
+   * `compact` is the hero-side preview: the same eight-beat cycle, same data, same materialize
+   * arrival, at a faster tempo and with the tab strip and step counter stripped out — a glance
+   * beside the headline, not a second navigable demo. No second data source, no second timer
+   * logic; only the JSX around it is thinner.
+   */
+  if (compact) {
+    return (
+      <div className="walk-card walk-card-compact" key={active}>
+        <div className="walk-card-head">
+          <span className="walk-tag">{t.tag} · {beat.title}</span>
+          <span className="walk-dot" />
+        </div>
+        {/* No `t-stagger`/`t-materialize` here on purpose — see the note above the `compact`
+            branch below: this exact per-line delayed-keyframe arrival, remounted every 2200ms
+            beside the orb's own always-running glow/corona/ring animations, was found to paint
+            blank on real mobile-viewport captures (verified in a real browser, not just built) —
+            the elements were correct by every computed-style/layout check, just not painted. The
+            card-level swap (tag, lines, progress dots all changing every 2.2s) is still a live,
+            auto-cycling preview without it. */}
+        <div className="walk-lines">
+          {beat.lines.map((line) => <div key={line} className="walk-line">{line}</div>)}
+        </div>
+        <div className="walk-progress walk-progress-compact" aria-hidden>
+          {beats.map((_, i) => <i key={i} className={i <= active ? "done" : ""} />)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="walk">

@@ -317,6 +317,14 @@
   color: var(--faint);
 }
 .walk-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; flex: none; }
+
+/* The hero-side compact card: same shape, smaller, its own mini progress row instead of the full
+   tab strip, and margin so it sits under the orb rather than filling the section. */
+.walk-card-compact { max-width: 340px; margin: 18px auto 0; padding: 16px; }
+.walk-progress-compact { display: flex; gap: 4px; padding: 0; margin-top: 12px; }
+.walk-progress-compact i { flex: 1; height: 2.5px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); }
+.walk-progress-compact i.done { background: var(--accent); }
+
 .walk-lines { display: flex; flex-direction: column; gap: 8px; }
 .walk-line {
   font-size: 13px;
@@ -360,8 +368,9 @@
   padding: 24px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
 }
-.dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
-@media (max-width: 780px) { .dash-grid { grid-template-columns: repeat(2, 1fr); } }
+.dash-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 18px; }
+@media (max-width: 980px) { .dash-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .dash-grid { grid-template-columns: repeat(2, 1fr); } }
 .dash-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--line); border-radius: 14px; padding: 15px; }
 .dash-card .lbl {
   font: 600 10.5px/1.3 ui-monospace, "SF Mono", monospace;
@@ -370,7 +379,42 @@
   letter-spacing: 0.05em;
 }
 .dash-card b { display: block; font-size: 25px; font-weight: 800; margin-top: 7px; font-variant-numeric: tabular-nums; }
-.dash-card.score b { color: #34d399; }
+
+/*
+ * The two score cards as progress rings, per the brief's own ask — a `conic-gradient` donut, no
+ * SVG, no JS. `--pct` is set inline per card; the gradient's own stop is the "fill", and the
+ * inner circle (an ::after, not a second element) punches the hole. Reveals once via `.t-enter`
+ * on the whole dashboard section — no separate scroll trigger of its own, consistent with every
+ * other mount-only reveal in this file.
+ */
+.dash-card-ring { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 18px 15px; }
+.dash-card-ring .lbl { order: 2; }
+.ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--pct) * 1%), rgba(255, 255, 255, 0.08) 0);
+  display: grid;
+  place-items: center;
+}
+.ring::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  /* Close enough to `.dash-card`'s own composited background (`--bg` plus a 3% white wash) that
+     the seam is imperceptible — an exact match isn't obtainable from a flat color under two
+     stacked translucent layers, and this is decorative, not a pixel a user will ever compare. */
+  background: var(--bg);
+}
+.ring span {
+  position: relative;
+  z-index: 1;
+  font: 800 15px/1 ui-monospace, "SF Mono", monospace;
+  color: #34d399;
+  font-variant-numeric: tabular-nums;
+}
 .dash-next {
   display: flex;
   align-items: center;
@@ -419,8 +463,53 @@
   align-items: flex-start;
 }
 
+/*
+ * Magnetic-feel CTA hover — the landing's own two buttons only, not the shared `.btn-accent`/
+ * `.btn-ghost` classes those two elements also carry (which are used across dozens of other pages;
+ * changing their shared hover would be an unrelated site-wide change for a landing-page ask). A
+ * true cursor-follow "magnet" needs a `pointermove` listener recalculating a transform on every
+ * frame the pointer is over the button — real work, on every hover, for an effect this lift+scale
+ * approximates close enough. `@media (hover: hover)` guards it for the same reason `.t-lift`
+ * already does: a touch tap must never leave a hover state stuck on.
+ */
+@media (hover: hover) {
+  .magnetic { transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .magnetic:hover { transform: translateY(-3px) scale(1.035); }
+}
+.magnetic:active { transform: translateY(-1px) scale(0.98); }
+
+/*
+ * A few particles drifting near the hero orb, independent of the static starfield tile — three
+ * elements, each its own slow, small, closed orbit (`translate` only, one keyframe per particle,
+ * offset by `animation-delay` so they don't move in lockstep). Layered above the starfield
+ * (`z-index: 1`, matching `.hero-orb-col > *`) but behind the orb sphere itself, which paints
+ * after it in DOM order.
+ */
+.hero-particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: visible; }
+.hero-particles i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c4b5fd;
+  box-shadow: 0 0 6px 1px rgba(196, 181, 253, 0.7);
+}
+.hero-particles i:nth-child(1) { top: 18%; left: 12%; animation: particle-drift-1 9s ease-in-out infinite; }
+.hero-particles i:nth-child(2) { top: 62%; right: 8%; width: 3px; height: 3px; animation: particle-drift-2 11s ease-in-out infinite; animation-delay: -3s; }
+.hero-particles i:nth-child(3) { bottom: 12%; left: 30%; animation: particle-drift-1 13s ease-in-out infinite; animation-delay: -6s; }
+@keyframes particle-drift-1 {
+  0%, 100% { translate: 0 0; opacity: 0.5; }
+  50% { translate: 14px -18px; opacity: 1; }
+}
+@keyframes particle-drift-2 {
+  0%, 100% { translate: 0 0; opacity: 0.4; }
+  50% { translate: -12px 16px; opacity: 0.9; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .demo-tab, .ats-bar-fill, .faq-q .plus, .faq-a,
-  .walk-tab, .walk-progress i { transition: none !important; }
+  .walk-tab, .walk-progress i, .magnetic { transition: none !important; }
+  .magnetic:hover, .magnetic:active { transform: none; }
   .hero-mockup-line.hl { animation: none; opacity: 1; }
+  .hero-particles i { animation: none; opacity: 0.6; }
 }
