@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 /**
- * The black pulsing orb — one component, three jobs, no client bundle.
+ * The black pulsing orb — one component, four jobs, no client bundle.
  *
  * ── what it replaces ──
  *
@@ -48,7 +48,16 @@ export type OrbVariant =
   /** Inside an AI button, 14–20px. Pulses a little faster to read as "this one thinks". */
   | "button"
   /** Large, dim, behind card content. Never interactive, never above text. */
-  | "decor";
+  | "decor"
+  /**
+   * The landing page's hero centerpiece, 400–650px. A deeper, slower breathe than `decor` and a
+   * second, counter-phased glow ring layered behind the first — depth from two static gradients
+   * animating out of sync, not from a brighter or faster version of the same one. Still `transform`
+   * and `opacity` only; still no `filter` animation. Not "flying between routes" — this one is
+   * static in the hero, which is the difference between this and the thing `bo-decor`'s own header
+   * already says was removed for re-rendering the tree every frame.
+   */
+  | "hero";
 
 export default function BrandOrb({
   size = 26,
@@ -70,7 +79,8 @@ export default function BrandOrb({
       className={`brand-orb bo-${variant}${busy ? " is-busy" : ""} ${className}`}
       style={{ ["--bo-size" as string]: `${size}px`, ...style }}
     >
-      {/* Order is paint order: glow behind, sphere over it, crescent on top of the sphere. */}
+      {/* Order is paint order: corona behind everything, glow behind the sphere, crescent on top. */}
+      {variant === "hero" && <span className="bo-corona" />}
       <span className="bo-glow" />
       <span className="bo-sphere">
         <span className="bo-crescent" />

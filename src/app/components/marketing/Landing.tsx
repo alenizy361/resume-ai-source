@@ -1,116 +1,115 @@
 /**
- * The marketing page — what this product is, before anyone is asked to fill anything in.
+ * The marketing page — a premium career operating system, not a form-builder brochure.
  *
- * `/` used to be the builder itself: twelve sections in one scrolling page, the first
- * eleven of them dimmed to 38% opacity with empty bodies. As a first impression that is
- * backwards. A visitor who has not decided to spend ten minutes on a form is shown a form,
- * and a visitor who HAS decided is shown ten steps at once.
+ * Rebuilt from the ground up on the user's own brief: huge type, one story top to bottom, a real
+ * "wow" moment, and instant clarity about what the product is. The wireframe and visual-hierarchy
+ * pass that preceded this file is a published artifact, reviewed before any of this was written.
  *
- * So the two are separated. This page explains and offers three doors; `/builder` is the
- * journey. The long single-page builder that used to answer at `/build` is gone — two builders
- * reachable at once meant every fix landed twice or once, and the menu pointed at the older one.
+ * Still deliberately a server component with only the genuinely interactive pieces pulled into
+ * small client islands (`ProfessionDemo`, `FaqAccordion`, `AtsScoreReveal`, `ContinueDraft`) —
+ * this is still the product's most important page for search, and `<h1>` is still the LCP element.
  *
- * Deliberately a server component with no client JavaScript except the returning-visitor
- * banner. It is the product's most important page for search, every claim on it is static,
- * and the one thing that genuinely needs the browser — whether this person already has a
- * draft — is the one thing that is a client component.
+ * Every motion class here is one this product already has and already trusts: `.t-hero` for the
+ * headline sequence (rises without fading, so it never delays LCP), `.t-enter` for every section
+ * below the fold (a ONE-TIME mount reveal, not a scroll listener — `transitions.css` documents why
+ * a scroll-driven version was removed after crashing a real iPhone three times), `.card` for
+ * anything pressable (real `<a>`/`<button>` elements get lift and press for free). Nothing new was
+ * invented for motion; `app/marketing.css` only adds the layout SHAPES this redesign needed that
+ * had no existing equivalent — the step rail, the profession-demo shell, the journey timeline, the
+ * template preview, the score ring.
  *
- * Every number comes from `lib/plans.ts` and every name from `lib/brand.ts`. The pricing
- * on this page cannot drift from the checkout because it is not written down here.
+ * Every number on this page is real: professions modeled, templates offered, and the profession
+ * demo itself all read from the same data the product runs on (`rolePacks.ts`, `templateCatalog.ts`)
+ * — a landing page that shows the product doing something it cannot actually do is a promise broken
+ * thirty seconds later.
  */
 
 import Link from "next/link";
 import BrandOrb from "../BrandOrb";
 import ContinueDraft from "./ContinueDraft";
-import { PLANS, formatPrice } from "@/app/lib/plans";
+import ProfessionDemo from "./ProfessionDemo";
+import AtsScoreReveal from "./AtsScoreReveal";
+import FaqAccordion from "./FaqAccordion";
+import { allRolePacks } from "@/app/lib/rolePacks";
+import { TEMPLATE_CATALOG } from "@/app/lib/templateCatalog";
 import { copyright } from "@/app/lib/brand";
-import { findRolePack } from "@/app/lib/rolePacks";
+import { toArabicDigits } from "@/app/lib/plans";
+import "../../marketing.css";
 
 const C = {
   en: {
-    eyebrow: "Free · no signup · Arabic & English",
-    h1a: "Get hired faster",
-    h1b: "with an AI career assistant built for Saudi Arabia.",
-    lede:
-      "More than a CV builder — an AI career assistant for the Saudi and Gulf job market. Build a strong CV, match it to a real job posting, check it against applicant-tracking systems, prepare for the interview, and track every application you send. You provide the facts; nothing is invented — no employer, date, certification or number.",
-    capHead: "What Sira does for your job search",
-    capabilities: [
-      ["Build a strong CV", "Step by step, with AI suggestions for your profession. You approve every line before it reaches your CV.", "/builder"],
-      ["Match it to a real job", "Paste a job description or its link and see exactly what matches, what's missing, and what to add — before you apply.", "/optimize"],
-      ["Check ATS compatibility", "A single-column, standard-headings structure applicant-tracking systems can actually parse — checked and scored.", "/optimize"],
-      ["Prepare for interviews", "Likely questions for your role, answered from your own CV — plus a live, scored mock interview.", "/interview"],
-      ["Track your applications", "Every job you apply to, its status, and which CV version you sent — in one place.", "/account"],
-      ["Improve your career readiness", "Your CV's completeness, evidence strength and formatting, scored and explained — plus a LinkedIn profile from the same confirmed facts.", "/account"],
-    ] as [string, string, string][],
-    ctaBuild: "Build my CV, step by step",
-    ctaBuildSub: "Eleven short steps. Nothing enters your CV until you approve it.",
-    ctaUpload: "I already have a CV — improve it",
-    ctaUploadSub: "We read your file, score it against the job, and rewrite it without inventing anything.",
-    /* `ctaChat` used to be here, for a card pointing at `/journey`. The conversation was retired,
-       the card was removed, and these two strings stayed behind — an invitation for someone to
-       re-add a link to a 308 redirect. Replaced by the third door, which is real. */
-    ctaResume: "Continue a CV I saved here",
-    ctaResumeSub: "Everything is kept on this device. Pick it up where you stopped, in the same form.",
-    /*
-     * A fourth, honestly distinct door. The other "I already have a CV" card feeds the file into
-     * the builder's own data model — same preview, same save, same download, on purpose (see the
-     * note beside it). This one is different: it sends a resume you're not editing today straight
-     * at the ATS scanner for an instant score against a specific job, no step-by-step form at all.
-     * `/optimize` is a real, separately-marketed tool — every SEO page's CTA already points at it —
-     * and until this card existed, the homepage was the one place in the product that never
-     * mentioned it.
-     */
-    ctaCheck: "Check a resume against a job posting",
-    ctaCheckSub: "Paste or upload it, paste the job — get a match score and the missing keywords in seconds. No step-by-step form.",
+    eyebrow: "AI career operating system · Saudi & Gulf",
+    h1a: "One system.",
+    h1b: "Every step to your next job.",
+    lede: "Sira turns one honest career profile into a tailored resume for every job you apply to — ATS-checked, interview-ready, and never a fact invented.",
+    pipeline: ["Career Profile", "Master Resume", "Tailored", "ATS-checked", "Interview-ready"],
+    ctaPrimary: "Start my Career Profile",
+    ctaSecondary: "See how it works",
 
-    howHead: "How it works",
-    how: [
-      ["Name the job you are aiming for",
-       "Everything the AI suggests is based on this one answer, so it comes first. Paste the advert — or its link — and your CV gets matched against the employer's actual requirements."],
-      ["Fill in the facts",
-       "Employers, dates, education, licences, languages. Short fields, one section at a time, with your CV building itself beside you as you type."],
-      ["The AI suggests; you approve",
-       "Responsibilities and skills for your profession arrive as suggestions. Keep, edit or reject each one. A suggestion is not on your CV until you say so."],
-      ["Review, design, download",
-       "What is missing, what would make it stronger, then a template and a PDF or Word file."],
+    proofHead: "proof, not a promise",
+    proof: [
+      ["25+", "Saudi occupations modeled — real duties, real licenses"],
+      ["2", "Languages, one engine — Arabic and English"],
+      ["0", "Facts invented. Enforced in the data model, not promised in the marketing."],
+      ["10", "ATS-safe templates, single-column by construction"],
     ] as [string, string][],
 
-    egHead: "What it already knows about your profession",
-    egLede:
-      "Type a job title and this appears immediately — no model call, no waiting. It is what the product knows about the occupation, offered so you can recognise your own work rather than describe it from a blank page.",
-    egTitle: "Radiology Technologist",
-    egDuties: "Typical responsibilities",
-    egCreds: "Licences it will ask about",
-    egNothing: "None of this is on a CV yet. Every item is a suggestion until it is tapped.",
-
-    trustHead: "What it will not do",
-    trust: [
-      ["It never invents a fact",
-       "No employer, date, degree, certification or number comes from the model. Those are yours alone. It drafts the WORDING of work you tell it you did."],
-      ["It works with the AI switched off",
-       "Every step can be completed by typing. If the model is unavailable or rate-limited, the form still finishes and still exports."],
-      ["ATS-ready by construction",
-       "Single column, standard headings, no tables or graphics in the parseable export — the structure applicant-tracking systems can actually read."],
-      ["Your draft stays in your browser",
-       "It is saved locally as you type. Text reaches our servers only when you ask for something specific: an AI suggestion, an ATS scan, or a job link to be read."],
+    sysKicker: "The system",
+    sysHead: "One connected journey, not six disconnected tools.",
+    sysLede: "Everything below reads from the same career profile. Nothing is re-typed between steps.",
+    rail: [
+      ["Career Profile", "Who you are, your target role, languages, licenses."],
+      ["Master Resume", "One confirmed document. Every fact in it is yours."],
+      ["Tailor for Job", "A version matched to one posting — your master resume stays untouched."],
+      ["ATS Review", "Scored against the same rules applicant-tracking systems use."],
+      ["Interview Prep", "Questions built from the exact resume you sent."],
+      ["Export", "PDF and Word — both ATS-parseable."],
     ] as [string, string][],
 
-    priceHead: "What costs money, and what does not",
-    priceFree: "Free, with no account:",
-    priceFreeList: [
-      "Building the whole CV, step by step",
-      "The live preview and every template",
-      "The ATS match score, the missing keywords and the review",
-    ],
-    pricePaid: "One payment removes the watermark and unlocks the downloads:",
-    priceNoSub: "One-time payments. There is no subscription.",
-    priceMore: "See what each includes →",
+    diffKicker: "Why Sira",
+    diffHead: "Not a template. Not ChatGPT. Not generic AI.",
+    diff: [
+      ["Not a template", "A template is a shape. Sira fills it with what your specific profession actually needs — a radiographer's CV needs different duties, tools and licenses than an accountant's, and the product knows the difference before you type a word."],
+      ["Not ChatGPT with a prompt", "General AI doesn't know that Saudi Arabia licenses radiographers through SCFHS, or that an ATS silently drops a two-column layout. That knowledge is built into the product, not typed into a prompt box each time."],
+      ["Not generic AI", "Every suggestion is grounded in facts you already gave it. Nothing is invented — no employer, no date, no number. If the evidence is missing, it says so instead of making one up."],
+    ] as [string, string][],
 
-    footHead: "More",
+    demoKicker: "Try it — no signup",
+    demoHead: "What Sira already knows about your profession.",
+    demoLede: "Pick a job title. This is what appears instantly — before any AI call, before any waiting.",
+
+    journeyKicker: "The journey",
+    journeyHead: "Discover → Get hired.",
+    journey: [
+      ["Discover", "Tell it the job you're aiming for — it already knows the shape of that profession."],
+      ["Build", "Eleven short steps. Your resume renders beside you as you type."],
+      ["Tailor", "One posting, one matched version — your master resume stays untouched."],
+      ["Apply", "Track every application, and which resume version you sent."],
+      ["Interview", "Questions built from the resume you actually sent for that job."],
+      ["Get hired", "One connected path — not six tabs that don't know each other."],
+    ] as [string, string][],
+
+    tplKicker: "Templates",
+    tplHead: "Every template is ATS-safe first, designed second.",
+
+    atsKicker: "Before you apply",
+    atsHead: "Watch your match score move — with the reasons why.",
+
+    faqKicker: "FAQ",
+    faqHead: "Questions people actually ask.",
+    faq: [
+      ["Is it free?", "Building and downloading a CV is free and needs no account. Paid features are the extras around it — cover letters, interview prep, removing the small footer mark."],
+      ["Will it invent experience to fill the page?", "No. A suggestion carrying a figure you didn't provide is dropped before you see it, and an improvement to a line you wrote is rejected if it gains a number the original didn't have."],
+      ["Can I build my CV in Arabic?", "Yes, start to finish — the questions, the suggestions, the review and the document itself. You can also produce an English version of the same facts afterward, translated and checked, not re-typed."],
+      ["What makes a CV “ATS-ready”?", "One column, standard section headings, real text rather than an image, dates a parser can read, and the employer's own vocabulary where it honestly applies."],
+      ["Where is my data stored?", "Locally on your device by default — nothing is uploaded for storage. If you sign in, your resume document is saved to your account so it follows you across devices, and you can delete it any time."],
+    ] as [string, string][],
+
+    finalHead: "Your career, run by one system.",
+
     footLinks: [
       ["Pricing", "/pricing"],
-      ["CV templates", "/resume-templates"],
-      ["CV examples by profession", "/resume-examples"],
+      ["Templates", "/templates"],
       ["ATS CV checker", "/ats-resume-checker"],
       ["Privacy", "/privacy"],
       ["Terms", "/terms"],
@@ -119,77 +118,78 @@ const C = {
   },
 
   ar: {
-    eyebrow: "مجاناً · بلا تسجيل · بالعربية والإنجليزية",
-    h1a: "احصل على وظيفة أسرع",
-    h1b: "بمساعدة مهنية ذكية مصممة للسوق السعودي.",
-    lede:
-      "أكثر من منشئ سيرة ذاتية — مساعد مهني ذكي لسوق العمل السعودي والخليجي. ابنِ سيرة قوية، طابقها مع وظيفة حقيقية، تحقق من توافقها مع أنظمة الفرز، جهّز نفسك للمقابلة، وتابع كل تقديم أرسلته. أنت تكتب الحقائق، والذكاء لا يختلق شيئاً — لا جهة عمل ولا تاريخاً ولا شهادة ولا رقماً.",
-    capHead: "ما تقدّمه سيرة لرحلة بحثك عن وظيفة",
-    capabilities: [
-      ["ابنِ سيرة قوية", "خطوة بخطوة، باقتراحات ذكاء مبنية على مهنتك. تعتمد كل سطر قبل أن يدخل سيرتك.", "/builder"],
-      ["طابقها مع وظيفة حقيقية", "الصق وصف الوظيفة أو رابطها لترى بالضبط ما يتطابق، وما ينقص، وما تحتاج إضافته — قبل التقديم.", "/optimize"],
-      ["تحقق من التوافق مع أنظمة الفرز", "بنية عمود واحد وعناوين قياسية تستطيع أنظمة التوظيف قراءتها فعلاً — مُقيَّمة ومفسَّرة.", "/optimize"],
-      ["جهّز نفسك للمقابلات", "أسئلة متوقعة لدورك، مجاب عليها من سيرتك نفسها — بالإضافة لمقابلة تجريبية مباشرة ومقيَّمة.", "/interview"],
-      ["تابع تقديماتك", "كل وظيفة قدّمت عليها، حالتها، والنسخة التي أرسلتها — في مكان واحد.", "/account"],
-      ["حسّن جاهزيتك المهنية", "اكتمال سيرتك وقوة أدلتها وتنسيقها، مُقيَّمة ومفسَّرة — إضافة لملف لينكدإن مبني من الحقائق نفسها.", "/account"],
-    ] as [string, string, string][],
-    ctaBuild: "ابنِ سيرتي خطوة بخطوة",
-    ctaBuildSub: "إحدى عشرة خطوة قصيرة. لا يدخل شيء سيرتك قبل أن تعتمده.",
-    ctaUpload: "لديّ سيرة — حسّنها",
-    ctaUploadSub: "نقرأ ملفك، ونقيّمه مقابل الوظيفة، ونعيد صياغته دون اختلاق أي شيء.",
-    ctaResume: "أكمل سيرة حفظتها هنا",
-    ctaResumeSub: "كل شيء محفوظ على جهازك. واصل من حيث توقفت، في النموذج نفسه.",
-    ctaCheck: "افحص سيرة مقابل إعلان وظيفة",
-    ctaCheckSub: "الصق أو ارفع سيرتك، والصق الإعلان — واحصل على نسبة التطابق والكلمات الناقصة خلال ثوانٍ، بلا نموذج خطوة بخطوة.",
+    eyebrow: "نظام تشغيل مهني بالذكاء الاصطناعي · السعودية والخليج",
+    h1a: "نظام واحد.",
+    h1b: "كل خطوة نحو وظيفتك القادمة.",
+    lede: "سيرة تحوّل ملفك المهني الصادق إلى سيرة مخصصة لكل وظيفة تتقدم لها — مفحوصة لأنظمة تتبع المتقدمين، وجاهزة للمقابلة، بلا حقيقة واحدة مختلقة.",
+    pipeline: ["ملف مهني", "سيرة رئيسية", "مخصصة", "مفحوصة للفرز", "جاهزة للمقابلة"],
+    ctaPrimary: "ابدأ ملفي المهني",
+    ctaSecondary: "شاهد كيف يعمل",
 
-    howHead: "كيف يعمل",
-    how: [
-      ["حدّد الوظيفة التي تستهدفها",
-       "كل ما يقترحه الذكاء مبني على هذه الإجابة، فتأتي أولاً. الصق الإعلان — أو رابطه — لتُطابق سيرتك مع متطلبات صاحب العمل الفعلية."],
-      ["اكتب الحقائق",
-       "جهات العمل والتواريخ والتعليم والرخص واللغات. حقول قصيرة، قسم واحد كل مرة، وسيرتك تُبنى أمامك وأنت تكتب."],
-      ["الذكاء يقترح، وأنت تعتمد",
-       "تصل المهام والمهارات الخاصة بمهنتك كاقتراحات. أبقِ ما تريد، أو عدّله، أو ارفضه. والاقتراح ليس في سيرتك حتى تقول ذلك."],
-      ["راجع، صمّم، نزّل",
-       "ما ينقص، وما يجعلها أقوى، ثم قالب وملف PDF أو Word."],
+    proofHead: "دليل، لا وعد",
+    proof: [
+      ["+٢٥", "مهنة سعودية مُنمذجة — بمهام وتراخيص حقيقية"],
+      ["٢", "لغتان بمحرك واحد — عربي وإنجليزي"],
+      ["٠", "حقائق مختلقة. مفروض في بنية البيانات، لا مجرد وعد تسويقي."],
+      ["١٠", "قوالب متوافقة مع أنظمة الفرز، بعمود واحد ببنيتها"],
     ] as [string, string][],
 
-    egHead: "ما يعرفه عن مهنتك مسبقاً",
-    egLede:
-      "اكتب المسمى الوظيفي فيظهر هذا فوراً — بلا استدعاء للذكاء وبلا انتظار. هذا ما يعرفه المنتج عن المهنة، معروضاً لتتعرّف على عملك بدل وصفه من صفحة بيضاء.",
-    egTitle: "أخصائي أشعة",
-    egDuties: "مهام معتادة",
-    egCreds: "رخص سيسألك عنها",
-    egNothing: "لا شيء من هذا في سيرة بعد. كل عنصر اقتراح حتى تنقره.",
-
-    trustHead: "ما لن يفعله",
-    trust: [
-      ["لا يختلق حقيقة",
-       "لا جهة عمل ولا تاريخ ولا شهادة ولا مؤهل ولا رقم يأتي من الذكاء. هذه منك وحدك. وهو يصوغ عبارات عمل أخبرته أنك قمت به."],
-      ["يعمل والذكاء مطفأ",
-       "كل خطوة يمكن إكمالها بالكتابة. وإن تعذّر الذكاء أو تجاوزت حد الاستخدام، يكتمل النموذج ويُصدَّر كما هو."],
-      ["مهيّأ لأنظمة الفرز بحكم بنيته",
-       "عمود واحد، وعناوين قياسية، ولا جداول ولا رسومات في الملف القابل للقراءة — البنية التي تستطيع أنظمة التوظيف قراءتها فعلاً."],
-      ["مسوّدتك تبقى في متصفحك",
-       "تُحفظ محلياً وأنت تكتب. ولا يصل أي نص إلى خوادمنا إلا عندما تطلب شيئاً محدداً: اقتراحاً من الذكاء، أو فحص توافق، أو قراءة رابط وظيفة."],
+    sysKicker: "النظام",
+    sysHead: "رحلة واحدة متصلة، لا ستة أدوات منفصلة.",
+    sysLede: "كل ما بالأسفل يقرأ من الملف المهني نفسه. لا شيء يُعاد كتابته بين الخطوات.",
+    rail: [
+      ["الملف المهني", "من أنت، دورك المستهدف، لغاتك، تراخيصك."],
+      ["السيرة الرئيسية", "مستند واحد مؤكد. كل حقيقة فيه لك."],
+      ["تخصيص لوظيفة", "نسخة مطابقة لإعلان واحد — وسيرتك الرئيسية تبقى كما هي."],
+      ["مراجعة ATS", "تُقيَّم بنفس القواعد التي تستخدمها أنظمة تتبع المتقدمين."],
+      ["تحضير المقابلة", "أسئلة مبنية من السيرة نفسها التي أرسلتها."],
+      ["التصدير", "PDF و Word — وكلاهما قابل للقراءة الآلية."],
     ] as [string, string][],
 
-    priceHead: "ما يُدفع عليه وما لا يُدفع",
-    priceFree: "مجاناً وبلا حساب:",
-    priceFreeList: [
-      "بناء السيرة كاملة خطوة بخطوة",
-      "المعاينة الحيّة وكل القوالب",
-      "تقييم التوافق والكلمات الناقصة والمراجعة",
-    ],
-    pricePaid: "دفعة واحدة تُزيل العلامة المائية وتفتح التنزيلات:",
-    priceNoSub: "دفعات لمرة واحدة. لا يوجد اشتراك.",
-    priceMore: "اعرف ما يتضمنه كل خيار ←",
+    diffKicker: "لماذا سيرة",
+    diffHead: "ليست قالباً. ولا ChatGPT. ولا ذكاءً عاماً.",
+    diff: [
+      ["ليست قالباً", "القالب مجرد شكل. سيرة تملؤه بما تحتاجه مهنتك تحديداً — فسيرة أخصائي الأشعة تحتاج مهاماً وأدوات وتراخيص مختلفة عن سيرة المحاسب، والمنتج يعرف الفرق قبل أن تكتب كلمة."],
+      ["ليست ChatGPT بمطالبة", "الذكاء العام لا يعرف أن السعودية تُرخّص أخصائيي الأشعة عبر الهيئة السعودية للتخصصات الصحية، ولا أن أنظمة الفرز تُسقط تخطيط العمودين بصمت. هذه المعرفة مبنية في المنتج، لا مكتوبة في مربع مطالبة كل مرة."],
+      ["ليست ذكاءً عاماً", "كل اقتراح مبني على حقائق أعطيتها أنت فعلاً. لا شيء يُختلق — لا جهة عمل، ولا تاريخ، ولا رقم. وإن كان الدليل ناقصاً، يقول ذلك بدل اختراعه."],
+    ] as [string, string][],
 
-    footHead: "المزيد",
+    demoKicker: "جرّبها الآن — بلا تسجيل",
+    demoHead: "ما تعرفه سيرة عن مهنتك مسبقاً.",
+    demoLede: "اختر مسمى وظيفياً. هذا ما يظهر فوراً — قبل أي استدعاء للذكاء، وبلا انتظار.",
+
+    journeyKicker: "الرحلة",
+    journeyHead: "اكتشف ← احصل على الوظيفة.",
+    journey: [
+      ["اكتشف", "أخبرها بالوظيفة التي تستهدفها — فهي تعرف شكل تلك المهنة مسبقاً."],
+      ["ابنِ", "إحدى عشرة خطوة قصيرة. سيرتك تُرسم أمامك وأنت تكتب."],
+      ["خصّص", "إعلان واحد، نسخة مطابقة واحدة — وسيرتك الرئيسية تبقى كما هي."],
+      ["قدّم", "تابع كل تقديم، والنسخة التي أرسلتها لكل واحد."],
+      ["قابِل", "أسئلة مبنية من السيرة التي أرسلتها فعلاً لتلك الوظيفة."],
+      ["اُقبَل", "مسار واحد متصل — لا ستة تبويبات لا تعرف بعضها."],
+    ] as [string, string][],
+
+    tplKicker: "القوالب",
+    tplHead: "كل قالب متوافق مع أنظمة الفرز أولاً، ومصمم ثانياً.",
+
+    atsKicker: "قبل أن تتقدم",
+    atsHead: "شاهد نسبة تطابقك تتحرك — مع أسباب ذلك.",
+
+    faqKicker: "الأسئلة الشائعة",
+    faqHead: "أسئلة يسألها الناس فعلاً.",
+    faq: [
+      ["هل الاستخدام مجاني؟", "بناء السيرة وتنزيلها مجاناً وبلا حساب. المدفوع هو ما حولها — خطاب التقديم، والتحضير للمقابلة، وإزالة العلامة الصغيرة أسفل الملف."],
+      ["هل تختلق خبرة لملء الصفحة؟", "لا. أي اقتراح يحمل رقماً لم تُعطه يُحذف قبل أن تراه، وأي تحسين لسطر كتبته يُرفض إن اكتسب رقماً لم يكن في الأصل."],
+      ["هل أقدر أبني سيرتي بالعربية؟", "نعم، من أول سؤال إلى آخر تنزيل — الأسئلة والاقتراحات والمراجعة والمستند نفسه. وتقدر تُنشئ نسخة إنجليزية من الحقائق ذاتها بعدها، مترجمة ومراجعة لا معاد كتابتها."],
+      ["ما الذي يجعل السيرة «متوافقة مع أنظمة الفرز»؟", "عمود واحد، عناوين أقسام قياسية، نص حقيقي لا صورة، تواريخ يقرؤها المحلّل، ومفردات الإعلان الوظيفي حيث تنطبق فعلاً."],
+      ["أين تُحفظ بياناتي؟", "على جهازك محلياً بشكل افتراضي — لا شيء يُرفع للتخزين. وإن سجّلت دخولك، تُحفظ سيرتك في حسابك لتتابعك عبر أجهزتك، وتقدر تحذفها في أي وقت."],
+    ] as [string, string][],
+
+    finalHead: "مسيرتك المهنية، يديرها نظام واحد.",
+
     footLinks: [
       ["الأسعار", "/ar/pricing"],
-      ["قوالب السير الذاتية", "/resume-templates"],
-      ["أمثلة سير بحسب المهنة", "/ar/resume-examples"],
+      ["القوالب", "/ar/templates"],
       ["فاحص السيرة لأنظمة ATS", "/ats-resume-checker"],
       ["الخصوصية", "/ar/privacy"],
       ["الشروط", "/ar/terms"],
@@ -202,236 +202,217 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
   const t = C[lang];
   const ar = lang === "ar";
   const p = ar ? "/ar" : "";
-
-  /*
-   * The example is read from the same cached pack the builder seeds from, not retyped.
-   * A landing page that advertises chips the product does not actually offer is a
-   * promise broken thirty seconds later — and this way, editing the pack edits the ad.
-   */
-  const pack = findRolePack(t.egTitle);
+  const professionCount = allRolePacks().length;
+  const professionStat = ar ? `+${toArabicDigits(professionCount)}` : `${professionCount}+`;
+  const proof = t.proof.map(([n, body], i) => (i === 0 ? [professionStat, body] : [n, body])) as [string, string][];
+  const templateCount = TEMPLATE_CATALOG.length;
 
   return (
     <main dir={ar ? "rtl" : "ltr"} lang={lang} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-
       <nav className="ps-header">
         <div className="ps-header-in">
-          <Link href={p || "/"} className="flex items-center gap-2.5">
+          <Link href={p || "/"} className="ps-brand">
             <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">{ar ? "سيرة" : "Sira"}</span>
+            <span>{ar ? "سيرة" : "Sira"}</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link href={ar ? "/" : "/ar"} className="text-xs font-semibold" style={{ color: "var(--muted)" }}>
               {t.ar}
             </Link>
-            <Link href={`${p}/builder`} className="btn-accent px-4 py-2 text-sm">{t.ctaBuild}</Link>
+            <Link href={`${p}/builder`} className="btn-accent px-4 py-2 text-sm">{t.ctaPrimary}</Link>
           </div>
         </div>
       </nav>
 
-      {/*
-        ── hero ──
-
-        `t-hero` staggers these five children — eyebrow, headline, description, the returning-visitor
-        banner, the three doors — 60ms apart. It moves them WITHOUT fading them, and that is not a
-        stylistic choice: this `<h1>` is the page's Largest Contentful Paint element, and LCP does not
-        count an element painted at zero opacity. A fade here would add its delay and duration to the
-        one number that decides where the page ranks. See `t-hero` in transitions.css.
-      */}
-      <section className="t-hero mx-auto max-w-3xl px-6 pb-4 pt-10">
-        <div className="chip mb-5">{t.eyebrow}</div>
-        <h1 className="text-4xl font-extrabold leading-[1.12] tracking-tight sm:text-5xl">
-          {t.h1a}<br />
-          <span style={{ color: "var(--accent)" }}>{t.h1b}</span>
-        </h1>
-        <p className="mt-5 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.lede}</p>
-
-        {/* Only shown to someone who already has work in progress. */}
-        <ContinueDraft lang={lang} />
-
-        <div className="mt-8 grid gap-3">
-          <Link href={`${p}/builder`} className="card card-hover p-5" style={{ borderColor: "rgba(139,92,246,0.45)", background: "rgba(139,92,246,0.06)" }}>
-            <div className="text-base font-bold">{t.ctaBuild} →</div>
-            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaBuildSub}</div>
-          </Link>
-          {/*
-            Into the BUILDER, with the importer open — not to `/optimize`.
-            
-            `/optimize` is a good tool and keeps its own address and its own search traffic, but it
-            is a different engine: its own state, its own preview, its own export. Sending the file
-            there meant the visitor who pressed this card could not then carry on building in the
-            form; they had a score and a rewrite and no way back into the product. All three doors —
-            new, upload, continue a saved CV — now land in one data model, one preview, one save and
-            one download.
-          */}
-          <Link href={`${p}/builder?entry=upload`} className="card card-hover p-5">
-            <div className="text-base font-bold">{t.ctaUpload} →</div>
-            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaUploadSub}</div>
-          </Link>
-          {/* And the third door: a CV already saved on this device. It was reachable only from
-              inside the builder, so a returning visitor's first screen did not mention it. */}
-          <Link href={`${p}/builder`} className="card card-hover p-5">
-            <div className="text-base font-bold">{t.ctaResume} →</div>
-            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaResumeSub}</div>
-          </Link>
-          {/* The fourth door — see the note beside `ctaCheck` above. */}
-          <Link href={`${p}/optimize`} className="card card-hover p-5">
-            <div className="text-base font-bold">{t.ctaCheck} →</div>
-            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaCheckSub}</div>
-          </Link>
-        </div>
-      </section>
-
-      {/*
-        ── what the product actually does ──
-
-        Four doors get someone INTO the product; this section says what it does for them once
-        they're in, and says it before the page settles into the build-a-CV flow below. Without
-        it the homepage reads as a template tool with four ways to start a form — every card
-        here links straight at the real page, not a promise, so "prepare for interviews" or
-        "track your applications" is one click from being checked, not taken on faith.
-      */}
-      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-bold tracking-tight">{t.capHead}</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {t.capabilities.map(([head, body, href]) => (
-            <Link key={head} href={`${p}${href}`} className="card card-hover p-5">
-              <div className="text-sm font-bold">{head}</div>
-              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── the flow ── */}
-      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-bold tracking-tight">{t.howHead}</h2>
-        <ol className="mt-6 grid gap-4">
-          {t.how.map(([head, body], i) => (
-            <li key={head} className="flex gap-4">
+      {/* ══════════ 1. HERO ══════════ */}
+      <section className="cosmos-glow relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="t-hero">
+            <div className="chip">{t.eyebrow}</div>
+            <h1
+              className="mt-5 font-extrabold leading-[0.98] tracking-tight"
+              style={{ fontSize: "clamp(2.75rem,6.4vw,5.5rem)", letterSpacing: "-0.03em", maxWidth: "16ch" }}
+            >
               <span
-                className="grid h-7 w-7 flex-none place-items-center rounded-full font-mono text-xs font-bold"
-                style={{ background: "rgba(139,92,246,0.14)", border: "1px solid rgba(139,92,246,0.35)", color: "#c4b5fd" }}
+                style={{
+                  background: "linear-gradient(100deg,#e9d8ff,#c4b5fd 45%,var(--accent) 85%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
               >
-                {ar ? ["١", "٢", "٣", "٤"][i] : i + 1}
+                {t.h1a}
               </span>
-              <div>
-                <div className="font-bold">{head}</div>
-                <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+              <br />
+              {t.h1b}
+            </h1>
+            <p className="mt-6 max-w-[46ch] text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.lede}</p>
 
-      {/* ── the worked example ── */}
-      {pack && (
-        <section className="t-enter mx-auto max-w-3xl px-6 py-12">
-          <h2 className="text-2xl font-bold tracking-tight">{t.egHead}</h2>
-          <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{t.egLede}</p>
+            <ContinueDraft lang={lang} />
 
-          <div className="card mt-6 p-5">
-            <div className="font-mono text-xs" style={{ color: "var(--faint)" }}>
-              {ar ? "المسمى الوظيفي" : "Job title"}
-            </div>
-            <div className="mt-1 text-lg font-bold">{pack.title[lang]}</div>
-
-            {pack.groups.map((g) => (
-              <div key={g.label.en} className="mt-4">
-                <div className="mb-2 text-xs font-semibold" style={{ color: "var(--muted)" }}>{g.label[lang]}</div>
-                <div className="flex flex-wrap gap-2">
-                  {g.items.slice(0, 6).map((it) => (
-                    <span
-                      key={it.en}
-                      className="rounded-full px-3 py-1 text-xs font-medium"
-                      style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}
-                    >
-                      + {it[lang]}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            <div className="mt-5">
-              <div className="mb-2 text-xs font-semibold" style={{ color: "var(--muted)" }}>{t.egDuties}</div>
-              <ul className="space-y-1.5 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>
-                {pack.duties.slice(0, 4).map((d) => <li key={d.en}>• {d[lang]}</li>)}
-              </ul>
-            </div>
-
-            <div className="mt-5">
-              <div className="mb-2 text-xs font-semibold" style={{ color: "var(--muted)" }}>{t.egCreds}</div>
-              <div className="flex flex-wrap gap-2">
-                {pack.credentials.slice(0, 4).map((c) => (
-                  <span
-                    key={c.title.en}
-                    className="rounded-lg px-3 py-1.5 text-xs font-semibold"
-                    style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}
-                  >
-                    {c.title[lang]}
+            <div>
+              <div className="hero-pipeline">
+                {t.pipeline.map((step, i) => (
+                  <span key={step} style={{ display: "contents" }}>
+                    {i > 0 && <span className="arrow">{ar ? "←" : "→"}</span>}
+                    <span className="pill">{step}</span>
                   </span>
                 ))}
               </div>
-            </div>
-
-            <p className="mt-5 text-xs" style={{ color: "var(--faint)" }}>{t.egNothing}</p>
-          </div>
-        </section>
-      )}
-
-      {/* ── the promises, stated as limits ── */}
-      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-bold tracking-tight">{t.trustHead}</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {t.trust.map(([head, body]) => (
-            <div key={head} className="card p-5">
-              <div className="text-sm font-bold">{head}</div>
-              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── pricing, read from lib/plans.ts ── */}
-      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-bold tracking-tight">{t.priceHead}</h2>
-
-        <div className="card mt-6 p-5">
-          <div className="text-sm font-bold">{t.priceFree}</div>
-          <ul className="mt-2 space-y-1 text-sm" style={{ color: "var(--muted)" }}>
-            {t.priceFreeList.map((x) => <li key={x}>✓ {x}</li>)}
-          </ul>
-        </div>
-
-        <div className="mt-4 text-sm font-bold">{t.pricePaid}</div>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          {(["single", "complete"] as const).map((id) => (
-            <div key={id} className="card p-5">
-              <div className="text-lg font-extrabold">{formatPrice(id, lang)}</div>
-              <div className="mt-1 text-sm font-semibold">{ar ? PLANS[id].nameAr : PLANS[id].name}</div>
-              <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-                {ar ? PLANS[id].accessLabelAr : PLANS[id].accessLabel}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href={`${p}/builder`} className="btn-accent px-8 py-4 text-[15px]">{t.ctaPrimary} →</Link>
+                <a href="#system" className="btn-ghost px-7 py-4 text-[15px]">{t.ctaSecondary}</a>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className="relative mx-auto flex h-[320px] w-full items-center justify-center lg:h-[560px]" aria-hidden>
+            <BrandOrb variant="hero" size={520} className="max-w-full" style={{ maxWidth: "88vw", maxHeight: "88vw" }} />
+          </div>
         </div>
-        <p className="mt-3 text-xs" style={{ color: "var(--faint)" }}>{t.priceNoSub}</p>
-        <Link href={`${p}/pricing`} className="mt-3 inline-block text-sm font-semibold text-accent">
-          {t.priceMore}
-        </Link>
       </section>
 
-      {/* ── footer ── */}
-      <footer className="px-6 py-12" style={{ borderTop: "1px solid var(--line)" }}>
+      {/* ══════════ 2. PROOF STRIP ══════════ */}
+      <section className="t-enter px-6 py-14" style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="proof-grid">
+            {proof.map(([n, body], i) => (
+              <div key={body} className="proof-stat">
+                <b style={{ color: i === 2 ? "var(--gold)" : i === 0 ? "var(--accent)" : "var(--fg)" }}>{n}</b>
+                <span>{body}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 3. INTERACTIVE PIPELINE ══════════ */}
+      <section id="system" className="t-enter px-6 py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="section-kicker">{t.sysKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.sysHead}</h2>
+          <p className="mt-3 max-w-[56ch] text-base leading-relaxed" style={{ color: "var(--muted)" }}>{t.sysLede}</p>
+
+          <div className="rail">
+            <div className="rail-line" />
+            <div className="rail-steps">
+              {t.rail.map(([head, body], i) => (
+                <div key={head} className="rail-step">
+                  <div className="rail-dot">{ar ? ["١", "٢", "٣", "٤", "٥", "٦"][i] : i + 1}</div>
+                  <div><b>{head}</b><p>{body}</p></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 4. WHY DIFFERENT ══════════ */}
+      <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="section-kicker">{t.diffKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.diffHead}</h2>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {t.diff.map(([head, body]) => (
+              <div key={head} className="card p-7">
+                <h3 className="text-lg font-bold" style={{ letterSpacing: "-0.01em" }}>{head}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 5. LIVE PROFESSION DEMO ══════════ */}
+      <section className="t-enter px-6 py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="section-kicker">{t.demoKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.demoHead}</h2>
+          <p className="mt-3 max-w-[56ch] text-base leading-relaxed" style={{ color: "var(--muted)" }}>{t.demoLede}</p>
+
+          <ProfessionDemo lang={lang} />
+        </div>
+      </section>
+
+      {/* ══════════ 6. JOURNEY TIMELINE ══════════ */}
+      <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-3xl">
-          <div className="mb-3 text-xs font-semibold" style={{ color: "var(--muted)" }}>{t.footHead}</div>
+          <div className="section-kicker">{t.journeyKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em" }}>{t.journeyHead}</h2>
+
+          <div className="timeline">
+            {t.journey.map(([head, body]) => (
+              <div key={head} className="t-item"><b>{head}</b><p>{body}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 7. TEMPLATES ══════════ */}
+      <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="section-kicker">{t.tplKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.tplHead}</h2>
+
+          <div className="tpl-grid">
+            {TEMPLATE_CATALOG.map((tpl) => (
+              <Link key={tpl.slug} href={`${p}/builder?template=${tpl.slug}`} className="card">
+                <div className="tpl-prev" style={{ color: tpl.accent }}>
+                  <div className="bar w60" /><div className="bar w40" /><div className="sp" />
+                  <div className="bar w30" /><div className="bar w80" /><div className="bar w80" />
+                  <div className="sp" /><div className="bar w30" /><div className="bar w60" />
+                </div>
+                <div className="tpl-label">
+                  <span>{ar ? tpl.nameAr : tpl.name}</span>
+                  {tpl.best && <span className="tpl-best">{ar ? "الأفضل" : "BEST"}</span>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 8. ATS SCORE ══════════ */}
+      <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto max-w-5xl">
+          <div className="section-kicker">{t.atsKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.6rem,2.8vw,2.4rem)", letterSpacing: "-0.02em", maxWidth: "22ch" }}>{t.atsHead}</h2>
+
+          <AtsScoreReveal lang={lang} />
+        </div>
+      </section>
+
+      {/* ══════════ 9. FAQ ══════════ */}
+      <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="section-kicker">{t.faqKicker}</div>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.6vw,3.2rem)", letterSpacing: "-0.02em" }}>{t.faqHead}</h2>
+        </div>
+        <FaqAccordion items={t.faq.map(([q, a]) => ({ q, a }))} />
+      </section>
+
+      {/* ══════════ 10. FINAL CTA ══════════ */}
+      <section className="t-enter px-6 py-28 text-center" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto flex max-w-2xl flex-col items-center">
+          <BrandOrb variant="hero" size={72} />
+          <h2 className="mt-7 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,4.4vw,3.4rem)", letterSpacing: "-0.025em" }}>{t.finalHead}</h2>
+          <Link href={`${p}/builder`} className="btn-accent mt-8 px-9 py-4 text-[15px]">{t.ctaPrimary} →</Link>
+        </div>
+      </section>
+
+      <footer className="px-6 py-12" style={{ borderTop: "1px solid var(--line)" }}>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
+          <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright(lang)}</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             {t.footLinks.map(([label, href]) => (
               <Link key={href} href={href} style={{ color: "var(--muted)" }}>{label}</Link>
             ))}
           </div>
-          <p className="mt-8 font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright(lang)}</p>
         </div>
+        <p className="mx-auto mt-4 max-w-6xl text-[11px]" style={{ color: "var(--faint)" }}>
+          {ar ? `${toArabicDigits(templateCount)} قوالب · ${professionStat} مهنة سعودية مُنمذجة` : `${templateCount} templates · ${professionStat} Saudi occupations modeled`}
+        </p>
       </footer>
     </main>
   );

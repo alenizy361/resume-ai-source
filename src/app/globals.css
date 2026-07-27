@@ -554,6 +554,39 @@ main {
 .brand-orb.bo-decor .bo-crescent { opacity: 0.55; }
 .brand-orb.bo-decor .bo-glow { opacity: 0.4; }
 
+/*
+ * The hero centerpiece. Bigger and slower than `decor`'s default breathe — a large orb pulsing at
+ * the same 3.6s cadence as a 26px logo mark reads as nervous, not alive. `bo-corona` is a second,
+ * larger static gradient (violet core fading through a thin cyan-teal rim before it goes
+ * transparent — an "alien" colour complexity with nothing ever animating `filter`, just two more
+ * gradient stops) breathing on ITS OWN slower, counter-phased timer, so the two rings drift in and
+ * out of phase with each other rather than pulsing in lockstep. That drift is what reads as
+ * something ALIVE rather than a single shape scaling uniformly.
+ */
+.brand-orb.bo-hero .bo-sphere { animation-duration: 5.2s; }
+.brand-orb.bo-hero .bo-crescent { animation-duration: 11s; }
+.brand-orb.bo-hero .bo-glow {
+  inset: -70%;
+  opacity: 0.85;
+  animation: bo-hero-glow 6.4s ease-in-out infinite;
+}
+.brand-orb.bo-hero .bo-corona {
+  position: absolute;
+  inset: -130%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139,92,246,0.22) 0%, rgba(94,234,212,0.08) 52%, transparent 74%);
+  animation: bo-hero-corona 8.6s ease-in-out infinite;
+  animation-delay: -2.3s; /* starts mid-cycle, out of phase with the glow from the first frame */
+}
+@keyframes bo-hero-glow {
+  0%, 100% { transform: scale(1);    opacity: 0.7; }
+  50%      { transform: scale(1.22); opacity: 1; }
+}
+@keyframes bo-hero-corona {
+  0%, 100% { transform: scale(0.94); opacity: 0.55; }
+  50%      { transform: scale(1.18); opacity: 0.9; }
+}
+
 /* A live AI call. No spinner and no extra element — the orb already is the indicator. */
 .brand-orb.is-busy .bo-sphere,
 .brand-orb.is-busy .bo-glow { animation-duration: 1.1s; }
@@ -570,8 +603,10 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .brand-orb .bo-sphere,
   .brand-orb .bo-glow,
-  .brand-orb .bo-crescent { animation: none; }
+  .brand-orb .bo-crescent,
+  .brand-orb .bo-corona { animation: none; }
   .brand-orb .bo-glow { opacity: 0.6; }
+  .brand-orb.bo-hero .bo-corona { opacity: 0.4; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

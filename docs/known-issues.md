@@ -1672,3 +1672,90 @@ reads as the same CPU-bound slow-compile class F-35/F-36 documented, now apparen
 previously-fast routes too, plausibly from the route tree's accumulated size over this long session.
 Shipped on typecheck + test + production-build verification, consistent with the last two passes;
 the live click-through remains undone and is recorded here rather than assumed.
+
+### F-38 · P0 · Landing page redesigned as a premium career operating system — FIXED
+
+The homepage read as documentation: dense text above the fold, no visual hierarchy, six sections of
+equal weight, and — the user's own words — "the first screen feels like documentation instead of a
+premium SaaS." Explicitly asked for an Apple/Linear/Stripe/Raycast-level page: huge type, one story
+top to bottom, a real "wow" moment, understandable in under 5 seconds. Also explicit: produce a
+wireframe, hierarchy and attention map FIRST, get it approved, only then implement.
+
+**Wireframe pass.** Published a high-fidelity HTML mockup as a Claude Artifact before touching the
+codebase, with a toggleable numbered attention-map overlay showing intended reading order per
+screen. Reused the product's real, already-established palette (`--bg:#0b0626`, `--accent:#8b5cf6`,
+`--gold:#f5b840`) rather than inventing a fresh identity — this is a live brand, not a blank canvas —
+and the existing bilingual font stack. User approved the direction with one note: make the orb more
+"pulsing" and "otherworldly."
+
+**The orb.** `BrandOrb.tsx` gained a fourth variant, `"hero"` (the other three: `logo`, `button`,
+`decor`), rather than a new component — the file's whole discipline is "one component, four jobs
+now, no client bundle," and a parallel orb implementation for one page would be exactly the
+duplication this pass was asked to remove. The "otherworldly" feel comes from a second, larger glow
+ring (`bo-corona`) breathing on its own out-of-phase timer behind the existing sphere/glow/crescent
+— two static gradients drifting in and out of sync reads as alive; a single shape pulsing harder does
+not. Still `transform`/`opacity` only — nothing here animates `filter`, which `BrandOrb.tsx`'s own
+header already documents as the thing that cost a real Android device a composited frame budget.
+
+**Motion: reused, not reinvented.** `transitions.css` documents three real iPhone crashes traced to
+a scroll-driven reveal system that was deliberately removed — `IntersectionObserver`s and
+`animation-timeline: view()` are both named as the cause. The published wireframe used
+`IntersectionObserver` for its scroll reveals, because it was a throwaway preview, not committed
+code; the real implementation does not carry that over. Every reveal on the rebuilt page uses the
+SAME one-time `@starting-style` mount animation this product already trusts: `.t-hero` for the
+headline sequence (rises without fading, so the LCP element is never delayed — this page's `<h1>` is
+still the LCP element), `.t-enter` for every section below the fold. The ATS score count-up
+(`AtsScoreReveal.tsx`) plays once on mount via `requestAnimationFrame`, not gated behind scroll
+visibility, for the same reason — a number ticking up slightly before a visitor scrolls to it costs
+nothing; a scroll listener watching for when they arrive is the exact pattern that got removed.
+
+**No backdrop-filter added to anything repeated.** `.card`'s own header in `globals.css` documents a
+second real crash: `backdrop-filter: blur(14px)` on the most-repeated element in the product closed
+an iPhone tab (51 blurred elements, 1.42 megapixels, invisible to this sandbox's Chromium-only
+sweep because Blink silently ignores the unprefixed property the build emitted). The rule stated
+there — "kept where there is exactly ONE per page" — is followed exactly: the sticky nav reuses the
+existing single-instance `.ps-header` (already blurred, already RTL-tested), and the profession
+demo's skill/certificate tags use a new blur-free `.pill` class rather than the site's `.chip` (which
+does carry a blur, safe at one eyebrow badge per page, not safe at the dozen tags one profession pack
+can show at once).
+
+**Content is real, not lorem.** The "why we're different" claims, the profession demo, the template
+grid and the proof strip all read from data the product actually has:
+- `ProfessionDemo.tsx` reads `allRolePacks()` and picks 5 real packs by slug (radiology technologist,
+  software developer, accountant, registered nurse, sales manager) — the same principle the old
+  worked-example section already followed ("editing a pack edits the ad"), extended to a tabbed,
+  client-side switch with no page reload and no model call.
+- The template grid reads `TEMPLATE_CATALOG` (10 real templates, real names, real accent colors) —
+  not a hand-typed list that could drift from what `/templates` actually offers.
+- The proof strip's profession count is `allRolePacks().length`, not a hardcoded "25+" that goes
+  stale the next time a pack is added.
+- The ATS score section uses the real dimension labels `reviewChecks.ts` scores every CV on
+  (ATS-safe structure, evidence strength, readability, completeness), labeled "illustrative example"
+  rather than presented as a live claim about a specific resume.
+- The FAQ's "where is my data stored" answer matches the corrected privacy disclosure from F-37
+  exactly — the redesign does not reintroduce the claim that pass just fixed.
+
+**What the brief asked for that was not built as asked, and why:** "Social proof — companies,
+professionals, trust indicators." This product has no real company logos to show — it serves
+individuals, not businesses — and inventing trust logos would be exactly the kind of fabrication
+every other part of this product refuses to do (the "0 facts invented" claim two sections later would
+be sitting directly below a fabricated one). Built as an honest proof strip instead: real numbers
+(professions modeled, languages, templates, "0 invented facts" as a philosophy stated plainly)
+rather than borrowed credibility that does not exist yet.
+
+**Files:** `app/components/marketing/Landing.tsx` (full rewrite), three new client islands
+(`ProfessionDemo.tsx`, `FaqAccordion.tsx`, `AtsScoreReveal.tsx`), one new scoped stylesheet
+(`app/marketing.css`, imported only by `Landing.tsx` — new LAYOUT shapes only: the step rail, the
+demo shell, the timeline, the template preview, the score ring; everything that already had a
+primitive — cards, buttons, chips, motion — reuses the existing one), and the `BrandOrb`/`globals.css`
+hero-variant addition described above.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean — `/` and
+`/ar` both compile as static routes. Live-verified in a real browser this time (the dev server
+happened to compile quickly for this pass): confirmed via `elementFromPoint` that the hero orb does
+not sit over the `<h1>` text (the design brief's own "the orb must not cover the text" rule, the
+same one `ops/design.test.mjs` checks live), confirmed no horizontal overflow at 1440px, and
+screenshotted the hero (English and Arabic, correctly mirrored — orb swaps sides, pipeline arrows
+flip direction, nav mirrors), the "why different" cards, and the journey timeline. `ops/design.test.mjs`
+itself needs a running app and was not run as part of this pass (it is not part of `npm test`);
+flagged rather than assumed clean.
