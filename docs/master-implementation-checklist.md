@@ -25,21 +25,20 @@ better than the system behaves.
 
 ---
 
-## The finding that gates everything
+## The finding that gated everything (resolved — P0-3)
 
 > `app/lib/resumeStore.ts:36` — *"This module is browser storage only, and browser storage
 > is a RECOVERY DRAFT — not the source of truth. Server persistence is `/api/resumes` and
 > is a separate, larger piece of work."*
 
-The structured CV — `BuilderState`, the thing the builder actually edits — **is never sent
-to the server.** `/api/resumes` exists, but:
+At the time this was written, the structured CV — `BuilderState`, the thing the builder
+actually edits — was never sent to the server: `/api/resumes` stored only a flat
+`{ title, text }` snapshot, and nothing in the builder wrote to it.
 
-- it stores a flat `{ title, text }` snapshot, not the document;
-- nothing in the builder calls it. Grep for `api/resumes` outside its own route returns
-  `AccountClient.tsx` (list + delete) and comments. There is no writer.
-
-So the order's requirement *"Saved CVs must be stored on the server"* is **not met**, and
-under the order's own priority rule (P0 before everything) that is the first thing built.
+That gap is now closed. `app/lib/resumeServer.ts` + `/api/resume` (singular — see its own
+header for how it differs from `/api/resumes`) + `useServerSync` give `BuilderState` itself
+a server-side home, addressed by (account, resumeId), versioned, and `BuilderProvider.tsx`
+mirrors every draft to it (`b59dd89`). See P0-3.
 
 ---
 
@@ -49,10 +48,10 @@ under the order's own priority rule (P0 before everything) that is the first thi
 |---|---|---|---|
 | P0-1 | Every CV has a unique `resumeId` | `DONE` (pre-existing) | `resumeStore.ts:112 newResumeId`; `ops/isolation.test.mjs` |
 | P0-2 | Every CV belongs to a `userId` | `DONE` (pre-existing) | `resumeStore.ts:83 ownerKey`, `recordKey(owner, resumeId)`; `useOwner.ts` resolves it from `/api/auth/me` |
-| P0-3 | **Saved CVs stored on the server** | `PARTIAL` | `app/lib/resumeServer.ts` + `/api/resume` + `useServerSync` built and tested (`ops/resumeserver.test.mjs`, 35 assertions against a real fake-Redis). **Not yet wired into `BuilderProvider`, and needs a Redis credential to be live.** |
+| P0-3 | **Saved CVs stored on the server** | `DONE` | `app/lib/resumeServer.ts` + `/api/resume` + `useServerSync`, wired into `BuilderProvider` (`b59dd89`) — local write stays first, the server mirrors on a 2.5s beat, and a server copy ahead of an untouched local draft is adopted on mount. `ops/resumeserver.test.mjs` (35 assertions against a fake-Redis) all pass. Redis is configured in Vercel per that commit's own message, so this is live; not independently re-verified against production Redis in this pass. |
 | P0-4 | New CV creates a new empty record | `DONE` (pre-existing) | `BuilderProvider.tsx` — `urlId \|\| newResumeId()`; no "current resume" concept exists |
 | P0-5 | Old CV data never appears in a new CV | `DONE` (pre-existing) | Records validate `owner`/`resumeId` against the key and quarantine on mismatch (`resumeStore.ts:131`); `ops/isolation.test.mjs` |
-| P0-6 | Browser storage is an isolated recovery draft only | `PARTIAL` | Local stays the write path by design; the server is a durable mirror. True once P0-3 is wired. |
+| P0-6 | Browser storage is an isolated recovery draft only | `DONE` | Local stays the write path by design; the server is a durable mirror, wired as of P0-3. |
 | P0-7 | Local draft keys include user + resume | `DONE` (pre-existing) | `ra_cv:{owner}:{resumeId}`; the seven personal stores are owner-scoped in `personalStore.ts` |
 | P0-8 | Query cache keys include user + resume | `DONE` (pre-existing) | `aiCache.ts questionKey` carries `task + contextHash + inputHash + instance`; `RequestStamp` carries `owner` and `resumeId`; `ops/aicache.test.mjs` (147 assertions) |
 | P0-9 | A late reply from one CV never updates another | `DONE` (pre-existing) | `acceptReply` checks owner → resumeId → contextHash → inputHash → revision, in that order; `useAiTask` is single-flight and aborts on unmount |
