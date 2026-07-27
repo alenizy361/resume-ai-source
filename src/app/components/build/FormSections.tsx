@@ -73,6 +73,15 @@ export function Field({
 
 export function StartCards(p: Common & {
   onPicked: () => void;
+  /*
+   * "Build a new CV" — distinct from `onPicked`. Continuing a draft or opening the importer both
+   * proceed into WHATEVER context already exists; starting fresh has to first make a genuinely new,
+   * empty draft exist (a fresh id, written as the newest record) before there is anywhere to proceed
+   * INTO. Only `BuilderStart.tsx` — which owns `owner`/the router/`newResumeId` — can do that, so it
+   * is a separate callback rather than folded into `onPicked` with an `entry` flag `onPicked` would
+   * have to branch on.
+   */
+  onNew: () => void;
   openImport?: boolean;
   /**
    * Whose browser this is, as `resumeStore.ownerKey` computes it, or `""` while the answer is still in
@@ -100,11 +109,7 @@ export function StartCards(p: Common & {
       <div className="bd-grid two">
         <button
           className="card card-hover t-lift t-tap p-4 text-start"
-          onClick={() => {
-            p.dispatch({ t: "entry", v: "new" });
-            track("builder_entry_selected", { entry: "new" });
-            p.onPicked();
-          }}
+          onClick={p.onNew}
         >
           <div className="text-sm font-bold">{C.newCv}</div>
           <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{C.newCvSub}</div>

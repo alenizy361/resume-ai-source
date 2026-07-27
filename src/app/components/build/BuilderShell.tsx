@@ -8,11 +8,32 @@
  * is rendered by the layout it stays mounted across step navigations, so the preview does not
  * remount and re-measure an A4 page every time the user presses Continue.
  *
- * It also repairs the URL. `/builder/<id>/<step>` is addressable, which means the id can be
- * wrong — a stale bookmark, a shared link, a hand-typed guess. The stored draft is the truth,
- * so a mismatched id is rewritten with `router.replace` rather than either 404ing or silently
- * building a resume the user cannot find again.
+ * ── the URL "repair" that used to live here, and why it is gone ──
  *
+ * `/builder/<id>/<step>` is addressable, which means the id can be wrong — a stale bookmark, a
+ * shared link, a hand-typed guess. This component used to watch for `urlId !== resumeId` (its own
+ * `usePathname()` parse against the context's loaded id) and `router.replace` the URL to match.
+ *
+ * That was safe only as long as `BuilderProvider` never actually reacted to the URL — which, until
+ * it was fixed, it never did (see `BuilderProvider.tsx`'s own note: its `resumeId` prop was accepted
+ * but never once passed by anything that rendered it). Once `BuilderProvider` was fixed to hydrate
+ * FOR the URL's id — which is what makes switching resumes work at all — the two mechanisms started
+ * fighting: on the render right after a navigation to a new id, this component's effect (a CHILD,
+ * so its effects commit before the parent's) still read the STALE `resumeId` from the previous
+ * resume, saw a "mismatch" against the new URL, and replaced the URL back to the old id before
+ * `BuilderProvider`'s own hydration effect — the parent, committing after — had a chance to catch
+ * up. The result was a `router.replace` racing a `router.push`, and the replace, running first,
+ * always won: "Build a new CV" and "Duplicate → tailor for a job" would write a new draft, navigate
+ * to it, and immediately get bounced back to the old one.
+ *
+ * `BuilderProvider` hydrating FOR whatever id is in the URL (creating an empty draft under an id it
+ * does not recognise rather than refusing it) makes this component's OWN correction unreachable in
+ * every legitimate case: `wanted` there always resolves to `urlId` first, whenever the URL has one.
+ * A second, independent "corrector" wasn't defending against a real remaining case — it was a stale
+ * duplicate of a mechanism that had already moved to where the id resolution actually happens, and
+ * it was actively wrong exactly when a switch was in flight.
+ *
+
  * ── what changed, and why ──
  *
  * **Four progress indicators became one.** A rail of eleven segments in the header, the full
@@ -38,7 +59,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import ResumeTemplate from "../ResumeTemplate";
 import BrandOrb from "../BrandOrb";
@@ -48,7 +69,7 @@ import StepBar from "./StepBar";
 import StepActions from "./StepActions";
 import { useBuilder } from "./BuilderProvider";
 import { lifecycleLabel, lifecycleTone } from "@/app/lib/lifecycle";
-import { stepFromSlug, stepHref } from "./steps";
+import { stepFromSlug } from "./steps";
 
 const CHROME = {
   en: {
@@ -77,10 +98,9 @@ export default function BuilderShell({
 }) {
   const t = CHROME[lang];
   const ar = lang === "ar";
-  const { state, lifecycle, online, resumeId, owner, hydrated, previewText, cv, template } = useBuilder();
+  const { state, lifecycle, online, resumeId, owner, previewText, cv, template } = useBuilder();
   const tone = lifecycleTone(lifecycle);
   const pathname = usePathname() || "";
-  const router = useRouter();
   const isDesktop = useMediaQuery(DESKTOP);
 
   /* The last two segments of `/builder/<id>/<step>` — absent on the landing page. */
@@ -95,12 +115,6 @@ export default function BuilderShell({
    * `replace`, not `push`: the wrong URL should not become a Back destination, or the user's
    * own Back button would bounce them straight into the redirect again.
    */
-  useEffect(() => {
-    if (!hydrated || !onStep || !resumeId || !step) return;
-    if (urlId === resumeId) return;
-    router.replace(stepHref(lang, resumeId, step));
-  }, [hydrated, onStep, resumeId, urlId, step, lang, router]);
-
   /*
    * Start every step at the top.
    *

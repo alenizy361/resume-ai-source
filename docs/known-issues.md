@@ -2351,3 +2351,59 @@ audit's own suggested remedy was "offer an English display name instead of forci
 is what not-translating-it already does) and was not touched. The `languageMismatch` review-step
 warning (`reviewChecks.ts`) still only warns rather than links directly to the fixed "Create English
 version" action — a smaller, separate polish item, not fixed here.
+
+### F-47 · P0 · "Build a new CV" reopened the old draft — and a wider bug behind it: switching resumes never actually worked — FIXED
+
+Direction: the same launch-readiness audit found that "Build a new CV", pressed with an existing draft
+open, navigated to a URL that looked new but showed the OLD draft's title/experience still filled in —
+verified CONFIRMED live before touching anything (`FormSections.tsx`'s "Build a new CV" button only
+dispatched `{t:"entry",v:"new"}` and called the SAME `onPicked` used to just continue, never minting a
+new id).
+
+**The obvious fix wasn't sufficient — a much deeper, previously-unknown bug was hiding behind it.**
+Minting a fresh id via `newResumeId()`, writing it as the newest record, and navigating there (the same
+shape the already-shipped "Duplicate → tailor for a job" button uses) still failed: the URL would show
+the new id for a moment, then silently revert to the old one. Tracing it found that **`BuilderProvider`'s
+`resumeId` prop — the thing its own hydration effect is supposed to re-run on when it changes ("switching
+resumes MUST re-run this", per the effect's own comment) — was never once passed by anything.**
+`BuilderFrame.tsx`, the only place `<BuilderProvider>` is ever rendered, mounts it with `lang` alone. So
+`urlId` had been `undefined` on every render since this mechanism was built: the effect's own re-run
+guard could never fire from a URL change, because the "URL" side of the comparison never moved.
+
+This meant **switching resumes — not just via the buggy "Build a new CV" button, but via the
+already-shipped "Duplicate" button too** — had likely never worked correctly in production: `duplicate()`
+also just writes a new record and navigates, relying on the exact mechanism that was silently
+disconnected. Not something the audit found or could have found without testing that specific button,
+which it did not.
+
+**Fixed by reading the real URL directly inside `BuilderProvider`** (`usePathname()`, parsed the same
+way `BuilderShell.tsx` already correctly parses it for its own purposes — same logic, so the two agree
+by construction), replacing the dead prop. `resumeId` prop removed from the component's signature
+entirely, since nothing ever supplied it correctly and the fix makes a prop unnecessary.
+
+**Fixing the dead wire exposed a second, subtler bug: a genuine React effect-ordering race.**
+`BuilderShell.tsx` had its OWN independent "wrong id in the URL" repair effect, built for the same
+`urlId`-never-worked world where `BuilderProvider` couldn't react to a switch on its own. Once
+`BuilderProvider` started reacting to the real URL, the two mechanisms started fighting: on the render
+right after a navigation to a new id, `BuilderShell`'s effect (a CHILD component, whose effects commit
+BEFORE its parent's in React) still read the STALE `resumeId` from the previous resume, saw a
+"mismatch" against the new URL, and `router.replace`d the URL back to the old id — before
+`BuilderProvider`'s own hydration effect, committing after, ever got to react. A `router.replace` racing
+a `router.push`, and the replace always won by construction. Verified live: even with the dead-wire fix
+alone, "Build a new CV" would navigate to the new id and bounce back within under a second, every time.
+Fixed by removing `BuilderShell`'s now-redundant repair effect entirely — `BuilderProvider` hydrating
+FOR whatever id is in the URL (creating an empty draft under an unrecognised one, rather than refusing
+it) makes the case that effect existed to correct unreachable in every legitimate scenario; it was
+firing only during this exact race, and only causing harm.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed. `npm run lint` — zero
+new issues. `npm run build` clean. Live Playwright against the real bundled app (no Anthropic key
+needed — none of this touches AI): "Build a new CV" with an existing draft open, run 3 times in a row —
+navigates to a genuinely different id every time, stays there, empty title field, old draft provably
+untouched in storage. "Duplicate → tailor for a job" — same verification, new id carries the "(copy)"
+suffix, original untouched. "Continue where you left off" on a normal draft — lands on the SAME id, no
+regression. The already-fixed English-version flow (F-46) re-verified working, unaffected by this pass.
+
+**Explicitly not done this pass**: no other caller of `BuilderProvider`'s old `resumeId` prop needed
+updating (there was exactly one render site, and it never passed the prop) — a narrow, low-risk fix
+despite the depth of what it uncovered.

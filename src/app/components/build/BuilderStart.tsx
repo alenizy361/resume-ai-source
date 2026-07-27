@@ -273,6 +273,31 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
     router.push(stepHref(lang, copyId, STEPS[0]), { scroll: false });
   };
 
+  /*
+   * "Build a new CV", made to actually mean it.
+   *
+   * `enter()` below navigates using the CURRENT `resumeId` from context — correct for continuing a
+   * draft or for a genuinely empty visit, and silently wrong here: `BuilderFrame` never threads the
+   * URL's resumeId down to `BuilderProvider` (it resolves the draft from storage — "the most
+   * recently updated one, or a fresh one if none exist" — never from the address bar), so navigating
+   * to a new URL changes nothing about which draft loads. Without this, "Build a new CV" pressed
+   * with an existing draft open returned to that SAME draft, mid-fill, under a "new CV" label — a
+   * user's old title/experience/summary still sitting in the fields. Fixed the same way `duplicate`
+   * above already had to: mint a fresh id, WRITE it as the newest record so "most recently updated"
+   * actually resolves to it, then navigate.
+   */
+  const startNew = () => {
+    const id = newResumeId();
+    writeResume(owner, id, lang, {
+      ...EMPTY_BUILDER,
+      target: { ...EMPTY_BUILDER.target, language: lang },
+      entry: "new",
+    });
+    track("builder_entry_selected", { entry: "new" });
+    trackStep("builderStarted", { at: STEPS[0], resumed: "0" });
+    router.push(stepHref(lang, id, STEPS[0]), { scroll: false });
+  };
+
   const enter = (step = STEPS[0]) => {
     /*
      * The funnel's builder step belongs HERE and not on the front door: viewing the landing page is
@@ -373,6 +398,7 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
              door means the landing can point at the right one instead of at another product. */
           openImport={params.get("entry") === "upload"}
           onPicked={() => enter()}
+          onNew={startNew}
         />
       </div>
 

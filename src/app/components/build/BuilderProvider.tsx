@@ -31,6 +31,7 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState,
 } from "react";
+import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
 
 import { assembleResume } from "@/app/lib/mergeProfile";
@@ -50,6 +51,7 @@ import { EMPTY_LEDGER } from "@/app/lib/aiBudget";
 import { findRolePack } from "@/app/lib/rolePacks";
 import { type Action, reducer, careerContext } from "./builderState";
 import { type UseGenerate, useGenerate } from "./useGenerate";
+import { stepFromSlug } from "./steps";
 import { useOnline } from "./useOnline";
 import { type Lifecycle, mayWrite } from "@/app/lib/lifecycle";
 
@@ -144,14 +146,9 @@ export function useBuilder(): BuilderContextValue {
 }
 
 export default function BuilderProvider({
-  lang, resumeId: urlId, children,
+  lang, children,
 }: {
   lang: "ar" | "en";
-  /**
-   * The id from the URL, when there is one. `/builder` itself has none — it is the
-   * landing, and the id is resolved from storage there.
-   */
-  resumeId?: string;
   children: React.ReactNode;
 }) {
   /* Every storage key starts with this. Empty until /api/auth/me answers — see `useOwner`. */
@@ -173,6 +170,25 @@ export default function BuilderProvider({
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   /*
+   * The id from the URL, when there is one — read directly here rather than accepted as a prop.
+   *
+   * It used to BE a prop (`resumeId: urlId`), and nothing ever passed one: `BuilderFrame.tsx` — the
+   * only place this component is ever rendered — mounts `<BuilderProvider lang={lang}>` with no
+   * `resumeId`, so `urlId` was `undefined` on every single render, forever. The hydration effect
+   * below has always correctly re-run "when `urlId` changes" — it just never actually changed,
+   * because it was never connected to anything that could change. `BuilderShell.tsx` derives the
+   * same value from `usePathname()` for its own "wrong id in the address bar" repair — that
+   * mechanism worked precisely because it reads the real URL and this one, silently, did not. Mirrors
+   * `BuilderShell`'s own parsing exactly, so the two agree by construction rather than by convention.
+   */
+  const pathname = usePathname() || "";
+  const urlId = useMemo(() => {
+    const parts = pathname.replace(/\/+$/, "").split("/").filter(Boolean);
+    const step = parts.length >= 2 ? stepFromSlug(parts[parts.length - 1]) : null;
+    return step ? decodeURIComponent(parts[parts.length - 2]) : undefined;
+  }, [pathname]);
+
+  /*
    * Hydrate for THIS (owner, resumeId), and re-hydrate when either changes.
    *
    * ── what this used to do, and why it was the bug ──
@@ -185,6 +201,14 @@ export default function BuilderProvider({
    * reducer back to the stored copy". That risk is real and it is answered by resetting to an EMPTY
    * form for an id with no record — not by loading a different resume. An unknown id showing a blank
    * builder is correct; an unknown id showing somebody else's CV is not.
+   *
+   * `urlId` being permanently `undefined` (see above) meant this whole guarantee was dormant: every
+   * navigation to a different resume — "Build a new CV" with an existing draft open, "Duplicate →
+   * tailor for a job" — wrote the new record correctly, pushed the new URL correctly, and then this
+   * effect's guard (`pair` unchanged, since `urlId` never moved) skipped re-running, leaving the OLD
+   * resume loaded in memory. `BuilderShell`'s own address-bar repair then rewrote the new URL back to
+   * the old id, since the old id was, in fact, what was actually loaded — a correct response to a
+   * question this effect should never have left open.
    */
   const started = useRef<string>("");
   useEffect(() => {
