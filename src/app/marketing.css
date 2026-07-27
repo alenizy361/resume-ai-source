@@ -23,6 +23,26 @@
   position: relative;
   isolation: isolate;
 }
+
+/*
+ * A static starfield behind the hero orb — one tiled background image, no per-star DOM node and
+ * nothing animated. Same reasoning as the ring: a still field of dots reads as depth; it does not
+ * need to twinkle to do that, and twinkling would mean N more animated layers for N stars.
+ */
+.hero-orb-col {
+  position: relative;
+}
+.hero-orb-col::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Ccircle cx='14' cy='22' r='1.1' fill='%23e9e6f7'/%3E%3Ccircle cx='58' cy='9' r='0.8' fill='%23c4b5fd'/%3E%3Ccircle cx='103' cy='41' r='1.3' fill='%23ffffff'/%3E%3Ccircle cx='150' cy='18' r='0.7' fill='%23c4b5fd'/%3E%3Ccircle cx='191' cy='55' r='1' fill='%23e9e6f7'/%3E%3Ccircle cx='27' cy='78' r='0.9' fill='%23ffffff'/%3E%3Ccircle cx='74' cy='96' r='1.2' fill='%23c4b5fd'/%3E%3Ccircle cx='119' cy='73' r='0.6' fill='%23e9e6f7'/%3E%3Ccircle cx='166' cy='101' r='1' fill='%23ffffff'/%3E%3Ccircle cx='206' cy='84' r='0.8' fill='%23c4b5fd'/%3E%3Ccircle cx='9' cy='134' r='1' fill='%23e9e6f7'/%3E%3Ccircle cx='49' cy='152' r='0.7' fill='%23ffffff'/%3E%3Ccircle cx='95' cy='128' r='1.3' fill='%23c4b5fd'/%3E%3Ccircle cx='138' cy='159' r='0.8' fill='%23e9e6f7'/%3E%3Ccircle cx='182' cy='140' r='1' fill='%23ffffff'/%3E%3Ccircle cx='34' cy='196' r='0.9' fill='%23c4b5fd'/%3E%3Ccircle cx='80' cy='206' r='0.6' fill='%23ffffff'/%3E%3Ccircle cx='127' cy='188' r='1.1' fill='%23e9e6f7'/%3E%3Ccircle cx='172' cy='210' r='0.8' fill='%23c4b5fd'/%3E%3Ccircle cx='210' cy='170' r='1' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+}
+.hero-orb-col > * { position: relative; z-index: 1; }
 .cosmos-glow::before {
   content: "";
   position: absolute;

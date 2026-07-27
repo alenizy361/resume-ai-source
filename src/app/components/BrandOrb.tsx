@@ -79,8 +79,11 @@ export default function BrandOrb({
       className={`brand-orb bo-${variant}${busy ? " is-busy" : ""} ${className}`}
       style={{ ["--bo-size" as string]: `${size}px`, ...style }}
     >
-      {/* Order is paint order: corona behind everything, glow behind the sphere, crescent on top. */}
+      {/* Order is paint order: corona behind everything, then the ring (a flattened ellipse
+          BEHIND the sphere so the sphere occludes its middle third — the classic "planet with
+          rings, viewed at an angle" read), then glow, then the sphere and its crescent on top. */}
       {variant === "hero" && <span className="bo-corona" />}
+      {variant === "hero" && <span className="bo-ring" />}
       <span className="bo-glow" />
       <span className="bo-sphere">
         <span className="bo-crescent" />

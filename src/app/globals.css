@@ -578,6 +578,31 @@ main {
   animation: bo-hero-corona 8.6s ease-in-out infinite;
   animation-delay: -2.3s; /* starts mid-cycle, out of phase with the glow from the first frame */
 }
+/*
+ * The ring — a circle flattened to an ellipse and tilted, the standard CSS "Saturn" construction.
+ * Sits BEHIND the sphere (earlier in paint order, no z-index needed) so the sphere's own opaque
+ * fill naturally occludes the ring's middle third; only the two side "wings" show, which is what
+ * reads as a ring viewed at an angle rather than a halo. One `transform: rotate`, nothing else
+ * animates on it — a static gradient border, so this costs one compositor layer, not a repaint.
+ */
+.brand-orb.bo-hero .bo-ring {
+  position: absolute;
+  inset: -18% -46%;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(90deg, transparent, rgba(196,181,253,0.65) 20%, rgba(226,232,245,0.85) 50%, rgba(196,181,253,0.65) 80%, transparent) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transform: rotate(-11deg) scaleY(0.28);
+  opacity: 0.8;
+  animation: bo-ring-spin 40s linear infinite;
+}
+@keyframes bo-ring-spin {
+  from { transform: rotate(-11deg) scaleY(0.28); }
+  to   { transform: rotate(349deg) scaleY(0.28); }
+}
 @keyframes bo-hero-glow {
   0%, 100% { transform: scale(1);    opacity: 0.7; }
   50%      { transform: scale(1.22); opacity: 1; }
@@ -604,9 +629,11 @@ main {
   .brand-orb .bo-sphere,
   .brand-orb .bo-glow,
   .brand-orb .bo-crescent,
-  .brand-orb .bo-corona { animation: none; }
+  .brand-orb .bo-corona,
+  .brand-orb .bo-ring { animation: none; }
   .brand-orb .bo-glow { opacity: 0.6; }
   .brand-orb.bo-hero .bo-corona { opacity: 0.4; }
+  .brand-orb.bo-hero .bo-ring { transform: rotate(-11deg) scaleY(0.28); }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

@@ -1759,3 +1759,58 @@ screenshotted the hero (English and Arabic, correctly mirrored — orb swaps sid
 flip direction, nav mirrors), the "why different" cards, and the journey timeline. `ops/design.test.mjs`
 itself needs a running app and was not run as part of this pass (it is not part of `npm test`);
 flagged rather than assumed clean.
+
+### F-39 · P0 · Hero orb: comfortable on mobile, and a real "planet with rings" — FIXED
+
+User feedback on F-38, with a reference screenshot: the mobile hero orb was "not comfortable, too
+big," and asked for the look in the photo — a Saturn-like ring and a starfield around a
+medium-sized, clearly-framed planet.
+
+**Found while investigating: the orb wasn't actually "too big" — it was pushed off-screen
+entirely.** The hero's text and orb columns share one CSS grid (`lg:grid-cols-[1.05fr_0.95fr]`),
+single-column below `lg`. With no explicit order, mobile stacked them in DOM order — text first,
+orb second — so the orb rendered roughly 800px down the page, past the headline, the description,
+and the CTAs. A user on a phone would have to scroll past the entire hero to ever see it, and the
+first "big black circle" they'd have scrolled past to get there would have read as an orb-sized gap,
+not a hero visual. Confirmed via `getBoundingClientRect()` on a real iPhone-13 viewport before
+touching anything, rather than guessing from the screenshot alone.
+
+**Fixed the order, not just the size.** `.hero-orb-col` gained `order-first lg:order-last` — orb
+first on mobile (matching the reference photo's composition: planet at the top, headline below),
+grid columns handle left/right placement on desktop unchanged. Re-verified the same way: text now
+measured at `top: 371`, orb at `top: 121`, on the same viewport.
+
+**The ring.** `BrandOrb.tsx`'s `hero` variant gained a `bo-ring` element — a circle flattened to an
+ellipse and tilted (`scaleY(0.28) rotate(-11deg)`), positioned BEHIND the sphere in paint order so
+the opaque sphere naturally occludes its middle third. That's the whole trick: no clip-path, no
+z-index games, just paint order, which is what makes it read as a ring viewed at an angle rather
+than a halo. One `transform: rotate` animation at 40s (near-static, barely perceptible motion) —
+nothing else on it moves, so it costs one static gradient-bordered layer, not a repaint.
+
+**The starfield.** A tiled SVG data-URI (20 small circles, three sizes, varied opacity) as a
+`background-image` on a new `.hero-orb-col::before` — one static image paint behind the orb, zero
+DOM nodes per star, nothing animated. Considered and rejected: individually-animated twinkling
+stars, which would have been N more animated layers for N stars — the same class of cost
+`transitions.css` and `.card`'s own header both document real crashes from, just multiplied by
+however many stars looked good. A still field of dots reads as depth without needing to move.
+
+**Mobile size.** The orb's `max-width`/`max-height` changed from a flat `88vw` (which could exceed
+340px on a wide phone) to `clamp(150px, 46vw, 520px)` — 150px floor, 520px ceiling, 46vw in between.
+Measured on an iPhone 13 viewport (390px wide): the sphere itself renders at 179px, comfortably
+smaller than before; the ring and corona glow extend beyond that by design (matching the reference
+photo's proportions), confirmed NOT to cause horizontal overflow (`document.documentElement.scrollWidth
+=== clientWidth`, both 390, measured live).
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean. Live-verified
+on a real iPhone-13-emulated viewport in Playwright: orb stacking order (first on mobile), orb sphere
+size (179px), no horizontal overflow, and screenshotted the result in both English and Arabic — the
+ring/starfield/planet composition renders correctly and RTL-mirrors correctly (confirmed visually,
+not just structurally). One stale-cache lesson from this pass, recorded because it cost real time:
+the FIRST verification pass silently re-tested the OLD layout — identical bounding-box numbers,
+sub-pixel-for-sub-pixel, across a full dev-server restart — before a direct computed-style check
+(`getComputedStyle(...).order`) confirmed the CSS was actually correct and a fresh `getBoundingClientRect()`
+call in the same script showed the corrected position. The first script wasn't wrong about what it
+measured; something about the page it measured was stale in a way a full `fuser -k` + restart did not
+clear. Isolating the check into a single fresh script (debug computed style AND position together, one
+navigation) is what surfaced the truth; re-running the exact same standalone script against an
+already-restarted server repeated the stale result.

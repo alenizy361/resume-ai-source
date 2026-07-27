@@ -266,8 +266,8 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             </div>
           </div>
 
-          <div className="relative mx-auto flex h-[320px] w-full items-center justify-center lg:h-[560px]" aria-hidden>
-            <BrandOrb variant="hero" size={520} className="max-w-full" style={{ maxWidth: "88vw", maxHeight: "88vw" }} />
+          <div className="hero-orb-col relative order-first mx-auto flex h-[210px] w-full items-center justify-center sm:h-[300px] lg:order-last lg:h-[560px]" aria-hidden>
+            <BrandOrb variant="hero" size={520} style={{ maxWidth: "clamp(150px,46vw,520px)", maxHeight: "clamp(150px,46vw,520px)" }} />
           </div>
         </div>
       </section>
