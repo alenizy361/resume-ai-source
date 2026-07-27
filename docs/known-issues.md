@@ -1319,3 +1319,41 @@ on the Anthropic call site, updated for the renamed `jdWithContext` variable), `
 clean. A throwaway Playwright script (not committed — this environment has no Anthropic/NVIDIA
 credential to run a real scan against) confirmed the JD-upload control, employer field, and
 target-country field all render and hold input correctly in step 2 of the wizard.
+
+### F-32 · P2 · Duplicate and tailor: the metadata the order asked for — FIXED
+
+`BuilderStart.tsx` already had a working "Duplicate → tailor for a job" action (P2-2, this session)
+— it clones a saved resume under a fresh id and lands on the target step. What it did not do was
+store the metadata the order names: source resume id, target employer, target job, job description,
+match score, created date, application status.
+
+**Checked before adding a new field for each one.** Four of the seven already exist and are exactly
+what the order is asking for, under names this codebase already uses: target employer is
+`target.employer`, target job is `target.title`, job description is `target.jobAdText`, match score
+is `snapshot.matchScore`. Duplicating those into a second location would only create two places that
+can disagree about the same fact — and they get filled in naturally, because the duplicate flow
+already lands the user on the target-job step to fill in the new job's own details.
+
+**What genuinely didn't exist:** which resume a tailored copy came from, when the copy was made, and
+whether an application went out for it — none of those are a property of the CV's content, so none
+of them belonged in `profile` or `target`. Added `BuilderState.tailoredFrom?: { sourceResumeId,
+tailoredAt, applicationStatus }` (`builderDoc.ts`) — optional, so every existing stored resume loads
+unchanged, no migration needed. `applicationStatus` reuses `localdata.ts`'s job-tracker vocabulary
+(`saved`/`applied`/`interview`/`offer`/`rejected`) rather than inventing a second one.
+
+**Wired in:** `duplicate()` stamps `sourceResumeId`/`tailoredAt` at clone time. The `/builder` start
+screen's resume list now reads `tailoredFrom` for every row (free — it already read each record's
+full state to compute step progress) and shows a "Tailored from *X*" badge plus an inline status
+selector on any tailored copy; changing the status patches just that field back into storage.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` all clean. Two of `ops/handoff.
+test.mjs`'s static source-regex guards needed updating for the refactored (not behaviourally
+changed) `listResumes(owner).map(...)` call site — confirmed the guard's actual property (every
+resume in the index is listed, not just the first) still holds before loosening the regex, rather
+than just making the text match. A live browser click-through of the duplicate → badge → status
+→ reload-persists path was attempted but not completed — `next dev` hung compiling `/builder` in
+this sandbox for several minutes with no error in its own log, after many heavy Playwright cycles
+earlier in this session (the same class of dev-server resource pressure F-29 documents, not a code
+defect: `npm run build`, the production compiler, succeeded cleanly on the same code moments
+earlier). Relying on the clean production build, typecheck, and full test suite for this pass;
+flagged here rather than silently claimed as browser-verified.

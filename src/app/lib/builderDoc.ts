@@ -262,6 +262,26 @@ export interface BuilderState {
     digest: string;
     at: number;
   };
+
+  /**
+   * Present only on a resume created via "Duplicate and tailor". Everything else "duplicate and
+   * tailor" is supposed to track already exists and is not repeated here: the target employer,
+   * the target job title, and the job description itself are `target.employer`/`target.title`/
+   * `target.jobAdText` — the same fields the ordinary target-job step fills in, because a tailored
+   * version's target job IS an ordinary target job, just one filled in on a copy instead of an
+   * original. The match score is `snapshot.matchScore`, for the same reason. Duplicating those
+   * into a second location would only create two places that can disagree about the same fact.
+   *
+   * What genuinely does not exist anywhere else: which resume this one was cloned from, when the
+   * clone happened, and whether an application actually went out for it — none of those are a
+   * property of the CV's content, so none of them belong in `profile` or `target`.
+   */
+  tailoredFrom?: {
+    sourceResumeId: string;
+    tailoredAt: number;
+    /** Same vocabulary `localdata.ts`'s job tracker uses — one status vocabulary, not two. */
+    applicationStatus?: "saved" | "applied" | "interview" | "offer" | "rejected";
+  };
 }
 
 export const EMPTY_TARGET: TargetJob = {

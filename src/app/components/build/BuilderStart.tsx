@@ -44,6 +44,11 @@ const T = {
        different job, so the original stays intact for the application it already fits. */
     duplicate: "Duplicate → tailor for a job",
     copySuffix: " (copy)",
+    tailoredFrom: (title: string) => `Tailored from “${title}”`,
+    statusLabel: "Application status",
+    status: {
+      saved: "Interested", applied: "Applied", interview: "Interview", offer: "Offer", rejected: "Rejected",
+    } as Record<string, string>,
   },
   ar: {
     h1: "ابنِ سيرتك الذاتية",
@@ -57,6 +62,11 @@ const T = {
     firstStep: "ابدأ ←",
     duplicate: "نسخ ← وخصّصها لوظيفة",
     copySuffix: " (نسخة)",
+    tailoredFrom: (title: string) => `مخصّصة من «${title}»`,
+    statusLabel: "حالة التقديم",
+    status: {
+      saved: "مهتم", applied: "تم التقديم", interview: "مقابلة", offer: "عرض عمل", rejected: "رُفض",
+    } as Record<string, string>,
   },
 };
 
@@ -159,24 +169,56 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
    * `mayRestore` so a lapsed anonymous visit is offered nothing — the same answer the provider and
    * the landing banner give, from the same function.
    */
-  const [saved, setSaved] = useState<Array<{ id: string; title: string; steps: number; at: SectionId }>>([]);
+  interface SavedRow {
+    id: string; title: string; steps: number; at: SectionId;
+    tailoredFrom?: { sourceResumeId: string; sourceTitle: string; applicationStatus?: string };
+  }
+  const [saved, setSaved] = useState<SavedRow[]>([]);
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!hydrated || !owner || !mayRestore(owner)) return;
     try {
-      setSaved(listResumes(owner).map((r) => {
-        const st = readResume(owner, r.resumeId).record?.state;
+      const list = listResumes(owner);
+      // Read every record's state once, so a tailored copy can look up its source's title
+      // without a second pass of storage reads per row.
+      const states = new Map(list.map((r) => [r.resumeId, readResume(owner, r.resumeId).record?.state]));
+      setSaved(list.map((r) => {
+        const st = states.get(r.resumeId);
         const sections = (st?.sectionsDone ?? []).filter((s) => (STEPS as string[]).includes(s));
+        const tf = st?.tailoredFrom;
         return {
           id: r.resumeId,
           title: r.title || st?.target.title || st?.personal.fullName || "",
           steps: sections.length,
           at: STEPS.find((s) => !sections.includes(s)) ?? STEPS[STEPS.length - 1],
+          tailoredFrom: tf ? {
+            sourceResumeId: tf.sourceResumeId,
+            // The source may since have been deleted — fall back to the untitled label rather
+            // than showing a blank "Tailored from "".
+            sourceTitle: states.get(tf.sourceResumeId)?.target.title
+              || states.get(tf.sourceResumeId)?.personal.fullName || t.untitled,
+            applicationStatus: tf.applicationStatus,
+          } : undefined,
         };
       }));
     } catch { setSaved([]); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, owner]);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  /** Patch just the application status on a tailored resume's stored record. */
+  const setApplicationStatus = (id: string, applicationStatus: string) => {
+    const { record } = readResume(owner, id);
+    if (!record?.state.tailoredFrom) return;
+    writeResume(owner, id, record.lang, {
+      ...record.state,
+      tailoredFrom: { ...record.state.tailoredFrom, applicationStatus: applicationStatus as never },
+    });
+    setSaved((prev) => prev.map((r) => r.id === id && r.tailoredFrom
+      ? { ...r, tailoredFrom: { ...r.tailoredFrom, applicationStatus } }
+      : r));
+    track("builder_application_status", { status: applicationStatus });
+  };
 
   /*
    * The live state outranks the stored index for the resume currently loaded.
@@ -213,9 +255,18 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
     const copyTitle = record.state.target.title
       ? `${record.state.target.title}${t.copySuffix}`
       : record.state.target.title;
+    /*
+     * The new job's own details — employer, title, job description, eventual match score — are
+     * NOT stamped here. They belong to `target`/`snapshot`, which the target-job step this
+     * navigates to is about to fill in for the FIRST time on this copy; carrying the source
+     * resume's own old target forward would make the duplicate look pre-tailored to a job nobody
+     * pasted yet. What genuinely dates from this moment — which resume this came from, and when —
+     * is `tailoredFrom`, and only that.
+     */
     writeResume(owner, copyId, record.lang, {
       ...record.state,
       target: { ...record.state.target, title: copyTitle },
+      tailoredFrom: { sourceResumeId: id, tailoredAt: Date.now() },
     });
     track("builder_duplicated", { source: id });
     trackStep("builderStarted", { at: STEPS[0], resumed: "1" });
@@ -262,6 +313,25 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
                 <div className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
                   {t.resumeSub(r.steps)} · {nav[r.at]}
                 </div>
+                {/* Only a tailored copy carries this — the primitive "duplicate and tailor" is
+                    built from, see `tailoredFrom` on BuilderState. */}
+                {r.tailoredFrom && (
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <span className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)" }}>
+                      {t.tailoredFrom(r.tailoredFrom.sourceTitle)}
+                    </span>
+                    <select
+                      aria-label={t.statusLabel}
+                      value={r.tailoredFrom.applicationStatus || "saved"}
+                      onChange={(e) => setApplicationStatus(r.id, e.target.value)}
+                      className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                      style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}
+                    >
+                      {Object.entries(t.status).map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+                    </select>
+                  </div>
+                )}
                 <button
                   onClick={() => {
                     track("builder_resumed", { at: r.at });

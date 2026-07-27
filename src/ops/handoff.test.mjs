@@ -260,7 +260,8 @@ console.log("\n── the retired key now has no live writer ──");
   /* The start screen has to be able to SHOW a second resume, or adding one hides it. Every
      consumer of the index took `[0]` until this change. */
   const start = readFileSync(new URL("../app/components/build/BuilderStart.tsx", import.meta.url), "utf8");
-  ok("the start screen lists the owner's resumes", /listResumes\(owner\)\.map/.test(start),
+  ok("the start screen lists the owner's resumes",
+    /listResumes\(owner\)/.test(start) && /\.map\(/.test(start),
     "a CV that cannot be reached is not a CV that was added");
   ok("and gates that list on the visit rule", /mayRestore\(owner\)/.test(start));
 }
