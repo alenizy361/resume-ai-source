@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // The Arabic skills and cover-letter hubs. Their 122 profession pages were in this sitemap
     // with no index page above them — reachable by a crawler, orphaned for a reader.
     "/ar/resume-skills", "/ar/cover-letter-examples",
-    "/privacy", "/terms",
+    "/privacy", "/terms", "/ar/privacy", "/ar/terms",
     // The builder's two landings. The step pages under them are one visitor's draft and
     // are noindex; only the entry points belong in a sitemap.
     "/builder", "/ar/builder",

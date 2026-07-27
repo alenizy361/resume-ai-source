@@ -674,7 +674,10 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 <button disabled={resume.trim().length < 50} onClick={() => setStep(2)}
                   className="btn-accent mt-5 w-full py-3.5 text-base disabled:cursor-not-allowed disabled:opacity-40">{ar ? "متابعة ←" : "Continue →"}</button>
                 <p className="mt-3 text-center text-[11px]" style={{ color: "var(--faint)" }}>
-                  {ar ? "🔒 تُعالَج فوراً · لا تُخزَّن على خوادمنا" : (
+                  {ar ? (
+                    <>🔒 تُعالَج فوراً · لا تُخزَّن على خوادمنا —{" "}
+                      <Link href="/ar/privacy" style={{ textDecoration: "underline" }}>كيف نعالج بياناتك</Link></>
+                  ) : (
                     <>Processed by a cloud AI provider, then discarded — not stored on our servers.{" "}
                       <Link href="/privacy" style={{ textDecoration: "underline" }}>How we handle your data</Link></>
                   )}
@@ -981,7 +984,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       <CheckoutButton ar={ar} plan="complete" label={ar ? `الحزمة الكاملة (${formatPrice("complete", "ar")})` : `Complete Pack (${formatPrice("complete", "en")})`} variant="ghost" />
                     </div>
                     <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>
-                      <a href="/terms" className="underline underline-offset-2">{ar ? "ضمان استرجاع خلال ٧ أيام" : "7-day money-back guarantee"}</a>
+                      <a href={ar ? "/ar/terms" : "/terms"} className="underline underline-offset-2">{ar ? "ضمان استرجاع خلال ٧ أيام" : "7-day money-back guarantee"}</a>
                     </p>
                   </div>
                 )}

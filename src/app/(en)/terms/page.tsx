@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { PLANS, formatPrice } from "@/app/lib/plans";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
-  title: "الشروط والأحكام وسياسة الاسترجاع | Terms — Sira",
-  description: "شروط استخدام خدمة «سيرة» على cv.rabit.sa، الأسعار، وسياسة الاسترجاع.",
-  alternates: { canonical: `${BASE}/terms` },
+  title: "Terms & Refund Policy | Sira",
+  description: "Terms of use for the Sira resume service at cv.rabit.sa, pricing, and the refund policy.",
+  alternates: {
+    canonical: `${BASE}/terms`,
+    languages: { en: `${BASE}/terms`, ar: `${BASE}/ar/terms`, "x-default": `${BASE}/terms` },
+  },
 };
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -18,89 +21,76 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
   </section>
 );
 
+/*
+ * A genuine parallel document, not a summary — this page used to be a short bullet list under an
+ * otherwise-Arabic page (`/terms` served Arabic content with an "English summary" card at the
+ * bottom, at a URL with no `/ar` in it). Same policy substance as `/ar/terms`, same section order,
+ * written in full English rather than condensed — a reader here shouldn't get less than a reader
+ * of the Arabic page gets.
+ */
 export default function TermsPage() {
   return (
-    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/privacy" className="text-sm" style={{ color: "var(--muted)" }}>سياسة الخصوصية</Link>
-        </div>
-      </nav>
+    <PageShell lang="en" langToggle="/ar/terms">
+      <div className="mx-auto max-w-3xl">
+        <div className="chip mb-4">Terms &amp; Conditions</div>
+        <h1 className="mb-2 text-3xl font-extrabold">Terms of Use &amp; Refund Policy</h1>
+        <p className="mb-10 text-sm" style={{ color: "var(--muted)" }}>Last updated: July 2026 · Applies to cv.rabit.sa</p>
 
-      <div className="mx-auto max-w-3xl px-6 py-14">
-        <div className="chip mb-4">الشروط والأحكام</div>
-        <h1 className="mb-2 text-3xl font-extrabold">شروط الاستخدام وسياسة الاسترجاع</h1>
-        <p className="mb-10 text-sm" style={{ color: "var(--muted)" }}>آخر تحديث: يوليو ٢٠٢٦ · تنطبق على cv.rabit.sa</p>
-
-        <Section title="١. الخدمة">
+        <Section title="1. The service">
           <p>
-            «سيرة» أداة ذكاء اصطناعي تساعدك على تحسين وضوح سيرتك الذاتية وملاءمتها لمتطلبات الوظائف،
-            وبناء سيرة إنجليزية من إجاباتك. النتائج <strong>مساعدة تحريرية</strong> — لا نضمن قبولك في وظيفة
-            ولا اجتياز أي نظام توظيف معيّن، لأن قرارات التوظيف بيد جهات التوظيف وأنظمتها المختلفة.
+            Sira is an AI tool that helps you clarify your resume and match it to a job's requirements,
+            and build an English resume from your own answers. Results are <strong>editorial assistance</strong> —
+            we do not guarantee you will be hired, or that your resume will pass any specific applicant
+            tracking system, because hiring decisions rest with employers and the systems they use.
           </p>
-          <p>أنت مسؤول عن مراجعة النتيجة قبل استخدامها، خاصة المواضع المعلَّمة بـ«[أضف رقمك الفعلي]».</p>
+          <p>You are responsible for reviewing the result before you use it — especially anywhere marked with a placeholder like "[add your real number]".</p>
         </Section>
 
-        <Section title="٢. الأسعار">
-          <ul className="mr-5 list-disc space-y-1">
-            <li><strong>{PLANS.single.nameAr} — {formatPrice("single", "ar")} (دفعة واحدة):</strong> {PLANS.single.accessLabelAr} يشمل السيرة المحسّنة كاملة وخطاب التعريف.</li>
-            <li><strong>{PLANS.complete.nameAr} — {formatPrice("complete", "ar")} دفعة واحدة:</strong> السيرة + خطاب التعريف + لينكدإن + تحضير المقابلة، {PLANS.complete.accessLabelAr}. دفعة واحدة بدون اشتراك ولا تجديد.</li>
-            <li>فحص الدرجة والتحليل مجاني دائماً بدون بطاقة.</li>
+        <Section title="2. Pricing">
+          <ul className="ml-5 list-disc space-y-1">
+            <li><strong>{PLANS.single.name} — {formatPrice("single", "en")} (one-time):</strong> {PLANS.single.accessLabel}. Includes the full optimized resume and a cover letter.</li>
+            <li><strong>{PLANS.complete.name} — {formatPrice("complete", "en")} one-time:</strong> resume + cover letter + LinkedIn + interview prep, {PLANS.complete.accessLabel}. One payment, no subscription and no renewal.</li>
+            <li>The score check and analysis are always free, no card required.</li>
           </ul>
         </Section>
 
-        <Section title="٣. سياسة الاسترجاع">
-          <p>ندفع لك فلوسك كاملة إذا لم تحصل على الخدمة:</p>
-          <ul className="mr-5 list-disc space-y-1">
-            <li>إذا دفعت ولم تُفعَّل خدمتك، أو فشل النظام بتوليد سيرتك المحسّنة — <strong>استرجاع كامل</strong> خلال ٧ أيام من الدفع.</li>
-            <li>راسلنا بالبريد مع رقم العملية وسنعالج الطلب خلال ٣ أيام عمل، ويعود المبلغ عبر نفس وسيلة الدفع.</li>
-            <li>لا يشمل الاسترجاع حالة استخدام الخدمة الكامل ثم طلب الاسترجاع لعدم الإعجاب بالأسلوب — لكن راسلنا وسنحاول إرضاءك.</li>
+        <Section title="3. Refund policy">
+          <p>We refund you in full if you did not get the service:</p>
+          <ul className="ml-5 list-disc space-y-1">
+            <li>If you paid and your access was never activated, or the system failed to generate your optimized resume — a <strong>full refund</strong> within 7 days of payment.</li>
+            <li>Email us with your order reference and we handle the request within 3 business days; the amount returns via the same payment method.</li>
+            <li>A refund does not cover using the service in full and then asking for one because you didn't like the style — but email us anyway and we'll try to make it right.</li>
           </ul>
         </Section>
 
-        <Section title="٤. الاستخدام المقبول">
-          <ul className="mr-5 list-disc space-y-1">
-            <li>لا تستخدم الخدمة لإنشاء سير بمعلومات كاذبة عن هوية شخص آخر أو مؤهلات مزوّرة.</li>
-            <li>روابط النشر العامة مخصّصة لسيرتك أنت — يُحذَف أي محتوى مخالف أو مسيء.</li>
-            <li>يُحظر الاستخدام الآلي المفرط (سكربتات/هجمات) وقد يُقيَّد.</li>
+        <Section title="4. Acceptable use">
+          <ul className="ml-5 list-disc space-y-1">
+            <li>Do not use the service to create resumes with false information about another person's identity, or fabricated qualifications.</li>
+            <li>Public publish links are for your own resume only — content that violates this or is abusive is removed.</li>
+            <li>Excessive automated use (scripts, attacks) is prohibited and may be rate-limited.</li>
           </ul>
         </Section>
 
-        <Section title="٥. الدفع">
+        <Section title="5. Payment">
           <p>
-            المدفوعات تُعالَج عبر بوابة «Paylink» المرخّصة في السعودية (مدى، فيزا، ماستركارد) بالريال السعودي.
-            لا نطّلع على بيانات بطاقتك ولا نخزّنها.
+            Payments are processed through Paylink, a payment gateway licensed in Saudi Arabia (mada, Visa,
+            Mastercard), in Saudi riyals. We never see or store your card details.
           </p>
         </Section>
 
-        <Section title="٦. التواصل">
+        <Section title="6. Contact">
           <p>
-            الخدمة تعمل على نطاق <span dir="ltr">cv.rabit.sa</span> التابع لـ«رابِت» (Rabit).
-            لأي مشكلة دفع أو استفسار:
+            The service runs on <span dir="ltr">cv.rabit.sa</span>, operated by Rabit. For any payment
+            issue or question:
           </p>
-          <p dir="ltr">📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a></p>
+          <p>📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a></p>
         </Section>
-
-        <div className="card mt-10 p-6" dir="ltr">
-          <h2 className="mb-3 text-lg font-bold">English summary</h2>
-          <ul className="ml-5 list-disc space-y-1 text-sm" style={{ color: "rgba(244,245,243,0.75)" }}>
-            <li>Sira is an editorial AI aid — we don&apos;t guarantee hiring outcomes or passage through any specific ATS.</li>
-            <li>Pricing: {formatPrice("single", "en")} one-time ({PLANS.single.accessLabel}) or {formatPrice("complete", "en")} one-time {PLANS.complete.name} ({PLANS.complete.accessLabel}, no subscription).</li>
-            <li><strong>Refunds:</strong> full refund within 7 days if you paid and the service failed to deliver. Processed within 3 business days via Paylink.</li>
-            <li>Payments handled by licensed Saudi gateway Paylink; we never see your card details.</li>
-            <li>Contact: alanziabdulaziz4@gmail.com</li>
-          </ul>
-        </div>
 
         <div className="mt-10 flex gap-4">
-          <Link href="/privacy" className="btn-ghost px-6 py-2.5 text-sm font-semibold" style={{ color: "var(--fg)" }}>سياسة الخصوصية ←</Link>
-          <Link href="/ar" className="btn-accent px-6 py-2.5 text-sm">الرئيسية</Link>
+          <Link href="/privacy" className="btn-ghost px-6 py-2.5 text-sm font-semibold" style={{ color: "var(--fg)" }}>Privacy policy →</Link>
+          <Link href="/" className="btn-accent px-6 py-2.5 text-sm">Home</Link>
         </div>
       </div>
-    </main>
+    </PageShell>
   );
 }

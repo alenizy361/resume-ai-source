@@ -1116,3 +1116,32 @@ English SEO body intact; `/ar/optimize` renders `dir="rtl"` with its Arabic SEO 
 thing this whole approach exists to protect); the header toggle navigates correctly in both
 directions; a draft typed in one language is present after switching to the other, with no
 hand-off code involved.
+
+### F-27 · P2 · `/terms` and `/privacy` split into real English and Arabic pages — FIXED
+
+Filed from the plan as "translate `/terms`/`/privacy` to Arabic" — checked before doing that, and
+the premise was backwards. Both pages were **already Arabic**: `dir="rtl" lang="ar"`, full Arabic
+legal text, at English-labelled URLs (`/terms`, `/privacy`, no `/ar` prefix), with a condensed
+"English summary" card bolted onto the bottom. An English-reading visitor landing on `/terms` got
+a page of Arabic legalese and a bullet-point summary, not an English document. The actual gap ran
+opposite to what the plan assumed.
+
+**Fix.** `/ar/terms` and `/ar/privacy` are new routes carrying the original, unedited Arabic text —
+now migrated onto `PageShell` and given the same `alternates.languages` hreflang pattern as every
+other bilingual pair on the site. `/terms` and `/privacy` were rewritten from scratch as full
+English documents — same section order, same policy substance (pricing figures pulled from
+`lib/plans.ts` exactly as the Arabic page does, same 7-day refund window, same PDPL rights section)
+— not a translation-shrunk-to-bullets summary. Every place in the app that linked `/privacy` or
+`/terms` unconditionally (`AccountClient.tsx`, `OptimizeTool.tsx` ×2, `interview-live/page.tsx`,
+`Landing.tsx`'s Arabic footer) now picks the language-correct URL; `sitemap.ts` gained the two new
+routes.
+
+**This is AI-translated/authored legal text and has not had human legal review.** Both new pages
+say the same thing as the pre-existing, presumably-reviewed Arabic original — same numbers, same
+policy — but a bilingual legal or compliance read before this is relied on as the site's actual
+terms is still owed, same as any machine-drafted legal copy.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` clean; all four routes return 200.
+Confirmed in a browser: `/terms` and `/privacy` render `dir="ltr"` with full English prose (375 and
+430 words respectively, not a summary); `/ar/terms` and `/ar/privacy` render `dir="rtl"` with the
+original Arabic text intact; the header language toggle navigates correctly between each pair.

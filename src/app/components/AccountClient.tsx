@@ -491,7 +491,9 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         </div>
 
         <p className="mt-6 text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>
-          History, resumes, and applications are stored on this device only — nothing is uploaded. <Link href="/privacy" className="underline">Privacy</Link>
+          {lang === "ar"
+            ? <>السجل والسير والوظائف محفوظة على هذا الجهاز فقط — لا شيء يُرفع. <Link href="/ar/privacy" className="underline">الخصوصية</Link></>
+            : <>History, resumes, and applications are stored on this device only — nothing is uploaded. <Link href="/privacy" className="underline">Privacy</Link></>}
         </p>
       </div>
     </PageShell>

@@ -377,7 +377,7 @@ export default function InterviewLivePage() {
                 <CheckoutButton ar={ar} plan="single" label={t.unlockSingle} variant="ghost" />
               </div>
               <p className="mt-4 text-xs" style={{ color: "var(--faint)" }}>
-                <a href="/terms" className="underline underline-offset-2">{t.guarantee}</a>
+                <a href={ar ? "/ar/terms" : "/terms"} className="underline underline-offset-2">{t.guarantee}</a>
               </p>
               <button onClick={() => speak(paywallMsg)} className="mt-3 block w-full text-xs" style={{ color: "var(--faint)" }}>{t.replayInterviewer}</button>
             </div>

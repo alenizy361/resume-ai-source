@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
-  title: "سياسة الخصوصية | Privacy Policy — Sira",
-  description: "كيف نعالج سيرتك الذاتية وبياناتك: لا نخزّن سيرتك على خوادمنا، لا نستخدم بياناتك لتدريب النماذج، وتقدر تحذف كل شيء.",
-  alternates: { canonical: `${BASE}/privacy` },
+  title: "Privacy Policy | Sira",
+  description: "How we handle your resume and your data: we don't store your resume on our servers, we never use your data to train models, and you can delete everything.",
+  alternates: {
+    canonical: `${BASE}/privacy`,
+    languages: { en: `${BASE}/privacy`, ar: `${BASE}/ar/privacy`, "x-default": `${BASE}/privacy` },
+  },
 };
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -17,103 +20,85 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
   </section>
 );
 
+/*
+ * A genuine parallel document, not a summary — see the note in terms/page.tsx for why this
+ * changed. Same policy substance as `/ar/privacy`, same section order, written in full English.
+ */
 export default function PrivacyPage() {
   return (
-    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/terms" className="text-sm" style={{ color: "var(--muted)" }}>الشروط والأحكام</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-3xl px-6 py-14">
-        <div className="chip mb-4">سياسة الخصوصية</div>
-        <h1 className="mb-2 text-3xl font-extrabold">خصوصيتك وسيرتك الذاتية</h1>
+    <PageShell lang="en" langToggle="/ar/privacy">
+      <div className="mx-auto max-w-3xl">
+        <div className="chip mb-4">Privacy Policy</div>
+        <h1 className="mb-2 text-3xl font-extrabold">Your privacy and your resume</h1>
         <p className="mb-10 text-sm" style={{ color: "var(--muted)" }}>
-          آخر تحديث: يوليو ٢٠٢٦ · تنطبق على cv.rabit.sa — خدمة السير الذاتية المقدَّمة عبر نطاق Rabit.sa
-          <span dir="ltr"> (English summary at the bottom)</span>
+          Last updated: July 2026 · Applies to cv.rabit.sa — a resume service operated under the Rabit.sa domain.
         </p>
 
-        <Section title="١. هل تُخزَّن سيرتك عندنا؟ لا.">
+        <Section title="1. Is your resume stored with us? No.">
           <p>
-            نص سيرتك الذاتية <strong>لا يُحفَظ على خوادمنا</strong>. عند الفحص أو البناء يُرسَل النص لمعالجته
-            فوراً ثم يُعاد إليك — لا توجد قاعدة بيانات تحتفظ بالسير الذاتية.
+            Your resume's text <strong>is not saved on our servers</strong>. When you run a scan or use the
+            builder, the text is sent for processing and returned to you immediately — there is no database
+            that keeps resumes.
           </p>
           <p>
-            المسودّة التي تكتبها تُحفَظ <strong>على جهازك أنت فقط</strong> (متصفحك — localStorage) لكي لا تضيع
-            كتابتك عند تحديث الصفحة، وتقدر تمسحها بزر «ابدأ من جديد» أو بمسح بيانات المتصفح.
+            The draft you type is saved <strong>only on your own device</strong> (your browser's localStorage)
+            so your writing survives a page refresh — you can clear it with the "Start over" button, or by
+            clearing your browser data.
           </p>
           <p>
-            الاستثناء الوحيد: إذا ضغطت أنت «انشر رابطاً عاماً» فسيُحفَظ النص الذي اخترت نشره على رابط عام،
-            ومعك زر «إلغاء النشر» يحذفه نهائياً في أي وقت.
-          </p>
-        </Section>
-
-        <Section title="٢. أين تتم المعالجة؟">
-          <p>
-            المعالجة تتم عبر مزوّد ذكاء اصطناعي سحابي (خوادم خارج المملكة — الولايات المتحدة). يُرسَل نص السيرة
-            لغرض توليد النتيجة فقط. <strong>لا نستخدم بياناتك لتدريب أي نموذج</strong>، ولا نبيعها أو نشاركها مع
-            أي جهة تسويقية.
+            The one exception: if you choose "Publish a public link", the text you chose to publish is saved
+            at that public link, and an "Unpublish" button next to it deletes it permanently at any time.
           </p>
         </Section>
 
-        <Section title="٣. ما الذي نحتفظ به فعلاً؟">
-          <p>فقط الحد الأدنى لتشغيل حسابك:</p>
-          <ul className="mr-5 list-disc space-y-1">
-            <li>بريدك الإلكتروني (لتسجيل الدخول وربط اشتراكك) — يُحفَظ حتى تطلب حذفه.</li>
-            <li>حالة اشتراكك وتاريخ انتهائه.</li>
-            <li>بيانات الدفع تُعالَج بالكامل لدى بوابة الدفع المرخّصة «Paylink» — نحن لا نرى ولا نخزّن رقم بطاقتك إطلاقاً.</li>
+        <Section title="2. Where does processing happen?">
+          <p>
+            Processing runs through a cloud AI provider (servers outside Saudi Arabia — the United States).
+            Your resume text is sent only to generate the result. <strong>We never use your data to train any
+            model</strong>, and we never sell or share it with any marketing party.
+          </p>
+        </Section>
+
+        <Section title="3. What do we actually keep?">
+          <p>Only the minimum needed to run your account:</p>
+          <ul className="ml-5 list-disc space-y-1">
+            <li>Your email (for sign-in and linking your access) — kept until you ask us to delete it.</li>
+            <li>Your access status and its expiry date.</li>
+            <li>Payment details are handled entirely by the licensed gateway Paylink — we never see or store your card number.</li>
           </ul>
         </Section>
 
-        <Section title="٤. تعهّد عدم الاختلاق">
+        <Section title="4. The no-fabrication pledge">
           <p>
-            نظامنا مقيَّد برمجياً بعدم إضافة أي رقم أو خبرة أو شهادة لم تذكرها أنت في سيرتك. إذا كان الرقم
-            ناقصاً يكتب النظام مكانه «[أضف رقمك الفعلي]» بدل اختراعه. سيرتك تبقى سيرتك — أوضح وأقوى، لكن صادقة.
+            Our system is technically constrained from adding any number, experience, or credential you did
+            not state in your resume. When a figure is missing, the system writes "[add your real number]"
+            in its place instead of inventing one. Your resume stays yours — clearer and stronger, but honest.
           </p>
         </Section>
 
-        <Section title="٥. حقوقك وطريقة الحذف">
-          <ul className="mr-5 list-disc space-y-1">
-            <li>حذف مسودّاتك: زر «ابدأ من جديد» أو مسح بيانات الموقع من متصفحك (فوري، بيدك).</li>
-            <li>حذف رابط منشور: زر «إلغاء النشر» بجانب الرابط.</li>
-            <li>حذف حسابك وبريدك نهائياً: راسلنا وسننفّذ خلال ٧ أيام.</li>
-            <li>وفق نظام حماية البيانات الشخصية السعودي (PDPL) لك حق الاطلاع والتصحيح والحذف — تواصل معنا لأي منها.</li>
+        <Section title="5. Your rights and how to delete">
+          <ul className="ml-5 list-disc space-y-1">
+            <li>Delete your drafts: the "Start over" button, or clear your site data from your browser (instant, in your own hands).</li>
+            <li>Delete a published link: the "Unpublish" button next to it.</li>
+            <li>Delete your account and email permanently: email us and we act within 7 days.</li>
+            <li>Under Saudi Arabia's Personal Data Protection Law (PDPL) you have the right to access, correct, and delete your data — contact us for any of these.</li>
           </ul>
         </Section>
 
-        <Section title="٦. من نحن وكيف تتواصل معنا؟">
+        <Section title="6. Who we are and how to reach us">
           <p>
-            «سيرة» خدمة سير ذاتية تعمل على نطاق <span dir="ltr">cv.rabit.sa</span> التابع لـ«رابِت» (Rabit).
-            لأي استفسار عن بياناتك أو الدفع أو الحذف:
+            Sira is a resume service running on <span dir="ltr">cv.rabit.sa</span>, operated by Rabit.
+            For any question about your data, payment, or deletion:
           </p>
-          <p dir="ltr">
-            📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a>
-          </p>
-          <p>نرد عادة خلال ٢٤–٤٨ ساعة.</p>
+          <p>📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a></p>
+          <p>We typically reply within 24–48 hours.</p>
         </Section>
-
-        <div className="card mt-10 p-6" dir="ltr">
-          <h2 className="mb-3 text-lg font-bold">English summary</h2>
-          <ul className="ml-5 list-disc space-y-1 text-sm" style={{ color: "rgba(244,245,243,0.75)" }}>
-            <li><strong>Your resume is processed, not archived.</strong> When you ask for a score, a rewrite or a suggestion, the relevant text is sent to a cloud AI provider (US-based) to produce that result, and is discarded afterwards — we do not keep a copy. When you upload a PDF or Word file, the file reaches our server so its text can be extracted, and is discarded once read; no AI provider receives the file itself. Drafts you have not published live only in your browser&apos;s localStorage, which means clearing your browser data deletes them. Two things ARE stored: a public resume link you explicitly publish (removed when you delete it), and the resumes you choose to save, which stay on your device.</li>
-            <li>We never use your data to train models, and never sell or share it.</li>
-            <li>We keep only your email + subscription status. Card details are handled entirely by the licensed gateway Paylink.</li>
-            <li>Public resume links exist only if you publish one, and you can unpublish anytime.</li>
-            <li><strong>No-fabrication pledge:</strong> the AI is technically constrained from inventing numbers, employers, or credentials you didn&apos;t provide.</li>
-            <li>Account deletion: email us — done within 7 days. Contact: alanziabdulaziz4@gmail.com</li>
-          </ul>
-        </div>
 
         <div className="mt-10 flex gap-4">
-          <Link href="/terms" className="btn-ghost px-6 py-2.5 text-sm font-semibold" style={{ color: "var(--fg)" }}>الشروط والأحكام ←</Link>
-          <Link href="/ar" className="btn-accent px-6 py-2.5 text-sm">الرئيسية</Link>
+          <Link href="/terms" className="btn-ghost px-6 py-2.5 text-sm font-semibold" style={{ color: "var(--fg)" }}>Terms &amp; Conditions →</Link>
+          <Link href="/" className="btn-accent px-6 py-2.5 text-sm">Home</Link>
         </div>
       </div>
-    </main>
+    </PageShell>
   );
 }
