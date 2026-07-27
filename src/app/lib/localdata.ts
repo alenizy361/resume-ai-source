@@ -80,6 +80,15 @@ export interface JobEntry {
   url: string;
   status: JobStatus;
   note: string;
+  /**
+   * Which saved resume this application used, if the user picked one — a snapshot pair
+   * (`SavedResume.id` + its title AT THE TIME), not a live reference. The saved resume it points to
+   * can be edited or deleted afterwards without corrupting this record; the title just stops being
+   * guaranteed current. Optional: applications tracked before this existed, or added without
+   * picking one, are still complete records.
+   */
+  resumeId?: string;
+  resumeTitle?: string;
 }
 
 const uid = () => Math.random().toString(36).slice(2, 10);

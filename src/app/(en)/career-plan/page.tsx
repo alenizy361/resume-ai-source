@@ -3,6 +3,7 @@ import { useState } from "react";
 import useLang from "@/app/components/useLang";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MyCvPicker from "@/app/components/MyCvPicker";
 import { navCta } from "@/app/lib/brand";
 
 interface CareerPlanResult {
@@ -97,6 +98,12 @@ export default function CareerPlanPage() {
 
         {!result ? (
           <form onSubmit={run} className="card space-y-4 p-7">
+            <MyCvPicker
+              ar={ar}
+              onPick={(cv) => {
+                if (!currentRole.trim() && cv.targetTitle.trim()) setCurrentRole(cv.targetTitle);
+              }}
+            />
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "دورك الحالي" : "Current role"}</label>
               <input value={currentRole} onChange={(e) => setCurrentRole(e.target.value)} required

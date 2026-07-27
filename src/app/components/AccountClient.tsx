@@ -55,6 +55,7 @@ const STRINGS = {
     signIn: "Sign in →", jobApps: "Job applications", close: "Close", addJob: "+ Add job",
     company: "Company", jobTitle: "Job title", jobLink: "Job link (optional)", add: "Add",
     jobHint: "Track every application: company, role, and status (saved → applied → interview → offer). Stays on this device.",
+    resumeUsed: "Resume used (optional)", noResumePicked: "No resume linked", prepareInterview: "Prepare for this interview →",
     scanHistory: "Scan history", scanHint: "Your last 10 scans will appear here with one-click reopen.",
     savedResumes: "Saved resumes", savedHint: "Resumes you build or unlock are saved here automatically (on this device).",
     open: "Open", builder: "CV Builder", optimizer: "Optimizer",
@@ -70,6 +71,7 @@ const STRINGS = {
     signIn: "تسجيل الدخول ←", jobApps: "طلبات الوظائف", close: "إغلاق", addJob: "+ إضافة وظيفة",
     company: "الشركة", jobTitle: "المسمى الوظيفي", jobLink: "رابط الوظيفة (اختياري)", add: "إضافة",
     jobHint: "تابع كل طلب: الشركة، المسمى، والحالة (محفوظ ← قدّمت ← مقابلة ← عرض). يبقى على هذا الجهاز.",
+    resumeUsed: "السيرة المستخدَمة (اختياري)", noResumePicked: "لا توجد سيرة مرتبطة", prepareInterview: "استعد لهذه المقابلة ←",
     scanHistory: "سجل الفحوصات", scanHint: "آخر ١٠ فحوصات تظهر هنا مع إعادة فتح بضغطة.",
     savedResumes: "السير المحفوظة", savedHint: "السير التي تبنيها أو تفتحها تُحفظ هنا تلقائياً (على هذا الجهاز).",
     open: "فتح", builder: "منشئ السيرة", optimizer: "المحسّن",
@@ -120,6 +122,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const [jc, setJc] = useState(""); // company
   const [jt, setJt] = useState(""); // title
   const [ju, setJu] = useState(""); // url
+  const [jr, setJr] = useState(""); // linked resume id, "" = none picked
 
   /*
    * The one mount-time read of everything this browser already knows.
@@ -247,9 +250,13 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   function submitJob(e: React.FormEvent) {
     e.preventDefault();
     if (!jc.trim() && !jt.trim()) return;
-    addJob(owner, { company: jc.trim(), title: jt.trim(), url: ju.trim(), status: "saved", note: "" });
+    const picked = jr ? resumes.find((r) => r.id === jr) : undefined;
+    addJob(owner, {
+      company: jc.trim(), title: jt.trim(), url: ju.trim(), status: "saved", note: "",
+      resumeId: picked?.id, resumeTitle: picked?.title,
+    });
     setJobs(getJobs(owner));
-    setJc(""); setJt(""); setJu("");
+    setJc(""); setJt(""); setJu(""); setJr("");
     setShowJobForm(false);
   }
 
@@ -355,6 +362,15 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
               </div>
               <input value={ju} onChange={(e) => setJu(e.target.value)} placeholder={t.jobLink} dir="ltr"
                 className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+              {resumes.length > 0 && (
+                <select value={jr} onChange={(e) => setJr(e.target.value)}
+                  className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: jr ? "var(--fg)" : "var(--faint)" }}>
+                  <option value="">{t.resumeUsed}</option>
+                  {resumes.map((r) => (
+                    <option key={r.id} value={r.id}>{r.title || (lang === "ar" ? "سيرة بلا عنوان" : "Untitled CV")}</option>
+                  ))}
+                </select>
+              )}
               <button type="submit" className="btn-accent w-full py-2 text-sm">{t.add}</button>
             </form>
           )}
@@ -369,6 +385,12 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-semibold">{j.title || "—"} <span style={{ color: "var(--muted)" }}>@ {j.company || "—"}</span></div>
                     {j.url && <a href={j.url} target="_blank" rel="noopener noreferrer" dir="ltr" className="block truncate text-xs text-accent">{j.url}</a>}
+                    <div className="truncate text-xs" style={{ color: "var(--faint)" }}>
+                      {j.resumeTitle ? `📄 ${j.resumeTitle}` : t.noResumePicked}
+                    </div>
+                    {(j.status === "interview" || j.status === "applied") && (
+                      <Link href={lang === "ar" ? "/ar/interview" : "/interview"} className="text-xs font-semibold text-accent">{t.prepareInterview}</Link>
+                    )}
                   </div>
                   <select
                     value={j.status}

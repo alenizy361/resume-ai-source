@@ -8,8 +8,14 @@ const EN: [string, string][] = [
   ["Resume examples", "/resume-examples"],
   ["By sector", "/resume-examples/category"],
   ["Skills by job", "/resume-skills"],
-  ["Templates", "/resume-templates"],
-  ["Template gallery", "/templates"],
+  /* One templates entry, not two: /resume-templates (the SEO catalog) and /templates (this
+     interactive gallery) both correctly funnel into /builder?template=<slug> already
+     (TemplatesGallery.tsx, resume-templates/[style]/page.tsx) — listing both here read as two
+     competing "templates" products. Keeping /templates matches the Arabic set below, which has
+     no SEO catalog to choose between (/resume-templates is EN-only) and has only ever pointed at
+     /ar/templates. /resume-templates itself is untouched — still live, indexed, and reachable
+     from its own pages and the sitemap. */
+  ["Templates", "/templates"],
   ["Cover letters", "/cover-letter-examples"],
   ["ATS checker", "/ats-resume-checker"],
   ["Free checker", "/free-resume-checker"],

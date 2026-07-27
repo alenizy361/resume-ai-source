@@ -1566,3 +1566,109 @@ production-build verification; the live click-through (including the PDF-upload 
 needs no AI credential and could be fully end-to-end verified if the compile completes) remains
 undone and is recorded here rather than assumed. The `jd-keywords` generation call itself separately
 needs `NVIDIA_API_KEY`, which this environment does not have.
+
+### F-37 · P0 · A live false privacy claim, and the "Career Operating System" fragmentation claims verified one by one — FIXED (privacy) / PARTIAL (connectivity)
+
+The user reported the product "still fragmented" despite the earlier IA-redesign pass (shared
+`PageShell`, `HubLinks` cross-linking, `/optimize` merged EN/AR, `/account` renamed "Career
+Dashboard" — commits `864208f`, `5c0520c`), and listed 7 specific symptoms, closing with "do not
+report completion until the old and new product surfaces no longer coexist." Before changing
+anything: confirmed via the Vercel MCP that every push to `main` auto-deploys to production
+(`cv.rabit.sa` is attached to the `resume-ai` project; the last 20+ deployments, including this
+session's own commits, are all `READY`/`target: production`) — so this was not a deploy-pipeline gap.
+Then audited each of the 7 claims against the actual current code, since the earlier IA pass's
+"completed" status did not match what was being reported.
+
+**1. "Builder, Optimizer, ATS, LinkedIn and Interview remain separate tools."** Partially true, but
+weaker than it reads: they are separate ROUTES, but `MyCvPicker` (`app/components/MyCvPicker.tsx`)
+already threads a shared "use a CV you already made here" strip through `/optimize`, `/linkedin`,
+`/interview`, and `/interview-live`, and `app/lib/handoff.ts`'s `sendToBuilder` already carries an
+`/optimize` scan into a real builder resume record (not a copy) with correct job-ad and document-
+language context preserved — deliberately sending the user's ORIGINAL text, not the AI rewrite,
+into the structured document, so a model's wording is never silently installed as confirmed fact.
+This is real, working, already-connected infrastructure, not something this pass invented.
+
+**2. "Arabic and English still use different flows."** FALSE for the core builder — verified by
+diffing `app/(en)/builder/page.tsx` against `app/(ar)/ar/builder/page.tsx`: both render the exact
+same `<BuilderStart lang="en"|"ar" />` component; the only difference is per-locale SEO metadata and
+genuinely-authored (not translated) `PageBody` prose. One engine, two SEO wrappers, not two flows.
+
+**3. "/templates and /resume-templates still coexist."** True that both routes exist, but both
+already funnel correctly into `/builder?template=<slug>` (`TemplatesGallery.tsx:169`,
+`resume-templates/[style]/page.tsx:44,57`) — not two competing tools. The actual bug was
+navigational: `HubLinks` listed BOTH as separate peer items ("Templates" → `/resume-templates`,
+"Template gallery" → `/templates`), which is what reads as two products. Fixed by dropping to one
+entry, keeping `/templates` (matching the Arabic set, which only ever had one entry — `/ar/templates`
+— since the SEO catalog is EN-only). `/resume-templates` was NOT redirected or touched: it stays
+fully live, indexed, and reachable from its own pages and the sitemap, per the user's own explicit
+"preserve SEO acquisition pages" instruction. Neither surface was deleted — the fix was presentation,
+not architecture.
+
+**4. "ResumeAI legacy branding still exists."** FALSE. The only match anywhere under `app/` is a
+`User-Agent: "resumeai"` HTTP header string sent to Microsoft's TTS API in `app/api/tts/route.ts` —
+never rendered, never user-visible. `app/lib/brand.ts` is the single source of truth for the product
+name ("Sira / سيرة") and company ("Rabit"), and it's what every page already reads.
+
+**5. "Account, resumes and job applications are still device-only."** Split verdict, and the
+resolution of this claim drove everything else in this entry. Resumes: FALSE — `app/api/resume/route.ts`
++ `app/lib/resumeServer.ts` is a fully built, Redis-backed, versioned, conflict-checked server store
+for the structured `BuilderState` document, keyed by (account, resumeId), for signed-in users. Job
+applications: TRUE — `app/lib/localdata.ts`'s `addJob`/`getJobs`/`updateJob`/`removeJob` are 100%
+`localStorage`, with zero server route (confirmed: no `app/api/job*` route exists at all). The file's
+own header says this is deliberate — "matches the privacy pledge" — which led directly to the next,
+more serious finding.
+
+**The privacy pledge itself was false.** `/privacy` and `/ar/privacy` stated, in a dedicated opening
+section: **"Your resume's text is not saved on our servers... there is no database that keeps
+resumes."** That is not true — `resumeServer.ts`'s own header describes exactly what it stores:
+"their employers, dates, licences and every confirmed line." A product that cites Saudi PDPL in the
+same policy document was making a live, false claim about server-side storage of PII. This was fixed
+before anything else, on the reasoning that extending server persistence further (or building it for
+job applications) while this claim was live would only compound a real disclosure problem. Both pages
+now accurately state: anonymous use is fully local (unchanged); signed-in users' resume documents ARE
+saved to their account server-side, self-deletable at any time from the dashboard; and everything else
+in the policy (no AI training use, no data sale, Paylink handles payment) is unchanged because it was
+already accurate. Section 3's "what we keep" list gained the matching bullet. Both pages edited in
+full, independently-authored prose per language, not a translation pass.
+
+**Given the corrected privacy claim, job-application server sync was deliberately NOT built this
+pass** — building it would need its own accurate disclosure work, and shipping more server storage in
+the same pass as fixing a false claim about server storage risked repeating the mistake under time
+pressure. The job tracker's own on-page copy ("Stays on this device") was already accurate and is left
+as-is. This is recorded as a real, scoped, follow-up gap — not silently dropped.
+
+**6. "Users must paste their resume again in separate tools."** Same evidence as #1 — largely FALSE
+already, via `MyCvPicker`, EXCEPT `/career-plan` (built last pass, F-35) never got it wired in. Fixed:
+added `MyCvPicker` to `/career-plan`, prefilling "current role" from the picked CV's target title,
+matching the exact pattern `/linkedin` already uses for its own "target role" field.
+
+**7. "There is no shared Career Profile or connected hiring journey."** PARTIAL, and this is the one
+genuine architecture gap confirmed. `BuilderState` (via `resumeId`) already functions as the "Career
+Profile / Master Resume," and Phase 4's `tailoredFrom` mechanic already connects a resume to the
+source it was tailored from. What was missing: a tracked job application had no link to which resume
+version it used, and the dashboard didn't connect application status to interview preparation. Fixed:
+`JobEntry` (`localdata.ts`) gained optional `resumeId`/`resumeTitle`, captured as a snapshot pair (not
+a live reference — editing or deleting the linked resume afterward doesn't corrupt the application
+record, it just means the title stops being guaranteed current). The "add application" form on
+`/account` now offers a resume picker (reusing the SAME saved-resume list already shown lower on that
+page — no new data source), each tracked application shows which resume was used, and any application
+marked "applied" or "interview" gets a "Prepare for this interview →" link straight into `/interview`.
+This connects Job Tracker → Master Resume → Interview Prep as one visible path on the one dashboard,
+without adding a page.
+
+**What remains, honestly scoped:**
+- Job-application server sync (see above) — a real, deliberately-deferred gap, not silently dropped.
+- A deeper dashboard restructure (grouping each Master Resume with all its tailored versions,
+  applications, and scores in one connected block, rather than three lists that now cross-link) was
+  not attempted — the connective links added this pass close the "no path between them" gap without
+  the larger layout risk of restructuring a live account page in the same pass as a privacy-page fix.
+- The other 5 of 9 SEO tools from F-36 remain as scoped there.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean. Live browser
+verification was attempted (`fuser -k 3141/tcp`, confirmed `✓ Ready in 422ms`) but even `/privacy` —
+an existing, previously-compiled route with only text changes — did not finish its first Turbopack
+dev-compile within 90 seconds. `free -h` showed 9.7GB free (not a memory-pressure symptom); this
+reads as the same CPU-bound slow-compile class F-35/F-36 documented, now apparently affecting
+previously-fast routes too, plausibly from the route tree's accumulated size over this long session.
+Shipped on typecheck + test + production-build verification, consistent with the last two passes;
+the live click-through remains undone and is recorded here rather than assumed.

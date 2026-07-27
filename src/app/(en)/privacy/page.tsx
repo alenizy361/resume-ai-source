@@ -6,7 +6,7 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Sira",
-  description: "How we handle your resume and your data: we don't store your resume on our servers, we never use your data to train models, and you can delete everything.",
+  description: "How we handle your resume and your data: what stays on your device, what's saved to your account when you sign in, and how to delete any of it.",
   alternates: {
     canonical: `${BASE}/privacy`,
     languages: { en: `${BASE}/privacy`, ar: `${BASE}/ar/privacy`, "x-default": `${BASE}/privacy` },
@@ -34,20 +34,24 @@ export default function PrivacyPage() {
           Last updated: July 2026 · Applies to cv.rabit.sa — a resume service operated under the Rabit.sa domain.
         </p>
 
-        <Section title="1. Is your resume stored with us? No.">
+        <Section title="1. Is your resume stored with us?">
           <p>
-            Your resume's text <strong>is not saved on our servers</strong>. When you run a scan or use the
-            builder, the text is sent for processing and returned to you immediately — there is no database
-            that keeps resumes.
+            <strong>If you're not signed in</strong>, no. The draft you type is saved only on your own device
+            (your browser's localStorage) so your writing survives a page refresh — you can clear it with the
+            "Start over" button, or by clearing your browser data. When you run a scan, your text is sent for
+            processing and returned to you immediately; nothing is kept on our side.
           </p>
           <p>
-            The draft you type is saved <strong>only on your own device</strong> (your browser's localStorage)
-            so your writing survives a page refresh — you can clear it with the "Start over" button, or by
-            clearing your browser data.
+            <strong>If you sign in</strong>, your resume document (the structured CV you build — your
+            employers, dates, licenses, and every line you've confirmed) is saved to your account on our
+            servers, so it's available if you come back on another device. It is stored under your email,
+            never shared with anyone else, and you can delete any saved resume permanently from your account
+            page at any time — deletion is immediate, not a request we process later.
           </p>
           <p>
-            The one exception: if you choose "Publish a public link", the text you chose to publish is saved
-            at that public link, and an "Unpublish" button next to it deletes it permanently at any time.
+            One more exception either way: if you choose "Publish a public link", the text you chose to
+            publish is saved at that public link, and an "Unpublish" button next to it deletes it permanently
+            at any time.
           </p>
         </Section>
 
@@ -64,6 +68,7 @@ export default function PrivacyPage() {
           <ul className="ml-5 list-disc space-y-1">
             <li>Your email (for sign-in and linking your access) — kept until you ask us to delete it.</li>
             <li>Your access status and its expiry date.</li>
+            <li>Any resume you choose to save while signed in — kept until you delete it from your account, which you can do at any time.</li>
             <li>Payment details are handled entirely by the licensed gateway Paylink — we never see or store your card number.</li>
           </ul>
         </Section>
