@@ -1393,3 +1393,40 @@ stale process still bound to the port from an earlier session, not a code issue 
 filtered by this project's own test suites, e.g. `form-smoke.mjs`). The generation and feedback
 calls themselves need `NVIDIA_API_KEY`, which this environment does not have — not live-verified
 against the model, same constraint as every other AI-dependent feature this session.
+
+### F-34 · P2 · LinkedIn improvement: headline options, experience descriptions, keyword suggestions — FIXED
+
+`/linkedin` already generated one headline, one About section, a skills list, and tips — and
+already supported copying section-by-section (the order's "allow copying section by section" line
+was already satisfied). The order named three things the response shape didn't have: **headline
+options** (plural), **experience descriptions** (per-role LinkedIn Experience-section rewrites),
+and **profile keyword suggestions** as a thing distinct from the skills list.
+
+Changed the `linkedin` prompt in `/api/tools` to return `headlineOptions` (3 differently-angled
+headlines instead of 1), `experience` (an array of `{role, description}`, one entry per role found
+in the source text, built only from what that role's own text says), and `keywords` (8-12 search
+terms a recruiter would type, explicitly described in the prompt as distinct from `skills` — these
+are for weaving into text over time, not a section to paste as-is). Kept `about`, `skills`, `tips`
+unchanged. The prompt keeps the same no-fabrication line every AI surface in this product carries:
+never invent an employer, role, date, or achievement not stated in the source.
+
+Updated both remaining old-schema references in `/api/tools`'s handler: the content-validation
+branch (was checking a `headline` singular field that no longer exists — now checks
+`headlineOptions.length || about`) and the final response-normalizer (now builds `headlineOptions`,
+`experience`, and `keywords` alongside the existing fields, with `experience` defensively
+coerced the same way `interview`'s `questions` array already is).
+
+`/linkedin`'s page component (shared by both `/linkedin` and `/ar/linkedin` via `useLang()` — no
+Arabic-specific file to duplicate the change into) gained: a "Headline options" card listing all
+three, each individually copyable; an "Experience descriptions" card with one sub-card per role,
+each individually copyable; and a "Profile keyword suggestions" card, separate from the existing
+"Skills to list" card, with its own copy button and a one-line explanation of how keywords differ
+from skills. The existing About/Skills/Tips cards and their copy buttons are unchanged.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` all clean (`/linkedin` compiles).
+Confirmed in a real browser against a correctly-started dev server (`fuser -k 3141/tcp` before
+start, waited for the server's own `✓ Ready in` line) that the form renders its profile textarea,
+target-role input, and submit button with no real console errors (only the expected local-dev
+`/_vercel/insights/script.js` 404). The actual generation call needs `NVIDIA_API_KEY`, which this
+environment does not have — not live-verified against the model, same constraint as every other
+AI-dependent feature this session.

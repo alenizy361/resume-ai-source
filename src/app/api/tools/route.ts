@@ -32,7 +32,7 @@ const LANG_RULE = (lang: "ar" | "en") =>
     : `\n\nOUTPUT LANGUAGE: Write every value in English.`;
 
 const PROMPTS: Record<string, (a: string, b: string, lang: "ar" | "en") => string> = {
-  linkedin: (profile, targetRole, lang) => `You are a LinkedIn optimization expert. Rewrite this person's LinkedIn presence for the target role.
+  linkedin: (profile, targetRole, lang) => `You are a LinkedIn optimization expert. Rewrite this person's LinkedIn presence for the target role, using ONLY what is stated in their own profile/resume text below — every employer, role, date and achievement must come from there.
 
 CURRENT PROFILE / RESUME TEXT:
 ${profile}
@@ -41,12 +41,16 @@ TARGET ROLE: ${targetRole}
 
 Return ONLY a JSON object:
 {
-  "headline": "<a 120-220 char keyword-rich LinkedIn headline: role | value proposition | key skills>",
+  "headlineOptions": ["<a 120-220 char keyword-rich LinkedIn headline: role | value proposition | key skills>", "<a second, differently-angled headline option — same facts, different framing (e.g. one leads with the role, one leads with the strongest achievement)>", "<a third option, distinct in tone from the first two>"],
   "about": "<a first-person About section, 3 short paragraphs: hook, proof with achievements from their background, call to action. Recruiter-search keywords woven in naturally.>",
+  "experience": [
+    {"role": "<the exact job title + employer as it appears in their own text, e.g. 'Marketing Coordinator — Acme Retail'>", "description": "<a 3-5 line LinkedIn Experience-section entry for THIS role: first-person or implied-first-person, achievement-led, built only from what the source says about this specific role. One entry per role found in the source, oldest last.>"}
+  ],
   "skills": ["<the 10-15 skills they should list, ordered by relevance to the target role — only skills their background supports>"],
+  "keywords": ["<8-12 SEPARATE search keywords/phrases a recruiter would type to find this profile — job titles, tools, certifications, industry terms. Distinct from the Skills list above: these are for weaving into the headline/About/experience text over time, not a section to paste as-is.>"],
   "tips": ["<3-4 specific profile tips, e.g. banner, featured section, activity>"]
 }
-Never invent employers or achievements. No text outside the JSON.${LANG_RULE(lang)}`,
+Never invent employers, roles, dates, or achievements not stated in the source. No text outside the JSON.${LANG_RULE(lang)}`,
 
   interview: (resume, jobDescription, lang) => `You are an interview coach. Based on this resume and job description, prepare the candidate.
 
@@ -207,7 +211,8 @@ export async function POST(req: NextRequest) {
             throw new Error("No usable questions in response");
           }
         } else if (mode === "linkedin") {
-          if (!candidate.headline && !candidate.about) throw new Error("No usable LinkedIn content");
+          const hasHeadlines = Array.isArray(candidate.headlineOptions) && candidate.headlineOptions.length > 0;
+          if (!hasHeadlines && !candidate.about) throw new Error("No usable LinkedIn content");
         } else if (mode === "interview-feedback") {
           if (!candidate.strength && !Array.isArray(candidate.weaknesses)) throw new Error("No usable feedback in response");
         }
@@ -244,10 +249,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ questions, redFlags });
     }
     if (mode === "linkedin") {
+      const experience = (Array.isArray(parsed.experience) ? parsed.experience : [])
+        .map((x) => {
+          const it = (x ?? {}) as Record<string, unknown>;
+          return { role: String(it.role ?? "").trim(), description: String(it.description ?? "").trim() };
+        })
+        .filter((it) => it.role || it.description);
       return NextResponse.json({
-        headline: String(parsed.headline ?? ""),
+        headlineOptions: (Array.isArray(parsed.headlineOptions) ? parsed.headlineOptions : []).map(String).filter(Boolean),
         about: String(parsed.about ?? ""),
+        experience,
         skills: (Array.isArray(parsed.skills) ? parsed.skills : []).map(String),
+        keywords: (Array.isArray(parsed.keywords) ? parsed.keywords : []).map(String),
         tips: (Array.isArray(parsed.tips) ? parsed.tips : []).map(String),
       });
     }

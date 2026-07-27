@@ -7,10 +7,17 @@ import AuthNav from "@/app/components/AuthNav";
 import { navCta } from "@/app/lib/brand";
 import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
+interface LinkedInExperience {
+  role: string;
+  description: string;
+}
+
 interface LinkedInResult {
-  headline: string;
+  headlineOptions: string[];
   about: string;
+  experience: LinkedInExperience[];
   skills: string[];
+  keywords: string[];
   tips: string[];
 }
 
@@ -45,8 +52,16 @@ export default function LinkedInPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      if (!data.headline && !data.about) throw new Error("Couldn't optimize this time — please try again.");
-      setResult({ headline: data.headline || "", about: data.about || "", skills: Array.isArray(data.skills) ? data.skills : [], tips: Array.isArray(data.tips) ? data.tips : [] });
+      const headlineOptions: string[] = Array.isArray(data.headlineOptions) ? data.headlineOptions : [];
+      if (!headlineOptions.length && !data.about) throw new Error("Couldn't optimize this time — please try again.");
+      setResult({
+        headlineOptions,
+        about: data.about || "",
+        experience: Array.isArray(data.experience) ? data.experience : [],
+        skills: Array.isArray(data.skills) ? data.skills : [],
+        keywords: Array.isArray(data.keywords) ? data.keywords : [],
+        tips: Array.isArray(data.tips) ? data.tips : [],
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -106,13 +121,19 @@ export default function LinkedInPage() {
           </form>
         ) : (
           <div className="space-y-5">
-            <div className="card p-6">
-              <div className="mb-2 flex items-center justify-between">
-                <h3 className="font-bold">{ar ? "العنوان" : "Headline"}</h3>
-                <button onClick={() => copy("h", result.headline)} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "h" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+            {result.headlineOptions.length > 0 && (
+              <div className="card p-6">
+                <h3 className="mb-3 font-bold">{ar ? "خيارات العنوان" : "Headline options"}</h3>
+                <div className="space-y-3">
+                  {result.headlineOptions.map((h, i) => (
+                    <div key={`h-${i}`} className="flex items-start justify-between gap-3 rounded-lg px-3 py-2.5" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+                      <p className="text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{h}</p>
+                      <button onClick={() => copy(`h${i}`, h)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `h${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{result.headline}</p>
-            </div>
+            )}
             <div className="card p-6">
               <div className="mb-2 flex items-center justify-between">
                 <h3 className="font-bold">{ar ? "قسم النبذة" : "About section"}</h3>
@@ -120,6 +141,22 @@ export default function LinkedInPage() {
               </div>
               <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{result.about}</p>
             </div>
+            {result.experience.length > 0 && (
+              <div className="card p-6">
+                <h3 className="mb-3 font-bold">{ar ? "أوصاف الخبرة" : "Experience descriptions"}</h3>
+                <div className="space-y-4">
+                  {result.experience.map((exp, i) => (
+                    <div key={`exp-${i}`} className="rounded-lg px-3 py-2.5" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <h4 className="text-xs font-semibold" style={{ color: "var(--faint)" }}>{exp.role}</h4>
+                        <button onClick={() => copy(`exp${i}`, exp.description)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `exp${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                      </div>
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{exp.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="card p-6">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-bold">{ar ? "المهارات المطلوب إدراجها (بهذا الترتيب)" : "Skills to list (in this order)"}</h3>
@@ -131,6 +168,20 @@ export default function LinkedInPage() {
                 ))}
               </div>
             </div>
+            {result.keywords.length > 0 && (
+              <div className="card p-6">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="font-bold">{ar ? "كلمات مفتاحية مقترحة للملف" : "Profile keyword suggestions"}</h3>
+                  <button onClick={() => copy("k", result.keywords.join(", "))} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "k" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                </div>
+                <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>{ar ? "استخدمها ضمن العنوان أو النبذة أو الخبرة — وليست قائمة للصقها كما هي." : "Weave these into your headline, About, or experience text — not a list to paste as-is."}</p>
+                <div className="flex flex-wrap gap-2">
+                  {result.keywords.map((k, i) => (
+                    <span key={`${k}-${i}`} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(251,191,36,0.14)", color: "#fbbf24" }}>{k}</span>
+                  ))}
+                </div>
+              </div>
+            )}
             {result.tips?.length > 0 && (
               <div className="card p-6" style={{ borderColor: "rgba(251,191,36,0.25)" }}>
                 <h3 className="mb-3 font-bold">{ar ? "نصائح للملف" : "Profile tips"}</h3>
