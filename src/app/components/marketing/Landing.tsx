@@ -29,10 +29,19 @@ import { findRolePack } from "@/app/lib/rolePacks";
 const C = {
   en: {
     eyebrow: "Free · no signup · Arabic & English",
-    h1a: "You provide the facts.",
-    h1b: "AI writes the professional CV.",
+    h1a: "Get hired faster",
+    h1b: "with an AI career assistant built for Saudi Arabia.",
     lede:
-      "A step-by-step CV builder for the Saudi and Gulf market. You type what is true — the jobs, the dates, the licences — and the AI turns it into the wording a recruiter and an applicant-tracking system both expect. It never invents an employer, a date, a certification or a number.",
+      "More than a CV builder — an AI career assistant for the Saudi and Gulf job market. Build a strong CV, match it to a real job posting, check it against applicant-tracking systems, prepare for the interview, and track every application you send. You provide the facts; nothing is invented — no employer, date, certification or number.",
+    capHead: "What Sira does for your job search",
+    capabilities: [
+      ["Build a strong CV", "Step by step, with AI suggestions for your profession. You approve every line before it reaches your CV.", "/builder"],
+      ["Match it to a real job", "Paste a job description or its link and see exactly what matches, what's missing, and what to add — before you apply.", "/optimize"],
+      ["Check ATS compatibility", "A single-column, standard-headings structure applicant-tracking systems can actually parse — checked and scored.", "/optimize"],
+      ["Prepare for interviews", "Likely questions for your role, answered from your own CV — plus a live, scored mock interview.", "/interview"],
+      ["Track your applications", "Every job you apply to, its status, and which CV version you sent — in one place.", "/account"],
+      ["Improve your career readiness", "Your CV's completeness, evidence strength and formatting, scored and explained — plus a LinkedIn profile from the same confirmed facts.", "/account"],
+    ] as [string, string, string][],
     ctaBuild: "Build my CV, step by step",
     ctaBuildSub: "Eleven short steps. Nothing enters your CV until you approve it.",
     ctaUpload: "I already have a CV — improve it",
@@ -111,10 +120,19 @@ const C = {
 
   ar: {
     eyebrow: "مجاناً · بلا تسجيل · بالعربية والإنجليزية",
-    h1a: "أنت تكتب الحقائق.",
-    h1b: "والذكاء يكتب السيرة المهنية.",
+    h1a: "احصل على وظيفة أسرع",
+    h1b: "بمساعدة مهنية ذكية مصممة للسوق السعودي.",
     lede:
-      "منشئ سيرة ذاتية خطوة بخطوة للسوق السعودي والخليجي. تكتب ما هو صحيح — الوظائف والتواريخ والرخص — ويحوّله الذكاء إلى الصياغة التي يتوقعها المسؤول عن التوظيف ونظام الفرز معاً. ولا يختلق جهة عمل ولا تاريخاً ولا شهادة ولا رقماً.",
+      "أكثر من منشئ سيرة ذاتية — مساعد مهني ذكي لسوق العمل السعودي والخليجي. ابنِ سيرة قوية، طابقها مع وظيفة حقيقية، تحقق من توافقها مع أنظمة الفرز، جهّز نفسك للمقابلة، وتابع كل تقديم أرسلته. أنت تكتب الحقائق، والذكاء لا يختلق شيئاً — لا جهة عمل ولا تاريخاً ولا شهادة ولا رقماً.",
+    capHead: "ما تقدّمه سيرة لرحلة بحثك عن وظيفة",
+    capabilities: [
+      ["ابنِ سيرة قوية", "خطوة بخطوة، باقتراحات ذكاء مبنية على مهنتك. تعتمد كل سطر قبل أن يدخل سيرتك.", "/builder"],
+      ["طابقها مع وظيفة حقيقية", "الصق وصف الوظيفة أو رابطها لترى بالضبط ما يتطابق، وما ينقص، وما تحتاج إضافته — قبل التقديم.", "/optimize"],
+      ["تحقق من التوافق مع أنظمة الفرز", "بنية عمود واحد وعناوين قياسية تستطيع أنظمة التوظيف قراءتها فعلاً — مُقيَّمة ومفسَّرة.", "/optimize"],
+      ["جهّز نفسك للمقابلات", "أسئلة متوقعة لدورك، مجاب عليها من سيرتك نفسها — بالإضافة لمقابلة تجريبية مباشرة ومقيَّمة.", "/interview"],
+      ["تابع تقديماتك", "كل وظيفة قدّمت عليها، حالتها، والنسخة التي أرسلتها — في مكان واحد.", "/account"],
+      ["حسّن جاهزيتك المهنية", "اكتمال سيرتك وقوة أدلتها وتنسيقها، مُقيَّمة ومفسَّرة — إضافة لملف لينكدإن مبني من الحقائق نفسها.", "/account"],
+    ] as [string, string, string][],
     ctaBuild: "ابنِ سيرتي خطوة بخطوة",
     ctaBuildSub: "إحدى عشرة خطوة قصيرة. لا يدخل شيء سيرتك قبل أن تعتمده.",
     ctaUpload: "لديّ سيرة — حسّنها",
@@ -260,6 +278,27 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <div className="text-base font-bold">{t.ctaCheck} →</div>
             <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaCheckSub}</div>
           </Link>
+        </div>
+      </section>
+
+      {/*
+        ── what the product actually does ──
+
+        Four doors get someone INTO the product; this section says what it does for them once
+        they're in, and says it before the page settles into the build-a-CV flow below. Without
+        it the homepage reads as a template tool with four ways to start a form — every card
+        here links straight at the real page, not a promise, so "prepare for interviews" or
+        "track your applications" is one click from being checked, not taken on faith.
+      */}
+      <section className="t-enter mx-auto max-w-3xl px-6 py-12">
+        <h2 className="text-2xl font-bold tracking-tight">{t.capHead}</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {t.capabilities.map(([head, body, href]) => (
+            <Link key={head} href={`${p}${href}`} className="card card-hover p-5">
+              <div className="text-sm font-bold">{head}</div>
+              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{body}</p>
+            </Link>
+          ))}
         </div>
       </section>
 

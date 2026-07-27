@@ -1261,3 +1261,25 @@ a plausible-looking false failure:**
 **Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` clean. `curl -sL` confirms the
 redirect chain resolves in one hop for both routes. `node ops/navconsistency.browser.mjs` passed
 98/98 against a freshly started dev server.
+
+### F-30 · P2 · The homepage still read as a CV template tool, not a career assistant — FIXED
+
+The order's own Phase 2 named the required change directly: replace the "Build a CV" framing with
+"Get hired faster with an AI career assistant built for Saudi Arabia" — and required the homepage
+to communicate all six capabilities (CV, job match, ATS check, interview prep, application
+tracking, career readiness), not just the builder. Checked against the live page rather than
+assumed: the `<h1>` still read *"You provide the facts. AI writes the professional CV."* — the
+pre-order copy, unchanged — and nothing on the page named the other five capabilities at all; a
+visitor could only infer them from footer links.
+
+**Fix.** `Landing.tsx`'s headline and lede now use the order's own wording (EN/AR, both exact).
+Added a new section between the four hero doors and "How it works" — six cards, each a real link
+to the page that capability actually lives on (`/builder`, `/optimize` ×2, `/interview`,
+`/account` ×2), not a claim with nothing behind it. `(en)/page.tsx` and `(ar)/ar/page.tsx`'s
+`<title>`/`description`/OpenGraph/Twitter metadata carry the same repositioning — the old copy
+called the product "AI CV Builder"; a title tag is part of "the message" the order asked to
+change, not just on-page text.
+
+**Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` clean. Confirmed against a
+running dev server with `curl`: the new `<title>`, `<h1>`, and the six-capability section all
+render server-side (no client JS needed) on both `/` and `/ar`.

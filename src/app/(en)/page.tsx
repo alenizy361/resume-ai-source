@@ -16,17 +16,17 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
  * used to answer at /build and /ar/build; those addresses now redirect to the step builder.
  */
 export const metadata: Metadata = {
-  title: "AI CV Builder — Arabic & English, ATS-Ready | Sira",
+  title: "AI Career Assistant for Saudi Arabia — CV, ATS Match, Interview Prep | Sira",
   description:
-    "A step-by-step CV builder for Saudi Arabia and the Gulf. AI suggests the skills for your profession; you approve every line. Free, Arabic and English.",
+    "Get hired faster with an AI career assistant built for Saudi Arabia and the Gulf. Build a CV, match it to a real job, check ATS compatibility, prepare for interviews, and track applications. Free, Arabic and English.",
   alternates: {
     canonical: `${BASE}/`,
     languages: { en: `${BASE}/`, ar: `${BASE}/ar`, "x-default": `${BASE}/` },
   },
   openGraph: {
-    title: "You provide the facts. AI writes the professional CV.",
+    title: "Get hired faster with an AI career assistant built for Saudi Arabia",
     description:
-      "Eleven short steps, with your CV building itself beside you. Suggested skills and duties for your profession — nothing reaches the document until you approve it.",
+      "Build a strong CV, match it to a real job, check ATS compatibility, prepare for interviews and track your applications — in one place. Nothing reaches your CV until you approve it.",
     url: `${BASE}/`,
     type: "website",
   },

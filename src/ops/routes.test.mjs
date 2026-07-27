@@ -43,8 +43,8 @@ const LOG = process.env.LOG || "";
  */
 const ROUTES = [
   // `/` is the marketing page; the long builder's own headline still answers at /build.
-  { path: "/", must: "You provide the facts" },
-  { path: "/ar", must: "أنت تكتب الحقائق" },
+  { path: "/", must: "Get hired faster" },
+  { path: "/ar", must: "احصل على وظيفة أسرع" },
   { path: "/build", must: "You fill the facts" },
   { path: "/ar/build", must: "أنت تكتب الحقائق" },
   { path: "/journey", must: "resume" },
