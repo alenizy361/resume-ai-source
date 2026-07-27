@@ -101,7 +101,7 @@ ok("ResultCoaching.tsx still uses all three",
   fileHas("app/components/ResultCoaching.tsx", "reveal-rise"));
 ok("and it is rendered from /optimize",
   anyFileHas("ResultCoaching") &&
-  (fileHas("app/(en)/optimize/page.tsx", "ResultCoaching") || fileHas("app/(ar)/ar/optimize/page.tsx", "ResultCoaching")));
+  fileHas("app/components/tools/OptimizeTool.tsx", "ResultCoaching"));
 
 /* aurora-burst: its own component, reachable from /pay/callback. */
 ok(".aurora-burst still defined", /\.aurora-burst\s*\{/.test(css));

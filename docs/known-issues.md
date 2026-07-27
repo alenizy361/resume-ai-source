@@ -1052,17 +1052,67 @@ introduced; the 640 KB figure predates this work and is a separate, pre-existing
 doc's `ops/jsweight.mjs` note elsewhere cites ~109 KB — that number is stale relative to the
 current build and is worth re-measuring on its own, not as part of this item).
 
-### O-17 · P2 · `/optimize`'s English and Arabic implementations are still two files
+### F-26 · P2 · `/optimize`'s English and Arabic implementations merged into one component — FIXED *(was O-17)*
 
 F-25's chrome migration gave both `/optimize` and `/ar/optimize` the same shared header, footer,
-and sign-in control — but the actual page logic is still two separately-coded ~1,000/~700-line
-files, unlike `/interview` and `/linkedin`, which are one `useLang()`-driven component each.
-Deliberately not merged in this pass: `/interview` and `/linkedin` were ~250-line files with
-`{ar ? x : y}` conditionals already threaded through every string, which is what made merging them
-safe and mechanical. The English `/optimize` file has **zero** such conditionals — it is not a
-mirror of the Arabic one waiting to be combined, it is a from-scratch English-only implementation,
-and the Arabic file is a separate ~700-line implementation, not a shorter version of the same
-structure. This is also the product's paid conversion path — upload, AI scan, watermarking,
-Paylink checkout — where a subtle bug introduced by a mechanical merge would cost real money and
-is hard to catch without a live end-to-end payment test. Left as a scoped follow-up for a session
-with room to test that flow properly, rather than attempted blind.
+and sign-in control, but left the actual page logic as two separately-coded ~1,000/~700-line
+files — deferred because, unlike `/interview` and `/linkedin` (~250-line files with `{ar ? x : y}`
+conditionals already threaded through every string), the English file had **zero** such
+conditionals: a from-scratch implementation, not a mirror waiting to be combined. This is also the
+paid conversion path — upload, AI scan, watermarking, Paylink checkout — so the merge was done
+carefully rather than blind.
+
+**What comparing the two files line by line actually found.** The Arabic file was missing real
+features, not deliberately omitting them: the "Full analysis" tab (missing/present keyword cards,
+skills-to-highlight, the improvements breakdown), the upload-extraction preview ("here's what we
+read — check it"), the sub-metric score breakdown, "email my results", and importing a job posting
+from a URL. All five are now in both languages.
+
+The English file had a real bug the Arabic one had already fixed: `handleFile` set `resume` to the
+full extracted text with no length check — the textarea's `maxLength={8000}` only limits typing,
+not a value set programmatically — so a long extracted resume silently exceeded 8,000 characters
+with nothing but an orange counter to show for it. Ported the Arabic file's truncate-with-a-visible-
+warning behavior to both.
+
+The English file never sent `uiLang` to `/api/optimize`; the Arabic one always sent `"ar"`. The
+route uses `uiLang` for exactly one thing — which language the ANALYSIS/COACHING prose comes back
+in, independent of `outLang` (the rewritten resume's own language) — so an English-UI visitor who
+pasted an Arabic resume got Arabic analysis text with nothing explaining why. Same class of bug as
+F-14 through F-18: the language someone is READING should never be guessed from what they pasted.
+Sent explicitly now, both languages.
+
+Kept deliberately asymmetric, not unified: the non-streaming error branch shows the server's own
+`data.error` text to an English reader (already in English) but a fixed, friendly Arabic message to
+an Arabic one — the Arabic file's own explicit fix against leaking raw English server text into an
+Arabic UI, not an accident.
+
+**Two routes stayed two routes.** Unlike `/interview` and `/linkedin`, `/ar/optimize` was not
+collapsed into a redirect. Its `layout.tsx` wraps the tool in a substantial, uniquely-Arabic SEO
+body — real prose, steps, an FAQ, not a translation of the English layout's — that a redirect would
+have orphaned (the redirect fires before that content ever renders). Both `/optimize` and
+`/ar/optimize` remain real pages, each still wrapped by its own existing layout, both rendering one
+shared component (`app/components/tools/OptimizeTool.tsx`) with a `defaultAr` flag saying which
+route it is. `defaultAr`, not the `useLang()` hook `/interview`/`/linkedin` use, decides the
+language on first paint — `useLang()` also consults a stored device preference, which is wrong
+here: a visitor who reaches `/ar/optimize` must see Arabic regardless of what some earlier,
+unrelated page left in `localStorage`. A `?lang=` query param can still override after mount.
+
+**The language switch got simpler anyway.** The two old routes had to hand off a draft to each
+other before navigating — write the in-progress `resume`/`jobDescription`/`mode` under the OTHER
+route's storage key, then change `location`. That whole dance existed only because switching
+language meant switching to a differently-mounted component with different React state. Now both
+routes render the same component and read/write the same storage keys (`ra_optimize_draft`/
+`ra_optimize_result`, with a one-time fallback to the legacy `ra_ar_optimize_*` keys for a draft
+written before this shipped), so switching remounts fresh and finds the draft already there —
+nothing left to write before navigating. Verified in a browser: typed text on `/optimize` survives
+a real click through the header's language toggle to `/ar/optimize`, confirmed via `localStorage`
+inspection, not just visually.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (all suites, including `ops/mycvs.test.mjs`,
+`ops/language.test.mjs`, `ops/exportrender.test.mjs`, and `ops/deadcss.test.mjs`, each updated to
+check `OptimizeTool.tsx` instead of the two now-thin page wrappers), and `npm run build` all clean.
+Confirmed in a real browser (not just reasoned about): `/optimize` renders `dir="ltr"` with its
+English SEO body intact; `/ar/optimize` renders `dir="rtl"` with its Arabic SEO body intact (the
+thing this whole approach exists to protect); the header toggle navigates correctly in both
+directions; a draft typed in one language is present after switching to the other, with no
+hand-off code involved.

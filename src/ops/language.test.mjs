@@ -81,9 +81,10 @@ console.log("\n── /api/cover-letter writes in the CV's language, not the mod
   ok("it no longer asks the model to mirror the job's LANGUAGE",
     !/Mirror the job's language/.test(route));
 
-  /* All three callers must send it, or the default silently becomes the policy again. */
+  /* Both callers must send it, or the default silently becomes the policy again. `/optimize` and
+     `/ar/optimize` share one caller since F-25 — `OptimizeTool.tsx` — instead of one each. */
   for (const f of ["app/components/build/DesignSection.tsx",
-                   "app/(en)/optimize/page.tsx", "app/(ar)/ar/optimize/page.tsx"]) {
+                   "app/components/tools/OptimizeTool.tsx"]) {
     const src = readFileSync(f, "utf8");
     const call = src.slice(src.indexOf('/api/cover-letter'), src.indexOf('/api/cover-letter') + 500);
     ok(`${f.split("/").pop()} sends outLang`, /outLang/.test(call), call.slice(0, 80));

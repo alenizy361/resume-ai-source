@@ -199,8 +199,10 @@ console.log("\n── the boundary, read from the source ──");
     ok(`${f.split("/").pop()} never passes watermark: false`, !/watermark: false/.test(src));
   }
 
-  /* No page may pass a watermark prop to these two any more. */
-  const pages = ["app/(en)/optimize/page.tsx", "app/(ar)/ar/optimize/page.tsx", "app/components/build/DesignSection.tsx"];
+  /* No page may pass a watermark prop to these two any more. `/optimize` and `/ar/optimize` are
+     thin wrappers around the shared tool component since F-25 — check the one file with the
+     actual calls, not the two page.tsx files that no longer contain any. */
+  const pages = ["app/components/tools/OptimizeTool.tsx", "app/components/build/DesignSection.tsx"];
   for (const f of pages) {
     const src = strip(readFileSync(new URL(`../${f}`, import.meta.url), "utf8"));
     const bad = /<(PdfExport|DocxExport)[^>]*watermark=/s.test(src);

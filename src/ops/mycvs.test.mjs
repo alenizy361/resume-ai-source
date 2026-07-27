@@ -297,8 +297,9 @@ console.log("\n── the five pages that asked twice ──");
     ["app/(en)/interview/page.tsx", true],
     ["app/(en)/interview-live/page.tsx", false],
     ["app/(en)/linkedin/page.tsx", true],
-    ["app/(en)/optimize/page.tsx", false],
-    ["app/(ar)/ar/optimize/page.tsx", false],
+    // /optimize and /ar/optimize share one component since F-25 (OptimizeTool.tsx) instead of
+    // one page.tsx each — checked once here rather than at both now-thin wrapper paths.
+    ["app/components/tools/OptimizeTool.tsx", false],
   ];
   for (const [path, callsTools] of PAGES) {
     const src = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
