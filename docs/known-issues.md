@@ -1283,3 +1283,39 @@ change, not just on-page text.
 **Verification.** `npx tsc --noEmit`, `npm test`, `npm run build` clean. Confirmed against a
 running dev server with `curl`: the new `<title>`, `<h1>`, and the six-capability section all
 render server-side (no client JS needed) on both `/` and `/ar`.
+
+### F-31 · P2 · Job Description → Tailored CV: the three missing inputs and the three-group split — FIXED
+
+The order's Phase 3 named five concrete gaps against `/optimize`'s existing target-a-job mode: no
+JD file upload, no employer-name field, no target-country field, and the requirement comparison
+was two lists (missing/present keywords) plus an unrelated "skills gap" list, not the three named
+groups — *supported and already included*, *supported but missing from the CV*, *not supported by
+the candidate's evidence*.
+
+**File upload.** `/api/extract` was already a generic PDF/DOCX/TXT-to-text endpoint — nothing
+resume-specific in its implementation, despite its docstring. Reused as-is for job postings: a new
+`handleJdFile` in `OptimizeTool.tsx` posts to the same route and fills `jobDescription`, no backend
+change needed.
+
+**Employer + target country.** Added as two optional text inputs in step 2. Folded into the prompt
+context server-side (`app/api/optimize/route.ts`'s `jdWithContext`) rather than given their own
+prompt parameter — an employer name doesn't add a requirement to extract, and a target country is
+exactly what the existing extraction step already reads from the posting text; there was nothing
+for a second code path to do with either except tell the model who's asking.
+
+**The three-group split.** Checked before assuming a new AI field was needed: `PRESENT` (keywords
+genuinely present), `MISSING` (keywords absent), and `GAPS` (skills the candidate truly lacks)
+already map onto the three required groups almost exactly — `GAPS` *was* "not supported by
+evidence," just not labelled that way anywhere the user could see. Sharpened the prompt's own
+definitions of `MISSING` (a wording gap — the candidate plausibly has this, just didn't use the
+job's term) versus `GAPS` (zero evidence in the resume at all, never to be invented into the
+rewrite) so the split is real rather than incidental, and relabelled all three cards in the UI to
+the order's own group names, each with a one-line explanation of what it means. No new AI call, no
+new schema field — the three groups the feature needed were already being computed and just never
+named as what they were.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (including `ops/language.test.mjs`'s static guard
+on the Anthropic call site, updated for the renamed `jdWithContext` variable), `npm run build`
+clean. A throwaway Playwright script (not committed — this environment has no Anthropic/NVIDIA
+credential to run a real scan against) confirmed the JD-upload control, employer field, and
+target-country field all render and hold input correctly in step 2 of the wizard.

@@ -108,9 +108,12 @@ SCORE: <number 0-100 from the rubric — the CURRENT resume as submitted. This i
 marker and a sanity check; the score shown to the user is computed from the text itself,
 so do not agonise over it and do not mention it in SUMMARY.>
 SUMMARY: <2-3 honest sentences on one line: score drivers, biggest gap, is it worth pursuing>
-MISSING: <comma-separated keywords absent from the resume>
-PRESENT: <comma-separated keywords genuinely present>
-GAPS: <comma-separated skills the candidate truly lacks>
+These three lists are a DELIBERATE THREE-WAY SPLIT of the job's requirements — every requirement
+you extracted belongs in exactly one, never zero and never two:
+PRESENT: <comma-separated requirements the resume ALREADY shows evidence for — group "supported and already included">
+MISSING: <comma-separated requirements the candidate plausibly HAS (adjacent/transferable experience is visible in the resume) but did not state in the resume's own words — group "supported, but missing from the CV". A keyword/wording gap, not an honesty gap.>
+GAPS: <comma-separated requirements the resume shows ZERO evidence for at all — group "not supported by the candidate's evidence". Never move an item here into the rewritten resume; a missing-requirement fix may only be FLAGGED (see IMPROVEMENTS' missing-requirement tag), never fabricated.>
+No requirement of the job posting may be silently dropped — every real requirement you found lands in PRESENT, MISSING, or GAPS.
 IMPROVEMENTS:
 <4-6 lines, each EXACTLY: area | specific problem | specific actionable fix | source>
   where "source" is ONE of these tags describing the fix's honesty class:
@@ -528,6 +531,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Input too long. Please trim your resume or job description." }, { status: 400 });
     }
 
+    /*
+     * Employer name and target country: optional context, folded into the job description text
+     * rather than given their own prompt parameter. Both only ever change how a target-a-job
+     * analysis reads the SAME job description — an employer name doesn't add a new requirement to
+     * check, and a target country is exactly what `PROMPT`'s own "REQUIRED qualifications" step
+     * already extracts from the posting text, so there is nothing for a second code path to do
+     * with them except tell the model who's asking. Capped and sanitised the same as any other
+     * free-text field reaching a prompt.
+     */
+    const employer = typeof b.employer === "string" ? b.employer.trim().slice(0, 120) : "";
+    const targetCountry = typeof b.targetCountry === "string" ? b.targetCountry.trim().slice(0, 60) : "";
+    const jdWithContext = jd && (employer || targetCountry)
+      ? `${employer ? `Employer: ${employer}\n` : ""}${targetCountry ? `Target country: ${targetCountry}\n` : ""}\n${jd}`
+      : jd;
+
     // Abuse guard: the scan is free, so cap per-IP volume (each is an LLM call).
     if (!(await allowShared(`optimize:${clientIp(req)}`, 15, 10 * 60 * 1000))) {
       return NextResponse.json({ error: "You're going a bit fast. Please wait a minute and try again." }, { status: 429 });
@@ -604,8 +622,8 @@ export async function POST(req: NextRequest) {
             // Attempt 1 tells the model exactly what it got wrong last time.
             const extra = attempt > 0 && langMiss ? LANGUAGE_RETRY(outLang) : "";
             const raw = await (PROVIDER === "anthropic"
-              ? callAnthropic(resume, jd, uiLang, outLang, extra)
-              : streamNvidia(resume, jd, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang, extra));
+              ? callAnthropic(resume, jdWithContext, uiLang, outLang, extra)
+              : streamNvidia(resume, jdWithContext, keepAlive, uiLang === "ar" ? "ar" : undefined, outLang, extra));
 
             if (!raw.trim()) throw new Error("Empty response from AI provider");
             const parsed = parseSections(raw);

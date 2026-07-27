@@ -231,6 +231,10 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
   const [jobUrl, setJobUrl] = useState("");
   const [fetchingJob, setFetchingJob] = useState(false);
   const [jobUrlMsg, setJobUrlMsg] = useState("");
+  const [employer, setEmployer] = useState("");
+  const [targetCountry, setTargetCountry] = useState("");
+  const [jdFileMsg, setJdFileMsg] = useState("");
+  const [uploadingJd, setUploadingJd] = useState(false);
   const thinkRef = useRef<HTMLDivElement>(null);
 
   /*
@@ -390,6 +394,33 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
     }
   }
 
+  /** Same extraction endpoint as the resume upload — a job posting saved as a PDF/DOCX/TXT
+      needs the same PDF-vs-line-breaks handling `/api/extract` already has; nothing job-posting-
+      specific to add. */
+  async function handleJdFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setJdFileMsg("");
+    setUploadingJd(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/extract", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(ar ? "تعذّرت قراءة الملف — الصق النص يدوياً." : (data.error || "Failed to read file"));
+      let text = typeof data.text === "string" ? data.text : "";
+      if (text.length > 4000) text = text.slice(0, 4000);
+      setJobDescription(text);
+      if (text.trim().length >= 30) setMode("target");
+      setJdFileMsg(ar ? `تم استيراد الملف: ${file.name}` : `Imported from ${file.name}`);
+    } catch (err) {
+      setJdFileMsg(err instanceof Error ? err.message : (ar ? "تعذّرت قراءة الملف." : "Failed to read file."));
+    } finally {
+      setUploadingJd(false);
+      e.target.value = "";
+    }
+  }
+
   function download(filename: string, text: string) {
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -497,7 +528,13 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
         // ANALYSIS/COACHING prose the model writes, independent of `outLang` (the rewritten
         // resume's own language). Sent explicitly now for both readers, not guessed from
         // whatever script the pasted resume happens to be in.
-        body: JSON.stringify({ resume: resumeText, jobDescription: mode === "target" ? jobDescription : "", uiLang: ar ? "ar" : "en", outLang }),
+        body: JSON.stringify({
+          resume: resumeText, jobDescription: mode === "target" ? jobDescription : "",
+          uiLang: ar ? "ar" : "en", outLang,
+          // Only meaningful alongside an actual job description — the general-review path
+          // ignores jobDescription server-side, so sending these then would be a no-op anyway.
+          employer: mode === "target" ? employer : "", targetCountry: mode === "target" ? targetCountry : "",
+        }),
       });
 
       // Non-streaming replies (validation errors, paywall) are plain JSON.
@@ -688,21 +725,38 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
               <div>
                 <h1 className="text-3xl font-extrabold tracking-tight">{ar ? "الوظيفة (اختياري)" : "Target a job (optional)"}</h1>
                 <p className="mt-2 mb-5 text-sm" style={{ color: "var(--muted)" }}>{ar ? "أضف الإعلان لنفصّل السيرة عليه، أو تخطّاه لتحسين شامل." : "Add the posting and we tailor to it. Or skip for a general improvement."}</p>
-                <div className="mb-3 flex gap-2">
+                <div className="mb-3 flex flex-wrap gap-2">
                   <input value={jobUrl} onChange={(e) => setJobUrl(e.target.value)} dir="ltr"
                     placeholder={ar ? "الصق رابط وظيفة (لينكدإن، بيت…) للاستيراد" : "Paste a job link (LinkedIn, Bayt…) to import"}
                     className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm focus:outline-none"
                     style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                   <button type="button" onClick={importJobFromUrl} disabled={fetchingJob || !jobUrl.trim()}
                     className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>{fetchingJob ? (ar ? "جارٍ الجلب…" : "Fetching…") : (ar ? "استيراد" : "Import")}</button>
+                  <label className="btn-ghost shrink-0 cursor-pointer px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)", opacity: uploadingJd ? 0.6 : 1 }}>
+                    {uploadingJd ? (ar ? "جارٍ القراءة…" : "Reading…") : (ar ? "أو ارفع ملف الإعلان" : "…or upload the posting")}
+                    <input type="file" accept=".pdf,.docx,.txt,.md" onChange={handleJdFile} className="hidden" disabled={uploadingJd} />
+                  </label>
                 </div>
                 {jobUrlMsg && <p className="mb-2 text-xs" style={{ color: jobUrlMsg.startsWith("✓") || jobUrlMsg.startsWith("تم") ? "var(--accent)" : "#fbbf24" }}>{jobUrlMsg}</p>}
+                {jdFileMsg && <p className="mb-2 text-xs" style={{ color: "var(--accent)" }}>{jdFileMsg}</p>}
                 <textarea value={jobDescription}
                   onChange={(e) => { const v = e.target.value; setJobDescription(v); if (v.trim().length >= 30) setMode("target"); else setMode("general"); }}
                   placeholder={ar ? "الصق إعلان الوظيفة هنا." : "…or paste the job description here."}
                   rows={10} maxLength={4000}
                   className="w-full resize-y rounded-xl px-4 py-3 text-sm focus:outline-none"
                   style={{ ...inputStyle, minHeight: "9rem" }} />
+                {/* Employer + target country — optional context folded into the analysis, not a
+                    second requirement to extract. See the note beside `jdWithContext` server-side. */}
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <input value={employer} onChange={(e) => setEmployer(e.target.value.slice(0, 120))}
+                    placeholder={ar ? "جهة التوظيف (اختياري)" : "Employer name (optional)"}
+                    className="min-w-0 rounded-lg px-3 py-2 text-sm focus:outline-none"
+                    style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                  <input value={targetCountry} onChange={(e) => setTargetCountry(e.target.value.slice(0, 60))}
+                    placeholder={ar ? "الدولة المستهدفة (اختياري)" : "Target country (optional)"}
+                    className="min-w-0 rounded-lg px-3 py-2 text-sm focus:outline-none"
+                    style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                </div>
                 <div className="mt-5 flex gap-2">
                   <button onClick={() => { setMode("general"); setStep(3); }} className="btn-ghost flex-1 py-3 text-sm font-semibold" style={{ color: "var(--fg)" }}>{ar ? "تخطّي" : "Skip"}</button>
                   <button onClick={() => setStep(3)} className="btn-accent flex-[2] py-3 text-base">{ar ? "متابعة ←" : "Continue →"}</button>
@@ -1069,18 +1123,15 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     {copied ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ التحليل" : "Copy analysis")}
                   </button>
                 </div>
+                {/*
+                  Three groups, in the order the job's requirements were actually resolved into —
+                  never two lists pretending to be the whole picture. Group 3 exists so a real gap
+                  is SHOWN, not silently dropped or, worse, invented into the rewritten resume.
+                */}
                 <div className="grid gap-6 md:grid-cols-2">
-                  <div className="card p-6" style={{ borderColor: "rgba(248,113,113,0.2)" }}>
-                    <h3 className="mb-4 font-bold">{ar ? `الكلمات الناقصة (${toArabicDigits(result.missingKeywords.length)})` : `Missing keywords (${result.missingKeywords.length})`}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {result.missingKeywords.map((k) => (
-                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(248,113,113,0.14)", color: "#f87171" }}>{k}</span>
-                      ))}
-                    </div>
-                  </div>
-
                   <div className="card p-6" style={{ borderColor: "rgba(139,92,246,0.2)" }}>
-                    <h3 className="mb-4 font-bold">{ar ? `الكلمات الموجودة (${toArabicDigits(result.presentKeywords.length)})` : `Present keywords (${result.presentKeywords.length})`}</h3>
+                    <h3 className="font-bold">{ar ? `مدعوم وموجود بالفعل (${toArabicDigits(result.presentKeywords.length)})` : `Supported and already included (${result.presentKeywords.length})`}</h3>
+                    <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "متطلبات الوظيفة التي تُظهر سيرتك دليلاً عليها بالفعل." : "Job requirements your resume already shows evidence for."}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.presentKeywords.map((k) => (
                         <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
@@ -1088,8 +1139,19 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     </div>
                   </div>
 
+                  <div className="card p-6" style={{ borderColor: "rgba(248,113,113,0.2)" }}>
+                    <h3 className="font-bold">{ar ? `مدعوم، لكنه ناقص في سيرتك (${toArabicDigits(result.missingKeywords.length)})` : `Supported, but missing from your CV (${result.missingKeywords.length})`}</h3>
+                    <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "الأرجح أن لديك هذا — لكنك لم تكتبه بكلمات الوظيفة نفسها." : "You likely have this, but didn't state it in the job posting's own words."}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {result.missingKeywords.map((k) => (
+                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(248,113,113,0.14)", color: "#f87171" }}>{k}</span>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="card p-6" style={{ borderColor: "rgba(251,191,36,0.2)" }}>
-                    <h3 className="mb-4 font-bold">{ar ? `مهارات يُنصح بإبرازها (${toArabicDigits(result.skillsGap.length)})` : `Skills to highlight (${result.skillsGap.length})`}</h3>
+                    <h3 className="font-bold">{ar ? `غير مدعوم بأدلتك (${toArabicDigits(result.skillsGap.length)})` : `Not supported by your evidence (${result.skillsGap.length})`}</h3>
+                    <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "لا يوجد دليل في سيرتك على هذا — لن يُضاف تلقائياً؛ إن كان صحيحاً فأضِفه بنفسك." : "Your resume shows no evidence of this — never added automatically. If it's true, add it yourself."}</p>
                     <ul className="space-y-2">
                       {result.skillsGap.map((s) => (
                         <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "#fbbf24" }}><span>{ar ? "←" : "→"}</span> {s}</li>

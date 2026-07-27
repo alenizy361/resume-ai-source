@@ -122,10 +122,10 @@ console.log("\n── the CV's language reaches every route that writes CV conte
   ok("and finally concatenates `extra`, so the retry says something new",
     /PROMPT\(resume, jobDescription, uiLang, outLang\) \+ extra/.test(opt));
   ok("the retry site passes them through",
-    /callAnthropic\(resume, jd, uiLang, outLang, extra\)/.test(opt));
+    /callAnthropic\(resume, jdWithContext, uiLang, outLang, extra\)/.test(opt));
   /* Both providers must now receive the same four things, or the bug returns on one of them. */
   ok("neither provider is called with fewer arguments than the other",
-    !/callAnthropic\(resume, jd, extra\)/.test(opt));
+    !/callAnthropic\(resume, jdWithContext, extra\)/.test(opt));
 
   /*
    * ── O-6: `ats_review` sent a key the route does not read, containing the wrong language ──
