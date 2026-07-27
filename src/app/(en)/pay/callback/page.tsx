@@ -289,11 +289,11 @@ function CallbackInner() {
         {state === "pending" && (
           <div className="mt-6 flex flex-col items-center gap-3">
             <button onClick={checkStatus} className="rounded-xl px-8 py-3 font-bold" style={{ background: "var(--gold)", color: "#3a2708" }}>{t.refresh}</button>
-            <Link href={ar ? "/ar#pricing" : "/#pricing"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>{t.back}</Link>
+            <Link href={ar ? "/ar/pricing" : "/pricing"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>{t.back}</Link>
           </div>
         )}
         {state === "failed" && (
-          <Link href={ar ? "/ar#pricing" : "/#pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}>{t.back}</Link>
+          <Link href={ar ? "/ar/pricing" : "/pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}>{t.back}</Link>
         )}
       </div>
     </main>

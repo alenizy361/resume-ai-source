@@ -309,8 +309,22 @@ export function LanguagesBlock({ lang, cv, state, dispatch }: {
 
   const { hidden, drop } = useDismissals("languages", state, dispatch);
 
+  /*
+   * A confirmed language stays a suggestion forever, and stays addable — a real, reported bug.
+   *
+   * "العربية / Arabic" is stored under EITHER half depending on `cv` (see `onAdd` below: an
+   * English-authored CV gets "Arabic", an Arabic one gets "العربية") — but this dedup check only
+   * ever compared against `n.split(" / ")[0]`, the Arabic half. On an English CV, `add()` had
+   * already written "Arabic" (Latin script) into `state.languages`, and `"arabic".includes("العربية")`
+   * is never true, so the chip that just got confirmed never left the suggestion row. Checking
+   * every half of the label, not just the first, matches whichever one `add()` could actually have
+   * written.
+   */
   const suggestions = ["العربية / Arabic", "English"]
-    .filter((n) => !state.languages.some((l) => l.name.toLowerCase().includes(n.split(" / ")[0].toLowerCase())))
+    .filter((n) => {
+      const variants = n.split(" / ").map((p) => p.toLowerCase());
+      return !state.languages.some((l) => variants.some((v) => l.name.toLowerCase().includes(v)));
+    })
     .filter((n) => !hidden.has(normalizeLabel(n)));
 
   return (

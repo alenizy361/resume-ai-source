@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import CheckoutButton from "./CheckoutButton";
 
 /**
  * Session-aware nav links. Shows "Sign in" when logged out, and the user's
@@ -17,9 +18,14 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
       .catch(() => setMe({ signedIn: false }));
   }, []);
 
-  const pricingHref = ar ? "/ar#pricing" : "/#pricing";
-
   if (!me) return <span className="w-24" />; // reserve space, no flash
+
+  /* Was `href={ar ? "/ar#pricing" : "/#pricing"}` — a dead anchor, no such element exists on the
+     homepage. "Unlimited" is the Complete Pack; buying it directly from wherever this nav renders
+     needs no separate pricing page in between. */
+  const unlockButton = (
+    <CheckoutButton ar={ar} plan="complete" label={ar ? "فتح غير محدود ←" : "Unlock unlimited →"} variant="accent" className="btn-accent px-4 py-2 text-sm" />
+  );
 
   if (me.signedIn) {
     return (
@@ -32,9 +38,7 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
           <Link href="/account" className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
             {ar ? "غير محدود ✓" : "Unlimited ✓"}
           </Link>
-        ) : (
-          <a href={pricingHref} className="btn-accent px-4 py-2 text-sm">{ar ? "فتح غير محدود ←" : "Unlock unlimited →"}</a>
-        )}
+        ) : unlockButton}
       </>
     );
   }
@@ -42,7 +46,7 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
   return (
     <>
       <Link href="/login" className="text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
-      <a href={pricingHref} className="btn-accent px-4 py-2 text-sm">{ar ? "فتح غير محدود ←" : "Unlock unlimited →"}</a>
+      {unlockButton}
     </>
   );
 }

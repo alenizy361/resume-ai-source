@@ -2407,3 +2407,54 @@ regression. The already-fixed English-version flow (F-46) re-verified working, u
 **Explicitly not done this pass**: no other caller of `BuilderProvider`'s old `resumeId` prop needed
 updating (there was exactly one render site, and it never passed the prop) — a narrow, low-risk fix
 despite the depth of what it uncovered.
+
+### F-48 · P1 · Three more audit findings: dead purchase links, a language that stayed re-addable, empty account/login HTML — FIXED
+
+Three smaller, independently-verified findings from the same launch-readiness audit, fixed together.
+
+**Every purchase/unlock link on the site pointed at `/#pricing` — and it was worse than reported: no
+`id="pricing"` element exists anywhere on the homepage**, confirmed by fetching the raw homepage HTML
+and finding zero matches. The link didn't just fail to scroll to a pricing section — it landed a
+paying-intent visitor at the plain top of the homepage with no pricing content at all. Seven call
+sites across `OptimizeTool.tsx` (three separate paywall CTAs — the actual conversion moments),
+`AccountClient.tsx`, `AuthNav.tsx` (the site-wide nav, rendered on nearly every page), `MobileMenu.tsx`
+(×2, EN/AR), `SeoLanding.tsx`, and `pay/callback/page.tsx` (×2).
+
+Fixed two different ways, matched to what each link actually meant: nav-style "go see pricing" links
+(`MobileMenu`, `SeoLanding`, the failed/pending states in `pay/callback`) now point at the real
+`/pricing` / `/ar/pricing` page. Everywhere the surrounding copy already named a specific plan —
+`OptimizeTool`'s watermark/cover-letter/bottom CTAs, `AccountClient`'s "Unlock unlimited", `AuthNav`'s
+site-wide unlock button — now render `CheckoutButton` directly, the same component `DesignSection.tsx`
+already used elsewhere, opening the real inline Paylink checkout with zero extra stop. `CheckoutButton`
+gained one optional `className` prop (defaulting to its existing full-width button, so every prior call
+site is visually unchanged) so it can sit inline in a compact row instead of only ever being a
+full-width block button.
+
+**A language, once added, stayed offered as a suggestion — reproduced live before fixing.**
+`LanguagesBlock`'s dedup check compared a confirmed language's name against only the FIRST half of the
+bilingual label `"العربية / Arabic"` (`n.split(" / ")[0]`, always the Arabic word) — but `add()` stores
+whichever half matches the CV's own authoring language, so an English CV stores the language as
+"Arabic" (Latin script), and `"arabic".includes("العربية")` is never true. The suggestion chip the user
+just confirmed never left the list. Fixed by checking every half of the label, not just the first.
+
+**`/account`, `/ar/account`, and `/login` really did serve empty `<main>` HTML — confirmed directly by
+fetching the raw response.** Not a missing `<Suspense>` boundary (both routes already had one, from
+prior work) — the boundary's own FALLBACK was the empty markup: `<main className="min-h-dvh" />`, shown
+to any crawler, screen reader, or slow connection that arrived before `useSearchParams()` resolved. A
+real visitor rarely notices (`AccountInner`/`LoginInner` mount within one frame), but the server
+response itself — what a crawler reads and what LCP measures — had no `<h1>`, matching the audit's own
+crawl finding exactly. Fixed the same way `BuilderStart.tsx`'s own `StartFallback` already solved the
+identical problem for `/builder`: render the page's real heading in the fallback instead of nothing.
+`AccountFallback` uses the already-known `initialLang` prop for the correct language synchronously, no
+async wait needed; `LoginFallback` renders the English default, since `/login`'s own `?lang=ar` is only
+knowable after the same `useSearchParams()` this fallback exists to cover for.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed. `npm run lint` — zero
+new issues across all nine touched files. `npm run build` clean. Live checks against the real bundled
+app: raw HTML fetch of `/account`, `/ar/account`, `/login` now shows a real `<h1>` in each
+(`Your career dashboard` / `لوحة مسيرتك المهنية` / `Your resume awaits`); homepage HTML confirmed to
+contain zero `#pricing` references and a real `/pricing` link; `AuthNav`'s "Unlock unlimited" on
+`/optimize` opens the real checkout modal (name/email/mobile fields) rather than navigating anywhere;
+`/pricing` itself renders real plan content. Builder languages step, live: the bilingual suggestion
+chip is offered, clicking it adds the language, and the same chip is confirmed GONE from the
+suggestion row afterward — the exact reported symptom, reproduced then fixed.

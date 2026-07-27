@@ -37,8 +37,14 @@ function loadSdk(): Promise<void> {
 }
 
 export default function CheckoutButton({
-  plan, label, variant = "accent", ar = false,
-}: { plan: "single" | "complete"; label: string; variant?: "accent" | "ghost"; ar?: boolean }) {
+  plan, label, variant = "accent", ar = false, className,
+}: {
+  plan: "single" | "complete"; label: string; variant?: "accent" | "ghost"; ar?: boolean;
+  /** Overrides the trigger button's own classes — every existing call site omits this and keeps
+      the full-width block button below; a spot that needs a compact inline trigger (a button
+      sharing a row with other text, say) can pass its own sizing without a second component. */
+  className?: string;
+}) {
   const uid = useId().replace(/[:]/g, "");
   const [open, setOpen] = useState(false);
   const [phase, setPhase] = useState<"details" | "card">("details");
@@ -154,7 +160,7 @@ export default function CheckoutButton({
           than on the invoice call: an abandoned checkout is the number worth knowing, and the
           invoice never gets created for the people who abandon at the first field. */}
       <button onClick={() => { trackStep("checkoutStarted", { plan }); setOpen(true); }}
-        className={variant === "accent" ? "btn-accent block w-full py-3 text-center" : "btn-ghost block w-full py-3 text-center font-semibold"}
+        className={className ?? (variant === "accent" ? "btn-accent block w-full py-3 text-center" : "btn-ghost block w-full py-3 text-center font-semibold")}
         style={variant === "ghost" ? { color: "var(--fg)" } : undefined}>{label}</button>
 
       {open && (

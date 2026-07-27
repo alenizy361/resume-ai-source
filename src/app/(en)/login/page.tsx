@@ -131,14 +131,32 @@ function LoginInner() {
   );
 }
 
-export default function LoginPage() {
-  /*
-   * The fallback is the same shape as the page, not a blank screen: `useSearchParams` needs a
-   * Suspense boundary, and a fallback that renders nothing is a flash of empty page on a slow
-   * connection — the exact thing this work is removing everywhere else.
-   */
+/*
+ * The comment above USED to say "the same shape as the page, not a blank screen" — the actual
+ * fallback was `<main className="min-h-dvh" />`, which is nothing: no `<h1>`, no card, no input,
+ * exactly the empty-server-HTML complaint a launch-readiness crawl reported for this route. A real
+ * visitor barely sees it (`LoginInner` mounts within one frame), but a crawler, a screen reader
+ * before hydration, or a slow connection got a genuinely blank page. `?lang=ar` (how `/ar/login`
+ * reaches this route) is itself only knowable once `useSearchParams` resolves, so this can't be
+ * bilingual without the same async dependency it exists to cover for — English, the direct-visit
+ * default, same call `AccountClient.tsx`'s equivalent fallback makes for the same reason.
+ */
+function LoginFallback() {
   return (
-    <Suspense fallback={<main className="min-h-dvh" />}>
+    <main className="flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+      <div className="w-full max-w-sm">
+        <div className="card p-7 text-center">
+          <h1 className="text-2xl font-bold">Your resume awaits</h1>
+          <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>Enter your email and we&apos;ll send you a magic link — no password.</p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
       <LoginInner />
     </Suspense>
   );

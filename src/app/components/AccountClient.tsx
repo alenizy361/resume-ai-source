@@ -6,6 +6,7 @@ import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entit
 import { toArabicDigits } from "@/app/lib/plans";
 import { navCta } from "@/app/lib/brand";
 import BrandOrb from "../components/BrandOrb";
+import CheckoutButton from "../components/CheckoutButton";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ScoreOrb from "../components/orb/ScoreOrb";
@@ -327,7 +328,10 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                 )}
               </dl>
               {!me.unlimited && (
-                <Link href="/#pricing" className="btn-accent mt-5 block w-full py-3 text-center">{t.unlockUnlimited}</Link>
+                /* `/#pricing` was a dead anchor — no such element exists on the homepage. "Unlimited"
+                   is the 90-day Complete Pack, so this buys it directly rather than sending the
+                   visitor to compare plans they've already decided between by clicking this. */
+                <CheckoutButton ar={lang === "ar"} plan="complete" label={t.unlockUnlimited} variant="accent" />
               )}
               <button onClick={signOut} disabled={signingOut}
                 className="btn-ghost mt-3 block w-full py-2.5 text-center text-sm font-semibold disabled:opacity-50" style={{ color: "var(--fg)" }}>
@@ -522,9 +526,35 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   );
 }
 
+/*
+ * What the raw server HTML contains while `useSearchParams()` (inside `AccountInner`) is still
+ * resolving — real content, not an empty `<main>`.
+ *
+ * The empty fallback this replaced was a genuine, reported bug: a crawl of `/account` found `200
+ * OK`, a `<title>`, and NO `<h1>`, no buttons, no inputs anywhere in the server-rendered HTML — this
+ * `<Suspense>` boundary's own fallback WAS that empty page, since nothing here ever gave it content.
+ * A real visitor never saw a permanently blank screen (`AccountInner` mounts and replaces this within
+ * one frame), but a slow connection, a crawler, or a screen reader arriving before hydration did.
+ * Same fix `BuilderStart.tsx`'s own `StartFallback` already applies for the identical reason: render
+ * the page's OWN heading here rather than a spinner, so the first HTML response already says what
+ * this page is — which is also what LCP measures. `initialLang` is a prop, known synchronously, so
+ * the heading is in the correct language without waiting on anything async.
+ */
+function AccountFallback({ initialLang }: { initialLang: "en" | "ar" }) {
+  const t = STRINGS[initialLang];
+  return (
+    <main dir={initialLang === "ar" ? "rtl" : "ltr"} className="min-h-dvh px-6 py-16" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <div className="mx-auto max-w-4xl">
+        <h1 className="mb-8 text-3xl font-extrabold">{t.dashboard}</h1>
+        <p className="text-sm" style={{ color: "var(--muted)" }}>{t.loading}</p>
+      </div>
+    </main>
+  );
+}
+
 export default function AccountClient({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   return (
-    <Suspense fallback={<main className="min-h-dvh" style={{ background: "var(--bg)" }} />}>
+    <Suspense fallback={<AccountFallback initialLang={initialLang} />}>
       <AccountInner initialLang={initialLang} />
     </Suspense>
   );

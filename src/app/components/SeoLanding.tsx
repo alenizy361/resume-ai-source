@@ -36,7 +36,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{intro}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/optimize" className="btn-accent px-7 py-3.5 text-base">Check my resume free →</Link>
-            <Link href="/#pricing" className="btn-ghost px-7 py-3.5 text-base" style={{ color: "var(--fg)" }}>See pricing</Link>
+            <Link href="/pricing" className="btn-ghost px-7 py-3.5 text-base" style={{ color: "var(--fg)" }}>See pricing</Link>
           </div>
         </div>
       </section>

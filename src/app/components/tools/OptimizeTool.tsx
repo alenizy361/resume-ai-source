@@ -616,7 +616,11 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
     : (ar ? (score >= 75 ? "سيرة قوية ✓" : score >= 55 ? "بداية جيدة" : "تحتاج تقوية")
           : (score >= 75 ? "STRONG RESUME" : score >= 55 ? "SOLID START" : "NEEDS WORK"));
 
-  const pricingHref = ar ? "/ar#pricing" : "/#pricing";
+  /* `/#pricing` was a dead anchor — the homepage has no `id="pricing"` element, so this landed
+     visitors at the top of the homepage with zero pricing content. The full pricing page exists at
+     `/pricing`; where the surrounding copy already names a specific plan, `CheckoutButton` (used
+     elsewhere on this same page) skips that extra stop entirely. */
+  const pricingHref = ar ? "/ar/pricing" : "/pricing";
   const SAMPLE_RESUME = ar ? SAMPLE_RESUME_AR : SAMPLE_RESUME_EN;
   const SAMPLE_JD = ar ? SAMPLE_JD_AR : SAMPLE_JD_EN;
 
@@ -1057,7 +1061,15 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       </p>
                     </div>
                     {marked ? (
-                      <Link href={pricingHref} className="btn-accent px-5 py-2.5 text-sm">{ar ? "🔒 افتح الوصول لإنشائه" : "Unlock to generate"}</Link>
+                      /* The copy right above already says this is "part of the Complete Pack" —
+                         so the button buys that plan directly rather than sending the visitor to
+                         a separate page to say so again. `className` keeps it the same compact
+                         pill every sibling button in this row uses, instead of CheckoutButton's
+                         own default full-width block sizing. */
+                      <CheckoutButton
+                        ar={ar} plan="complete" label={ar ? "🔒 افتح الوصول لإنشائه" : "Unlock to generate"}
+                        variant="accent" className="btn-accent px-5 py-2.5 text-sm"
+                      />
                     ) : !coverLetter ? (
                       <button
                         onClick={generateCoverLetter}
@@ -1203,7 +1215,11 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   : `Get the Complete Pack — ${formatPrice("complete", "en")} once, no subscription: cover letters, LinkedIn, and interview prep included.`}
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <Link href={pricingHref} className="btn-accent px-8 py-3">{ar ? "اشترك الآن ←" : `Get the Complete Pack — ${formatPrice("complete", "en")} →`}</Link>
+                <CheckoutButton
+                  ar={ar} plan="complete"
+                  label={ar ? "اشترك الآن ←" : `Get the Complete Pack — ${formatPrice("complete", "en")} →`}
+                  variant="accent" className="btn-accent px-8 py-3"
+                />
                 <button
                   onClick={() => {
                     setResult(null); setResume(""); setJobDescription(""); setCoverLetter("");
