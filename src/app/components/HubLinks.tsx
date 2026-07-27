@@ -17,6 +17,7 @@ const EN: [string, string][] = [
   ["Interview prep", "/interview"],
   ["Mock interview", "/interview-live"],
   ["LinkedIn optimizer", "/linkedin"],
+  ["Career plan", "/career-plan"],
   ["Pricing", "/pricing"],
 ];
 /*
@@ -45,6 +46,7 @@ const AR: [string, string][] = [
   ["تحضير المقابلة", "/ar/interview"],
   ["مقابلة مباشرة", "/ar/interview-live"],
   ["محسّن لينكدإن", "/ar/linkedin"],
+  ["خطة مسيرتك المهنية", "/ar/career-plan"],
   ["الأسعار", "/ar/pricing"],
   ["حسابي", "/ar/account"],
   ["فحص ATS (EN)", "/ats-resume-checker"],

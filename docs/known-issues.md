@@ -1430,3 +1430,50 @@ target-role input, and submit button with no real console errors (only the expec
 `/_vercel/insights/script.js` 404). The actual generation call needs `NVIDIA_API_KEY`, which this
 environment does not have — not live-verified against the model, same constraint as every other
 AI-dependent feature this session.
+
+### F-35 · P3 · Career plan: compare current vs. target role — FIXED
+
+This checklist entry (P3-4) was previously left honestly `TODO` because the order's own text at the
+time was a single undefined line. The order text was re-read in full for this pass and it names a
+concrete feature: the user picks a current role, a target role, a country, and a timeline; the
+system compares the two roles and returns transferable skills, missing skills, missing credentials,
+recommended experience, suggested learning areas, CV changes, and interview preparation areas — and
+must never recommend a specific paid course, bootcamp, or platform by name.
+
+Built as a new page, `/career-plan` (English UI, shared with Arabic via `useLang()` — same pattern
+as `/linkedin` and `/interview`, with a one-line `/ar/career-plan` redirect stub, deliberately left
+out of `proxy.ts`'s `AR_TWINS` list for the exact reason documented there for `/interview` and
+`/linkedin`: a stub-only Arabic route in that list produces the F-29 infinite-redirect loop), and a
+new `career-plan` mode on the existing `/api/tools` endpoint — reusing its retry loop, JSON
+extraction/repair, rate limiter, and per-mode validation/normalize pattern rather than standing up a
+new subsystem for a seventh AI surface.
+
+**Inputs, not a resume.** Unlike `/linkedin` and `/interview`, this tool has no resume/profile text
+to analyze — its two required fields are role names. The shared endpoint's generic validation
+(`inputA` ≥ 50 chars, meant for pasted resume text) would reject a short role name, so `career-plan`
+gets its own floor (10 chars) and its own error copy, the same way `interview-feedback` already got
+its own error copy without a new endpoint.
+
+**The no-paid-course rule is enforced in the prompt itself**, not left to hope: "Never recommend a
+specific paid course, bootcamp, or training platform by name — describe the skill or credential area
+only, never a vendor," directly implementing the order's "Do not recommend paid courses unless a
+verified integration exists" line (no such integration exists in this codebase, so the safe default
+is not naming any). The same no-fabrication line every AI surface here carries also applies: base
+every item on the stated roles, never invent employers, dates, or achievements.
+
+`HubLinks` (English and Arabic sets) gained a "Career plan" / "خطة مسيرتك المهنية" entry so the SEO
+hub pages that already cross-link every other tool now link to this one too.
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean — both
+`/career-plan` and `/ar/career-plan` compile as static routes in the production build. Browser
+verification was attempted against a freshly restarted dev server (`fuser -k 3141/tcp` first,
+confirmed `✓ Ready in 486ms` in the server's own log), but the route's first Turbopack dev-compile
+did not finish within several minutes even with the port pre-cleared — unlike F-32, where a stale
+process on the port turned out to be the whole explanation. The root cause here was not identified;
+it may be the same class of sandbox resource pressure noted before, or something specific to this
+route, and that distinction was not resolved before this pass ended. Since `npm run build` compiled
+the exact same code cleanly (both routes, no errors) moments before and after the dev-server attempt,
+this is being shipped on typecheck + test + production-build verification, with the browser check
+honestly recorded as inconclusive rather than claimed. The generation call itself needs
+`NVIDIA_API_KEY`, which this environment does not have — not live-verified against the model, same
+constraint as every other AI-dependent feature this session.

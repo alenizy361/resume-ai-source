@@ -85,6 +85,25 @@ Return ONLY a JSON object:
   "revisedOpening": "<a one-sentence stronger opening line for this answer, built only from facts already present in their answer or the background above>"
 }
 No text outside the JSON.${LANG_RULE(lang)}`,
+
+  "career-plan": (context, timeline, lang) => `You are a career strategist. Compare the candidate's current role to their target role and produce a realistic transition plan.
+
+CONTEXT (current role, target role, country, and any known occupation facts):
+${context}
+
+TIMELINE THE CANDIDATE WANTS: ${timeline}
+
+Return ONLY a JSON object:
+{
+  "transferableSkills": ["<skills from the current role that carry directly into the target role>"],
+  "missingSkills": ["<skills the target role typically needs that the current role does not obviously provide>"],
+  "missingCredentials": ["<certifications, licenses or qualifications commonly expected for the target role that the candidate likely does not yet hold>"],
+  "recommendedExperience": ["<concrete experience to seek out before or during the transition, e.g. a project type, a rotation, a responsibility to request>"],
+  "learningAreas": ["<topics or skill areas worth studying — subject areas only, never a specific paid course, bootcamp, or platform name>"],
+  "cvChanges": ["<specific changes to make to their CV for this target role — framing, sections, keywords to add>"],
+  "interviewPrepAreas": ["<topics or question types to prepare for in interviews for this target role>"]
+}
+Never recommend a specific paid course, bootcamp, or training platform by name — describe the skill or credential area only, never a vendor. Base every item on the stated current and target roles; do not invent employers, dates, or achievements the candidate does not have. No text outside the JSON.${LANG_RULE(lang)}`,
 };
 
 function extractJson(text: string): string {
@@ -138,13 +157,18 @@ export async function POST(req: NextRequest) {
     const lang: "ar" | "en" = rawLang === "ar" ? "ar" : "en";
     const promptFn = PROMPTS[mode];
     if (!promptFn) return NextResponse.json({ error: "Unknown tool." }, { status: 400 });
-    if (!inputA?.trim() || inputA.length < 50) {
-      return NextResponse.json({ error: "Please provide more detail (paste your resume or profile)." }, { status: 400 });
+    const minA = mode === "career-plan" ? 10 : 50;
+    if (!inputA?.trim() || inputA.length < minA) {
+      return NextResponse.json({
+        error: mode === "career-plan" ? "Please fill in your current and target role."
+          : "Please provide more detail (paste your resume or profile).",
+      }, { status: 400 });
     }
     if (!inputB?.trim() || inputB.length < 3) {
       return NextResponse.json({
         error: mode === "linkedin" ? "Please enter your target role."
           : mode === "interview-feedback" ? "Please write out your answer first."
+          : mode === "career-plan" ? "Please select a timeline."
           : "Please paste the job description.",
       }, { status: 400 });
     }
@@ -215,6 +239,9 @@ export async function POST(req: NextRequest) {
           if (!hasHeadlines && !candidate.about) throw new Error("No usable LinkedIn content");
         } else if (mode === "interview-feedback") {
           if (!candidate.strength && !Array.isArray(candidate.weaknesses)) throw new Error("No usable feedback in response");
+        } else if (mode === "career-plan") {
+          const hasSkills = Array.isArray(candidate.transferableSkills) || Array.isArray(candidate.missingSkills);
+          if (!hasSkills) throw new Error("No usable career plan in response");
         }
         parsed = candidate;
       } catch (e) {
@@ -270,6 +297,18 @@ export async function POST(req: NextRequest) {
         weaknesses: (Array.isArray(parsed.weaknesses) ? parsed.weaknesses : []).map(String),
         missingEvidence: (Array.isArray(parsed.missingEvidence) ? parsed.missingEvidence : []).map(String),
         revisedOpening: String(parsed.revisedOpening ?? ""),
+      });
+    }
+    if (mode === "career-plan") {
+      const arr = (v: unknown) => (Array.isArray(v) ? v : []).map(String).filter(Boolean);
+      return NextResponse.json({
+        transferableSkills: arr(parsed.transferableSkills),
+        missingSkills: arr(parsed.missingSkills),
+        missingCredentials: arr(parsed.missingCredentials),
+        recommendedExperience: arr(parsed.recommendedExperience),
+        learningAreas: arr(parsed.learningAreas),
+        cvChanges: arr(parsed.cvChanges),
+        interviewPrepAreas: arr(parsed.interviewPrepAreas),
       });
     }
     return NextResponse.json(parsed);
