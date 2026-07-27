@@ -42,6 +42,7 @@ import BrandOrb from "../BrandOrb";
 import CinematicIntro from "./CinematicIntro";
 import ContinueDraft from "./ContinueDraft";
 import DemoWalkthrough from "./DemoWalkthrough";
+import HeroExperience from "./HeroExperience";
 import ProfessionDemo from "./ProfessionDemo";
 import AtsScoreReveal from "./AtsScoreReveal";
 import FaqAccordion from "./FaqAccordion";
@@ -335,14 +336,12 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
           </div>
 
           <div className="hero-orb-col order-first mx-auto w-full lg:order-last">
-            <div className="relative flex items-center justify-center h-[190px] sm:h-[240px] lg:h-[400px]" aria-hidden>
-              <div className="hero-particles"><i /><i /><i /></div>
-              <BrandOrb variant="hero" size={440} style={{ maxWidth: "clamp(140px,40vw,440px)", maxHeight: "clamp(140px,40vw,440px)" }} />
-            </div>
-            {/* The hero-side preview — the same eight-beat DemoWalkthrough data, compact and
-                auto-cycling on its own faster tempo, so "a live animated product preview" is
-                true beside the headline rather than a single static card. */}
-            <DemoWalkthrough lang={lang} compact />
+            {/* The hero transforms into the product: one continuous four-step story (Career
+                Profile fills in → a job posting arrives → the resume tailors to it → the ATS
+                match rises, with the reason shown) — and the orb's own expression (idle /
+                analyzing / thinking / success) follows the same step, both owned by one small
+                client wrapper since Landing.tsx itself is a server component. */}
+            <HeroExperience lang={lang} />
           </div>
         </div>
       </section>

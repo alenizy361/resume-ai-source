@@ -79,7 +79,7 @@ export default function AtsScoreReveal({ lang, before = 42, after = 91 }: { lang
           </svg>
           <div className="score-num"><b>{n}</b><span>{t.scoreLabel}</span></div>
         </div>
-        <p style={{ textAlign: "center", marginTop: 16, fontSize: 11, color: "var(--faint)", fontFamily: "var(--font-mono, monospace)", letterSpacing: ".06em", textTransform: "uppercase" }}>
+        <p style={{ textAlign: "center", marginTop: 16, fontSize: 14, color: "var(--muted)", fontFamily: "var(--font-mono, monospace)", letterSpacing: ".04em", textTransform: "uppercase" }}>
           {t.label}
         </p>
       </div>

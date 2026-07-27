@@ -142,6 +142,8 @@ const LATIN_TOKEN_OK = new RegExp(
   + "|(?:↓\\s*)?PDF(?:\\s*\\(.*\\))?"
   + "|(?:↓\\s*)?Word(?:\\s*\\(\\.docx\\))?"
   + "|LinkedIn|ATS|PACS|SCFHS|CVV|MM|YY|A4|Apple Pay|STC|Paylink|Sira|Rabit"
+  + "|(?:CT|MRI|PACS)(?:\\s*·\\s*(?:CT|MRI|PACS))*"          // imaging-modality acronyms, alone or
+                                                           // middle-dot-joined ("CT · MRI · PACS")
   + "|https?://\\S+"
   + "|[\\w.-]+\\.(?:docx|pdf|txt|md)"
   + "|English|EN|AR"                                       // endonyms: a language names itself

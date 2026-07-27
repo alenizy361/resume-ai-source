@@ -2153,3 +2153,73 @@ implied as covered by "Phase 1 shipped"):
 - The public/authenticated navigation split described in the brief.
 - Any change to `/pricing`, `/interview`, `/interview-live`, `/account`, or any authenticated route —
   none of those files were touched this pass.
+
+### F-44 · P0 · Phase 2 of the cinematic Career-OS experience: the hero becomes one continuous four-step story — FIXED, PARTIAL
+
+Direction: continuing the brief's Scene 2/3 ("the hero transforms into the product" — Career Profile
+fills in, a job posting arrives, the resume tailors to it, the ATS match rises with the reason
+shown) — the first real caller of F-43's orb state machine, which shipped with no caller.
+
+**`HeroExperience.tsx`** (new) — a small client wrapper owning one step timer (`0..3`, 3.4s per
+step, paused on `document.hidden`, off under `prefers-reduced-motion`), feeding the SAME step into
+both `BrandOrb`'s `orbState` (idle → analyzing → thinking → success) and the new
+`CareerProfileScene`. Exists as its own component only because `Landing.tsx` is a server component
+and cannot hold this state itself, and because the orb and the card are positioned siblings in the
+hero, not parent/child.
+
+**`CareerProfileScene.tsx`** (new) — the four beats: Career Profile fills in (Job Title, Experience,
+Skills), a Job Posting arrives (Role, Employer, Requires), Tailoring happens (three concrete content
+changes, not just a number), then the ATS Match score counts up through three real stages
+(61 → 83 → 91) with the reason for the rise shown alongside it, not just the final number — matching
+the brief's explicit "not just a number" requirement. Uses the exact example (Radiology
+Technologist, CT/MRI/PACS, City Medical Center) the brief itself specified, kept distinct from the
+Accountant example the rest of the landing page already uses. Reuses `.walk-card`/`.walk-line`/
+`.walk-tag`/`.walk-progress-compact` — the same primitives F-42 already proved safe in this exact
+hero position — and deliberately applies NO `t-materialize`/`t-stagger` animation classes to these
+lines, for the same reason F-41 found that exact animation painting blank on a real mobile viewport
+next to the orb's own always-animating layers.
+
+`DemoWalkthrough.tsx`'s `compact` mode (the old cycling hero preview F-41/F-42 built) is removed —
+`HeroExperience`/`CareerProfileScene` replace it in the hero; the full 8-beat walkthrough further
+down the page is untouched.
+
+**A real content bug found and fixed during verification, not a code bug:** the ATS score reason
+text originally read "+30 for CT · MRI · PACS keywords, +8 for reordered experience" against stages
+61 → 83 → 91 — but 61 + 30 + 8 = 99, not 91. The actual deltas are +22 then +8. Caught by eye while
+screenshot-reviewing the live score card (not by any test — nothing in this codebase currently
+asserts that an illustrative reason string's numbers sum to its displayed total). Fixed by
+correcting the reason text to "+22 for CT · MRI · PACS keywords, +8 for reordered experience"
+(and its Arabic-digit equivalent) rather than changing the stage numbers, since 61/83/91 are the
+exact values the brief specified. Filed here rather than silently amended, per this codebase's own
+no-fabricated/inconsistent-numbers doctrine.
+
+**A real, legitimate test catch, fixed properly rather than bypassed:** `ops/i18n.test.mjs`'s
+"no Arabic string is the English one copied over" check correctly flagged `"CT · MRI · PACS"` —
+identical text in both language blocks. `PACS` alone was already allowlisted as a legitimate
+untranslated acronym (international imaging-system name), but the test's `LATIN_TOKEN_OK` regex only
+matched single tokens, not a middle-dot-joined list of them, and `CT`/`MRI` were not yet allowlisted
+at all. Fixed at the test, not the component: added `CT` and `MRI` alongside `PACS` and a repeatable
+`(?:CT|MRI|PACS)(?:\s*·\s*(?:CT|MRI|PACS))*` alternative so a middle-dot-joined run of these specific
+imaging acronyms — alone or combined — passes, while any other untranslated English string in an
+Arabic block still fails as before.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed (including the fixed
+i18n suite). `npm run lint` — zero issues in every file this pass touched
+(`CareerProfileScene.tsx`, `HeroExperience.tsx`, `DemoWalkthrough.tsx`, `Landing.tsx`,
+`marketing.css`); `AtsScoreReveal.tsx`'s only change was an unrelated F-42-sweep font-size fix, and
+its pre-existing `react-hooks/set-state-in-effect` lint error (same reduced-motion synchronous-
+setState pattern this pass's `CareerProfileScene.tsx` also uses) is baseline, not introduced here.
+`npm run build` clean, page count unchanged. Live-browser checks against the local dev server (this
+sandbox still cannot reach `cv.rabit.sa` — not re-verified against production, same standing
+limitation as F-42/F-43), both languages, desktop (1440×1000) and mobile (390×844): the four-step
+story cycles correctly, the orb visibly changes state in sync with the card, the score count-up
+reaches 91% and settles, RTL renders correctly in Arabic including the score card and progress dots,
+no horizontal overflow at mobile width, no console errors.
+
+**Explicitly not done this pass** (Phase 2 covers only the hero's own four-step story — the rest of
+the brief's Scene 3 onward is still open): the Job Description panel as its own distinct entering
+element (folded into the same card's step 2 rather than a separate animated panel); Scene 4's
+scroll-camera treatment (still not implemented, and per F-43's own note, will not be — conflicts with
+`transitions.css` §9's crash-tested no-scroll-linked-JS rule; one-time triggered reveals remain the
+substitute); Career Road, Mission Control, Interview-as-orb, Pricing, and Final scenes (Phases 3–4);
+any change to the authenticated app, navigation split, or non-landing routes (Phase 5).
