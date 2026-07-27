@@ -612,6 +612,67 @@ label.card:active,
   to   { translate: none; }
 }
 
+/* ──────────────────────────────────────────────────────────────────────────────
+   15. t-materialize — an AI answer arriving as matter, not as a list refresh
+   ────────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * The moment this product is FOR: the user asked the AI for suggestions, waited through the
+ * `t-ghost` shimmer, and the answer lands. `t-stagger` made that arrival orderly; this makes it
+ * an event. Each item materializes — rises, overshoots a breath, and cools from an accent-hot
+ * flash to its settled colors — and the container emits one soft radial pulse behind them, as if
+ * the orb exhaled the answer onto the page.
+ *
+ * ── additive by design, and that is load-bearing ──
+ *
+ * This class is used WITH `t-stagger`, never instead of it: `ops/aifeedback.browser.mjs` finds the
+ * arrival by querying `.t-stagger`, and the nth-child delay ladder lives there. These longhands sit
+ * AFTER §12 in this file, so at equal specificity they override the shorthand's animation-name and
+ * duration while leaving the delays — and that selector — untouched.
+ *
+ * ── why the flash is allowed under this file's own rules ──
+ *
+ * The 0% keyframe tints background/border and adds a glow; later frames leave them unset, so the
+ * browser interpolates back to each element's OWN settled values — chips cool into being. Color is
+ * explicitly inside this file's budget ("plus color/background where nothing moves"), and the
+ * box-shadow is a one-shot 520ms entrance on at most a dozen elements, not a loop — the same class
+ * of bounded cost as `.card`'s hover shadow, not the per-frame blur the doctrine bans.
+ */
+.t-materialize { position: relative; }
+.t-materialize::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 18px;
+  background: radial-gradient(70% 90% at 50% 0%, rgba(139, 92, 246, 0.16), transparent 70%);
+  pointer-events: none;
+  animation: t-mat-burst 700ms var(--t-out) both;
+}
+.t-materialize > * {
+  animation-name: t-mat-in;
+  animation-duration: 520ms;
+  animation-timing-function: var(--t-spring);
+}
+
+@keyframes t-mat-in {
+  0% {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.9;
+    background-color: rgba(139, 92, 246, 0.3);
+    border-color: rgba(196, 181, 253, 0.9);
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.5);
+  }
+  55% { opacity: 1; scale: 1.03; }
+  100% { opacity: 1; translate: none; scale: none; }
+}
+
+@keyframes t-mat-burst {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════════════
    THE GUARD
    ══════════════════════════════════════════════════════════════════════════════════════
@@ -633,10 +694,13 @@ label.card:active,
 @media (prefers-reduced-motion: reduce) {
   .t-tap, .t-land, .t-pop, .t-reveal, .t-scrim, .t-sheet,
   .t-shake, .t-swap, .t-lift, .t-enter, .t-stagger > *, .t-hero > *,
+  .t-materialize > *, .t-materialize::before,
   .card, .btn-accent, .btn-ghost, .t-busy::after, .t-ghost::after {
     animation: none !important;
     transition: none !important;
   }
+  /* With the burst's animation gone, its `both` fill can no longer end it at opacity 0. */
+  .t-materialize::before { display: none; }
   .t-tap:active, .t-lift:hover { transform: none; }
   a.card:hover, button.card:hover, label.card:hover, .card[role="button"]:hover,
   a.card:active, button.card:active, label.card:active, .card[role="button"]:active,
@@ -644,12 +708,15 @@ label.card:active,
   /* `@starting-style` sets the pre-transition value, and a `both` keyframe holds its FROM state;
      with the animation gone either would strand the element at the invisible end. So every settled
      value is restated. */
-  .t-reveal, .t-sheet, .t-scrim, .t-land, .t-enter, .t-stagger > *, .t-hero > * {
+  .t-reveal, .t-sheet, .t-scrim, .t-land, .t-enter, .t-stagger > *, .t-hero > *,
+  .t-materialize > * {
     opacity: 1;
     transform: none;
     /* The entrance rises with `translate`, not `transform` — see `t-enter-in`. Restating only
        `transform` here would leave every card 20px low and look like a layout bug. */
     translate: none;
+    /* `t-mat-in` also scales; without this restatement its `both` fill would hold 0.9. */
+    scale: none;
   }
   /* The ring stops travelling and simply stays on. */
   .t-busy::after { opacity: 0.6; transform: none; }

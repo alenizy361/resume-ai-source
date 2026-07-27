@@ -293,7 +293,7 @@ export default function BlueprintStrip({
               than as a button on each of twenty-five of them. `showWhy={false}` for the same
               reason — see `sharedWhy` in `lib/provenance.ts`. */}
           <p className="bd-why-note mt-3 text-xs">{whySentence(lang, "ai")}</p>
-          <div className="bd-chips t-stagger mt-2">
+          <div className="bd-chips t-stagger t-materialize mt-2">
             {visible.map((item) => (
               <SuggestionChip
                 key={item.text}

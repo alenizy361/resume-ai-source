@@ -429,7 +429,7 @@ function RoleCard({
           first" line would have been given animation delays as well, and the label would have
           arrived 60ms after the heading it belongs to.
         */}
-        <div className="t-stagger">
+        <div className="t-stagger t-materialize">
         {visible.map((it) => (
           <div key={it.id} className="bd-sug">
             <span className="bd-sug-badge">{it.source === "ai" ? c.aiBadge : c.packBadge}</span>

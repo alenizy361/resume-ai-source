@@ -13,7 +13,10 @@
 import { useState } from "react";
 import { allRolePacks, type RolePack } from "@/app/lib/rolePacks";
 
-const CURATED_SLUGS = ["radiology-technologist", "software-developer", "accountant", "registered-nurse", "sales-manager"];
+/* The five the redesign brief named — "Software Developer" is the pack's real title (there is no
+   "Software Engineer" pack, and relabeling data this section promises to be reading live from
+   would make its own claim false). Teacher replaced Sales Manager per the same brief. */
+const CURATED_SLUGS = ["radiology-technologist", "software-developer", "teacher", "accountant", "registered-nurse"];
 
 const T = {
   en: { certs: "Certificates it will ask about", duties: "Typical responsibilities", note: "None of this is on a CV yet — every item is a suggestion until it's tapped. Nothing here called a model; this is what the product already knows." },
@@ -48,19 +51,19 @@ export default function ProfessionDemo({ lang }: { lang: "ar" | "en" }) {
           {pack.groups.slice(0, 2).map((g) => (
             <div key={g.label.en} style={{ marginBottom: 22 }}>
               <div className="k">{g.label[lang]}</div>
-              <div className="chip-list">
-                {g.items.slice(0, 6).map((it) => <span key={it.en} className="chip">{it[lang]}</span>)}
+              <div className="chip-list t-stagger t-materialize">
+                {g.items.slice(0, 6).map((it) => <span key={it.en} className="pill">{it[lang]}</span>)}
               </div>
             </div>
           ))}
           <div className="k">{t.certs}</div>
-          <div className="chip-list">
-            {pack.credentials.slice(0, 4).map((c) => <span key={c.title.en} className="chip">{c.title[lang]}</span>)}
+          <div className="chip-list t-stagger t-materialize">
+            {pack.credentials.slice(0, 4).map((c) => <span key={c.title.en} className="pill">{c.title[lang]}</span>)}
           </div>
         </div>
         <div className="demo-col">
           <div className="k">{t.duties}</div>
-          <ul className="duty-list">
+          <ul className="duty-list t-stagger t-materialize">
             {pack.duties.slice(0, 5).map((d) => <li key={d.en}>{d[lang]}</li>)}
           </ul>
         </div>

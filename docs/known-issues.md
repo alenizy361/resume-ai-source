@@ -1814,3 +1814,63 @@ measured; something about the page it measured was stale in a way a full `fuser 
 clear. Isolating the check into a single fresh script (debug computed style AND position together, one
 navigation) is what surfaced the truth; re-running the exact same standalone script against an
 already-restarted server repeated the stale result.
+
+### F-40 · P0 · The landing DEMONSTRATES: eight-beat walkthrough, comparison table, dashboard preview, and the materialize arrival — FIXED
+
+Direction after F-38/F-39 shipped: the page "still feels like an AI Resume Builder" — it explained
+too much and demonstrated too little, the full product (tailoring, tracking, interview prep,
+dashboard) felt hidden, and there was no interactive preview. Plus one specific ask: when AI
+suggestions arrive after being requested, the arrival itself should be a stunning animation
+("انميشن يبهر"). A section-by-section audit with per-section verdicts was given in conversation, the
+v2 wireframe was updated at the same artifact URL, and the user approved with "ابدع… نفذ".
+
+**The new motion primitive is the deliverable, and it ships in the PRODUCT, not just the ad.**
+`transitions.css` §15, `t-materialize`: each arriving item rises with a spring overshoot while
+cooling from an accent-hot flash (background/border/glow set only at the 0% keyframe, so the
+browser interpolates back to each element's own settled values — chips "cool into being"), and the
+container emits one soft radial burst. Additive over `t-stagger` by design: the delay ladder and the
+`.t-stagger` selector `ops/aifeedback.browser.mjs` queries stay untouched; the longhands after §12
+override only animation-name/duration. Wired into all six REAL AI-arrival sites (`AiStrip`,
+`DetailSections` ×2, `FormSections`, `ExperienceSection`, `BlueprintStrip`) — so the moment a user
+actually asks the AI for suggestions in the builder, they get the same arrival the landing page
+advertises. One animation, both places; the marketing is a demo of the product, not an imitation.
+Reduced-motion: everything off, settled values restated (including `scale`), burst hidden.
+
+**Landing restructure per the audit** (`Landing.tsx` header carries the per-section ledger):
+- Hero: static pipeline chips → a small live mockup card (shimmering tailored line + "91 ATS match
+  after tailoring", labeled Example); three trust numbers moved directly under the CTAs.
+- New `DemoWalkthrough.tsx`: eight auto-advancing, clickable beats — profile → master resume →
+  paste posting → AI tailors → ATS improves → export → track → interview prep — each beat's mockup
+  lines arriving via the same `t-stagger t-materialize`. Auto-advance is a plain interval (not
+  scroll-linked — §9's crash rule), off under reduced motion, paused while the tab is hidden, and
+  reset by manual navigation. Panel labeled "Illustrative example — every step is a real product
+  capability", which is true (builder, /optimize tailoring+scoring, /api/export, tracker,
+  /interview).
+- "Not X" cards → Traditional-vs-Sira comparison table (Career Profile / AI tailoring / ATS scored /
+  tracking / interview prep / LinkedIn — all six real features).
+- How-it-works: three icon cards, one line each.
+- Profession demo: Teacher in, Sales Manager out (the brief's own list); "Software Developer" kept
+  as-is because that is the pack's real title. Tags switched from `.chip` (carries backdrop-filter —
+  fine at 1/page, not at ~10; the F-38 note claimed `.pill` was already used here and the code said
+  otherwise, now it does) to `.pill`. Arrivals materialize on every tab switch.
+- Templates grid removed as a section (the most "resume-builder" visual on the page; export is now a
+  walkthrough beat; `/templates` untouched, still in the footer). Dead rail/template/pipeline/proof
+  CSS stripped from `marketing.css`.
+- New dashboard preview: Resume score / ATS match / Applications / Interviews / next recommended
+  action, labeled "Illustrative example — not live account data" in both languages, linking to
+  `/account`.
+- Trust section before the final CTA: live counts + the no-fabrication pledge. Testimonials were
+  explicitly declined: there are no real user quotes to publish, and invented ones two sections
+  below "0 facts invented" would refute the page's own thesis. Stated to the user before building.
+- Final CTA reframed on the outcome: "Your next job is one profile away."
+
+**Verification.** `npx tsc --noEmit`, `npm test` (48 suites), `npm run build` all clean. Live in a
+real browser (desktop 1440px + iPhone-13 viewport + Arabic): no horizontal overflow on any of the
+three; walkthrough tab click switches beats and refills the progress bar; a screenshot taken 260ms
+after switching the profession tab caught the materialize mid-flight — chips at visibly different
+stages of arrival, later ones still accent-lit and translucent — confirming the stagger and the
+flash actually render rather than merely parse. Arabic mirrors correctly (progress bar fills
+right-to-left, dashboard arrow flipped via `scaleX(-1)`, Arabic-Indic digits from `toArabicDigits`).
+The one thing NOT verified live is the builder's own six call sites playing the new arrival — that
+needs an AI key this sandbox does not have; the class composition is the same one the landing
+plays, and `ops/aifeedback.browser.mjs` (needs a running app + key) remains the live check.

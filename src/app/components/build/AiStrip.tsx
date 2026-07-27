@@ -105,7 +105,7 @@ export default function AiStrip({
         <>
           {/* `t-stagger` is on the container, so the chips arrive in reading order about 60ms
               apart — the difference between the screen changing and the system answering. */}
-          <div className="bd-chips t-stagger mt-3">
+          <div className="bd-chips t-stagger t-materialize mt-3">
             {items.map((text) => (
               <button key={text} className="bd-chip t-tap" onClick={() => onPick(text)}>+ {text}</button>
             ))}
