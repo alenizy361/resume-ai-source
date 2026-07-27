@@ -713,6 +713,23 @@ second way to ask a question `useEntitlement` already answers from the same cook
   disk, and counting `/api/export` calls — because a button that silently fell into its local fallback
   on every click still downloads a marked file and looks fine.
 
+Run the browser suite BEFORE the gate suite, or restart the server between them: the gate suite
+deliberately exhausts the shared per-IP bucket, and the buttons then correctly refuse rather than
+download. That cost one confusing 20-second timeout, so the browser suite now captures dialogs and
+names the cause instead of failing with "waiting for event download".
+
+**Two things the move itself created, closed in the same pass.**
+
+- **A rate limit.** Rendering on the server turned this into a public POST that lays out an A4 document
+  and zips a Word file — a surface the client-side render never had, because it spent the visitor's own
+  CPU. 30 per ten minutes per IP via `allowShared`, generous enough that iterating on a CV never sees
+  it, with `Retry-After` on the refusal.
+- **A 4xx is the server's considered answer and must not be worked around.** The offline fallback
+  exists for an unreachable server; using it on a reply would turn every deliberate refusal into a
+  silently watermarked file — and the refusal that matters is the 429, where a paying customer
+  iterating would have received a marked download with no explanation. So a 4xx is shown to the user
+  and only a network failure or a 5xx renders locally.
+
 **Two harness bugs found and recorded, both of which made a test pass for the wrong reason:**
 
 - `docxContainsMark` used `require()` inside an ES module (throws, and the throw was swallowed by the

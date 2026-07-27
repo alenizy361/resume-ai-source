@@ -49,6 +49,14 @@ export default function DocxExport({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ format: "docx", text, lang, filename }),
       });
+      /* A 4xx is the server's considered answer — surfaced, not worked around. Falling back would
+         turn a rate-limit refusal into a silently watermarked file for a paying customer. See the
+         longer note in `PdfExport`. */
+      if (res.status >= 400 && res.status < 500) {
+        const why = await res.json().catch(() => ({}));
+        alert(String(why?.error || "تعذّر التنزيل — حاول بعد قليل.\nThat download was refused — please try again in a moment."));
+        return;
+      }
       if (!res.ok) throw new Error(`export ${res.status}`);
       save(await res.arrayBuffer());
     } catch (e) {

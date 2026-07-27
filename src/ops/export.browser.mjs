@@ -17,6 +17,18 @@
  *
  * So the requests to `/api/export` are counted, and the downloaded bytes are read off disk.
  *
+ * ── run this BEFORE `ops/exportgate.mjs`, or restart the server between them ──
+ *
+ * `/api/export` is rate limited per IP (30 per ten minutes), and the gate suite deliberately exhausts
+ * that bucket to prove the limiter works. Running this afterwards meant every click got a 429 — which
+ * the buttons now surface as a dialog instead of silently downloading a watermarked file, so the
+ * symptom was a 20-second timeout waiting for a download that was never going to happen.
+ *
+ * That is the harness's problem, not the product's, so any dialog is captured and reported by name
+ * below: a suite that fails with "the download was rate limited" costs a minute, and one that fails
+ * with "waiting for event download" costs an afternoon. With Upstash unset the counter is in-memory,
+ * so restarting the server clears it.
+ *
  *   BASE=http://localhost:3317 node ops/export.browser.mjs
  */
 
@@ -77,6 +89,30 @@ function docxHasMark(buf) {
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
 
+/**
+ * Every dialog the page raised, so a refused download is diagnosable.
+ *
+ * The buttons `alert()` on a 4xx — a rate limit, an Arabic text PDF — and without this the only
+ * symptom is a timeout waiting for a download event, which says nothing about why.
+ */
+const dialogs = [];
+function watchDialogs(page) {
+  page.on("dialog", (d) => { dialogs.push(d.message()); d.accept().catch(() => {}); });
+}
+/** Wrap a download wait so a dialog is reported instead of a bare timeout. */
+async function expectDownload(page, action) {
+  const before = dialogs.length;
+  try {
+    const [dl] = await Promise.all([page.waitForEvent("download", { timeout: 20000 }), action()]);
+    return dl;
+  } catch (e) {
+    const said = dialogs.slice(before).join(" | ");
+    throw new Error(said
+      ? `no download — the page said: ${said}${/many downloads/i.test(said) ? "  ← the rate-limit bucket is exhausted; restart the server or run this suite before ops/exportgate.mjs" : ""}`
+      : String(e).slice(0, 200));
+  }
+}
+
 /** Reach /optimize's result screen with a stubbed analysis, counting export calls. */
 async function resultScreen(page) {
   const exportCalls = [];
@@ -107,15 +143,13 @@ console.log("\n── clicking Download PDF as a free visitor ──");
   const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => console.log(`   PAGE ERROR: ${String(e).slice(0, 200)}`));
+  watchDialogs(page);
   const calls = await resultScreen(page);
 
   const btn = page.locator('button:has-text("Download PDF")');
   ok("the button is on the result screen", (await btn.count()) === 1, String(await btn.count()));
 
-  const [dl] = await Promise.all([
-    page.waitForEvent("download", { timeout: 20000 }),
-    btn.first().click(),
-  ]);
+  const dl = await expectDownload(page, () => btn.first().click());
   const file = await dl.path();
   ok("a file was downloaded", Boolean(file), String(file));
   ok("named as a PDF", dl.suggestedFilename().endsWith(".pdf"), dl.suggestedFilename());
@@ -128,10 +162,7 @@ console.log("\n── clicking Download PDF as a free visitor ──");
   ok("by POST", calls.includes("POST"), JSON.stringify(calls));
 
   /* Word too, on the same screen. */
-  const [dl2] = await Promise.all([
-    page.waitForEvent("download", { timeout: 20000 }),
-    page.locator('button:has-text("Word")').first().click(),
-  ]);
+  const dl2 = await expectDownload(page, () => page.locator('button:has-text("Word")').first().click());
   const wordBytes = readFileSync(await dl2.path());
   ok("the Word file downloads", wordBytes.length > 1000, String(wordBytes.length));
   ok("it is a zip", wordBytes.toString("latin1").startsWith("PK"));
@@ -145,6 +176,7 @@ console.log("\n── editing the stored result, which used to be the whole bypa
 {
   const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
+  watchDialogs(page);
   await resultScreen(page);
 
   /*
@@ -165,10 +197,7 @@ console.log("\n── editing the stored result, which used to be the whole bypa
   await page.reload({ waitUntil: "load" });
   await page.waitForTimeout(2500);
 
-  const [dl] = await Promise.all([
-    page.waitForEvent("download", { timeout: 20000 }),
-    page.locator('button:has-text("Download PDF")').first().click(),
-  ]);
+  const dl = await expectDownload(page, () => page.locator('button:has-text("Download PDF")').first().click());
   const bytes = readFileSync(await dl.path());
   ok("the downloaded PDF is STILL marked", bytes.toString("latin1").includes(MARK),
     "this is the O-12 bypass: one edited boolean used to yield a clean paid-quality file");
@@ -191,20 +220,15 @@ if (!process.env.ACCESS_SECRET) {
     domain: new URL(BASE).hostname, path: "/", httpOnly: false, secure: false,
   }]);
   const page = await ctx.newPage();
+  watchDialogs(page);
   await resultScreen(page);
 
-  const [dl] = await Promise.all([
-    page.waitForEvent("download", { timeout: 20000 }),
-    page.locator('button:has-text("Download PDF")').first().click(),
-  ]);
+  const dl = await expectDownload(page, () => page.locator('button:has-text("Download PDF")').first().click());
   const bytes = readFileSync(await dl.path());
   ok("the paid PDF has no mark", !bytes.toString("latin1").includes(MARK),
     "\"always watermark\" would satisfy every assertion above and break the product");
 
-  const [dl2] = await Promise.all([
-    page.waitForEvent("download", { timeout: 20000 }),
-    page.locator('button:has-text("Word")').first().click(),
-  ]);
+  const dl2 = await expectDownload(page, () => page.locator('button:has-text("Word")').first().click());
   ok("and the paid Word file has none either", !docxHasMark(readFileSync(await dl2.path())));
   await ctx.close();
 }

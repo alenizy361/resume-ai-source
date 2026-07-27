@@ -217,5 +217,30 @@ console.log(`\n── the boundary's own hygiene ──`);
     `status ${res.status}`);
 }
 
+console.log(`\n── the rate limit this route needed once it became public compute ──`);
+{
+  /*
+   * Moving the render to the server created a POST that lays out an A4 document for anyone who asks.
+   * The old client-side render spent the visitor's own CPU and had no such surface.
+   *
+   * Run LAST, deliberately: it exhausts the bucket for this IP, so every assertion above would start
+   * seeing 429s if this ran first. The ceiling is 30 per ten minutes, so the loop asks for more.
+   */
+  let sawLimit = 0;
+  const statuses = new Set();
+  for (let i = 0; i < 40; i++) {
+    const r = await post({ format: "pdf", text: CV, lang: "en" });
+    statuses.add(r.status);
+    if (r.status === 429) { sawLimit++; if (sawLimit >= 2) break; }
+  }
+  ok("hammering the route eventually gets a 429", sawLimit >= 1, [...statuses].join(","));
+  ok("and 200s came back before it did", statuses.has(200),
+    "a route that 429s from the first request is a broken limiter, not a limiter");
+
+  const r = await post({ format: "pdf", text: CV, lang: "en" });
+  ok("the refusal carries Retry-After", r.status !== 429 || Boolean(r.headers.get("retry-after")),
+    String(r.headers.get("retry-after")));
+}
+
 console.log(`\n${fail === 0 ? "✅" : "❌"} ${pass} passed, ${fail} failed${skipped ? `, ${skipped} skipped` : ""}`);
 process.exit(fail === 0 ? 0 : 1);

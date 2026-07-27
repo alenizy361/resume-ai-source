@@ -57,6 +57,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { paidRequest } from "@/app/lib/paidRequest";
+import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { renderPdf, pdfRefusesArabic } from "@/app/lib/renderPdf";
 import { renderDocx } from "@/app/lib/renderDocx";
 
@@ -64,6 +65,22 @@ export const maxDuration = 30;
 
 /** Long enough for a very long CV, short enough that this is not an upload endpoint. */
 const MAX_TEXT = 60_000;
+
+/**
+ * A rate limit, because moving the render to the server created a public compute endpoint.
+ *
+ * Nothing here calls a model, so this is not about cost per token — it is about a POST that lays out
+ * an A4 document and zips a Word file, reachable by anyone, on a serverless function with a 30-second
+ * ceiling. The old client-side render had no such surface: it spent the visitor's own CPU.
+ *
+ * The ceiling is deliberately generous. A real person downloading a CV takes two files, tries a
+ * different template, changes a bullet and takes them again — thirty in ten minutes is a bad afternoon
+ * of iterating, not abuse. `allowShared` falls back to an in-memory counter when Upstash is unset, so
+ * the exact remaining count is not knowable across instances; that is fine for a backstop and the
+ * reason this is not presented to the user as a quota.
+ */
+const RATE_LIMIT = 30;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
   let body: { format?: unknown; text?: unknown; lang?: unknown; filename?: unknown };
@@ -83,6 +100,19 @@ export async function POST(req: NextRequest) {
   }
 
   const lang: "ar" | "en" = body.lang === "ar" ? "ar" : "en";
+
+  /*
+   * Checked AFTER the body is validated and BEFORE anything is rendered: a malformed request should
+   * not consume someone's allowance, and a valid one should not consume CPU before it is allowed to.
+   */
+  if (!(await allowShared(`export:${clientIp(req)}`, RATE_LIMIT, RATE_WINDOW_MS))) {
+    /* 429 with a human sentence, because this is reachable by an ordinary user iterating on their CV,
+       not only by a script. `Retry-After` in seconds, per the spec. */
+    return NextResponse.json(
+      { error: "Too many downloads in a short time — wait a few minutes and try again." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(RATE_WINDOW_MS / 1000)) } },
+    );
+  }
 
   /* Refused here as well as in the button, because a caller that skipped the button would otherwise
      get mojibake and no explanation. See `renderPdf`. */

@@ -63,6 +63,21 @@ export default function PdfExport({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ format: "pdf", text, lang }),
       });
+      /*
+       * ── a 4xx is the server's CONSIDERED answer, and must not be worked around ──
+       *
+       * The local fallback exists for an unreachable server. Using it when the server actually replied
+       * would turn every deliberate refusal into a silently watermarked file — and the refusal that
+       * matters is 429: a paying customer iterating on their CV would hit the rate limit and receive a
+       * marked download with no explanation, which is exactly the complaint the whole item is about.
+       *
+       * So a 4xx is shown to the user. Only a network failure or a 5xx renders locally.
+       */
+      if (res.status >= 400 && res.status < 500) {
+        const why = await res.json().catch(() => ({}));
+        alert(String(why?.error || "That download was refused — please try again in a moment."));
+        return;
+      }
       if (!res.ok) throw new Error(`export ${res.status}`);
       save(await res.arrayBuffer(), "resume.pdf");
     } catch (e) {
