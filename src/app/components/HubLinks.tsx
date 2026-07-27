@@ -15,9 +15,19 @@ const EN: [string, string][] = [
   ["Free checker", "/free-resume-checker"],
   ["Jobscan alternative", "/jobscan-alternative"],
   ["Interview prep", "/interview"],
+  ["Mock interview", "/interview-live"],
   ["LinkedIn optimizer", "/linkedin"],
   ["Pricing", "/pricing"],
 ];
+/*
+ * Arabic parity, fixed.
+ *
+ * This set used to omit the ATS-checker trio and LinkedIn entirely (no Arabic page ever existed
+ * for the former, so they're still absent here — adding fake links would be worse than the gap),
+ * and its "Templates"/"Pricing" entries pointed at `/templates` and `/pricing` — the ENGLISH
+ * routes, with no `/ar` prefix — which dropped an Arabic-reading visitor into the English UI from
+ * a link on an Arabic page. Every entry below is a route that actually exists in Arabic.
+ */
 const AR: [string, string][] = [
   ["الرئيسية", "/ar"],
   ["افحص سيرتك", "/ar/optimize"],
@@ -25,9 +35,11 @@ const AR: [string, string][] = [
   ["حسب القطاع", "/ar/resume-examples/category"],
   ["المهارات لكل مهنة", "/ar/resume-skills"],
   ["خطابات التعريف", "/ar/cover-letter-examples"],
-  ["القوالب", "/templates"],
+  ["القوالب", "/ar/templates"],
   ["تحضير المقابلة", "/ar/interview"],
-  ["الأسعار", "/pricing"],
+  ["مقابلة مباشرة", "/ar/interview-live"],
+  ["محسّن لينكدإن", "/ar/linkedin"],
+  ["الأسعار", "/ar/pricing"],
   ["حسابي", "/ar/account"],
 ];
 

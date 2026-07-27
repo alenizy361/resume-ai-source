@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { navCta } from "@/app/lib/brand";
 import HubLinks from "@/app/components/HubLinks";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 import { JOBS_AR, AR_CATEGORIES } from "@/app/lib/jobs-ar";
 import { copyFor, sectorForCategory, sectorsFor } from "@/app/lib/sectors.ts";
@@ -24,18 +24,8 @@ export const metadata: Metadata = {
 
 export default function Hub() {
   return (
-    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
-          </Link>
-          <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">افحص سيرتي</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-5xl px-6 py-12">
+    <PageShell lang="ar" cta={navCta("ar")} langToggle="/cover-letter-examples" width="wide">
+      <div className="mx-auto max-w-5xl py-12">
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href="/ar" style={{ color: "var(--faint)" }}>الرئيسية</Link> ‹ خطابات التعريف
         </div>
@@ -82,10 +72,7 @@ export default function Hub() {
         })}
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("ar")}</p>
-      </footer>
       <HubLinks ar current="/ar/cover-letter-examples" />
-    </main>
+    </PageShell>
   );
 }

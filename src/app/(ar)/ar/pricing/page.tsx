@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import BrandOrb from "@/app/components/BrandOrb";
-import Link from "next/link";
 import CheckoutButton from "@/app/components/CheckoutButton";
+import PageShell from "@/app/components/PageShell";
+import AuthNav from "@/app/components/AuthNav";
 import { PLANS, formatPrice } from "@/app/lib/plans";
+import { navCta } from "@/app/lib/brand";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -54,21 +55,8 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
 
 export default function ArabicPricingPage() {
   return (
-    <main className="min-h-dvh" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/pricing" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>EN</Link>
-            <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">فحص مجاني ←</Link>
-          </div>
-        </div>
-      </nav>
-
-      <section className="t-enter ps-body relative max-w-3xl">
+    <PageShell lang="ar" cta={navCta("ar")} langToggle="/pricing" authNav={<AuthNav ar />}>
+      <section className="t-enter relative">
         <div className="relative mb-12 text-center">
           <div className="chip mb-4">الأسعار</div>
           <h1 className="text-4xl font-extrabold tracking-tight">ادفع مرة واحدة. بدون اشتراك.</h1>
@@ -101,6 +89,6 @@ export default function ArabicPricingPage() {
           </div>
         </div>
       </section>
-    </main>
+    </PageShell>
   );
 }

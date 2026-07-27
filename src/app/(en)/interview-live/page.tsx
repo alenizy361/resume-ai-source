@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { formatPrice } from "@/app/lib/plans";
-import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import useLang from "@/app/components/useLang";
 import InterviewerAvatar from "@/app/components/InterviewerAvatar";
 import CheckoutButton from "@/app/components/CheckoutButton";
 import MyCvPicker from "@/app/components/MyCvPicker";
+import PageShell from "@/app/components/PageShell";
+import AuthNav from "@/app/components/AuthNav";
+import { navCta } from "@/app/lib/brand";
 
 /**
  * AI video mock-interview: the candidate sits on camera, the AI asks real
@@ -323,18 +325,8 @@ export default function InterviewLivePage() {
   const avg = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} lang={ar ? "ar" : "en"} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href={t.home} className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href={t.optimize} className="btn-accent px-4 py-2 text-sm">{t.navCta}</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-3xl px-6 py-10">
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+      <div className="mx-auto max-w-3xl py-10">
         {phase === "setup" && (
           <>
             <div className="mb-8 text-center">
@@ -489,6 +481,6 @@ export default function InterviewLivePage() {
           </div>
         )}
       </div>
-    </main>
+    </PageShell>
   );
 }

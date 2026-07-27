@@ -16,7 +16,9 @@ import ScoreOrb from "@/app/components/orb/ScoreOrb";
 import ResultCoaching from "@/app/components/ResultCoaching";
 import GapFiller from "@/app/components/GapFiller";
 import CheckoutButton from "@/app/components/CheckoutButton";
+import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import { navCta } from "@/app/lib/brand";
 import { addScan, saveResume } from "@/app/lib/localdata";
 import MyCvPicker from "@/app/components/MyCvPicker";
 import { useOwner } from "@/app/components/useOwner";
@@ -452,34 +454,21 @@ export default function OptimizePage() {
     : (score >= 75 ? "STRONG RESUME" : score >= 55 ? "SOLID START" : "NEEDS WORK");
 
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      {/* Nav */}
-      {/* the orb watches the wizard — it never leaves you mid-journey */}
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            {/* flat logo mark — the living orb is the single flying one */}
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <div className="flex items-center gap-5">
-            <Link href="/ar/optimize" className="rounded-lg px-3 py-2 text-sm font-semibold" style={{ color: "var(--accent)", border: "1px solid var(--line)" }}
-              onClick={() => {
-                // Carry the draft across the language switch — separate storage
-                // keys otherwise make it look like the user's text vanished.
-                writePersonal(owner, "ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
-                  /* `ra_lang` stays unscoped on purpose — it is a device preference and must survive a
-                     sign-out. See `DEVICE_KEYS` in `lib/personalStore.ts`. */
-                  try { localStorage.setItem("ra_lang", "ar"); } catch { /* noop */ }
-              }}>
-              عربي
-            </Link>
-            <AuthNav />
-          </div>
-        </div>
-      </nav>
-
-      <div className="ps-body max-w-6xl">
+    <PageShell
+      lang="en"
+      width="full"
+      authNav={<AuthNav />}
+      langToggle="/ar/optimize"
+      onLangToggle={() => {
+        // Carry the draft across the language switch — separate storage
+        // keys otherwise make it look like the user's text vanished.
+        writePersonal(owner, "ra_ar_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+        /* `ra_lang` stays unscoped on purpose — it is a device preference and must survive a
+           sign-out. See `DEVICE_KEYS` in `lib/personalStore.ts`. */
+        try { localStorage.setItem("ra_lang", "ar"); } catch { /* noop */ }
+      }}
+    >
+      <div className="mx-auto max-w-6xl">
         {/* Loading is handled inside the wizard (step view) below. */}
         {!result ? (
           <div className="mx-auto max-w-2xl">
@@ -1018,6 +1007,6 @@ export default function OptimizePage() {
         )}
       </div>
 
-    </main>
+    </PageShell>
   );
 }

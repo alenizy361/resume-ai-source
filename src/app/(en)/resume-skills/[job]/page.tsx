@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { fitTitle } from "@/app/lib/seoTitle.ts";
-import { copyright, salaryBasis } from "@/app/lib/brand";
+import { salaryBasis, navCta } from "@/app/lib/brand";
 import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import SectorLink from "@/app/components/seo/SectorLink";
+import PageShell from "@/app/components/PageShell";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "@/app/lib/jobs";
 
@@ -55,6 +56,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
   if (!j) notFound();
 
   const related = JOBS.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 4);
+  const hasAr = Boolean(getJobAr(job));
 
   const faqs = [
     { q: `How many skills should a ${j.title} resume list?`, a: `8–14, grouped by category, front-loading what the specific posting asks for. A wall of 30 skills dilutes the signal — ATS ranking favors focused matches.` },
@@ -64,18 +66,8 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
   ];
 
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-3xl px-6 py-12">
+    <PageShell lang="en" cta={navCta("en")} langToggle={hasAr ? `/ar/resume-skills/${j.slug}` : undefined}>
+      <div className="mx-auto max-w-3xl py-12">
         <nav className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href="/">Home</Link> / <Link href="/resume-skills">Resume Skills</Link> / <span style={{ color: "var(--muted)" }}>{j.title}</span>
         </nav>
@@ -188,10 +180,6 @@ EXPERIENCE (example bullet)
         </section>
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -202,6 +190,6 @@ EXPERIENCE (example bullet)
           }),
         }}
       />
-    </main>
+    </PageShell>
   );
 }

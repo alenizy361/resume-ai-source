@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
-import BrandOrb from "@/app/components/BrandOrb";
+import { navCta } from "@/app/lib/brand";
 import Link from "next/link";
 import SectorLink from "@/app/components/seo/SectorLink";
+import PageShell from "@/app/components/PageShell";
 import { notFound } from "next/navigation";
 import { JOBS_AR, AR_SLUGS, getJobAr } from "@/app/lib/jobs-ar";
 import { getJob } from "@/app/lib/jobs";
@@ -37,6 +37,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
   if (!j) notFound();
 
   const siblings = JOBS_AR.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 8);
+  const hasEn = Boolean(getJob(job));
 
   const ld = {
     "@context": "https://schema.org",
@@ -48,18 +49,8 @@ export default async function Page({ params }: { params: Promise<{ job: string }
   };
 
   return (
-    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
-          </Link>
-          <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">افحص سيرتي</Link>
-        </div>
-      </nav>
-
-      <article className="mx-auto max-w-3xl px-6 py-10">
+    <PageShell lang="ar" cta={navCta("ar")} langToggle={hasEn ? `/resume-skills/${j.slug}` : undefined}>
+      <article className="mx-auto max-w-3xl py-10">
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href="/ar" style={{ color: "var(--faint)" }}>الرئيسية</Link> › {j.title}
         </div>
@@ -163,11 +154,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         )}
       </article>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("ar")}</p>
-      </footer>
-
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-    </main>
+    </PageShell>
   );
 }

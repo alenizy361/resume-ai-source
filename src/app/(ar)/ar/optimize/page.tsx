@@ -16,6 +16,7 @@ import ScoreOrb from "@/app/components/orb/ScoreOrb";
 import ResultCoaching from "@/app/components/ResultCoaching";
 import GapFiller from "@/app/components/GapFiller";
 import CheckoutButton from "@/app/components/CheckoutButton";
+import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
 import { addScan, saveResume } from "@/app/lib/localdata";
 import MyCvPicker from "@/app/components/MyCvPicker";
@@ -353,29 +354,19 @@ export default function ArOptimizePage() {
   }
 
   return (
-    <main dir="rtl" lang="ar" className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
-          </Link>
-          <div className="flex items-center gap-5">
-            <Link href="/optimize" className="rounded-lg px-3 py-2 text-sm" style={{ color: "var(--muted)", border: "1px solid var(--line)" }}
-              onClick={() => {
-                writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
-                /* `ra_lang` يبقى بلا مالك عن قصد: تفضيل جهاز يجب أن يبقى بعد الخروج — انظر
-                   `DEVICE_KEYS` في `lib/personalStore.ts`. */
-                try { localStorage.setItem("ra_lang", "en"); } catch { /* noop */ }
-              }}>
-              English
-            </Link>
-            <AuthNav ar />
-          </div>
-        </div>
-      </nav>
-
-      <div className="ps-body max-w-6xl">
+    <PageShell
+      lang="ar"
+      width="full"
+      authNav={<AuthNav ar />}
+      langToggle="/optimize"
+      onLangToggle={() => {
+        writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+        /* `ra_lang` يبقى بلا مالك عن قصد: تفضيل جهاز يجب أن يبقى بعد الخروج — انظر
+           `DEVICE_KEYS` في `lib/personalStore.ts`. */
+        try { localStorage.setItem("ra_lang", "en"); } catch { /* noop */ }
+      }}
+    >
+      <div className="mx-auto max-w-6xl">
         {/* التحميل يُعرض داخل المعالج بالأسفل */}
 
         {!result ? (
@@ -682,6 +673,6 @@ export default function ArOptimizePage() {
         )}
       </div>
 
-    </main>
+    </PageShell>
   );
 }

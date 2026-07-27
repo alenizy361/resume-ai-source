@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import BrandOrb from "@/app/components/BrandOrb";
-import Link from "next/link";
+import HubLinks from "@/app/components/HubLinks";
+import PageShell from "@/app/components/PageShell";
+import { navCta } from "@/app/lib/brand";
 import TemplatesGallery from "@/app/components/TemplatesGallery";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -18,21 +19,8 @@ export const metadata: Metadata = {
 
 export default function ArabicTemplatesPage() {
   return (
-    <main className="min-h-dvh" dir="rtl" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/ar" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">سيرة</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/templates" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>EN</Link>
-            <Link href="/ar/optimize" className="btn-accent px-4 py-2 text-sm">فحص مجاني ←</Link>
-          </div>
-        </div>
-      </nav>
-
-      <section className="t-enter relative mx-auto max-w-6xl px-6 py-14">
+    <PageShell lang="ar" cta={navCta("ar")} langToggle="/templates" width="full">
+      <section className="t-enter relative mx-auto max-w-6xl py-14">
         <div className="relative mb-10 text-center">
           <div className="chip mb-4">القوالب</div>
           <h1 className="text-4xl font-extrabold tracking-tight">قوالب سيرة احترافية</h1>
@@ -45,6 +33,7 @@ export default function ArabicTemplatesPage() {
           الـ PDF المصمّم ممتاز للمسؤولين ولينكدإن. وللتقديم عبر أنظمة الفرز استخدم PDF/Word النصي — كلاهما مشمول.
         </p>
       </section>
-    </main>
+      <HubLinks ar current="/ar/templates" />
+    </PageShell>
   );
 }

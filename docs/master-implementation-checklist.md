@@ -81,8 +81,8 @@ Listed here so the checklist is complete rather than convenient.
 | P2-1 | 3 | Job description → tailored CV | `TODO` |
 | P2-2 | 4 | Duplicate and tailor | `TODO` |
 | P2-3 | 5 | Saudi occupation knowledge base | `PARTIAL` — `rolePacks.ts` (906 lines), `occupations.ts`, `countryRules.ts` with a verification pack already exist |
-| P2-4 | 6 | Career dashboard | `TODO` |
-| P3-1 | 7 | Job application tracker | `TODO` |
+| P2-4 | 6 | Career dashboard | `DONE` — `/account` renamed "Career Dashboard" (F-25); links saved CVs, scan history, and cloud-saved CVs, all already-collected data `localdata.ts` had no page rendering before |
+| P3-1 | 7 | Job application tracker | `DONE` — was marked `TODO` in error; `AccountClient.tsx` already has a working tracker (add/list/status/delete, backed by `localdata.ts`'s `addJob`/`getJobs`) — found while auditing the account page for F-25, not built new |
 | P3-2 | 8 | Interview preparation | `PARTIAL` — `/interview` and `/interview-live` exist, and both now read the user's own CV (F-18) |
 | P3-3 | 9 | LinkedIn improvement | `PARTIAL` — `/linkedin` exists, reads the user's own CV, and answers in the CV's language (F-18) |
 | P3-4 | 10 | Career plan | `TODO` |

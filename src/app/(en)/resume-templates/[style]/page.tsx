@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TEMPLATES, TEMPLATE_SLUGS, getTemplate } from "@/app/lib/templates";
+import { TEMPLATES, TEMPLATE_SLUGS, getTemplate, TEMPLATE_CATALOG_SLUG } from "@/app/lib/templates";
 import TemplatePreview from "@/app/components/TemplatePreview";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -39,20 +38,11 @@ export default async function Page({ params }: { params: Promise<{ style: string
     { q: `Can I edit this template in Word?`, a: `You build and edit it right here, then download as plain text or a print-ready PDF you can open anywhere.` },
   ];
   const ld = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+  const builderHref = `/builder?template=${TEMPLATE_CATALOG_SLUG[t.slug] ?? "ats-pro"}`;
 
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/builder" className="btn-accent px-4 py-2 text-sm">Use this template</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-5xl px-6 py-10">
+    <PageShell lang="en" cta={{ href: builderHref, label: "Use this template" }} width="wide">
+      <div className="mx-auto max-w-5xl py-10">
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href="/" style={{ color: "var(--faint)" }}>Home</Link> › <Link href="/resume-templates" style={{ color: "var(--faint)" }}>Templates</Link> › {t.name}
         </div>
@@ -64,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
             <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>{t.tagline}</p>
             <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}><strong>Best for:</strong> {t.bestFor}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/builder" className="btn-accent px-6 py-3">Use this template free →</Link>
+              <Link href={builderHref} className="btn-accent px-6 py-3">Use this template free →</Link>
               <Link href="/optimize" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Already have a resume? Check it</Link>
             </div>
             <div className="card mt-6 p-4 text-sm" style={{ color: "var(--muted)" }}>
@@ -96,10 +86,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
         </section>
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-    </main>
+    </PageShell>
   );
 }

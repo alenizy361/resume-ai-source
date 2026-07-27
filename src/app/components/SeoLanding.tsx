@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { copyright } from "@/app/lib/brand";
-import BrandOrb from "./BrandOrb";
+import { navCta } from "@/app/lib/brand";
 import HubLinks from "./HubLinks";
+import PageShell from "./PageShell";
 
 export interface Faq {
   q: string;
@@ -26,17 +26,7 @@ export interface SeoLandingProps {
  */
 export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs, ctaLine, methodology }: SeoLandingProps) {
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
-        </div>
-      </nav>
-
+    <PageShell lang="en" cta={navCta("en")} bleed>
       <section className="t-enter relative px-6 pb-16 pt-16">
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <div className="chip mb-6">{eyebrow}</div>
@@ -112,16 +102,6 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
 
       <HubLinks />
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex items-center gap-2">
-            <BrandOrb size={20} />
-            <span className="text-sm font-bold">Sira</span>
-          </div>
-          <p className="font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-        </div>
-      </footer>
-
       {/* FAQ structured data for rich results */}
       <script
         type="application/ld+json"
@@ -137,6 +117,6 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
           }),
         }}
       />
-    </main>
+    </PageShell>
   );
 }

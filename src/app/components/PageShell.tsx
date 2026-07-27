@@ -44,6 +44,36 @@ export default function PageShell({
   width = "reading",
   /** Set when the page renders its own footer (the SEO hubs do). */
   footer = true,
+  /** Path to this same page's other-language twin. Omit when no twin exists (EN-only pages). */
+  langToggle,
+  /**
+   * Fires before the language-toggle link navigates. For the one page that must carry state
+   * across the switch (`/optimize` persists its in-progress draft under the other language's
+   * storage key first, so it isn't lost) — most pages don't need this. `PageShell` itself has
+   * no `"use client"` directive, so it renders as ordinary server-side JSX when a Server
+   * Component page uses it (this prop simply stays undefined there) and as ordinary
+   * client-side JSX when a Client Component page uses it (this prop works normally, since
+   * that page already crossed the client boundary before rendering `PageShell` at all).
+   */
+  onLangToggle,
+  /**
+   * The session-aware sign-in/account control, when the page wants one — pass `<AuthNav ar={ar} />`.
+   * Taken as a node, not a boolean, on purpose: `AuthNav` is a `"use client"` component, and a
+   * static `import AuthNav from "./AuthNav"` at the top of THIS file would put it in the client
+   * reference manifest for every page that renders `PageShell` — including the ~350 static SEO
+   * pages that pass no `authNav` at all. Measured: that one unconditional import alone pushed
+   * `/resume-examples`'s shipped JS from ~109 KB to 523 KB, the exact class of regression F-23
+   * fixed for the root layout, reintroduced through this file instead. Accepting a node means only
+   * the pages that actually import `AuthNav` themselves pay for it.
+   */
+  authNav,
+  /**
+   * Skip the `ps-body` wrapper (its max-width and fixed padding) and render children directly
+   * under `<main>`. For landing-style pages built from full-width, alternating-background
+   * sections — each section manages its own inner column — wrapping them in a padded box would
+   * pull every section's background in from the viewport edge. Header and footer are unaffected.
+   */
+  bleed = false,
 }: {
   lang: "ar" | "en";
   /** The header's one action. Omit on pages that ARE that action (login, checkout). */
@@ -51,6 +81,10 @@ export default function PageShell({
   children: React.ReactNode;
   width?: "reading" | "wide" | "full";
   footer?: boolean;
+  langToggle?: string;
+  onLangToggle?: () => void;
+  authNav?: React.ReactNode;
+  bleed?: boolean;
 }) {
   const ar = lang === "ar";
   const home = ar ? "/ar" : "/";
@@ -71,11 +105,19 @@ export default function PageShell({
             <BrandOrb size={26} />
             <span>{brand}</span>
           </Link>
-          {cta && <Link href={cta.href} className="ps-cta">{cta.label}</Link>}
+          <div className="flex items-center gap-3">
+            {langToggle && (
+              <Link href={langToggle} onClick={onLangToggle} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>
+                {ar ? "EN" : "AR"}
+              </Link>
+            )}
+            {authNav}
+            {cta && <Link href={cta.href} className="ps-cta">{cta.label}</Link>}
+          </div>
         </div>
       </header>
 
-      <div className={`ps-body ${max}`}>{children}</div>
+      {bleed ? children : <div className={`ps-body ${max}`}>{children}</div>}
 
       {footer && (
         <footer className="ps-footer">

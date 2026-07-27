@@ -42,6 +42,17 @@ const C = {
        re-add a link to a 308 redirect. Replaced by the third door, which is real. */
     ctaResume: "Continue a CV I saved here",
     ctaResumeSub: "Everything is kept on this device. Pick it up where you stopped, in the same form.",
+    /*
+     * A fourth, honestly distinct door. The other "I already have a CV" card feeds the file into
+     * the builder's own data model — same preview, same save, same download, on purpose (see the
+     * note beside it). This one is different: it sends a resume you're not editing today straight
+     * at the ATS scanner for an instant score against a specific job, no step-by-step form at all.
+     * `/optimize` is a real, separately-marketed tool — every SEO page's CTA already points at it —
+     * and until this card existed, the homepage was the one place in the product that never
+     * mentioned it.
+     */
+    ctaCheck: "Check a resume against a job posting",
+    ctaCheckSub: "Paste or upload it, paste the job — get a match score and the missing keywords in seconds. No step-by-step form.",
 
     howHead: "How it works",
     how: [
@@ -110,6 +121,8 @@ const C = {
     ctaUploadSub: "نقرأ ملفك، ونقيّمه مقابل الوظيفة، ونعيد صياغته دون اختلاق أي شيء.",
     ctaResume: "أكمل سيرة حفظتها هنا",
     ctaResumeSub: "كل شيء محفوظ على جهازك. واصل من حيث توقفت، في النموذج نفسه.",
+    ctaCheck: "افحص سيرة مقابل إعلان وظيفة",
+    ctaCheckSub: "الصق أو ارفع سيرتك، والصق الإعلان — واحصل على نسبة التطابق والكلمات الناقصة خلال ثوانٍ، بلا نموذج خطوة بخطوة.",
 
     howHead: "كيف يعمل",
     how: [
@@ -241,6 +254,11 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
           <Link href={`${p}/builder`} className="card card-hover p-5">
             <div className="text-base font-bold">{t.ctaResume} →</div>
             <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaResumeSub}</div>
+          </Link>
+          {/* The fourth door — see the note beside `ctaCheck` above. */}
+          <Link href={`${p}/optimize`} className="card card-hover p-5">
+            <div className="text-base font-bold">{t.ctaCheck} →</div>
+            <div className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.ctaCheckSub}</div>
           </Link>
         </div>
       </section>

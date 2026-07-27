@@ -980,3 +980,89 @@ that ever starts failing it means someone wired it in — good news the test sho
 reflect, not a regression. Confirmed in a browser too: `.ia-face`/`.ia-idle` still animate on
 `/interview-live`, `.brand-orb.bo-logo .bo-glow` still runs `bo-pulse` on `/`. `npm run build` and
 `ops/motion.test.mjs` (49) both clean after the deletion.
+
+### F-25 · P1 · One shared shell replaces 27 hand-rolled headers, and the navigation graph got the links it was missing — FIXED
+
+The owner's complaint: the product reads as separate tools — Builder, Optimizer, Journey, ATS,
+LinkedIn, Interview — with no one clear journey, inconsistent navigation, and old UI surviving
+behind the new design. A full route/navigation/shared-state audit (three passes, this session)
+found the *code* duplication mostly already gone — Journey is a retired redirect, the Arabic and
+English builders already share one engine, `lib/myCvs.ts` already threads five tool pages together
+— and the actual damage was navigation and chrome: every page hand-rolled its own `<nav
+className="ps-header">`, a complete, already-correct shared shell (`PageShell.tsx`) sat unused,
+the homepage linked only `/builder` so `/optimize` had no path in from home despite being a real,
+separately-marketed tool, `/interview-live` had zero inbound links anywhere in the codebase, and
+the "go check your resume" call to action read five different ways depending which page it was on.
+
+**Fix, in five parts:**
+
+1. **`PageShell.tsx` adopted, not rebuilt.** Extended with `langToggle` (+ an `onLangToggle` hook
+   for `/optimize`, the one page that must carry its draft across the switch), and an `authNav`
+   slot. `authNav` takes a **node**, not a boolean — `PageShell` itself has no `"use client"`
+   directive and is rendered by ~350 static SEO pages; a bare `import AuthNav` at its top would
+   have put that `"use client"` component's chunk in every one of those pages' client reference
+   manifest whether they render it or not. Measured directly (see the `jsweight.mjs` note below):
+   passing `<AuthNav ar={ar} />` from the ~10 pages that actually want it, instead of an internal
+   `authNav && <AuthNav/>`, keeps that cost off the other 340+.
+   Then migrated: the SEO-hub pages first (`resume-examples`, `cover-letter-examples`,
+   `resume-skills`, `resume-templates`, `templates`, sector pages via `SectorPage.tsx`'s shared
+   `Chrome`, the ATS-checker trio via `SeoLanding.tsx`), then the product surface (`/optimize`,
+   `/pricing`, `/interview`, `/linkedin`, `/interview-live`, `/account`). `/login` was deliberately
+   **not** migrated — it already carries its own documented reason for a minimal, headerless,
+   single-card layout ("no cinema"), and wrapping it in the standard header/CTA chrome would work
+   against that, not fix anything.
+   A new `bleed` option lets landing-style pages built from full-width, alternating-background
+   sections (`SeoLanding`, `SectorPage`) skip `PageShell`'s own padded content box, so their
+   sections still reach the viewport edge the way they were designed to.
+2. **One CTA.** `lib/brand.ts` gained `NAV_CTA`/`navCta()` — the audit found five live strings for
+   "go check your resume against a job" (`Free scan →`, `Scan my resume`, `Resume optimizer →`,
+   `افحص سيرتي`, `فحص مجاني ←`), all pointing at the same `/optimize`. Every migrated page's header
+   CTA now reads from the one constant.
+3. **`HubLinks` Arabic parity.** Its Arabic set omitted the ATS-checker trio and `/linkedin`
+   entirely (no Arabic page exists for the trio, so those stay out — an honest gap, not one to
+   paper over), and its `"Templates"`/`"Pricing"` entries linked `/templates`/`/pricing` — the
+   ENGLISH routes, no `/ar` prefix — dropping an Arabic-reading visitor into the English UI from a
+   link on an Arabic page. Fixed to `/ar/templates`/`/ar/pricing`, and added `/ar/linkedin` and a
+   new `/ar/interview-live` redirect (mirroring `/ar/interview`'s existing `?lang=ar` pattern —
+   `/interview-live` has one address and switches language in the browser, so this is a
+   convenience redirect, not a second URL for its content).
+4. **Homepage gets a fourth, honestly distinct door.** Not a replacement for the existing "I
+   already have a CV — improve it" card, which deliberately feeds a file into the *builder's* own
+   data model (see that card's own comment in `Landing.tsx` — one preview, one save, one download).
+   The new card is different: "Check a resume against a job posting" → `/optimize`, the actual
+   ATS-scoring tool every SEO page already markets, which the homepage never once mentioned.
+5. **`/account` renamed Career Dashboard.** Copy/heading only — `AccountClient.tsx` already had a
+   working job-application tracker (add/list/status/delete, `localdata.ts`-backed) that an earlier
+   pass of this audit had assumed didn't exist; it does, so nothing needed building, only naming.
+
+**`/resume-templates/[style]`'s "Use this template" button was silently broken**, found while
+migrating its chrome. It linked `/builder?template=<slug>`, and `BuilderStart.tsx` only recognises
+slugs from `templateCatalog.ts` — a completely different catalogue than `lib/templates.ts`, the one
+this page reads from. Only `executive` and `minimal` happened to share a slug name between the two;
+every other style (`ats`, `modern`, `professional`, `creative`, `simple`, `two-column`, `jadarat`)
+silently landed on the builder's default template instead of the one the visitor clicked. Fixed
+with an explicit `TEMPLATE_CATALOG_SLUG` mapping in `lib/templates.ts`.
+
+**Verification.** `npx tsc --noEmit` and `npm run build` clean (430 pages, same shape as before —
+no product-surface page count change). `ops/jsweight.mjs` / a direct `<script src>` byte count on
+`/resume-examples` was compared against the SAME measurement taken from a `git stash`-reverted
+build of the identical page — byte-for-byte identical (640 KB in both), which is what proved the
+`authNav`-as-node fix mattered defensively but was not, in fact, fixing a regression this pass
+introduced; the 640 KB figure predates this work and is a separate, pre-existing item (this
+doc's `ops/jsweight.mjs` note elsewhere cites ~109 KB — that number is stale relative to the
+current build and is worth re-measuring on its own, not as part of this item).
+
+### O-17 · P2 · `/optimize`'s English and Arabic implementations are still two files
+
+F-25's chrome migration gave both `/optimize` and `/ar/optimize` the same shared header, footer,
+and sign-in control — but the actual page logic is still two separately-coded ~1,000/~700-line
+files, unlike `/interview` and `/linkedin`, which are one `useLang()`-driven component each.
+Deliberately not merged in this pass: `/interview` and `/linkedin` were ~250-line files with
+`{ar ? x : y}` conditionals already threaded through every string, which is what made merging them
+safe and mechanical. The English `/optimize` file has **zero** such conditionals — it is not a
+mirror of the Arabic one waiting to be combined, it is a from-scratch English-only implementation,
+and the Arabic file is a separate ~700-line implementation, not a shorter version of the same
+structure. This is also the product's paid conversion path — upload, AI scan, watermarking,
+Paylink checkout — where a subtle bug introduced by a mechanical merge would cost real money and
+is hard to catch without a live end-to-end payment test. Left as a scoped follow-up for a session
+with room to test that flow properly, rather than attempted blind.

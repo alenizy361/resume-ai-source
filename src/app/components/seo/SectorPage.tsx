@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { copyright } from "@/app/lib/brand";
-import BrandOrb from "../BrandOrb";
 import HubLinks from "../HubLinks";
+import PageShell from "../PageShell";
 import {
   type Lang, type Sector, copyFor, professions, sectorsFor, sharedKeywords, sharedCerts,
 } from "@/app/lib/sectors.ts";
@@ -116,27 +115,10 @@ function Chrome({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   const l = L[lang];
   const rtl = lang === "ar";
   return (
-    <main
-      dir={rtl ? "rtl" : "ltr"}
-      lang={lang}
-      className="min-h-dvh"
-      style={{ background: "var(--bg)", color: "var(--fg)" }}
-    >
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href={l.homeHref} className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">{l.brand}</span>
-          </Link>
-          <Link href={l.ctaHref} className="btn-accent px-4 py-2 text-sm">{l.cta}</Link>
-        </div>
-      </nav>
+    <PageShell lang={lang} cta={{ href: l.ctaHref, label: l.cta }} bleed>
       {children}
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright(lang)}</p>
-      </footer>
       <HubLinks ar={rtl} />
-    </main>
+    </PageShell>
   );
 }
 

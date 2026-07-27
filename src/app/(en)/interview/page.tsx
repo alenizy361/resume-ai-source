@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
-import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import useLang from "@/app/components/useLang";
 import MyCvPicker from "@/app/components/MyCvPicker";
+import PageShell from "@/app/components/PageShell";
+import AuthNav from "@/app/components/AuthNav";
+import { navCta } from "@/app/lib/brand";
 import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
 interface InterviewResult {
@@ -88,18 +90,8 @@ export default function InterviewPage() {
   }
 
   return (
-    <main dir={ar ? "rtl" : "ltr"} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">{ar ? "محسّن السيرة ←" : "Resume optimizer →"}</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-2xl px-6 py-12">
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+      <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "تحضير المقابلة" : "Interview Prep"}</div>
           <h1 className="text-4xl font-extrabold tracking-tight">{ar ? "اعرف الأسئلة قبل أن تُطرح" : "Know the questions before they ask"}</h1>
@@ -205,6 +197,6 @@ export default function InterviewPage() {
           </div>
         )}
       </div>
-    </main>
+    </PageShell>
   );
 }

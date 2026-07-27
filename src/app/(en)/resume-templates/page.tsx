@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
 import HubLinks from "@/app/components/HubLinks";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 import { TEMPLATES } from "@/app/lib/templates";
 import TemplatePreview from "@/app/components/TemplatePreview";
@@ -17,18 +16,8 @@ export const metadata: Metadata = {
 
 export default function Hub() {
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/builder" className="btn-accent px-4 py-2 text-sm">Build my resume</Link>
-        </div>
-      </nav>
-
-      <section className="t-enter relative px-6 py-16 text-center">
+    <PageShell lang="en" cta={{ href: "/builder", label: "Build my resume" }} width="wide">
+      <section className="t-enter relative pb-16 text-center">
         <div className="relative z-10 mx-auto max-w-3xl">
           <div className="chip mb-4">Free · ATS-friendly</div>
           <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Free resume templates</h1>
@@ -38,7 +27,7 @@ export default function Hub() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-6 pb-16">
+      <div className="mx-auto max-w-6xl pb-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {TEMPLATES.map((t) => (
             <Link key={t.slug} href={`/resume-templates/${t.slug}`} className="group">
@@ -55,10 +44,7 @@ export default function Hub() {
         </div>
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
-          <HubLinks current="/resume-templates" />
-    </main>
+      <HubLinks current="/resume-templates" />
+    </PageShell>
   );
 }

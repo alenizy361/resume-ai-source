@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { fitTitle } from "@/app/lib/seoTitle.ts";
-import { copyright, salaryBasis } from "@/app/lib/brand";
+import { salaryBasis, navCta } from "@/app/lib/brand";
 import BrandOrb from "@/app/components/BrandOrb";
 import Link from "next/link";
 import SectorLink from "@/app/components/seo/SectorLink";
+import PageShell from "@/app/components/PageShell";
 import { notFound } from "next/navigation";
 import { JOBS, JOB_SLUGS, getJob } from "@/app/lib/jobs";
 import { getJobAr } from "@/app/lib/jobs-ar";
@@ -67,6 +68,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
 
   const siblings = JOBS.filter((x) => x.category === j.category && x.slug !== j.slug).slice(0, 6);
   const others = JOBS.filter((x) => x.category !== j.category).slice(0, 4);
+  const hasAr = Boolean(getJobAr(job));
 
   const faqs = [
     { q: `What skills should a ${j.title} put on a resume?`, a: `The most important ${j.title} resume skills are: ${j.skills.slice(0, 6).join(", ")}. Match these to the exact wording in the job posting so the ATS scores your resume higher.` },
@@ -88,18 +90,8 @@ export default async function Page({ params }: { params: Promise<{ job: string }
   };
 
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
-        </div>
-      </nav>
-
-      <article className="mx-auto max-w-3xl px-6 py-10">
+    <PageShell lang="en" cta={navCta("en")} langToggle={hasAr ? `/ar/resume-examples/${j.slug}` : undefined}>
+      <article className="mx-auto max-w-3xl py-10">
         {/* Breadcrumb */}
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href="/" style={{ color: "var(--faint)" }}>Home</Link> ›{" "}
@@ -207,11 +199,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </Section>
       </article>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
-
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-    </main>
+    </PageShell>
   );
 }

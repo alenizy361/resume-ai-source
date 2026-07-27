@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { navCta } from "@/app/lib/brand";
 import HubLinks from "@/app/components/HubLinks";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 import { JOBS, CATEGORIES } from "@/app/lib/jobs";
 import { copyFor, sectorForCategory, sectorsFor } from "@/app/lib/sectors.ts";
@@ -29,20 +29,10 @@ export const metadata: Metadata = {
 
 export default function Hub() {
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
-        </div>
-      </nav>
-
+    <PageShell lang="en" cta={navCta("en")} langToggle="/ar/resume-examples" width="wide">
       {/* `t-no-cv`: this section is on screen from the first frame, so `content-visibility`'s
           placeholder-to-real-height collapse is pure CLS with nothing to defer. See transitions.css. */}
-      <section className="t-enter t-no-cv relative px-6 py-16 text-center">
+      <section className="t-enter t-no-cv relative pb-16 text-center">
         <div className="relative z-10 mx-auto max-w-3xl">
           <div className="chip mb-4">Free · ATS-optimized</div>
           <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Resume examples &amp; ATS keywords by job</h1>
@@ -52,7 +42,7 @@ export default function Hub() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-6 pb-16">
+      <div className="mx-auto max-w-4xl pb-16">
         {/*
           Browse by sector, above the profession list rather than below it. A visitor who knows the
           industry but not the job title had nowhere to go before this; a crawler had no signal that
@@ -95,10 +85,7 @@ export default function Hub() {
         })}
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
-          <HubLinks current="/resume-examples" />
-    </main>
+      <HubLinks current="/resume-examples" />
+    </PageShell>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { copyright } from "@/app/lib/brand";
+import { navCta } from "@/app/lib/brand";
 import HubLinks from "@/app/components/HubLinks";
-import BrandOrb from "@/app/components/BrandOrb";
+import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
 import { JOBS, CATEGORIES } from "@/app/lib/jobs";
 
@@ -29,18 +29,8 @@ export const metadata: Metadata = {
 
 export default function CoverLetterHub() {
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Scan my resume</Link>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-5xl px-6 py-14">
+    <PageShell lang="en" cta={navCta("en")} langToggle="/ar/cover-letter-examples" width="wide">
+      <div className="mx-auto max-w-5xl py-14">
         <div className="text-center">
           <div className="chip mb-4">Cover letter examples</div>
           <h1 className="text-4xl font-extrabold tracking-tight">Cover letter examples <span className="accent-underline text-accent">by job</span></h1>
@@ -63,10 +53,7 @@ export default function CoverLetterHub() {
         ))}
       </div>
 
-      <footer className="px-6 py-10" style={{ borderTop: "1px solid var(--line)" }}>
-        <p className="text-center font-mono text-xs" style={{ color: "var(--faint)" }}>{copyright("en")}</p>
-      </footer>
-          <HubLinks current="/cover-letter-examples" />
-    </main>
+      <HubLinks current="/cover-letter-examples" />
+    </PageShell>
   );
 }

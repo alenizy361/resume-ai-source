@@ -92,9 +92,20 @@ const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/
     rel !== "lib/brand.ts" && /©\s*\d{4}\s*(?:Sira|سيرة)/.test(code(src))).map(([rel]) => rel);
   ok("no page hardcodes the copyright line", hardcoded.length === 0, hardcoded.join(", "));
 
-  const users = FILES.filter(([, src]) => /\bcopyright\(/.test(src)).length;
-  // Thirteen footers were consolidated. If this drops, a page stopped attributing.
-  ok("the generated footer is actually used", users >= 12, `${users} files`);
+  /*
+   * F-25 consolidated the thirteen-plus hand-copied footers this count used to watch into ONE —
+   * `PageShell.tsx` calls `copyright()` once and every migrated page gets it through the shared
+   * shell, so the number of files calling `copyright()` directly went DOWN as a result of MORE
+   * pages being covered, not fewer. The old "users >= 12" threshold measured the wrong thing after
+   * that change: it wants the previous, less-unified world back. What actually matters now is that
+   * the one shared shell still does the job, plus the one page that deliberately isn't on it yet
+   * (the homepage keeps its own hero chrome — see `PageShell`'s own footer-carve-out note).
+   */
+  const fileHas = (rel, needle) => (FILES.find(([r]) => r === rel)?.[1] ?? "").includes(needle);
+  ok("PageShell — the shared footer every migrated page gets — still attributes",
+    fileHas("components/PageShell.tsx", "copyright("));
+  ok("the homepage's own footer still attributes too",
+    fileHas("components/marketing/Landing.tsx", "copyright("));
 }
 
 /* ── the support address ── */

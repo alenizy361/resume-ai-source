@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import useLang from "./useLang";
 import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entitlement";
 import { toArabicDigits } from "@/app/lib/plans";
+import { navCta } from "@/app/lib/brand";
 import BrandOrb from "../components/BrandOrb";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ScoreOrb from "../components/orb/ScoreOrb";
+import PageShell from "../components/PageShell";
 import {
   getScans, removeScan, type ScanEntry,
   getResumes, removeResume, type SavedResume,
@@ -45,7 +47,7 @@ const STATUS_COLORS: Record<JobStatus, string> = {
 const STRINGS = {
   en: {
     optimizeCta: "Optimize a resume →", welcome: "You're signed in — welcome back!",
-    myAccount: "● My account", dashboard: "Your dashboard", loading: "Loading…",
+    myAccount: "● Career Dashboard", dashboard: "Your career dashboard", loading: "Loading…",
     email: "Email", plan: "Plan", unlimited: "Unlimited — active", free: "Free",
     accessUntil: "Access until", unlockUnlimited: "Unlock unlimited →",
     signOut: "Sign out", signingOut: "Signing out…",
@@ -60,7 +62,7 @@ const STRINGS = {
   },
   ar: {
     optimizeCta: "حسّن سيرتك ←", welcome: "سجّلت دخولك — أهلاً بعودتك!",
-    myAccount: "● حسابي", dashboard: "لوحتك", loading: "جارٍ التحميل…",
+    myAccount: "● لوحتك المهنية", dashboard: "لوحة مسيرتك المهنية", loading: "جارٍ التحميل…",
     email: "البريد", plan: "الباقة", unlimited: "كامل — نشط", free: "مجاني",
     accessUntil: "الوصول حتى", unlockUnlimited: "افتح الوصول الكامل ←",
     signOut: "تسجيل الخروج", signingOut: "جارٍ الخروج…",
@@ -272,18 +274,8 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const sectionTitle = "mb-4 text-sm font-bold";
 
   return (
-    <main dir={lang === "ar" ? "rtl" : "ltr"} lang={lang} className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href={lang === "ar" ? "/ar" : "/"} className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <Link href="/optimize" className="text-sm" style={{ color: "var(--muted)" }}>{t.optimizeCta}</Link>
-        </div>
-      </nav>
-
-      <div className="ps-body max-w-2xl">
+    <PageShell lang={lang} cta={navCta(lang)} width="reading">
+      <div className="mx-auto max-w-2xl">
         {welcome && (
           <div className="mb-6 rounded-xl px-4 py-3 text-sm font-semibold"
             style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent)" }}>
@@ -502,7 +494,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           History, resumes, and applications are stored on this device only — nothing is uploaded. <Link href="/privacy" className="underline">Privacy</Link>
         </p>
       </div>
-    </main>
+    </PageShell>
   );
 }
 

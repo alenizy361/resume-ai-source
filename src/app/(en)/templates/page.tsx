@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import HubLinks from "@/app/components/HubLinks";
-import BrandOrb from "@/app/components/BrandOrb";
-import Link from "next/link";
+import PageShell from "@/app/components/PageShell";
+import { navCta } from "@/app/lib/brand";
 import TemplatesGallery from "@/app/components/TemplatesGallery";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
@@ -19,22 +19,8 @@ export const metadata: Metadata = {
 
 export default function TemplatesPage() {
   return (
-    <main className="min-h-dvh" style={{ background: "var(--bg)", color: "var(--fg)" }}>
-      <nav className="ps-header">
-        <div className="ps-header-in">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BrandOrb size={26} />
-            <span className="text-[15px] font-bold tracking-tight">Sira</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/ar/templates" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>ع</Link>
-            <Link href="/pricing" className="text-sm font-semibold" style={{ color: "var(--muted)" }}>Pricing</Link>
-            <Link href="/optimize" className="btn-accent px-4 py-2 text-sm">Free scan →</Link>
-          </div>
-        </div>
-      </nav>
-
-      <section className="t-enter relative mx-auto max-w-6xl px-6 py-14">
+    <PageShell lang="en" cta={navCta("en")} langToggle="/ar/templates" width="full">
+      <section className="t-enter relative mx-auto max-w-6xl py-14">
         <div className="relative mb-10 text-center">
           <div className="chip mb-4">Templates</div>
           <h1 className="text-4xl font-extrabold tracking-tight">Professional resume templates</h1>
@@ -47,7 +33,7 @@ export default function TemplatesPage() {
           Designed PDF is great for recruiters &amp; LinkedIn. For the applicant-tracking upload, use the plain ATS PDF/Word — both are included.
         </p>
       </section>
-          <HubLinks current="/templates" />
-    </main>
+      <HubLinks current="/templates" />
+    </PageShell>
   );
 }

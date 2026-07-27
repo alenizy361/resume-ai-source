@@ -91,3 +91,23 @@ export const SALARY_BASIS = {
 export function salaryBasis(lang: "ar" | "en"): string {
   return SALARY_BASIS[lang];
 }
+
+/* ─────────────────── the one "go check your resume" call to action ─────────────────── */
+
+/**
+ * The header CTA that points at `/optimize`.
+ *
+ * The audit found five separate strings for this one action across the SEO catalog and the
+ * product surface: "Free scan →", "Scan my resume", "Resume optimizer →", "افحص سيرتي",
+ * "فحص مجاني ←". Five labels for one destination reads as five different tools, which is
+ * exactly the "feels like separate products" complaint the IA redesign set out to fix. One
+ * constant, one place — every `PageShell` `cta` prop that points at `/optimize` uses this.
+ */
+export const NAV_CTA = {
+  en: { href: "/optimize", label: "Scan my resume →" },
+  ar: { href: "/ar/optimize", label: "افحص سيرتي مجاناً ←" },
+} as const;
+
+export function navCta(lang: "ar" | "en"): { href: string; label: string } {
+  return NAV_CTA[lang];
+}

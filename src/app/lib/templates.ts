@@ -28,3 +28,25 @@ export const TEMPLATES: TemplateData[] = [
 
 export const TEMPLATE_SLUGS = TEMPLATES.map((t) => t.slug);
 export const getTemplate = (slug: string) => TEMPLATES.find((t) => t.slug === slug);
+
+/**
+ * This catalogue's slug for each style, mapped to `templateCatalog.ts`'s slug for the closest
+ * design — the builder's "Use this template" only recognises slugs from that second catalogue
+ * (see `BuilderStart.tsx`'s `TEMPLATE_CATALOG.some(...)` check). The two files were written
+ * separately for two different surfaces (this one is the SEO catalogue, the other backs the
+ * `/templates` gallery and the builder's own template step) and never shared a slug space, so
+ * `/resume-templates/[style]`'s CTA linked `?template=<this catalogue's slug>` for years and the
+ * builder silently ignored it on every style except the two, `minimal` and `executive`, whose
+ * names happened to collide. This is the explicit pairing that makes the other seven work too.
+ */
+export const TEMPLATE_CATALOG_SLUG: Record<string, string> = {
+  ats: "ats-pro",
+  modern: "azure",
+  minimal: "minimal",
+  professional: "onyx",
+  executive: "executive",
+  creative: "crimson",
+  simple: "slate",
+  "two-column": "royal",
+  jadarat: "riyadh",
+};
