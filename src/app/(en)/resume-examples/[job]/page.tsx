@@ -101,12 +101,24 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         <div className="chip mb-4">{j.category} · ATS-optimized</div>
         <h1 className="text-4xl font-extrabold leading-tight tracking-tight">{j.title} Resume Example &amp; ATS Keywords (2026)</h1>
         <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          {j.demand} Typical salary: {j.salary} <span style={{ opacity: 0.7 }}>({salaryBasis("en")})</span>. Below is a complete {j.title} resume example plus the exact keywords applicant tracking systems (ATS) scan for — then build yours free in 60 seconds.
+          {j.demand} Typical salary: {j.salary}. Below is a complete {j.title} resume example plus the exact keywords applicant tracking systems (ATS) scan for — then build yours free in 60 seconds.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/optimize" className="btn-accent px-6 py-3">Check my {j.title} resume free →</Link>
           <Link href="/builder" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Build one from scratch</Link>
         </div>
+        {/*
+          A footnote, not a parenthesis inside the lede.
+
+          Set inline at reduced contrast, this three-line qualifier occupied lines 2–4 of a
+          five-line opening paragraph and the actual sentence resumed mid-line after it — the
+          lede was cut in half by its own disclaimer. It still sits with the figure it qualifies
+          (`ops/brand.test.mjs` requires the two on the same page, and rightly), just where a
+          qualifier belongs: after the content, in caption type.
+        */}
+        <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--faint)" }}>
+          Salary: {salaryBasis("en")}
+        </p>
 
         <Section title={`Professional summary example for a ${j.title}`}>
           <div className="card p-5 font-mono text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.summary}</div>

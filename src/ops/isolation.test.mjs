@@ -745,5 +745,123 @@ console.log("\n── and the hook does not put the network in front of the form
     readResume(owner, "no-such-id").record === null);
 }
 
+/* ═════════ a SECOND TAB is not a new visit, and must not destroy the first one's CVs ═════════ */
+{
+  /*
+   * ── the bug this locks down ──
+   *
+   * The rule above is right: the visit is the tab session. But `sessionStorage` is per TAB, so a
+   * SECOND tab of the same browser had no marker, `mayRestore` answered false, and
+   * `BuilderProvider` then called `endAnonymousVisit()` — which does not decline to restore, it
+   * `forgetOwner("anon")`s the entire anonymous keyspace.
+   *
+   * Measured in Chromium before the fix: two real CVs (12,504 and 7,033 bytes) replaced by a single
+   * empty 781-byte record, from nothing but opening the builder in a new tab while the first was
+   * still open and mid-edit. Silent and unrecoverable.
+   *
+   * The missing fact was "is another tab of this browser still alive?", which `sessionStorage`
+   * structurally cannot answer. A `localStorage` liveness lease can. That is a DIFFERENT question
+   * from "when does a visit end" — a visit still ends when the last tab closes — so it does not
+   * reopen the `VISIT_GAP_MS` question the store deliberately retired.
+   */
+  const { mayRestore, endAnonymousVisit, touchVisit, keepVisitAlive } =
+    await import("../app/lib/resumeStore.ts");
+
+  store.clear(); session.clear();
+  const owner = "anon";
+  const id = newResumeId();
+  writeResume(owner, id, "en", cv("Radiology Technologist"));
+  const id2 = newResumeId();
+  writeResume(owner, id2, "en", cv("Accountant"));
+  ok("two anonymous CVs are stored", listResumes(owner).length === 2);
+
+  /* Tab 1 is live and beating. `document` is stubbed because `keepVisitAlive` listens for
+     visibilitychange — the listener is the real thing being exercised, not incidental. */
+  const listeners = [];
+  globalThis.document = {
+    visibilityState: "visible",
+    addEventListener: (t, fn) => listeners.push([t, fn]),
+    removeEventListener: (t, fn) => {
+      const i = listeners.findIndex(([lt, lf]) => lt === t && lf === fn);
+      if (i >= 0) listeners.splice(i, 1);
+    },
+  };
+  const stopTab1 = keepVisitAlive();
+  ok("a live tab registers a visibilitychange listener", listeners.some(([t]) => t === "visibilitychange"));
+  ok("and stamps the lease immediately, not on the first beat", store.getItem("ra_visit_live") !== null);
+
+  /* THE BUG: a new tab clears sessionStorage. Tab 1 is still open. */
+  session.clear();
+  ok("a second tab may restore, because a sibling tab is still live", mayRestore(owner) === true);
+  ok("and therefore nothing is destroyed", listResumes(owner).length === 2);
+
+  /* The visibility hook restamps, so a tab whose timer was throttled while hidden does not have its
+     own lease judged on a beat the browser refused to run. */
+  store.setItem("ra_visit_live", String(Date.now() - 4 * 60_000));
+  listeners.filter(([t]) => t === "visibilitychange").forEach(([, fn]) => fn());
+  ok("returning to the foreground restamps the lease",
+    Date.now() - Number(store.getItem("ra_visit_live")) < 5_000);
+
+  /* ── and the ORIGINAL rule still holds: every tab closed means a clean builder ── */
+  stopTab1();
+  ok("stopping a tab removes its visibilitychange listener",
+    !listeners.some(([t]) => t === "visibilitychange"));
+
+  /* The lease is not cleared on teardown — a tab can be killed without running cleanup at all, so
+     correctness cannot depend on it. It expires instead. Five minutes and one second later: */
+  store.setItem("ra_visit_live", String(Date.now() - (5 * 60_000 + 1000)));
+  ok("a stale lease is not a live sibling — a genuinely new visit restores nothing",
+    mayRestore(owner) === false);
+
+  /* A lease from the FUTURE means the clock moved (a timezone change, an NTP correction). Read as
+     live, deliberately: the cost is an old draft surviving a few minutes, and the cost of the other
+     choice is the data loss above, on the machines least able to explain it. */
+  store.setItem("ra_visit_live", String(Date.now() + 60 * 60_000));
+  ok("a lease from the future is treated as live rather than as expired", mayRestore(owner) === true);
+
+  /* Ending the visit takes the lease with it, so the tab that just declared the visit over cannot
+     read its own stamp back as a sibling and re-open it. */
+  store.setItem("ra_visit_live", String(Date.now()));
+  endAnonymousVisit();
+  ok("ending the visit drops the lease", store.getItem("ra_visit_live") === null);
+  ok("and the anonymous records with it", listResumes(owner).length === 0);
+
+  /* A signed-in account is untouched by any of this — that difference IS the offer. */
+  const acct = ownerKey("someone@example.com");
+  writeResume(acct, newResumeId(), "en", cv("Signed in"));
+  session.clear();
+  store.removeItem("ra_visit_live");
+  ok("an account restores with no session marker and no lease", mayRestore(acct) === true);
+  ok("and endAnonymousVisit never touches it",
+    (endAnonymousVisit(), listResumes(acct).length === 1));
+
+  touchVisit(owner, Date.now());   // leave the store in a sane state for anything after this
+  delete globalThis.document;
+}
+
+/* ═══════ and the provider must not write a record for a document nobody has touched ═══════ */
+{
+  /*
+   * Merely LOADING /builder minted an id and autosaved an empty state 450ms later, and then
+   * `BuilderStart` listed it: a visitor who had created nothing was shown "Untitled · 0 of 11 steps
+   * done" under "Your CVs here" — twice, if they pressed "Build a new CV" and came back.
+   *
+   * Asserted against the source, like the hydration guards above, because the condition is a React
+   * ref that no store-level test can reach.
+   */
+  const { readFileSync } = await import("node:fs");
+  const code = readFileSync("app/components/build/BuilderProvider.tsx", "utf8");
+  ok("the autosave refuses an untouched document",
+    /if \(!touched\.current && !mustPersist\.current\) return;/.test(code));
+  ok("and so does the navigation flush, which used to write it anyway",
+    (code.match(/if \(!touched\.current && !mustPersist\.current\) return;/g) || []).length >= 2);
+  ok("a resume carried over from the chat door is still persisted",
+    /mustPersist\.current = true;\s*\/\/ real content/.test(code));
+  ok("and so is a record upgraded to a newer schema",
+    /if \(upgraded\) mustPersist\.current = true;/.test(code));
+  ok("the builder holds the anonymous visit open while it is on screen",
+    /useEffect\(\(\) => keepVisitAlive\(\), \[\]\)/.test(code));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

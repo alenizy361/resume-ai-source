@@ -2863,3 +2863,131 @@ world automatically); `/account` rendering in the stored language under an EN UR
 documented preference order; the old-system pages still use `ps-header` rather than the
 homepage's `cine-nav` — same black world, same brand mark, same CTA now, with full chrome
 convergence left as its own deliberate migration rather than a rushed find-and-replace.
+
+---
+
+## Overnight adversarial round 1 (`f8db092`) — 22 defects, 4 agents
+
+Four agents drove the live production build concurrently at 390×844 and 1280×800 in both
+languages: a bug hunter on the builder and everything downstream of it, a bug hunter on
+`/optimize` and payments, a design critic on English desktop, and a light-theme breakage sweep.
+Everything below was measured in a browser, and every fix was re-measured in one (22/22).
+
+**A methodological note worth keeping.** Agents test the RUNNING build but root-cause from
+SOURCE, and this round those two drifted — several findings (`bd-sheet` at 1.02:1, the checkout
+modal ignoring Escape, `--faint` at 3.82:1, `.ps-cta` at 4.22:1) were already patched in the
+working tree and only still live on `:3000`. One agent noticed the mtimes and said so, which is
+the behaviour to want. **Triage every agent finding against current source before fixing it**,
+and rebuild before launching a round.
+
+### Critical · a second browser tab deleted every anonymous CV
+
+The anonymous "visit" marker lives in `sessionStorage`, which is per-TAB. A second tab therefore
+had no marker, `mayRestore` answered false, and `BuilderProvider` called `endAnonymousVisit()` —
+which does not decline to restore, it `forgetOwner("anon")`s the whole anonymous keyspace.
+Measured: two real CVs (12,504 and 7,033 bytes) replaced by one empty 781-byte record, silently,
+with the first tab still open and mid-edit.
+
+The visit is still the tab session — that rule is unchanged and was never the bug. What was
+missing is a way to tell one live tab from zero, which `sessionStorage` structurally cannot
+answer. `resumeStore` now keeps a `localStorage` liveness lease (`ra_visit_live`), restamped
+every 60s by `keepVisitAlive()` and by the `visibilitychange` hook, and treated as fresh for
+5 minutes. The wide gap is deliberate: browsers throttle background-tab timers to roughly once a
+minute, and the backgrounded tab is exactly the one this protects. A future-dated lease is read
+as live, because that failure direction costs an extra few minutes of an old draft while the
+other costs the bug above.
+
+This does NOT reopen the retired `VISIT_GAP_MS` question. "When does a visit end" still has one
+answer (when the last tab closes); the lease answers a different question.
+
+Sibling defect: merely LOADING `/builder` minted an id and autosaved an empty state, which
+`BuilderStart` then listed — a visitor who had created nothing saw "Untitled · 0 of 11 steps
+done" under "Your CVs here", twice if they pressed "Build a new CV" and came back. The autosave
+and the navigation flush now both refuse an untouched document, with `mustPersist` carving out
+the two hydrations that carry content storage does not already hold (a resume from the chat
+door, a schema upgrade).
+
+**Evidence.** `ops/isolation.test.mjs`, +15 assertions covering the lease, its expiry, the
+future-clock case, teardown, account immunity, and the provider's write gate.
+
+### Major · an Arabic comma cost every English CV its PDF download
+
+`confirmItem` joined confirmed skills with `، ` regardless of CV language, so an all-English CV
+read `General X-ray، Computed Tomography`. `hasArabic` matched U+060C, `pdfRefusesArabic` agreed,
+and the design step REMOVED the plain ATS PDF while printing "an Arabic CV downloads as Word"
+over a document with no Arabic in it. Two confirmed skills was the whole trigger — with one there
+is no separator, so it looked unrelated to skills.
+
+Fixed at both joins (`builderDoc.confirmItem`, `builderState.removeSkill`, matching what
+`withLangs` already did correctly) AND in the detector: `hasArabic` now strips Arabic punctuation
+before testing, because punctuation is not a script. The second half is what makes every CV
+already saved in a browser whole again without a migration.
+
+**Evidence.** `ops/builderdoc.test.mjs` (both separators asserted, and the pre-existing test that
+asserted the *buggy* separator corrected), `ops/cvheadings.test.mjs` (+4).
+
+### The rest, grouped
+
+**Builder.** The summary's "write your own" box committed only on blur — the preview never showed
+it, the header said "Saved", and a reload discarded it; pressing "Save & continue" worked only
+because the click blurred the field first, which is why it survived testing. It commits per
+keystroke now, with a `writingOwn` latch so making `profile.summary` truthy does not unmount the
+field mid-type. · The step counter filtered on `stepMark(...) === "done"`, which returns
+`current` for the step you are standing on before it checks anything, so eleven finished steps
+read "10 / 11" forever and Back appeared to undo work; counted via `completedSteps` now. · The
+review page's `pending-suggestions` finding offered "Go to section" and navigated to the review
+page.
+
+**Interactive states.** `focus:outline-none` was pasted onto 29 fields with no replacement and
+`globals.css` had exactly one focus rule, so every text input in the product had a measured
+outline of `0px none` — including the only field on `/login`. One `:focus-visible` ring now, with
+a doubled selector so a re-pasted utility cannot silently outrank it. · The mobile menu ignored
+Escape and let the page behind scroll (measured 0 → 400 while the panel stayed put). · Disabled
+primaries still lifted, brightened and ran their light-sweep on hover. · Segmented controls had
+no hover at all, because their inactive state was an inline style no CSS `:hover` could answer —
+hence the new `.seg` class. · The checkout ring measured 1.15:1 against its own field.
+
+**Layout and colour.** The homepage ATS meter never filled: it is an `<i>`, so inline, so `width`
+and `height` were ignored — 0×0 in a 310×6 track while the number beside it climbed to 91%, on
+the single element carrying the product's proof. · The pricing BEST VALUE badge overlapped the
+eyebrow (92px reserved for ~230px of text), wrapping "ONE-TIME" across two lines and throwing the
+right card 16px out of alignment, so the two CTAs the page exists to compare sat 46px apart;
+badge is in flow now and the left eyebrow no longer reads "ONE-TIME OPTIMIZATION · ONE-TIME". ·
+`InterviewerAvatar` was `h-full w-full` inside a `h-40 w-40` box around a ~250px stack, so its
+caption drew 30px below its own parent and struck through the chip beneath it. · Four dark-theme
+literals were never re-pointed at the light tokens: StepGate amber (1.32:1), review blockers
+(1.66:1), AI-suggest pills (1.55:1, added `--info`), and a `rgba(255,255,255,0.18)` hairline that
+left all three 404 secondaries with no visible edge. · `.btn-accent` gained a transparent 1px
+border so a primary and the ghost beside it stop measuring 50px against 49px.
+
+**Copy and wiring.** `/interview-live` was the one header in a bilingual product with no language
+toggle. · The support address was hardcoded in six places and now reads `brand.ts`, so
+`NEXT_PUBLIC_SUPPORT_EMAIL` moves all six — the codebase's own `isPersonalMailbox` health check
+has been reporting this as not-ok. · `/interview` and `/linkedin` served an RTL Arabic shell
+around English body copy; both now have real Arabic `PageBody` bundles. · The homepage promised a
+free tier that `/pricing` did not mention, and rendered its price as a bare "0". · British and
+American spellings were mixed within pages ("Practise"/"Licences" against
+"optimize"/"analyze"); standardised on American in user-facing strings, leaving code comments in
+the author's own voice and leaving official credential names (the ETEC "Teaching Licence") alone,
+since a proper noun's spelling is not ours to normalise. · The salary disclaimer occupied lines
+2–4 of a five-line lede with the sentence resuming mid-line after it; it is a footnote now, still
+on the same page as the figure, which is what `ops/brand.test.mjs` actually requires. · The
+mission-control alert inherited `justify-between` from `.cine-mc-job` (carried only for the reveal
+animation), putting the `!` badge ~210px from its own message. · The hero card showed bare
+"EXPERIENCE" and "SKILLS" labels above empty rules until ~2.1s, indistinguishable above the fold
+from a form that failed to load; the stagger now fills every row by ~1.3s.
+
+**Verification.** `tsc` clean; 48 suites, 0 failures, +19 assertions; `lint` unchanged from
+baseline (36 errors / 217 warnings, all pre-existing); build generates all 439 pages; 22/22 fixes
+confirmed in Chromium.
+
+**OPEN, deliberately not this round.** One 1152px header sits above six different content widths
+(`/pricing` 768, `/resume-examples` 1024, `/templates` full-bleed, homepage 1120) — needs named
+container tokens, which is a migration not a patch. · The same two destinations still carry
+eleven names between them ("Build my resume" / "CV Builder" / "Build a CV" / "Build one from
+scratch"; "Scan my resume" / "Analyze my resume" / "Screening Check"); `brand.ts` holds one
+`NAV_CTA` but the chips and the mobile menu do not read it. · Header composition varies six ways
+across ten pages. · Ten templates are one layout in ten accent hues. · Emoji stand in for an icon
+set beside a bespoke animated Orb, and `/interview-live` introduces a third visual identity. · A
+band of `var(--faint)` small text measures 3.4–3.9:1 — over the 3:1 bar this product set, under
+WCAG AA's 4.5:1.

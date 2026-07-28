@@ -77,7 +77,12 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
           {j.title} skills <span className="accent-underline text-accent">for your resume</span>
         </h1>
         <p className="mt-4 text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-          {j.demand} Typical range: {j.salary} <span style={{ opacity: 0.7 }}>({salaryBasis("en")})</span>. Below: the exact terms applicant tracking software scans for in {j.title} resumes, and the skills recruiters actually shortlist on.
+          {j.demand} Typical range: {j.salary}. Below: the exact terms applicant tracking software scans for in {j.title} resumes, and the skills recruiters actually shortlist on.
+        </p>
+        {/* Caption type, below the lede — see the resume-examples page for why this stopped being
+            a parenthesis in the middle of the opening sentence. */}
+        <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--faint)" }}>
+          Salary: {salaryBasis("en")}
         </p>
 
         {/* ATS keywords */}

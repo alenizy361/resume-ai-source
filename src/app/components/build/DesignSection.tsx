@@ -75,7 +75,7 @@ const C = {
     prep: "Interview preparation",
     prepSub: "Likely questions for this role, and how to answer them from your own CV.",
     prepGo: "Open interview prep",
-    prepLiveGo: "Practise a live mock interview",
+    prepLiveGo: "Practice a live mock interview",
     keep: "Keep this version",
     keepSub: "Saved on this device only — it is never uploaded. Find it under My resumes.",
     keepGo: "Save to my resumes",

@@ -29,7 +29,10 @@ export default function PricingScene({ lang }: { lang: "ar" | "en" }) {
       <div className="cine-price-grid">
         <div className="cine-price cine-rise">
           <div className="cine-price-name">{t.freeName}</div>
-          <div className="cine-price-amount">{ar ? "٠" : "0"}</div>
+          {/* A bare "0" is not a price — it is a digit with no currency and no unit, sitting in the
+              slot where the card beside it says "SAR 35". The word is what a free tier actually
+              costs, and it needs no unit at all. */}
+          <div className="cine-price-amount">{t.freeAmount}</div>
           <ul className="cine-price-list">
             {t.freeLines.map((l) => <li key={l}>{l}</li>)}
           </ul>

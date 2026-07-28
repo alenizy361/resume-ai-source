@@ -49,7 +49,7 @@ export default function InterviewLayout({ children }: { children: React.ReactNod
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/interview-live", label: "Practise answering out loud" },
+          { href: "/interview-live", label: "Practice answering out loud" },
           { href: "/optimize", label: "Check your CV against the advert" },
           { href: "/builder", label: "Build a CV" },
           { href: "/cover-letter-examples", label: "Cover letter examples" },

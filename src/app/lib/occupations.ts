@@ -286,7 +286,7 @@ const BROAD: BroadTitle[] = [
   {
     match: ["teacher", "معلم", "معلمه", "مدرس", "مدرسه"],
     question: {
-      en: "Which kind of teaching? It changes the skills and the licence.",
+      en: "Which kind of teaching? It changes the skills and the license.",
       ar: "أي نوع من التعليم؟ يغيّر المهارات والرخصة المطلوبة.",
     },
     options: [

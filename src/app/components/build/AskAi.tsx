@@ -26,7 +26,7 @@ const C = {
   en: {
     open: "Ask AI about this section",
     close: "Close",
-    ph: "e.g. should I list my licence number here?",
+    ph: "e.g. should I list my license number here?",
     send: "Ask", stop: "Stop",
     note: "Advice only. Nothing here is added to your CV.",
   },

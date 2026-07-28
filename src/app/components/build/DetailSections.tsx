@@ -32,7 +32,7 @@ type Lang = "ar" | "en";
 type Dispatch = React.Dispatch<{ t: string; [k: string]: unknown }>;
 
 const KIND_LABEL: Record<CredentialKind, { en: string; ar: string }> = {
-  licence: { en: "Professional licence", ar: "رخصة مهنية" },
+  licence: { en: "Professional license", ar: "رخصة مهنية" },
   registration: { en: "Professional registration", ar: "تسجيل مهني" },
   classification: { en: "Professional classification", ar: "تصنيف مهني" },
   certification: { en: "Certification", ar: "شهادة" },

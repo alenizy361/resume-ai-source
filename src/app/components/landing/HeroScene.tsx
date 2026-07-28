@@ -43,7 +43,15 @@ export default function HeroScene({ lang }: { lang: "ar" | "en" }) {
   const ar = lang === "ar";
   /* Stages: 1 title typed · 2 exp typed · 3+ chips land one by one · final = settled. */
   const chipCount = t.values.skills.length;
-  const { ref, on, stage } = useScene<HTMLElement>([600, 1500, 1100, ...Array.from({ length: chipCount }, () => 420), 500]);
+  /*
+   * Tightened from [600, 1500, 1100, …420]. That timeline left the second and third rows as bare
+   * "EXPERIENCE" and "SKILLS" labels above empty divider rules until about 2.1s — measured on a
+   * 1440x900 screenshot at t≈1000ms, the card above the fold is indistinguishable from a form that
+   * failed to load. It is the first thing anyone sees, and for two seconds it argued against the
+   * product. Every row now carries content by ~1.3s, which is still a reveal and no longer a
+   * period of looking broken.
+   */
+  const { ref, on, stage } = useScene<HTMLElement>([350, 700, 480, ...Array.from({ length: chipCount }, () => 320), 400]);
   const settled = stage >= chipCount + 4;
   const instant = on && stage >= chipCount + 4; // reduced-motion lands here immediately
 

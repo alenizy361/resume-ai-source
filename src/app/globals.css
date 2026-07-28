@@ -320,6 +320,11 @@ body {
   background: linear-gradient(135deg, #7c3aed, #6d28d9);
   color: #ffffff;
   font-weight: 700;
+  /* A transparent border so a primary and the `.btn-ghost` beside it are the same HEIGHT. The
+     ghost carries a real 1px border and this carried none, so every pair of them measured 50px
+     against 49px and sat 1px out of vertical alignment — a mismatch too small to name and just
+     large enough to look unconsidered, on every page that offers two actions side by side. */
+  border: 1px solid transparent;
   border-radius: 12px;
   box-shadow: 0 8px 24px -8px rgba(139, 92, 246, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;

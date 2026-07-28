@@ -50,7 +50,7 @@ const C = {
     roles: "Positions",
     skills: "Skills",
     education: "Education",
-    certs: "Licences & certifications",
+    certs: "Licenses & certifications",
     langs: "Languages",
     unread: (n: number) => `${n} line${n === 1 ? "" : "s"} we could not place`,
     unreadWhy: "Nothing is thrown away silently. Copy anything here into the right section yourself.",

@@ -285,7 +285,14 @@
 .cine-mc-status[data-tone="focus"] { color: var(--cine-energy); }
 .cine-mc-status[data-tone="wait"] { color: var(--cine-mut); }
 .cine-mc-status[data-tone="act"] { color: var(--cine-warn); }
-.cine-mc-alert { display: flex; gap: 10px; align-items: baseline; font-size: 15px; color: var(--cine-warn); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 12px; padding: 12px 16px; }
+/*
+ * `justify-content: flex-start` is the fix, and it is here because this element also carries
+ * `.cine-mc-job` — for the reveal animation alone, but that class sets `space-between`, which is
+ * right for the job rows above it (title on one side, status on the other) and wrong for an
+ * icon-plus-message pair. The `!` badge was flush left and its sentence flush right, about 210px
+ * apart inside a 742px card, so the warning did not read as belonging to the badge.
+ */
+.cine-mc-alert { display: flex; justify-content: flex-start; gap: 10px; align-items: baseline; font-size: 15px; color: var(--cine-warn); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 12px; padding: 12px 16px; }
 
 /* ── interview ── */
 

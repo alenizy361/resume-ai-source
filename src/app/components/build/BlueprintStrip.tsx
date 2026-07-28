@@ -50,7 +50,7 @@ const C = {
     thinking: "Working out what this profession involves…",
     needTitle: "Add the job title first, so a suggestion has something to be about.",
     /* Said on the chip itself: a licence you cannot practise without is not a suggestion. */
-    required: "required to practise",
+    required: "required to practice",
     /* The same fact, stated at the strength the evidence supports. */
     usuallyRequired: "usually required — check with the authority",
   },

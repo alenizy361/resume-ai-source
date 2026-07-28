@@ -78,7 +78,7 @@ export default function InterviewLiveLayout({ children }: { children: React.Reac
             a: "No, and that is deliberate. It tells you what is missing from the answer you gave; it does not hand you a script. An answer you did not write is one you cannot defend when the follow-up question comes.",
           },
           {
-            q: "How many questions should I practise?",
+            q: "How many questions should I practice?",
             a: "Five answered properly beats twenty rushed. The questions that repeat across interviews for one role are a short list, and getting through that list out loud once is worth more than reading fifty of them.",
           },
         ]}

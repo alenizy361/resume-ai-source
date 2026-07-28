@@ -79,6 +79,18 @@ export default function PricingPage() {
           <p className="mx-auto mt-3 max-w-xl" style={{ color: "var(--muted)" }}>
             Both plans include <strong>every feature</strong> — full resume rewrite, cover letter, LinkedIn, interview prep, and watermark-free downloads. The only difference is how long your access lasts.
           </p>
+          {/*
+            The homepage's pricing scene offers a free tier — the full builder in both languages,
+            job matching and the screening check, with a watermark on downloads. This page showed
+            two paid plans and no free tier at all, so a visitor who read the homepage and then
+            clicked "Compare all plans" was shown a different product. Stating it here costs one
+            line and makes the two pages agree.
+          */}
+          <p className="mx-auto mt-3 max-w-xl text-sm" style={{ color: "var(--faint)" }}>
+            Building is free — the whole builder, both languages, job matching and the screening
+            check. Free downloads carry a small watermark. Paying is what removes it and unlocks
+            the rewrite, cover letter, LinkedIn and interview prep.
+          </p>
         </div>
         <div className="grid gap-5 md:grid-cols-2">
           <PlanCard id="single" />

@@ -381,7 +381,7 @@ export function BlueprintBody(p: Common) {
         generic: "لا توجد حزمة جاهزة لهذا المسمى — سنعتمد على الذكاء الاصطناعي في الأقسام التالية." }
     : { none: "Enter a job title above and what we know about the profession appears here instantly.",
         alsoKnown: "Also known as", groups: "Common skills & systems", duties: "Typical responsibilities",
-        creds: "Possible licences & certifications", nothingYet: "None of this is in your CV yet — you choose, in the sections below.",
+        creds: "Possible licenses & certifications", nothingYet: "None of this is in your CV yet — you choose, in the sections below.",
         generic: "No cached pack for this title — the AI will suggest in the sections below." };
 
   const pack = useMemo(() => findRolePack(p.state.target.title), [p.state.target.title]);
