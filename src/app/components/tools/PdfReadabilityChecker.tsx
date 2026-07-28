@@ -131,7 +131,7 @@ export default function PdfReadabilityChecker({ defaultAr }: { defaultAr: boolea
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: verdictCopy[report.verdict].color }} />
                 <h3 className="font-bold">{verdictCopy[report.verdict].label}</h3>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{verdictCopy[report.verdict].body}</p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{verdictCopy[report.verdict].body}</p>
               {report.serverError && report.verdict === "unreadable" && (
                 <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>{report.serverError}</p>
               )}

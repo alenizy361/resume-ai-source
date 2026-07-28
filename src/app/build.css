@@ -186,8 +186,8 @@
   background: transparent; border: 0; color: var(--faint);
   transition: color .16s var(--ez), background .16s var(--ez);
 }
-.build-root .bd-chip-aux:hover { color: var(--muted); background: rgba(255, 255, 255, .06); }
-.build-root .bd-chip-aux[aria-expanded="true"] { color: #ddd6fe; background: rgba(139, 92, 246, .18); }
+.build-root .bd-chip-aux:hover { color: var(--muted); background: rgba(15, 20, 35, .06); }
+.build-root .bd-chip-aux[aria-expanded="true"] { color: #6d28d9; background: rgba(139, 92, 246, .14); }
 
 /* The group's provenance, said once above its chips. Same voice as the per-chip note — it is the
    same sentence, moved — but without the box, because nothing was opened to see it. */
@@ -254,7 +254,7 @@
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  background: linear-gradient(180deg, rgba(7, 5, 20, 0.94), rgba(7, 5, 20, 0.76));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.84));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
@@ -290,7 +290,7 @@
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(15, 20, 35, 0.03);
 }
 /*
  * The one place monospace and tracking STAY in both directions: this element holds digits only.
@@ -478,7 +478,7 @@
    * So the bar is a solid surface. The gradient above it fades the content into the bar's edge
    * instead of trying to see through it.
    */
-  background: #0a0718;
+  background: #ffffff;
   border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -489,7 +489,7 @@
   inset-inline: 0;
   top: -20px;
   height: 20px;
-  background: linear-gradient(180deg, transparent, #0a0718);
+  background: linear-gradient(180deg, transparent, #ffffff);
   pointer-events: none;
 }
 .build-root .bd-actions-in {

@@ -37,12 +37,12 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{p.tagline}</p>
       <ul className="mt-6 space-y-3 text-sm">
         {p.features.map((f) => (
-          <li key={f} className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+          <li key={f} className="flex items-center gap-3" style={{ color: "var(--muted)" }}>
             <span className="text-accent">✓</span> {f}
           </li>
         ))}
         {id === "complete" && (
-          <li className="flex items-center gap-3" style={{ color: "rgba(244,245,243,0.85)" }}>
+          <li className="flex items-center gap-3" style={{ color: "var(--muted)" }}>
             <span className="text-accent">✓</span> 7-day money-back guarantee
           </li>
         )}

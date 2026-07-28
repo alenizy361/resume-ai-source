@@ -111,7 +111,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
           <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>
             A grouped skills section parses cleanly in ATS software. Then prove your top skills inside experience bullets — like this example of the level to aim for:
           </p>
-          <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>
+          <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             {`SKILLS
 ${j.atsKeywords.slice(0, 4).join(" · ")}
 ${j.skills.slice(0, 3).join(" · ")}
@@ -130,7 +130,7 @@ EXPERIENCE (example bullet)
             <h2 className="mb-3 text-2xl font-bold">Certifications worth listing</h2>
             <div className="flex flex-wrap gap-2">
               {j.certs.map((c) => (
-                <span key={c} className="rounded-lg px-4 py-2 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "rgba(244,245,243,0.8)" }}>{c}</span>
+                <span key={c} className="rounded-lg px-4 py-2 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--muted)" }}>{c}</span>
               ))}
             </div>
           </section>

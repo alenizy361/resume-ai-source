@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="t-enter mb-8">
     <h2 className="mb-3 text-xl font-bold">{title}</h2>
-    <div className="space-y-2 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.75)" }}>{children}</div>
+    <div className="space-y-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{children}</div>
   </section>
 );
 

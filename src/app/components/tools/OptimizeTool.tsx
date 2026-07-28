@@ -659,7 +659,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   <BrandOrb variant="button" size={22} busy />
                   <span className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: "var(--accent)" }}>{ar ? "جارٍ التحليل — مباشر" : "Analyzing — live"}</span>
                 </div>
-                <div className="px-5 py-4 font-mono text-xs leading-relaxed" style={{ color: "rgba(244,245,243,0.75)" }}>
+                <div className="px-5 py-4 font-mono text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
                   {thinking.replace(/^ANALYSIS\s*/i, "") || (ar ? "نقرأ سيرتك…" : "Reading your resume…")}<span className="animate-pulse text-accent">▌</span>
                 </div>
               </div>
@@ -1018,7 +1018,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   </div>
                 ) : (
                   <div dir={ar ? "ltr" : undefined} className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed"
-                    style={{ color: "rgba(244,245,243,0.85)", textAlign: ar ? "left" : undefined }}>
+                    style={{ color: "var(--muted)", textAlign: ar ? "left" : undefined }}>
                     {result.optimizedResume}
                   </div>
                 )}
@@ -1106,7 +1106,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   )}
                   {coverLetter && (
                     <div dir={ar ? "ltr" : undefined} className="card mt-4 whitespace-pre-wrap p-5 text-sm leading-relaxed"
-                      style={{ background: "rgba(255,255,255,0.02)", color: "rgba(244,245,243,0.85)", textAlign: ar ? "left" : undefined }}>
+                      style={{ background: "rgba(255,255,255,0.02)", color: "var(--muted)", textAlign: ar ? "left" : undefined }}>
                       {coverLetter}
                     </div>
                   )}

@@ -451,8 +451,8 @@ export default function InterviewLivePage() {
                     <span className="font-bold">{t.yourScore}</span>
                     <span className="font-mono text-2xl font-bold" style={{ color: feedback.score >= 7 ? "#a78bfa" : feedback.score >= 5 ? "#fbbf24" : "#f87171" }}>{feedback.score}/10</span>
                   </div>
-                  {feedback.strengths && <p className="text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><b style={{ color: "#a78bfa" }}>{t.strength}</b> {feedback.strengths}</p>}
-                  {feedback.improve && <p className="mt-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><b style={{ color: "#fbbf24" }}>{t.toImprove}</b> {feedback.improve}</p>}
+                  {feedback.strengths && <p className="text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#a78bfa" }}>{t.strength}</b> {feedback.strengths}</p>}
+                  {feedback.improve && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#fbbf24" }}>{t.toImprove}</b> {feedback.improve}</p>}
                   {feedback.model && (
                     <div className="mt-3 rounded-lg p-3 text-sm leading-relaxed" style={{ background: "rgba(139,92,246,0.06)", color: "var(--muted)" }}>
                       <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent)" }}>{t.modelAnswer}</div>

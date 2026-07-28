@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <h2 className="mb-4 text-2xl font-bold">المهارات الأساسية (Hard & Soft)</h2>
           <ul className="grid gap-2 sm:grid-cols-2">
             {j.skills.map((s) => (
-              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><span className="text-accent">✓</span> {s}</li>
+              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}><span className="text-accent">✓</span> {s}</li>
             ))}
           </ul>
         </section>

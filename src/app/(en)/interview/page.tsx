@@ -233,7 +233,7 @@ export default function InterviewPage() {
                             <span className="mt-0.5 font-mono text-accent">{open === i ? "−" : "+"}</span>
                           </button>
                           {open === i && (
-                            <div className="border-t px-5 py-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "rgba(244,245,243,0.85)", background: "rgba(139,92,246,0.03)" }}>
+                            <div className="border-t px-5 py-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "var(--muted)", background: "rgba(139,92,246,0.03)" }}>
                               <div className="mb-1 font-mono text-xs uppercase tracking-wider text-accent">{ar ? "إجابة قوية" : "Strong answer"}</div>
                               {item.answer}
 

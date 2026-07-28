@@ -80,14 +80,14 @@ export default async function Page({ params }: { params: Promise<{ job: string }
 
         <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">نموذج الخطاب (قابل للنسخ)</h2>
-          <div className="card whitespace-pre-wrap p-6 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{letter}</div>
+          <div className="card whitespace-pre-wrap p-6 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{letter}</div>
         </section>
 
         <section className="t-enter mt-10">
           <h2 className="mb-4 text-2xl font-bold">نصائح لخطاب {j.title} مقنع</h2>
           <ul className="space-y-3">
             {tips.map((t) => (
-              <li key={t} className="card p-4 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}><span className="text-accent">←</span> {t}</li>
+              <li key={t} className="card p-4 text-sm leading-relaxed" style={{ color: "var(--muted)" }}><span className="text-accent">←</span> {t}</li>
             ))}
           </ul>
         </section>

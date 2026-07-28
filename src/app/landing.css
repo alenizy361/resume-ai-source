@@ -2,8 +2,8 @@
  * The cinematic landing's visual system. Scoped under `.cine-root`.
  *
  * ── the color contract ──
- * 95% black and near-black, 4% neutral gray, 1% energy accent. The page reads BLACK, not
- * purple: the accent appears only as thin light — active nodes, the match meter, one CTA.
+ * LIGHT, 95% white and near-white, 4% neutral gray, 1% energy accent — the owner's call
+ * after living with the black version. The intro film alone keeps the black frame.
  *
  * ── the motion contract (F-7/F-8/F-10 honoured) ──
  * transform + opacity only. No animation-timeline / view() (crashed iOS — F-10). No repeated
@@ -17,15 +17,18 @@
  */
 
 .cine-root {
-  --cine-bg: #030407;
-  --cine-ink: #f2f4fa;
-  --cine-mut: #a7b0c4;   /* ≥7:1 on --cine-bg */
-  --cine-dim: #7e8798;   /* ≥4.6:1 — the floor for meaningful text */
-  --cine-line: rgba(255, 255, 255, 0.08);
-  --cine-energy: #8b5cf6;
-  --cine-blue: #3b82f6;
-  --cine-ok: #34d399;
-  --cine-warn: #fbbf24;
+  /* LIGHT, by the owner's direction. The intro film alone stays black — the product opens
+     into daylight. Text tones hold AA on the light ground; the status colors are the darker
+     cuts of the same hues because amber/green that read on black wash out on white. */
+  --cine-bg: #f6f7fa;
+  --cine-ink: #171a21;
+  --cine-mut: #454c5e;   /* ≥7:1 on --cine-bg */
+  --cine-dim: #5d6577;   /* ≥4.6:1 — the floor for meaningful text */
+  --cine-line: rgba(15, 20, 35, 0.1);
+  --cine-energy: #7c3aed;
+  --cine-blue: #2563eb;
+  --cine-ok: #059669;
+  --cine-warn: #b45309;
   background: var(--cine-bg);
   color: var(--cine-ink);
   min-height: 100dvh;
@@ -43,7 +46,7 @@
   background: transparent;
 }
 .cine-nav[data-solid] {
-  background: rgba(3, 4, 7, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   border-color: var(--cine-line);
 }
 .cine-nav-in {
@@ -58,7 +61,7 @@
 }
 .cine-nav-links a:hover { color: var(--cine-ink); }
 .cine-cta {
-  display: inline-block; background: var(--cine-ink); color: #05060a;
+  display: inline-block; background: var(--cine-ink); color: #f6f7fa;
   font-size: 14px; font-weight: 700; border-radius: 10px; padding: 10px 18px;
   transition: transform 0.15s ease, opacity 0.2s ease;
 }
@@ -72,7 +75,7 @@
 .cine-nav-burger span { width: 18px; height: 2px; background: var(--cine-ink); border-radius: 2px; }
 @media (min-width: 760px) { .cine-nav-burger { display: none; } }
 .cine-nav-sheet {
-  position: fixed; inset: 0; z-index: var(--z-menu); background: rgba(3, 4, 7, 0.97);
+  position: fixed; inset: 0; z-index: var(--z-menu); background: rgba(255, 255, 255, 0.98);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
 }
 .cine-nav-sheet a { font-size: 22px; font-weight: 700; color: var(--cine-ink); padding: 12px 24px; }
@@ -84,7 +87,12 @@
   background: #000; display: flex; align-items: center; justify-content: center;
   flex-direction: column; gap: 40px;
   transition: opacity 0.7s ease;
+  /* The film stays black on the light platform, so it declares its own ink — inheriting the
+     page's dark text would render the statements invisible on the black frame. */
+  color: #f2f4fa;
 }
+.cine-intro .cine-skip { color: #9aa3b6; border-color: rgba(255, 255, 255, 0.2); }
+.cine-intro .cine-skip:hover { color: #f2f4fa; }
 .cine-intro[data-leaving] { opacity: 0; pointer-events: none; }
 .cine-intro-orbwrap {
   transform: scale(0.02); opacity: 0;
@@ -141,12 +149,16 @@
 
 /* ── hero / career profile document ── */
 
-.cine-hero { min-height: calc(100dvh - 20px); display: flex; flex-direction: column; justify-content: center; }
+/* Top padding = the fixed nav's band + breathing room: without it the headline's first line
+   rendered BEHIND the nav on phones (owner screenshot). min-height accounts for it so the
+   hero still fills the first viewport. */
+.cine-hero { padding-top: calc(76px + env(safe-area-inset-top)); min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; }
 .cine-hero-grid { display: grid; gap: 44px; align-items: center; margin-top: 26px; }
 @media (min-width: 980px) { .cine-hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 .cine-doc {
-  background: #fbfbfd; color: #16181d; border-radius: 14px;
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
+  background: #ffffff; color: #16181d; border-radius: 14px;
+  border: 1px solid rgba(15, 20, 35, 0.09);
+  box-shadow: 0 24px 60px -28px rgba(15, 20, 35, 0.28);
   padding: 26px 28px; position: relative;
   transform: translateY(26px) scale(0.97); opacity: 0;
   transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
@@ -182,7 +194,7 @@
 @media (min-width: 980px) { .cine-tailor-grid { grid-template-columns: 1.1fr 0.9fr; } }
 .cine-panel {
   border: 1px solid var(--cine-line); border-radius: 14px; padding: 22px;
-  background: rgba(255, 255, 255, 0.015);
+  background: #ffffff;
 }
 .cine-panel-title { font-size: 14px; font-weight: 700; color: var(--cine-dim); text-transform: uppercase; }
 .cine-root[dir="ltr"] .cine-panel-title { letter-spacing: 0.1em; }
@@ -237,7 +249,7 @@
 
 .cine-mc { margin-top: 40px; display: grid; gap: 18px; }
 @media (min-width: 980px) { .cine-mc { grid-template-columns: 320px 1fr; align-items: start; } }
-.cine-mc-core { text-align: center; padding: 30px 22px; border: 1px solid var(--cine-line); border-radius: 16px; background: rgba(255, 255, 255, 0.015); }
+.cine-mc-core { text-align: center; padding: 30px 22px; border: 1px solid var(--cine-line); border-radius: 16px; background: #ffffff; }
 .cine-mc-core-t { margin-top: 14px; font-size: 18px; font-weight: 800; }
 .cine-mc-core-s { font-size: 14px; color: var(--cine-dim); margin-top: 2px; }
 .cine-mc-stats { display: flex; justify-content: center; gap: 18px; margin-top: 18px; }
@@ -260,7 +272,7 @@
 
 /* ── interview ── */
 
-.cine-interview { background: radial-gradient(1200px 600px at 50% 0%, rgba(76, 29, 149, 0.12), transparent 65%); border-block: 1px solid var(--cine-line); }
+.cine-interview { background: radial-gradient(1200px 600px at 50% 0%, rgba(124, 58, 237, 0.06), transparent 65%); border-block: 1px solid var(--cine-line); }
 .cine-int-stage { display: grid; gap: 26px; margin-top: 34px; justify-items: center; text-align: center; }
 .cine-int-q { font-size: clamp(20px, 2.6vw, 28px); font-weight: 700; max-width: 30ch; line-height: 1.4; }
 .cine-int-a { font-size: 17px; line-height: 1.7; color: var(--cine-mut); max-width: 58ch; text-align: start; border-inline-start: 2px solid var(--cine-line); padding-inline-start: 16px; min-height: 3em; }

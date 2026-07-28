@@ -149,7 +149,7 @@ export default function CareerPlanPage() {
                   </div>
                   <ul className="space-y-2">
                     {items.map((it, i) => (
-                      <li key={`${key}-${i}`} className="flex gap-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><span style={{ color: "var(--accent)" }}>→</span> {it}</li>
+                      <li key={`${key}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--accent)" }}>→</span> {it}</li>
                     ))}
                   </ul>
                 </div>

@@ -116,7 +116,7 @@ Sincerely,
           <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
             The <span style={{ color: "#fbbf24" }}>[brackets]</span> are yours to fill with real facts — the example achievements shown are illustrations of the level of specificity to aim for, not claims to copy.
           </p>
-          <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>
+          <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             {template}
           </div>
         </section>

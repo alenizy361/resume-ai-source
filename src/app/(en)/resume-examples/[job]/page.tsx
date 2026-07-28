@@ -109,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </div>
 
         <Section title={`Professional summary example for a ${j.title}`}>
-          <div className="card p-5 font-mono text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{j.summary}</div>
+          <div className="card p-5 font-mono text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.summary}</div>
         </Section>
 
         <Section title={`ATS keywords for a ${j.title} resume`}>
@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         <Section title={`Top skills for a ${j.title}`}>
           <ul className="grid gap-2 sm:grid-cols-2">
             {j.skills.map((s) => (
-              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "rgba(244,245,243,0.85)" }}><span className="text-accent">✓</span> {s}</li>
+              <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}><span className="text-accent">✓</span> {s}</li>
             ))}
           </ul>
         </Section>
@@ -132,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         <Section title={`Work experience bullet examples`}>
           <ul className="space-y-3">
             {j.bullets.map((b) => (
-              <li key={b} className="card p-4 text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>• {b}</li>
+              <li key={b} className="card p-4 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>• {b}</li>
             ))}
           </ul>
         </Section>
@@ -146,7 +146,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
         </Section>
 
         <Section title={`Common ${j.title} resume mistake`}>
-          <div className="card p-5 text-sm leading-relaxed" style={{ borderColor: "rgba(248,113,113,0.3)", color: "rgba(244,245,243,0.85)" }}>
+          <div className="card p-5 text-sm leading-relaxed" style={{ borderColor: "rgba(248,113,113,0.3)", color: "var(--muted)" }}>
             <span style={{ color: "#f87171" }}>Avoid this:</span> {j.mistake}
           </div>
         </Section>

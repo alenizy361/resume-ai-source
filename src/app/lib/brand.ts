@@ -111,8 +111,8 @@ export function salaryBasis(lang: "ar" | "en"): string {
  * keeps its own in-page CTAs and its three SEO landings funnel into it as before.
  */
 export const NAV_CTA = {
-  en: { href: "/builder", label: "Start Building" },
-  ar: { href: "/ar/builder", label: "ابدأ البناء" },
+  en: { href: "/builder", label: "Build my resume" },
+  ar: { href: "/ar/builder", label: "ابنِ سيرتك" },
 } as const;
 
 export function navCta(lang: "ar" | "en"): { href: string; label: string } {

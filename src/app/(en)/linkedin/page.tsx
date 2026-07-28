@@ -128,7 +128,7 @@ export default function LinkedInPage() {
                 <div className="space-y-3">
                   {result.headlineOptions.map((h, i) => (
                     <div key={`h-${i}`} className="flex items-start justify-between gap-3 rounded-lg px-3 py-2.5" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
-                      <p className="text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{h}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{h}</p>
                       <button onClick={() => copy(`h${i}`, h)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `h${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                     </div>
                   ))}
@@ -140,7 +140,7 @@ export default function LinkedInPage() {
                 <h3 className="font-bold">{ar ? "قسم النبذة" : "About section"}</h3>
                 <button onClick={() => copy("a", result.about)} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "a" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
               </div>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{result.about}</p>
+              <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{result.about}</p>
             </div>
             {result.experience.length > 0 && (
               <div className="card p-6">
@@ -152,7 +152,7 @@ export default function LinkedInPage() {
                         <h4 className="text-xs font-semibold" style={{ color: "var(--faint)" }}>{exp.role}</h4>
                         <button onClick={() => copy(`exp${i}`, exp.description)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `exp${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                       </div>
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "rgba(244,245,243,0.85)" }}>{exp.description}</p>
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{exp.description}</p>
                     </div>
                   ))}
                 </div>
