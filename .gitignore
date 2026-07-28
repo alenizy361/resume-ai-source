@@ -33,3 +33,14 @@ yarn-error.log*
 .idea/
 *.tsbuildinfo
 next-env.d.ts
+
+# Throwaway verification probes. `ops/*.test.mjs` and `ops/*.browser.mjs` are the
+# real suites and stay tracked; anything named `_tmp_*` is a one-off written to
+# measure a single finding in a browser and is meant to be deleted after.
+#
+# ANCHORED, following the lesson recorded above about `/build/`: an unanchored
+# pattern here would also swallow a legitimately-named file elsewhere in the tree.
+#
+# 21 of these reached commits f8db092..cdec754 via `git add -A` before this rule
+# existed. They are untracked in the same commit that adds it.
+/src/ops/_tmp_*
