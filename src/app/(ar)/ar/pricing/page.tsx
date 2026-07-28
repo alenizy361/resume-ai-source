@@ -53,7 +53,7 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
         )}
       </ul>
       <div className="mt-8">
-        <CheckoutButton plan={id} label={id === "single" ? "وصول ٢٤ ساعة" : "الحزمة الكاملة ←"} variant={highlight ? "accent" : "ghost"} />
+        <CheckoutButton ar plan={id} label={id === "single" ? "وصول ٢٤ ساعة" : "الحزمة الكاملة ←"} variant={highlight ? "accent" : "ghost"} />
       </div>
     </div>
   );

@@ -817,3 +817,7 @@ main {
   font: 600 11px/1.6 var(--font-mono, ui-monospace), monospace;
   color: var(--faint);
 }
+
+/* Checkout inputs: a clear focus ring, because a payment field a user cannot tell is active
+   is where they stall. Scoped to the class the modal sets. */
+.ck-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }

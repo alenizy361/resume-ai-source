@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { trackStep } from "@/app/lib/funnelClient.ts";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import BrandOrb from "./BrandOrb";
@@ -101,7 +102,9 @@ export default function CheckoutButton({
       try {
         await loadSdk();
         if (cancelled) return;
-        const payment = new window.PaylinkPayments({ mode: PAY_MODE, defaultLang: ar ? "ar" : "en", backgroundColor: "#101316" });
+        /* White to match the light modal — the SDK paints the card fields' own background from
+           this, and #101316 left three dark inputs sitting in a white form. */
+        const payment = new window.PaylinkPayments({ mode: PAY_MODE, defaultLang: ar ? "ar" : "en", backgroundColor: "#ffffff" });
         await payment.initPayment(`#cn-${uid}`, `#nm-${uid}`, `#yy-${uid}`, `#mm-${uid}`, `#cv-${uid}`);
         if (cancelled) return;
         payRef.current = payment;
@@ -139,7 +142,13 @@ export default function CheckoutButton({
         other: "Other ways: Tamara · Tabby · Apple Pay · STC →", secure: "🔒 Secure via Paylink · 7-day money-back",
         cardErr: "Please check your card details and try again." };
 
-  const inp = { background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" } as const;
+  /* A visible field on white: its own faint fill, a real border that darkens on focus, 16px text
+     (any smaller and iOS zooms the page on focus), and a 46px min height for the thumb. */
+  const inp = {
+    background: "#fbfbfd", border: "1.5px solid var(--line)", color: "var(--fg)",
+    fontSize: 16, minHeight: 46, borderRadius: 12,
+  } as const;
+  const lbl = { display: "block", fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 6 } as const;
 
   async function createInvoice(e: React.FormEvent) {
     e.preventDefault();
@@ -184,54 +193,116 @@ export default function CheckoutButton({
         className={className ?? (variant === "accent" ? "btn-accent block w-full py-3 text-center" : "btn-ghost block w-full py-3 text-center font-semibold")}
         style={variant === "ghost" ? { color: "var(--fg)" } : undefined}>{label}</button>
 
-      {open && (
-        <div className="fixed inset-0 flex items-center justify-center p-4"
-          /* `--z-dialog`, the top of the one layer scale. It was `z-[100]`, an arbitrary
-             number chosen to be above whatever else existed at the time. */
-          style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", zIndex: "var(--z-dialog)" }}
+      {open && createPortal(
+        /* Portalled to <body>. A `position: fixed` overlay is trapped by ANY ancestor with a
+           transform/filter/will-change — the pricing card's entrance animation did exactly that,
+           dropping the modal 1400px down the page instead of over the viewport. A portal is the
+           correct home for a modal regardless. */
+        <div className="fixed inset-0 flex items-end justify-center p-0 sm:items-center sm:p-4"
+          /* `--z-dialog`, the top of the one layer scale. */
+          style={{ background: "rgba(15,20,35,0.5)", backdropFilter: "blur(3px)", zIndex: "var(--z-dialog)" }}
           onClick={() => !loading && !paying && reset()}>
-          <div dir={ar ? "rtl" : "ltr"} className={`relative w-full max-w-sm overflow-hidden rounded-3xl p-7 ${ar ? "text-right" : "text-left"}`} style={{ background: "rgba(10,14,26,0.96)", border: "1px solid rgba(245,184,64,0.35)", boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }} onClick={(e) => e.stopPropagation()}>
-            <div className="relative mb-3 flex items-center gap-2.5">
-              <BrandOrb variant="button" size={30} />
-              <div className="font-mono text-xs tracking-widest" style={{ color: "var(--gold)", textTransform: ar ? "none" : "uppercase" }}>{t.planLine}</div>
+          {/* A white sheet: a bottom sheet on phones (thumb-reachable), a centered card on desktop. */}
+          <div dir={ar ? "rtl" : "ltr"} role="dialog" aria-modal="true" aria-label={t.title}
+            className={`relative w-full max-w-md overflow-hidden rounded-t-3xl p-6 sm:rounded-3xl sm:p-7 ${ar ? "text-right" : "text-left"}`}
+            style={{ background: "#ffffff", color: "var(--fg)", boxShadow: "0 -8px 40px rgba(15,20,35,0.18), 0 20px 60px rgba(15,20,35,0.22)" }}
+            onClick={(e) => e.stopPropagation()}>
+
+            {/* A grabber, so the sheet reads as dismissable on a phone. */}
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full sm:hidden" style={{ background: "var(--line)" }} aria-hidden />
+
+            {/* Order summary: the plan and its price, stated once, in a soft panel. */}
+            <div className="mb-5 flex items-center justify-between gap-3 rounded-2xl px-4 py-3"
+              style={{ background: "#f6f7fa", border: "1px solid var(--line)" }}>
+              <div className="flex items-center gap-2.5">
+                <BrandOrb variant="button" size={28} />
+                <span className="text-sm font-bold">{ar ? "سيرة" : "Sira"}</span>
+              </div>
+              <span className="text-sm font-semibold" style={{ color: "var(--fg)" }}>{t.planLine}</span>
             </div>
 
             {phase === "details" ? (
               <div className="relative">
-                <h3 className="text-xl font-bold">{t.title}</h3>
+                <h3 className="text-xl font-extrabold">{t.title}</h3>
                 <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
-                <form onSubmit={createInvoice} className="mt-5 space-y-3">
-                  <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t.name} required className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.email} required dir="ltr" className={`w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none ${ar ? "text-right" : ""}`} style={inp} />
-                  <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder={t.mobile} inputMode="tel" required dir="ltr" className={`w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none ${ar ? "text-right" : ""}`} style={inp} />
-                  {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
-                  <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">{loading ? t.starting : t.pay}</button>
-                  <button type="button" onClick={reset} disabled={loading} className="w-full py-1 text-center text-xs" style={{ color: "var(--faint)" }}>{t.cancel}</button>
-                  <p className="pt-1 text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>{t.secure}</p>
+                <form onSubmit={createInvoice} className="mt-5 space-y-3.5">
+                  <div>
+                    <label htmlFor={`buyer-name-${uid}`} style={lbl}>{t.name}</label>
+                    <input id={`buyer-name-${uid}`} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} required className="ck-field w-full px-4 py-3" style={inp} />
+                  </div>
+                  <div>
+                    <label htmlFor={`buyer-email-${uid}`} style={lbl}>{t.email}</label>
+                    <input id={`buyer-email-${uid}`} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required dir="ltr" className={`ck-field w-full px-4 py-3 ${ar ? "text-right" : ""}`} style={inp} />
+                  </div>
+                  <div>
+                    <label htmlFor={`buyer-mobile-${uid}`} style={lbl}>{t.mobile}</label>
+                    <input id={`buyer-mobile-${uid}`} autoComplete="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} inputMode="tel" required dir="ltr" className={`ck-field w-full px-4 py-3 ${ar ? "text-right" : ""}`} style={inp} />
+                  </div>
+                  {error && <div className="rounded-xl px-3 py-2.5 text-sm" style={{ background: "rgba(220,38,38,0.08)", color: "#b91c1c", border: "1px solid rgba(220,38,38,0.2)" }}>{error}</div>}
+                  <button type="submit" disabled={loading} className="btn-accent w-full disabled:opacity-50" style={{ padding: "14px", fontSize: 16 }}>{loading ? t.starting : t.pay}</button>
+                  <button type="button" onClick={reset} disabled={loading} className="w-full py-1 text-center text-sm" style={{ color: "var(--faint)" }}>{t.cancel}</button>
                 </form>
+                <TrustRow ar={ar} secure={t.secure} />
               </div>
             ) : (
               <div className="relative">
-                <h3 className="text-xl font-bold">{t.cardTitle}</h3>
+                <h3 className="text-xl font-extrabold">{t.cardTitle}</h3>
                 {/* Inline card form — Paylink SDK binds to these (readonly) fields. */}
-                <div className="mt-5 space-y-3">
-                  <input id={`nm-${uid}`} readOnly placeholder={t.cardName} dir="ltr" className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
-                  <input id={`cn-${uid}`} readOnly placeholder={t.cardNo} inputMode="numeric" dir="ltr" className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inp} />
-                  <div className="flex gap-2" dir="ltr">
-                    <input id={`mm-${uid}`} readOnly placeholder={t.mm} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
-                    <input id={`yy-${uid}`} readOnly placeholder={t.yy} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
-                    <input id={`cv-${uid}`} readOnly placeholder={t.cvv} className="w-full rounded-lg px-3 py-2.5 text-center text-sm focus:outline-none" style={inp} />
+                <div className="mt-5 space-y-3.5">
+                  <div>
+                    <label htmlFor={`nm-${uid}`} style={lbl}>{t.cardName}</label>
+                    <input id={`nm-${uid}`} readOnly dir="ltr" className="ck-field w-full px-4 py-3" style={inp} />
                   </div>
-                  {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
-                  <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full py-3 disabled:opacity-50">{paying ? t.processing : t.payNow}</button>
-                  <a href={payUrl || "#"} className="block w-full py-2 text-center text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
-                  <p className="text-center font-mono text-[11px]" style={{ color: "var(--faint)" }}>{t.secure}</p>
+                  <div>
+                    <label htmlFor={`cn-${uid}`} style={lbl}>{t.cardNo}</label>
+                    <input id={`cn-${uid}`} readOnly inputMode="numeric" dir="ltr" className="ck-field w-full px-4 py-3" style={inp} />
+                  </div>
+                  <div className="flex gap-2.5" dir="ltr">
+                    <div className="flex-1">
+                      <label htmlFor={`mm-${uid}`} style={lbl}>{t.mm}</label>
+                      <input id={`mm-${uid}`} readOnly className="ck-field w-full px-3 py-3 text-center" style={inp} />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor={`yy-${uid}`} style={lbl}>{t.yy}</label>
+                      <input id={`yy-${uid}`} readOnly className="ck-field w-full px-3 py-3 text-center" style={inp} />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor={`cv-${uid}`} style={lbl}>{t.cvv}</label>
+                      <input id={`cv-${uid}`} readOnly className="ck-field w-full px-3 py-3 text-center" style={inp} />
+                    </div>
+                  </div>
+                  {error && <div className="rounded-xl px-3 py-2.5 text-sm" style={{ background: "rgba(220,38,38,0.08)", color: "#b91c1c", border: "1px solid rgba(220,38,38,0.2)" }}>{error}</div>}
+                  <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full disabled:opacity-50" style={{ padding: "14px", fontSize: 16 }}>{paying ? t.processing : t.payNow}</button>
+                  <a href={payUrl || "#"} className="block w-full py-2 text-center text-sm font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
                 </div>
+                <TrustRow ar={ar} secure={t.secure} />
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
+  );
+}
+
+/**
+ * The trust row under the checkout form.
+ *
+ * Small security signals lift payment conversion (Stripe/web.dev): the accepted networks named,
+ * an explicit "encrypted" line, and the money-back promise. Wordmarks are TEXT, not logo images —
+ * a broken or mis-scaled card logo reads as LESS trustworthy than none, and text cannot 404.
+ */
+function TrustRow({ ar, secure }: { ar: boolean; secure: string }) {
+  const nets = ["mada", "VISA", "Mastercard", "Apple Pay"];
+  return (
+    <div className="mt-5 border-t pt-4" style={{ borderColor: "var(--line)" }}>
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+        {nets.map((n) => (
+          <span key={n} className="rounded-md px-2 py-1 text-[11px] font-bold" style={{ background: "#f6f7fa", border: "1px solid var(--line)", color: "var(--muted)" }}>{n}</span>
+        ))}
+      </div>
+      <p className="mt-3 text-center text-xs" style={{ color: "var(--faint)" }}>{secure}</p>
+    </div>
   );
 }
