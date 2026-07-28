@@ -23,6 +23,8 @@ export default function CareerRoadScene({ lang }: { lang: "ar" | "en" }) {
     const root = roadRef.current;
     if (!root) return;
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    /* External-state branch (reduced motion) — the rule's carve-out. */
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reduced) { setLit(t.steps.length); return; }
     const stops = [...root.querySelectorAll("[data-stop]")];
     const io = new IntersectionObserver((entries) => {

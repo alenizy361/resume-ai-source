@@ -28,6 +28,10 @@ export function useScene<T extends HTMLElement>(stageDelays: number[] = []) {
     const el = ref.current;
     if (!el) return;
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    /* A LOAD from external browser state (the media query), the case the rule's own docs carve
+       out — the server cannot know reduced-motion, so the first client pass must set it. Same
+       precedent as BuilderProvider's storage hydration. */
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reduced) { setOn(true); setStage(total); return; }
 
     let timers: ReturnType<typeof setTimeout>[] = [];

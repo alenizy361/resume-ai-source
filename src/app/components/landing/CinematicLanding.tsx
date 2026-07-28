@@ -41,6 +41,9 @@ export default function CinematicLanding({ lang }: { lang: "ar" | "en" }) {
   useEffect(() => {
     try {
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+      /* A read of sessionStorage + matchMedia — external stores the server cannot see; the
+         decision must be made once, on the client, after mount. The rule's documented carve-out. */
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (!reduced && !sessionStorage.getItem(INTRO_SEEN_KEY)) setIntro(true);
     } catch { /* storage blocked — no film, full page */ }
   }, []);

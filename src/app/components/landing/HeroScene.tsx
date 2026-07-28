@@ -23,6 +23,8 @@ function Typed({ text, go, instant, onDone }: { text: string; go: boolean; insta
   const [n, setN] = useState(instant ? text.length : 0);
   useEffect(() => {
     if (!go) return;
+    /* External-state branch (reduced motion resolved on the client) — the rule's carve-out. */
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (instant) { setN(text.length); onDone?.(); return; }
     let i = 0;
     const id = setInterval(() => {
