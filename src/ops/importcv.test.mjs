@@ -304,6 +304,20 @@ console.log("\n── a scan that cannot be read has somewhere to go ──");
 
   /* And it must refuse a stub rather than opening a review screen with nothing in it. */
   ok("a too-short paste is refused with its own message", /pasteTooShort/.test(src));
+
+  /*
+   * The tick meant two different things in one list. Positions and education go onto the CV as
+   * confirmed content; skills, credentials and languages arrive as SUGGESTIONS to accept — the
+   * reducer's invariant, and the right one. The panel did not say so, so ticking "Skills · 12" and
+   * pressing the button left the CV's skills line empty with no explanation anywhere on screen.
+   */
+  ok("both languages have the offered-for-approval note", /offered: "Offered for approval/.test(src)
+    && /offered: "تُعرَض للاعتماد/.test(src));
+  const ticks = src.slice(src.indexOf("<Tick label={c.skills}"), src.indexOf("{parsed.unread.length > 0"));
+  ok("skills, credentials and languages each carry it",
+    (ticks.match(/note=\{c\.offered\}/g) || []).length === 3, ticks);
+  ok("and education does not, because education really is added",
+    !/label=\{c\.education\}[^/]*note=/.test(ticks));
 }
 
 /* ── reading a scan or a photo, and the promise it costs ── */

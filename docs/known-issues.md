@@ -3331,3 +3331,44 @@ the job above are never eaten as the next job's title; a line that already carri
 stays a duty; and held dates with nothing job-shaped beneath them still reach `unread` rather than
 opening an invented position — `EXPERIENCE / 2020 - 2023 / • Did a thing` imports no role, as
 before.
+
+### F-R7 · P2 · The intro dialog now contains focus — FIXED
+
+`CinematicIntro` is a `role="dialog"` that covers the whole viewport in black. It locked scroll and
+put initial focus on Skip, and stopped there. One Tab press walked focus into the navigation
+underneath — links that are covered, unreadable, and still focusable *and clickable*. `aria-modal`
+was not even claimed, and claiming it without a barrier would only have made the markup lie to a
+screen reader.
+
+Both halves shipped together: `aria-modal="true"`, and `inert` on every SIBLING of the dialog for
+exactly the lifetime of the scroll lock — same effect, same cleanup, so the barrier cannot outlive
+the scene or be lifted early. Siblings rather than `body`'s children because that is where the
+component is mounted and it should not have to know which. No trap code: the dialog owns two
+controls (Skip, CTA) and focus simply cycles between them.
+
+Verified in a real browser, not only in source: the intro mounts, every sibling carries `inert`,
+focus starts on Skip, seven Tab presses never leave the scene, Escape ends it, nothing is left
+`inert`, the page scrolls again and the navigation behind is focusable once more. Source assertions
+in `ops/motion.test.mjs` hold the shape, because the intro plays once per tab session and a browser
+run that has already seen it never mounts it again.
+
+### F-R8 · P1 · The import review said "ticked" and meant two different things — FIXED
+
+The reducer is right and deliberate: positions and education arrive as CONFIRMED content, while
+skills, credentials and languages arrive as SUGGESTIONS the user still has to accept. That is the
+builder's central invariant — `profile` holds only confirmed content — and it is what makes "nothing
+appears until you approve it" true by construction rather than by a render-time filter.
+
+The panel did not say so. An identical ticked checkbox sat beside both kinds, so ticking
+`Skills · 12` and pressing "Use what is ticked" promised twelve skills and delivered an empty skills
+line, with no explanation anywhere on the screen. The user's reasonable conclusion is that the import
+lost them.
+
+Fixed where the decision is made rather than after it: `Tick` takes a `note`, and the three groups
+that arrive as offers carry *"Offered for approval — these arrive as suggestions and are not on the
+CV until you accept them"* in both languages. Education deliberately does not, because education
+really is added. Asserted three-carry-it-and-education-does-not in `ops/importcv.test.mjs`, and
+confirmed on the rendered panel in a browser.
+
+*Same shape as most of this session's worst findings: the codebase had already written the right
+answer, and the surface that reports it had not been told.*

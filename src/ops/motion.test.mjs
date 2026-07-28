@@ -365,5 +365,31 @@ console.log("\n── the entrance cannot switch off the press, and cannot cost 
   ok("the busy ring survives reduced motion as a static ring", /\.t-busy::after\s*\{[^}]*opacity/.test(guard));
 }
 
+
+/*
+ * ── the full-screen scene must contain focus, not merely claim to ──
+ *
+ * `CinematicIntro` is a `role="dialog"` covering the whole viewport in black. It locked scroll and
+ * put initial focus on Skip, and stopped there: one Tab press walked focus into the navigation
+ * underneath — links that are covered, unreadable and still focusable and clickable. `aria-modal`
+ * without a barrier is a claim the markup does not honour, so both halves are asserted together.
+ *
+ * Source-asserted rather than measured in a browser because the intro plays once per tab session and
+ * a Playwright run that has already seen it never mounts it again.
+ */
+{
+  const src = read("app/components/landing/CinematicIntro.tsx");
+  ok("the intro still declares itself a dialog", /role="dialog"/.test(src));
+  ok("and now says it is modal", /aria-modal="true"/.test(src));
+  ok("everything outside it is made inert while it plays", /setAttribute\("inert", ""\)/.test(src));
+  ok("and inert is lifted again on the way out", /removeAttribute\("inert"\)/.test(src));
+  /* The barrier is only honest if it goes up for the whole scene: applied in the same effect that
+     locks scroll, removed in the same cleanup that restores it. */
+  const eff = src.slice(src.indexOf("document.body.style.overflow = \"hidden\""));
+  ok("the barrier and the scroll lock share one lifetime",
+    eff.indexOf("setAttribute(\"inert\"") > 0
+    && eff.indexOf("removeAttribute(\"inert\"") > eff.indexOf("style.overflow = prevB"));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

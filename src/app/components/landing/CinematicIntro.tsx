@@ -10,7 +10,8 @@
  *     full page is always underneath it, and a crawler or reduced-motion reader never meets
  *     it at all.
  *   · Skippable at every moment: a visible Skip control, Escape, and the CTA all end it.
- *     Focus starts on Skip so a keyboard user's first Tab press is already on the exit.
+ *     Focus starts on Skip so a keyboard user's first Tab press is already on the exit, and
+ *     every sibling is `inert` while it plays so that Tab cannot leave the scene at all.
  *   · Once per tab session (`sessionStorage`), matching the product's own definition of a
  *     visit (`resumeStore`'s rule): a refresh does not replay a film at somebody mid-task.
  *   · ~9 seconds total, and the page behind stays scrollable the moment it leaves.
@@ -68,6 +69,22 @@ export default function CinematicIntro({ lang, onDone }: { lang: "ar" | "en"; on
     const prevB = document.body.style.overflow, prevR = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    /*
+     * ── and it must not be reachable by Tab either ──
+     *
+     * `role="dialog"` said "modal" to a screen reader and meant nothing to the keyboard: one Tab
+     * press from Skip walked focus straight into the navigation underneath — links that are covered
+     * by a black full-screen scene, unreadable, and still focusable and clickable. `aria-modal`
+     * without an actual barrier is a claim the markup does not honour.
+     *
+     * `inert` on every SIBLING is the whole fix: nothing outside can take focus, and the dialog's
+     * own two controls (Skip, CTA) cycle between themselves with no trap code to get wrong. Applied
+     * to siblings rather than to `body`'s children because that is where this component is mounted,
+     * and it does not have to know which. Restored on unmount, whatever ended the scene.
+     */
+    const outside = Array.from(rootRef.current?.parentElement?.children ?? [])
+      .filter((el) => el !== rootRef.current);
+    outside.forEach((el) => el.setAttribute("inert", ""));
 
     const timers = [
       setTimeout(() => { setPhase(1); setOrbState("awakening"); }, 350),
@@ -88,12 +105,13 @@ export default function CinematicIntro({ lang, onDone }: { lang: "ar" | "en"; on
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevB;
       document.documentElement.style.overflow = prevR;
+      outside.forEach((el) => el.removeAttribute("inert"));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div ref={rootRef} className="cine-intro" data-phase={phase} data-leaving={leaving ? "" : undefined} role="dialog" aria-label={t.lines[2]}>
+    <div ref={rootRef} className="cine-intro" data-phase={phase} data-leaving={leaving ? "" : undefined} role="dialog" aria-modal="true" aria-label={t.lines[2]}>
       <button ref={skipRef} className="cine-skip" onClick={finish}>{t.skip}</button>
 
       <div

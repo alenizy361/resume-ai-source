@@ -58,6 +58,7 @@ const C = {
     use: "Use what is ticked",
     cancel: "Start from scratch instead",
     budget: (n: number) => `${n} extra ${n === 1 ? "duty" : "duties"} will be offered rather than added — a current job shows six, a past one four.`,
+    offered: "Offered for approval — these arrive as suggestions and are not on the CV until you accept them.",
     nothing: "Tick at least one thing to bring across.",
     done: "Brought across. Everything is editable in the sections below.",
     saved: "Or continue from a CV you already made here",
@@ -92,6 +93,7 @@ const C = {
     use: "استخدم ما حدّدته",
     cancel: "أبدأ من الصفر",
     budget: (n: number) => `${n} مهمة إضافية ستُعرض عليك بدل إضافتها — الوظيفة الحالية تُظهر ستاً والسابقة أربعاً.`,
+    offered: "تُعرَض للاعتماد — تصل كاقتراحات ولا تدخل السيرة حتى تعتمدها.",
     nothing: "حدّد شيئاً واحداً على الأقل لنقله.",
     done: "تم النقل. وكل شيء قابل للتعديل في الأقسام أدناه.",
     saved: "أو واصل من سيرة أنشأتها هنا",
@@ -459,13 +461,15 @@ export default function ImportPanel({
             </div>
           )}
 
-          <Tick label={c.skills} items={parsed.skills} on={picks.skills}
+          {/* Skills, credentials and languages arrive as suggestions; positions and education go
+              onto the CV. The tick is the same control either way, so the difference is said. */}
+          <Tick label={c.skills} items={parsed.skills} on={picks.skills} note={c.offered}
             set={(v) => setPicks((p) => ({ ...p, skills: v }))} />
           <Tick label={c.education} items={parsed.education} on={picks.education}
             set={(v) => setPicks((p) => ({ ...p, education: v }))} />
-          <Tick label={c.certs} items={parsed.certifications} on={picks.certs}
+          <Tick label={c.certs} items={parsed.certifications} on={picks.certs} note={c.offered}
             set={(v) => setPicks((p) => ({ ...p, certs: v }))} />
-          <Tick label={c.langs} items={parsed.languages} on={picks.langs}
+          <Tick label={c.langs} items={parsed.languages} on={picks.langs} note={c.offered}
             set={(v) => setPicks((p) => ({ ...p, langs: v }))} />
 
           {parsed.unread.length > 0 && (
@@ -504,11 +508,20 @@ export default function ImportPanel({
   );
 }
 
-/** One tickable group, with a preview of what it contains. Hidden when empty. */
+/**
+ * One tickable group, with a preview of what it contains. Hidden when empty.
+ *
+ * `note` exists because the tick meant two different things in one list. Positions and education go
+ * onto the CV as CONFIRMED content; skills, credentials and languages arrive as SUGGESTIONS the user
+ * still has to accept — that is the reducer's deliberate invariant (`profile` holds only confirmed
+ * content), and it is right. What was wrong was the panel: an identical ticked checkbox beside both
+ * kinds promised the same outcome for both, so a user who ticked "Skills · 12" and pressed the
+ * button found the skills line of their CV still empty and no explanation for it anywhere.
+ */
 function Tick({
-  label, items, on, set,
+  label, items, on, set, note,
 }: {
-  label: string; items: string[]; on: boolean; set: (v: boolean) => void;
+  label: string; items: string[]; on: boolean; set: (v: boolean) => void; note?: string;
 }) {
   if (!items.length) return null;
   return (
@@ -518,6 +531,12 @@ function Tick({
         <b>{label}</b> <span style={{ color: "var(--faint)" }}>· {items.length}</span>
         <br />
         <span style={{ color: "var(--muted)" }}>{items.slice(0, 6).join(" · ")}{items.length > 6 ? " …" : ""}</span>
+        {note && (
+          <>
+            <br />
+            <span style={{ color: "var(--faint)" }}>{note}</span>
+          </>
+        )}
       </span>
     </label>
   );
