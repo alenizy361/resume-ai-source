@@ -778,3 +778,19 @@
 @media (prefers-reduced-motion: reduce) {
   .scene-score-fill { transition: none; }
 }
+
+/*
+ * ── Arabic letterforms JOIN; tracking breaks the joins ──
+ *
+ * Every letter-spacing in this stylesheet is Latin typography — mono kickers, walk-step
+ * counters, tightened display headings. On /ar the same classes carry ARABIC text, and the
+ * global guard (`[dir="rtl"] * { letter-spacing: normal }` in globals.css) silently loses to
+ * them: equal 0,1,0 specificity, and this file is imported later, so source order decides.
+ * Measured live before this rule existed: 46 Arabic-text elements on /ar carried non-zero
+ * computed letter-spacing — "شاهدها تعمل" rendered as disconnected glyphs in a monospace
+ * kicker. This selector (0,2,0, declared last) outranks every class rule above it, and the
+ * inline letterSpacing in Landing.tsx — which no stylesheet can beat — is conditional on the
+ * language at the source. `ops/design.test.mjs` asserts exactly this and must stay green when
+ * run against a live server (it is NOT part of `npm test` — it needs a running app).
+ */
+.landing-root[dir="rtl"] * { letter-spacing: normal; }

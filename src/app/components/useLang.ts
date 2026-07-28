@@ -28,6 +28,17 @@ function readLang(): boolean {
     const q = new URLSearchParams(window.location.search).get("lang");
     if (q === "ar") return true;
     if (q === "en") return false;
+    /*
+     * The PATH speaks before any stored preference: a page under `/ar` IS Arabic — that is what
+     * the route group means — and this check is what keeps the `<html lang>`/`dir` sync effect
+     * below the no-op it promises to be on those pages. Found the hard way: `/ar/account` (the one
+     * `(ar)`-group page whose client calls this hook) in a fresh session had no `?lang` and no
+     * stored choice, so this function answered "en" and the effect OVERWROTE the server's
+     * `dir="rtl"` document with `ltr` — re-enabling the LTR-only chip letter-spacing on Arabic
+     * text and mislabeling a fully Arabic page for screen readers.
+     */
+    const p = window.location.pathname;
+    if (p === "/ar" || p.startsWith("/ar/")) return true;
     return (localStorage.getItem("ra_lang") || localStorage.getItem("ra_lang_choice") || "en") === "ar";
   } catch {
     /* Storage blocked, or no window. English is the safe answer — it is what the server sent. */

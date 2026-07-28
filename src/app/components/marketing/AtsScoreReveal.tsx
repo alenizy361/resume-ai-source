@@ -79,7 +79,9 @@ export default function AtsScoreReveal({ lang, before = 42, after = 91 }: { lang
           </svg>
           <div className="score-num"><b>{n}</b><span>{t.scoreLabel}</span></div>
         </div>
-        <p style={{ textAlign: "center", marginTop: 16, fontSize: 14, color: "var(--muted)", fontFamily: "var(--font-mono, monospace)", letterSpacing: ".04em", textTransform: "uppercase" }}>
+        {/* Tracking is Latin typography — zero on Arabic, whose letters join (inline style,
+            so the stylesheet-level RTL guard cannot reach it). */}
+        <p style={{ textAlign: "center", marginTop: 16, fontSize: 14, color: "var(--muted)", fontFamily: "var(--font-mono, monospace)", letterSpacing: lang === "ar" ? 0 : ".04em", textTransform: "uppercase" }}>
           {t.label}
         </p>
       </div>

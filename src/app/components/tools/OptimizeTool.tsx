@@ -94,6 +94,7 @@ import GapFiller from "@/app/components/GapFiller";
 import CheckoutButton from "@/app/components/CheckoutButton";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import { addScan, saveResume } from "@/app/lib/localdata";
 import MyCvPicker from "@/app/components/MyCvPicker";
 import { useOwner } from "@/app/components/useOwner";
@@ -629,6 +630,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
       lang={ar ? "ar" : "en"}
       width="full"
       authNav={<AuthNav ar={ar} />}
+      mobileMenu={<MobileMenu ar={ar} />}
       langToggle={ar ? "/optimize" : "/ar/optimize"}
     >
       <div className="mx-auto max-w-6xl">

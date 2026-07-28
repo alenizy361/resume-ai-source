@@ -4,6 +4,7 @@ import useLang from "@/app/components/useLang";
 import MyCvPicker from "@/app/components/MyCvPicker";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import { navCta } from "@/app/lib/brand";
 import { type MyCv, outLangFor } from "@/app/lib/myCvs";
 
@@ -76,7 +77,7 @@ export default function LinkedInPage() {
   }
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/linkedin" : "/ar/linkedin"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "محسّن لينكدإن" : "LinkedIn Optimizer"}</div>

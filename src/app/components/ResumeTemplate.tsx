@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { isHeading } from "@/app/lib/cvHeadings";
+import { hasArabic, isHeading } from "@/app/lib/cvHeadings";
 
 /**
  * Visual, designed resume template with a live preview + a one-click designed
@@ -17,7 +17,7 @@ import { isHeading } from "@/app/lib/cvHeadings";
  */
 
 interface Section { heading: string; lines: string[] }
-interface Parsed { name: string; contact: string; sections: Section[] }
+interface Parsed { name: string; contact: string; subtitle: string; sections: Section[] }
 
 /*
  * Heading detection is shared with the Word export via `lib/cvHeadings.ts`.
@@ -60,6 +60,26 @@ function parse(text: string): Parsed {
     }
   }
 
+  /*
+   * A short orphan line here is the PROFESSIONAL TITLE, not summary text. Every
+   * builder-assembled CV has this shape — `assembleResume` deliberately emits the target
+   * role as a bare line under the contact ("the role headline on the CV") — and without
+   * this the line was wrapped in a fabricated "SUMMARY" section rendered directly above
+   * the real PROFESSIONAL SUMMARY heading: two near-duplicate headings back to back, the
+   * fabricated one hardcoded English even on a fully Arabic resume. A title renders under
+   * the name, where a recruiter expects it. The guards keep real summaries out: one line,
+   * short, no sentence-ending punctuation, not contact-shaped.
+   */
+  let subtitle = "";
+  if (
+    i < nonEmpty.length && nonEmpty[i].trim() && !isHeading(nonEmpty[i])
+    && nonEmpty[i].trim().length < 70 && !looksContact(nonEmpty[i])
+    && !/[.!؟?،]$/.test(nonEmpty[i].trim())
+  ) {
+    subtitle = nonEmpty[i].trim();
+    i++;
+  }
+
   const sections: Section[] = [];
   let cur: Section | null = null;
   for (; i < nonEmpty.length; i++) {
@@ -70,11 +90,13 @@ function parse(text: string): Parsed {
     } else if (cur) {
       cur.lines.push(line);
     } else if (line.trim()) {
-      cur = { heading: "SUMMARY", lines: [line] };
+      /* A real orphan paragraph still gets a summary section — in ITS language. The
+         hardcoded English word was the first heading of Arabic CVs. */
+      cur = { heading: hasArabic(line) ? "الملخص" : "SUMMARY", lines: [line] };
       sections.push(cur);
     }
   }
-  return { name, contact, sections };
+  return { name, contact, subtitle, sections };
 }
 
 // ALL variants are single-column: research consensus (Jobscan, Resume.io, and
@@ -241,13 +263,30 @@ export default function ResumeTemplate({ text, name = "resume", accent = "#0f766
 
       {/* Live preview (also the capture source). dir drives RTL for Arabic;
           the contact line stays LTR so phone/email/dates read correctly. */}
-      <div ref={wrapRef} className={preview ? "" : "rounded-xl"} style={preview ? undefined : { border: "1px solid var(--line)", overflow: "hidden", height: fitWidth && pageH ? pageH * fit : undefined }}>
+      {/*
+        `dir` on the CLIP WRAPPER is load-bearing, not decoration. The 794px page inside is wider
+        than this wrapper, and where an oversized block overflows — and therefore which side of it
+        the clip box shows — is decided by the wrapper's OWN direction, while `transformOrigin`
+        below follows the CONTENT's. When the two disagreed (an Arabic CV previewed inside the
+        English UI, or the reverse), the scale pulled the page toward the side the wrapper was NOT
+        showing: measured live, the builder's preview pane rendered 0% of the page — a completely
+        blank box — and the design step's large preview lost ~12% off one edge. Stamping the
+        wrapper with the content's direction makes anchor and origin agree by construction, in
+        either UI.
+      */}
+      <div ref={wrapRef} dir={isRtl ? "rtl" : "ltr"} className={preview ? "" : "rounded-xl"} style={preview ? undefined : { border: "1px solid var(--line)", overflow: "hidden", height: fitWidth && pageH ? pageH * fit : undefined }}>
         <div style={fitWidth ? { width: 794, transform: `scale(${fit})`, transformOrigin: isRtl ? "top right" : "top left" } : undefined}>
-        <div ref={ref} dir={isRtl ? "rtl" : "ltr"} lang={isRtl ? "ar" : undefined} style={{ width: 794, minHeight: 1123, background: "#ffffff", color: "#374151", fontFamily: isRtl ? "'Segoe UI', Tahoma, Arial, sans-serif" : "Arial, Helvetica, sans-serif", fontSize: 13.5, textAlign: isRtl ? "right" : "left" }}>
+        {/* `overflowWrap: anywhere` (inherited): an unbroken token longer than the column — a
+            licence number, a tracking code — used to paint through the page's margin and get
+            clipped mid-glyph at the sheet edge, in the preview and in the captured PDF alike.
+            Text with natural break points is unaffected. */}
+        <div ref={ref} dir={isRtl ? "rtl" : "ltr"} lang={isRtl ? "ar" : undefined} style={{ width: 794, minHeight: 1123, background: "#ffffff", color: "#374151", fontFamily: isRtl ? "'Segoe UI', Tahoma, Arial, sans-serif" : "Arial, Helvetica, sans-serif", fontSize: 13.5, textAlign: isRtl ? "right" : "left", overflowWrap: "anywhere" }}>
           {/* Header: white background always (colored header blocks confuse some
               parsers and waste toner). Name ≈ 22pt; contact one line below. */}
           <div style={{ padding: "40px 64px 0", textAlign: headerCentered ? "center" : "start" }}>
             <div style={{ fontSize: 29, fontWeight: serif ? 700 : 800, letterSpacing: isRtl ? 0 : serif ? 1.5 : 0.3, color: strict || variant === "minimal" ? "#111827" : accent, fontFamily: serif ? "Georgia, 'Times New Roman', serif" : undefined }}>{parsed.name}</div>
+            {/* The professional title, under the name where a recruiter expects it — see parse(). */}
+            {parsed.subtitle && <div style={{ marginTop: 5, fontSize: 14.5, fontWeight: 600, color: "#374151", letterSpacing: isRtl ? 0 : 0.2 }}>{parsed.subtitle}</div>}
             {parsed.contact && <div dir="ltr" style={{ marginTop: 8, fontSize: 12.5, color: "#4b5563", textAlign: headerCentered ? "center" : isRtl ? "right" : "left", unicodeBidi: "plaintext" }}>{parsed.contact}</div>}
             <div style={{ marginTop: 14, borderBottom: strict ? "1.5px solid #111827" : variant === "classic" ? `3px solid ${accent}` : variant === "modern" ? `2px solid ${accent}` : serif ? "1px solid #9ca3af" : "1.5px solid #d1d5db" }} />
           </div>

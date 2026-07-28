@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import { navCta } from "@/app/lib/brand";
 
 interface KeywordResult {
@@ -71,7 +72,7 @@ export default function JdKeywordExtractor({ defaultAr }: { defaultAr: boolean }
   }
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "مستخرج كلمات الإعلان الوظيفي" : "Job Description Keyword Extractor"}</div>

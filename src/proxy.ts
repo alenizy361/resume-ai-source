@@ -27,6 +27,14 @@ import type { NextRequest } from "next/server";
  * canonicalization this list exists for only makes sense for a route with distinct Arabic
  * content to canonicalize TO — these two have none, so leaving `?lang=ar` alone and letting the
  * shared component's own `useLang()` read it is correct, not a gap.
+ *
+ * `/login` is the third member of that club, removed for the same reason AFTER repeating the
+ * same loop: `app/(ar)/ar/login/page.tsx` is a one-line stub doing `redirect("/login?lang=ar")`,
+ * and with `/login` listed here that redirect bounced straight back to `/ar/login`, forever.
+ * The victims were real: the builder's own "سجّل الدخول لتحتفظ بهذه السيرة" header link on every
+ * Arabic step points at `/ar/login`, so every anonymous Arabic user who tried to keep their CV
+ * hit ERR_TOO_MANY_REDIRECTS. The rule to carry forward: a route goes in this list ONLY if its
+ * `/ar/*` page renders real content — a redirect stub disqualifies it, structurally.
  */
 const AR_TWINS: RegExp[] = [
   /^\/$/,
@@ -35,7 +43,6 @@ const AR_TWINS: RegExp[] = [
   /^\/build$/,
   /^\/builder$/,
   /^\/journey$/,
-  /^\/login$/,
   /^\/pricing$/,
   /^\/templates$/,
   /^\/v1$/,

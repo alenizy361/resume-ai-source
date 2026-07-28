@@ -3,6 +3,7 @@ import { useState } from "react";
 import useLang from "@/app/components/useLang";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import MyCvPicker from "@/app/components/MyCvPicker";
 import { navCta } from "@/app/lib/brand";
 
@@ -86,7 +87,7 @@ export default function CareerPlanPage() {
   const timelines = ar ? TIMELINES_AR : TIMELINES_EN;
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/career-plan" : "/ar/career-plan"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "خطة مسيرتك المهنية" : "Career Plan"}</div>

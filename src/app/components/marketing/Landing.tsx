@@ -305,7 +305,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
             <div className="chip">{t.eyebrow}</div>
             <h1
               className="mt-5 font-extrabold tracking-tight"
-              style={{ fontSize: "clamp(2.75rem,6vw,4.75rem)", lineHeight: 1.04, letterSpacing: "-0.04em", maxWidth: "16ch" }}
+              style={{ fontSize: "clamp(2.75rem,6vw,4.75rem)", lineHeight: 1.04, letterSpacing: ar ? 0 : "-0.04em", maxWidth: "16ch" }}
             >
               {t.h1a}
               <br />
@@ -352,7 +352,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section id="demo" className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.walkKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.walkHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "18ch" }}>{t.walkHead}</h2>
           <p className="mt-3 max-w-[56ch] text-lg leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{t.walkLede}</p>
 
           <DemoWalkthrough lang={lang} />
@@ -363,7 +363,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-4xl">
           <div className="section-kicker">{t.cmpKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.cmpHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "18ch" }}>{t.cmpHead}</h2>
 
           <div className="compare">
             <div className="compare-row head">
@@ -386,7 +386,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.howKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.howHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em" }}>{t.howHead}</h2>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {t.how.map(([icon, head, body], i) => (
@@ -395,7 +395,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
                   <span className="how-step-num" aria-hidden>{ar ? toArabicDigits(i + 1) : String(i + 1).padStart(2, "0")}</span>
                   <span style={{ fontSize: 22 }} aria-hidden>{icon}</span>
                 </div>
-                <h3 className="mt-5 text-xl font-semibold" style={{ letterSpacing: "-0.01em" }}>{head}</h3>
+                <h3 className="mt-5 text-xl font-semibold" style={{ letterSpacing: ar ? 0 : "-0.01em" }}>{head}</h3>
                 <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{body}</p>
               </div>
             ))}
@@ -407,7 +407,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.demoKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.demoHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "20ch" }}>{t.demoHead}</h2>
           <p className="mt-3 max-w-[56ch] text-lg leading-relaxed" style={{ color: "var(--body, var(--muted))" }}>{t.demoLede}</p>
 
           <ProfessionDemo lang={lang} />
@@ -418,7 +418,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.journeyKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "24ch" }}>{t.journeyHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "24ch" }}>{t.journeyHead}</h2>
 
           <div className="road t-stagger">
             {t.journey.map(([icon, head, body], i) => (
@@ -441,7 +441,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-24" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-5xl">
           <div className="section-kicker">{t.dashKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "18ch" }}>{t.dashHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "18ch" }}>{t.dashHead}</h2>
 
           <div className="dash">
             <div className="mc-bar">
@@ -486,7 +486,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-5xl">
           <div className="section-kicker">{t.atsKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.6rem,2.8vw,2.4rem)", letterSpacing: "-0.02em", maxWidth: "22ch" }}>{t.atsHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.6rem,2.8vw,2.4rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "22ch" }}>{t.atsHead}</h2>
 
           <AtsScoreReveal lang={lang} />
         </div>
@@ -496,7 +496,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-[1200px]">
           <div className="section-kicker">{t.trustKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em", maxWidth: "20ch" }}>{t.trustHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em", maxWidth: "20ch" }}>{t.trustHead}</h2>
 
           <div className="trust-grid">
             {t.trust(packsStat, tplsStat).map(([n, body], i) => (
@@ -517,7 +517,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-20" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto max-w-3xl text-center">
           <div className="section-kicker">{t.faqKicker}</div>
-          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: "-0.02em" }}>{t.faqHead}</h2>
+          <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", letterSpacing: ar ? 0 : "-0.02em" }}>{t.faqHead}</h2>
         </div>
         <FaqAccordion items={t.faq.map(([q, a]) => ({ q, a }))} />
       </section>
@@ -526,7 +526,7 @@ export default function Landing({ lang }: { lang: "ar" | "en" }) {
       <section className="t-enter px-6 py-28 text-center" style={{ borderTop: "1px solid var(--line)" }}>
         <div className="mx-auto flex max-w-2xl flex-col items-center">
           <BrandOrb variant="hero" size={72} />
-          <h2 className="mt-7 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,4.4vw,3.4rem)", letterSpacing: "-0.025em" }}>{t.finalHead}</h2>
+          <h2 className="mt-7 font-extrabold tracking-tight" style={{ fontSize: "clamp(1.9rem,4.4vw,3.4rem)", letterSpacing: ar ? 0 : "-0.025em" }}>{t.finalHead}</h2>
           <p className="mt-3 text-lg" style={{ color: "var(--body, var(--muted))" }}>{t.finalSub}</p>
           <Link href={`${p}/builder`} className="btn-accent magnetic mt-8 px-9 py-4 text-[16px]">{t.ctaPrimary} →</Link>
         </div>

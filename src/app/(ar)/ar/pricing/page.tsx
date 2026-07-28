@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import CheckoutButton from "@/app/components/CheckoutButton";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import { navCta } from "@/app/lib/brand";
 
@@ -55,7 +56,7 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
 
 export default function ArabicPricingPage() {
   return (
-    <PageShell lang="ar" cta={navCta("ar")} langToggle="/pricing" authNav={<AuthNav ar />}>
+    <PageShell lang="ar" cta={navCta("ar")} langToggle="/pricing" authNav={<AuthNav ar />} mobileMenu={<MobileMenu ar />}>
       <section className="t-enter relative">
         <div className="relative mb-12 text-center">
           <div className="chip mb-4">الأسعار</div>

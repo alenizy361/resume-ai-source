@@ -8,6 +8,7 @@ import CheckoutButton from "@/app/components/CheckoutButton";
 import MyCvPicker from "@/app/components/MyCvPicker";
 import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
+import MobileMenu from "@/app/components/MobileMenu";
 import { navCta } from "@/app/lib/brand";
 
 /**
@@ -325,7 +326,7 @@ export default function InterviewLivePage() {
   const avg = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-3xl py-10">
         {phase === "setup" && (
           <>

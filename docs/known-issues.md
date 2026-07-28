@@ -2633,3 +2633,99 @@ end-to-end (needs a signed-in session against a configured server store — cove
 documented fetch flag). The reducer's `ai` case is exercised indirectly (the blueprint auto-fire
 path compiles against it and the store/ledger now have a live write path) but not asserted against
 a real generation — no AI key exists here.
+
+### F-51 · P0/P1 · Design-focused adversarial round: 10 confirmed visual/UX defects, from a broken Arabic sign-in to blank previews — FIXED
+
+A second hunter/skeptic/referee pass, this time DESIGN-focused: three hunters drove real Chromium
+sessions (mobile 390×844 and desktop, both languages, screenshots re-examined before claiming),
+two skeptics independently re-measured every claim in fresh browser contexts, and every verdict
+came back with hard numbers. 10 findings, 10 confirmed, 10 fixed.
+
+**`/ar/login` was an infinite redirect loop — the Arabic sign-in was unreachable, in production.**
+`proxy.ts` listed `/login` in `AR_TWINS` (308 `/login?lang=ar` → `/ar/login`) while
+`app/(ar)/ar/login/page.tsx` is a one-line stub redirecting straight back — the EXACT loop class
+the proxy's own comment documents having already fixed for `/interview` and `/linkedin` (F-29).
+Verified with curl: a closed 307/308 cycle ending in `ERR_TOO_MANY_REDIRECTS`; and the victims
+were funnel-critical — the builder's own "سجّل الدخول لتحتفظ بهذه السيرة" header link on every
+Arabic step points at `/ar/login`, so every anonymous Arabic user who tried to keep their CV got a
+blank error page. Fixed by removing `/login` from `AR_TWINS` (its comment now states the rule: a
+route belongs in that list only if its `/ar/*` page renders real content — a redirect stub
+disqualifies it). Verified: one 307, then 200.
+
+**Cross-direction previews rendered 100% BLANK.** `ResumeTemplate`'s fit-scale `transformOrigin`
+followed the CONTENT's direction while the oversized 794px page's anchor inside the
+overflow-hidden clip wrapper followed the ANCESTOR page's — so whenever the two disagreed (an
+Arabic CV previewed in the English UI, or the reverse), the scale pulled the page entirely out of
+the clip box: measured 0.000 visible fraction in the builder's preview pane (an empty dark
+rectangle), ~12% clipped on the design step's large instance. The same defect class sat in
+`TemplatesGallery`: switching `/templates` to the Arabic sample — or `/ar/templates` to the
+English or bilingual samples — showed ten empty bordered boxes, 0% visible on every card. Fixed
+in both by stamping the CLIP WRAPPER with the direction its child's transform origin scales
+toward, so anchor and origin agree by construction. Verified live: >0.9 visible fraction across
+every combination that measured 0.000.
+
+**Every builder CV printed a fabricated "SUMMARY" heading — hardcoded English even on Arabic
+resumes.** `assembleResume` deliberately emits the target role as a bare line under the contact;
+`ResumeTemplate.parse()` wrapped any pre-heading orphan line in a literal `"SUMMARY"` section —
+rendered directly above the REAL "PROFESSIONAL SUMMARY"/"الملخص المهني" heading, two
+near-duplicates back to back, shipping into the designed PDF. `parse()` now recognizes a short,
+unpunctuated, non-contact orphan line as the PROFESSIONAL TITLE and renders it under the name
+where a recruiter expects it; a genuine orphan paragraph still gets a summary section — in its
+own language (`hasArabic` picks "الملخص").
+
+**The `<html lang>` sync effect (F-49) had a regression this round caught: `/ar/account` hydrated
+to `lang="en" dir="ltr"`.** `readLang()` consulted only `?lang` and localStorage — never the
+path — so the one `(ar)`-route-group page whose client calls `useLang` (`AccountClient`), in a
+fresh session with neither signal, overwrote the server's RTL document with LTR: measured, and it
+re-enabled the LTR-only `.chip` letter-spacing on Arabic text ("لوحتك المهنية" rendered as
+disconnected glyphs). F-49's own claim that the effect was "a no-op where already correct" was
+false for this page. `readLang()` now answers from the `/ar` path before any stored preference.
+
+**Arabic letterforms were being tracked apart across the landing page.** 46 Arabic-text elements
+on `/ar` carried non-zero computed letter-spacing — monospace uppercase kickers at 1.26px,
+walk-step counters, and twelve inline negative-tracking display headings in `Landing.tsx`, all
+defeating the global `[dir="rtl"] *` guard (equal specificity, later import order wins — and
+inline styles outrank any stylesheet). Fixed at both levels: every inline `letterSpacing` in
+`Landing.tsx` (and one in `AtsScoreReveal.tsx`) is now conditional on the language, and
+`marketing.css` ends with `.landing-root[dir="rtl"] * { letter-spacing: normal }` (0,2,0,
+declared last — outranks every class rule in the file). Verified live: zero Arabic-text elements
+with letter-spacing on `/ar`, down from 46. **Found in the same pass: `ops/design.test.mjs`
+asserts exactly this and never runs** — it is not in `npm test` (separate `test:design` script,
+needs a manually-started server) and its landing-page assertions have drifted from the current
+landing design (it flags the walkthrough's canvas and intro scrim, which are deliberate). It
+"passed" by never executing. Left un-wired this round — reconciling that suite with the current
+design is its own task — recorded here so it stops being invisible.
+
+**The mobile header wrapped to three lines — and the hamburger built to prevent it was dead
+code.** Every `PageShell` page that passes `authNav` measured 81px tall at 390px ("Sign in",
+"Unlock unlimited →" and the CTA all wrapping), while `MobileMenu.tsx` — whose own doc says it
+collapses exactly these links below `sm` — was imported by zero files. `PageShell` now takes a
+`mobileMenu` node (same client-bundle-weight reasoning as its `authNav` prop, documented in
+place); with it present, the language toggle and `authNav` hide below `sm` and fold into the
+hamburger while the CTA stays. Wired at all nine `authNav` call sites. Verified: `/pricing`
+header 81px → ≤64px, matching its siblings.
+
+**Four bilingual pages had no language toggle** (`/interview`, `/linkedin`, `/career-plan`,
+`/account`) despite live Arabic twins, violating `PageShell`'s own "omit when no twin exists"
+rule while every sibling showed one. All four now pass `langToggle`. Verified present on all
+four.
+
+**The checkout modal did not lock the page beneath** — a wheel over the open payment dialog
+scrolled the pricing page from scrollY 0 to 813 behind it. `CheckoutButton` now locks BOTH
+`body` and `documentElement` overflow while open (body alone measurably did not stop the root
+scroller) and restores them on close and unmount. Verified: scrollY stays 0.
+
+**Long unbroken tokens escaped the A4 page** — a ~100-char licence number painted through the
+right margin and was clipped mid-glyph, in the preview and in the html2canvas-captured PDF (li
+scrollWidth 927–1091 vs 648 clientWidth). One inherited `overflowWrap: "anywhere"` on the page
+root; text with natural break points is unaffected.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites (the two lint messages near
+touched files — `OptimizeTool`'s set-state-in-effect error and `interview-live`'s unused
+directive — were verified pre-existing on the base commit via `git stash`, not introduced).
+`npm run build` clean (439 pages). Live Playwright against the rebuilt bundle — **13/13**:
+`/ar/login` resolves in one redirect; `/ar/account` stays `ar`/`rtl` with an unspaced chip; zero
+letter-spaced Arabic elements on `/ar`; `/pricing` mobile header ≤64px with the hamburger in the
+served HTML; all four lang toggles present; body scroll locked under the checkout modal; template
+samples >90% visible in all three previously-blank language combinations; the Arabic-content CV
+preview visible inside the English UI; and no fabricated SUMMARY heading on the Arabic preview.

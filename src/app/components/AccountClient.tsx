@@ -282,7 +282,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const sectionTitle = "mb-4 text-sm font-bold";
 
   return (
-    <PageShell lang={lang} cta={navCta(lang)} width="reading">
+    <PageShell lang={lang} cta={navCta(lang)} langToggle={lang === "ar" ? "/account" : "/ar/account"} width="reading">
       <div className="mx-auto max-w-2xl">
         {welcome && (
           <div className="mb-6 rounded-xl px-4 py-3 text-sm font-semibold"

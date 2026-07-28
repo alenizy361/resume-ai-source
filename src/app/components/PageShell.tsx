@@ -68,6 +68,17 @@ export default function PageShell({
    */
   authNav,
   /**
+   * The hamburger that collapses the secondary header links below `sm` — pass
+   * `<MobileMenu ar={ar} />`. A node for exactly the reason `authNav` is (see above): `MobileMenu`
+   * is a `"use client"` component, and importing it here would ship it to every static SEO page.
+   * When present, the language toggle and `authNav` hide below `sm` and fold into it; the CTA
+   * stays visible, because the header's one action is not "secondary". Without it, headers that
+   * carried `authNav` measured 81px tall at 390px wide — "Sign in", "Unlock unlimited →" and the
+   * CTA all wrapping to two and three lines — while `MobileMenu`, built for precisely this, was
+   * imported by zero files.
+   */
+  mobileMenu,
+  /**
    * Skip the `ps-body` wrapper (its max-width and fixed padding) and render children directly
    * under `<main>`. For landing-style pages built from full-width, alternating-background
    * sections — each section manages its own inner column — wrapping them in a padded box would
@@ -84,6 +95,7 @@ export default function PageShell({
   langToggle?: string;
   onLangToggle?: () => void;
   authNav?: React.ReactNode;
+  mobileMenu?: React.ReactNode;
   bleed?: boolean;
 }) {
   const ar = lang === "ar";
@@ -106,13 +118,19 @@ export default function PageShell({
             <span>{brand}</span>
           </Link>
           <div className="flex items-center gap-3">
-            {langToggle && (
-              <Link href={langToggle} onClick={onLangToggle} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>
-                {ar ? "EN" : "AR"}
-              </Link>
-            )}
-            {authNav}
+            {/* With a hamburger present, the secondary links live inside it below `sm` —
+                rendering them twice would be two session fetches and a wrapping header,
+                which is the exact 81px-tall-header defect this prop closes. */}
+            <div className={`${mobileMenu ? "hidden sm:flex" : "flex"} items-center gap-3`}>
+              {langToggle && (
+                <Link href={langToggle} onClick={onLangToggle} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>
+                  {ar ? "EN" : "AR"}
+                </Link>
+              )}
+              {authNav}
+            </div>
             {cta && <Link href={cta.href} className="ps-cta">{cta.label}</Link>}
+            {mobileMenu}
           </div>
         </div>
       </header>

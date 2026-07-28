@@ -70,6 +70,27 @@ export default function CheckoutButton({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const payRef = useRef<any>(null);
 
+  /*
+   * The page beneath holds still while the dialog is open. Without this, a wheel or trackpad
+   * scroll OVER the modal scrolled the underlying page (measured: scrollY 0 → 813 with the
+   * dialog stationary on top) — disorienting mid-payment, and the buyer loses their place when
+   * the dialog closes. Restored on close AND on unmount, so a modal removed any other way cannot
+   * leave the page unscrollable.
+   */
+  useEffect(() => {
+    if (!open) return;
+    /* BOTH elements: with only body locked, the wheel still scrolled the page through the
+       root scroller (measured scrollY 0 → 400 with body already overflow:hidden). */
+    const prevBody = document.body.style.overflow;
+    const prevRoot = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevRoot;
+    };
+  }, [open]);
+
   // Bind the Paylink SDK to the card fields ONLY AFTER they've rendered (phase
   // "card"). Initializing earlier bound to elements that weren't in the DOM yet,
   // so the fields never appeared.

@@ -144,7 +144,15 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
               </div>
               <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-bold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>ATS</span>
             </div>
-            <div className="mb-4 overflow-hidden rounded-lg" style={{ height: 794 * SCALE * 0.62, border: "1px solid var(--line)" }}>
+            {/*
+              `dir` here anchors the oversized 794px sample to the SAME side the child's
+              transformOrigin scales toward. Without it the wrapper inherited the PAGE's
+              direction, and every cross-direction combination — the Arabic sample on
+              /templates, the English or bilingual samples on /ar/templates — scaled the
+              page out of the clip box entirely: ten empty bordered rectangles, measured at
+              0% visibility. Same defect class (and same fix) as ResumeTemplate's own pane.
+            */}
+            <div dir={mode === "bi" ? "ltr" : dir} className="mb-4 overflow-hidden rounded-lg" style={{ height: 794 * SCALE * 0.62, border: "1px solid var(--line)" }}>
               {mode === "bi" ? (
                 /* "Both" = the page split lengthwise: English on the left,
                    Arabic facing it on the right — two full CVs side by side. */
