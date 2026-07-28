@@ -520,6 +520,7 @@ export function SkillsBody(p: Common) {
     <BlueprintStrip
       field="skillGroups"
       section="skills"
+      picksDisabled={atCap}
       onPick={(text) => {
         /*
          * Offered then confirmed, in two dispatches, rather than written straight in as confirmed.

@@ -76,7 +76,7 @@ export type BlueprintField =
   | "alternativeTitles" | "responsibilityThemes";
 
 export default function BlueprintStrip({
-  field, section, onPick, note, auto = false,
+  field, section, onPick, note, auto = false, picksDisabled = false,
 }: {
   field: BlueprintField;
   /**
@@ -89,6 +89,16 @@ export default function BlueprintStrip({
    */
   section: SectionId;
   onPick: (text: string) => void;
+  /**
+   * The section is at a cap and cannot accept another pick.
+   *
+   * Its own suggestion chips are disabled at the 12-skill cap; these pills were not, and `onPick`
+   * dispatches `offer` then `confirm` — so at the cap `confirmItem` returns `blocked:"skill-cap"`,
+   * the reducer discards it, and the tap leaves a new permanently-unconfirmable item in the bag.
+   * The same "a control that looks available and refuses" the cap fix set out to end, one component
+   * over.
+   */
+  picksDisabled?: boolean;
   note?: string;
   /**
    * Generate on mount if nothing is stored yet.
@@ -311,7 +321,8 @@ export default function BlueprintStrip({
                 source="ai"
                 showWhy={false}
                 suffix={item.note ? <span className="bd-opt"> · {item.note}</span> : undefined}
-                onAdd={() => onPick(item.text)}
+                disabled={picksDisabled}
+                onAdd={() => { if (!picksDisabled) onPick(item.text); }}
                 onReject={() => drop(item.text)}
               />
             ))}

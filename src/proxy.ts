@@ -52,6 +52,17 @@ const AR_TWINS: RegExp[] = [
      /login): app/(ar)/ar/score/[id] is a redirect stub back to /score/{id}?lang=ar, so listing
      it here made the Arabic "Share my score" link — and every shared Arabic score URL — an
      infinite 308/307 loop. The rule stands: only routes whose /ar page renders real content. */
+  /*
+   * These four were missing, and the two directions disagreed because of it: `/ar/privacy?lang=en`
+   * redirected to `/privacy`, while `/privacy?lang=ar` did nothing — although `/ar/privacy` is a
+   * real, fully Arabic page answering 200. Each one below was checked against the rule this list
+   * states rather than assumed: all four render content, none is a redirect stub, so none can join
+   * the loop club.
+   */
+  /^\/privacy$/,
+  /^\/terms$/,
+  /^\/jd-keyword-extractor$/,
+  /^\/pdf-readability-checker$/,
   /* The three catalog HUBS only. Their children are decided by `hasArTwin` below, because a
      prefix pattern here claimed 85 twins where 62 exist. */
   /^\/resume-examples$/,
@@ -112,7 +123,15 @@ export function proxy(request: NextRequest) {
   const lang = searchParams.get("lang");
 
   if (lang) {
-    if (pathname.startsWith("/ar")) {
+    /*
+     * A SEGMENT test, not a prefix test.
+     *
+     * `startsWith("/ar")` also matches `/artist`, `/arabic-cv`, `/ar-test` — so `?lang=en` on any of
+     * them 308-redirected to a truncated path: `/artist?lang=en` → `/tist` → 404. No live route
+     * begins with those letters today, so the damage was bounded to hand-typed and crawled URLs, but
+     * it is precisely the redirect-into-a-404 defect this block's own header declares closed.
+     */
+    if (pathname === "/ar" || pathname.startsWith("/ar/")) {
       if (lang === "en" && hasEnTwin(pathname)) {
         const url = request.nextUrl.clone();
         url.pathname = pathname.replace(/^\/ar/, "") || "/";

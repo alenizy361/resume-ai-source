@@ -271,7 +271,16 @@ export default function CheckoutButton({
     } catch (err) {
       // If the SDK fails to load, fall back to the hosted page so checkout never dead-ends.
       if (urlRef.current) { window.location.href = urlRef.current; return; }
-      setError(err instanceof Error ? err.message : t.failed); setLoading(false);
+      /*
+       * An AbortError IS an Error, so `err.message` printed Chrome's own DOMException text —
+       * "signal is aborted without reason" — into the payment sheet, in English, on BOTH language
+       * surfaces. Measured three times, including on /ar/pricing. The 25-second timeout above added
+       * the escape and forgot that its own abort takes this branch: the file argues at length two
+       * blocks up that untranslated English must never reach an Arabic buyer, and then leaked
+       * browser English to everyone.
+       */
+      const aborted = err instanceof Error && err.name === "AbortError";
+      setError(aborted || !(err instanceof Error) ? t.failed : err.message); setLoading(false);
     }
   }
 

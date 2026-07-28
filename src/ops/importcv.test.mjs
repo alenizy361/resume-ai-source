@@ -275,5 +275,82 @@ console.log("\n── the OCR door is separate, consented, and honest ──");
   ok("an OCR read goes through the same ingest() as an upload", /ingest\(String\(data\?\.text \|\| ""\), "ocr"\)/.test(panel));
 }
 
+/* ── a job written over two or three lines, which is how CVs are actually written ── */
+{
+  /*
+   * `looksLikeRoleHeader` asks each line in isolation, so it only ever saw single-line layouts. The
+   * two commonest real ones both failed, and one of them FABRICATED:
+   *
+   *   three lines (title / employer / dates)  →  ZERO positions imported
+   *   two lines (title / Employer, City — dates)  →  title "King Faisal Hospital", company "Riyadh"
+   *
+   * The second is the serious one: the employer written into the job-title field and the city into
+   * the employer field, pushed into `profile.roles` as confirmed, pre-ticked content, on a product
+   * whose whole claim is that it does not invent facts.
+   */
+  const three = parseCv([
+    "EXPERIENCE",
+    "Senior Radiology Technologist",
+    "King Faisal Hospital",
+    "Jan 2019 - Present",
+    "- Performed CT and MRI examinations",
+  ].join("\n"));
+  eq("a three-line job imports one position",
+    three.roles.map((r) => [r.title, r.company, r.start, r.end]),
+    [["Senior Radiology Technologist", "King Faisal Hospital", "Jan 2019", "Present"]]);
+  ok("and its duty is attached, not stranded", three.roles[0]?.bullets.length === 1,
+    JSON.stringify(three.roles[0]?.bullets));
+
+  const two = parseCv([
+    "EXPERIENCE",
+    "Senior Radiology Technologist",
+    "King Faisal Hospital, Riyadh — Jan 2019 - Present",
+    "- Performed CT and MRI examinations",
+  ].join("\n"));
+  eq("a two-line job keeps the title as the title",
+    two.roles.map((r) => [r.title, r.company]),
+    [["Senior Radiology Technologist", "King Faisal Hospital"]]);
+  ok("and the city lands in location, not in the employer field",
+    /Riyadh/.test(two.roles[0]?.location || ""), JSON.stringify(two.roles[0]));
+
+  /* Two three-line jobs in a row: the second must not be swallowed as duties of the first. */
+  const both = parseCv([
+    "EXPERIENCE",
+    "Accountant",
+    "Alpha Trading",
+    "Jan 2020 - Present",
+    "- Prepared monthly financial statements",
+    "Junior Accountant",
+    "Beta Group",
+    "Jan 2016 - Dec 2019",
+    "- Processed supplier invoices",
+  ].join("\n"));
+  eq("two three-line jobs both import",
+    both.roles.map((r) => r.title), ["Accountant", "Junior Accountant"]);
+  ok("and neither absorbs the other's heading as a duty",
+    both.roles.every((r) => r.bullets.length === 1), JSON.stringify(both.roles.map((r) => r.bullets)));
+
+  /*
+   * The guard, stated as a test: a prose duty above a normal single-line header must STAY a duty.
+   * Without the verb test the lookback promoted it to the next job's title — a worse error than the
+   * one being fixed, and the reason this whole block is conservative.
+   */
+  const prose = parseCv([
+    "EXPERIENCE",
+    "Radiographer — Dallah Hospital | 2023 - Present",
+    "Operated CT and MRI scanners for outpatients",
+    "Radiologic Technologist — King Fahad Specialist Hospital | 2020 - 2023",
+    "- Positioned patients and applied shielding",
+  ].join("\n"));
+  eq("a prose duty is not promoted to the next job's title",
+    prose.roles.map((r) => r.title), ["Radiographer", "Radiologic Technologist"]);
+  ok("it stays a duty of the job it was written under",
+    /Operated CT/.test((prose.roles[0]?.bullets || []).join(" ")), JSON.stringify(prose.roles[0]?.bullets));
+
+  /* A date line with nothing above it that reads like a job is still unplaced, not invented. */
+  const orphan = parseCv(["EXPERIENCE", "Jan 2019 - Present"].join("\n"));
+  ok("a bare date line invents no job", orphan.roles.length === 0, JSON.stringify(orphan.roles));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

@@ -3123,3 +3123,110 @@ composition varying across pages; ten templates that are one layout in ten accen
 standing in for an icon set beside a bespoke Orb; and the personal Gmail on the Terms page — now
 read from `brand.ts`, so `NEXT_PUBLIC_SUPPORT_EMAIL` moves all six call sites at once, but the
 address itself is the owner's to choose.
+
+---
+
+## Overnight adversarial rounds 3 and 4 — the import door, and a bug fixed three times
+
+### Round 3 (`630fd6b`) · CRITICAL: "Upload and improve my CV" discarded every CV it read
+
+The panel parses a file, lists what it found — *"Positions: Accountant — Alpha Trading · 2"* — says
+"Brought across. Everything is editable in the sections below", navigates to step 1, and lands **zero**
+positions, zero skills, no education. Reproduced four times, both viewports, into empty and populated
+builders. There is no other route into the import reducer, so the whole door was dead while appearing
+to work.
+
+Two mechanics combined, and finding either alone would not have fixed it:
+
+1. The hydration guard keyed on the RAW url id. `/builder` carries none, so the effect resolves one;
+   navigating to `/builder/<that same id>/target` changed the key from `anon::` to `anon::rms4…` and
+   read as a *different resume*, so it re-hydrated from storage and reset `touched`.
+2. `flush()` reads a ref written in an effect, so a handler that dispatches and then flushes in the
+   same tick persists the PRE-dispatch document. The import handler did exactly that.
+
+The first attempt at (2) wrote the ref during render and tripped `Cannot access refs during render`.
+That rule is right; the fix belongs at the call site (flush after the commit). The ref's docstring now
+says so, because the next dispatch-then-flush caller needs to know.
+
+Round 3 also closed: the 12-skill cap was a silent dead click (`confirmItem` computed
+`blocked: "skill-cap"` and the reducer discarded it); `seed` deduped against the suggestion bag only,
+so every cold load resurrected already-confirmed skills and the review's critical gate could never
+clear — and could not be cleared by accepting them, because they were already accepted; a CV-language
+change left 46 chips in two scripts, one tap from putting Arabic into an English CV; quarantine removed
+the record but not its index row, leaving a phantom with a dead Duplicate; the import panel counted
+overflow against 6 bullets for roles the importer caps at 4; and the Arabic review rendered English fix
+hints, with three per-item finding ids (`expired-credential:<id>`, `keyword-stuffing:<term>`,
+`thin-role:<i>`) that an exact-match table could never hold — so their English was permanent.
+
+### Round 3b (`b867b0c`) · the second-tab data loss, attempt three
+
+| | Shipped | What the verifier measured |
+|---|---|---|
+| v1 (R1) | a liveness lease | every tab read its OWN stamp as a sibling's → the visit never expired → a shared machine showed the next person a stranger's CV |
+| v2 (R2) | a per-tab registry | `endAnonymousVisit()` still deleted the whole key including this tab's entry → the wipe survived, narrowed to the **first 60 s of every builder tab** |
+| v3 (R3b) | prune to keep this tab's own entry | 20 attacks, 0 failures |
+
+v2 is the one to learn from. The delete was justified by a comment — *"so the tab that just declared
+the visit over does not read its OWN stale stamp as a sibling"* — describing a hazard that stopped
+existing the moment entries became keyed by tab id. **The stale comment outlived its reason and took
+the fix with it.** And an intermittent data-loss bug is worse than a constant one: `ra_visit_live`
+measured `null` from t+10 s to t+50 s, the wipe reproduced four times inside the window, and a control
+at t+66 s left the CV intact.
+
+**A test of mine passed while its bug was live.** Round 2's AI-ledger fix set `mustPersist` in
+`dispatchUser`; `commitAi` — the only `{t:"ai"}` dispatch in the product — calls the raw reducer. The
+test asserted *the line I had written* rather than the path the product takes, so it was green for a
+whole round while the per-resume spend cap still reset on every reload. Assert the path, not the patch.
+
+Also 3b: `hasArTwin` guarded `?lang=ar` only, so 34 Arabic-only professions 308-redirected into 404s in
+the direction nobody swept; `landing.css` and `marketing.css` kept their own focus rules with the
+`border-radius` removed globally, so the front door still re-cut 17 controls per page on keyboard focus;
+`.btn-ghost` got the 44 px floor while a later same-specificity `display: inline-block` cancelled the
+centring that came with it; and a stalled `/api/pay` sealed the buyer into a scroll-locked modal with
+Escape, the scrim and Cancel all gated on `!loading`.
+
+### Round 4 · the importer was writing the employer into the job-title field
+
+11 of 13 round-3 fixes survived. The fresh hunt went at `parseCv` and found the worst defect of the
+whole loop — worse than the import door, because that one *lost* facts and this one *invents* them:
+
+```
+Senior Radiology Technologist                       ← discarded
+King Faisal Hospital, Riyadh — Jan 2019 - Present
+→ title "King Faisal Hospital", company "Riyadh"
+```
+
+The employer written into the job title and the city into the employer, pushed straight into
+`profile.roles` as **confirmed, pre-ticked** content — on a product whose entire claim is that it does
+not invent facts. And the three-line layout (title / employer / dates), which is the most common CV
+layout there is, imported **zero** positions.
+
+`looksLikeRoleHeader` asks each line in isolation, so it could only ever see single-line layouts. The
+fix is a bounded lookback: un-bulleted experience lines are held rather than committed, and a dated
+header decides which of them are its title and employer.
+
+**The first version of that fix fabricated too**, and `ops/importcv.test.mjs` caught it: it promoted
+*"Positioned patients and applied shielding to ALARA standards"* — a duty of the job above — into the
+next job's title. The guard is that a duty is a sentence about doing something and a title is a noun
+phrase: a regular `-ed` past tense, a short list of irregulars, or an Arabic first-person past verb
+ending in ت. Ten fixtures now cover both layouts, two three-line jobs in a row, the prose-duty case that
+must NOT be promoted, and a bare date line that must invent nothing.
+
+Round 4 also fixed: the 25 s checkout abort printed Chrome's own `"signal is aborted without reason"`
+into the payment sheet **in both languages** (an `AbortError` is an `Error`, so `err.message` leaked) —
+in the one file that argues at length that untranslated English must never reach an Arabic buyer; the
+44 px floor went onto `.cine-nav-links a`, which is `display: none` below 760 px, so it landed exactly
+where thumbs are not while the front door's only two phone-visible controls stayed at 26 px and 36 px;
+`startsWith("/ar")` is a prefix not a segment, so `/artist?lang=en` → `/tist` → 404; `/privacy?lang=ar`
+never redirected although `/ar/privacy` is a real 200 page; the nav CTA wrapped between 760 and 799 px,
+inflating the fixed header from 73 px to 91 px; and `BlueprintStrip`'s pick pills were not disabled at
+the 12-skill cap, so a tap there left a permanently-unconfirmable item in the bag.
+
+### What this loop is actually good at
+
+Four rounds, four agent cohorts, ~90 fixes. The pattern worth keeping is that **most serious findings
+were places this codebase had already written down the right answer and the guard missed** — the mono
+rule keyed on a class while nine sites reached the font through a token; the AA note fixing one button
+while seventy inline sites kept the failing value; `.t-tap` naming the exact controls it was never
+applied to; the proxy header promising "only when a twin actually exists" for one direction of two.
+Grepping for a fix's own justification and checking it still holds found more than reading new code did.

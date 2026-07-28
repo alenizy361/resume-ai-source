@@ -171,7 +171,7 @@ export default function BuilderShell({
       <main className="bd-page">
         <header className="bd-header">
           <div className="bd-header-in">
-            <Link href={ar ? "/ar" : "/"} className="flex items-center gap-2">
+            <Link href={ar ? "/ar" : "/"} className="flex min-h-11 items-center gap-2">
               <BrandOrb size={26} />
               <span className="text-sm font-extrabold">{t.brand}</span>
             </Link>

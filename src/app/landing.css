@@ -73,7 +73,11 @@
 /* The CTA is a BUTTON that happens to be an anchor: the rule above (0,1,1) out-specifies
    `.cine-cta` (0,1,0), so the site's primary action rendered muted grey on its own dark fill —
    measured 2.03:1, the worst contrast on the page. Stated at matching specificity. */
-.cine-nav-links a.cine-cta { color: #f6f7fa; }
+/* `nowrap` because "Build my resume" wrapped to two lines between 760px and ~799px — the width an
+   iPad portrait lands on — taking the fixed header from 73px to 91px. Pre-existing, not caused by
+   the 44px floor (A/B'd in the live page: forcing min-height:0 left navH at 91). /ar is unaffected
+   only because its label is shorter, which is not a reason to leave it. */
+.cine-nav-links a.cine-cta { color: #f6f7fa; white-space: nowrap; }
 .cine-nav-links a.cine-cta:hover { color: #f6f7fa; }
 .cine-cta {
   display: inline-block; background: var(--cine-ink); color: #f6f7fa;
@@ -83,8 +87,17 @@
 .cine-cta:hover { opacity: 0.92; }
 .cine-cta:active { transform: scale(0.97); }
 .cine-cta--energy { background: var(--cine-energy); color: #fff; }
+/*
+ * 44px, and this is the control the floor was FOR.
+ *
+ * The floor went onto `.cine-nav-links a` — which is `display: none` below 760px. So it landed
+ * exactly where thumbs are not, and the two controls that survive that breakpoint (this burger at
+ * 40x36, and the brand at 26px) were left under it. On a phone these two ARE the front door's whole
+ * navigation.
+ */
 .cine-nav-burger {
   display: flex; flex-direction: column; gap: 4px; padding: 10px;
+  min-height: 44px; min-width: 44px; align-items: center; justify-content: center;
   background: none; border: 1px solid var(--cine-line); border-radius: 10px;
 }
 .cine-nav-burger span { width: 18px; height: 2px; background: var(--cine-ink); border-radius: 2px; }

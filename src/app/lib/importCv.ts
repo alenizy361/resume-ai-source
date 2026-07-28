@@ -151,6 +151,111 @@ function splitRole(rest: string): { title: string; company: string; location: st
   return { title, company, location: [location, ...parts.slice(3)].filter(Boolean).join(", ") };
 }
 
+
+/**
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * A CV WRITES A JOB OVER TWO OR THREE LINES, AND THE DATE IS ON THE LAST ONE
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * `looksLikeRoleHeader` asks each line in isolation, so it could only ever see the layouts that put
+ * everything on ONE line. The two most common real layouts put it on more, and both failed — one by
+ * losing the job, the other by inventing one:
+ *
+ *   Senior Radiology Technologist          ← no date, no separator: not a header, goes to `unread`
+ *   King Faisal Hospital                   ← same
+ *   Jan 2019 - Present                     ← a header whose `rest` is empty ⇒ no title ⇒ `unread`
+ *   → ZERO positions imported, from the most common CV layout there is.
+ *
+ *   Senior Radiology Technologist          ← goes to `unread`
+ *   King Faisal Hospital, Riyadh — Jan 2019 - Present
+ *   → title "King Faisal Hospital", company "Riyadh". The EMPLOYER written into the job-title field
+ *     and the CITY into the employer field, pushed straight into `profile.roles` as CONFIRMED,
+ *     pre-ticked content — on a product whose whole claim is that it does not invent facts. A
+ *     dropped fact is a bad import; a wrong fact is a worse one.
+ *
+ * So a header now looks BACK at the lines above it. `carry` holds the un-bulleted, unclassified
+ * lines seen since the last bullet or role, and this decides which of them belong to the job the
+ * date is opening.
+ *
+ * ── the guard, because guessing wrong here fabricates ──
+ *
+ * A pending line is only eligible if it reads like a heading rather than a duty: short, few words,
+ * no trailing full stop, no bullet marker. Anything else stays a duty and is flushed as one. Two
+ * lines at most are ever consumed (title, employer); a third means this is prose, not a header
+ * block, and none of it is taken.
+ */
+const MAX_CARRY = 2;
+
+/*
+ * Irregular past-tense verbs a duty starts with. The regular ones are caught by `-ed` below; these
+ * are the ones English does not inflect that way and that a CV actually uses.
+ */
+const DUTY_VERB = /^(led|ran|built|drove|grew|oversaw|won|set|wrote|made|took|gave|held|kept|sold|taught|chose|met|began|spoke|drew|brought)\b/i;
+
+function looksLikeHeading(line: string): boolean {
+  const t = line.trim();
+  if (!t || t.length > 60) return false;
+  if (BULLET.test(t)) return false;
+  if (/[.!?]$/.test(t)) return false;              // a finished sentence is a duty
+  if (t.split(/\s+/).length > 8) return false;
+  /*
+   * ── the verb test, and it is what keeps this from fabricating ──
+   *
+   * A duty is a sentence about doing something; a job title is a noun phrase. Without this the
+   * lookback promoted "Positioned patients and applied shielding to ALARA standards" — a duty of the
+   * job ABOVE — into the job title of the one below, which is a worse error than the one the
+   * lookback exists to fix. Caught by `ops/importcv.test.mjs`, which is why the fixture is there.
+   *
+   * English: a regular past tense ends in `-ed`; the irregulars are listed above.
+   * Arabic: a first-person past verb ends in ت (قدت, أدرت, نسّقت, أعددت, تابعت), where the job titles
+   * this product sees are noun phrases (أخصائي أشعة, محاسب, مهندس مدني).
+   */
+  const first = t.split(/\s+/)[0].replace(/[,،:]$/, "");
+  if (/^[a-z]/i.test(first) && (/[a-z]ed$/i.test(first) && first.length > 3 || DUTY_VERB.test(first))) return false;
+  if (/^[؀-ۿ]/.test(first) && /ت$/.test(first) && first.length >= 3) return false;
+  return true;
+}
+
+/**
+ * Compose a role from the dated line and whatever the lines above it were.
+ *
+ * Returns `null` when there is nothing that can honestly be called a job, so the caller can put the
+ * line back in `unread` — which is what "we could not place this" is for.
+ */
+function roleFromHeader(
+  rest: string,
+  carry: string[],
+): { title: string; company: string; location: string; used: number } | null {
+  const eligible = carry.slice(-MAX_CARRY).filter(looksLikeHeading);
+  const inline = splitRole(rest);
+
+  /* The dated line carries no text of its own: everything must come from above it. */
+  if (!inline.title) {
+    if (!eligible.length) return null;
+    const [a, b] = eligible.length >= 2 ? eligible.slice(-2) : [eligible[eligible.length - 1], ""];
+    return { title: a, company: b, location: "", used: eligible.length >= 2 ? 2 : 1 };
+  }
+
+  /*
+   * The dated line HAS text, and a heading sits directly above it. That heading is the job title and
+   * the dated line's parts are the employer and its city — the second layout above.
+   *
+   * Preferred over the old reading deliberately: the alternative discards the line above entirely
+   * (that is the bug), while this keeps every fact and matches the layout CVs actually use. The
+   * `looksLikeHeading` guard is what stops a trailing prose duty being promoted to a job title.
+   */
+  const above = eligible[eligible.length - 1];
+  if (above) {
+    return {
+      title: above,
+      company: inline.title,
+      location: [inline.company, inline.location].filter(Boolean).join(", "),
+      used: 1,
+    };
+  }
+  return { ...inline, used: 0 };
+}
+
 /**
  * Does this line start a job, or continue one?
  *
@@ -224,6 +329,20 @@ export function parseCv(raw: string): ParsedCv {
   let section: Section = "header";
   let role: ParsedRole | null = null;
   const summaryLines: string[] = [];
+  /*
+   * Un-bulleted experience lines whose meaning is not yet decidable — see `roleFromHeader`. They are
+   * this job's prose duties unless a dated header two lines later claims them as the NEXT job's
+   * title and employer.
+   */
+  const carry: string[] = [];
+  /** Commit whatever the lookback did not claim: duties of the job in hand, or unplaced lines. */
+  const flushCarry = () => {
+    for (const c of carry) {
+      if (role) role.bullets.push(c);
+      else if (c) out.unread.push(c);
+    }
+    carry.length = 0;
+  };
 
   for (const line of lines) {
     /* contact details are wherever they are — a heading never guards them */
@@ -245,6 +364,8 @@ export function parseCv(raw: string): ParsedCv {
 
     const heading = headingFor(line);
     if (heading) {
+      /* Before the section changes, or the last job's trailing prose would be lost with it. */
+      flushCarry();
       section = heading;
       role = null;
       continue;
@@ -266,20 +387,32 @@ export function parseCv(raw: string): ParsedCv {
     if (section === "summary") { summaryLines.push(line.replace(BULLET, "")); continue; }
 
     if (section === "experience") {
-      if (role && BULLET.test(line)) { role.bullets.push(line.replace(BULLET, "").trim()); continue; }
+      if (role && BULLET.test(line)) {
+        /* A real bullet ends any lookback: the lines above it were prose duties of THIS job, not the
+           heading of a job that never arrived. */
+        flushCarry();
+        role.bullets.push(line.replace(BULLET, "").trim());
+        continue;
+      }
       if (looksLikeRoleHeader(line)) {
         const { start, end, rest } = splitDates(line);
-        const { title, company, location } = splitRole(rest);
-        // A "header" with no title is a stray date or separator line, not a job.
-        if (!title) { out.unread.push(line); continue; }
-        role = { title, company, location, start, end, bullets: [] };
+        const made = roleFromHeader(rest, carry);
+        // Nothing here and nothing above it that reads like a job: a stray date or separator line.
+        if (!made) { out.unread.push(line); flushCarry(); continue; }
+        /* Whatever the new role did NOT take belongs to the job before it, as prose duties. */
+        carry.length = Math.max(0, carry.length - made.used);
+        flushCarry();
+        role = { title: made.title, company: made.company, location: made.location, start, end, bullets: [] };
         out.roles.push(role);
         continue;
       }
-      // Un-bulleted prose under a job is still that job's duty — plenty of CVs do not
-      // use bullet characters at all.
-      if (role) { role.bullets.push(line.replace(BULLET, "").trim()); continue; }
-      out.unread.push(line);
+      /*
+       * Held, not committed. Un-bulleted prose under a job IS that job's duty — plenty of CVs use no
+       * bullet characters — but the same shape is also the first two lines of the NEXT job when the
+       * date is on the third. Which it is only becomes knowable one or two lines later, so the
+       * decision waits: `flushCarry` turns these into duties everywhere a header does not claim them.
+       */
+      carry.push(line.replace(BULLET, "").trim());
       continue;
     }
 
@@ -298,6 +431,9 @@ export function parseCv(raw: string): ParsedCv {
       continue;
     }
   }
+
+  /* And at the end of the document, for a CV that finishes on its last job. */
+  flushCarry();
 
   out.summary = summaryLines.join(" ").trim();
   // De-duplicate the flat lists: a CV that repeats "CT" in two skill rows should not

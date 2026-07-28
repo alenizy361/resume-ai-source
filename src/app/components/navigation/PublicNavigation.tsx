@@ -52,7 +52,7 @@ export default function PublicNavigation({ lang }: { lang: "ar" | "en" }) {
   return (
     <nav className="cine-nav" data-solid={solid ? "" : undefined} aria-label={ar ? "التنقل الرئيسي" : "Main navigation"}>
       <div className="cine-nav-in">
-        <Link href={ar ? "/ar" : "/"} className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 16 }}>
+        <Link href={ar ? "/ar" : "/"} className="flex min-h-11 items-center gap-2" style={{ fontWeight: 800, fontSize: 16 }}>
           <BrandOrbMark size={26} />
           <span>{ar ? "سيرة" : "Sira"}</span>
         </Link>
