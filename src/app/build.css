@@ -327,7 +327,9 @@
 }
 .build-root .bd-stepbar-btn {
   flex: 0 0 auto;
-  min-height: 40px; padding: 8px 14px;
+  /* 44px, not 40 — this is a `.t-tap` control, and `.t-tap`'s floor (0,1,0) loses to this
+     rule's (0,2,0), so the class it carries did nothing here. */
+  min-height: 44px; padding: 8px 14px;
   border-radius: 999px; border: 1px solid var(--line);
   font-size: .78rem; font-weight: 700; color: var(--muted);
   background: transparent;
@@ -418,7 +420,8 @@
   border: 1px solid var(--line);
 }
 .build-root .bd-pane-btn[data-on] {
-  background: var(--accent); color: #fff; border-color: transparent;
+  /* --accent-deep for the same reason as .bd-continue: white on #8b5cf6 is 4.23:1 at this size. */
+  background: var(--accent-deep); color: #fff; border-color: transparent;
 }
 
 /* ── columns ───────────────────────────────────────────────
@@ -506,9 +509,14 @@
   min-height: 44px; padding: 10px 20px;
   border-radius: 12px; border: 0;
   font-size: .86rem; font-weight: 800; color: #fff;
-  background: var(--accent);
+  /* `--accent-deep`, not `--accent`. The accent-as-INK pass moved text off #8b5cf6 and left the
+     accent BACKGROUNDS that fail the identical test: white on #8b5cf6 is 4.23:1 at 13.76px — the
+     exact number globals.css quotes as "under AA" — and this is the builder's primary button, on
+     every one of the eleven steps, in both languages. Only its :hover had the readable cut, so the
+     button became compliant when you pointed at it. `.ps-cta` made this move for the same reason. */
+  background: var(--accent-deep);
 }
-.build-root .bd-continue:hover { background: var(--accent-deep); }
+.build-root .bd-continue:hover { background: #6d28d9; }
 /*
  * ── the press, and the rule that was quietly cancelling it ──
  *

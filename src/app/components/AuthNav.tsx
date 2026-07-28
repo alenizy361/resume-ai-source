@@ -45,7 +45,8 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
 
   return (
     <>
-      <Link href={ar ? "/ar/login" : "/login"} className="text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
+      {/* 44px — this measured 20px tall, the same gap the language toggle beside it just closed. */}
+      <Link href={ar ? "/ar/login" : "/login"} className="inline-flex min-h-11 items-center text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
       {unlockButton}
     </>
   );

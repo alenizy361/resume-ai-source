@@ -21,6 +21,7 @@ function CallbackInner() {
         reviewTitle: "\u062a\u0645 \u0627\u0644\u062f\u0641\u0639 \u2014 \u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629",
         contactSupport: "\u0631\u0627\u0633\u0644\u0646\u0627",
         pendingTitle: "\u062c\u0627\u0631\u064d \u0645\u0639\u0627\u0644\u062c\u0629 \u0627\u0644\u062f\u0641\u0639",
+        unverifiedTitle: "\u062a\u0639\u0630\u0651\u0631 \u062a\u0623\u0643\u064a\u062f \u0647\u0630\u0627 \u0627\u0644\u062f\u0641\u0639",
         pendingMsg: "\u062f\u0641\u0639\u062a\u0643 \u0642\u064a\u062f \u0627\u0644\u0645\u0639\u0627\u0644\u062c\u0629 \u0648\u0644\u0645 \u062a\u0643\u062a\u0645\u0644 \u0628\u0639\u062f. \u0644\u0627 \u062a\u062f\u0641\u0639 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u2014 \u0627\u0636\u063a\u0637 \u201c\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629\u201d \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a.",
         refresh: "\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629",
         wait: "\u0644\u062d\u0638\u0629 \u0645\u0646 \u0641\u0636\u0644\u0643.",
@@ -50,6 +51,11 @@ function CallbackInner() {
         reviewTitle: "Payment received — needs review",
         contactSupport: "Contact support",
         pendingTitle: "Payment processing",
+        /* Its own title. The verify-failure branch reused `pendingTitle`, so the page said "Payment
+           processing" with a "Refresh status" button directly above a body reading "We couldn't
+           verify the payment. If you were charged, contact support." The heading and the sentence
+           under it were telling the buyer two different things at the worst possible moment. */
+        unverifiedTitle: "We couldn't confirm this payment",
         pendingMsg: "Your payment is still being processed and hasn't completed yet. Don't pay again — tap “Refresh status” in a moment.",
         refresh: "Refresh status",
         wait: "Please wait a moment.",
@@ -277,7 +283,11 @@ function CallbackInner() {
         {burst && <div className="pointer-events-none absolute inset-x-0" style={{ top: "-96px" }}><AuroraBurst /></div>}
 
         <h1 className="text-2xl font-extrabold">
-          {state === "checking" ? t.checking : paid ? t.paidTitle : state === "pending" ? t.pendingTitle : review ? t.reviewTitle : t.failedTitle}
+          {state === "checking" ? t.checking
+            : paid ? t.paidTitle
+            /* `showSupport` on a pending state IS the verify-failure branch — see the fetch chain. */
+            : state === "pending" ? (showSupport ? t.unverifiedTitle : t.pendingTitle)
+            : review ? t.reviewTitle : t.failedTitle}
         </h1>
         <p className="mt-3 text-sm" style={{ color: paid ? "var(--glass-muted)" : "var(--muted)" }}>
           {state === "failed" && !review ? t.neverLost : detail || t.wait}

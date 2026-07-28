@@ -493,14 +493,24 @@ function readLease(): Lease {
 }
 
 /** Is a sibling tab of this browser session still holding the anonymous visit open? */
+/**
+ * Is this entry from a tab that is plausibly still alive?
+ *
+ * A small forward tolerance, because two tabs' clocks can disagree by a little and reading a
+ * sibling as dead is the expensive direction. But only a little: an entry dated far in the future
+ * NEVER expires, so a clock that was ahead and then corrected (NTP, a timezone change, a battery
+ * pull) left the anonymous visit open on that browser forever — and the next person on a shared
+ * machine was shown the previous person's CV, indefinitely. Measured: a seeded `now + 24h` entry
+ * restored a stranger's CV and survived every prune.
+ */
+function leaseIsLive(at: number, now: number): boolean {
+  if (at > now + LEASE_BEAT_MS) return false;   // a broken clock, not a live tab
+  return now - at < LEASE_FRESH_MS;
+}
+
 function siblingTabIsLive(now = Date.now()): boolean {
   const me = tabId();
-  return Object.entries(readLease()).some(([id, at]) =>
-    id !== me
-    /* A future-dated entry is a clock that moved (a timezone change, an NTP correction). Read as
-       live: that failure direction costs an old draft a few extra minutes, and the other one is the
-       data loss this whole mechanism exists to prevent. */
-    && (at > now || now - at < LEASE_FRESH_MS));
+  return Object.entries(readLease()).some(([id, at]) => id !== me && leaseIsLive(at, now));
 }
 
 /**
@@ -521,8 +531,10 @@ export function keepVisitAlive(): () => void {
       const lease = readLease();
       /* Stale entries are pruned on every write, so a browser that crashed months ago does not
          leave a key growing an entry per visit. */
+      /* Anything not live goes — including the far-future entries the old condition skipped, which
+         is what let one broken clock keep a visit open forever. */
       for (const [id, at] of Object.entries(lease)) {
-        if (id !== me && at <= now && now - at >= LEASE_FRESH_MS) delete lease[id];
+        if (id !== me && !leaseIsLive(at, now)) delete lease[id];
       }
       mutate(lease);
       const keys = Object.keys(lease);
@@ -657,9 +669,31 @@ export function endAnonymousVisit(): number {
   /* The session marker too, so a builder opened twice in one lapsed tab does not decide differently
      the second time. */
   try { ss()?.removeItem(SESSION_VISIT); } catch { /* noop */ }
-  /* And the liveness lease, so the tab that just declared the visit over does not immediately
-     read its OWN stale stamp as a sibling and re-open it. */
-  try { store.removeItem(LIVE_LEASE); } catch { /* noop */ }
+  /*
+   * ── the registry is PRUNED, not deleted, and deleting it re-opened the original bug ──
+   *
+   * This removed the whole `LIVE_LEASE` key. `BuilderProvider` calls this on the first real
+   * hydration of any genuinely new visit — and by then `keepVisitAlive()` has already written THIS
+   * tab's entry, so the delete took it too. Nothing re-stamps until the 60-second beat, which left
+   * every builder tab advertising itself as dead for its first minute: a second tab opened inside
+   * that window read an empty registry and `forgetOwner("anon")`-ed the first tab's CVs.
+   *
+   * Measured: `ra_visit_live` was `null` from t+10s to t+50s on a fresh tab, the wipe reproduced
+   * four times inside the window, and a control at t+66s left the CV intact. So v2 did not fix the
+   * second-tab data loss — it narrowed it to a minute that every visit passes through, which is
+   * worse than a bug that is always present, because it is intermittent.
+   *
+   * The comment that justified the delete — "so the tab that just declared the visit over does not
+   * read its OWN stale stamp as a sibling" — described a hazard that stopped existing the moment
+   * entries became keyed by tab id: `siblingTabIsLive` skips this tab by name. So the correct action
+   * is to drop everyone ELSE's entry (their visit is over too) and keep our own.
+   */
+  try {
+    const me = tabId();
+    const mine = readLease()[me];
+    if (me && typeof mine === "number") store.setItem(LIVE_LEASE, JSON.stringify({ [me]: mine }));
+    else store.removeItem(LIVE_LEASE);
+  } catch { /* noop */ }
   return removed;
 }
 

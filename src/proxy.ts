@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { AR_SLUGS } from "@/app/lib/jobs-ar";
+import { JOB_SLUGS } from "@/app/lib/jobs";
 
 // Next 16 renamed `middleware` -> `proxy` (runtime is nodejs, not edge).
 //
@@ -76,6 +77,26 @@ const AR_TWINS: RegExp[] = [
  */
 const CATALOGS = ["/resume-examples/", "/cover-letter-examples/", "/resume-skills/"];
 
+/**
+ * …and the same question in the other direction, which the first version did not ask.
+ *
+ * `hasArTwin` guarded `?lang=ar` only. The `/ar/* + ?lang=en` branch stripped `/ar` unconditionally,
+ * so an Arabic-only profession — and there are 34 of them across the three catalogs — 308-redirected
+ * to an English page that does not exist. Measured: `/ar/resume-examples/medical-doctor?lang=en` →
+ * 308 → `/resume-examples/medical-doctor` → 404, while the Arabic page itself answers 200. The same
+ * "a redirect pointing at a page that does not exist" defect the fix declared closed, surviving in
+ * the direction nobody swept.
+ */
+function hasEnTwin(arPathname: string): boolean {
+  const pathname = arPathname.replace(/^\/ar/, "") || "/";
+  if (/^\/resume-examples\/category(\/[a-z0-9-]+)?$/.test(pathname)) return true;
+  const catalog = CATALOGS.find((c) => pathname.startsWith(c));
+  if (catalog) return JOB_SLUGS.includes(pathname.slice(catalog.length));
+  /* Everything outside the catalogs has an English original by construction — the `/ar` tree is
+     built from it — so only the programmatic children need asking about. */
+  return true;
+}
+
 function hasArTwin(pathname: string): boolean {
   /* The SECTOR tree lives under the same prefix and is fully bilingual — identical slugs in both
      languages — so it is matched before the profession check, which would otherwise look up
@@ -92,7 +113,7 @@ export function proxy(request: NextRequest) {
 
   if (lang) {
     if (pathname.startsWith("/ar")) {
-      if (lang === "en") {
+      if (lang === "en" && hasEnTwin(pathname)) {
         const url = request.nextUrl.clone();
         url.pathname = pathname.replace(/^\/ar/, "") || "/";
         url.searchParams.delete("lang");

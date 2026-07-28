@@ -858,11 +858,22 @@ console.log("\n── and the hook does not put the network in front of the form
   ok("a stale sibling is not a live one — a genuinely new visit restores nothing",
     mayRestore(owner) === false);
 
-  /* A stranger's entry from the FUTURE means the clock moved (a timezone change, an NTP
-     correction). Read as live, deliberately: the cost is an old draft surviving a few minutes, and
-     the cost of the other choice is the data loss above, on the machines least able to explain it. */
+  /*
+   * A future-dated entry, and the first version of this assertion had it backwards.
+   *
+   * It asserted that ANY future entry is read as live, reasoning that a moved clock (NTP, a timezone
+   * change) should not cost a draft. The consequence, measured: such an entry never expires and is
+   * never pruned, so the anonymous visit on that browser never ends and the next person on a shared
+   * machine is shown the previous person's CV — indefinitely. A seeded `now + 24h` entry restored a
+   * stranger's CV and survived every prune.
+   *
+   * A SMALL skew is still tolerated, because two tabs' clocks can disagree by a little and reading a
+   * live sibling as dead is the expensive direction. Beyond one beat it is a broken clock, not a tab.
+   */
   store.setItem("ra_visit_live", JSON.stringify({ tOther: Date.now() + 60 * 60_000 }));
-  ok("a sibling entry from the future is treated as live rather than as expired", mayRestore(owner) === true);
+  ok("an entry far in the future is a broken clock, not a live sibling", mayRestore(owner) === false);
+  store.setItem("ra_visit_live", JSON.stringify({ tOther: Date.now() + 5_000 }));
+  ok("but a few seconds of clock skew is still tolerated", mayRestore(owner) === true);
 
   /* Ending the visit takes the whole registry with it, so the tab that just declared the visit over
      cannot read anything back and re-open it. */
@@ -906,10 +917,18 @@ console.log("\n── and the hook does not put the network in front of the form
     /if \(upgraded\) mustPersist\.current = true;/.test(code));
   ok("the builder holds the anonymous visit open while it is on screen",
     /useEffect\(\(\) => keepVisitAlive\(\), \[\]\)/.test(code));
-  /* The AI ledger is what `mayCall` enforces the per-resume budget from. Gated behind `touched`, it
-     was never written on an untouched resume — so the cap reset on every reload and the same money
-     could be spent again. */
-  ok("an AI dispatch persists its spend ledger", /if \(a\.t === "ai"\) mustPersist\.current = true;/.test(code));
+  /*
+   * The AI ledger is what `mayCall` enforces the per-resume budget from. Gated behind `touched` it
+   * was never written on an untouched resume, so the cap reset on every reload.
+   *
+   * This first asserted the carve-out inside `dispatchUser` — and passed while the bug was still
+   * live, because `commitAi` (the ONLY `{t:"ai"}` dispatch in the product) calls the raw reducer
+   * `dispatch` and never goes near `dispatchUser`. Proved at runtime: the record was byte-identical
+   * after three "Suggest with AI" presses. Asserted at the real call site now.
+   */
+  const commitAi = code.slice(code.indexOf("const commitAi"), code.indexOf("const gen = useGenerate"));
+  ok("the AI dispatch persists its spend ledger",
+    /mustPersist\.current = true;/.test(commitAi) && /t: "ai"/.test(commitAi), commitAi.slice(0, 160));
   /* A server copy adopted on a second device is content this browser does not hold. Without the
      flag it reached the screen and never the disk. */
   ok("an adopted server copy is written locally",

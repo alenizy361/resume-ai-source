@@ -74,11 +74,13 @@
 /* No `:focus` rule existed anywhere on this page before — every control relied on the browser's
    bare default outline. Scoped here rather than added globally: a sitewide focus-ring change is a
    bigger, unrelated risk than this page's own visual pass should carry. */
+/* `border-radius` removed for the reason globals.css records: it re-cuts the ELEMENT on focus, not
+   the ring, and `outline` already follows each control's own radius. (This file's own note above is
+   now out of date — there IS a global focus rule; this one only keeps the page's hue.) */
 .landing-root a:focus-visible,
 .landing-root button:focus-visible {
   outline: 2px solid var(--accent-bright);
   outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* The "how it works" step number — made "visually obvious" (the brief's own words) by being the

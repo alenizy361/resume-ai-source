@@ -440,7 +440,11 @@ body {
      squeeze snaps on and off instead of easing — and it has to be added HERE, because that file is
      `@import`ed at the top of this one and loses every same-specificity tie to it. */
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.12s ease;
-  display: inline-block;
+  /* `display` is deliberately NOT set here. It was `inline-block`, written later in this file at the
+     same specificity as the 44px block above — so it won, and the `align-items`/`justify-content`
+     that came with the floor became inert. On `<button>` the UA's own button layout hid it; on
+     ANCHOR-based ghost buttons the label sat 3–11px above centre inside a 44px box, which is exactly
+     the failure that block's comment says it avoids. Six live anchor call sites had it. */
 }
 .btn-ghost:hover {
   border-color: rgba(15, 20, 35, 0.28);
@@ -914,6 +918,8 @@ main {
 .ps-brand {
   display: inline-flex;
   align-items: center;
+  /* 26px measured; the language toggle beside it already carries the floor. */
+  min-height: 44px;
   gap: 10px;
   font-size: 15px;
   font-weight: 800;

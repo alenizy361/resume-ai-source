@@ -59,7 +59,13 @@
 }
 .cine-nav-links { display: none; align-items: center; gap: 26px; }
 @media (min-width: 760px) { .cine-nav-links { display: flex; } }
+/* 44px, matching the rest of the product. These measured 21px tall — and on a tablet they are the
+   first controls a finger meets, on the page that IS the front door. `inline-flex` + centring rather
+   than padding, so the row's rhythm does not change. */
 .cine-nav-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   font-size: 14px; font-weight: 600; color: var(--cine-mut); text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -100,7 +106,8 @@
      page's dark text would render the statements invisible on the black frame. */
   color: #f2f4fa;
 }
-.cine-intro .cine-skip { color: #9aa3b6; border-color: rgba(255, 255, 255, 0.2); }
+.cine-intro .cine-skip {
+  min-height: 44px; display: inline-flex; align-items: center; justify-content: center; color: #9aa3b6; border-color: rgba(255, 255, 255, 0.2); }
 .cine-intro .cine-skip:hover { color: #f2f4fa; }
 .cine-intro[data-leaving] { opacity: 0; pointer-events: none; }
 .cine-intro-orbwrap {
@@ -331,7 +338,8 @@
 .cine-price-list { margin-top: 16px; display: grid; gap: 8px; }
 .cine-price-list li { font-size: 15px; line-height: 1.5; color: var(--cine-mut); list-style: none; display: flex; gap: 10px; }
 .cine-price-list li::before { content: "·"; color: var(--cine-dim); }
-.cine-price-all { display: inline-block; margin-top: 22px; font-size: 15px; font-weight: 600; color: var(--cine-mut); text-decoration: underline; text-underline-offset: 4px; }
+.cine-price-all {
+  min-height: 44px; display: inline-flex; align-items: center; display: inline-block; margin-top: 22px; font-size: 15px; font-weight: 600; color: var(--cine-mut); text-decoration: underline; text-underline-offset: 4px; }
 
 /* ── final ── */
 
@@ -345,7 +353,17 @@
 .cine-footer-in a:hover { color: var(--cine-ink); }
 
 /* focus — visible on black, everywhere in the story */
-.cine-root :is(a, button):focus-visible { outline: 2px solid var(--cine-blue); outline-offset: 3px; border-radius: 6px; }
+/*
+ * No `border-radius`, and no hue of its own.
+ *
+ * The global rule dropped its `border-radius` for a measured reason — it reshapes the ELEMENT, not
+ * the ring — and this page-scoped copy kept it, on the site's front door. Measured on / and /ar: 17
+ * controls per page re-cut from their own radius to 6px the moment they took keyboard focus, pills
+ * snapping to rectangles. It also painted the ring `--cine-blue` while every other page used the
+ * product's violet, so focus looked like two different systems depending which page you were on.
+ * `outline` already follows each control's own radius.
+ */
+.cine-root :is(a, button):focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 3px; }
 
 /* Arabic letterforms join; tracking breaks the joins. Outranks every rule above (0,2,0, last). */
 .cine-root[dir="rtl"] * { letter-spacing: normal; }

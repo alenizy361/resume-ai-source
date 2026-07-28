@@ -177,15 +177,9 @@ export default function BuilderProvider({
   const mustPersist = useRef(false);
   const dispatchUser = useCallback((a: Action) => {
     if (a.t !== "hydrate" && a.t !== "seed" && a.t !== "ai") touched.current = true;
-    /*
-     * `ai` is not a user EDIT — it must not make an untouched document count as touched — but it does
-     * carry facts storage has to keep: the spend ledger `mayCall` enforces the per-resume budget
-     * from, and the generation cache. With the autosave gated on `touched`, three "Suggest with AI"
-     * presses on an untouched resume wrote nothing at all, so the budget cap reset on every reload
-     * and the same money could be spent again. `mustPersist` is exactly the carve-out for content
-     * storage does not already hold.
-     */
-    if (a.t === "ai") mustPersist.current = true;
+    /* `{t:"ai"}` never arrives here — `commitAi` dispatches it through the raw reducer — so its
+       persistence carve-out lives at that call site instead. Left as a note rather than as a
+       condition that reads as coverage it does not provide. */
     dispatch(a);
   }, []);
   /**
@@ -700,6 +694,19 @@ export default function BuilderProvider({
   const career = useMemo(() => careerContext(state), [state]);
   const commitAi = useCallback(
     (next: { store: Parameters<typeof reducer>[0]["generations"]; ledger: BuilderState["ledger"] }) => {
+      /*
+       * `mustPersist` is set HERE, not in `dispatchUser`.
+       *
+       * The carve-out was added to `dispatchUser` — and this is the only `{t:"ai"}` dispatch in the
+       * product, and it calls the raw reducer `dispatch`. So the carve-out was unreachable and the
+       * bug it was written for survived untouched: proved at runtime, where the stored record was
+       * byte-identical after three "Suggest with AI" presses and the ledger appeared only after an
+       * unrelated user edit. An AI dispatch is not an EDIT (it must not make an untouched document
+       * count as touched, which is why it is excluded there) but it does carry the spend ledger
+       * `mayCall` enforces the per-resume budget from — so without this the cap reset on every
+       * reload and the same money could be spent again.
+       */
+      mustPersist.current = true;
       dispatch({ t: "ai", store: next.store ?? {}, ledger: next.ledger ?? { ...EMPTY_LEDGER } });
     },
     [],

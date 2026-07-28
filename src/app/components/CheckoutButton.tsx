@@ -222,8 +222,27 @@ export default function CheckoutButton({
     if (!name.trim() || !email.trim() || !mobile.trim()) { setError(ar ? "فضلاً عبّ كل الحقول." : "Please fill in all fields."); return; }
     setError(""); setLoading(true);
     try {
-      const res = await fetch("/api/pay", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, name, email, mobile, locale: ar ? "ar" : "en" }) });
+      /*
+       * ── a request that never returns must not seal the buyer in ──
+       *
+       * Escape, the scrim and Cancel are all gated on `!loading`, and this dialog also locks `html`
+       * and `body`. So a `/api/pay` call that hangs — a stalled connection, a proxy that never
+       * answers — left a keyboard AND mouse user with no way out of a scroll-locked page, in both
+       * languages: {dialog: open, bodyOverflow: "hidden", buttons: ["Preparing…" disabled, "Cancel"
+       * disabled]}. The gates are right (nothing should cancel a payment mid-flight); what was
+       * missing is that "mid-flight" has to end.
+       *
+       * 25 seconds, then the request is aborted and `loading` clears, which re-enables every exit
+       * and shows the failure. Longer than any healthy checkout and short enough that nobody sits
+       * trapped wondering whether they have been charged.
+       */
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 25_000);
+      let res: Response;
+      try {
+        res = await fetch("/api/pay", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan, name, email, mobile, locale: ar ? "ar" : "en" }), signal: ctl.signal });
+      } finally { clearTimeout(timer); }
       const data = await res.json();
       /*
        * ── the REASON survives, in the buyer's own language ──
