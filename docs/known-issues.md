@@ -3230,3 +3230,46 @@ rule keyed on a class while nine sites reached the font through a token; the AA 
 while seventy inline sites kept the failing value; `.t-tap` naming the exact controls it was never
 applied to; the proxy header promising "only when a twin actually exists" for one direction of two.
 Grepping for a fix's own justification and checking it still holds found more than reading new code did.
+
+### Round 5 · the parser fix fabricated in three new ways, and the old parser was right about two
+
+Round 4's lookback was measured against the pre-fix file run side by side, and it lost that
+comparison in two of three cases. The guard was a **denylist of ~25 past-tense verb forms standing in
+for "is this a noun phrase"**, and a denylist fails in both directions at once:
+
+| | Input | What the denylist did |
+|---|---|---|
+| under-inclusive | `Responsible for daily radiography operations` · `إدارة قسم الأشعة والإشراف على الفنيين` | present tense and Arabic masdar are not past tense → promoted to the NEXT job's title, its real title demoted to employer. **The pre-fix parser got both right.** |
+| over-inclusive | `Registered Nurse`, `Licensed Practical Nurse`, `Certified Public Accountant`, `Embedded Systems Engineer` | the `-ed` is an ADJECTIVE → title discarded, **employer name written into the title field** — verbatim the defect the lookback was added to fix |
+
+Plus a plain bug: `carry.length -= made.used` truncated the *unfiltered* buffer using a count taken
+from the *filtered* one, so an over-long employer (`King Faisal Specialist Hospital and Research
+Centre, Riyadh Region`, `مستشفيات المانع`) was **deleted outright** — absent from roles, bullets and
+`unread` alike — while the title was duplicated as a fabricated duty on the job above. Silent loss is
+the outcome this file's own header calls the worst.
+
+**The fix is to stop classifying the line and classify the SEPARATOR instead.** The ambiguity was
+never in the line above — both a duty and a title are short noun-ish phrases — it is in how the dated
+line splits:
+
+```
+Senior Radiology Technologist
+King Faisal Hospital, Riyadh — Jan 2019 - Present     ← COMMA: employer, city. Above is the title.
+
+Operated CT and MRI scanners for outpatients          ← a duty of the job above
+Radiologic Technologist — King Fahad Hospital | 2020  ← PHRASE (| — at في): self-sufficient.
+```
+
+So the promotion happens only on the comma shape; `looksLikeHeading` is now purely structural (≤80
+chars, ≤12 words, no bullet, no trailing `.!?`) with no morphology at all, and `used` indexes the same
+array it splices. 19 fixtures pin every case above, including all eight `-ed` titles.
+
+**OPEN, deliberately not changed the same night:** `splitRole` separates on `|`, an em-dash, ` at `
+and ` في `, but NOT on a plain spaced hyphen — so `Radiographer - Dallah Hospital` stays one string
+in the title field. Pre-existing (the verifier's own before/after shows the old parser doing the
+same). Also open from this round: dates-first layouts import zero roles; an un-bulleted duty
+containing ` at ` or ` في ` becomes a dateless fabricated job (pre-existing, same no-fabrication
+class); an unrecognised section heading (`VOLUNTEER WORK`, `PROFESSIONAL DEVELOPMENT`) turns the
+entry beneath it into employment; imported skills/languages are OFFERED rather than confirmed while
+the review panel's ticks imply otherwise; and `.cine-intro` is a `role="dialog"` that lets Tab walk
+out from under it.

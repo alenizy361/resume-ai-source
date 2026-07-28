@@ -142,13 +142,28 @@ const LINKEDIN = /(?:linkedin\.com\/[^\s,;]+|\/in\/[^\s,;]+)/i;
  * separators are the reliable part; the order (title first) is the convention every
  * one of those follows.
  */
-function splitRole(rest: string): { title: string; company: string; location: string } {
+/**
+ * Which separator held the line together — the signal `roleFromHeader` resolves its ambiguity with.
+ *
+ * `comma` means "X, Y" with Y capitalised, which is how a place and its city are written.
+ * `phrase` means `|`, an em-dash, ` at ` or ` في `, which is how a title and its employer are.
+ */
+export type SepKind = "comma" | "phrase" | "none";
+
+const SEP_PHRASE = /\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*/;
+const SEP_COMMA = /\s*,\s*(?=[A-Z؀-ۿ])/;
+
+function splitRole(rest: string): { title: string; company: string; location: string; sep: SepKind } {
   const parts = rest
     .split(/\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*|\s*,\s*(?=[A-Z؀-ۿ])/)
     .map((x) => x.trim())
     .filter(Boolean);
   const [title = "", company = "", location = ""] = parts;
-  return { title, company, location: [location, ...parts.slice(3)].filter(Boolean).join(", ") };
+  /* Whichever matched EARLIEST is the one that structured the line. */
+  const ph = SEP_PHRASE.exec(rest);
+  const cm = SEP_COMMA.exec(rest);
+  const sep: SepKind = ph && (!cm || ph.index < cm.index) ? "phrase" : cm ? "comma" : "none";
+  return { title, company, location: [location, ...parts.slice(3)].filter(Boolean).join(", "), sep };
 }
 
 
@@ -186,72 +201,100 @@ function splitRole(rest: string): { title: string; company: string; location: st
  */
 const MAX_CARRY = 2;
 
-/*
- * Irregular past-tense verbs a duty starts with. The regular ones are caught by `-ed` below; these
- * are the ones English does not inflect that way and that a CV actually uses.
+/**
+ * Could this line be a heading — a job title or an employer — rather than a duty?
+ *
+ * STRUCTURAL only, and the version this replaces was a verb denylist that failed in both
+ * directions at once:
+ *
+ *   under-inclusive · "Responsible for daily radiography operations" and "إدارة قسم الأشعة
+ *                     والإشراف على الفنيين" are duties in the present tense / the Arabic masdar,
+ *                     which no past-tense test catches — so they were promoted to the next job's
+ *                     TITLE and that job's real title was pushed down into the employer field.
+ *   over-inclusive  · "Registered Nurse", "Licensed Practical Nurse", "Certified Public
+ *                     Accountant", "Embedded Systems Engineer" — the `-ed` there is an ADJECTIVE,
+ *                     indistinguishable from a verb by suffix. Those titles were thrown away and
+ *                     the EMPLOYER NAME written into the title field instead.
+ *
+ * Both were measured against the pre-fix parser, which got several of them right. A denylist of
+ * twenty-five past-tense forms cannot stand in for "is this a noun phrase", so it is gone; the
+ * ambiguity is resolved by the SHAPE of the dated line instead (see `roleFromHeader`).
+ *
+ * The limits are generous because employers are long: "King Faisal Specialist Hospital and
+ * Research Centre, Riyadh Region" is 67 characters and a real place.
  */
-const DUTY_VERB = /^(led|ran|built|drove|grew|oversaw|won|set|wrote|made|took|gave|held|kept|sold|taught|chose|met|began|spoke|drew|brought)\b/i;
-
 function looksLikeHeading(line: string): boolean {
   const t = line.trim();
-  if (!t || t.length > 60) return false;
+  if (!t) return false;
+  if (t.length > 80) return false;
   if (BULLET.test(t)) return false;
   if (/[.!?]$/.test(t)) return false;              // a finished sentence is a duty
-  if (t.split(/\s+/).length > 8) return false;
-  /*
-   * ── the verb test, and it is what keeps this from fabricating ──
-   *
-   * A duty is a sentence about doing something; a job title is a noun phrase. Without this the
-   * lookback promoted "Positioned patients and applied shielding to ALARA standards" — a duty of the
-   * job ABOVE — into the job title of the one below, which is a worse error than the one the
-   * lookback exists to fix. Caught by `ops/importcv.test.mjs`, which is why the fixture is there.
-   *
-   * English: a regular past tense ends in `-ed`; the irregulars are listed above.
-   * Arabic: a first-person past verb ends in ت (قدت, أدرت, نسّقت, أعددت, تابعت), where the job titles
-   * this product sees are noun phrases (أخصائي أشعة, محاسب, مهندس مدني).
-   */
-  const first = t.split(/\s+/)[0].replace(/[,،:]$/, "");
-  if (/^[a-z]/i.test(first) && (/[a-z]ed$/i.test(first) && first.length > 3 || DUTY_VERB.test(first))) return false;
-  if (/^[؀-ۿ]/.test(first) && /ت$/.test(first) && first.length >= 3) return false;
-  return true;
+  return t.split(/\s+/).length <= 12;
 }
 
 /**
- * Compose a role from the dated line and whatever the lines above it were.
+ * Compose a role from the dated line and the lines above it.
  *
- * Returns `null` when there is nothing that can honestly be called a job, so the caller can put the
- * line back in `unread` — which is what "we could not place this" is for.
+ * `used` counts lines taken from the END of `carry`, contiguously — the caller splices exactly that
+ * many. It used to be a count taken from a FILTERED array and applied to the unfiltered buffer, so
+ * whenever an ineligible line sat among the eligible ones the wrong element was dropped: an
+ * over-long employer was deleted outright — absent from roles, bullets and `unread` alike — while
+ * the title was both used AND duplicated as a duty on the job above. Silent loss is the one outcome
+ * this file's header calls the worst, so the two now index the same array.
+ *
+ * Returns `null` when nothing here can honestly be called a job.
  */
 function roleFromHeader(
   rest: string,
   carry: string[],
+  sep: SepKind,
 ): { title: string; company: string; location: string; used: number } | null {
-  const eligible = carry.slice(-MAX_CARRY).filter(looksLikeHeading);
+  const tail = carry.slice(-MAX_CARRY);
   const inline = splitRole(rest);
 
-  /* The dated line carries no text of its own: everything must come from above it. */
+  /*
+   * ── the unambiguous case: the dated line is ONLY a date ──
+   *
+   * Everything must come from above it, and a duty sitting directly above a bare date line is not a
+   * shape CVs use. So this branch is permissive: it is the three-line layout (title / employer /
+   * dates), which is the most common there is and which imported ZERO positions before the lookback
+   * existed. Any reasonable reading beats losing the job outright.
+   */
   if (!inline.title) {
-    if (!eligible.length) return null;
-    const [a, b] = eligible.length >= 2 ? eligible.slice(-2) : [eligible[eligible.length - 1], ""];
-    return { title: a, company: b, location: "", used: eligible.length >= 2 ? 2 : 1 };
+    const usable = tail.filter(looksLikeHeading);
+    if (!usable.length) return null;
+    const take = Math.min(usable.length, tail.length);
+    const [a, b] = take >= 2 ? tail.slice(-2) : [tail[tail.length - 1], ""];
+    return { title: a, company: b, location: "", used: take >= 2 ? 2 : 1 };
   }
 
   /*
-   * The dated line HAS text, and a heading sits directly above it. That heading is the job title and
-   * the dated line's parts are the employer and its city — the second layout above.
+   * ── the ambiguous case, resolved by the SEPARATOR rather than by guessing ──
    *
-   * Preferred over the old reading deliberately: the alternative discards the line above entirely
-   * (that is the bug), while this keeps every fact and matches the layout CVs actually use. The
-   * `looksLikeHeading` guard is what stops a trailing prose duty being promoted to a job title.
+   * The dated line has text of its own, and a line sits above it. Two real layouts collide here:
+   *
+   *   Senior Radiology Technologist
+   *   King Faisal Hospital, Riyadh — Jan 2019 - Present     ← employer, CITY. Above is the title.
+   *
+   *   Operated CT and MRI scanners for outpatients          ← a duty of the job above
+   *   Radiologic Technologist — King Fahad Hospital | 2020  ← title, EMPLOYER. Self-sufficient.
+   *
+   * The difference is not in the line above — both are short noun-ish phrases — it is in how the
+   * dated line splits. A COMMA before a capitalised word separates a place from its city; `|`, an
+   * em-dash, ` at ` or ` في ` separate a title from its employer. So the promotion happens only on
+   * the comma shape, which is what the first version got wrong: it promoted on every shape and
+   * turned duties into job titles.
    */
-  const above = eligible[eligible.length - 1];
-  if (above) {
-    return {
-      title: above,
-      company: inline.title,
-      location: [inline.company, inline.location].filter(Boolean).join(", "),
-      used: 1,
-    };
+  if (sep === "comma" && tail.length) {
+    const above = tail[tail.length - 1];
+    if (looksLikeHeading(above)) {
+      return {
+        title: above,
+        company: inline.title,
+        location: [inline.company, inline.location].filter(Boolean).join(", "),
+        used: 1,
+      };
+    }
   }
   return { ...inline, used: 0 };
 }
@@ -396,7 +439,7 @@ export function parseCv(raw: string): ParsedCv {
       }
       if (looksLikeRoleHeader(line)) {
         const { start, end, rest } = splitDates(line);
-        const made = roleFromHeader(rest, carry);
+        const made = roleFromHeader(rest, carry, splitRole(rest).sep);
         // Nothing here and nothing above it that reads like a job: a stray date or separator line.
         if (!made) { out.unread.push(line); flushCarry(); continue; }
         /* Whatever the new role did NOT take belongs to the job before it, as prose duties. */

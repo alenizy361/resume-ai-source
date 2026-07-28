@@ -352,5 +352,91 @@ console.log("\n── the OCR door is separate, consented, and honest ──");
   ok("a bare date line invents no job", orphan.roles.length === 0, JSON.stringify(orphan.roles));
 }
 
+/* ── the three ways the FIRST lookback fabricated, each pinned ── */
+{
+  /*
+   * 1. A duty in the PRESENT tense, or an Arabic masdar, above a self-sufficient dated line. The
+   *    first guard was a past-tense denylist, so neither was caught and both were promoted to the
+   *    next job's title — while that job's real title was demoted into the employer field. The
+   *    pre-fix parser got both of these RIGHT, which is what made it a regression rather than a
+   *    gap.
+   */
+  const present = parseCv([
+    "WORK EXPERIENCE",
+    "Radiographer - Dallah Hospital | Sep 2024 - Present",
+    "Responsible for daily radiography operations",
+    "Staff Nurse - Green Clinic | 2018 - 2020",
+  ].join("\n"));
+  /* Asserted on the ROLE COUNT and on where the duty landed, not on the split of the title —
+     `splitRole` separates on `|`, an em-dash and ` at `, and NOT on a plain spaced hyphen, so
+     "Radiographer - Dallah Hospital" stays one string. That is pre-existing behaviour (the
+     verifier's own before/after shows the old parser doing the same) and a separate gap, recorded
+     in docs/known-issues.md rather than changed here on the same night the lookback landed. */
+  eq("a present-tense duty is not promoted to a job title",
+    present.roles.map((r) => r.title),
+    ["Radiographer - Dallah Hospital", "Staff Nurse - Green Clinic"]);
+  ok("and it produced exactly two jobs, not three", present.roles.length === 2, JSON.stringify(present.roles.map((r) => r.title)));
+  ok("it stays a duty of the job above it",
+    /Responsible for daily/.test((present.roles[0]?.bullets || []).join(" ")),
+    JSON.stringify(present.roles[0]?.bullets));
+
+  const masdar = parseCv([
+    "الخبرة العملية",
+    "أخصائي أشعة – مستشفى دلة | سبتمبر 2024 حتى الآن",
+    "إدارة قسم الأشعة والإشراف على الفنيين",
+    "محاسب – شركة الراجحي | يناير 2019 - ديسمبر 2021",
+  ].join("\n"));
+  eq("an Arabic masdar duty is not promoted either",
+    masdar.roles.map((r) => r.title), ["أخصائي أشعة", "محاسب"]);
+  eq("and the employers stay employers",
+    masdar.roles.map((r) => r.company), ["مستشفى دلة", "شركة الراجحي"]);
+
+  /*
+   * 2. A job title whose first word ends in `-ed` — an ADJECTIVE, not a verb. The denylist threw
+   *    these away and wrote the EMPLOYER NAME into the title field, which is verbatim the defect
+   *    the lookback was added to fix, still live for a large slice of healthcare, accounting and
+   *    engineering CVs.
+   */
+  for (const title of [
+    "Registered Nurse", "Licensed Practical Nurse", "Advanced Practice Nurse",
+    "Certified Public Accountant", "Chartered Accountant", "Qualified Teacher",
+    "Embedded Systems Engineer", "Set Designer",
+  ]) {
+    const r = parseCv(["WORK EXPERIENCE", title, "King Faisal Hospital", "Mar 2020 - Present"].join("\n"));
+    eq(`"${title}" survives as the job title`,
+      r.roles.map((x) => [x.title, x.company]), [[title, "King Faisal Hospital"]]);
+  }
+
+  /*
+   * 3. The splice bug. `used` was counted against a FILTERED array and applied to the unfiltered
+   *    buffer, so an over-long employer was deleted outright — absent from roles, bullets AND
+   *    `unread` — while the title was duplicated as a fabricated duty on the job above. Silent loss
+   *    is the outcome this file's header calls the worst.
+   */
+  const longEmployer = "King Faisal Specialist Hospital and Research Centre, Riyadh Region";
+  const spliced = parseCv([
+    "WORK EXPERIENCE",
+    "Radiographer — Dallah Hospital | 2010 - 2018",
+    "- Performed CT scans",
+    "Senior Radiology Technologist",
+    longEmployer,
+    "Jan 2019 - Present",
+  ].join("\n"));
+  const everywhere = JSON.stringify(spliced);
+  ok("a long employer line is never silently deleted", everywhere.includes("Research Centre"), everywhere.slice(0, 200));
+  ok("and the title is not duplicated as a duty of the job above",
+    !(spliced.roles[0]?.bullets || []).some((b) => /Senior Radiology Technologist/.test(b)),
+    JSON.stringify(spliced.roles[0]?.bullets));
+
+  /* And the two layouts the lookback exists for still work. */
+  const two = parseCv([
+    "EXPERIENCE",
+    "Senior Radiology Technologist",
+    "King Faisal Hospital, Riyadh — Jan 2019 - Present",
+  ].join("\n"));
+  eq("the comma layout still keeps the title as the title",
+    two.roles.map((r) => [r.title, r.company]), [["Senior Radiology Technologist", "King Faisal Hospital"]]);
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);
