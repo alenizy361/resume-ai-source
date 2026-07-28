@@ -438,3 +438,20 @@ export function cacheHitRate(lines: TokenCounts[]): number {
   }
   return total === 0 ? 0 : read / total;
 }
+
+/* ─────────────────────────── the NVIDIA default ─────────────────────────── */
+
+/**
+ * The one NVIDIA model id the free-provider routes fall back to.
+ *
+ * It used to be six identical hardcoded copies of `meta/llama-4-maverick-17b-128e-instruct` —
+ * which reached its END OF LIFE on 2026-07-27 and started answering 410 Gone, taking
+ * `/api/optimize` (and every sibling on the default provider) down in production with an error
+ * that reads like an outage. Six copies meant six edits to recover; this constant means one.
+ *
+ * `openai/gpt-oss-120b` is the successor Groq named for this exact model's deprecation, and it
+ * is served on `integrate.api.nvidia.com`. If it ever misbehaves, the escape hatch needs no
+ * deploy-with-code: set `AI_MODEL` (all routes) in the environment and redeploy — every route
+ * reads the env FIRST and this constant only as the fallback.
+ */
+export const NVIDIA_DEFAULT_MODEL = "openai/gpt-oss-120b";

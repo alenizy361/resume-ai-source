@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { NVIDIA_DEFAULT_MODEL } from "@/app/lib/aiModels";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
 import { DRAFTING_DOCTRINE, METRIC_QUESTION_DOCTRINE } from "@/app/lib/prompts";
@@ -235,7 +236,7 @@ export async function POST(req: NextRequest) {
      */
     const model = anthropic
       ? (process.env.ANTHROPIC_MODEL_SUGGEST || "claude-haiku-4-5")
-      : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
+      : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || NVIDIA_DEFAULT_MODEL);
     const t0 = Date.now();
 
     // Structured kinds must come back parseable; the free-text ones must not be

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { NVIDIA_DEFAULT_MODEL } from "@/app/lib/aiModels";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { verifyPass, ACCESS_COOKIE } from "@/app/lib/access";
 import { readSession, SESSION_COOKIE } from "@/app/lib/session";
@@ -58,7 +59,7 @@ MODEL: <a stronger 2-4 sentence model answer they could have given, using THEIR 
 async function callModel(prompt: string, system: string, maxTokens: number): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
-  const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const model = process.env.AI_MODEL || NVIDIA_DEFAULT_MODEL;
   const t0 = Date.now();
   const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
     method: "POST",

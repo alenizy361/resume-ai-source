@@ -5,7 +5,7 @@ import { readSession, SESSION_COOKIE } from "@/app/lib/session";
 import { hasActiveEntitlement } from "@/app/lib/entitlements";
 import { allowShared, clientIp } from "@/app/lib/ratelimit";
 import { logUsage, fromOpenAI, fromAnthropic } from "@/app/lib/usage";
-import { canDisableThinking, claudeModelOr, thinksByDefault } from "@/app/lib/aiModels";
+import { canDisableThinking, claudeModelOr, thinksByDefault , NVIDIA_DEFAULT_MODEL } from "@/app/lib/aiModels";
 import { languageHonoured, LANGUAGE_RETRY } from "@/app/lib/resumeLang";
 
 /**
@@ -350,7 +350,7 @@ async function streamNvidia(
 ): Promise<string> {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY is not set");
-  const model = process.env.AI_MODEL || "meta/llama-4-maverick-17b-128e-instruct";
+  const model = process.env.AI_MODEL || NVIDIA_DEFAULT_MODEL;
 
   const guard = streamGuard();
   const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {

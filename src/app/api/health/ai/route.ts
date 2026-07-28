@@ -3,7 +3,7 @@ import { TASKS, TASK_NAMES } from "@/app/lib/aiTasks";
 import { fromAnthropic } from "@/app/lib/usage";
 import {
   modelConfig, MAX_OUTPUT, TASK_CLASS, estimateCallCost, canDisableThinking, thinksByDefault,
-  acceptsTemperature, type AiTaskType,
+  acceptsTemperature, type AiTaskType, NVIDIA_DEFAULT_MODEL,
 } from "@/app/lib/aiModels";
 import { PROMPT_VERSION, RULES_VERSION } from "@/app/lib/aiCache";
 import { CORE_RULES, TASK_SCHEMA, estimateTokens, cacheFloorFor } from "@/app/lib/aiPrompts";
@@ -93,10 +93,10 @@ export async function GET(req: NextRequest) {
   const shared = process.env.AI_MODEL || "";
   const model = provider === "anthropic"
     ? (process.env.ANTHROPIC_MODEL || (/^claude/i.test(shared) ? shared : "claude-opus-5"))
-    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
+    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || NVIDIA_DEFAULT_MODEL);
   const suggestModel = suggestProvider === "anthropic"
     ? (process.env.ANTHROPIC_MODEL_SUGGEST || "claude-haiku-4-5")
-    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || "meta/llama-4-maverick-17b-128e-instruct");
+    : (process.env.NVIDIA_MODEL || (/^claude/i.test(shared) ? "" : shared) || NVIDIA_DEFAULT_MODEL);
 
   const keyPresent = provider === "anthropic" ? redact("ANTHROPIC_API_KEY") : redact("NVIDIA_API_KEY");
   /* The failure this catches: AI_PROVIDER_SUGGEST set to anthropic with no Anthropic key, which
