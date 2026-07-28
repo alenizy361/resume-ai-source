@@ -3273,3 +3273,61 @@ class); an unrecognised section heading (`VOLUNTEER WORK`, `PROFESSIONAL DEVELOP
 entry beneath it into employment; imported skills/languages are OFFERED rather than confirmed while
 the review panel's ticks imply otherwise; and `.cine-intro` is a `role="dialog"` that lets Tab walk
 out from under it.
+
+### F-R6 · P1 · The four parser gaps R5 left open — FIXED
+
+All four are the same failure in different clothes: the parser met a layout it had no rule for and
+answered by inventing employment or by losing a job outright. 107 fixtures now, up from 88.
+
+**1 · the spaced hyphen.** ` - ` joins `SEP_PHRASE` and the `splitRole` split, so
+`Radiographer - Dallah Hospital` no longer lands whole in the job-title field. Safe because
+`splitDates` strips the date range *before* `splitRole` runs — the hyphen in `2019 - 2022` is gone by
+then — and a hyphenated name (`Al-Faisal`) carries no spaces around its hyphen.
+
+**2 · a separator is not a job once a job is open.** `looksLikeRoleHeader(line, roleOpen)` returns
+false for an undated separator line while a role is already collecting duties, because ` at ` and
+` في ` are the commonest prepositions in their languages. `Trained new technologists at the Riyadh
+site` and `تشغيل أجهزة الأشعة المقطعية في قسم الطوارئ` were each being split into a whole fabricated
+DATELESS job. It fires hardest on Arabic prose CVs — the ones that use no bullet characters, so
+every line takes this path. Before the first role the rule stays permissive: a dateless
+`Radiographer at Dallah Hospital` opening the section really is the header, and refusing it would
+lose the only job.
+
+**3 · sections with no field for them.** `VOLUNTEER WORK`, `PROJECTS`, `REFERENCES` and their
+siblings are named in `HEADINGS` under a new `other` key whose content goes to `unread` — visible
+and unplaced. Previously the heading became a bullet of the last job and the entry beneath it became
+a fabricated position, dates and all.
+
+The interesting part is the two attempts it took. Both earlier versions scored the SHAPE of the line
+— short, capitalised, no date, no sentence punctuation — and **both ate ordinary job titles**:
+`Registered Nurse`, `Set Designer`, `King Faisal Hospital` are all short, capitalised and dateless.
+14 fixtures went red on the second attempt. So the new entries match the **whole line**, unlike the
+six original headings which match as a prefix: `VOLUNTEER WORK` is a heading, `Volunteer Coordinator`
+and `Projects Manager` are job titles, and a prefix test cannot tell them apart. A false positive
+here deletes a real job, so the match is exact or nothing — pinned by fixtures in both directions.
+
+*Third time this parser has been burnt by a guard that scores a line's shape instead of its
+structure — see the verb denylist above. The pattern is now explicit: classify the SEPARATOR, the
+POSITION, or match a closed set exactly; never the morphology.*
+
+**4 · the dates-first layout.** Several popular Word templates put the date range on its own line
+*above* the job:
+
+```
+Jan 2019 - Present
+Senior Radiology Technologist
+King Faisal Hospital
+• Operated CT and MRI scanners
+```
+
+`roleFromHeader` reads UPWARD, and above a date line that opens the section there is nothing — so
+the header was refused, its title and employer fell out as unplaced lines, and the CV imported
+**zero roles**. The dates are now HELD (`pending`) and claim the one or two heading-shaped lines
+directly beneath them, settling on the first bullet, on the third carry line, or on any flush.
+
+Three guards, each with a fixture: the carry is flushed *before* the dates are held, so duties of
+the job above are never eaten as the next job's title; a line that already carries its own separator
+(`Senior Radiology Technologist — King Faisal Hospital`) is the whole header and the line under it
+stays a duty; and held dates with nothing job-shaped beneath them still reach `unread` rather than
+opening an invented position — `EXPERIENCE / 2020 - 2023 / • Did a thing` imports no role, as
+before.

@@ -59,9 +59,32 @@ const HEADINGS: Array<{ key: Section; re: RegExp }> = [
   { key: "skills", re: /^(skills|technical skills|core competencies|competencies)\b|^(المهارات|الكفاءات)/i },
   { key: "certifications", re: /^(certifications?|licen[cs]es?|credentials|courses|training)\b|^(الشهادات|الرخص|الدورات|التدريب)/i },
   { key: "languages", re: /^(languages)\b|^(اللغات|إجادة اللغات|اجادة اللغات)/i },
+  /*
+   * The sections this builder has no field for — and the reason they are named here rather than
+   * ignored. `VOLUNTEER WORK`, `PROJECTS`, `REFERENCES` and their siblings are not in the six above,
+   * so inside the experience block each became a fabricated DUTY on the last job and the entry
+   * beneath it became a fabricated JOB:
+   *
+   *   VOLUNTEER WORK                → a bullet of the job above
+   *   Red Crescent Society          → job title
+   *   Riyadh Chapter, 2021 - 2022   → employer + dates, imported as EMPLOYMENT
+   *
+   * Naming them ends the experience block instead, and their content goes to `unread` — visible,
+   * unplaced, and honest. There is no field for a volunteer entry; inventing a salaried job out of
+   * one is the worse answer.
+   *
+   * Matched on the WHOLE line, unlike the six above which match as a prefix. That is deliberate:
+   * "VOLUNTEER WORK" is a heading, "Volunteer Coordinator" and "Projects Manager" are job titles,
+   * and a prefix test cannot tell them apart. A false positive here DELETES a real job, so the match
+   * is exact or nothing. Two earlier attempts at this guard scored the SHAPE of the line instead —
+   * short, capitalised, dateless — and both ate ordinary job titles ("Registered Nurse",
+   * "Set Designer") for exactly that reason.
+   */
+  { key: "other", re: /^(volunteer(ing)?( work| experience)?|community service|references|projects|key projects|achievements|accomplishments|awards|awards (and|&) honou?rs|honou?rs|publications|memberships|professional memberships|affiliations|professional development|activities|extracurricular activities|interests|hobbies|personal (information|details)|portfolio|patents|conferences|workshops|presentations)$/i },
+  { key: "other", re: /^(التطوع|العمل التطوعي|الأعمال التطوعية|الاعمال التطوعية|الأنشطة|الانشطة|الأنشطة التطوعية|المراجع|المشاريع|الإنجازات|الانجازات|الجوائز|المنشورات|العضويات|الاهتمامات|الهوايات|التطوير المهني|معلومات شخصية|المعلومات الشخصية|البيانات الشخصية)$/ },
 ];
 
-type Section = "summary" | "experience" | "education" | "skills" | "certifications" | "languages" | "header";
+type Section = "summary" | "experience" | "education" | "skills" | "certifications" | "languages" | "header" | "other";
 
 function headingFor(line: string): Section | null {
   const bare = line.replace(/[:：]\s*$/, "").trim();
@@ -150,12 +173,18 @@ const LINKEDIN = /(?:linkedin\.com\/[^\s,;]+|\/in\/[^\s,;]+)/i;
  */
 export type SepKind = "comma" | "phrase" | "none";
 
-const SEP_PHRASE = /\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*/;
+/*
+ * ` - ` with spaces around it is included: "Radiographer - Dallah Hospital" is an ordinary CV line
+ * and was landing whole in the job-title field. Safe because `splitDates` strips the date range
+ * BEFORE `splitRole` runs, so "2019 - 2021" is gone by now, and because a hyphenated NAME
+ * (Al-Otaibi, Jeddah-based) carries no spaces around its hyphen.
+ */
+const SEP_PHRASE = /\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*|\s+-\s+/;
 const SEP_COMMA = /\s*,\s*(?=[A-Z؀-ۿ])/;
 
 function splitRole(rest: string): { title: string; company: string; location: string; sep: SepKind } {
   const parts = rest
-    .split(/\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*|\s*,\s*(?=[A-Z؀-ۿ])/)
+    .split(/\s+(?:at|@|في|لدى)\s+|\s*[|—–]\s*|\s+-\s+|\s*,\s*(?=[A-Z؀-ۿ])/)
     .map((x) => x.trim())
     .filter(Boolean);
   const [title = "", company = "", location = ""] = parts;
@@ -307,12 +336,31 @@ function roleFromHeader(
  * header as a duty — leaves a stray line in the bullets, which the user deletes.
  * Getting it wrong the other way invents a job, so the test is deliberately strict.
  */
-function looksLikeRoleHeader(line: string): boolean {
+function looksLikeRoleHeader(line: string, roleOpen: boolean): boolean {
   if (BULLET.test(line)) return false;
   if (line.length > 120) return false;
   const hasDate = new RegExp(POINT, "i").test(line);
-  const hasSeparator = /\s(?:at|@|في|لدى)\s|[|—–]/.test(line);
-  return hasDate || hasSeparator;
+  if (hasDate) return true;
+  /*
+   * ── a separator ALONE is not a job, once a job is already open ──
+   *
+   * ` at ` and ` في ` are the commonest prepositions in their languages, so an un-bulleted duty
+   * carrying one was being split into a whole fabricated DATELESS job:
+   *
+   *   "Trained new technologists at the Riyadh site"  → {title: "Trained new technologists",
+   *                                                       company: "the Riyadh site"}
+   *   "تشغيل أجهزة الأشعة المقطعية في قسم الطوارئ"     → {title: "تشغيل أجهزة…", company: "قسم الطوارئ"}
+   *
+   * Two duties became two jobs. It fires hardest on Arabic prose CVs — exactly the ones that use no
+   * bullet characters, so every line takes this path.
+   *
+   * Before the first job it stays permissive: a dateless "Radiographer at Dallah Hospital" opening
+   * the experience section really is a job header, and refusing it would lose the only role. Once a
+   * role is open and collecting duties, the burden flips — an undated line is a duty until a date
+   * says otherwise.
+   */
+  if (roleOpen) return false;
+  return /\s(?:at|@|في|لدى)\s|[|—–]/.test(line);
 }
 
 /** Comma / bullet / pipe separated, in either script. */
@@ -378,8 +426,48 @@ export function parseCv(raw: string): ParsedCv {
    * title and employer.
    */
   const carry: string[] = [];
+  /*
+   * ── the DATES-FIRST layout, which imported nothing at all ──
+   *
+   *   Jan 2019 - Present                     ← dates alone on the line
+   *   Senior Radiology Technologist          ← title
+   *   King Faisal Hospital                   ← employer
+   *   • Operated CT and MRI scanners
+   *
+   * `roleFromHeader` reads UPWARD, and above a date line that opens the section there is nothing, so
+   * every job in a CV written this way was refused and its title and employer fell out as unplaced
+   * lines. Measured: zero roles imported from a layout several popular Word templates produce.
+   *
+   * The dates are HELD instead of guessed at, and claim the one or two heading-shaped lines directly
+   * beneath them — no further, because line three onward is already the duties. A bare date line
+   * with nothing usable under it still reaches `unread` as before: some templates put the date
+   * beside a section heading, and inventing a job out of that is the failure this whole file exists
+   * to avoid.
+   */
+  let pending: { start: string; end: string; line: string } | null = null;
+  const settlePending = () => {
+    if (!pending) return;
+    const held = pending;
+    pending = null;
+    const take: string[] = [];
+    for (const c of carry.slice(0, 2)) {
+      if (!looksLikeHeading(c)) break;
+      take.push(c);
+    }
+    if (!take.length) { out.unread.push(held.line); return; }
+    /* If the first line already carries a separator it is the whole header — do not also eat the
+       line below it, which is a duty. Same rule `roleFromHeader` applies reading upward. */
+    const inline = splitRole(take[0]);
+    const used = inline.title && inline.company ? 1 : take.length;
+    const title = inline.title && inline.company ? inline.title : take[0];
+    const company = inline.title && inline.company ? inline.company : (take[1] || "");
+    carry.splice(0, used);
+    role = { title, company, location: inline.company ? inline.location : "", start: held.start, end: held.end, bullets: [] };
+    out.roles.push(role);
+  };
   /** Commit whatever the lookback did not claim: duties of the job in hand, or unplaced lines. */
   const flushCarry = () => {
+    settlePending();
     for (const c of carry) {
       if (role) role.bullets.push(c);
       else if (c) out.unread.push(c);
@@ -430,6 +518,9 @@ export function parseCv(raw: string): ParsedCv {
     if (section === "summary") { summaryLines.push(line.replace(BULLET, "")); continue; }
 
     if (section === "experience") {
+      /* A bullet means the job header is over: whatever the held dates were going to claim, they
+         claim now, so the bullet lands on the right role rather than on the one before it. */
+      if (pending && BULLET.test(line)) settlePending();
       if (role && BULLET.test(line)) {
         /* A real bullet ends any lookback: the lines above it were prose duties of THIS job, not the
            heading of a job that never arrived. */
@@ -437,11 +528,17 @@ export function parseCv(raw: string): ParsedCv {
         role.bullets.push(line.replace(BULLET, "").trim());
         continue;
       }
-      if (looksLikeRoleHeader(line)) {
+      if (looksLikeRoleHeader(line, Boolean(role && role.bullets.length))) {
         const { start, end, rest } = splitDates(line);
         const made = roleFromHeader(rest, carry, splitRole(rest).sep);
-        // Nothing here and nothing above it that reads like a job: a stray date or separator line.
-        if (!made) { out.unread.push(line); flushCarry(); continue; }
+        if (!made) {
+          /* Dates alone on the line, with nothing above them: the job is BELOW, so hold them. The
+             carry is flushed first — anything already in it belongs to the job before this one, and
+             letting the held dates claim it would move a duty into the next job's title. */
+          if (start && !rest.trim() && !pending) { flushCarry(); pending = { start, end, line }; continue; }
+          // Nothing here and nothing above it that reads like a job: a stray date or separator line.
+          out.unread.push(line); flushCarry(); continue;
+        }
         /* Whatever the new role did NOT take belongs to the job before it, as prose duties. */
         carry.length = Math.max(0, carry.length - made.used);
         flushCarry();
@@ -455,6 +552,9 @@ export function parseCv(raw: string): ParsedCv {
        * date is on the third. Which it is only becomes knowable one or two lines later, so the
        * decision waits: `flushCarry` turns these into duties everywhere a header does not claim them.
        */
+      /* Held dates claim at most the two lines directly under them; settle before a third arrives,
+         or a duty three lines down would be read as the employer. */
+      if (pending && carry.length >= 2) settlePending();
       carry.push(line.replace(BULLET, "").trim());
       continue;
     }
@@ -465,6 +565,13 @@ export function parseCv(raw: string): ParsedCv {
       out.skills.push(...(items.length > 1 ? items : [line.replace(BULLET, "").trim()].filter((x) => x.length < 60)));
       continue;
     }
+
+    /*
+     * A named section with no field to put it in. Every line is reported rather than dropped: the
+     * builder cannot store a volunteer entry, but the user can see it was left behind and decide
+     * where it belongs. Falling through instead would delete the section in silence.
+     */
+    if (section === "other") { out.unread.push(line.replace(BULLET, "").trim()); continue; }
 
     if (section === "education") { out.education.push(line.replace(BULLET, "").trim()); continue; }
     if (section === "certifications") { out.certifications.push(line.replace(BULLET, "").trim()); continue; }

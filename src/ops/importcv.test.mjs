@@ -178,6 +178,94 @@ const AR = `
   ok("a duty mentioning numbers is not read as a phone number", s.phone === "", s.phone);
 }
 
+/* ── the dates-first layout, which used to import nothing at all ── */
+{
+  const p = parseCv([
+    "WORK EXPERIENCE",
+    "Jan 2019 - Present",
+    "Senior Radiology Technologist",
+    "King Faisal Hospital",
+    "- Operated CT and MRI scanners",
+    "- Trained new technologists",
+    "Mar 2016 - Dec 2018",
+    "Radiographer",
+    "Dallah Hospital",
+    "- Ran the outpatient list",
+  ].join("\n"));
+  eq("both dates-first jobs import", p.roles.length, 2);
+  eq("the title is the line under the dates, not the employer",
+    p.roles.map((r) => [r.title, r.company]),
+    [["Senior Radiology Technologist", "King Faisal Hospital"], ["Radiographer", "Dallah Hospital"]]);
+  eq("and the dates stay with their own job",
+    p.roles.map((r) => [r.start, r.end]), [["Jan 2019", "Present"], ["Mar 2016", "Dec 2018"]]);
+  eq("the first job keeps both of its duties", p.roles[0].bullets.length, 2);
+  eq("and none of them leaked into the second", p.roles[1].bullets.length, 1);
+  ok("nothing fell out", p.unread.length === 0, JSON.stringify(p.unread));
+
+  /* One line under the dates carrying its own separator is the WHOLE header — the line below it is
+     a duty, and eating it as the employer is the fabrication this layout invites. */
+  const q = parseCv([
+    "EXPERIENCE",
+    "2019 - 2022",
+    "Senior Radiology Technologist — King Faisal Hospital",
+    "Operated CT and MRI scanners for outpatients",
+  ].join("\n"));
+  eq("a self-sufficient header line is not paired with the line beneath it",
+    [q.roles[0].title, q.roles[0].company],
+    ["Senior Radiology Technologist", "King Faisal Hospital"]);
+  ok("the line beneath it stays a duty",
+    /Operated CT/.test(q.roles[0].bullets.join(" ")), JSON.stringify(q.roles[0].bullets));
+
+  /* And the guard the whole feature is balanced against: held dates with nothing job-shaped under
+     them must still be reported, not turned into an invented position. */
+  const r = parseCv("EXPERIENCE\n2020 - 2023\n- Did a thing");
+  eq("held dates with no job under them invent nothing", r.roles.length, 0);
+}
+
+/* ── a section we have no field for ends the experience block, it does not join it ── */
+{
+  const p = parseCv([
+    "WORK EXPERIENCE",
+    "Senior Radiology Technologist",
+    "King Faisal Hospital",
+    "Jan 2019 - Present",
+    "- Operated CT and MRI scanners",
+    "VOLUNTEER WORK",
+    "Red Crescent Society",
+    "Riyadh Chapter, 2021 - 2022",
+    "REFERENCES",
+    "Available on request",
+  ].join("\n"));
+  eq("a volunteer entry is not imported as a second job", p.roles.length, 1);
+  eq("and the real job is untouched", p.roles[0].title, "Senior Radiology Technologist");
+  ok("the volunteer lines are reported, not deleted",
+    p.unread.some((u) => /Red Crescent/.test(u)) && p.unread.some((u) => /Riyadh Chapter/.test(u)),
+    JSON.stringify(p.unread));
+  ok("the heading itself does not become a duty of the job above it",
+    !(p.roles[0].bullets.join(" ")).toLowerCase().includes("volunteer"),
+    JSON.stringify(p.roles[0].bullets));
+
+  /* The guard is an exact whole-line match for exactly this reason: two earlier attempts scored the
+     SHAPE of the line — short, capitalised, dateless — and ate ordinary job titles. */
+  const q = parseCv("EXPERIENCE\nVolunteer Coordinator - Red Crescent | 2019 - 2021\n- Ran the roster");
+  eq("but a job whose TITLE starts with a section word is still a job", q.roles.length, 1);
+  eq("and it keeps its title", q.roles[0].title, "Volunteer Coordinator");
+  const r = parseCv("EXPERIENCE\nProjects Manager - Aramco | 2019 - 2021\n- Ran the portfolio");
+  eq("'Projects Manager' is a job title, not a PROJECTS heading", r.roles.length, 1);
+  eq("and it keeps its title too", r.roles[0].title, "Projects Manager");
+
+  const ar = parseCv([
+    "الخبرة العملية",
+    "أخصائي أشعة - مستشفى دلة | 2019 - 2022",
+    "- تشغيل أجهزة الأشعة المقطعية",
+    "العمل التطوعي",
+    "الهلال الأحمر السعودي",
+  ].join("\n"));
+  eq("the Arabic volunteer heading ends the Arabic experience block too", ar.roles.length, 1);
+  ok("and its entry is reported",
+    ar.unread.some((u) => /الهلال الأحمر/.test(u)), JSON.stringify(ar.unread));
+}
+
 /* ── the unreadable-file escape hatch ── */
 
 console.log("\n── a scan that cannot be read has somewhere to go ──");
@@ -367,14 +455,12 @@ console.log("\n── the OCR door is separate, consented, and honest ──");
     "Responsible for daily radiography operations",
     "Staff Nurse - Green Clinic | 2018 - 2020",
   ].join("\n"));
-  /* Asserted on the ROLE COUNT and on where the duty landed, not on the split of the title —
-     `splitRole` separates on `|`, an em-dash and ` at `, and NOT on a plain spaced hyphen, so
-     "Radiographer - Dallah Hospital" stays one string. That is pre-existing behaviour (the
-     verifier's own before/after shows the old parser doing the same) and a separate gap, recorded
-     in docs/known-issues.md rather than changed here on the same night the lookback landed. */
+  /* The spaced hyphen splits now — it was the one common separator `splitRole` did not know, so
+     "Radiographer - Dallah Hospital" used to land whole in the job-title field. */
   eq("a present-tense duty is not promoted to a job title",
-    present.roles.map((r) => r.title),
-    ["Radiographer - Dallah Hospital", "Staff Nurse - Green Clinic"]);
+    present.roles.map((r) => r.title), ["Radiographer", "Staff Nurse"]);
+  eq("and a spaced hyphen separates the title from the employer",
+    present.roles.map((r) => r.company), ["Dallah Hospital", "Green Clinic"]);
   ok("and it produced exactly two jobs, not three", present.roles.length === 2, JSON.stringify(present.roles.map((r) => r.title)));
   ok("it stays a duty of the job above it",
     /Responsible for daily/.test((present.roles[0]?.bullets || []).join(" ")),
