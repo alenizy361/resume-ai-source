@@ -9,6 +9,11 @@ const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "", "/optimize", "/linkedin", "/interview", "/career-plan", "/pricing", "/templates",
+    /* `/ar/pricing` and `/ar/templates` were the only two indexable Arabic pages missing from this
+       list: both emit a self-canonical, both are declared as the `ar` alternate by their English
+       twins, and neither is noindex — so the sitemap contradicted the pages' own tags. (Contrast
+       `/ar/account`, correctly absent because its page sets `robots: { index: false }`.) */
+    "/ar/pricing", "/ar/templates",
     "/ats-resume-checker", "/jobscan-alternative", "/free-resume-checker",
     "/pdf-readability-checker", "/ar/pdf-readability-checker",
     "/jd-keyword-extractor", "/ar/jd-keyword-extractor",

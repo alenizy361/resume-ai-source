@@ -287,12 +287,23 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
    * actually resolves to it, then navigate.
    */
   const startNew = () => {
+    /*
+     * ── no write here, and that IS the phantom-CV fix ──
+     *
+     * This used to `writeResume` an empty record before navigating, so that "most recently updated"
+     * would resolve to the new id. `BuilderProvider`'s autosave now refuses to write an untouched
+     * document — but this call site bypassed that gate entirely, so pressing "Build a new CV" twice
+     * still put two "Untitled · 0 of 11 steps done" rows under "Your CVs here" for somebody who had
+     * created nothing. The gate was real and this was the hole in it.
+     *
+     * The write is no longer needed for its original purpose: we navigate to `stepHref(…, id, …)`,
+     * which puts the id IN THE URL, and the provider prefers `urlId` over any "most recent" lookup.
+     * That resolution order is what the original bug was really about.
+     *
+     * `entry: "new"` goes with it, harmlessly — its one consumer reads `state.entry || "new"`
+     * (`DesignSection`), so the default already says what the field was carrying.
+     */
     const id = newResumeId();
-    writeResume(owner, id, lang, {
-      ...EMPTY_BUILDER,
-      target: { ...EMPTY_BUILDER.target, language: lang },
-      entry: "new",
-    });
     track("builder_entry_selected", { entry: "new" });
     trackStep("builderStarted", { at: STEPS[0], resumed: "0" });
     router.push(stepHref(lang, id, STEPS[0]), { scroll: false });
@@ -352,7 +363,7 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
                 {r.tailoredFrom && (
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)" }}>
+                      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)" }}>
                       {t.tailoredFrom(r.tailoredFrom.sourceTitle)}
                     </span>
                     <select

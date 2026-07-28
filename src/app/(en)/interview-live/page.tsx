@@ -330,7 +330,7 @@ export default function InterviewLivePage() {
      It is a single-address route (`/ar/interview-live` redirects here carrying `?lang=ar`), so the
      toggle flips the query string rather than swapping an `/ar/…` path like the two-address pages. */
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/interview-live" : "/interview-live?lang=ar"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/interview-live?lang=en" : "/interview-live?lang=ar"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-3xl py-10">
         {phase === "setup" && (
           <>
@@ -395,7 +395,7 @@ export default function InterviewLivePage() {
             <div>
               <div className="mb-2 flex items-center justify-between text-sm" style={{ color: "var(--faint)" }}>
                 <span>{t.qOf(idx + 1, questions.length)}</span>
-                {scores.length > 0 && <span>{t.avgLabel} <b style={{ color: "var(--accent)" }}>{avg}/10</b></span>}
+                {scores.length > 0 && <span>{t.avgLabel} <b style={{ color: "var(--accent-deep)" }}>{avg}/10</b></span>}
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(15, 20, 35, 0.128)" }}>
                 <div className="h-full rounded-full" style={{ width: `${(idx / Math.max(1, questions.length)) * 100}%`, background: "linear-gradient(90deg,var(--accent-deep),var(--accent))", transition: "width .5s ease" }} />
@@ -406,8 +406,8 @@ export default function InterviewLivePage() {
             <div className="grid gap-3 sm:grid-cols-2">
               {/* AI interviewer */}
               <div className="relative overflow-hidden rounded-2xl p-4" style={{ border: "1px solid var(--line)", background: "radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.08), var(--surface) 70%)", aspectRatio: "1/1" }}>
-                <div className="absolute end-3 top-3 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>AI</div>
-                <InterviewerAvatar speaking={aiSpeaking} />
+                <div className="absolute end-3 top-3 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>AI</div>
+                <InterviewerAvatar speaking={aiSpeaking} label={t.interviewerShort} lang={ar ? "ar" : "en"} />
               </div>
               {/* You */}
               <div className="relative overflow-hidden rounded-2xl" style={{ border: "1px solid var(--line)", background: "#000", aspectRatio: "1/1" }}>
@@ -423,9 +423,9 @@ export default function InterviewLivePage() {
 
             {/* Question */}
             <div className="card p-5" style={{ borderColor: aiSpeaking ? "rgba(139,92,246,0.4)" : "var(--line)" }}>
-              <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent)" }}>{t.askLabel}</div>
+              <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent-deep)" }}>{t.askLabel}</div>
               <div className="text-lg font-bold leading-relaxed">{questions[idx]}</div>
-              <button onClick={() => speak(questions[idx])} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>{t.listenQ}</button>
+              <button onClick={() => speak(questions[idx])} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.3)" }}>{t.listenQ}</button>
               {voiceOff && <p className="mt-2 text-xs" style={{ color: "var(--warn)" }}>{t.voiceOff}</p>}
             </div>
 
@@ -459,7 +459,7 @@ export default function InterviewLivePage() {
                   {feedback.improve && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "var(--warn)" }}>{t.toImprove}</b> {feedback.improve}</p>}
                   {feedback.model && (
                     <div className="mt-3 rounded-lg p-3 text-sm leading-relaxed" style={{ background: "rgba(139,92,246,0.06)", color: "var(--muted)" }}>
-                      <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent)" }}>{t.modelAnswer}</div>
+                      <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent-deep)" }}>{t.modelAnswer}</div>
                       {feedback.model}
                     </div>
                   )}
@@ -475,7 +475,7 @@ export default function InterviewLivePage() {
             <div className="chip mb-4">{t.doneChip}</div>
             <h2 className="text-3xl font-extrabold">{t.practicedN(questions.length)}</h2>
             <div className="my-6 inline-flex items-baseline gap-2">
-              <span className="font-mono text-6xl font-bold" style={{ color: "var(--accent)" }}>{avg}</span>
+              <span className="font-mono text-6xl font-bold" style={{ color: "var(--accent-deep)" }}>{avg}</span>
               <span className="text-2xl" style={{ color: "var(--faint)" }}>/10</span>
             </div>
             <p className="mx-auto max-w-md text-sm" style={{ color: "var(--muted)" }}>{t.doneMsg}</p>

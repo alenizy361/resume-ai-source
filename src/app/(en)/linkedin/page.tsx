@@ -77,7 +77,7 @@ export default function LinkedInPage() {
   }
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/linkedin" : "/ar/linkedin"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/linkedin?lang=en" : "/ar/linkedin"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "محسّن لينكدإن" : "LinkedIn Optimizer"}</div>
@@ -129,7 +129,7 @@ export default function LinkedInPage() {
                   {result.headlineOptions.map((h, i) => (
                     <div key={`h-${i}`} className="flex items-start justify-between gap-3 rounded-lg px-3 py-2.5" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
                       <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{h}</p>
-                      <button onClick={() => copy(`h${i}`, h)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `h${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                      <button onClick={() => copy(`h${i}`, h)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === `h${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                     </div>
                   ))}
                 </div>
@@ -138,7 +138,7 @@ export default function LinkedInPage() {
             <div className="card p-6">
               <div className="mb-2 flex items-center justify-between">
                 <h3 className="font-bold">{ar ? "قسم النبذة" : "About section"}</h3>
-                <button onClick={() => copy("a", result.about)} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "a" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                <button onClick={() => copy("a", result.about)} className="text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === "a" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
               </div>
               <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{result.about}</p>
             </div>
@@ -150,7 +150,7 @@ export default function LinkedInPage() {
                     <div key={`exp-${i}`} className="rounded-lg px-3 py-2.5" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
                       <div className="mb-1 flex items-center justify-between gap-3">
                         <h4 className="text-xs font-semibold" style={{ color: "var(--faint)" }}>{exp.role}</h4>
-                        <button onClick={() => copy(`exp${i}`, exp.description)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === `exp${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                        <button onClick={() => copy(`exp${i}`, exp.description)} className="shrink-0 text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === `exp${i}` ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                       </div>
                       <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{exp.description}</p>
                     </div>
@@ -161,11 +161,11 @@ export default function LinkedInPage() {
             <div className="card p-6">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-bold">{ar ? "المهارات المطلوب إدراجها (بهذا الترتيب)" : "Skills to list (in this order)"}</h3>
-                <button onClick={() => copy("s", result.skills.join(", "))} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "s" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                <button onClick={() => copy("s", result.skills.join(", "))} className="text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === "s" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {result.skills.map((s, i) => (
-                  <span key={`${s}-${i}`} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{s}</span>
+                  <span key={`${s}-${i}`} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>{s}</span>
                 ))}
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function LinkedInPage() {
               <div className="card p-6">
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="font-bold">{ar ? "كلمات مفتاحية مقترحة للملف" : "Profile keyword suggestions"}</h3>
-                  <button onClick={() => copy("k", result.keywords.join(", "))} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "k" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                  <button onClick={() => copy("k", result.keywords.join(", "))} className="text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === "k" ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                 </div>
                 <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>{ar ? "استخدمها ضمن العنوان أو النبذة أو الخبرة — وليست قائمة للصقها كما هي." : "Weave these into your headline, About, or experience text — not a list to paste as-is."}</p>
                 <div className="flex flex-wrap gap-2">
@@ -188,7 +188,7 @@ export default function LinkedInPage() {
                 <h3 className="mb-3 font-bold">{ar ? "نصائح للملف" : "Profile tips"}</h3>
                 <ul className="space-y-2">
                   {result.tips.map((t, i) => (
-                    <li key={`${t}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--warn)" }}>→</span> {t}</li>
+                    <li key={`${t}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--warn)" }}>{ar ? "←" : "→"}</span> {t}</li>
                   ))}
                 </ul>
               </div>

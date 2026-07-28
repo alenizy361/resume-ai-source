@@ -94,7 +94,7 @@ const L: Record<Lang, Labels> = {
     faqHeading: "أسئلة يسألها الناس",
     cardSub: "مثال سيرة · كلمات ATS · أمثلة إنجازات",
     skills: "المهارات", cover: "خطاب تعريف",
-    allExamples: "كل أمثلة السير الذاتية →",
+    allExamples: "كل أمثلة السير الذاتية ←",
     otherSectors: "قطاعات أخرى",
     indexIntro: "كل صفحة قطاع تعرض المهن التي يشملها، وكلمات ATS المتكرّرة بينها، والشهادات التي تطلبها أكثر من وظيفة منها. اختر قطاعك لترى أمثلة السير الذاتية الخاصة به.",
     indexH1: "أمثلة السير الذاتية حسب القطاع",
@@ -108,10 +108,23 @@ function jobHref(lang: Lang, kind: "resume-examples" | "resume-skills" | "cover-
   return lang === "ar" ? `/ar/${kind}/${slug}` : `/${kind}/${slug}`;
 }
 
-function Chrome({ lang, children }: { lang: Lang; children: React.ReactNode }) {
+/**
+ * `twin` is the same page in the other language, and its absence was a real gap.
+ *
+ * These 20 sector pages were the only bilingual pair in the product with NO language toggle and no
+ * cross-language link of any kind — from an English sector page there was literally no path to any
+ * Arabic page at all — while both sets sit in the sitemap and declare each other as reciprocal
+ * hreflang alternates. `PageShell` renders the toggle only when it is given one, so the header shipped
+ * an empty container where it belongs.
+ *
+ * The sector slugs are identical in both languages (business, design-media, engineering, finance,
+ * healthcare, hospitality, logistics, marketing, technology), so the twin is a prefix swap — which is
+ * exactly what the hreflang tags already claimed and nothing was letting a reader act on.
+ */
+function Chrome({ lang, twin, children }: { lang: Lang; twin: string; children: React.ReactNode }) {
   const rtl = lang === "ar";
   return (
-    <PageShell lang={lang} cta={navCta(lang)} bleed>
+    <PageShell lang={lang} cta={navCta(lang)} langToggle={twin} bleed>
       {children}
       <HubLinks ar={rtl} />
     </PageShell>
@@ -167,7 +180,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
   };
 
   return (
-    <Chrome lang={lang}>
+    <Chrome lang={lang} twin={lang === "ar" ? `/resume-examples/category/${sector.slug}` : `/ar/resume-examples/category/${sector.slug}`}>
       <article className="mx-auto max-w-3xl px-6 py-10">
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href={l.homeHref} style={{ color: "var(--faint)" }}>{l.home}</Link> {sep}{" "}
@@ -197,8 +210,8 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
                 </Link>
                 <div className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{l.cardSub}</div>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
-                  <Link href={jobHref(lang, "resume-skills", j.slug)} style={{ color: "var(--accent)" }}>{l.skills} →</Link>
-                  <Link href={jobHref(lang, "cover-letter-examples", j.slug)} style={{ color: "var(--accent)" }}>{l.cover} →</Link>
+                  <Link href={jobHref(lang, "resume-skills", j.slug)} style={{ color: "var(--accent-deep)" }}>{l.skills} {lang === "ar" ? "←" : "→"}</Link>
+                  <Link href={jobHref(lang, "cover-letter-examples", j.slug)} style={{ color: "var(--accent-deep)" }}>{l.cover} {lang === "ar" ? "←" : "→"}</Link>
                 </div>
               </div>
             ))}
@@ -214,7 +227,7 @@ export function SectorPage({ sector, lang }: { sector: Sector; lang: Lang }) {
             <div className="flex flex-wrap gap-2">
               {keywords.map((k) => (
                 <span key={k.term} className="rounded-full px-3 py-1 text-xs font-medium"
-                  style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>
+                  style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>
                   {k.term} <span style={{ opacity: 0.6 }}>×{k.count}</span>
                 </span>
               ))}
@@ -316,7 +329,7 @@ export function SectorIndex({ lang }: { lang: Lang }) {
   };
 
   return (
-    <Chrome lang={lang}>
+    <Chrome lang={lang} twin={lang === "ar" ? "/resume-examples/category" : "/ar/resume-examples/category"}>
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="mb-6 font-mono text-xs" style={{ color: "var(--faint)" }}>
           <Link href={l.homeHref} style={{ color: "var(--faint)" }}>{l.home}</Link> {sep}{" "}

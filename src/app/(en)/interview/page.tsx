@@ -134,7 +134,7 @@ export default function InterviewPage() {
   }
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/interview" : "/ar/interview"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/interview?lang=en" : "/ar/interview"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "تحضير المقابلة" : "Interview Prep"}</div>
@@ -174,7 +174,7 @@ export default function InterviewPage() {
                 <div>{error}</div>
                 {resume.trim() && jd.trim() && !loading && (
                   <button type="submit" className="mt-2 inline-block rounded-lg px-3 py-1 text-xs font-semibold"
-                    style={{ background: "rgba(139,92,246,0.15)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.4)" }}>
+                    style={{ background: "rgba(139,92,246,0.15)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.4)" }}>
                     {ar ? "إعادة المحاولة" : "↻ Retry"}
                   </button>
                 )}
@@ -201,7 +201,7 @@ export default function InterviewPage() {
                   setTimeout(() => setCopied(false), 1800);
                 }}
                 className="rounded-lg px-4 py-2 text-sm font-semibold"
-                style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>
+                style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.3)" }}>
                 {copied ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ الكل" : "Copy all")}
               </button>
             </div>
@@ -240,7 +240,7 @@ export default function InterviewPage() {
                               <button
                                 onClick={() => setPracticing((p) => ({ ...p, [i]: !p[i] }))}
                                 className="mt-4 rounded-lg px-3 py-1.5 text-xs font-semibold"
-                                style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}
+                                style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.25)" }}
                               >
                                 {practicing[i] ? (ar ? "إخفاء التمرين" : "Hide practice") : (ar ? "بناء إجابتك أنت (STAR) ←" : "Build your own answer (STAR) →")}
                               </button>
@@ -277,7 +277,7 @@ export default function InterviewPage() {
 
                                   {fb && fb !== "loading" && fb !== "error" && (
                                     <div className="mt-3 space-y-2 text-xs" style={{ color: "var(--muted)" }}>
-                                      <div><span className="font-semibold" style={{ color: "var(--accent)" }}>{ar ? "نقطة قوة: " : "Strength: "}</span>{fb.strength}</div>
+                                      <div><span className="font-semibold" style={{ color: "var(--accent-deep)" }}>{ar ? "نقطة قوة: " : "Strength: "}</span>{fb.strength}</div>
                                       {fb.weaknesses.length > 0 && (
                                         <div>
                                           <span className="font-semibold" style={{ color: "var(--warn)" }}>{ar ? "نقاط للتحسين:" : "To improve:"}</span>
@@ -295,7 +295,7 @@ export default function InterviewPage() {
                                         </div>
                                       )}
                                       {fb.revisedOpening && (
-                                        <div><span className="font-semibold" style={{ color: "var(--accent)" }}>{ar ? "بداية أقوى: " : "Stronger opening: "}</span>“{fb.revisedOpening}”</div>
+                                        <div><span className="font-semibold" style={{ color: "var(--accent-deep)" }}>{ar ? "بداية أقوى: " : "Stronger opening: "}</span>“{fb.revisedOpening}”</div>
                                       )}
                                     </div>
                                   )}

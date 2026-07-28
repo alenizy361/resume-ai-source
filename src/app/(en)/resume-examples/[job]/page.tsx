@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>These are the exact terms an ATS scans for. Include the ones you genuinely have, worded like the job posting:</p>
           <div className="flex flex-wrap gap-2">
             {j.atsKeywords.map((k) => (
-              <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+              <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>{k}</span>
             ))}
           </div>
         </Section>

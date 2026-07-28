@@ -35,7 +35,7 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
           <span className="max-w-40 truncate" dir="ltr">{me.email}</span>
         </Link>
         {me.unlimited ? (
-          <Link href={ar ? "/ar/account" : "/account"} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+          <Link href={ar ? "/ar/account" : "/account"} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>
             {ar ? "غير محدود ✓" : "Unlimited ✓"}
           </Link>
         ) : unlockButton}

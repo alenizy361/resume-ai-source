@@ -98,7 +98,7 @@ function LoginInner() {
               </p>
               <button
                 onClick={() => { try { sessionStorage.removeItem("ra_login_sent"); } catch { /* noop */ } setEmail(""); setState("idle"); }}
-                className="mt-4 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+                className="mt-4 text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>
                 {ar ? "استخدام بريد آخر ←" : "Use a different email →"}
               </button>
             </div>

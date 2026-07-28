@@ -177,6 +177,15 @@ export default function BuilderProvider({
   const mustPersist = useRef(false);
   const dispatchUser = useCallback((a: Action) => {
     if (a.t !== "hydrate" && a.t !== "seed" && a.t !== "ai") touched.current = true;
+    /*
+     * `ai` is not a user EDIT — it must not make an untouched document count as touched — but it does
+     * carry facts storage has to keep: the spend ledger `mayCall` enforces the per-resume budget
+     * from, and the generation cache. With the autosave gated on `touched`, three "Suggest with AI"
+     * presses on an untouched resume wrote nothing at all, so the budget cap reset on every reload
+     * and the same money could be spent again. `mustPersist` is exactly the carve-out for content
+     * storage does not already hold.
+     */
+    if (a.t === "ai") mustPersist.current = true;
     dispatch(a);
   }, []);
   /**
@@ -500,6 +509,14 @@ export default function BuilderProvider({
   useEffect(() => {
     if (!sync.incoming) return;
     if (!touched.current && sync.incoming.state) {
+      /*
+       * A server copy adopted here is content this browser does not hold — the third case the
+       * `mustPersist` carve-out is for. Without it, a signed-in user opening their CV on a SECOND
+       * DEVICE got the state on screen and nothing on disk: the adoption arrives as `hydrate`
+       * (excluded from `touched`), and `markMirrored` returns early when there is no local record
+       * to amend, so the pull had to run again on every load and an offline reload showed nothing.
+       */
+      mustPersist.current = true;
       dispatch({ t: "hydrate", state: sync.incoming.state });
       sync.adopt(sync.incoming.revision);
       markMirrored(owner, resumeId, sync.incoming.revision);

@@ -58,16 +58,37 @@ export async function POST(req: NextRequest) {
 
     const amount = chargeableAmount(String(plan));
     const title = TITLES[String(plan)];
-    if (amount === null || !title) return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
+    /*
+     * ── every rejection carries a `code`, because the reason has to survive translation ──
+     *
+     * These messages are written in English, and `CheckoutButton` replaced ALL of them with one
+     * generic "تعذّر بدء الدفع، حاول مرة أخرى" on an Arabic surface rather than leak English into a
+     * payment step. Defensible instinct, wrong result: an Arabic buyer whose mobile number was
+     * rejected was told only that checkout failed, so retrying the same unfixable input failed the
+     * same way. A payment dead-end with no discoverable cause.
+     *
+     * A code is language-neutral, so the client can say which field is wrong in the buyer's own
+     * language without either side guessing.
+     */
+    if (amount === null || !title) return NextResponse.json({ error: "Unknown plan.", code: "plan" }, { status: 400 });
     const chosen = { title, amount };
     if (!name || String(name).trim().length < 2) {
-      return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
+      return NextResponse.json({ error: "Please enter your name.", code: "name" }, { status: 400 });
     }
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) {
-      return NextResponse.json({ error: "Please enter a valid email — it's how your access is unlocked." }, { status: 400 });
+      return NextResponse.json({ error: "Please enter a valid email — it's how your access is unlocked.", code: "email" }, { status: 400 });
     }
-    if (!mobile || !/^\d{6,15}$/.test(String(mobile).replace(/[\s+]/g, ""))) {
-      return NextResponse.json({ error: "Please enter a valid mobile number." }, { status: 400 });
+    /*
+     * Separators are stripped, not rejected.
+     *
+     * This stripped only spaces and `+`, so "055-123-4567" — an ordinary way to write a Saudi
+     * mobile — failed validation, and the Arabic buyer could not find out why (above). Punctuation
+     * in a phone number is formatting, not data: every non-digit goes, and what reaches the
+     * provider is the same normalised string the check ran on.
+     */
+    const mobileDigits = String(mobile ?? "").replace(/\D/g, "");
+    if (!/^\d{6,15}$/.test(mobileDigits)) {
+      return NextResponse.json({ error: "Please enter a valid mobile number.", code: "mobile" }, { status: 400 });
     }
 
     const token = await authenticate();
@@ -106,7 +127,7 @@ export async function POST(req: NextRequest) {
         amount: chosen.amount,
         currency: CURRENCY,
         clientName: String(name).trim(),
-        clientMobile: String(mobile).replace(/[\s+]/g, ""),
+        clientMobile: mobileDigits,
         callBackUrl: `${origin}/pay/callback?lang=${lang}`,
         note: chosen.title,
         products: [{ title: chosen.title, price: chosen.amount, qty: 1 }],

@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <p className="mb-3 text-sm" style={{ color: "var(--muted)" }}>هذه المصطلحات التي يفحصها نظام ATS. أدرج ما تملكه فعلاً بصياغة الإعلان الوظيفي:</p>
           <div className="flex flex-wrap gap-2">
             {j.keywords.map((k) => (
-              <span key={k} dir="ltr" className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+              <span key={k} dir="ltr" className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>{k}</span>
             ))}
           </div>
         </Section>

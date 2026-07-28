@@ -33,7 +33,7 @@ export default function BeforeAfter({
         <h3 className="font-bold">{t("Before → after the rewrite", "قبل ← بعد إعادة الكتابة")}</h3>
         <span
           className="rounded-lg px-3 py-1 font-mono text-xs font-bold"
-          style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}
+          style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.3)" }}
         >
           +{gain} {t("pts", "نقطة")}
         </span>
@@ -57,7 +57,7 @@ export default function BeforeAfter({
       <div>
         <div className="mb-1.5 flex items-center justify-between text-xs" style={{ color: "var(--muted)" }}>
           <span className="font-semibold">{t("With the Sira rewrite", "بعد إعادة كتابة سيرة")}</span>
-          <span className="font-mono font-bold tabular-nums" style={{ color: "var(--accent)" }}>{shown}%</span>
+          <span className="font-mono font-bold tabular-nums" style={{ color: "var(--accent-deep)" }}>{shown}%</span>
         </div>
         <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(15, 20, 35, 0.096)" }}>
           <div

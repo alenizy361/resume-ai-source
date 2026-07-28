@@ -69,7 +69,8 @@ export default function HubLinks({ current, ar = false }: { current?: string; ar
   return (
     <nav className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-2 px-6 pb-12" aria-label="Explore more">
       {links.map(([label, href]) => (
-        <Link key={href} href={href} className="rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors"
+        /* `t-tap` — 16 of these are the whole secondary navigation of /ar/templates, at 30px. */
+        <Link key={href} href={href} className="t-tap rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors"
           style={{ border: "1px solid var(--line)", color: "var(--muted)" }}>{label}</Link>
       ))}
     </nav>

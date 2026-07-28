@@ -359,7 +359,7 @@ export default function DesignSection({
         {watermark && (
           <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>
             {c.mark}{" "}
-            <Link href={ar ? "/ar/pricing" : "/pricing"} style={{ color: "var(--accent)", fontWeight: 600 }}>
+            <Link href={ar ? "/ar/pricing" : "/pricing"} style={{ color: "var(--accent-deep)", fontWeight: 600 }}>
               {c.unlock}
             </Link>
           </p>
@@ -414,7 +414,7 @@ export default function DesignSection({
         {coverPaywall && (
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
             {c.coverPaywall}{" "}
-            <Link href={ar ? "/ar/pricing" : "/pricing"} style={{ color: "var(--accent)", fontWeight: 600 }}>
+            <Link href={ar ? "/ar/pricing" : "/pricing"} style={{ color: "var(--accent-deep)", fontWeight: 600 }}>
               {c.unlock}
             </Link>
           </p>

@@ -123,9 +123,28 @@ export default function PageShell({
                 which is the exact 81px-tall-header defect this prop closes. */}
             <div className={`${mobileMenu ? "hidden sm:flex" : "flex"} items-center gap-3`}>
               {langToggle && (
-                <Link href={langToggle} onClick={onLangToggle} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>
+                /* 44px. This measured 20x20 — a fifth of the required area, and the smallest tap
+                   target in the product, on the control that switches the whole thing's language for
+                   an audience that is majority Arabic. The `.ps-cta` beside it has carried the floor
+                   with a written reason for a while; the header was disagreeing with itself. */
+                /*
+                 * A plain `<a>`, not a `<Link>`, and that is what makes the toggle WORK.
+                 *
+                 * On the four single-URL tools (`/interview`, `/linkedin`, `/career-plan`,
+                 * `/interview-live`) switching language changes only the query string, so a
+                 * client-side navigation stays on the same route and never remounts. `useLang`'s
+                 * writer effect has `[]` deps, so `ra_lang` was never updated, and the subscription
+                 * that feeds `useSyncExternalStore` only fires on `storage` events — so clicking EN
+                 * on an Arabic page produced a new URL and an unchanged page. Measured: url
+                 * `/interview?lang=en`, `<html lang>` still "ar", h1 still Arabic.
+                 *
+                 * A full load is also the honest thing to do here regardless: the language decides
+                 * `<html lang>` and `dir` on the document itself, which is not a subtree React can
+                 * swap. Switching language is a deliberate, rare click; a reload is the correct cost.
+                 */
+                <a href={langToggle} onClick={onLangToggle} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-sm font-semibold" style={{ color: "var(--muted)" }}>
                   {ar ? "EN" : "AR"}
-                </Link>
+                </a>
               )}
               {authNav}
             </div>

@@ -407,40 +407,138 @@ const LIVE_LEASE = "ra_visit_live";
 const LEASE_BEAT_MS = 60_000;
 const LEASE_FRESH_MS = 5 * 60_000;
 
-/** Is a sibling tab of this browser session still holding the anonymous visit open? */
-function siblingTabIsLive(now = Date.now()): boolean {
+/*
+ * ── the lease is a REGISTRY of tabs, not one timestamp, and the first version was worse than
+ *    the bug it fixed ──
+ *
+ * The first version stored a bare `Date.now()`. `keepVisitAlive()` stamps it on mount, and the
+ * builder's hydration effect bails on its first pass because `useOwner()` has not answered yet —
+ * so by the time `mayRestore("anon")` actually runs, the only thing in the lease is a stamp THIS
+ * TAB wrote milliseconds earlier. Every tab therefore read itself as a live sibling, the anonymous
+ * visit never expired, and a shared machine showed the next person the previous one's half-built
+ * CV — the exact complaint the header above quotes, reintroduced by the fix for a different one.
+ * Measured with a negative control: block the lease write and correct wiping returns immediately.
+ *
+ * A stamp cannot answer "is somebody ELSE alive", so the value is now `{ tabId: lastBeat }` and a
+ * tab looks for a fresh entry belonging to a DIFFERENT id. That also makes the multi-tab lifecycle
+ * correct, which a single shared key could not be: closing one of three tabs removes only its own
+ * entry, so the remaining two still hold the visit open.
+ *
+ * ── the residual window, stated rather than hidden ──
+ *
+ * A tab that is KILLED (crash, force-quit, iOS reclaiming the process) never runs its teardown, so
+ * its entry lingers until it goes stale. For up to `LEASE_FRESH_MS` after a crash, reopening looks
+ * like joining a live visit. That is the deliberate trade: the alternative is a shorter freshness
+ * window, and the window has to outlast a BACKGROUNDED tab's throttled timer — browsers cut those
+ * to roughly one beat a minute, which is exactly the tab this protects. Five minutes against a
+ * 60-second beat is the smallest ratio that survives the throttling with margin.
+ */
+type Lease = Record<string, number>;
+
+/**
+ * This tab's id, stable for the tab's lifetime.
+ *
+ * In `sessionStorage`, so a RELOAD keeps the same id — a reload is the same tab, and a fresh id on
+ * every reload would let a tab inherit its own previous entry and reintroduce the self-read above.
+ */
+function tabId(): string {
+  const sess = ss();
+  if (!sess) return "";
+  try {
+    let id = sess.getItem("ra_tab_id");
+    if (!id) {
+      id = `t${Math.random().toString(36).slice(2, 10)}`;
+      sess.setItem("ra_tab_id", id);
+    }
+    return id;
+  } catch { return ""; }
+}
+
+function readLease(): Lease {
   const store = ls();
-  if (!store) return false;
+  if (!store) return {};
   try {
     const raw = store.getItem(LIVE_LEASE);
-    if (!raw) return false;
-    const at = Number(raw);
-    /* A lease from the FUTURE is a clock that moved (a timezone change, an NTP correction, a
-       user setting the date back). Treated as live: this is the failure direction that costs
-       nothing, and refusing it would resurrect the data loss on exactly the machines least able
-       to explain it. */
-    return Number.isFinite(at) && now - at < LEASE_FRESH_MS;
-  } catch { return false; }
+    if (!raw) return {};
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+    const out: Lease = {};
+    for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof v === "number" && Number.isFinite(v)) out[k] = v;
+    }
+    return out;
+  } catch { return {}; }   // includes the bare-timestamp value the first version wrote
+}
+
+/** Is a sibling tab of this browser session still holding the anonymous visit open? */
+function siblingTabIsLive(now = Date.now()): boolean {
+  const me = tabId();
+  return Object.entries(readLease()).some(([id, at]) =>
+    id !== me
+    /* A future-dated entry is a clock that moved (a timezone change, an NTP correction). Read as
+       live: that failure direction costs an old draft a few extra minutes, and the other one is the
+       data loss this whole mechanism exists to prevent. */
+    && (at > now || now - at < LEASE_FRESH_MS));
 }
 
 /**
  * Hold the anonymous visit open for as long as this tab is on screen.
  *
- * Called by the builder on mount. Returns its own teardown — when the last tab stops beating,
- * the lease goes stale on its own and the next visit starts clean, which is the rule intact.
+ * Called by the builder on mount. Returns its own teardown, which removes THIS tab's entry — so
+ * when the last tab goes, the registry empties and the next visit starts clean, which is the rule
+ * in the header intact.
  */
 export function keepVisitAlive(): () => void {
   const store = ls();
-  if (!store) return () => {};
-  const beat = () => { try { store.setItem(LIVE_LEASE, String(Date.now())); } catch { /* noop */ } };
+  const me = tabId();
+  if (!store || !me) return () => {};
+
+  const write = (mutate: (l: Lease) => void) => {
+    try {
+      const now = Date.now();
+      const lease = readLease();
+      /* Stale entries are pruned on every write, so a browser that crashed months ago does not
+         leave a key growing an entry per visit. */
+      for (const [id, at] of Object.entries(lease)) {
+        if (id !== me && at <= now && now - at >= LEASE_FRESH_MS) delete lease[id];
+      }
+      mutate(lease);
+      const keys = Object.keys(lease);
+      if (keys.length) store.setItem(LIVE_LEASE, JSON.stringify(lease));
+      else store.removeItem(LIVE_LEASE);
+    } catch { /* a blocked storage must not break the builder */ }
+  };
+
+  const beat = () => write((l) => { l[me] = Date.now(); });
+  const leave = () => write((l) => { delete l[me]; });
+
   beat();
   const id = setInterval(beat, LEASE_BEAT_MS);
   /* A tab returning to the foreground has just had its timer throttled for however long it was
-     hidden; restamping on the way back means the lease is never judged on a beat that the
-     browser refused to run. */
+     hidden; restamping on the way back means the lease is never judged on a beat the browser
+     refused to run. */
   const onShow = () => { if (document.visibilityState === "visible") beat(); };
-  document.addEventListener("visibilitychange", onShow);
-  return () => { clearInterval(id); document.removeEventListener("visibilitychange", onShow); };
+  /*
+   * Both listeners are OPTIONAL, and that is not defensive noise.
+   *
+   * This module is unit-tested in plain Node against a fake `window` that carries only the two
+   * storages — deliberately, because the key scheme is what those tests are about. An unguarded
+   * `window.addEventListener` threw there, and the same shape of gap is real in a browser too: an
+   * embedded webview or a hardened environment can hand back an object missing either API, and a
+   * store that cannot register a listener must still keep the lease beating.
+   */
+  document.addEventListener?.("visibilitychange", onShow);
+  /* `pagehide` as well as the React teardown: a tab closed outright never unmounts anything, and a
+     clean close is the case where the visit genuinely should end immediately rather than waiting
+     out the freshness window. */
+  window.addEventListener?.("pagehide", leave);
+
+  return () => {
+    clearInterval(id);
+    document.removeEventListener?.("visibilitychange", onShow);
+    window.removeEventListener?.("pagehide", leave);
+    leave();
+  };
 }
 
 /**

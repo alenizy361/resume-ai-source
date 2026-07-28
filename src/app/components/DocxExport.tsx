@@ -77,7 +77,7 @@ export default function DocxExport({
       onClick={exportDocx}
       disabled={busy}
       className="rounded-lg px-4 py-2 text-sm font-semibold t-tap disabled:opacity-50"
-      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}
+      style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.3)" }}
     >
       {busy ? "…" : label}
     </button>

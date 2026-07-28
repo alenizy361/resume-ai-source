@@ -28,14 +28,44 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     window.addEventListener("keydown", onKey);
-    /* Restored to what it WAS, not to "" — a page that set its own overflow (the builder
-       does) would otherwise be unlocked by closing a menu it never opened. */
-    const prev = document.body.style.overflow;
+    /*
+     * BOTH elements, and locking only `body` was measured to do NOTHING.
+     *
+     * `globals.css` sets `html { overflow-x: clip }`. A root with a non-`visible` overflow stops
+     * the body's overflow being propagated to the viewport, so `body { overflow: hidden }` alone
+     * left the page scrolling freely behind the open panel — a real wheel still moved it 0 → 400,
+     * the exact number this fix was written to eliminate. `PublicNavigation` already sets both and
+     * locks correctly; this is the same treatment.
+     *
+     * Restored to what each WAS, not to "" — a page that sets its own overflow (the builder does)
+     * must not be unlocked by the closing of a menu it never opened.
+     */
+    const prevBody = document.body.style.overflow;
+    const prevRoot = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevRoot;
     };
+  }, [open]);
+
+  /*
+   * Close on crossing the breakpoint that hides the trigger.
+   *
+   * The whole component is `sm:hidden`. A phone rotated to landscape while the menu was open left
+   * `open === true`, `aria-expanded="true"` and the scroll lock in place, with the panel itself
+   * `display: none` — the page unscrollable, the menu invisible, and no control on screen able to
+   * undo either. Escape still worked, which is not a thing a user knows to try.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(min-width: 640px)");
+    const onChange = () => { if (mq.matches) setOpen(false); };
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, [open]);
 
   /* The Arabic entries point at the ARABIC routes — the bare EN paths landed an Arabic user on
@@ -70,7 +100,7 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
         onClick={() => setOpen((v) => !v)}
         aria-label={ar ? "القائمة" : "Menu"}
         aria-expanded={open}
-        className="flex h-10 w-10 items-center justify-center rounded-lg"
+        className="flex h-11 w-11 items-center justify-center rounded-lg"
         style={{ border: "1px solid var(--line)", background: "var(--surface)" }}
       >
         <div className="space-y-1.5">

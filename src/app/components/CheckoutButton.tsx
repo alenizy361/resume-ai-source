@@ -16,6 +16,22 @@ import BrandOrb from "./BrandOrb";
  * Credentials never touch the client; only the transactionNo + hosted url do.
  */
 
+/**
+ * `/api/pay`'s validation codes, in Arabic.
+ *
+ * The server names the field that failed with a language-neutral code rather than sending Arabic
+ * prose, so there is exactly one place per language where these sentences live and the API stays
+ * monolingual. Anything not listed here falls back to the generic failure line, which is the right
+ * answer for a real server fault: which internal thing broke is not the buyer's business, but which
+ * of THEIR fields is wrong very much is.
+ */
+const FIELD_ERR_AR: Record<string, string> = {
+  name: "فضلاً أدخل اسمك الكامل.",
+  email: "فضلاً أدخل بريداً إلكترونياً صحيحاً — عليه يُفعَّل وصولك.",
+  mobile: "فضلاً أدخل رقم جوال صحيحاً.",
+  plan: "الباقة غير معروفة. اختر باقة من صفحة الأسعار.",
+};
+
 const SDK_SRC = "https://paylink.sa/assets/js/paylink.js";
 const PAY_MODE = process.env.NEXT_PUBLIC_PAY_MODE === "test" ? "test" : "production";
 
@@ -57,6 +73,9 @@ export default function CheckoutButton({
   const [error, setError] = useState("");
   const txRef = useRef<string>("");
   const urlRef = useRef<string>("");
+  /* The dialog box itself — the focus trap needs to ask what is inside it, and the portal puts it
+     outside this component's own DOM subtree, so there is nothing else to walk up from. */
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   /*
    * The hosted-checkout URL, in state as well as in the ref.
    *
@@ -83,8 +102,47 @@ export default function CheckoutButton({
     /* Escape closes it, like every other dialog in the product. It did not, and a modal that
        locks the page's scroll while refusing the standard way out is a trap — never mid-payment,
        and never while the request is in flight. */
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && !loading && !paying) reset(); };
+    /*
+     * ── and Tab is CONFINED, because `aria-modal` promises that ──
+     *
+     * The dialog set `aria-modal="true"` and implemented none of it. Measured on open: focus stayed
+     * on `<body>`, and a keyboard buyer needed EIGHT tabs — through the site nav, the trigger they
+     * had just pressed, and the other plan's buy button — before reaching the Full name field, then
+     * could tab straight back out into a page whose scroll was locked. Announced as modal to a
+     * screen reader, behaving as an ordinary panel to a keyboard.
+     *
+     * Focus moves in below; this keeps it in. The cycle is computed per keypress rather than cached,
+     * because the dialog swaps its whole field set when `phase` goes to "card".
+     */
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !loading && !paying) { reset(); return; }
+      if (e.key !== "Tab") return;
+      const box = dialogRef.current;
+      if (!box) return;
+      const stops = [...box.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )].filter((n) => n.offsetParent !== null || n === document.activeElement);
+      if (!stops.length) return;
+      const first = stops[0], last = stops[stops.length - 1];
+      const here = document.activeElement;
+      /* Also catches focus that is OUTSIDE the dialog entirely — which is where it starts if the
+         focus move below is ever prevented — and pulls it back in rather than letting it walk. */
+      if (!box.contains(here)) { e.preventDefault(); first.focus(); return; }
+      if (e.shiftKey && here === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && here === last) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener("keydown", onKey);
+
+    /*
+     * Focus into the dialog, and back to the trigger on the way out.
+     *
+     * The first field rather than the container, because this dialog's job is to be filled in — the
+     * buyer's next action is typing, and landing them on it removes a step. `preventScroll` so
+     * moving focus cannot itself scroll the page underneath the overlay.
+     */
+    const returnTo = document.activeElement as HTMLElement | null;
+    const target = dialogRef.current?.querySelector<HTMLElement>("input, button, a[href]");
+    target?.focus({ preventScroll: true });
     /* BOTH elements: with only body locked, the wheel still scrolled the page through the
        root scroller (measured scrollY 0 → 400 with body already overflow:hidden). */
     const prevBody = document.body.style.overflow;
@@ -95,6 +153,9 @@ export default function CheckoutButton({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevBody;
       document.documentElement.style.overflow = prevRoot;
+      /* Focus returns where it came from, so closing does not dump the buyer at the top of the
+         document. Guarded on still being connected — the trigger can unmount with the dialog. */
+      if (returnTo?.isConnected) returnTo.focus({ preventScroll: true });
     };
   }, [open, loading, paying]);
 
@@ -164,10 +225,25 @@ export default function CheckoutButton({
       const res = await fetch("/api/pay", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan, name, email, mobile, locale: ar ? "ar" : "en" }) });
       const data = await res.json();
-      /* The localized string wins on an Arabic surface: a server error is written in one
-         language and the payment step is the worst place to leak it. The server's text is kept
-         for English, where it is more specific than the generic fallback. */
-      if (!res.ok || !data.url || !data.transactionNo) throw new Error(ar ? t.failed : (data.error || t.failed));
+      /*
+       * ── the REASON survives, in the buyer's own language ──
+       *
+       * This was `ar ? t.failed : (data.error || t.failed)`: on an Arabic surface every non-OK
+       * response, including a field-level 400, collapsed to one generic "تعذّر بدء الدفع، حاول مرة
+       * أخرى". The instinct was right — the server writes English and a payment step is the worst
+       * place to leak it — but the result was that an Arabic buyer whose mobile number was rejected
+       * could not learn which field was wrong, so retrying the identical unfixable input failed
+       * identically. A dead end at the one screen that takes money.
+       *
+       * `/api/pay` now returns a language-neutral `code` for each validation branch, so the field
+       * can be named in Arabic without anybody translating server text at runtime. An unrecognised
+       * code (or none) still falls back to the generic sentence, which is the correct behaviour for
+       * a genuine server fault — that one really is not the buyer's business.
+       */
+      if (!res.ok || !data.url || !data.transactionNo) {
+        const localized = ar ? FIELD_ERR_AR[String(data.code)] : (data.error || t.failed);
+        throw new Error(localized || t.failed);
+      }
       txRef.current = String(data.transactionNo);
       urlRef.current = String(data.url);
       setPayUrl(String(data.url));
@@ -212,7 +288,7 @@ export default function CheckoutButton({
           style={{ background: "rgba(15,20,35,0.5)", backdropFilter: "blur(3px)", zIndex: "var(--z-dialog)" }}
           onClick={() => !loading && !paying && reset()}>
           {/* A white sheet: a bottom sheet on phones (thumb-reachable), a centered card on desktop. */}
-          <div dir={ar ? "rtl" : "ltr"} role="dialog" aria-modal="true" aria-label={t.title}
+          <div ref={dialogRef} dir={ar ? "rtl" : "ltr"} role="dialog" aria-modal="true" aria-label={t.title}
             className={`relative w-full max-w-md overflow-hidden rounded-t-3xl p-6 sm:rounded-3xl sm:p-7 ${ar ? "text-right" : "text-left"}`}
             style={{ background: "#ffffff", color: "var(--fg)", boxShadow: "0 -8px 40px rgba(15,20,35,0.18), 0 20px 60px rgba(15,20,35,0.22)" }}
             onClick={(e) => e.stopPropagation()}>
@@ -282,7 +358,7 @@ export default function CheckoutButton({
                   </div>
                   {error && <div className="rounded-xl px-3 py-2.5 text-sm" style={{ background: "rgba(220,38,38,0.08)", color: "#b91c1c", border: "1px solid rgba(220,38,38,0.2)" }}>{error}</div>}
                   <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full disabled:opacity-50" style={{ padding: "14px", fontSize: 16 }}>{paying ? t.processing : t.payNow}</button>
-                  <a href={payUrl || "#"} className="block w-full py-2 text-center text-sm font-semibold" style={{ color: "var(--accent)" }}>{t.other}</a>
+                  <a href={payUrl || "#"} className="block w-full py-2 text-center text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>{t.other}</a>
                 </div>
                 <TrustRow ar={ar} secure={t.secure} />
               </div>

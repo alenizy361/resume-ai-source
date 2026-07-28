@@ -24,7 +24,7 @@ function Section({ icon, title, hint, items }: { icon: string; title: string; hi
       <div className="mb-2 text-xs" style={{ color: "var(--muted)" }}>{hint}</div>
       <div className="flex flex-wrap gap-1.5">
         {items.slice(0, 12).map((k, i) => (
-          <span key={i} className="rounded-full px-2.5 py-1 text-xs" style={{ background: "rgba(139,92,246,0.08)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
+          <span key={i} className="rounded-full px-2.5 py-1 text-xs" style={{ background: "rgba(139,92,246,0.08)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
         ))}
       </div>
     </div>
@@ -83,7 +83,7 @@ export default function ResultCoaching({
     <div className="my-6">
       {/* Reveal banner */}
       <div className="improved-banner reveal-pop mb-5 rounded-2xl p-5 text-center" style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05))", border: "1px solid rgba(139,92,246,0.4)" }}>
-        <div className="text-2xl font-extrabold" style={{ color: "var(--accent)" }}>{t.improved}</div>
+        <div className="text-2xl font-extrabold" style={{ color: "var(--accent-deep)" }}>{t.improved}</div>
         <div className="mt-1 text-sm font-semibold" style={{ color: "var(--fg)" }}>{t.gained}</div>
       </div>
 
@@ -117,7 +117,7 @@ export default function ResultCoaching({
             </div>
           )}
         </div>
-        <div className="mt-4 rounded-xl px-4 py-2.5 text-center text-sm font-semibold" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)" }}>{t.rescan}</div>
+        <div className="mt-4 rounded-xl px-4 py-2.5 text-center text-sm font-semibold" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent-deep)" }}>{t.rescan}</div>
       </div>
     </div>
   );

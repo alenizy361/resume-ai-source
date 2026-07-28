@@ -29,7 +29,10 @@ export default function SectorLink({
   const label = lang === "ar"
     ? `كل مهن قطاع ${copy.name}`
     : `All ${copy.name} professions`;
+  /* A "forward" arrow points toward the reading direction, so it flips in RTL — this one was
+     hard-coded and pointed BACK on every Arabic sector link. `StepActions` and `OptimizeTool`
+     already branch; this file, `SectorPage` and `linkedin` did not. */
   return (
-    <Link href={href} className={className} style={style}>{label} →</Link>
+    <Link href={href} className={className} style={style}>{label} {lang === "ar" ? "←" : "→"}</Link>
   );
 }

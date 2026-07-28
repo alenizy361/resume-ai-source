@@ -45,7 +45,7 @@ export default function SeoLanding({ eyebrow, h1, h1Accent, intro, bullets, faqs
         <div className="grid gap-5 md:grid-cols-2">
           {bullets.map((b) => (
             <div key={b.title} className="card p-6">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg font-mono text-sm font-bold" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.2)" }}>✓</div>
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg font-mono text-sm font-bold" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.2)" }}>✓</div>
               <h2 className="font-bold">{b.title}</h2>
               <p className="mt-1.5 text-sm" style={{ color: "var(--muted)" }}>{b.body}</p>
             </div>

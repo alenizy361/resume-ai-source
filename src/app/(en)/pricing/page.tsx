@@ -41,14 +41,14 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.name}</div>
         {highlight && (
-          <div className="shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>BEST VALUE</div>
+          <div className="shrink-0 rounded-full px-2.5 font-mono text-[10px] font-bold leading-4 tracking-wider" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>BEST VALUE</div>
         )}
       </div>
       <div className="mt-4 flex items-baseline gap-1">
         <span className="text-5xl font-extrabold">SAR {p.priceSar}</span>
         <span className="text-sm" style={{ color: "var(--muted)" }}>once ({p.priceUsd})</span>
       </div>
-      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>{p.accessLabel}</p>
+      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>{p.accessLabel}</p>
       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{p.tagline}</p>
       <ul className="mt-6 space-y-3 text-sm">
         {p.features.map((f) => (

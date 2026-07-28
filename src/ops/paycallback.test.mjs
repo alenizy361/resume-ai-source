@@ -229,5 +229,87 @@ console.log("\n── the webhook reads a payload whose shape we could not look 
     /names\.push\(prefix \+ k\)/.test(wstrip) && !/names\.push\([^)]*v\b/.test(wstrip));
 }
 
+/* ── an unverifiable payment must not be reported as one that is still processing ── */
+{
+  /*
+   * `/api/pay/verify` answers HTTP 500 with a JSON body — `{ error, paid: false }` — for every
+   * verification failure, including any unknown, expired or garbage `transactionNo` (a non-200 from
+   * `getInvoice` throws into the route's outer catch). That body PARSES, so the callback's success
+   * chain ran on it: `d.paid` falsy, `d.status` undefined, `isDeadStatus(undefined)` false, and the
+   * final `else` told the buyer "your payment is still being processed — don't pay again", with a
+   * Refresh button that replayed to the same screen forever.
+   *
+   * `verifyFail` and the Contact-support link were written for exactly this case and were reachable
+   * only from `.catch()` — a transport error — so a buyer who may well have been CHARGED got a
+   * reassuring "still processing" and no way to reach anybody.
+   */
+  const { readFileSync } = await import("node:fs");
+  const cb = readFileSync("app/(en)/pay/callback/page.tsx", "utf8");
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const cbCode = strip(cb);
+  ok("the callback checks res.ok before trusting the body", /if \(!r\.ok\) throw/.test(cbCode),
+    "a 500 with a JSON body would otherwise be handled as a successful poll");
+  ok("and the support branch is still what a failure lands in",
+    /setShowSupport\(true\)/.test(cbCode) && /t\.verifyFail/.test(cbCode));
+
+  /*
+   * The Arabic buyer must learn WHICH field was rejected. `CheckoutButton` collapsed every non-OK
+   * response — including a field-level 400 — to one generic "تعذّر بدء الدفع، حاول مرة أخرى", so
+   * retrying the identical unfixable input failed identically: a dead end at the screen that takes
+   * money. `/api/pay` now names the field with a language-neutral code.
+   */
+  const pay = strip(readFileSync("app/api/pay/route.ts", "utf8"));
+  for (const code of ["name", "email", "mobile", "plan"]) {
+    ok(`/api/pay names the ${code} rejection with a code`, new RegExp(`code: "${code}"`).test(pay));
+  }
+  const btn = strip(readFileSync("app/components/CheckoutButton.tsx", "utf8"));
+  ok("the modal maps those codes to Arabic rather than discarding them",
+    /FIELD_ERR_AR\[String\(data\.code\)\]/.test(btn));
+  ok("and every code the server can send has an Arabic sentence",
+    ["name", "email", "mobile", "plan"].every((c) => new RegExp(`^\\s*${c}:`, "m").test(btn)));
+
+  /* A phone number's punctuation is formatting, not data. This stripped only spaces and "+", so an
+     ordinary "055-123-4567" was rejected — and, before the codes above, rejected mutely. */
+  ok("mobile validation strips every non-digit", /replace\(\/\\D\/g, ""\)/.test(pay));
+  ok("and the provider is sent the same normalised value the check ran on",
+    /clientMobile: mobileDigits/.test(pay));
+}
+
+/* ── the page-level notFound() shell: measured, app-wide, NOT fixed ── */
+{
+  /*
+   * Every page-level `notFound()` in this app answers with Next's bare `__next_error__` document —
+   * no lang, no dir, no stylesheet, the English homepage title — in BOTH languages
+   * (/resume-examples/no-such-job and /resume-skills/nope as much as /ar/zzz). Only the ROUTER-level
+   * 404 for an unmatched path renders a real document.
+   *
+   * No assertion here yet, deliberately: the fix is a structural change above the two route groups
+   * and this suite reads source, so a source assertion would only pin whichever guess got written.
+   * What IS worth pinning is that the Arabic catch-all keeps its 404 STATUS — a soft 404 returning
+   * 200 would turn a rendering bug into an indexing one.
+   */
+  const cat = readFileSync("app/(ar)/ar/[...missing]/page.tsx", "utf8");
+  ok("the Arabic catch-all still returns a real 404", /notFound\(\)/.test(
+    cat.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "")));
+}
+
+/* ── ?lang=ar must never 308 into a 404 ── */
+{
+  const { readFileSync } = await import("node:fs");
+  const px = (t => t.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, ""))(readFileSync("proxy.ts", "utf8"));
+  /*
+   * `AR_TWINS` held prefix patterns for the three catalogs, so they claimed 85 twins where
+   * `AR_SLUGS` has 62. For the 23 English-only professions a `?lang=ar` URL redirected straight into
+   * a 404 — 69 such URLs across the three trees. The file's own header already promised the opposite
+   * ("only when a twin actually exists, so English-only tools are never sent to a 404").
+   */
+  ok("the catalog patterns no longer match every child",
+    !/\/\^\\\/resume-examples\(\\\/\|\$\)\//.test(px),
+    "a prefix pattern claims an Arabic twin for all 85 professions");
+  ok("the twin check consults the real Arabic slug list", /AR_SLUGS\.includes\(/.test(px));
+  ok("and the fully-bilingual sector tree is still redirected",
+    /resume-examples\\\/category/.test(px));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

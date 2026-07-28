@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { toArabicDigits } from "@/app/lib/plans";
 
 /**
  * The part of a tool page that a crawler can actually read.
@@ -73,7 +74,12 @@ function Body({ dir, c }: { dir: "ltr" | "rtl"; c: PageBodyContent }) {
       <ol className="mt-3 space-y-3">
         {steps.map((s, i) => (
           <li key={s.title} className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
-            <span className="font-semibold" style={{ color: "var(--fg)" }}>{i + 1}. {s.title}</span>
+            {/* Arabic-Indic digits on an Arabic page. The tool directly above this list says
+                «الخطوة ١ من ٣» and this list numbered itself «1. 2. 3. 4.» — two digit systems for
+                the same kind of ordinal, on one screen. The helper already existed and was used in a
+                dozen other places. One line here covers /ar/optimize, /interview?lang=ar,
+                /linkedin?lang=ar and /ar/career-plan together, since they share this component. */}
+            <span className="font-semibold" style={{ color: "var(--fg)" }}>{dir === "rtl" ? toArabicDigits(i + 1) : i + 1}. {s.title}</span>
             {" — "}{s.body}
           </li>
         ))}
@@ -100,7 +106,12 @@ function Body({ dir, c }: { dir: "ltr" | "rtl"; c: PageBodyContent }) {
           <li key={l.href}>
             <Link
               href={l.href}
-              className="inline-block rounded-full px-3 py-1.5 text-xs font-semibold"
+              /* `t-tap` for the 44px floor. Measured at 390px: 34 of these across six pages, every
+                 one exactly 30px, and several sitting with 0px between adjacent rows. The class's
+                 own docstring names "the optimize template chips 30px" as a reason it exists — the
+                 chips just never carried it, and until now an `li .t-tap` exception would have
+                 cancelled it anyway. */
+              className="t-tap inline-block rounded-full px-3 py-1.5 text-xs font-semibold"
               style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
             >
               {l.label}

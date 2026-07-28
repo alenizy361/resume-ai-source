@@ -108,7 +108,7 @@ export default function JdKeywordExtractor({ defaultAr }: { defaultAr: boolean }
         ) : (
           <div className="space-y-5">
             <div className="flex justify-end">
-              <button onClick={copyAll} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === "all" ? (ar ? "نُسخ الكل" : "Copied all") : (ar ? "نسخ الكل" : "Copy all")}</button>
+              <button onClick={copyAll} className="text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === "all" ? (ar ? "نُسخ الكل" : "Copied all") : (ar ? "نسخ الكل" : "Copy all")}</button>
             </div>
             {SECTIONS.map(({ key, en, ar: arLabel, pillBg, pillFg }) => {
               const items = result[key];

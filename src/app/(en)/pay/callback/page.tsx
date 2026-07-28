@@ -149,7 +149,28 @@ function CallbackInner() {
     setReview(false);
     setShowSupport(false);
     fetch(`/api/pay/verify?transactionNo=${encodeURIComponent(tx)}`)
-      .then((r) => r.json())
+      /*
+       * ── `res.ok` is checked, and its absence was the bug ──
+       *
+       * `/api/pay/verify` answers HTTP 500 with a JSON body — `{ error, paid: false }` — for every
+       * verification failure: Paylink unreachable, and also any unknown, expired or garbage
+       * `transactionNo`, since a non-200 from `getInvoice` throws into the route's outer catch.
+       *
+       * That body PARSES. So the success chain ran on it, `d.paid` was falsy, `d.status` was
+       * `undefined`, `isDeadStatus(undefined)` was false, and the final `else` told the buyer
+       * "your payment is still being processed — don't pay again", with a Refresh button that
+       * replayed to the same screen forever.
+       *
+       * `verifyFail` and the Contact-support link exist for precisely this case and were reachable
+       * only from `.catch()` — i.e. only on a transport error — so a buyer who may well have been
+       * CHARGED was shown a reassuring "still processing" and given no way to reach anybody.
+       * Throwing here routes them to the branch that was written for them.
+       */
+      .then(async (r) => {
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(String(d.error || `verify ${r.status}`));
+        return d;
+      })
       .then((d) => {
         if (d.paid && d.amountOk !== false) {
           const paidPlan = d.plan === "complete" ? "complete" : d.plan === "monthly" ? "monthly" : "single";

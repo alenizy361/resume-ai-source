@@ -87,7 +87,7 @@ export default function CareerPlanPage() {
   const timelines = ar ? TIMELINES_AR : TIMELINES_EN;
 
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/career-plan" : "/ar/career-plan"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/career-plan?lang=en" : "/ar/career-plan"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-2xl py-12">
         <div className="mb-8 text-center">
           <div className="chip mb-4">{ar ? "خطة مسيرتك المهنية" : "Career Plan"}</div>
@@ -145,11 +145,11 @@ export default function CareerPlanPage() {
                 <div key={key} className="card p-6">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="font-bold">{ar ? arLabel : en}</h3>
-                    <button onClick={() => copy(key, items)} className="text-xs font-semibold" style={{ color: "var(--accent)" }}>{copied === key ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
+                    <button onClick={() => copy(key, items)} className="text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{copied === key ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}</button>
                   </div>
                   <ul className="space-y-2">
                     {items.map((it, i) => (
-                      <li key={`${key}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--accent)" }}>→</span> {it}</li>
+                      <li key={`${key}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--accent-deep)" }}>{ar ? "←" : "→"}</span> {it}</li>
                     ))}
                   </ul>
                 </div>

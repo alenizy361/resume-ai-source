@@ -33,7 +33,14 @@ export const BRAND = {
   company: "Rabit",
   /** Shown as "Sira · a resume service by Rabit". One string, one place. */
   attribution: "Sira · a resume service by Rabit",
-  attributionAr: "سيرة · خدمة سير ذاتية من رابِط",
+  /*
+   * «رابِت» — final TAA, not TAA MARBUTA/TAA-with-dot variants. It was «رابِط» (rābiṭ), which is a
+   * different Arabic word entirely ("ligament", "connector"), on the footer of ten pages. The
+   * homepage footer, the Terms page and the Privacy page all had it right — and `ops/seo-audit.mjs`
+   * already asserts `/رابِت|Rabit/`, so the product's own audit was failing this string while the
+   * majority of pages carried the misspelling. It is the parent company's NAME.
+   */
+  attributionAr: "سيرة · خدمة سير ذاتية من رابِت",
   domain: "cv.rabit.sa",
   url: process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa",
   /**

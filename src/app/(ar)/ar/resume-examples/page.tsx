@@ -40,7 +40,7 @@ export default function Hub() {
               </Link>
             ))}
             <Link href="/ar/resume-examples/category" className="rounded-lg px-3.5 py-2 text-sm font-semibold text-accent"
-              style={{ border: "1px solid var(--line)" }}>كل القطاعات →</Link>
+              style={{ border: "1px solid var(--line)" }}>كل القطاعات ←</Link>
           </div>
         </section>
 

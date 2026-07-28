@@ -30,7 +30,7 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.nameAr}</div>
         {highlight && (
-          <div className="shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>الأفضل قيمة</div>
+          <div className="shrink-0 rounded-full px-2.5 font-mono text-[10px] font-bold leading-4" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>الأفضل قيمة</div>
         )}
       </div>
       <div className="mt-4 flex items-baseline gap-1">
@@ -39,7 +39,7 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
         <span className="text-5xl font-extrabold">{formatPrice(p.id, "ar")}</span>
         <span className="text-sm" style={{ color: "var(--muted)" }}>مرة واحدة ({p.priceUsd})</span>
       </div>
-      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>{p.accessLabelAr}</p>
+      <p className="mt-2 text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>{p.accessLabelAr}</p>
       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{p.taglineAr}</p>
       <ul className="mt-6 space-y-3 text-sm">
         {p.featuresAr.map((f) => (

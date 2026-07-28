@@ -788,7 +788,8 @@ console.log("\n── and the hook does not put the network in front of the form
   };
   const stopTab1 = keepVisitAlive();
   ok("a live tab registers a visibilitychange listener", listeners.some(([t]) => t === "visibilitychange"));
-  ok("and stamps the lease immediately, not on the first beat", store.getItem("ra_visit_live") !== null);
+  ok("and stamps its own entry immediately, not on the first beat",
+    Object.keys(JSON.parse(store.getItem("ra_visit_live") || "{}")).length === 1);
 
   /* THE BUG: a new tab clears sessionStorage. Tab 1 is still open. */
   session.clear();
@@ -797,31 +798,75 @@ console.log("\n── and the hook does not put the network in front of the form
 
   /* The visibility hook restamps, so a tab whose timer was throttled while hidden does not have its
      own lease judged on a beat the browser refused to run. */
-  store.setItem("ra_visit_live", String(Date.now() - 4 * 60_000));
   listeners.filter(([t]) => t === "visibilitychange").forEach(([, fn]) => fn());
-  ok("returning to the foreground restamps the lease",
-    Date.now() - Number(store.getItem("ra_visit_live")) < 5_000);
+  {
+    const entries = Object.values(JSON.parse(store.getItem("ra_visit_live") || "{}"));
+    ok("returning to the foreground restamps this tab's entry",
+      entries.length === 1 && Date.now() - Number(entries[0]) < 5_000);
+  }
+
+  /*
+   * ══════════════════════════════════════════════════════════════════════════════════════
+   * A TAB MUST NOT READ ITS OWN STAMP AS A SIBLING'S
+   * ══════════════════════════════════════════════════════════════════════════════════════
+   *
+   * The first version of this lease stored a bare `Date.now()`, and that was WORSE than the bug it
+   * fixed. `keepVisitAlive()` stamps on mount; the builder's hydration effect bails on its first
+   * pass because `useOwner()` has not answered yet — so by the time `mayRestore("anon")` ran, the
+   * only thing in the lease was a stamp this very tab had written milliseconds earlier. Every tab
+   * read itself as a live sibling, the anonymous visit NEVER expired, and a shared machine showed
+   * the next person the previous one's half-built CV. Measured with a negative control: block the
+   * lease write and correct wiping returns at once.
+   *
+   * So the assertion is not "a lease exists" but "a lease belonging to SOMEBODY ELSE exists".
+   */
+  {
+    const realSess = globalThis.window.sessionStorage;
+    store.clear();
+    /* The PREVIOUS visitor leaves a CV behind. Written first, and in their own session, because
+       `writeResume` marks the visit — planting it after the swap would mark the NEW tab's session
+       and `mayRestore` would then answer true for a legitimate reason, testing nothing. */
+    writeResume(owner, newResumeId(), "en", cv("Left by the last visitor"));
+    /* …then every tab closes and somebody else opens one: fresh sessionStorage, so no visit marker
+       and a new tab id, with the previous visitor's localStorage still on the machine. */
+    globalThis.window.sessionStorage = new FakeStorage();
+    const stopSolo = keepVisitAlive();               // this tab stamps its own entry…
+    ok("a lone tab does not read its own entry as a sibling", mayRestore(owner) === false,
+      "the visit would otherwise never expire, and the next person would be shown a stranger's CV");
+    stopSolo();
+    globalThis.window.sessionStorage = realSess;
+  }
+
+  /* The previous visitor's `writeResume` above marked THEIR session, and that object is back in
+     place now. Cleared, because every assertion below is a fresh tab judging somebody else's entry,
+     and a leftover session marker would satisfy `mayRestore` before the lease was ever consulted —
+     which is exactly the kind of accidentally-passing test this suite exists to avoid. */
+  session.clear();
 
   /* ── and the ORIGINAL rule still holds: every tab closed means a clean builder ── */
   stopTab1();
   ok("stopping a tab removes its visibilitychange listener",
     !listeners.some(([t]) => t === "visibilitychange"));
 
-  /* The lease is not cleared on teardown — a tab can be killed without running cleanup at all, so
-     correctness cannot depend on it. It expires instead. Five minutes and one second later: */
-  store.setItem("ra_visit_live", String(Date.now() - (5 * 60_000 + 1000)));
-  ok("a stale lease is not a live sibling — a genuinely new visit restores nothing",
+  /* A clean close removes this tab's own entry, so the registry empties with the last tab. A tab
+     that is KILLED never runs teardown, so an entry can also linger and expire — both paths are
+     asserted, because only one of them is under our control. */
+  ok("a clean teardown removes this tab's entry", store.getItem("ra_visit_live") === null);
+
+  /* A stranger's entry, stale. Five minutes and one second after its last beat: */
+  store.setItem("ra_visit_live", JSON.stringify({ tOther: Date.now() - (5 * 60_000 + 1000) }));
+  ok("a stale sibling is not a live one — a genuinely new visit restores nothing",
     mayRestore(owner) === false);
 
-  /* A lease from the FUTURE means the clock moved (a timezone change, an NTP correction). Read as
-     live, deliberately: the cost is an old draft surviving a few minutes, and the cost of the other
-     choice is the data loss above, on the machines least able to explain it. */
-  store.setItem("ra_visit_live", String(Date.now() + 60 * 60_000));
-  ok("a lease from the future is treated as live rather than as expired", mayRestore(owner) === true);
+  /* A stranger's entry from the FUTURE means the clock moved (a timezone change, an NTP
+     correction). Read as live, deliberately: the cost is an old draft surviving a few minutes, and
+     the cost of the other choice is the data loss above, on the machines least able to explain it. */
+  store.setItem("ra_visit_live", JSON.stringify({ tOther: Date.now() + 60 * 60_000 }));
+  ok("a sibling entry from the future is treated as live rather than as expired", mayRestore(owner) === true);
 
-  /* Ending the visit takes the lease with it, so the tab that just declared the visit over cannot
-     read its own stamp back as a sibling and re-open it. */
-  store.setItem("ra_visit_live", String(Date.now()));
+  /* Ending the visit takes the whole registry with it, so the tab that just declared the visit over
+     cannot read anything back and re-open it. */
+  store.setItem("ra_visit_live", JSON.stringify({ tOther: Date.now() }));
   endAnonymousVisit();
   ok("ending the visit drops the lease", store.getItem("ra_visit_live") === null);
   ok("and the anonymous records with it", listResumes(owner).length === 0);
@@ -861,6 +906,21 @@ console.log("\n── and the hook does not put the network in front of the form
     /if \(upgraded\) mustPersist\.current = true;/.test(code));
   ok("the builder holds the anonymous visit open while it is on screen",
     /useEffect\(\(\) => keepVisitAlive\(\), \[\]\)/.test(code));
+  /* The AI ledger is what `mayCall` enforces the per-resume budget from. Gated behind `touched`, it
+     was never written on an untouched resume — so the cap reset on every reload and the same money
+     could be spent again. */
+  ok("an AI dispatch persists its spend ledger", /if \(a\.t === "ai"\) mustPersist\.current = true;/.test(code));
+  /* A server copy adopted on a second device is content this browser does not hold. Without the
+     flag it reached the screen and never the disk. */
+  ok("an adopted server copy is written locally",
+    /mustPersist\.current = true;\s*\n\s*dispatch\(\{ t: "hydrate", state: sync\.incoming\.state \}\)/.test(code));
+
+  /* And the hole the gate had: "Build a new CV" wrote the empty record itself, outside the gate, so
+     pressing it twice still listed two "Untitled" rows. */
+  const start = readFileSync("app/components/build/BuilderStart.tsx", "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const startNew = start.slice(start.indexOf("const startNew"), start.indexOf("const enter"));
+  ok("startNew does not pre-write an empty record", !/writeResume\(/.test(startNew), startNew.slice(0, 200));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

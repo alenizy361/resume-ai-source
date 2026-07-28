@@ -291,7 +291,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
       <div className="mx-auto max-w-2xl">
         {welcome && (
           <div className="mb-6 rounded-xl px-4 py-3 text-sm font-semibold"
-            style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent)" }}>
+            style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent-deep)" }}>
             {t.welcome}
           </div>
         )}
@@ -357,7 +357,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         <div id="applications" className={`${sectionCard} mt-6`} style={{ scrollMarginTop: 80 }}>
           <div className="flex items-center justify-between">
             <h2 className={sectionTitle} style={{ marginBottom: 0 }}>📋 {t.jobApps} ({jobs.length})</h2>
-            <button onClick={() => setShowJobForm((v) => !v)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>
+            <button onClick={() => setShowJobForm((v) => !v)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>
               {showJobForm ? t.close : t.addJob}
             </button>
           </div>
@@ -431,7 +431,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                     <div className="truncate">{s.jobTitle}</div>
                     <div className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>{new Date(s.ts).toLocaleString()}</div>
                   </div>
-                  <button onClick={() => openScan(s)} className="btn-ghost shrink-0 px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>{t.open}</button>
+                  <button onClick={() => openScan(s)} className="btn-ghost shrink-0 px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>{t.open}</button>
                   <button onClick={() => { removeScan(owner, s.id); setScans(getScans(owner)); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
                 </li>
               ))}
@@ -468,7 +468,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                       {r.status && ` · ${r.status === "draft" ? t.draftLbl : t.ready}`}
                     </div>
                   </div>
-                  <button onClick={() => loadResume(r)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>Optimize</button>
+                  <button onClick={() => loadResume(r)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent-deep)" }}>Optimize</button>
                   <button onClick={() => downloadText("resume.txt", r.text)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--fg)" }}>↓ .txt</button>
                   <button onClick={() => { removeResume(owner, r.id); setResumes(getResumes(owner)); }} className="text-xs" style={{ color: "var(--faint)" }}>✕</button>
                 </li>

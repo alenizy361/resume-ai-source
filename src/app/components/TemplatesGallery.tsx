@@ -127,8 +127,7 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
       <div className="mb-8 flex justify-center gap-2">
         {modeBtns.map((b) => (
           <button key={b.id} onClick={() => setMode(b.id)} aria-pressed={mode === b.id}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold ${mode === b.id ? "" : "seg"}`}
-            style={mode === b.id ? { background: "var(--accent-deep)", color: "#ffffff" } : undefined}>
+            className={`seg rounded-lg px-4 py-2 text-sm font-semibold ${mode === b.id ? "seg-on" : ""}`}>
             {b.label}
           </button>
         ))}
@@ -141,11 +140,11 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
               <div>
                 <div className="flex items-center gap-2 font-bold">
                   {ar ? t.nameAr : t.name}
-                  {t.best && <span className="rounded-full px-2 py-0.5 font-mono text-[9px] font-bold" style={{ background: "var(--accent)", color: "#ffffff" }}>{ar ? "الأفضل" : "BEST"}</span>}
+                  {t.best && <span className="rounded-full px-2 py-0.5 font-mono text-[11px] font-bold" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>{ar ? "الأفضل" : "BEST"}</span>}
                 </div>
                 <div className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>{ar ? t.tagAr : t.tag}</div>
               </div>
-              <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-bold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>ATS</span>
+              <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-bold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.3)" }}>ATS</span>
             </div>
             {/*
               `dir` here anchors the oversized 794px sample to the SAME side the child's
@@ -177,7 +176,21 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
                 </div>
               )}
             </div>
-            <Link href={`/builder?template=${t.slug}&lang=${mode}`} className="btn-accent block w-full py-2.5 text-center text-sm font-semibold">
+            {/*
+              Routed by the PAGE's language, not by the preview mode.
+
+              This was `&lang=${mode}`, where mode is "en" | "ar" | "bi". `proxy.ts` rewrites to the
+              Arabic builder only when `lang === "ar"`, so "bi" fell through to the ENGLISH builder —
+              an Arabic visitor on /ar/templates who picked "ثنائي اللغة" and pressed the Arabic CTA
+              "استخدم هذا القالب" landed on an English `/builder` with `lang=bi` discarded. The
+              gallery's mode selector controlled the builder's language for two of its three values
+              and silently failed on the third.
+
+              `mode` is a PREVIEW control — which sample this card renders — and there is no
+              bilingual builder route for it to name. The visitor's language is the page they are
+              standing on, which is the thing that was always true and was being inferred instead.
+            */}
+            <Link href={`${ar ? "/ar/builder" : "/builder"}?template=${t.slug}`} className="btn-accent block w-full py-2.5 text-center text-sm font-semibold">
               {ar ? "استخدم هذا القالب ←" : "Use this template →"}
             </Link>
           </div>

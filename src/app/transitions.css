@@ -89,16 +89,43 @@
  *
  * `inline-flex` + centring rather than a padding bump: padding would move the text off its
  * baseline in a row of siblings, where extra HEIGHT around a centred label does not.
+ *
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * …BUT ONLY WHERE THE CONTROL IS A SINGLE LABEL
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * `display: inline-flex` is a layout instruction, and this class is pasted onto controls that
+ * already have a layout. It landed on the builder's two entry cards — the ONE decision screen of
+ * the primary funnel — whose markup is a bold title above a description, and turned them into
+ * flex ROWS. Measured at 390px on `/ar/builder`: the title «أنشئ سيرة جديدة» squeezed into a
+ * 68.8px column and wrapped mid-phrase, with its description laid out beside it at a 6px vertical
+ * offset, the two texts interleaving. Unreadable in Arabic, wrong in English, and nothing else in
+ * the cascade set `display` — this rule was the only cause.
+ *
+ * So the display half is scoped to controls that are a label and nothing else. `.card` opts out
+ * because a card composes its own children; anything padded to a card's size already clears 44px
+ * without help.
  */
 .t-tap {
   min-height: 44px;
+}
+.t-tap:not(.card) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-/* A tap target inside running prose is a link, not a button — forcing 44px there would
-   break the line box it sits in. */
-p .t-tap, li .t-tap, .t-tap-inline { min-height: 0; display: inline; }
+/*
+ * A tap target inside running PROSE is a link, not a button — forcing 44px there would break the
+ * line box it sits in.
+ *
+ * `li` is deliberately NOT in this list any more. It was, and it silently cancelled the 44px floor
+ * for every chip rail in the product, because those rails are `<ul><li><a class="t-tap">` — so the
+ * one place the class was most needed was the one place it did nothing. Measured: 34 Arabic chips
+ * across six pages, all exactly 30px. A list ITEM is a container, not prose; a link inside a
+ * paragraph of text is prose. `.t-tap-inline` remains the explicit opt-out for the genuine
+ * mid-sentence case.
+ */
+p .t-tap, .t-tap-inline { min-height: 0; display: inline; }
 
 /*
  * ── the hover this class was already paying for ──

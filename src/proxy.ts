@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { AR_SLUGS } from "@/app/lib/jobs-ar";
 
 // Next 16 renamed `middleware` -> `proxy` (runtime is nodejs, not edge).
 //
@@ -50,10 +51,40 @@ const AR_TWINS: RegExp[] = [
      /login): app/(ar)/ar/score/[id] is a redirect stub back to /score/{id}?lang=ar, so listing
      it here made the Arabic "Share my score" link — and every shared Arabic score URL — an
      infinite 308/307 loop. The rule stands: only routes whose /ar page renders real content. */
-  /^\/resume-examples(\/|$)/,
-  /^\/cover-letter-examples(\/|$)/,
-  /^\/resume-skills(\/|$)/,
+  /* The three catalog HUBS only. Their children are decided by `hasArTwin` below, because a
+     prefix pattern here claimed 85 twins where 62 exist. */
+  /^\/resume-examples$/,
+  /^\/cover-letter-examples$/,
+  /^\/resume-skills$/,
 ];
+
+/**
+ * The three programmatic catalogs cover different profession sets in the two languages.
+ *
+ * `AR_TWINS` used to hold `/^\/resume-examples(\/|$)/` and its two siblings — prefix patterns, so
+ * they matched all 85 English profession slugs while `AR_SLUGS` holds 62. For the 23 English-only
+ * professions (data-scientist, project-manager, web-developer, recruiter, ux-ui-designer, …) a
+ * `?lang=ar` URL 308-redirected straight into a 404: a redirect pointing at a page that does not
+ * exist, 69 of them across the three trees.
+ *
+ * No in-product link produces those URLs — the page components already guard their own toggles on
+ * `hasAr` — but hand-typed, bookmarked and legacy links do, and answering them with a redirect into
+ * a 404 is worse than answering them with the English page they asked for.
+ *
+ * This is the rule stated at the top of this file finally applied to the catalogs: redirect only
+ * when a twin actually exists.
+ */
+const CATALOGS = ["/resume-examples/", "/cover-letter-examples/", "/resume-skills/"];
+
+function hasArTwin(pathname: string): boolean {
+  /* The SECTOR tree lives under the same prefix and is fully bilingual — identical slugs in both
+     languages — so it is matched before the profession check, which would otherwise look up
+     "category/technology" in a list of profession slugs and answer no. */
+  if (/^\/resume-examples\/category(\/[a-z0-9-]+)?$/.test(pathname)) return true;
+  const catalog = CATALOGS.find((c) => pathname.startsWith(c));
+  if (catalog) return AR_SLUGS.includes(pathname.slice(catalog.length));
+  return AR_TWINS.some((r) => r.test(pathname));
+}
 
 export function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -67,7 +98,7 @@ export function proxy(request: NextRequest) {
         url.searchParams.delete("lang");
         return NextResponse.redirect(url, 308);
       }
-    } else if (lang === "ar" && AR_TWINS.some((r) => r.test(pathname))) {
+    } else if (lang === "ar" && hasArTwin(pathname)) {
       const url = request.nextUrl.clone();
       url.pathname = `/ar${pathname === "/" ? "" : pathname}`;
       url.searchParams.delete("lang");

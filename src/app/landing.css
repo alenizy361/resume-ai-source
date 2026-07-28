@@ -27,7 +27,11 @@
   --cine-line: rgba(15, 20, 35, 0.1);
   --cine-energy: #7c3aed;
   --cine-blue: #2563eb;
-  --cine-ok: #059669;
+  /* #059669 measured 3.77:1 on white at the 17px these ticks render at, and a tick is the
+     "included" MARKER on the pricing scene, not decoration — it carries meaning, so it needs
+     the text bar. #047857 is the same hue at 4.6:1, and is already the global --ok for exactly
+     this reason. */
+  --cine-ok: #047857;
   --cine-warn: #b45309;
   background: var(--cine-bg);
   color: var(--cine-ink);

@@ -101,6 +101,23 @@ import { useOwner } from "@/app/components/useOwner";
 import { readPersonalJson, removePersonal, writePersonal } from "@/app/lib/personalStore";
 import { useBackToForm, useCountUp } from "@/app/lib/resultUx";
 
+/**
+ * The saved wizard draft, as read back off the wire.
+ *
+ * Every field is `unknown` on purpose: this comes out of localStorage, which any earlier version of
+ * this component — or a hand-edited devtools session — may have written, so each one is type-checked
+ * at the point of use rather than trusted here. Named because it is now read in two places and
+ * carries six fields; the inline shape was becoming the longest thing on its line.
+ */
+interface DraftShape {
+  resume?: unknown;
+  jobDescription?: unknown;
+  mode?: unknown;
+  employer?: unknown;
+  targetCountry?: unknown;
+  step?: unknown;
+}
+
 interface OptimizeResult {
   matchScore: number;
   afterScore?: number;
@@ -235,6 +252,25 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
   const [employer, setEmployer] = useState("");
   const [targetCountry, setTargetCountry] = useState("");
   const [jdFileMsg, setJdFileMsg] = useState("");
+  /*
+   * Step 1's own feedback channel, with a TONE.
+   *
+   * The upload handler wrote to `error`, and the only `{error && …}` block in this component sits
+   * inside the step-3 branch — so on step 1, where the file input actually is, a corrupt file, an
+   * unsupported type and a silently-truncated 33,000-character CV all looked identical to nothing
+   * happening. The message then surfaced two steps later in the SCAN-error slot, beside a Retry
+   * button that re-runs the scan rather than the upload.
+   *
+   * The server added its `truncated` flag specifically so the cut would be visible ("6,632
+   * characters of somebody's career, gone silently" — api/extract/route.ts). The client was setting
+   * the message and had nowhere to paint it.
+   *
+   * A tone as well as a text, because these two are not the same thing: a truncation is a warning
+   * about something that WORKED, and a failed read is an error. Painting both red, or both in the
+   * accent colour, misreports one of them.
+   */
+  const [uploadMsg, setUploadMsg] = useState<{ text: string; tone: "warn" | "error" } | null>(null);
+  const [jdTone, setJdTone] = useState<"ok" | "warn" | "error">("ok");
   const [uploadingJd, setUploadingJd] = useState(false);
   const thinkRef = useRef<HTMLDivElement>(null);
 
@@ -316,13 +352,11 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!owner) return;
-    let d = readPersonalJson<{ resume?: unknown; jobDescription?: unknown; mode?: unknown } | null>(
-      owner, "ra_optimize_draft", null);
+    let d = readPersonalJson<DraftShape | null>(owner, "ra_optimize_draft", null);
     let savedResult = readPersonalJson<OptimizeResult | null>(owner, "ra_optimize_result", null);
     // One-time fallback to the pre-merge Arabic-only keys, for a draft written before this
     // page's two routes became one. Never written back under the old names.
-    if (!d) d = readPersonalJson<{ resume?: unknown; jobDescription?: unknown; mode?: unknown } | null>(
-      owner, "ra_ar_optimize_draft", null);
+    if (!d) d = readPersonalJson<DraftShape | null>(owner, "ra_ar_optimize_draft", null);
     if (!savedResult) savedResult = readPersonalJson<OptimizeResult | null>(owner, "ra_ar_optimize_result", null);
     if (d) {
       if (typeof d.resume === "string") setResume(d.resume);
@@ -335,6 +369,23 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
       if (d.mode === "target" && typeof d.jobDescription === "string" && d.jobDescription.trim().length >= 30) {
         setMode("target");
       }
+      /*
+       * Step 2's context, which a reload used to discard.
+       *
+       * The draft held only `{resume, jobDescription, mode}`, so the employer name and target
+       * country typed on step 2 were gone after a refresh while the two fields beside them came
+       * back — and the wizard restarted at "Step 1 of 3" even though the work behind step 3 had
+       * survived, so the counter disagreed with how far the user actually got. Silently dropping
+       * two typed fields is the same class of loss this draft exists to prevent.
+       */
+      if (typeof d.employer === "string") setEmployer(d.employer);
+      if (typeof d.targetCountry === "string") setTargetCountry(d.targetCountry);
+      /* Clamped, and only forward past step 1 when there is something to show for it — a stored
+         step from a draft whose text has since been cleared must not strand the user on an empty
+         later screen. */
+      if (typeof d.step === "number" && d.step >= 2 && d.step <= 3 && typeof d.resume === "string" && d.resume.trim().length >= 50) {
+        setStep(d.step === 3 ? 3 : 2);
+      }
     }
     if (savedResult) setResult(savedResult);
   }, [owner]);
@@ -345,13 +396,13 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
        user's next keystroke would appear to save while actually going nowhere. */
     if (!owner) return;
     if (resume || jobDescription) {
-      writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode }));
+      writePersonal(owner, "ra_optimize_draft", JSON.stringify({ resume, jobDescription, mode, employer, targetCountry, step }));
     } else {
       // Both fields emptied — clear the saved draft so a refresh doesn't
       // resurrect stale text the user just deleted.
       removePersonal(owner, "ra_optimize_draft");
     }
-  }, [owner, resume, jobDescription, mode]);
+  }, [owner, resume, jobDescription, mode, employer, targetCountry, step]);
 
   useEffect(() => {
     if (!owner) return;
@@ -362,7 +413,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setError("");
+    setUploadMsg(null);
     setUploading(true);
     setUploadedName("");
     try {
@@ -380,15 +431,15 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
       let text = typeof data.text === "string" ? data.text : "";
       if (data.truncated || text.length > 8000) {
         text = text.slice(0, 8000);
-        setError(ar
+        setUploadMsg({ tone: "warn", text: ar
           ? "سيرتك طويلة — اقتصرنا على أول ٨٠٠٠ حرف. راجع النص قبل الفحص."
-          : "Your resume is long — we kept the first 8,000 characters. Review the text before scanning.");
+          : "Your resume is long — we kept the first 8,000 characters. Review the text before scanning." });
       }
       setResume(text);
       setUploadedName(file.name);
       setExtraction(analyzeExtraction(text));
     } catch (err) {
-      setError(err instanceof Error ? err.message : (ar ? "تعذّرت قراءة الملف." : "Failed to read file."));
+      setUploadMsg({ tone: "error", text: err instanceof Error ? err.message : (ar ? "تعذّرت قراءة الملف." : "Failed to read file.") });
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -402,6 +453,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setJdFileMsg("");
+    setJdTone("ok");
     setUploadingJd(true);
     try {
       const fd = new FormData();
@@ -410,11 +462,22 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
       const data = await res.json();
       if (!res.ok) throw new Error(ar ? "تعذّرت قراءة الملف — الصق النص يدوياً." : (data.error || "Failed to read file"));
       let text = typeof data.text === "string" ? data.text : "";
+      /*
+       * This threw text away TWICE and reported success. `/api/extract` already caps at 8,000 and
+       * says so with `truncated`; this ignored the flag and then cut another 4,000 off, while the
+       * only thing on screen was "Imported from <file>" in the accent colour. A long posting lost
+       * two thirds of itself and looked fine.
+       */
+      const cut = Boolean(data.truncated) || text.length > 4000;
       if (text.length > 4000) text = text.slice(0, 4000);
       setJobDescription(text);
       if (text.trim().length >= 30) setMode("target");
-      setJdFileMsg(ar ? `تم استيراد الملف: ${file.name}` : `Imported from ${file.name}`);
+      setJdTone(cut ? "warn" : "ok");
+      setJdFileMsg(cut
+        ? (ar ? `تم استيراد ${file.name} — اقتصرنا على أول ٤٠٠٠ حرف من الإعلان.` : `Imported ${file.name} — we kept the first 4,000 characters of the posting.`)
+        : (ar ? `تم استيراد الملف: ${file.name}` : `Imported from ${file.name}`));
     } catch (err) {
+      setJdTone("error");
       setJdFileMsg(err instanceof Error ? err.message : (ar ? "تعذّرت قراءة الملف." : "Failed to read file."));
     } finally {
       setUploadingJd(false);
@@ -657,7 +720,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
               <div className="card mx-auto max-w-2xl overflow-hidden" style={{ borderColor: "rgba(139,92,246,0.35)" }}>
                 <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: "1px solid var(--line)", background: "rgba(139,92,246,0.05)" }}>
                   <BrandOrb variant="button" size={22} busy />
-                  <span className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: "var(--accent)" }}>{ar ? "جارٍ التحليل — مباشر" : "Analyzing — live"}</span>
+                  <span className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: "var(--accent-deep)" }}>{ar ? "جارٍ التحليل — مباشر" : "Analyzing — live"}</span>
                 </div>
                 <div className="px-5 py-4 font-mono text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
                   {thinking.replace(/^ANALYSIS\s*/i, "") || (ar ? "نقرأ سيرتك…" : "Reading your resume…")}<span className="animate-pulse text-accent">▌</span>
@@ -687,7 +750,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 />
                 <div className="mb-3 flex flex-wrap gap-2">
                   <label className="cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold"
-                    style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                    style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                     {uploading ? (ar ? "جارٍ القراءة…" : "Reading…") : uploadedName ? `${uploadedName.slice(0, ar ? 18 : 22)}` : (ar ? "↑ رفع PDF / Word" : "↑ Upload PDF / Word")}
                     <input type="file" accept=".pdf,.docx,.txt,.md" onChange={handleFile} className="hidden" disabled={uploading} />
                   </label>
@@ -696,6 +759,20 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--fg)" }}>{ar ? "👀 جرّب نموذج" : "Try a sample"}</button>
                   )}
                 </div>
+                {/* On the step the upload lives on — see `uploadMsg`. `role="status"` for the
+                    warning and `role="alert"` for the failure, so a screen reader is told about a
+                    silent truncation with the same urgency a sighted reader gets from the colour. */}
+                {uploadMsg && (
+                  <p
+                    role={uploadMsg.tone === "error" ? "alert" : "status"}
+                    className="mb-3 rounded-lg px-3 py-2 text-xs leading-relaxed"
+                    style={uploadMsg.tone === "error"
+                      ? { background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "var(--danger)" }
+                      : { background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", color: "var(--warn)" }}
+                  >
+                    {uploadMsg.text}
+                  </p>
+                )}
                 <textarea value={resume} onChange={(e) => setResume(e.target.value)}
                   placeholder={ar ? "الصق سيرتك هنا بأي لغة — الخبرات، التعليم، المهارات، معلومات التواصل…" : "Paste your resume here — work experience, education, skills, contact info…"}
                   rows={12} maxLength={8000}
@@ -704,7 +781,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 <p className="mono-nums mt-2 font-mono text-xs" dir="ltr" style={{ color: resume.length > 7500 ? "var(--warn)" : "var(--faint)", textAlign: ar ? "right" : "left" }}>{ar ? `${toArabicDigits(resume.length)}/${toArabicDigits(8000)}` : `${resume.length}/8000`}</p>
                 {extraction && uploadedName && (
                   <div className="mt-3 rounded-xl p-4" style={{ background: "rgba(139,92,246,0.05)", border: "1px solid var(--line)" }}>
-                    <div className="mb-2 text-sm font-bold" style={{ color: "var(--accent)" }}>{ar ? "هذا ما قرأناه — تحقّق منه" : "Here’s what we read — check it"}</div>
+                    <div className="mb-2 text-sm font-bold" style={{ color: "var(--accent-deep)" }}>{ar ? "هذا ما قرأناه — تحقّق منه" : "Here’s what we read — check it"}</div>
                     <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4" style={{ color: "var(--muted)" }}>
                       <div><span style={{ color: "var(--faint)" }}>{ar ? "الاسم" : "Name"}</span><br /><strong>{extraction.name}</strong></div>
                       <div><span style={{ color: "var(--faint)" }}>{ar ? "مدخلات مؤرَّخة" : "Dated entries"}</span><br /><strong>{ar ? toArabicDigits(extraction.expCount) : extraction.expCount}</strong></div>
@@ -737,14 +814,14 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                   <button type="button" onClick={importJobFromUrl} disabled={fetchingJob || !jobUrl.trim()}
-                    className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>{fetchingJob ? (ar ? "جارٍ الجلب…" : "Fetching…") : (ar ? "استيراد" : "Import")}</button>
-                  <label className="btn-ghost shrink-0 cursor-pointer px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)", opacity: uploadingJd ? 0.6 : 1 }}>
+                    className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent-deep)" }}>{fetchingJob ? (ar ? "جارٍ الجلب…" : "Fetching…") : (ar ? "استيراد" : "Import")}</button>
+                  <label className="btn-ghost shrink-0 cursor-pointer px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent-deep)", opacity: uploadingJd ? 0.6 : 1 }}>
                     {uploadingJd ? (ar ? "جارٍ القراءة…" : "Reading…") : (ar ? "أو ارفع ملف الإعلان" : "…or upload the posting")}
                     <input type="file" accept=".pdf,.docx,.txt,.md" onChange={handleJdFile} className="hidden" disabled={uploadingJd} />
                   </label>
                 </div>
                 {jobUrlMsg && <p className="mb-2 text-xs" style={{ color: jobUrlMsg.startsWith("✓") || jobUrlMsg.startsWith("تم") ? "var(--accent)" : "var(--warn)" }}>{jobUrlMsg}</p>}
-                {jdFileMsg && <p className="mb-2 text-xs" style={{ color: "var(--accent)" }}>{jdFileMsg}</p>}
+                {jdFileMsg && <p className="mb-2 text-xs" style={{ color: jdTone === "error" ? "var(--danger)" : jdTone === "warn" ? "var(--warn)" : "var(--accent)" }}>{jdFileMsg}</p>}
                 <textarea value={jobDescription}
                   onChange={(e) => { const v = e.target.value; setJobDescription(v); if (v.trim().length >= 30) setMode("target"); else setMode("general"); }}
                   placeholder={ar ? "الصق إعلان الوظيفة هنا." : "…or paste the job description here."}
@@ -797,13 +874,13 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 <div className="mb-4 rounded-xl p-4 text-sm" style={{ background: "rgba(139,92,246,0.05)", border: "1px solid rgba(139,92,246,0.2)", color: "var(--muted)" }}>
                   <div className="mb-1 font-semibold" style={{ color: "var(--fg)" }}>{mode === "target" ? (ar ? "مخصّصة لإعلان الوظيفة" : "Tailored to your job posting") : (ar ? "تحسين شامل" : "General improvement")}</div>
                   {ar
-                    ? <>مجاناً: درجة الملاءمة، الكلمات الناقصة، فجوة المهارات، معاينة. <span style={{ color: "var(--accent)" }}>السيرة الكاملة بعد الفتح.</span></>
-                    : <>Free: match score, missing keywords, skills gap, preview. <span style={{ color: "var(--accent)" }}>Full rewrite unlocks after.</span></>}
+                    ? <>مجاناً: درجة الملاءمة، الكلمات الناقصة، فجوة المهارات، معاينة. <span style={{ color: "var(--accent-deep)" }}>السيرة الكاملة بعد الفتح.</span></>
+                    : <>Free: match score, missing keywords, skills gap, preview. <span style={{ color: "var(--accent-deep)" }}>Full rewrite unlocks after.</span></>}
                 </div>
                 {error && (
                   <div className="mb-4 rounded-xl px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "var(--danger)" }}>
                     <div>{error}</div>
-                    {resume.trim() && <button type="button" onClick={() => runScan()} className="mt-2 inline-block rounded-lg px-4 py-1.5 text-xs font-semibold" style={{ background: "rgba(139,92,246,0.15)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.4)" }}>{ar ? "↻ إعادة" : "↻ Retry"}</button>}
+                    {resume.trim() && <button type="button" onClick={() => runScan()} className="mt-2 inline-block rounded-lg px-4 py-1.5 text-xs font-semibold" style={{ background: "rgba(139,92,246,0.15)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.4)" }}>{ar ? "↻ إعادة" : "↻ Retry"}</button>}
                   </div>
                 )}
                 <button onClick={() => runScan()} disabled={resume.trim().length < 50}
@@ -857,7 +934,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
               })()}
               <a href={`/score/${score}${ar ? "?lang=ar" : ""}`} target="_blank" rel="noopener noreferrer"
                 className="mt-5 inline-block rounded-lg px-5 py-2 text-sm font-semibold"
-                style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                 {ar ? "📣 شارك نتيجتي" : "📣 Share my score"}
               </a>
             </div>
@@ -919,13 +996,13 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       <button
                         onClick={() => { navigator.clipboard.writeText(result.optimizedResume); setCopied(true); setTimeout(() => setCopied(false), 1800); }}
                         className="rounded-lg px-4 py-2 text-sm font-semibold"
-                        style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                        style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                         {copied ? (ar ? "نُسخت" : "Copied") : (ar ? "نسخ" : "Copy")}
                       </button>
                       <button
                         onClick={() => download("optimized-resume.txt", marked ? wmTxt(result.optimizedResume, ar) : result.optimizedResume)}
                         className="rounded-lg px-4 py-2 text-sm font-semibold"
-                        style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                        style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                         {ar ? "↓ نص" : "↓ .txt"}
                       </button>
                       {/* No `watermark` prop any more: the bytes come from `POST /api/export`, which
@@ -956,7 +1033,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                                 <button
                                   onClick={() => continueInBuilder(r.resumeId)}
                                   className="font-semibold underline underline-offset-2"
-                                  style={{ color: "var(--accent)" }}
+                                  style={{ color: "var(--accent-deep)" }}
                                 >
                                   {ar ? `استبدل «${r.title || "سيرة بلا عنوان"}»` : `replace “${r.title || "Untitled CV"}”`}
                                 </button>
@@ -971,13 +1048,13 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 {/* Email my results — delivery + opt-in capture. */}
                 {!result.locked && (
                   emailState === "sent" ? (
-                    <div className="mb-4 rounded-xl px-4 py-3 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent)" }}>{ar ? "أُرسلت — تفقّد بريدك." : "Sent — check your inbox."}</div>
+                    <div className="mb-4 rounded-xl px-4 py-3 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.35)", color: "var(--accent-deep)" }}>{ar ? "أُرسلت — تفقّد بريدك." : "Sent — check your inbox."}</div>
                   ) : (
                     <div className="mb-4 flex flex-wrap gap-2">
                       <input type="email" value={emailTo} onChange={(e) => setEmailTo(e.target.value)} dir="ltr" placeholder="you@email.com"
                         className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                       <button type="button" onClick={emailResults} disabled={emailState === "sending" || !emailTo.trim()}
-                        className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>
+                        className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent-deep)" }}>
                         {emailState === "sending" ? (ar ? "جارٍ الإرسال…" : "Sending…") : (ar ? "✉ أرسل نتيجتي بالبريد" : "✉ Email my results")}
                       </button>
                       {emailState === "error" && <p className="w-full text-xs" style={{ color: "var(--danger)" }}>{emailMsg}</p>}
@@ -1084,7 +1161,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                         <button
                           onClick={() => { navigator.clipboard.writeText(coverLetter); setCoverCopied(true); setTimeout(() => setCoverCopied(false), 1800); }}
                           className="rounded-lg px-4 py-2 text-sm font-semibold"
-                          style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                          style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                           {coverCopied ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ" : "Copy")}
                         </button>
                         <button
@@ -1100,7 +1177,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     <div className="mt-3 rounded-lg px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "var(--danger)" }}>
                       {coverError}
                       {coverPaywalled && (
-                        <Link href={pricingHref} className={ar ? "mr-2 font-semibold underline" : "ml-2 font-semibold underline"} style={{ color: "var(--accent)" }}>{ar ? "شاهد الباقات ←" : "See plans →"}</Link>
+                        <Link href={pricingHref} className={ar ? "mr-2 font-semibold underline" : "ml-2 font-semibold underline"} style={{ color: "var(--accent-deep)" }}>{ar ? "شاهد الباقات ←" : "See plans →"}</Link>
                       )}
                     </div>
                   )}
@@ -1133,7 +1210,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       navigator.clipboard.writeText(txt); setCopied(true); setTimeout(() => setCopied(false), 1800);
                     }}
                     className="rounded-lg px-4 py-2 text-sm font-semibold"
-                    style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid var(--line)" }}>
+                    style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent-deep)", border: "1px solid var(--line)" }}>
                     {copied ? (ar ? "نُسخ" : "Copied") : (ar ? "نسخ التحليل" : "Copy analysis")}
                   </button>
                 </div>
@@ -1148,7 +1225,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "متطلبات الوظيفة التي تُظهر سيرتك دليلاً عليها بالفعل." : "Job requirements your resume already shows evidence for."}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.presentKeywords.map((k) => (
-                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>{k}</span>
                       ))}
                     </div>
                   </div>

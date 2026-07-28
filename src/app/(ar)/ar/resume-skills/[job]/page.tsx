@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
           <h2 className="mb-4 text-2xl font-bold">كلمات ATS الأساسية</h2>
           <div className="flex flex-wrap gap-2">
             {j.keywords.map((k) => (
-              <span key={k} dir="ltr" className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent)" }}>{k}</span>
+              <span key={k} dir="ltr" className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(139,92,246,0.14)", color: "var(--accent-deep)" }}>{k}</span>
             ))}
           </div>
         </section>

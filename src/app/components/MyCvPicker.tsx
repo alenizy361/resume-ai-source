@@ -144,7 +144,7 @@ export default function MyCvPicker({
                 {when(cv.updatedAt, c, now) && ` · ${when(cv.updatedAt, c, now)}`}
               </span>
             </span>
-            <span aria-hidden style={{ color: "var(--accent)" }}>{ar ? "←" : "→"}</span>
+            <span aria-hidden style={{ color: "var(--accent-deep)" }}>{ar ? "←" : "→"}</span>
           </button>
         ))}
       </div>

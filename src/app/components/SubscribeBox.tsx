@@ -32,7 +32,7 @@ export default function SubscribeBox({ ar = false }: { ar?: boolean }) {
         <h2 className="text-2xl font-bold">{t.title}</h2>
         <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{t.sub}</p>
         {state === "done" ? (
-          <p className="mt-5 font-semibold" style={{ color: "var(--accent)" }}>{t.done}</p>
+          <p className="mt-5 font-semibold" style={{ color: "var(--accent-deep)" }}>{t.done}</p>
         ) : (
           <form onSubmit={submit} className="mt-5 flex gap-2">
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t.ph} required dir="ltr"

@@ -93,7 +93,7 @@ export default async function ResumeSkillsPage({ params }: { params: Promise<{ j
           </p>
           <div className="flex flex-wrap gap-2">
             {j.atsKeywords.map((k) => (
-              <span key={k} className="rounded-full px-4 py-1.5 text-sm font-medium" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
+              <span key={k} className="rounded-full px-4 py-1.5 text-sm font-medium" style={{ background: "rgba(139,92,246,0.1)", color: "var(--accent-deep)", border: "1px solid rgba(139,92,246,0.25)" }}>{k}</span>
             ))}
           </div>
         </section>
@@ -177,7 +177,7 @@ EXPERIENCE (example bullet)
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href={`/resume-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} resume example</Link>
             <Link href={`/cover-letter-examples/${j.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--fg)" }}>{j.title} cover letter</Link>
-            <SectorLink category={j.category} lang="en" className="btn-ghost px-4 py-2 font-semibold" style={{ color: "var(--accent)" }} />
+            <SectorLink category={j.category} lang="en" className="btn-ghost px-4 py-2 font-semibold" style={{ color: "var(--accent-deep)" }} />
             {related.map((r) => (
               <Link key={r.slug} href={`/resume-skills/${r.slug}`} className="btn-ghost px-4 py-2" style={{ color: "var(--muted)" }}>{r.title} skills</Link>
             ))}

@@ -12,7 +12,7 @@ export default function NavAccountLink({ ar = false }: { ar?: boolean }) {
 
   if (!me) return null;
   return me.signedIn ? (
-    <Link href="/account" className="hidden items-center gap-1.5 text-sm sm:flex" style={{ color: "var(--accent)" }}>
+    <Link href="/account" className="hidden items-center gap-1.5 text-sm sm:flex" style={{ color: "var(--accent-deep)" }}>
       <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "var(--accent)" }} />
       {ar ? "حسابي" : "Account"}
     </Link>
