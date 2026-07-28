@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { dest } from "@/app/lib/brand";
 
 /** Hamburger menu for small screens — the header's secondary links (which are
  *  hidden below `sm`) collapse into this, INCLUDING the session-aware Sign in /
@@ -43,17 +44,21 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
     ? (signedIn ? { href: "/ar/account", label: "● حسابي" } : { href: "/ar/login", label: "تسجيل الدخول" })
     : (signedIn ? { href: "/account", label: "● Account" } : { href: "/login", label: "Sign in" });
 
+  /* The two destination names come from `brand.ts`, not from here. This menu called them "Scan my
+     resume" and "CV Builder" while the header CTA two inches above it said "Build my resume" and
+     the chip rails said four other things — eleven names for two doors. See `DEST`. */
+  const lang = ar ? "ar" : "en";
   const links = ar
     ? [
-        { href: "/ar/optimize", label: "افحص سيرتك" },
-        { href: "/ar/builder", label: "ابنِ سيرتك" },
+        dest("optimize", lang),
+        dest("builder", lang),
         { href: "/ar/pricing", label: "الأسعار" },
         acct,
         { href: "/", label: "English" },
       ]
     : [
-        { href: "/optimize", label: "Scan my resume" },
-        { href: "/builder", label: "CV Builder" },
+        dest("optimize", lang),
+        dest("builder", lang),
         { href: "/pricing", label: "Pricing" },
         acct,
         { href: "/ar", label: "عربي" },

@@ -75,11 +75,11 @@ export default function BuilderStartPage() {
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/optimize", label: "Check an existing CV against a job" },
+          { href: "/optimize", label: "Check my resume" },
           { href: "/resume-examples", label: "Resume examples by job" },
           { href: "/templates", label: "ATS-safe templates" },
           { href: "/cover-letter-examples", label: "Cover letter examples" },
-          { href: "/ar/builder", label: "ابنِ سيرتك بالعربية" },
+          { href: "/ar/builder", label: "ابنِ سيرتك" },
         ]}
       />
     </>

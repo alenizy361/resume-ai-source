@@ -57,8 +57,8 @@ export default function ArPdfReadabilityCheckerLayout({ children }: { children: 
         ]}
         relatedHeading="روابط ذات صلة"
         related={[
-          { href: "/ar/optimize", label: "فاحص ATS المجاني" },
-          { href: "/ar/builder", label: "ابنِ سيرة متوافقة مع أنظمة الفرز" },
+          { href: "/ar/optimize", label: "افحص سيرتي" },
+          { href: "/ar/builder", label: "ابنِ سيرتك" },
           { href: "/ar/templates", label: "قوالب متوافقة مع أنظمة الفرز" },
           { href: "/pdf-readability-checker", label: "Check your file's readability in English" },
         ]}

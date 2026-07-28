@@ -147,5 +147,57 @@ const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/
   ok("no page prints a salary range without its basis", unlabelled.length === 0, unlabelled.join(", "));
 }
 
+/* ── one name per destination, in navigation ── */
+{
+  /*
+   * `NAV_CTA` fixed the header and nothing else. A later audit counted what was left: `/builder`
+   * was called "Build my resume", "CV Builder", "Build a CV", "Build a CV from scratch", "Build one
+   * from scratch" and "Build your CV"; `/optimize` was "Scan my resume", "Scan a resume", "Check
+   * your CV against a job", "Check your CV against the advert" and "Check an existing CV against a
+   * job". Eleven names for two doors — and the Arabic side was worse, at nine.
+   *
+   * A visitor cannot learn a product whose parts are renamed between the pages that link to them.
+   * This counts the labels on chip-rail entries, which is where the sprawl lived, and fails if a
+   * door grows a second name.
+   *
+   * What this deliberately does NOT police: a page's own primary button (an action, not a signpost
+   * — "Analyze my resume — free" is the verb of `/optimize` step 3), and the SEO catalog's headings,
+   * which are keyword-led on purpose.
+   */
+  const { DEST } = await import("../app/lib/brand.ts");
+  for (const [which, hrefs] of [["builder", ["/builder", "/ar/builder"]], ["optimize", ["/optimize", "/ar/optimize"]]]) {
+    for (const href of hrefs) {
+      const lang = href.startsWith("/ar/") ? "ar" : "en";
+      const want = DEST[which][lang].label;
+      const found = new Set();
+      for (const [rel, src] of FILES) {
+        /*
+         * Same-language links only. A chip on an Arabic page pointing at `/builder` is a LANGUAGE
+         * SWITCH ("Build your CV in English") and is not a second name for the destination — it is
+         * naming the language, which is the one thing that legitimately varies. Policing those
+         * would force an Arabic page to offer an English route under an Arabic label, which is the
+         * mislabelling this rule exists to prevent.
+         */
+        const fileIsAr = rel.startsWith("(ar)/");
+        if (fileIsAr !== (lang === "ar")) continue;
+        const re = new RegExp(`\\{\\s*href:\\s*"${href}",\\s*label:\\s*"([^"]+)"`, "g");
+        for (const m of code(src).matchAll(re)) found.add(m[1]);
+      }
+      if (found.size === 0) continue;   // no chip rail points here, nothing to police
+      ok(`${href} has exactly one navigation label`, found.size === 1, [...found].join(" | "));
+      ok(`and it is the one in brand.ts (${want})`, found.has(want), [...found].join(" | "));
+    }
+  }
+
+  /* Signing in is one thing with one word. The landing page said "Log in" while `AuthNav` said
+     "Sign in" on every other page. */
+  const authWords = new Set();
+  for (const [rel, src] of FILES) {
+    if (!/AuthNav|landing\/copy/.test(rel)) continue;
+    for (const m of code(src).matchAll(/"(Log in|Sign in)"/g)) authWords.add(m[1]);
+  }
+  ok("signing in has one English name", authWords.size <= 1, [...authWords].join(" | "));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

@@ -69,7 +69,7 @@ export default function GlobalNotFound() {
                 className="btn-ghost px-6 py-3 font-semibold"
                 style={{ color: "var(--fg)" }}
               >
-                Scan a resume
+                Check my resume
               </a>
             </div>
           </div>

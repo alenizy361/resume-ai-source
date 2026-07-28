@@ -56,8 +56,8 @@ export default function JdKeywordExtractorLayout({ children }: { children: React
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/optimize", label: "Compare your CV to a job posting" },
-          { href: "/builder", label: "Build a CV from scratch" },
+          { href: "/optimize", label: "Check my resume" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/career-plan", label: "Plan a move into a new role" },
           { href: "/ar/jd-keyword-extractor", label: "استخرج كلمات الإعلان الوظيفي بالعربية" },
         ]}

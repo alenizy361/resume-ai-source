@@ -56,8 +56,8 @@ export default function PdfReadabilityCheckerLayout({ children }: { children: Re
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/optimize", label: "Free ATS resume checker" },
-          { href: "/builder", label: "Build an ATS-safe resume" },
+          { href: "/optimize", label: "Check my resume" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/templates", label: "ATS-safe templates" },
           { href: "/ar/pdf-readability-checker", label: "فحص قابلية قراءة ملفك بالعربية" },
         ]}

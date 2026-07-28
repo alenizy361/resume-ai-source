@@ -85,8 +85,8 @@ export default function InterviewLiveLayout({ children }: { children: React.Reac
         relatedHeading="Related"
         related={[
           { href: "/interview", label: "Interview questions by role" },
-          { href: "/optimize", label: "Check your resume against a job post" },
-          { href: "/builder", label: "Build an ATS-ready CV" },
+          { href: "/optimize", label: "Check my resume" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/pricing", label: "Pricing" },
           { href: "/ar/interview", label: "تحضير المقابلة بالعربية" },
         ]}

@@ -60,11 +60,11 @@ export default function OptimizeLayout({ children }: { children: React.ReactNode
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/builder", label: "Build a CV from scratch" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/resume-examples", label: "Resume examples by job" },
           { href: "/templates", label: "ATS-safe templates" },
           { href: "/ats-resume-checker", label: "How ATS filtering works" },
-          { href: "/ar/optimize", label: "افحص سيرتك بالعربية" },
+          { href: "/ar/optimize", label: "افحص سيرتي" },
         ]}
       />
       {/* The funnel step for "reached the tool". The entry page it is attributed to was

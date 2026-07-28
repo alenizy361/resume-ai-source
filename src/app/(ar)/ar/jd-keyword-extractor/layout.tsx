@@ -57,8 +57,8 @@ export default function ArJdKeywordExtractorLayout({ children }: { children: Rea
         ]}
         relatedHeading="روابط ذات صلة"
         related={[
-          { href: "/ar/optimize", label: "قارن سيرتك بإعلان وظيفي" },
-          { href: "/ar/builder", label: "ابنِ سيرة من الصفر" },
+          { href: "/ar/optimize", label: "افحص سيرتي" },
+          { href: "/ar/builder", label: "ابنِ سيرتك" },
           { href: "/ar/career-plan", label: "خطط للانتقال إلى وظيفة جديدة" },
           { href: "/jd-keyword-extractor", label: "Extract job posting keywords in English" },
         ]}

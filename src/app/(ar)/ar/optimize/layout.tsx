@@ -68,7 +68,7 @@ export default function ArOptimizeLayout({ children }: { children: React.ReactNo
         ]}
         relatedHeading="روابط ذات صلة"
         related={[
-          { href: "/ar/builder", label: "ابنِ سيرة من الصفر" },
+          { href: "/ar/builder", label: "ابنِ سيرتك" },
           { href: "/ar/resume-examples", label: "أمثلة سير ذاتية حسب المهنة" },
           { href: "/ar/templates", label: "قوالب متوافقة مع أنظمة الفرز" },
           { href: "/ar/pricing", label: "الأسعار" },

@@ -82,7 +82,7 @@ export default function ArabicBuilderStartPage() {
         ]}
         relatedHeading="روابط ذات صلة"
         related={[
-          { href: "/ar/optimize", label: "افحص سيرة موجودة أمام إعلان وظيفي" },
+          { href: "/ar/optimize", label: "افحص سيرتي" },
           { href: "/ar/resume-examples", label: "أمثلة سير ذاتية حسب المهنة" },
           { href: "/ar/templates", label: "قوالب متوافقة مع أنظمة الفرز" },
           { href: "/ar/pricing", label: "الأسعار" },

@@ -118,3 +118,40 @@ export const NAV_CTA = {
 export function navCta(lang: "ar" | "en"): { href: string; label: string } {
   return NAV_CTA[lang];
 }
+
+/**
+ * The two in-product destinations, each with ONE name.
+ *
+ * `NAV_CTA` above fixed the header. It did not fix everything else, and a later audit counted the
+ * damage: `/builder` was called "Build my resume", "CV Builder", "Build a CV", "Build a CV from
+ * scratch", "Build one from scratch" and "Build your CV" — six names — while `/optimize` was
+ * "Scan my resume", "Scan a resume", "Check an existing CV against a job" and "Check your CV
+ * against the advert". Eleven names for two doors, and the words "CV" and "resume" alternating
+ * inside single sentences.
+ *
+ * A visitor cannot learn a product whose parts are renamed between the pages that link to them.
+ * These are the names for NAVIGATION — menus, chip rails, secondary buttons, the 404 — so that
+ * every link to a place agrees about what the place is called.
+ *
+ * ── what deliberately does NOT read from here ──
+ *
+ * A page's OWN primary button, which is an action rather than a signpost ("Analyze my resume —
+ * free" on `/optimize` step 3 is the verb of that screen, not a name for it), and the SEO catalog's
+ * headings and titles, which are keyword-led on purpose — `/resume-examples` says "resume" because
+ * that is what people search, and normalising it to the product's house vocabulary would trade the
+ * product's sole organic channel for tidiness.
+ */
+export const DEST = {
+  builder: {
+    en: { href: "/builder", label: "Build my resume" },
+    ar: { href: "/ar/builder", label: "ابنِ سيرتك" },
+  },
+  optimize: {
+    en: { href: "/optimize", label: "Check my resume" },
+    ar: { href: "/ar/optimize", label: "افحص سيرتي" },
+  },
+} as const;
+
+export function dest(which: keyof typeof DEST, lang: "ar" | "en"): { href: string; label: string } {
+  return DEST[which][lang];
+}

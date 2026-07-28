@@ -63,7 +63,7 @@ const L: Record<Lang, Labels> = {
     homeHref: "/", home: "Home",
     hubHref: "/resume-examples", hub: "Resume Examples",
     indexHref: "/resume-examples/category", index: "By sector",
-    build: "Build one from scratch", buildHref: "/builder",
+    build: "Build my resume", buildHref: "/builder",
     professionsHeading: (n) => `${n} professions in this sector`,
     keywordsHeading: "Keywords that recur across this sector",
     keywordsNote: (n) => `These terms appear in the postings for more than one profession below — the count is how many of the ${n} they cover. Use the ones you genuinely have, worded the way the job posting words them.`,

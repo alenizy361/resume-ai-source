@@ -50,8 +50,8 @@ export default function InterviewLayout({ children }: { children: React.ReactNod
         relatedHeading="Related"
         related={[
           { href: "/interview-live", label: "Practice answering out loud" },
-          { href: "/optimize", label: "Check your CV against the advert" },
-          { href: "/builder", label: "Build a CV" },
+          { href: "/optimize", label: "Check my resume" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/cover-letter-examples", label: "Cover letter examples" },
         ]}
         /* This page has no /ar twin — `/ar/interview` redirects here with `?lang=ar` — so the
@@ -78,7 +78,7 @@ export default function InterviewLayout({ children }: { children: React.ReactNod
           relatedHeading: "صفحات ذات صلة",
           related: [
             { href: "/interview-live?lang=ar", label: "تدرّب على الإجابة بصوتك" },
-            { href: "/ar/optimize", label: "افحص سيرتك مقابل الإعلان" },
+            { href: "/ar/optimize", label: "افحص سيرتي" },
             { href: "/ar/builder", label: "ابنِ سيرتك" },
             { href: "/ar/cover-letter-examples", label: "نماذج خطابات تعريف" },
           ],

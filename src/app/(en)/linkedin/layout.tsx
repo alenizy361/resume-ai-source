@@ -48,8 +48,8 @@ export default function LinkedinLayout({ children }: { children: React.ReactNode
         ]}
         relatedHeading="Related"
         related={[
-          { href: "/optimize", label: "Check your CV against a job" },
-          { href: "/builder", label: "Build a CV" },
+          { href: "/optimize", label: "Check my resume" },
+          { href: "/builder", label: "Build my resume" },
           { href: "/interview", label: "Prepare for the interview" },
           { href: "/resume-examples", label: "Resume examples by job" },
         ]}
@@ -83,7 +83,7 @@ export default function LinkedinLayout({ children }: { children: React.ReactNode
           ],
           relatedHeading: "صفحات ذات صلة",
           related: [
-            { href: "/ar/optimize", label: "افحص سيرتك أمام وظيفة" },
+            { href: "/ar/optimize", label: "افحص سيرتي" },
             { href: "/ar/builder", label: "ابنِ سيرتك" },
             { href: "/interview?lang=ar", label: "استعد للمقابلة" },
             { href: "/ar/pricing", label: "الأسعار" },

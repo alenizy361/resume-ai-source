@@ -17,7 +17,7 @@
 
 export const LANDING_COPY = {
   en: {
-    nav: { explore: "Examples", product: "How it works", templates: "Templates", pricing: "Pricing", login: "Log in", cta: "Build my resume" },
+    nav: { explore: "Examples", product: "How it works", templates: "Templates", pricing: "Pricing", login: "Sign in", cta: "Build my resume" },
     intro: {
       lines: ["Your next job is closer than you think.", "It starts with your resume.", "Let's make yours impossible to ignore."],
       skip: "Skip",
