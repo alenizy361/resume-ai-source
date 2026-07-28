@@ -112,9 +112,16 @@ export default function BlueprintStrip({
    * question rather than a re-run — and excluding it would have made that button a no-op that
    * silently served the old answer.
    */
+  /*
+   * From `profile.skills` — the confirmed skills' actual home — NOT from the suggestion bag.
+   * `confirmItem` REMOVES a confirmed item from the bag entirely ("the resume is now their home"),
+   * so filtering the bag for `status === "confirmed"` matched nothing, ever: the model was always
+   * told zero skills were confirmed, already-added skills kept being offered as chips, and
+   * "Suggest more" after confirming asked the byte-identical question and served the same answer.
+   */
   const confirmed = useMemo(
-    () => state.suggestions.filter((i) => i.status === "confirmed" && i.type === "skill").map((i) => i.text),
-    [state.suggestions],
+    () => String(state.profile.skills || "").split(/[,،]/).map((x) => x.trim()).filter(Boolean),
+    [state.profile.skills],
   );
   const input = useMemo(() => ({ confirmedSkills: confirmed.slice(0, 30) }), [confirmed]);
 
@@ -189,11 +196,13 @@ export default function BlueprintStrip({
    * in one builder is how a rejection starts feeling unreliable.
    */
   const visible = useMemo(() => {
+    /* `confirmed` filters too, so a chip the user just added stops being offered — the tap
+       visibly moved it rather than appearing to do nothing. */
     const fresh = new Set(
-      filterFresh(items.map((i) => i.text), { confirmed: [], pending: [], rejected: rejected(state, section) }),
+      filterFresh(items.map((i) => i.text), { confirmed, pending: [], rejected: rejected(state, section) }),
     );
     return items.filter((i) => fresh.has(i.text));
-  }, [items, state, section]);
+  }, [items, state, section, confirmed]);
 
   /*
    * A rejection is written as an item, offered and immediately rejected, rather than kept in local

@@ -300,6 +300,15 @@ function BuilderStartInner({ lang }: { lang: "ar" | "en" }) {
 
   const enter = (step = STEPS[0]) => {
     /*
+     * Nothing to enter yet. `resumeId` is "" until the owner is known and the draft read — a
+     * multi-hundred-ms window on a slow connection for a browser holding signed-in records — and
+     * `stepHref(lang, "", step)` builds `/builder//target`, which either 404s or is parsed back
+     * with "builder" as the resume id. The step list below already guards its links against
+     * exactly this (`resumeId ? <Link> : <span>`); the Start button and the start cards route
+     * through here, so this is their guard.
+     */
+    if (!resumeId) return;
+    /*
      * The funnel's builder step belongs HERE and not on the front door: viewing the landing page is
      * a page view, and every path into the builder — resume, a start card, the first-step button —
      * goes through this one function, so one call covers all of them and cannot drift apart.

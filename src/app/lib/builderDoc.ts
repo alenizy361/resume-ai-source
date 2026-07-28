@@ -21,7 +21,7 @@
 
 import { type Profile, EMPTY_PROFILE } from "./mergeProfile.ts";
 import {
-  type Role, upsertRole, rolesToLines, dedupeBullets, saysTheSame,
+  type Role, rolesToLines, dedupeBullets, saysTheSame,
   BULLET_CAP_CURRENT, BULLET_CAP_PAST,
 } from "./resumeDoc.ts";
 import type { GenerationStore } from "./aiCache.ts";
@@ -378,13 +378,19 @@ export function validToWord(lang: "ar" | "en"): string {
 
 let seq = 0;
 /**
- * Deterministic-ish unique id. `Math.random` is avoided so a workflow replay or a
- * server render produces stable output; the counter plus a caller-supplied stamp
- * is enough, since ids only need to be unique within one document.
+ * Unique id. `Math.random` is avoided so a workflow replay produces stable-shaped output;
+ * the counter alone, though, was NOT enough — "unique within one document" was read as
+ * "unique within one page load", and those differ: the document is persisted and re-hydrated
+ * while the module-level counter restarts at 0. A role added as the first action of one
+ * session and a role added as the first action of the next both got `r_1_1`, and every
+ * id-addressed action (`role`, `removeRole`, `cred`, `lang`) then patched or deleted BOTH.
+ * The clock term makes ids unique across loads; the counter keeps them unique within one
+ * millisecond. A caller-supplied stamp (item `createdAt`) still wins when present, so
+ * stamped ids keep their meaning.
  */
 export function newId(prefix = "i", stamp = 0): string {
   seq += 1;
-  return `${prefix}_${stamp || seq}_${seq}`;
+  return `${prefix}_${(stamp || Date.now()).toString(36)}_${seq}`;
 }
 
 /* ─────────────────── normalization ─────────────────── */
@@ -493,16 +499,31 @@ export function confirmItem(
     const at = roles.findIndex((r) => r.id === item.roleId);
     if (at === -1) return { state, blocked: "role-missing" };
     if (bulletRoom(roles[at]) === 0) return { state, blocked: "bullet-cap" };
-    // replace=true so the role's bullets are exactly the confirmed set.
-    profile.roles = upsertRole(roles, {
-      ...roles[at],
-      bullets: [...roles[at].bullets, item.text],
-    }, true);
+    /*
+     * Written IN PLACE, by the index the id resolved to — not through `upsertRole`, which
+     * re-resolves by title+company and takes the FIRST match. With two stints at the same
+     * employer (a return to Hospital X under the same title), that re-resolution landed the
+     * duty on the EARLIER stint and, with replace=true, swapped that stint's own bullets for
+     * this one's — cross-role corruption from a single confirm. The id already names the
+     * role exactly; nothing needs to be re-found.
+     */
+    profile.roles = roles.map((r, i) => i === at
+      ? { ...r, bullets: [...r.bullets, item.text] }
+      : r);
     profile.wovenLines = rolesToLines(profile.roles);
   } else if (item.type === "skill") {
     const have = String(profile.skills || "").split(/[,،]/).map((s) => s.trim()).filter(Boolean);
-    if (!have.some((h) => normalizeLabel(h) === item.normalized)) have.push(item.text);
-    profile.skills = have.slice(0, 12).join("، ");
+    if (!have.some((h) => normalizeLabel(h) === item.normalized)) {
+      /*
+       * Full is BLOCKED, exactly like the bullet cap above — the previous shape pushed and then
+       * `slice(0, 12)`-ed, which silently discarded the just-accepted 13th skill while still
+       * removing its chip from the bag: the user's click looked like it worked and did nothing.
+       * Blocking keeps the chip, so the state of the world is visible.
+       */
+      if (have.length >= 12) return { state, blocked: "skill-cap" };
+      have.push(item.text);
+    }
+    profile.skills = have.join("، ");
   } else if (item.type === "summary") {
     profile.summary = item.text;
   } else if (item.type === "education") {

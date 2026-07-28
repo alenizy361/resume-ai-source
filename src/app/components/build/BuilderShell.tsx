@@ -69,6 +69,8 @@ import StepBar from "./StepBar";
 import StepActions from "./StepActions";
 import { useBuilder } from "./BuilderProvider";
 import { lifecycleLabel, lifecycleTone } from "@/app/lib/lifecycle";
+import { useEntitlement } from "@/app/lib/useEntitlement";
+import { shouldShowWatermark } from "@/app/lib/entitlement";
 import { stepFromSlug } from "./steps";
 
 const CHROME = {
@@ -98,7 +100,15 @@ export default function BuilderShell({
 }) {
   const t = CHROME[lang];
   const ar = lang === "ar";
-  const { state, lifecycle, online, resumeId, owner, previewText, cv, template } = useBuilder();
+  const { state, lifecycle, online, resumeId, owner, previewText, viewLang, template } = useBuilder();
+  /*
+   * The pane's ResumeTemplate has a real, working designed-PDF button, so it needs the same two
+   * facts DesignSection's instance already wires: whether this visitor has paid (the component
+   * fail-closes to a watermark when the prop is absent — right for free users, wrong for paying
+   * ones, who were getting a marked file from this button on every step), and — via `viewLang`
+   * below — which language is actually being RENDERED, not merely declared.
+   */
+  const { entitlement, loading: entLoading } = useEntitlement();
   const tone = lifecycleTone(lifecycle);
   const pathname = usePathname() || "";
   const isDesktop = useMediaQuery(DESKTOP);
@@ -235,8 +245,13 @@ export default function BuilderShell({
                           variant={template.variant}
                           accent={template.accent}
                           /* Explicit: detectDir guesses, and on a half-empty draft it flips the
-                             whole preview mid-build. */
-                          dir={cv === "ar" ? "rtl" : "ltr"}
+                             whole preview mid-build. From `viewLang`, NOT the declared `cv` —
+                             `previewText` follows the active version (the VersionSwitch directly
+                             above), and reading the declared language here rendered the English
+                             version of an Arabic CV right-to-left. Same rule DesignSection
+                             already states: direction follows the version being VIEWED. */
+                          dir={viewLang === "ar" ? "rtl" : "ltr"}
+                          watermark={entLoading || shouldShowWatermark(entitlement)}
                           fitWidth
                         />
                       ) : (

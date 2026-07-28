@@ -35,11 +35,11 @@ import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
 
 import { assembleResume } from "@/app/lib/mergeProfile";
-import { applyVersionToProfile, buildTranslationSource } from "@/app/lib/translate";
+import { applyVersionToProfile, buildTranslationSource, translationFresh } from "@/app/lib/translate";
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft } from "@/app/lib/draftStore";
 import {
-  endAnonymousVisit, listResumes, mayRestore, migrateLegacy, newResumeId, readResume, titleOf, writeResume,
+  endAnonymousVisit, listResumes, markMirrored, mayRestore, migrateLegacy, newResumeId, readResume, titleOf, writeResume,
 } from "@/app/lib/resumeStore";
 import { useOwner } from "../useOwner";
 import { useServerSync } from "./useServerSync";
@@ -154,6 +154,28 @@ export default function BuilderProvider({
   /* Every storage key starts with this. Empty until /api/auth/me answers — see `useOwner`. */
   const owner = useOwner();
   const [state, dispatch] = useReducer(reducer, EMPTY_BUILDER);
+
+  /*
+   * Has the USER changed this document since it was hydrated?
+   *
+   * This used to be answered by object identity against a snapshot of the hydrated state — and
+   * identity was the wrong instrument twice over. The snapshot was captured once per MOUNT
+   * (`=== null` guard) while the provider deliberately survives resume switches, so every resume
+   * after the first could never read "untouched". And SYSTEM dispatches broke it even on the
+   * first: the role-pack seed fires on hydration of any pack-titled draft, and the blueprint's
+   * auto-generation commits `{t:"ai"}` moments after mount — neither is the user's work, and both
+   * made a newer server copy be silently declined for someone who typed nothing (after which the
+   * stale local copy could overwrite it — see `useServerSync`'s header).
+   *
+   * So the question is now answered directly: a flag set by USER-originated dispatches only, reset
+   * whenever a (owner, id) pair hydrates. `hydrate`, `seed` and `ai` are the system's actions —
+   * hydration itself, the pack seeding the bag, and a generation being cached with its cost.
+   */
+  const touched = useRef(false);
+  const dispatchUser = useCallback((a: Action) => {
+    if (a.t !== "hydrate" && a.t !== "seed" && a.t !== "ai") touched.current = true;
+    dispatch(a);
+  }, []);
   /**
    * Everything the one read of storage established, written once.
    *
@@ -162,7 +184,9 @@ export default function BuilderProvider({
    */
   const [boot, setBoot] = useState<{
     id: string; hydrated: boolean; damaged: boolean; migrated: boolean;
-  }>({ id: "", hydrated: false, damaged: false, migrated: false });
+    /** The stored record's sync facts, read in the same pass — what the server pull compares against. */
+    serverRev: number; dirty: boolean;
+  }>({ id: "", hydrated: false, damaged: false, migrated: false, serverRev: 0, dirty: false });
   const resumeId = boot.id;
   const hydrated = boot.hydrated;
   const damagedDraft = boot.damaged;
@@ -218,6 +242,9 @@ export default function BuilderProvider({
     if (started.current === pair) return;
     started.current = pair;
     if (!owner) return;                 // owner unknown yet — wait rather than read `anon` and swap later
+    /* A fresh hydration is a fresh document: nothing has been touched IN it yet, whatever was
+       true of the resume loaded before it. */
+    touched.current = false;
 
     /*
      * ══════════════════════════════════════════════════════════════════════════════
@@ -318,10 +345,12 @@ export default function BuilderProvider({
      * SUBSCRIBING to a value that changes underneath you, and a resume is fetched once per id, not
      * watched.
      */
-    // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
-    setBoot({ id, hydrated: true, damaged, migrated: upgraded });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBoot({
+      id, hydrated: true, damaged, migrated: upgraded,
+      serverRev: record?.serverRevision ?? 0, dirty: record?.dirty ?? false,
+    });
     track("builder_started", { lang, surface: "steps" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang, owner, urlId]);
 
   /*
@@ -372,13 +401,19 @@ export default function BuilderProvider({
 
   /* Held while `invalidResume`, which is the whole point of having that state: the autosave used
      to overwrite an unparseable draft 450ms after arrival, and that draft was the only copy. */
+  /*
+   * Failure is read from the RETURN VALUE, not a catch. `writeResume` swallows its own storage
+   * errors and answers 0 — it never throws — so the try/catch that used to wrap these calls was
+   * dead code: on a full or blocked localStorage the catch never fired, `setWritten` ran anyway,
+   * and the header printed "Saved" over a draft that was never written. That made the entire
+   * `saveError` lifecycle state — built precisely for this situation — unreachable.
+   */
   const flush = useCallback(() => {
     if (!resumeId || !mayWrite(lifecycle)) return;
-    try {
-      writeResume(owner, resumeId, lang, live.current);
+    if (writeResume(owner, resumeId, lang, live.current)) {
       setWritten(live.current);
       setFailed(false);
-    } catch { setFailed(true); }
+    } else setFailed(true);
     /* After the local write, never instead of it, and deliberately not awaited — `flush` runs
        synchronously before a navigation and on `pagehide`, where a round trip would either block
        the navigation or be cancelled by it. */
@@ -388,8 +423,8 @@ export default function BuilderProvider({
   useEffect(() => {
     if (!hydrated || !resumeId || damagedDraft) return;
     const id = setTimeout(() => {
-      try { writeResume(owner, resumeId, lang, state); setWritten(state); setFailed(false); }
-      catch { setFailed(true); }
+      if (writeResume(owner, resumeId, lang, state)) { setWritten(state); setFailed(false); }
+      else setFailed(true);
     }, 450);
     return () => clearTimeout(id);
   }, [state, lang, resumeId, hydrated, damagedDraft, owner]);
@@ -404,34 +439,34 @@ export default function BuilderProvider({
    */
   const sync = useServerSync({
     resumeId, lang, state, title: titleOf(state), hydrated,
+    /* For `markMirrored`, and the record's own sync facts the pull compares against. */
+    owner, localServerRevision: boot.serverRev, localDirty: boot.dirty,
     /* The same gate the local autosave uses: never write over a draft that would not parse. */
     writable: mayWrite(lifecycle),
   });
   useEffect(() => { syncPush.current = sync.push; }, [sync.push]);
 
   /*
-   * Adopt the account's copy — but ONLY if nothing has been typed since hydration.
+   * Adopt the account's copy — but ONLY if the USER has not changed this document since it
+   * hydrated.
    *
    * This is the "I built it on my phone and opened my laptop" case, and it is the one moment the
-   * server is allowed to overrule local. The guard is what keeps it safe: `hydratedState` is the
-   * document as the local draft produced it, and `state === hydratedState` is an identity check
-   * that can only still hold if no action has run. The instant the user types, the reducer makes a
-   * new object, this stops matching, and the server copy is declined rather than applied — their
-   * work survives, and the disagreement surfaces as a save conflict instead of as a silent
-   * replacement of what they just wrote.
+   * server is allowed to overrule local. `touched` (see its declaration above for why it replaced
+   * an object-identity snapshot) answers exactly that question, per hydrated resume, immune to the
+   * system's own dispatches. On adoption the revision is adopted WITH the state — `sync.adopt` —
+   * and recorded on the local record, so the next session's pull knows this browser has seen it.
+   * On decline neither happens: the next mirror then 409s and the disagreement is surfaced,
+   * instead of the stale local copy overwriting the newer server one with a passing check.
    */
-  const hydratedState = useRef<BuilderState | null>(null);
-  useEffect(() => { if (hydrated && hydratedState.current === null) hydratedState.current = state; }, [hydrated, state]);
-
   useEffect(() => {
     if (!sync.incoming) return;
-    const untouched = hydratedState.current !== null && state === hydratedState.current;
-    if (untouched && sync.incoming.state) {
+    if (!touched.current && sync.incoming.state) {
       dispatch({ t: "hydrate", state: sync.incoming.state });
-      hydratedState.current = sync.incoming.state;
+      sync.adopt(sync.incoming.revision);
+      markMirrored(owner, resumeId, sync.incoming.revision);
     }
     sync.clearIncoming();
-  }, [sync, state]);
+  }, [sync, owner, resumeId]);
 
   const online = useOnline();
 
@@ -461,6 +496,20 @@ export default function BuilderProvider({
   }, [flush]);
 
   /*
+   * And the third way a session leaves: a SOFT navigation out of the builder entirely — the
+   * header's brand link, or the "Sign in to keep this CV" link the shell shows every anonymous
+   * user. Neither fires `pagehide` (client-side routing never does), and the autosave effect's
+   * cleanup only CLEARS its pending timer, so a keystroke followed within 450ms by one of those
+   * links was silently dropped — from the exact link that promises to keep the work. An unmount
+   * cleanup flushes it. Through a ref, so this effect can register once: `flush`'s identity moves
+   * with the lifecycle, and re-registering an unmount hook on every change would make it fire on
+   * every re-render's cleanup instead of the real unmount.
+   */
+  const flushRef = useRef(flush);
+  useEffect(() => { flushRef.current = flush; }, [flush]);
+  useEffect(() => () => { flushRef.current(); }, []);
+
+  /*
    * Seed the suggestion bag from the cached role pack, as a consequence of the TITLE
    * changing — not as a side effect of rendering one particular step.
    *
@@ -479,7 +528,10 @@ export default function BuilderProvider({
   useEffect(() => {
     if (!hydrated) return;
     const pack = findRolePack(state.target.title);
-    if (!pack) return;
+    /* A title with no pack RESETS the marker rather than leaving it: the reducer's target case
+       retires the previous pack's chips on a title change, so returning to the earlier title
+       later must be allowed to seed again — a stale marker here would block that forever. */
+    if (!pack) { seeded.current = ""; return; }
     const key = `${pack.slug}:${cvLang(state.target)}`;
     if (seeded.current === key) return;
     seeded.current = key;
@@ -511,20 +563,38 @@ export default function BuilderProvider({
    * Arabic CV is left-to-right, and getting that wrong produces a document that is correct and
    * unreadable.
    */
-  const viewLang: "ar" | "en" = state.activeVersion === "en" ? "en"
+  /*
+   * Which language was ASKED for. Compared against `docLang`, not `cv`: `cv` is the declared
+   * target, and an Arabic-authored document with `target.language` flipped to English shares a
+   * language code with its own translation — `docLang` is what the content actually is.
+   */
+  const requested: "ar" | "en" = state.activeVersion === "en" ? "en"
     : state.activeVersion === "ar" ? "ar"
     : cv;
+  /*
+   * A stored version renders ONLY while it is FRESH.
+   *
+   * Translation item ids are positional (`${roleId}.b${index}`) on both sides — built by index,
+   * applied by index. Delete bullet 0 and the stored map's `b0` lands on the SURVIVOR: the
+   * preview and both exports were showing the translation of a bullet the user had deleted,
+   * every later bullet one translation off, and the last one's translation orphaned. The
+   * freshness machinery (`translationFresh`/`staleSections`, hash-per-section) existed for
+   * exactly this and was consulted only by the notice in `EnglishVersion` — never by the render
+   * path. Gated here, a stale version falls back to the source document (with the existing
+   * stale notice explaining, and one tap re-translating only the sections that moved), which is
+   * honest — where showing deleted content on an exported CV is not.
+   */
+  const version = requested === docLang ? null : (state.versions?.[requested] ?? null);
+  const versionFresh = useMemo(
+    () => Boolean(version && translationFresh(version, buildTranslationSource(state, requested))),
+    [version, state, requested],
+  );
+  /* What is ACTUALLY rendered — the direction and the export format follow this, so a stale
+     fallback to the Arabic source is also rendered (and exported) AS Arabic. */
+  const viewLang: "ar" | "en" = version && versionFresh ? requested : docLang;
   const shown = useMemo(
-    /*
-     * Compared against `docLang`, not `cv`. `cv` is the user's DECLARED target — when a user authors
-     * in Arabic and later flips `target.language` to English, `cv` becomes "en" too, and comparing
-     * against `cv` here would treat the still-Arabic `state.profile` as if it were already the
-     * document being asked for and never apply a stored "en" translation meant to replace it. Compare
-     * against what the content ACTUALLY is instead, so a translation that shares a language code with
-     * `cv` is still recognised as the alternate, not the original.
-     */
-    () => (viewLang === docLang ? state.profile : applyVersionToProfile(state.profile, state.versions?.[viewLang])),
-    [state.profile, state.versions, viewLang, docLang],
+    () => (version && versionFresh ? applyVersionToProfile(state.profile, version) : state.profile),
+    [state.profile, version, versionFresh],
   );
   const resumeRtl = viewLang === "ar";
   useEffect(() => {
@@ -559,14 +629,16 @@ export default function BuilderProvider({
   });
 
   const markDone = useCallback((step: SectionId) => {
-    dispatch({ t: "done", section: step });
+    dispatchUser({ t: "done", section: step });
     track("builder_section_completed", { section: step });
-  }, []);
+  }, [dispatchUser]);
 
+  /* The sections receive the WRAPPED dispatch, so every action they fire counts as the user's —
+     which is what keeps the `touched` flag honest without any section knowing it exists. */
   const value = useMemo<BuilderContextValue>(() => ({
-    lang, resumeId, owner, state, dispatch, save, lifecycle, online, flush, hydrated,
+    lang, resumeId, owner, state, dispatch: dispatchUser, save, lifecycle, online, flush, hydrated,
     previewText, cv, docLang, viewLang, shown, progress, template, today, markDone, gen, career,
-  }), [lang, resumeId, owner, state, save, lifecycle, online, flush, hydrated, previewText, cv, docLang, viewLang, shown, progress, template, today, markDone, gen, career]);
+  }), [lang, resumeId, owner, state, dispatchUser, save, lifecycle, online, flush, hydrated, previewText, cv, docLang, viewLang, shown, progress, template, today, markDone, gen, career]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

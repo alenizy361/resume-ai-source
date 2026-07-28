@@ -55,6 +55,18 @@ export interface ResumeRecord {
   updatedAt: number;
   /** Set when this copy holds edits not yet confirmed by a server save. */
   dirty: boolean;
+  /**
+   * The account revision this record last agreed with — written by `markMirrored` after a
+   * successful mirror or an adoption, 0 for a record that has never met the server.
+   *
+   * This is what makes "is the server AHEAD of what this browser has seen?" answerable at all.
+   * `revision` above cannot answer it: that is a local per-write counter, incremented by every
+   * autosave, and comparing it to the server's own counter compares two unrelated clocks. Without
+   * this field the mount-time pull had no basis for comparison and offered the server copy
+   * unconditionally — which, after a session whose final mirror failed (tab closed on a train),
+   * adopted the OLDER server copy over the newer local edits and then autosaved the loss.
+   */
+  serverRevision: number;
   state: BuilderState;
 }
 
@@ -166,6 +178,9 @@ export function readResume(owner: string, resumeId: string): { record: ResumeRec
       lang: r.lang === "ar" ? "ar" : "en",
       updatedAt: Number(r.updatedAt) || 0,
       dirty: r.dirty !== false,
+      /* 0 for records written before the field existed: "never met the server" is the safe
+         reading — the pull then treats any server copy as new and the untouched-guard decides. */
+      serverRevision: Number(r.serverRevision) || 0,
       state: r.state as BuilderState,
     },
     damaged: false,
@@ -185,16 +200,21 @@ export function readResume(owner: string, resumeId: string): { record: ResumeRec
  */
 export function writeResume(
   owner: string, resumeId: string, lang: "ar" | "en", state: BuilderState,
-  opts: { revision?: number; dirty?: boolean; now?: number } = {},
+  opts: { revision?: number; dirty?: boolean; now?: number; serverRevision?: number } = {},
 ): number {
   const store = ls();
   if (!store || !resumeId) return 0;
   const now = opts.now ?? Date.now();
-  const revision = opts.revision ?? (readResume(owner, resumeId).record?.revision ?? 0) + 1;
+  const existing = readResume(owner, resumeId).record;
+  const revision = opts.revision ?? (existing?.revision ?? 0) + 1;
 
   const record: ResumeRecord = {
     owner, resumeId, recordVersion: RESUME_RECORD_VERSION,
-    revision, lang, updatedAt: now, dirty: opts.dirty !== false, state,
+    revision, lang, updatedAt: now, dirty: opts.dirty !== false,
+    /* Carried forward by default: an ordinary autosave does not change which server revision
+       this browser has seen — only `markMirrored` (a confirmed mirror or an adoption) does. */
+    serverRevision: opts.serverRevision ?? existing?.serverRevision ?? 0,
+    state,
   };
   try { store.setItem(recordKey(owner, resumeId), JSON.stringify(record)); } catch { return 0; }
 
@@ -206,6 +226,34 @@ export function writeResume(
      caller has to remember to set is a marker that drifts from the data it describes. */
   touchVisit(owner, now);
   return revision;
+}
+
+/**
+ * Record that this browser's copy and the account's copy agree, as of `serverRevision`.
+ *
+ * Called after a successful mirror PUT, and after adopting an incoming server copy. A targeted
+ * amendment, deliberately NOT a `writeResume`: acknowledging a mirror is not an edit, so it must
+ * not bump `revision`, must not move the resume to the top of the index, and must not extend an
+ * anonymous visit. It clears `dirty` — the definition of clean is exactly "the server has
+ * confirmed this content".
+ */
+export function markMirrored(
+  owner: string, resumeId: string, serverRevision: number,
+  opts: { clean?: boolean } = {},
+): void {
+  const store = ls();
+  if (!store || !resumeId) return;
+  const { record } = readResume(owner, resumeId);
+  if (!record) return;
+  try {
+    store.setItem(recordKey(owner, resumeId), JSON.stringify({
+      ...record,
+      /* `clean` only when the caller knows the mirrored content IS the current content — a mirror
+         that raced a newer keystroke confirms the revision without vouching for the edits. */
+      dirty: opts.clean === false ? record.dirty : false,
+      serverRevision,
+    }));
+  } catch { /* a failed acknowledgement costs nothing — the next mirror repeats it */ }
 }
 
 /** The list a "my CVs" screen reads. Derived from writes, never from scanning storage. */

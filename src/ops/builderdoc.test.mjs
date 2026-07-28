@@ -320,5 +320,74 @@ eq("the schema is versioned", SCHEMA_VERSION, 3);
 }
 
 
+/* ── the skill cap must block, never silently discard — same rule as the bullet cap ── */
+{
+  // Twelve confirmed skills, then a thirteenth chip. The old shape pushed and then
+  // `slice(0, 12)`-ed — the newest skill vanished while its chip still left the bag,
+  // so the user's click looked like it worked and did nothing.
+  let st = base();
+  st.profile.skills = Array.from({ length: 12 }, (_, i) => `Skill ${i + 1}`).join("، ");
+  const extra = newItem({ section: "skills", type: "skill", text: "Skill 13", createdAt: 1 });
+  st.suggestions = [extra];
+  const r = confirmItem(st, extra.id);
+  eq("confirming a 13th skill is blocked, not swallowed", r.blocked, "skill-cap");
+  ok("the chip stays in the bag so the state of the world is visible",
+    r.state.suggestions.some((i) => i.id === extra.id));
+  ok("the twelve on the CV are untouched",
+    r.state.profile.skills.split("، ").length === 12);
+
+  // A duplicate of a skill already on the CV is NOT blocked at the cap — it adds
+  // nothing, so it only clears the chip. That distinction is what makes the block
+  // honest rather than a blanket refusal.
+  let st2 = base();
+  st2.profile.skills = Array.from({ length: 12 }, (_, i) => `Skill ${i + 1}`).join("، ");
+  const dup = newItem({ section: "skills", type: "skill", text: "Skill 3", createdAt: 1 });
+  st2.suggestions = [dup];
+  const r2 = confirmItem(st2, dup.id);
+  ok("a duplicate at the cap just clears its chip", !r2.blocked
+    && !r2.state.suggestions.some((i) => i.id === dup.id)
+    && r2.state.profile.skills.split("، ").length === 12);
+}
+
+/* ── a confirmed duty lands on the role its id names, not the first jobKey match ── */
+{
+  // Two stints at the same employer under the same title — a return to Hospital X.
+  // The old path resolved the role by id and then wrote through `upsertRole`, which
+  // re-resolves by title+company and takes the FIRST match: the duty landed on the
+  // 2015 stint and, with replace=true, swapped that stint's own bullets for the
+  // 2020 stint's set. One confirm corrupted two roles.
+  let st = base();
+  st.profile.roles = [
+    { id: "r_old", title: "Radiographer", company: "Hospital X", location: "", department: "",
+      start: "2015", end: "2018", bullets: ["Old duty A", "Old duty B"] },
+    { id: "r_new", title: "Radiographer", company: "Hospital X", location: "", department: "",
+      start: "2020", end: "Present", bullets: ["New duty A"] },
+  ];
+  const duty = newItem({ section: "experience", type: "duty", roleId: "r_new",
+    text: "Calibrated the new CT scanner", createdAt: 1 });
+  st.suggestions = [duty];
+  const r = confirmItem(st, duty.id);
+  const oldRole = r.state.profile.roles.find((x) => x.id === "r_old");
+  const newRole = r.state.profile.roles.find((x) => x.id === "r_new");
+  eq("the earlier stint keeps its own bullets", oldRole.bullets, ["Old duty A", "Old duty B"]);
+  eq("the duty lands on the stint the suggestion names", newRole.bullets,
+    ["New duty A", "Calibrated the new CT scanner"]);
+  ok("both stints keep distinct ids", oldRole.id !== newRole.id);
+  ok("the woven lines carry the new duty",
+    r.state.profile.wovenLines.some((l) => l.includes("Calibrated the new CT scanner")));
+}
+
+/* ── ids stay unique across page loads ── */
+{
+  // The counter alone resets with the module, while the DOCUMENT is persisted and
+  // re-hydrated: session 1's first role and session 2's first role both got `r_1_1`,
+  // and every id-addressed action then patched or deleted BOTH. A second module
+  // instance (same file, cache-busted) simulates the reload exactly.
+  const again = await import("../app/lib/builderDoc.ts?reload=1");
+  const a = (await import("../app/lib/builderDoc.ts")).newId("r");
+  const b = again.newId("r");
+  ok("the same first call in two sessions yields two different ids", a !== b, `both ${a}`);
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

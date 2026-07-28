@@ -2504,3 +2504,132 @@ resolve to `ar`/`rtl` after hydration on all four affected routes when loaded wi
 unaffected — 10/10 checks. `findRolePack("Graphic Designer")` and `findRolePack("مصمم جرافيك")` both
 resolve to the new `graphic-designer` pack; `allRolePacks().length === 26`, confirmed with a direct Node
 check.
+
+### F-50 · P0/P1 · Adversarial bug-hunt of the CV flow: 19 confirmed defects from entry to download — FIXED
+
+A structured adversarial pass over the whole CV flow (entry → builder steps → export/download),
+run as a hunter/skeptic/referee pipeline: three independent hunter agents scanned risk-ordered
+segments, three skeptic agents then tried to REFUTE every finding by mandatory line-level code
+reading, and a referee pass independently re-verified each surviving claim at the code before any
+fix. 19 findings were raised; all 19 survived refutation and re-verification. Fixed in one pass,
+grouped below by root cause.
+
+**Two more swallowed reducer actions — the F-46 defect class, again.** `Action` declared
+`{t:"ai"}` (the ONLY persistence path for the generation store and the spend ledger) and
+`{t:"occupation"}` (the clarification card's answer), and the reducer's switch handled neither:
+both fell through `default: return s`. Consequences, all live: no AI result was ever cached on the
+resume (every revisit to a generated section re-bought the same answer), no spend was ever
+recorded (the ledger's auto/hard budget ceilings could never engage), and every button on the
+occupation-clarification card was a no-op — the card could never be answered or dismissed and the
+confirmed occupation never reached `careerContext`. Both cases added. This is the third and fourth
+instance of declared-but-unhandled actions (after F-46's `version`/`viewVersion`) — the pattern to
+watch for in review whenever `Action` grows.
+
+**Ids collided across page loads.** `newId`'s uniqueness came from a module-level counter that
+resets on every load, while the document it stamps is persisted and re-hydrated: the first role
+added in one session and the first role added after a reload both got `r_1_1`, and every
+id-addressed action then patched or deleted BOTH roles (same for credentials, languages, items,
+and duplicate React keys). A clock term now makes ids unique across loads; the counter keeps them
+unique within a millisecond. Asserted with a genuinely cache-busted second module instance.
+
+**The server-sync adoption cluster — three interlocking defects, the worst silent data
+destruction found in this pass.** (1) The mount-time pull offered the account's copy with NO
+freshness comparison at all (the hook's own header claimed one existed), so an untouched session
+adopted an OLDER server copy over newer local edits whose final mirror had failed, then autosaved
+the loss. (2) The "untouched since hydration" guard was object identity against a snapshot taken
+once per MOUNT — falsified by the role-pack seed dispatch on any pack-titled draft (the seed case
+returned a fresh object even when it added nothing), and structurally never true for any resume
+after the first, since the provider survives resume switches. (3) Worst: the pull adopted the
+server's REVISION even when the state was declined, so the next mirror PUT passed the server's
+conflict check and silently overwrote the newer server copy with the stale local one — the exact
+outcome the revision system exists to prevent. Fixed together: the local record now carries
+`serverRevision` (the account revision this browser last agreed with, written by a new
+`markMirrored` on every confirmed mirror and every adoption — a targeted amendment that does not
+count as an edit, does not reorder the index, and clears `dirty` only when the mirrored content is
+still the live content); the pull offers the server copy only when it is genuinely AHEAD of that
+marker, surfaces `conflict` when both sides moved, and bases mirrors on the server's revision when
+nothing is new; the offered revision now travels WITH the offer and is adopted only via
+`sync.adopt()` on actual adoption — a declined offer leaves the next mirror to 409 and surface the
+disagreement instead of resolving it silently; and "untouched" is now a per-hydration flag set
+only by USER-originated dispatches (the context hands sections a wrapped dispatch; `hydrate`,
+`seed` and `ai` are the system's own actions), immune to both falsifiers. The flush-time PUT also
+rides `keepalive` now — a plain fetch is aborted on unload, which made "type, close the tab"
+routinely leave the server a session behind and forced the pull to arbitrate exactly this.
+
+**"Saved" over an unwritten draft.** `writeResume` swallows every storage failure internally and
+returns 0 — it never throws — while the provider detected failure only via try/catch. So on a full
+or blocked localStorage the catch never fired, the header said "Saved", and the entire `saveError`
+lifecycle state (built for precisely this) was unreachable dead code. Failure is now read from the
+return value.
+
+**Soft-navigating out of the builder dropped the last keystrokes.** `pagehide` never fires on
+client-side routing, the autosave cleanup only CLEARS its pending 450ms timer, and the shell's
+brand link and — for every anonymous user — the "Sign in to keep this CV" link both leave the
+builder layout. A keystroke followed within 450ms by the exact link that promises to keep the work
+was silently dropped. An unmount cleanup now flushes, through a ref so it registers once.
+
+**Content-step defects.** Confirming a 13th skill pushed then `slice(0,12)`-ed — the just-accepted
+skill vanished while its chip still left the bag; now blocked at the cap exactly like the bullet
+cap (a duplicate at the cap still just clears its chip). A confirmed duty resolved its role by id
+but wrote through `upsertRole`, which re-resolves by title+company and takes the FIRST match: with
+two stints at the same employer, the duty landed on the earlier stint and replace-mode swapped
+that stint's bullets for the later one's — one confirm corrupted two roles; written in place by
+index now. `BlueprintStrip` filtered the suggestion bag for `status === "confirmed"` items — which
+`confirmItem` removes from the bag entirely, so the model was always told zero skills were
+confirmed, already-added skills kept being offered, and "Suggest more" re-asked the identical
+question; it reads `profile.skills` (the confirmed skills' actual home) now, for both the payload
+and the visible-chips filter. The `import` case appended roles, credentials and education with no
+dedupe, so applying the same file twice doubled the document; deduped by `jobKey` / normalized
+title / exact line, with a skipped role's overflow suggestions skipped with it. And a title change
+retired nothing: the old profession's pack chips stayed offered as "common for this job title";
+the target case now drops unanswered pack-seeded suggestions on a title change (rejected ones
+stay, so a re-seed cannot re-offer declined text), and the provider's seed marker resets when a
+title has no pack so returning to an earlier title can seed again.
+
+**Stale translations rendered deleted content.** Translation item ids are positional
+(`${roleId}.b${index}`) on both build and apply sides, and the render path applied a stored
+version with no freshness check — `translationFresh`/`staleSections` existed and were consulted
+only by a notice. Deleting bullet 0 made the English view (and BOTH exports, which read the same
+`shown`) render the DELETED bullet's translation on the survivor, every later bullet one
+translation off. The version now renders only while fresh; stale falls back to the source document
+— `viewLang` on the context now reports what is ACTUALLY rendered, so direction and export format
+follow the fallback too.
+
+**Preview/export defects.** `ResumeTemplate.parse()`'s contact rescue kept the WRONG line: when a
+professional-title line sat under the name (the shape the code's own comment says models emit),
+the scan found the real email/phone line, `contact ? contact : cand` kept the title, and the
+splice deleted the contact line — email and phone rendered nowhere in the designed preview or its
+PDF; the found line is now taken as contact and the displaced line returned to the body. The
+builder shell's preview pane passed `dir` from the DECLARED language while its text follows the
+active version — the English version of an Arabic CV rendered (and exported) right-to-left; it
+follows `viewLang` now, the same rule DesignSection already stated. The same pane omitted the
+`watermark` prop entirely, and the component correctly fail-closes to marked — so the pane's real,
+working designed-PDF button watermarked every download including paying customers', on every step;
+wired to `useEntitlement` like its DesignSection sibling. And the plain-PDF button for the English
+version of an Arabic CV was guaranteed shown and guaranteed refused — the version keeps the
+author's Arabic name and employers by design, and `pdfRefusesArabic` is a presence test — the
+button now renders only when the export it triggers can succeed, with the existing explanation
+shown otherwise. Finally, `BuilderStart.enter()` navigated with the pre-hydration empty `resumeId`
+to the malformed `/builder//target` — the file guarded its own step links against exactly this and
+not the Start button; guarded now.
+
+**Verification.** `npx tsc --noEmit` clean. `npm test` — 48/48 suites, 0 failed, with new
+regression coverage: `ops/builderdoc.test.mjs` (76 assertions, +8: skill-cap blocks and keeps the
+chip, duplicate-at-cap clears without blocking, a confirmed duty lands on the id-named stint with
+the other stint untouched, cross-module-instance id uniqueness) and `ops/isolation.test.mjs` (135
+assertions, +9: `serverRevision` lifecycle — never-met-server, confirmed mirror clears dirty
+without counting as an edit, autosave carries the marker, raced mirror advances without vouching,
+missing record is a no-op). `npm run lint` — zero new issues on all twelve touched files.
+`npm run build` clean (439 pages). Live Playwright against the bundled app — 7/7: "Build a new CV"
+lands on a real id; typing "teacher" raises the clarification card and ANSWERING IT STICKS (the
+`state.occupationId`-gated confirmation line renders — the swallowed-action fix, observed live); a
+pack title seeds skill chips; tapping one lands it in the CV and removes it from the offer strip
+(confirm + confirmed-filter, live); changing the title retires the old profession's chips.
+
+**Explicitly not verified live in this sandbox**: the server-sync adoption/conflict matrix
+end-to-end (needs a signed-in session against a configured server store — covered at the
+`resumeStore` unit level and by line-level re-verification of `useServerSync`'s logic), and the
+`keepalive` flush surviving a real tab close (browser-level behavior; the code change is the
+documented fetch flag). The reducer's `ai` case is exercised indirectly (the blueprint auto-fire
+path compiles against it and the store/ledger now have a live write path) but not asserted against
+a real generation — no AI key exists here.

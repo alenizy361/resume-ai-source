@@ -27,12 +27,24 @@
  *
  * The server is therefore a DURABLE MIRROR, not the write path. It is what survives the browser.
  *
- * ── and the one case where the server wins ──
+ * ── when the server may win, stated precisely ──
  *
- * On mount, if the account's copy has a higher revision than the local record, the account's copy is
- * adopted. That is the "I built this on my phone and opened my laptop" case, and it is the only
- * moment the server overrides local — a fresh document, before anything has been typed into it.
- * Adopting mid-session would delete whatever the person had just written.
+ * The header used to SAY "if the account's copy has a higher revision than the local record" and
+ * the code compared nothing: any server copy was offered, and an untouched session adopted it —
+ * including a copy OLDER than local edits whose final mirror had failed. The comparison is now
+ * real, and it needs its own clock: the local `revision` is a per-write counter unrelated to the
+ * server's, so the record carries `serverRevision` — the account revision this browser last agreed
+ * with, written by `markMirrored` on every confirmed mirror and every adoption.
+ *
+ *   server == serverRevision   → nothing new. Base future mirrors here; local edits push cleanly.
+ *   server >  serverRevision, local clean → the phone-then-laptop case. Offered for adoption.
+ *   server >  serverRevision, local dirty → BOTH moved. Conflict, surfaced, nothing adopted.
+ *
+ * And the offered revision is adopted ONLY when the state is adopted. Adopting it on the offer —
+ * which is what `setRevision` on the pull used to do — armed the next mirror with the server's own
+ * revision, so a DECLINED offer was followed by the stale local document overwriting the newer
+ * server copy with a passing conflict check. A declined offer now leaves `revision` at 0, the next
+ * mirror 409s, and the disagreement is surfaced instead of resolved silently.
  *
  * ── conflicts are surfaced, never resolved silently ──
  *
@@ -44,6 +56,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BuilderState } from "@/app/lib/builderDoc";
+import { markMirrored } from "@/app/lib/resumeStore";
 
 /**
  * Where the document currently lives, as a fact rather than a promise.
@@ -76,6 +89,11 @@ export interface ServerSync {
   incoming: { state: BuilderState; revision: number } | null;
   /** Acknowledge `incoming` — called by the provider once it has adopted or declined it. */
   clearIncoming: () => void;
+  /**
+   * The provider ADOPTED `incoming`: base future mirrors on its revision. Never called on decline —
+   * a declined offer must 409 rather than overwrite, which is why the pull does not do this itself.
+   */
+  adopt: (revision: number) => void;
   /** Mirror now, outside the debounce. Used by `flush` before navigation. */
   push: () => void;
 }
@@ -88,12 +106,20 @@ export function useServerSync(args: {
   lang: "ar" | "en";
   state: BuilderState;
   title: string;
+  /** For `markMirrored` — acknowledging a confirmed mirror on the local record. */
+  owner: string;
+  /**
+   * The local record's own sync facts, read at hydration: the account revision it last agreed
+   * with, and whether it holds edits the server has not confirmed. What the pull compares against.
+   */
+  localServerRevision: number;
+  localDirty: boolean;
   /** Nothing is read or written before the local draft has been read. */
   hydrated: boolean;
   /** Held for the same reason the local autosave is: never write over a draft that would not parse. */
   writable: boolean;
 }): ServerSync {
-  const { resumeId, lang, state, title, hydrated, writable } = args;
+  const { resumeId, lang, state, title, owner, localServerRevision, localDirty, hydrated, writable } = args;
 
   const [status, setStatus] = useState<SyncState>("device");
   const [revision, setRevision] = useState(0);
@@ -119,6 +145,12 @@ export function useServerSync(args: {
   useEffect(() => {
     if (!hydrated || !resumeId || pulled.current === resumeId) return;
     pulled.current = resumeId;
+    /* A fresh resume starts its sync life from zero — the previous resume's revision, mirror
+       marker and conflict state must not leak into this one's. */
+    setRevision(0);
+    rev.current = 0;
+    mirrored.current = null;
+    setIncoming(null);
     let alive = true;
 
     fetch(`/api/resume?id=${encodeURIComponent(resumeId)}`, { cache: "no-store" })
@@ -128,14 +160,33 @@ export function useServerSync(args: {
         const on = Boolean(d?.configured && d?.signedIn);
         setEnabled(on);
         if (!on) { setStatus("device"); return; }
-        if (d?.resume?.revision) {
-          setRevision(d.resume.revision);
-          /*
-           * Offered, not applied. And offered only on the FIRST resolution for this resumeId — the
-           * ref above guarantees that — because adopting a server copy after the user has begun
-           * typing would delete what they just wrote.
-           */
-          setIncoming({ state: d.resume.state, revision: d.resume.revision });
+        const serverRev = Number(d?.resume?.revision) || 0;
+        if (serverRev > 0 && d?.resume) {
+          if (serverRev > localServerRevision) {
+            if (localDirty && localServerRevision > 0) {
+              /*
+               * Both sides moved: the server is past what this browser last agreed with, AND the
+               * local record holds edits no mirror confirmed. Adopting either way silently loses
+               * the other, so nothing is adopted and nothing is mirrored — the same terminal
+               * conflict a 409 produces, reached one request earlier. (`localServerRevision > 0`
+               * because a record that never met the server is not "both moved" — it is the
+               * ordinary first-adoption case, decided by the untouched guard.)
+               */
+              setStatus("conflict");
+              return;
+            }
+            /*
+             * Offered, not applied — and the revision is NOT adopted here. It travels with the
+             * offer and lands via `adopt()` only if the provider applies the state. Offered only
+             * on the FIRST resolution for this resumeId (the ref above), because adopting a server
+             * copy after the user has begun typing would delete what they just wrote.
+             */
+            setIncoming({ state: d.resume.state, revision: serverRev });
+          } else {
+            /* Nothing new on the server. Base future mirrors on its revision so local edits —
+               including ones from a session whose final mirror failed — push cleanly on top. */
+            setRevision(serverRev);
+          }
         }
         setStatus("account");
       })
@@ -151,10 +202,10 @@ export function useServerSync(args: {
       });
 
     return () => { alive = false; };
-  }, [hydrated, resumeId]);
+  }, [hydrated, resumeId, localServerRevision, localDirty]);
 
   /* ── 2. mirror ────────────────────────────────────────────────────────────────────── */
-  const send = useCallback(async (doc: BuilderState) => {
+  const send = useCallback(async (doc: BuilderState, keepalive = false) => {
     if (!enabled || !resumeId || !writable) return;
     setStatus("syncing");
     try {
@@ -162,6 +213,14 @@ export function useServerSync(args: {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeId, lang, state: doc, baseRevision: rev.current, title }),
+        /*
+         * Set only for the flush-before-navigation push: a plain fetch is aborted when the page
+         * unloads, which made "type, close the tab" routinely leave the server one session behind
+         * — the exact staleness the pull then had to arbitrate. `keepalive` lets the final PUT
+         * outlive the page. Not set for ordinary mirrors, which have a page under them and should
+         * not spend the browser's small keepalive quota.
+         */
+        keepalive,
       });
       const d = await r.json().catch(() => null);
       if (r.status === 409) {
@@ -173,13 +232,17 @@ export function useServerSync(args: {
       }
       if (!r.ok || !d?.ok) { setStatus("error"); return; }
       mirrored.current = doc;
-      setRevision(Number(d.revision) || rev.current + 1);
+      const confirmed = Number(d.revision) || rev.current + 1;
+      setRevision(confirmed);
+      /* The local record now agrees with the account as of `confirmed` — which is what the next
+         session's pull compares against. `clean` only if nothing was typed while the PUT flew. */
+      markMirrored(owner, resumeId, confirmed, { clean: live.current === doc });
       setStatus("account");
     } catch {
       /* Offline, most likely. Local already holds it; the next change retries. */
       setStatus("error");
     }
-  }, [enabled, resumeId, lang, title, writable]);
+  }, [enabled, resumeId, lang, title, writable, owner]);
 
   useEffect(() => {
     if (!enabled || !hydrated || !writable) return;
@@ -194,15 +257,17 @@ export function useServerSync(args: {
    *
    * Its caller is `flush`, which runs synchronously before a navigation and on `pagehide`. Awaiting
    * a network round trip there would either block the navigation or be cancelled by it. The local
-   * write in the same `flush` is the one that must not be lost, and it is synchronous.
+   * write in the same `flush` is the one that must not be lost, and it is synchronous — the PUT
+   * itself rides `keepalive` so an unload cannot abort it.
    */
   const push = useCallback(() => {
     if (!enabled || !writable || status === "conflict") return;
     if (mirrored.current === live.current) return;
-    void send(live.current);
+    void send(live.current, true);
   }, [enabled, writable, status, send]);
 
   const clearIncoming = useCallback(() => setIncoming(null), []);
+  const adopt = useCallback((r: number) => { setRevision(r); rev.current = r; }, []);
 
-  return { status, revision, incoming, clearIncoming, push };
+  return { status, revision, incoming, clearIncoming, adopt, push };
 }

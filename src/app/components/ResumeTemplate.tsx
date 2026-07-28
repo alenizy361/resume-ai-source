@@ -45,8 +45,16 @@ function parse(text: string): Parsed {
     for (let k = i; k < Math.min(i + 10, nonEmpty.length); k++) {
       const cand = nonEmpty[k].trim();
       if (cand && !isHeading(cand) && looksContact(cand)) {
-        contact = contact ? contact : cand;
+        /*
+         * The found line BECOMES the contact, and whatever non-contact line was holding the slot
+         * (typically a professional-title line under the name — the exact shape the comment above
+         * describes models emitting) goes BACK into the body. The previous form kept the wrong
+         * line (`contact ? contact : cand`) and still spliced the real one out — so the email and
+         * phone were rendered nowhere: deleted from the designed preview and the designed PDF.
+         */
         nonEmpty.splice(k, 1);
+        if (contact) nonEmpty.splice(i, 0, contact);
+        contact = cand;
         break;
       }
     }

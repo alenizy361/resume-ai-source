@@ -19,10 +19,10 @@ import { contactLine } from "@/app/lib/draftStore";
 import {
   type BuilderState, type SectionId, type Item, type Credential, type CredentialKind,
   type LanguageEntry,
-  newItem, confirmItem, rejectItem, editItem, newId, summaryBasis,
+  newItem, confirmItem, rejectItem, editItem, newId, normalizeLabel, summaryBasis,
   cvLang, levelWord, validToWord,
 } from "@/app/lib/builderDoc";
-import { type Role, rolesToLines } from "@/app/lib/resumeDoc";
+import { type Role, jobKey, rolesToLines } from "@/app/lib/resumeDoc";
 import {
   type CareerContext, type GenerationStore, invalidate, tasksToInvalidate,
 } from "@/app/lib/aiCache";
@@ -161,8 +161,19 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
        * thing that drifts when a field is added.
        */
       const dead = tasksToInvalidate(careerContext(s), careerContext({ ...s, target }));
+      /*
+       * A changed TITLE also retires the previous profession's pack-seeded chips. `seed` only ever
+       * appends, so without this an accountant who started as "أخصائي أشعة" kept being offered CT
+       * and MRI "common for this job title" — a claim now false. Only unanswered pack suggestions
+       * go: rejected ones stay (a rejection must survive so a re-seed cannot re-offer the same
+       * text), and imported/AI items were never tied to the old title's pack.
+       */
+      const retitled = a.patch.title !== undefined && a.patch.title !== s.target.title;
+      const suggestions = retitled
+        ? s.suggestions.filter((i) => !(i.source === "occupation" && i.status === "suggested"))
+        : s.suggestions;
       const next: BuilderState = {
-        ...s, target, profile,
+        ...s, target, profile, suggestions,
         ...(dead.length
           ? {
             generations: invalidate(s.generations, dead, Date.now()),
@@ -223,6 +234,13 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
           if (!already.has(item.normalized)) { already.add(item.normalized); fresh.push(item); }
         }
       }
+      /*
+       * A seed that adds nothing returns the SAME object, matching "done"/"record"/"viewVersion".
+       * Not cosmetic: the provider re-seeds on every hydration of a pack-titled draft, and a new
+       * object for a no-op made "has the user touched this since it loaded?" answer wrongly —
+       * which is what silently declined a newer server copy for a user who typed nothing.
+       */
+      if (!fresh.length) return s;
       return { ...s, suggestions: [...s.suggestions, ...fresh] };
     }
 
@@ -382,9 +400,27 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
         linkedin: keep(s.personal.linkedin, cv.linkedin),
       };
 
+      /*
+       * Same file, applied twice — a plain re-pick of the importer, which stays reachable after a
+       * first apply — used to double every position, credential card and education line, because
+       * everything below was a bare append. Identity here is the same one the rest of the document
+       * uses: `jobKey` for a position, the normalized title for a credential, the exact line for
+       * education. A role that already exists is skipped WITH its overflow suggestions — offering
+       * the overflow of a job that was not added would attach duties to nothing.
+       */
+      const seenJobs = new Set((s.profile.roles || []).map((r) => jobKey(r.title, r.company)));
+      const seenSuggested = new Set(s.suggestions.map((i) => i.normalized));
       const roles: Role[] = [...(s.profile.roles || [])];
       const offered: Item[] = [];
+      const offer = (item: Item) => {
+        if (seenSuggested.has(item.normalized)) return;
+        seenSuggested.add(item.normalized);
+        offered.push(item);
+      };
       for (const r of cv.roles) {
+        const k = jobKey(r.title, r.company);
+        if (seenJobs.has(k)) continue;
+        seenJobs.add(k);
         const id = newId("r");
         const current = /present|now|الآن|حالي/i.test(r.end) || !r.end;
         const cap = current ? 6 : 4;
@@ -394,7 +430,7 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
           bullets: r.bullets.slice(0, cap),
         });
         for (const extra of r.bullets.slice(cap)) {
-          offered.push(newItem({
+          offer(newItem({
             section: "experience", type: "duty", text: extra, roleId: id,
             source: "imported", sourceRef: "cv-upload",
             reason: a.lang === "ar" ? "من سيرتك المرفوعة — تجاوزت حد المهام" : "from your uploaded CV — over this job's bullet limit",
@@ -403,20 +439,23 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       }
 
       for (const skill of cv.skills) {
-        offered.push(newItem({
+        offer(newItem({
           section: "skills", type: "skill", text: skill,
           source: "imported", sourceRef: "cv-upload",
           reason: a.lang === "ar" ? "من سيرتك المرفوعة" : "from your uploaded CV",
         }));
       }
 
+      const seenCreds = new Set(s.credentials.map((c) => normalizeLabel(c.title)));
       const credentials: Credential[] = [
         ...s.credentials,
-        ...cv.certifications.map((title) => ({
-          id: newId("cr"), kind: "certification" as CredentialKind, title,
-          issuer: "", issueDate: "", expiryDate: "",
-          status: "suggested" as const, source: "imported" as const,
-        })),
+        ...cv.certifications
+          .filter((title) => !seenCreds.has(normalizeLabel(title)))
+          .map((title) => ({
+            id: newId("cr"), kind: "certification" as CredentialKind, title,
+            issuer: "", issueDate: "", expiryDate: "",
+            status: "suggested" as const, source: "imported" as const,
+          })),
       ];
 
       const languages: LanguageEntry[] = [
@@ -432,7 +471,13 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
           })),
       ];
 
-      const education = [s.profile.education, ...cv.education].filter((x) => x && x.trim()).join("\n");
+      const seenEdu = new Set(
+        String(s.profile.education || "").split("\n").map((x) => x.trim()).filter(Boolean),
+      );
+      const education = [
+        s.profile.education,
+        ...cv.education.filter((line) => line && !seenEdu.has(line.trim())),
+      ].filter((x) => x && x.trim()).join("\n");
 
       const next: BuilderState = {
         ...s,
@@ -485,6 +530,22 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       return { ...s, versions: { ...(s.versions ?? {}), [a.lang]: a.version } };
     case "viewVersion":
       return a.lang === s.activeVersion ? s : { ...s, activeVersion: a.lang };
+    /*
+     * The two cases below were DECLARED in `Action` and handled by nothing — the exact defect class
+     * F-46 documents for "version"/"viewVersion": the dispatch compiled, ran, and fell through to
+     * `default: return s`. With "ai" swallowed, no generation was ever cached on the resume and no
+     * spend ever recorded, so every revisit to a generated section re-bought the same answer and the
+     * ledger's auto/hard ceilings could never engage. With "occupation" swallowed, the clarification
+     * card's three buttons all did nothing and `careerContext` never saw the user's answer.
+     */
+    case "ai":
+      /* The full store and the full ledger arrive together — see the Action's own comment on why
+         they must never diverge. `commitAi` always passes complete objects, so this is replacement,
+         not merge. */
+      return { ...s, generations: a.store, ledger: a.ledger };
+    case "occupation":
+      /* `""` clears (the question may be asked again); `"none"` is a real, sticky answer. */
+      return s.occupationId === a.id ? s : { ...s, occupationId: a.id };
     default:
       return s;
   }

@@ -36,7 +36,7 @@ const store = globalThis.window.localStorage;
 const session = globalThis.window.sessionStorage;
 
 const {
-  deleteResume, forgetOwner, indexKey, listResumes, migrateLegacy, newResumeId,
+  deleteResume, forgetOwner, indexKey, listResumes, markMirrored, migrateLegacy, newResumeId,
   ownerKey, quarantineKey, readResume, recordKey, writeResume, legacyKey, legacyRetiredKey,
 } = await import("../app/lib/resumeStore.ts");
 
@@ -706,6 +706,43 @@ console.log("\n── and the hook does not put the network in front of the form
   ok("adoption waits for the server's answer", /!settled\s*\|\|/.test(code));
   ok("and `settled` is state, so the effect re-runs on the transition", /\[settled, setSettled\] = useState/.test(code));
   ok("with settled in the dependency list", /\}, \[owner, settled\]\)/.test(code));
+}
+
+/* ── the record remembers which account revision it last agreed with ── */
+{
+  // The mount-time pull can only answer "is the server AHEAD of what this browser has
+  // seen?" if the record carries that fact. `revision` cannot answer it — a local
+  // per-write counter compared to the server's counter compares two unrelated clocks —
+  // which is why an untouched session used to adopt an OLDER server copy over newer
+  // local edits whose final mirror had failed, then autosave the loss.
+  store.clear();
+  const owner = ownerKey("mirror@example.com");
+  const id = newResumeId(1000);
+  writeResume(owner, id, "en", cv("train edits"));
+  ok("a record that never met the server says so", readResume(owner, id).record.serverRevision === 0);
+  ok("and holds unconfirmed edits", readResume(owner, id).record.dirty === true);
+
+  markMirrored(owner, id, 7);
+  const acked = readResume(owner, id).record;
+  ok("a confirmed mirror records the account revision", acked.serverRevision === 7);
+  ok("and clears dirty — the server has vouched for this content", acked.dirty === false);
+  ok("without counting as an edit", acked.revision === 1);
+
+  writeResume(owner, id, "en", cv("more edits"));
+  const edited = readResume(owner, id).record;
+  ok("an ordinary autosave carries the marker forward", edited.serverRevision === 7);
+  ok("and is dirty again until the next mirror confirms it", edited.dirty === true);
+
+  // A mirror that raced a newer keystroke confirms the revision without vouching
+  // for the edits: `clean: false` keeps dirty true.
+  markMirrored(owner, id, 8, { clean: false });
+  const raced = readResume(owner, id).record;
+  ok("a raced mirror advances the revision but does not vouch for newer edits",
+    raced.serverRevision === 8 && raced.dirty === true);
+
+  markMirrored(owner, "no-such-id", 9);
+  ok("acknowledging a missing record does nothing rather than minting one",
+    readResume(owner, "no-such-id").record === null);
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

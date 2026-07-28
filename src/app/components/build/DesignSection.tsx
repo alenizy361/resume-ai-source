@@ -39,6 +39,7 @@ import { type BuilderState, type SectionId } from "@/app/lib/builderDoc";
 import { review } from "@/app/lib/reviewChecks";
 import { shouldShowWatermark } from "@/app/lib/entitlement";
 import { useEntitlement } from "@/app/lib/useEntitlement";
+import { pdfRefusesArabic } from "@/app/lib/renderPdf";
 
 type Lang = "ar" | "en";
 
@@ -338,7 +339,15 @@ export default function DesignSection({
             user what they are about to get — and `useEntitlement` makes that a server-backed answer,
             but it can no longer decide what is in the file.
           */}
-          {!arabicCv && (
+          {/*
+            Offered only when the export can actually SUCCEED. `viewLang === "en"` alone was the
+            wrong predicate: the English version of an Arabic CV keeps the author's Arabic name and
+            employer names by design (protected, untranslatable — see `translate.ts`), and
+            `pdfRefusesArabic` is a presence test, so for that whole population the button was
+            guaranteed shown and every click guaranteed refused. The gate below is the same one the
+            button's own handler and the server both apply — shown means it works.
+          */}
+          {!arabicCv && !pdfRefusesArabic(cv) && (
             <PdfExport text={cv} lang={lang} label={c.pdf} />
           )}
           <DocxExport
@@ -346,7 +355,7 @@ export default function DesignSection({
             filename={arabicCv ? "resume-ar.docx" : "resume.docx"}
           />
         </div>
-        {arabicCv && <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{c.arabicPdf}</p>}
+        {(arabicCv || pdfRefusesArabic(cv)) && <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{c.arabicPdf}</p>}
         {watermark && (
           <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>
             {c.mark}{" "}
