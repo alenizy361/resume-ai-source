@@ -20,7 +20,7 @@ export default function ArabicNotFound() {
     >
       <div
         className="relative mt-16 w-full max-w-md rounded-3xl p-10 text-center"
-        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(10px)" }}
+        style={{ background: "rgba(15, 20, 35, 0.048)", border: "1px solid rgba(15, 20, 35, 0.14)", backdropFilter: "blur(10px)" }}
       >
         <div className="mb-2 font-mono text-sm tracking-[0.3em]" style={{ color: "var(--muted)" }}>٤٠٤</div>
         <h1 className="text-2xl font-bold">الصفحة غير موجودة</h1>

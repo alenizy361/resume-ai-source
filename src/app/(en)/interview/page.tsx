@@ -170,7 +170,7 @@ export default function InterviewPage() {
                 placeholder={ar ? "الصق إعلان الوظيفة…" : "Paste the job posting..."} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
             </div>
             {error && (
-              <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>
+              <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>
                 <div>{error}</div>
                 {resume.trim() && jd.trim() && !loading && (
                   <button type="submit" className="mt-2 inline-block rounded-lg px-3 py-1 text-xs font-semibold"
@@ -280,7 +280,7 @@ export default function InterviewPage() {
                                       <div><span className="font-semibold" style={{ color: "var(--accent)" }}>{ar ? "نقطة قوة: " : "Strength: "}</span>{fb.strength}</div>
                                       {fb.weaknesses.length > 0 && (
                                         <div>
-                                          <span className="font-semibold" style={{ color: "#fbbf24" }}>{ar ? "نقاط للتحسين:" : "To improve:"}</span>
+                                          <span className="font-semibold" style={{ color: "var(--warn)" }}>{ar ? "نقاط للتحسين:" : "To improve:"}</span>
                                           <ul className="mt-1 space-y-1 ps-4" style={{ listStyle: "disc" }}>
                                             {fb.weaknesses.map((w, wi) => <li key={wi}>{w}</li>)}
                                           </ul>
@@ -288,7 +288,7 @@ export default function InterviewPage() {
                                       )}
                                       {fb.missingEvidence.length > 0 && (
                                         <div>
-                                          <span className="font-semibold" style={{ color: "#f87171" }}>{ar ? "دليل ناقص:" : "Missing evidence:"}</span>
+                                          <span className="font-semibold" style={{ color: "var(--danger)" }}>{ar ? "دليل ناقص:" : "Missing evidence:"}</span>
                                           <ul className="mt-1 space-y-1 ps-4" style={{ listStyle: "disc" }}>
                                             {fb.missingEvidence.map((m, mi) => <li key={mi}>{m}</li>)}
                                           </ul>
@@ -300,7 +300,7 @@ export default function InterviewPage() {
                                     </div>
                                   )}
                                   {fb === "error" && (
-                                    <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{ar ? "تعذّر التقييم — حاول مرة أخرى." : "Couldn't get feedback — try again."}</p>
+                                    <p className="mt-2 text-xs" style={{ color: "var(--danger)" }}>{ar ? "تعذّر التقييم — حاول مرة أخرى." : "Couldn't get feedback — try again."}</p>
                                   )}
                                 </div>
                               )}
@@ -319,7 +319,7 @@ export default function InterviewPage() {
                 <h3 className="mb-3 font-bold">{ar ? "قد يتعمقون في هذه — كن مستعداً" : "They may probe these — be ready"}</h3>
                 <ul className="space-y-2">
                   {result.redFlags.map((r, i) => (
-                    <li key={`${r}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "#f87171" }}>!</span> {r}</li>
+                    <li key={`${r}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--danger)" }}>!</span> {r}</li>
                   ))}
                 </ul>
               </div>

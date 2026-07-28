@@ -126,7 +126,7 @@ export default function CareerPlanPage() {
                 {timelines.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
-            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
             <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">
               {loading ? (
                 <span className="flex items-center justify-center gap-3">

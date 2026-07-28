@@ -47,8 +47,8 @@ export default function GlobalNotFound() {
           <div
             className="relative w-full max-w-md rounded-3xl p-10 text-center"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(15, 20, 35, 0.048)",
+              border: "1px solid rgba(15, 20, 35, 0.14)",
               backdropFilter: "blur(10px)",
             }}
           >

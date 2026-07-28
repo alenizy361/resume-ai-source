@@ -43,7 +43,7 @@ export default function SubscribeBox({ ar = false }: { ar?: boolean }) {
             </button>
           </form>
         )}
-        {state === "err" && <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{t.err}</p>}
+        {state === "err" && <p className="mt-2 text-xs" style={{ color: "var(--danger)" }}>{t.err}</p>}
       </div>
     </section>
   );

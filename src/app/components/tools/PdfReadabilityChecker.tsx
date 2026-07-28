@@ -73,21 +73,21 @@ export default function PdfReadabilityChecker({ defaultAr }: { defaultAr: boolea
   const verdictCopy: Record<Verdict, { label: string; color: string; body: string }> = {
     readable: {
       label: ar ? "قابل للقراءة" : "Readable",
-      color: "#34d399",
+      color: "var(--ok)",
       body: ar
         ? "استخرجنا نصاً كاملاً ومنظماً بفواصل أسطر واضحة. أنظمة تتبع المتقدمين تقرأ هذا الملف كما تقرأه أنت تقريباً."
         : "We extracted full, structured text with clear line breaks. An applicant tracking system will read this file close to the way you do.",
     },
     partial: {
       label: ar ? "قابل للقراءة جزئياً" : "Partially readable",
-      color: "#fbbf24",
+      color: "var(--warn)",
       body: ar
         ? "استخرجنا نصاً، لكنه إما قصير جداً أو بلا فواصل أسطر — علامة على أن الملف مصمم بجداول أو مربعات نصية أو تخطيط معقد يربك أنظمة الفرز الآلي."
         : "We extracted text, but it's either very short or has no line breaks — a sign the file uses tables, text boxes, or a layout complex enough to confuse automated screening.",
     },
     unreadable: {
       label: ar ? "غير قابل للقراءة" : "Not readable",
-      color: "#f87171",
+      color: "var(--danger)",
       body: ar
         ? "لم نتمكن من استخراج أي نص من هذا الملف. غالباً لأنه صورة ممسوحة ضوئياً وليس نصاً حقيقياً — وهذا يعني أن أنظمة تتبع المتقدمين لن تقرأه إطلاقاً."
         : "We couldn't extract any text from this file. It's most likely a scanned image rather than real text — which means an applicant tracking system won't read it at all.",
@@ -118,7 +118,7 @@ export default function PdfReadabilityChecker({ defaultAr }: { defaultAr: boolea
             ) : (ar ? "ارفع ملفك (PDF أو Word)" : "Upload your file (PDF or Word)")}
           </button>
           {fileName && !loading && <p className="text-center text-xs" style={{ color: "var(--faint)" }}>{fileName}</p>}
-          {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+          {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
           <p className="text-center text-xs" style={{ color: "var(--faint)" }}>
             {ar ? "لا يُحفظ ملفك ولا يُرسل لأي طرف ثالث — يُستخرج نصه فقط ليُعرض عليك." : "Your file isn't stored or sent to any third party — only its text is extracted, to show you."}
           </p>

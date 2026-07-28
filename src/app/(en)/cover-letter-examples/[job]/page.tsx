@@ -114,7 +114,7 @@ Sincerely,
         <section className="t-enter mt-12">
           <h2 className="mb-2 text-2xl font-bold">Fill-in template</h2>
           <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
-            The <span style={{ color: "#fbbf24" }}>[brackets]</span> are yours to fill with real facts — the example achievements shown are illustrations of the level of specificity to aim for, not claims to copy.
+            The <span style={{ color: "var(--warn)" }}>[brackets]</span> are yours to fill with real facts — the example achievements shown are illustrations of the level of specificity to aim for, not claims to copy.
           </p>
           <div className="card whitespace-pre-wrap p-6 font-mono text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             {template}
@@ -123,7 +123,7 @@ Sincerely,
 
         {/* Mistake */}
         <section className="t-enter card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
-          <h2 className="font-bold" style={{ color: "#f87171" }}>⚠ The most common {j.title} mistake</h2>
+          <h2 className="font-bold" style={{ color: "var(--danger)" }}>⚠ The most common {j.title} mistake</h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.mistake}</p>
         </section>
 

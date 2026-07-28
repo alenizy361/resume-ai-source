@@ -138,7 +138,7 @@ EXPERIENCE (example bullet)
 
         {/* Mistake */}
         <section className="t-enter card mt-10 p-6" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
-          <h2 className="font-bold" style={{ color: "#f87171" }}>⚠ Common {j.title} mistake</h2>
+          <h2 className="font-bold" style={{ color: "var(--danger)" }}>⚠ Common {j.title} mistake</h2>
           <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{j.mistake}</p>
         </section>
 

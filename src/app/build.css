@@ -157,7 +157,7 @@
 .build-root .bd-chip.on {
   background: rgba(139, 92, 246, .14);
   border-color: rgba(139, 92, 246, .5);
-  color: #ddd6fe;
+  color: #5b21b6;
 }
 .build-root .bd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
@@ -221,7 +221,7 @@
   font-family: var(--font-mono, ui-monospace), monospace;
   letter-spacing: .06em;
 }
-.build-root .bd-save.err { color: #f87171; }
+.build-root .bd-save.err { color: var(--danger); }
 
 /* ══════════════════════════════════════════════════════════════════════════
    THE BUILDER SHELL — page, header, columns, step bar, action bar.

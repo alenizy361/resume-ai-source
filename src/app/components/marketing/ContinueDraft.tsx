@@ -91,7 +91,7 @@ export default function ContinueDraft({ lang }: { lang: "ar" | "en" }) {
    */
   return (
     <Link href={draft.href} className="mt-5 inline-flex items-center gap-2 text-[15px] font-medium" style={{ color: "var(--muted)" }}>
-      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", flex: "none" }} />
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--ok)", flex: "none" }} />
       <span>{T[lang].head}: <b style={{ color: "var(--fg)", fontWeight: 700 }}>{draft.label}</b></span>
       <span style={{ color: "#6ee7b7", fontWeight: 700 }}>{T[lang].go}</span>
     </Link>

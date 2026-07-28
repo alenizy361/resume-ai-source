@@ -45,7 +45,7 @@ export default function BeforeAfter({
           <span>{t("Your resume now", "سيرتك الآن")}</span>
           <span className="font-mono tabular-nums">{before}%</span>
         </div>
-        <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+        <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(15, 20, 35, 0.096)" }}>
           <div
             className="h-full rounded-full"
             style={{ width: `${before}%`, background: barColor(before), transition: "width 0.6s ease" }}
@@ -59,7 +59,7 @@ export default function BeforeAfter({
           <span className="font-semibold">{t("With the Sira rewrite", "بعد إعادة كتابة سيرة")}</span>
           <span className="font-mono font-bold tabular-nums" style={{ color: "var(--accent)" }}>{shown}%</span>
         </div>
-        <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+        <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(15, 20, 35, 0.096)" }}>
           <div
             className="h-full rounded-full"
             style={{

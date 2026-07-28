@@ -95,7 +95,7 @@ export default function JdKeywordExtractor({ defaultAr }: { defaultAr: boolean }
               <input value={roleTitle} onChange={(e) => setRoleTitle(e.target.value)}
                 placeholder={ar ? "مثال: محلل بيانات" : "e.g. Data Analyst"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
             </div>
-            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
             <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">
               {loading ? (
                 <span className="flex items-center justify-center gap-3">

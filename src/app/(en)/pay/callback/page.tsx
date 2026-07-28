@@ -246,7 +246,10 @@ function CallbackInner() {
       style={{ background: paid ? "var(--glass-bg)" : "var(--bg)", color: paid ? "var(--glass-text)" : "var(--fg)", transition: "background 0.9s var(--smooth)" }}>
 
       <div className={`relative mt-24 w-full max-w-md rounded-3xl p-10 text-center ${paid ? "glass-surface" : ""}`}
-        style={paid ? undefined : { background: "rgba(255,255,255,0.03)", border: "1px solid rgba(245,184,64,0.25)", backdropFilter: "blur(10px)" }}>
+        /* A real white card. `rgba(15, 20, 35, 0.048)` was a faint lift on the old dark page and
+           is invisible on the light one — this is the screen a customer lands on straight after
+           paying, so the state they arrive in has to be plainly framed. */
+        style={paid ? undefined : { background: "#ffffff", border: "1px solid var(--line)", boxShadow: "0 10px 30px -18px rgba(15,20,35,0.14)" }}>
 
         {/* aurora burst emitted from رابط the moment the lock opens */}
         {burst && <div className="pointer-events-none absolute inset-x-0" style={{ top: "-96px" }}><AuroraBurst /></div>}

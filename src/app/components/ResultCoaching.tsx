@@ -94,7 +94,7 @@ export default function ResultCoaching({
         <div className="space-y-3">
           {hasPlaceholders && (
             <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(251,191,36,0.35)" }}>
-              <div className="mb-1 text-sm font-bold" style={{ color: "#fbbf24" }}>{t.numbers}</div>
+              <div className="mb-1 text-sm font-bold" style={{ color: "var(--warn)" }}>{t.numbers}</div>
               <div className="text-xs" style={{ color: "var(--muted)" }}>{t.numbersHint}</div>
             </div>
           )}
@@ -102,7 +102,7 @@ export default function ResultCoaching({
           <Section icon="" title={t.skills} hint={t.skillsHint} items={skillsGap} />
           {confirm.length > 0 && (
             <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(251,191,36,0.35)" }}>
-              <div className="mb-2 text-sm font-bold" style={{ color: "#fbbf24" }}>⚠️ {t.confirm}</div>
+              <div className="mb-2 text-sm font-bold" style={{ color: "var(--warn)" }}>⚠️ {t.confirm}</div>
               <ul className="space-y-1 text-xs" style={{ color: "var(--muted)" }}>
                 {confirm.slice(0, 5).map((c, i) => <li key={i}>• {c.fix}</li>)}
               </ul>
@@ -110,7 +110,7 @@ export default function ResultCoaching({
           )}
           {missingReq.length > 0 && (
             <div className="reveal-rise rounded-xl p-4" style={{ background: "var(--surface)", border: "1px solid rgba(248,113,113,0.3)" }}>
-              <div className="mb-2 text-sm font-bold" style={{ color: "#f87171" }}>❗ {t.missing}</div>
+              <div className="mb-2 text-sm font-bold" style={{ color: "var(--danger)" }}>❗ {t.missing}</div>
               <ul className="space-y-1 text-xs" style={{ color: "var(--muted)" }}>
                 {missingReq.slice(0, 5).map((c, i) => <li key={i}>• {c.issue}</li>)}
               </ul>

@@ -351,7 +351,7 @@ export default function ImportPanel({
 
       {/* Keyed on the message so a SECOND failure shakes again — an unchanged element would not
           re-run the animation, and "it failed again" is exactly what needs to register. */}
-      {err && <p key={err} className="mt-2 text-xs t-shake" style={{ color: "#fca5a5" }}>{err}</p>}
+      {err && <p key={err} className="mt-2 text-xs t-shake" style={{ color: "var(--danger)" }}>{err}</p>}
 
       {/*
         ── the paste box, which the error message used to point away from ──

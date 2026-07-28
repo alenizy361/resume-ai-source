@@ -711,7 +711,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       <div><span style={{ color: "var(--faint)" }}>{ar ? "عناصر مهارات" : "Skill items"}</span><br /><strong>{ar ? toArabicDigits(extraction.skillsCount) : extraction.skillsCount}</strong></div>
                       <div><span style={{ color: "var(--faint)" }}>{ar ? "اللغة" : "Language"}</span><br /><strong>{extraction.lang === "ar" ? (ar ? "العربية" : "Arabic") : (ar ? "الإنجليزية" : "English")}</strong></div>
                     </div>
-                    {extraction.looksScanned && <div className="mt-2 text-xs font-semibold" style={{ color: "#fbbf24" }}>{ar ? "⚠️ يبدو أنها صورة ممسوحة — قد تنقص بعض المعلومات. الصق النص لأفضل نتيجة." : "⚠️ Looks like a scanned image — some info may be missing. Paste the text for best results."}</div>}
+                    {extraction.looksScanned && <div className="mt-2 text-xs font-semibold" style={{ color: "var(--warn)" }}>{ar ? "⚠️ يبدو أنها صورة ممسوحة — قد تنقص بعض المعلومات. الصق النص لأفضل نتيجة." : "⚠️ Looks like a scanned image — some info may be missing. Paste the text for best results."}</div>}
                   </div>
                 )}
                 <button disabled={resume.trim().length < 50} onClick={() => setStep(2)}
@@ -801,7 +801,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     : <>Free: match score, missing keywords, skills gap, preview. <span style={{ color: "var(--accent)" }}>Full rewrite unlocks after.</span></>}
                 </div>
                 {error && (
-                  <div className="mb-4 rounded-xl px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}>
+                  <div className="mb-4 rounded-xl px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "var(--danger)" }}>
                     <div>{error}</div>
                     {resume.trim() && <button type="button" onClick={() => runScan()} className="mt-2 inline-block rounded-lg px-4 py-1.5 text-xs font-semibold" style={{ background: "rgba(139,92,246,0.15)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.4)" }}>{ar ? "↻ إعادة" : "↻ Retry"}</button>}
                   </div>
@@ -980,7 +980,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                         className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>
                         {emailState === "sending" ? (ar ? "جارٍ الإرسال…" : "Sending…") : (ar ? "✉ أرسل نتيجتي بالبريد" : "✉ Email my results")}
                       </button>
-                      {emailState === "error" && <p className="w-full text-xs" style={{ color: "#f87171" }}>{emailMsg}</p>}
+                      {emailState === "error" && <p className="w-full text-xs" style={{ color: "var(--danger)" }}>{emailMsg}</p>}
                     </div>
                   )
                 )}
@@ -1097,7 +1097,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     )}
                   </div>
                   {coverError && (
-                    <div className="mt-3 rounded-lg px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "#f87171" }}>
+                    <div className="mt-3 rounded-lg px-4 py-3 text-sm" style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", color: "var(--danger)" }}>
                       {coverError}
                       {coverPaywalled && (
                         <Link href={pricingHref} className={ar ? "mr-2 font-semibold underline" : "ml-2 font-semibold underline"} style={{ color: "var(--accent)" }}>{ar ? "شاهد الباقات ←" : "See plans →"}</Link>
@@ -1106,7 +1106,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   )}
                   {coverLetter && (
                     <div dir={ar ? "ltr" : undefined} className="card mt-4 whitespace-pre-wrap p-5 text-sm leading-relaxed"
-                      style={{ background: "rgba(255,255,255,0.02)", color: "var(--muted)", textAlign: ar ? "left" : undefined }}>
+                      style={{ background: "rgba(15, 20, 35, 0.032)", color: "var(--muted)", textAlign: ar ? "left" : undefined }}>
                       {coverLetter}
                     </div>
                   )}
@@ -1158,7 +1158,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "الأرجح أن لديك هذا — لكنك لم تكتبه بكلمات الوظيفة نفسها." : "You likely have this, but didn't state it in the job posting's own words."}</p>
                     <div className="flex flex-wrap gap-2">
                       {result.missingKeywords.map((k) => (
-                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(248,113,113,0.14)", color: "#f87171" }}>{k}</span>
+                        <span key={k} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(248,113,113,0.14)", color: "var(--danger)" }}>{k}</span>
                       ))}
                     </div>
                   </div>
@@ -1168,7 +1168,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     <p className="mb-4 mt-1 text-xs" style={{ color: "var(--faint)" }}>{ar ? "لا يوجد دليل في سيرتك على هذا — لن يُضاف تلقائياً؛ إن كان صحيحاً فأضِفه بنفسك." : "Your resume shows no evidence of this — never added automatically. If it's true, add it yourself."}</p>
                     <ul className="space-y-2">
                       {result.skillsGap.map((s) => (
-                        <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "#fbbf24" }}><span>{ar ? "←" : "→"}</span> {s}</li>
+                        <li key={s} className="flex items-center gap-2 text-sm" style={{ color: "var(--warn)" }}><span>{ar ? "←" : "→"}</span> {s}</li>
                       ))}
                     </ul>
                   </div>
@@ -1182,12 +1182,12 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                         const B: Record<string, { t: string; c: string; bg: string }> = ar ? {
                           "rephrase": { t: "إعادة صياغة فقط", c: "#93c5fd", bg: "rgba(147,197,253,0.12)" },
                           "from-your-data": { t: "من بياناتك", c: "#86efac", bg: "rgba(134,239,172,0.12)" },
-                          "needs-confirmation": { t: "⚠ تأكّد أنها صحيحة", c: "#fbbf24", bg: "rgba(251,191,36,0.12)" },
+                          "needs-confirmation": { t: "⚠ تأكّد أنها صحيحة", c: "var(--warn)", bg: "rgba(251,191,36,0.12)" },
                           "missing-requirement": { t: "ناقصة — أضفها", c: "#f87171", bg: "rgba(248,113,113,0.12)" },
                         } : {
                           "rephrase": { t: "Rephrased only", c: "#93c5fd", bg: "rgba(147,197,253,0.12)" },
                           "from-your-data": { t: "From your data", c: "#86efac", bg: "rgba(134,239,172,0.12)" },
-                          "needs-confirmation": { t: "⚠ Confirm this is true", c: "#fbbf24", bg: "rgba(251,191,36,0.12)" },
+                          "needs-confirmation": { t: "⚠ Confirm this is true", c: "var(--warn)", bg: "rgba(251,191,36,0.12)" },
                           "missing-requirement": { t: "Missing — you must add", c: "#f87171", bg: "rgba(248,113,113,0.12)" },
                         };
                         const b = B[imp.source || "rephrase"] || B.rephrase;

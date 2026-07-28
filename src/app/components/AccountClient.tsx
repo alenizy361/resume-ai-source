@@ -37,9 +37,9 @@ const STATUS_LABELS: Record<JobStatus, string> = {
 };
 const STATUS_COLORS: Record<JobStatus, string> = {
   saved: "var(--faint)",
-  applied: "#60a5fa",
-  interview: "#fbbf24",
-  offer: "#a78bfa",
+  applied: "#1d4ed8",
+  interview: "var(--warn)",
+  offer: "#6d28d9",
   rejected: "#f87171",
 };
 
@@ -387,7 +387,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           ) : (
             <ul className="mt-4 space-y-2">
               {jobs.map((j) => (
-                <li key={j.id} className="flex flex-wrap items-center gap-2 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--line)" }}>
+                <li key={j.id} className="flex flex-wrap items-center gap-2 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(15, 20, 35, 0.032)", border: "1px solid var(--line)" }}>
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-semibold">{j.title || "—"} <span style={{ color: "var(--muted)" }}>@ {j.company || "—"}</span></div>
                     {j.url && <a href={j.url} target="_blank" rel="noopener noreferrer" dir="ltr" className="block truncate text-xs text-accent">{j.url}</a>}
@@ -422,7 +422,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           ) : (
             <ul className="space-y-2">
               {scans.map((s) => (
-                <li key={s.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--line)" }}>
+                <li key={s.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(15, 20, 35, 0.032)", border: "1px solid var(--line)" }}>
                   <div className="shrink-0"><ScoreOrb value={s.score} size={46} animate={false} /></div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate">{s.jobTitle}</div>
@@ -448,7 +448,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           ) : (
             <ul className="space-y-2">
               {resumes.map((r) => (
-                <li key={r.id} className="flex flex-wrap items-center gap-2 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--line)" }}>
+                <li key={r.id} className="flex flex-wrap items-center gap-2 rounded-lg px-3 py-2.5 text-sm" style={{ background: "rgba(15, 20, 35, 0.032)", border: "1px solid var(--line)" }}>
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-semibold">{r.title}</div>
                     <div className="font-mono text-[11px]" style={{ color: "var(--faint)" }}>
@@ -510,15 +510,15 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
           ) : (
             <ul className="space-y-2">
               {links.map((l) => (
-                <li key={l.slug} className="rounded-lg px-3 py-2 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--line)" }}>
+                <li key={l.slug} className="rounded-lg px-3 py-2 text-sm" style={{ background: "rgba(15, 20, 35, 0.032)", border: "1px solid var(--line)" }}>
                   <div className="flex items-center justify-between gap-3">
                     <a href={l.url} target="_blank" rel="noopener noreferrer" className="truncate text-accent" dir="ltr">{l.url}</a>
-                    <button onClick={() => removeLink(l.slug, l.token)} className="shrink-0 text-xs" style={{ color: "#f87171" }}>
+                    <button onClick={() => removeLink(l.slug, l.token)} className="shrink-0 text-xs" style={{ color: "var(--danger)" }}>
                       {lang === "ar" ? "إلغاء النشر" : "Unpublish"}
                     </button>
                   </div>
                   {linkError[l.slug] && (
-                    <p className="mt-1.5 text-xs" style={{ color: "#f87171" }}>{linkError[l.slug]}</p>
+                    <p className="mt-1.5 text-xs" style={{ color: "var(--danger)" }}>{linkError[l.slug]}</p>
                   )}
                 </li>
               ))}

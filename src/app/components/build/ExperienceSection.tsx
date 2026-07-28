@@ -401,7 +401,7 @@ function RoleCard({
         <div className="mt-4">
           <div className="bd-label">
             {c.onCv} · {room > 0 ? c.room(room) : ""}
-            {room === 0 && <span style={{ color: "#fbbf24" }}> {c.full}</span>}
+            {room === 0 && <span style={{ color: "var(--warn)" }}> {c.full}</span>}
           </div>
           {role.bullets.map((b, i) => (
             <div key={`${i}-${b.slice(0, 12)}`} className="bd-confirmed">

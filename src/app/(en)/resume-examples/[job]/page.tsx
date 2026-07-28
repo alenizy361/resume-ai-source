@@ -147,7 +147,7 @@ export default async function Page({ params }: { params: Promise<{ job: string }
 
         <Section title={`Common ${j.title} resume mistake`}>
           <div className="card p-5 text-sm leading-relaxed" style={{ borderColor: "rgba(248,113,113,0.3)", color: "var(--muted)" }}>
-            <span style={{ color: "#f87171" }}>Avoid this:</span> {j.mistake}
+            <span style={{ color: "var(--danger)" }}>Avoid this:</span> {j.mistake}
           </div>
         </Section>
 

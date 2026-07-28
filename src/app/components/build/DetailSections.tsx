@@ -271,7 +271,7 @@ function CredentialCard({ cred, lang, dispatch, referenceDate }: {
         <Text label={c.num} opt optLabel={c.opt} value={cred.credentialNumber ?? ""} onChange={(v) => set({ credentialNumber: v })} />
       </div>
 
-      {expired && <p className="mt-2 text-xs" style={{ color: "#fbbf24" }}>⚠ {c.expired}</p>}
+      {expired && <p className="mt-2 text-xs" style={{ color: "var(--warn)" }}>⚠ {c.expired}</p>}
 
       <div className="mt-3 flex items-center gap-3">
         <label className="flex items-center gap-2 text-xs font-semibold" style={{ color: "var(--muted)" }}>

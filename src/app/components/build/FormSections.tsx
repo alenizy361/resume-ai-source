@@ -290,7 +290,7 @@ export function TargetFields(p: Common) {
             </button>
           </div>
           {got > 0 && <p className="mt-1.5 text-xs" style={{ color: "#6ee7b7" }}>{L.got(got)}</p>}
-          {err && <p className="mt-1.5 text-xs" style={{ color: "#fca5a5" }}>{err}</p>}
+          {err && <p className="mt-1.5 text-xs" style={{ color: "var(--danger)" }}>{err}</p>}
         </div>
       </div>
     </>

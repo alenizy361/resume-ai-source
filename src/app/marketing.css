@@ -476,7 +476,7 @@
 }
 .compare-row > div { padding: 15px 16px; font-size: 15px; }
 .compare-row .feat { color: var(--fg); font-weight: 600; }
-.compare-row .no { color: #f87171; }
+.compare-row .no { color: var(--danger); }
 .compare-row .yes { color: var(--success, #34d399); font-weight: 700; }
 
 /* ── dashboard preview ── */
@@ -552,7 +552,7 @@
   position: relative;
   z-index: 1;
   font: 800 15px/1 ui-monospace, "SF Mono", monospace;
-  color: #34d399;
+  color: var(--ok);
   font-variant-numeric: tabular-nums;
 }
 .dash-next {

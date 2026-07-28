@@ -55,6 +55,21 @@
      cinematic layer. Removed rather than left as three names nothing reads. */
   --accent: #8b5cf6;
   --accent-deep: #7c3aed;
+  /*
+   * Error TEXT, as a token rather than a hex repeated in 35 files.
+   *
+   * Those files all carried #fca5a5 / #f87171 — light reds picked for the old dark theme. On
+   * the light ground they measure ≈2:1 against white: every error message in the product,
+   * from a failed save to a rejected card, rendered as a pale pink whisper. The tint used for
+   * error BACKGROUNDS and borders (rgba(248,113,113,.1)) is unchanged — a wash still reads on
+   * white; it is the text that had to darken.
+   */
+  --danger: #b91c1c;
+  /* Same story as --danger for the other two status hues: #fbbf24 and #34d399 were picked to
+     glow on black and measure ≈1.7:1 and ≈1.9:1 as text on white. These are their readable cuts;
+     the pale originals stay valid as background tints, which is where they still appear. */
+  --warn: #b45309;
+  --ok: #047857;
   --gold: #f5b840;
 }
 

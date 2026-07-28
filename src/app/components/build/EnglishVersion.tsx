@@ -188,7 +188,7 @@ export default function EnglishVersion() {
         </p>
       )}
 
-      {phase === "error" && <p className="mt-3 text-xs" style={{ color: "#fca5a5" }}>{c.failed}</p>}
+      {phase === "error" && <p className="mt-3 text-xs" style={{ color: "var(--danger)" }}>{c.failed}</p>}
 
       {stored?.needsConfirmation?.length ? (
         <div className="mt-4">

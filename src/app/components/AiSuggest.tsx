@@ -97,7 +97,7 @@ export default function AiSuggest({
           </button>
         </>
       )}
-      {err && <span className="text-[11px]" style={{ color: "#fca5a5" }}>{err}</span>}
+      {err && <span className="text-[11px]" style={{ color: "var(--danger)" }}>{err}</span>}
     </div>
   );
 }

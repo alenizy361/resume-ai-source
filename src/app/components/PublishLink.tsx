@@ -127,7 +127,7 @@ export default function PublishLink({ text, name, role, ar = false }: { text: st
       <button onClick={publish} disabled={loading} className="btn-ghost px-6 py-2.5 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--fg)" }}>
         {loading ? t.publishing : t.cta}
       </button>
-      {error && <p className="mt-2 text-xs" style={{ color: "#f87171" }}>{error}</p>}
+      {error && <p className="mt-2 text-xs" style={{ color: "var(--danger)" }}>{error}</p>}
     </div>
   );
 }

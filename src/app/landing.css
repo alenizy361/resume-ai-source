@@ -60,6 +60,11 @@
   transition: color 0.2s ease;
 }
 .cine-nav-links a:hover { color: var(--cine-ink); }
+/* The CTA is a BUTTON that happens to be an anchor: the rule above (0,1,1) out-specifies
+   `.cine-cta` (0,1,0), so the site's primary action rendered muted grey on its own dark fill —
+   measured 2.03:1, the worst contrast on the page. Stated at matching specificity. */
+.cine-nav-links a.cine-cta { color: #f6f7fa; }
+.cine-nav-links a.cine-cta:hover { color: #f6f7fa; }
 .cine-cta {
   display: inline-block; background: var(--cine-ink); color: #f6f7fa;
   font-size: 14px; font-weight: 700; border-radius: 10px; padding: 10px 18px;

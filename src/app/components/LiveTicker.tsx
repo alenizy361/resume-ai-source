@@ -59,7 +59,7 @@ export default function LiveTicker({ ar = false }: { ar?: boolean }) {
         {e.d}
       </span>
       <span dir="ltr" className="font-bold tabular-nums">
-        <span style={{ color: "#f87171" }}>{e.from}%</span>
+        <span style={{ color: "var(--danger)" }}>{e.from}%</span>
         <span style={{ color: "var(--faint)" }}> → </span>
         <span style={{ color: "var(--accent)" }}>{e.to}%</span>
       </span>

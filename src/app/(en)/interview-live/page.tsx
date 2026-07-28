@@ -357,7 +357,7 @@ export default function InterviewLivePage() {
                 <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{t.roleLabel}</label>
                 <input value={role} onChange={(e) => setRole(e.target.value)} placeholder={t.rolePlaceholder} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
               </div>
-              {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+              {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
               <button onClick={start} disabled={busy} className="btn-accent w-full py-3 disabled:opacity-50">
                 {busy ? t.preparing : t.startBtn}
               </button>
@@ -393,7 +393,7 @@ export default function InterviewLivePage() {
                 <span>{t.qOf(idx + 1, questions.length)}</span>
                 {scores.length > 0 && <span>{t.avgLabel} <b style={{ color: "var(--accent)" }}>{avg}/10</b></span>}
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: "rgba(15, 20, 35, 0.128)" }}>
                 <div className="h-full rounded-full" style={{ width: `${(idx / Math.max(1, questions.length)) * 100}%`, background: "linear-gradient(90deg,var(--accent-deep),var(--accent))", transition: "width .5s ease" }} />
               </div>
             </div>
@@ -422,10 +422,10 @@ export default function InterviewLivePage() {
               <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent)" }}>{t.askLabel}</div>
               <div className="text-lg font-bold leading-relaxed">{questions[idx]}</div>
               <button onClick={() => speak(questions[idx])} className="mt-3 rounded-lg px-4 py-2 text-sm font-semibold" style={{ background: "rgba(139,92,246,0.12)", color: "var(--accent)", border: "1px solid rgba(139,92,246,0.3)" }}>{t.listenQ}</button>
-              {voiceOff && <p className="mt-2 text-xs" style={{ color: "#fbbf24" }}>{t.voiceOff}</p>}
+              {voiceOff && <p className="mt-2 text-xs" style={{ color: "var(--warn)" }}>{t.voiceOff}</p>}
             </div>
 
-            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
 
             {/* Controls */}
             {(phase === "asking") && (
@@ -451,8 +451,8 @@ export default function InterviewLivePage() {
                     <span className="font-bold">{t.yourScore}</span>
                     <span className="font-mono text-2xl font-bold" style={{ color: feedback.score >= 7 ? "#a78bfa" : feedback.score >= 5 ? "#fbbf24" : "#f87171" }}>{feedback.score}/10</span>
                   </div>
-                  {feedback.strengths && <p className="text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#a78bfa" }}>{t.strength}</b> {feedback.strengths}</p>}
-                  {feedback.improve && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#fbbf24" }}>{t.toImprove}</b> {feedback.improve}</p>}
+                  {feedback.strengths && <p className="text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#6d28d9" }}>{t.strength}</b> {feedback.strengths}</p>}
+                  {feedback.improve && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "var(--warn)" }}>{t.toImprove}</b> {feedback.improve}</p>}
                   {feedback.model && (
                     <div className="mt-3 rounded-lg p-3 text-sm leading-relaxed" style={{ background: "rgba(139,92,246,0.06)", color: "var(--muted)" }}>
                       <div className="mb-1 font-mono text-xs" style={{ color: "var(--accent)" }}>{t.modelAnswer}</div>

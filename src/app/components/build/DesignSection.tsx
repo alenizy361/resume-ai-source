@@ -273,12 +273,12 @@ export default function DesignSection({
           className="mb-5 rounded-xl p-3"
           style={{ background: "rgba(248,113,113,0.07)", border: "1px solid rgba(248,113,113,0.35)" }}
         >
-          <p className="text-xs font-bold" style={{ color: "#fca5a5" }}>{c.stillWrong(critical.length)}</p>
+          <p className="text-xs font-bold" style={{ color: "var(--danger)" }}>{c.stillWrong(critical.length)}</p>
           <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{c.anyway}</p>
           <button
             onClick={() => onJump("review")}
             className="mt-2 rounded-full px-3 text-xs font-semibold"
-            style={{ border: "1px solid rgba(248,113,113,0.4)", color: "#fca5a5" }}
+            style={{ border: "1px solid rgba(248,113,113,0.4)", color: "var(--danger)" }}
           >
             {c.goFix}
           </button>
@@ -419,7 +419,7 @@ export default function DesignSection({
             </Link>
           </p>
         )}
-        {coverErr && <p className="mt-2 text-xs" style={{ color: "#fca5a5" }}>{coverErr}</p>}
+        {coverErr && <p className="mt-2 text-xs" style={{ color: "var(--danger)" }}>{coverErr}</p>}
         {cover && (
           <div className="mt-3">
             <textarea

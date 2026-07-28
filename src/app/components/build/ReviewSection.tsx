@@ -136,7 +136,7 @@ export default function ReviewSection({
       <div className="mt-6">
         {critical.length > 0 ? (
           <>
-            <div className="bd-label" style={{ color: "#fca5a5" }}>{c.fixFirst}</div>
+            <div className="bd-label" style={{ color: "var(--danger)" }}>{c.fixFirst}</div>
             {critical.map((f) => <FindingRow key={f.id} f={f} tone="critical" jump={c.jump} onJump={onJump} cv={cv} />)}
           </>
         ) : (

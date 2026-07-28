@@ -110,7 +110,7 @@ export default function LinkedInPage() {
               <input value={targetRole} onChange={(e) => setTargetRole(e.target.value)} required
                 placeholder={ar ? "مثال: مدير منتج" : "e.g. Product Manager"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
             </div>
-            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+            {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
             <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">
               {loading ? (
                 <span className="flex items-center justify-center gap-3">
@@ -178,7 +178,7 @@ export default function LinkedInPage() {
                 <p className="mb-3 text-xs" style={{ color: "var(--faint)" }}>{ar ? "استخدمها ضمن العنوان أو النبذة أو الخبرة — وليست قائمة للصقها كما هي." : "Weave these into your headline, About, or experience text — not a list to paste as-is."}</p>
                 <div className="flex flex-wrap gap-2">
                   {result.keywords.map((k, i) => (
-                    <span key={`${k}-${i}`} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(251,191,36,0.14)", color: "#fbbf24" }}>{k}</span>
+                    <span key={`${k}-${i}`} className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: "rgba(251,191,36,0.14)", color: "var(--warn)" }}>{k}</span>
                   ))}
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function LinkedInPage() {
                 <h3 className="mb-3 font-bold">{ar ? "نصائح للملف" : "Profile tips"}</h3>
                 <ul className="space-y-2">
                   {result.tips.map((t, i) => (
-                    <li key={`${t}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "#fbbf24" }}>→</span> {t}</li>
+                    <li key={`${t}-${i}`} className="flex gap-2 text-sm" style={{ color: "var(--muted)" }}><span style={{ color: "var(--warn)" }}>→</span> {t}</li>
                   ))}
                 </ul>
               </div>

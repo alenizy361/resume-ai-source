@@ -31,7 +31,7 @@ export default function ArabicError({
       <div className="card w-full max-w-md p-10 text-center" style={{ borderColor: "rgba(248,113,113,0.4)" }}>
         <div
           className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full font-mono text-3xl"
-          style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "1px solid rgba(248,113,113,0.3)" }}
+          style={{ background: "rgba(248,113,113,0.12)", color: "var(--danger)", border: "1px solid rgba(248,113,113,0.3)" }}
         >
           !
         </div>

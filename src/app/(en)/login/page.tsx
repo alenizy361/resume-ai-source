@@ -116,9 +116,9 @@ function LoginInner() {
                   className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
                   /* 16px, not smaller: iOS Safari zooms the whole page when a focused input's
                      text is under 16px, which then leaves the layout scrolled sideways. */
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--line)", color: "var(--fg)", fontSize: 16 }}
+                  style={{ background: "rgba(15, 20, 35, 0.08)", border: "1px solid var(--line)", color: "var(--fg)", fontSize: 16 }}
                 />
-                {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171" }}>{error}</div>}
+                {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
                 <button type="submit" disabled={state === "sending"} className="ps-cta w-full justify-center disabled:opacity-50">
                   {state === "sending" ? (ar ? "جارٍ الإرسال…" : "Sending…") : (ar ? "أرسل رابط الدخول" : "Send magic link")}
                 </button>
