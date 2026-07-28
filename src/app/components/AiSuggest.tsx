@@ -77,7 +77,7 @@ export default function AiSuggest({
         onClick={suggest}
         disabled={busy}
         className="flex min-h-9 items-center gap-2 rounded-full py-1 pe-3.5 ps-1.5 text-xs font-bold transition-opacity disabled:opacity-70"
-        style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
+        style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "var(--info)" }}
       >
         <BrandOrb variant="button" size={22} busy={busy} />
         {busy ? (ar ? "يكتب لك…" : "Writing for you…") : ar ? "خلّ الذكاء يكتبها" : "Let AI write it"}

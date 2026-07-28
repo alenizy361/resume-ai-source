@@ -378,7 +378,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
        * with a visible warning, matching what the Arabic file already did.
        */
       let text = typeof data.text === "string" ? data.text : "";
-      if (text.length > 8000) {
+      if (data.truncated || text.length > 8000) {
         text = text.slice(0, 8000);
         setError(ar
           ? "سيرتك طويلة — اقتصرنا على أول ٨٠٠٠ حرف. راجع النص قبل الفحص."
@@ -608,7 +608,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
   }
 
   const score = result?.matchScore ?? 0;
-  const scoreColor = score >= 75 ? "#a78bfa" : score >= 55 ? "#fbbf24" : "#f87171";
+  const scoreColor = score >= 75 ? "#6d28d9" : score >= 55 ? "var(--warn)" : "var(--danger)";
   // "MATCH" language only makes sense against a job. In general review (no JD)
   // there's nothing to match — use neutral quality-review wording instead.
   const verdict = mode === "target"
@@ -642,7 +642,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
               <div className="mb-8">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="font-mono text-xs" style={{ color: "var(--faint)" }}>{ar ? `الخطوة ${toArabicDigits(step)} من ٣` : `Step ${step} of 3`}</div>
-                  {step > 1 && <button onClick={() => setStep(step - 1)} className="text-xs font-semibold" style={{ color: "var(--muted)" }}>{ar ? "→ رجوع" : "← Back"}</button>}
+                  {step > 1 && <button onClick={() => setStep(step - 1)} className="t-tap rounded-lg px-3 text-xs font-semibold" style={{ color: "var(--muted)" }}>{ar ? "→ رجوع" : "← Back"}</button>}
                 </div>
                 <div className="flex gap-2">
                   {[1, 2, 3].map((s) => (
@@ -699,9 +699,9 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 <textarea value={resume} onChange={(e) => setResume(e.target.value)}
                   placeholder={ar ? "الصق سيرتك هنا بأي لغة — الخبرات، التعليم، المهارات، معلومات التواصل…" : "Paste your resume here — work experience, education, skills, contact info…"}
                   rows={12} maxLength={8000}
-                  className="w-full resize-y rounded-xl px-4 py-3 text-sm focus:outline-none"
+                  className="w-full resize-y rounded-xl px-4 py-3 text-sm"
                   style={{ ...inputStyle, minHeight: "11rem" }} />
-                <p className="mt-2 font-mono text-xs" dir="ltr" style={{ color: resume.length > 7500 ? "#fbbf24" : "var(--faint)", textAlign: ar ? "right" : "left" }}>{resume.length}/8000</p>
+                <p className="mono-nums mt-2 font-mono text-xs" dir="ltr" style={{ color: resume.length > 7500 ? "var(--warn)" : "var(--faint)", textAlign: ar ? "right" : "left" }}>{ar ? `${toArabicDigits(resume.length)}/${toArabicDigits(8000)}` : `${resume.length}/8000`}</p>
                 {extraction && uploadedName && (
                   <div className="mt-3 rounded-xl p-4" style={{ background: "rgba(139,92,246,0.05)", border: "1px solid var(--line)" }}>
                     <div className="mb-2 text-sm font-bold" style={{ color: "var(--accent)" }}>{ar ? "هذا ما قرأناه — تحقّق منه" : "Here’s what we read — check it"}</div>
@@ -734,7 +734,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 <div className="mb-3 flex flex-wrap gap-2">
                   <input value={jobUrl} onChange={(e) => setJobUrl(e.target.value)} dir="ltr"
                     placeholder={ar ? "الصق رابط وظيفة (لينكدإن، بيت…) للاستيراد" : "Paste a job link (LinkedIn, Bayt…) to import"}
-                    className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm focus:outline-none"
+                    className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                   <button type="button" onClick={importJobFromUrl} disabled={fetchingJob || !jobUrl.trim()}
                     className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>{fetchingJob ? (ar ? "جارٍ الجلب…" : "Fetching…") : (ar ? "استيراد" : "Import")}</button>
@@ -743,24 +743,24 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                     <input type="file" accept=".pdf,.docx,.txt,.md" onChange={handleJdFile} className="hidden" disabled={uploadingJd} />
                   </label>
                 </div>
-                {jobUrlMsg && <p className="mb-2 text-xs" style={{ color: jobUrlMsg.startsWith("✓") || jobUrlMsg.startsWith("تم") ? "var(--accent)" : "#fbbf24" }}>{jobUrlMsg}</p>}
+                {jobUrlMsg && <p className="mb-2 text-xs" style={{ color: jobUrlMsg.startsWith("✓") || jobUrlMsg.startsWith("تم") ? "var(--accent)" : "var(--warn)" }}>{jobUrlMsg}</p>}
                 {jdFileMsg && <p className="mb-2 text-xs" style={{ color: "var(--accent)" }}>{jdFileMsg}</p>}
                 <textarea value={jobDescription}
                   onChange={(e) => { const v = e.target.value; setJobDescription(v); if (v.trim().length >= 30) setMode("target"); else setMode("general"); }}
                   placeholder={ar ? "الصق إعلان الوظيفة هنا." : "…or paste the job description here."}
                   rows={10} maxLength={4000}
-                  className="w-full resize-y rounded-xl px-4 py-3 text-sm focus:outline-none"
+                  className="w-full resize-y rounded-xl px-4 py-3 text-sm"
                   style={{ ...inputStyle, minHeight: "9rem" }} />
                 {/* Employer + target country — optional context folded into the analysis, not a
                     second requirement to extract. See the note beside `jdWithContext` server-side. */}
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <input value={employer} onChange={(e) => setEmployer(e.target.value.slice(0, 120))}
                     placeholder={ar ? "جهة التوظيف (اختياري)" : "Employer name (optional)"}
-                    className="min-w-0 rounded-lg px-3 py-2 text-sm focus:outline-none"
+                    className="min-w-0 rounded-lg px-3 py-2 text-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                   <input value={targetCountry} onChange={(e) => setTargetCountry(e.target.value.slice(0, 60))}
                     placeholder={ar ? "الدولة المستهدفة (اختياري)" : "Target country (optional)"}
-                    className="min-w-0 rounded-lg px-3 py-2 text-sm focus:outline-none"
+                    className="min-w-0 rounded-lg px-3 py-2 text-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -785,7 +785,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 </div>
                 {/* Template pick (optional) — choose the look upfront; changeable on the result too. */}
                 <div className="mb-1 font-mono text-xs" style={{ color: "var(--faint)" }}>{ar ? "القالب (اختياري)" : "Template (optional)"}</div>
-                <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
+                <div className="scroll-strip mb-6 flex gap-2 pb-1">
                   {TEMPLATE_CATALOG.map((tp) => (
                     <button key={tp.slug} onClick={() => setTplSlug(tp.slug)}
                       className="shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold"
@@ -975,7 +975,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                   ) : (
                     <div className="mb-4 flex flex-wrap gap-2">
                       <input type="email" value={emailTo} onChange={(e) => setEmailTo(e.target.value)} dir="ltr" placeholder="you@email.com"
-                        className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                        className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm" style={{ background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                       <button type="button" onClick={emailResults} disabled={emailState === "sending" || !emailTo.trim()}
                         className="btn-ghost shrink-0 px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ color: "var(--accent)" }}>
                         {emailState === "sending" ? (ar ? "جارٍ الإرسال…" : "Sending…") : (ar ? "✉ أرسل نتيجتي بالبريد" : "✉ Email my results")}
@@ -1000,7 +1000,7 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                 {!result.locked && resumeView === "designed" ? (
                   <div>
                     {/* Template picker — choose from the full catalogue, not one. */}
-                    <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+                    <div className="scroll-strip mb-3 flex gap-2 pb-1">
                       {TEMPLATE_CATALOG.map((tp) => (
                         <button key={tp.slug} onClick={() => setTplSlug(tp.slug)}
                           className="shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold"
@@ -1180,15 +1180,15 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                         // The trust differentiator: every edit is labelled with its
                         // honesty class so nothing feels invented behind your back.
                         const B: Record<string, { t: string; c: string; bg: string }> = ar ? {
-                          "rephrase": { t: "إعادة صياغة فقط", c: "#93c5fd", bg: "rgba(147,197,253,0.12)" },
+                          "rephrase": { t: "إعادة صياغة فقط", c: "var(--info)", bg: "rgba(147,197,253,0.12)" },
                           "from-your-data": { t: "من بياناتك", c: "#86efac", bg: "rgba(134,239,172,0.12)" },
                           "needs-confirmation": { t: "⚠ تأكّد أنها صحيحة", c: "var(--warn)", bg: "rgba(251,191,36,0.12)" },
-                          "missing-requirement": { t: "ناقصة — أضفها", c: "#f87171", bg: "rgba(248,113,113,0.12)" },
+                          "missing-requirement": { t: "ناقصة — أضفها", c: "var(--danger)", bg: "rgba(248,113,113,0.12)" },
                         } : {
-                          "rephrase": { t: "Rephrased only", c: "#93c5fd", bg: "rgba(147,197,253,0.12)" },
+                          "rephrase": { t: "Rephrased only", c: "var(--info)", bg: "rgba(147,197,253,0.12)" },
                           "from-your-data": { t: "From your data", c: "#86efac", bg: "rgba(134,239,172,0.12)" },
                           "needs-confirmation": { t: "⚠ Confirm this is true", c: "var(--warn)", bg: "rgba(251,191,36,0.12)" },
-                          "missing-requirement": { t: "Missing — you must add", c: "#f87171", bg: "rgba(248,113,113,0.12)" },
+                          "missing-requirement": { t: "Missing — you must add", c: "var(--danger)", bg: "rgba(248,113,113,0.12)" },
                         };
                         const b = B[imp.source || "rephrase"] || B.rephrase;
                         return (

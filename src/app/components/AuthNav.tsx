@@ -30,12 +30,12 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
   if (me.signedIn) {
     return (
       <>
-        <Link href="/account" className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
+        <Link href={ar ? "/ar/account" : "/account"} className="flex items-center gap-2 text-sm" style={{ color: "var(--muted)" }}>
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: "var(--accent)" }} />
           <span className="max-w-40 truncate" dir="ltr">{me.email}</span>
         </Link>
         {me.unlimited ? (
-          <Link href="/account" className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
+          <Link href={ar ? "/ar/account" : "/account"} className="btn-ghost px-4 py-2 text-sm font-semibold" style={{ color: "var(--accent)" }}>
             {ar ? "غير محدود ✓" : "Unlimited ✓"}
           </Link>
         ) : unlockButton}
@@ -45,7 +45,7 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
 
   return (
     <>
-      <Link href="/login" className="text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
+      <Link href={ar ? "/ar/login" : "/login"} className="text-sm" style={{ color: "var(--muted)" }}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
       {unlockButton}
     </>
   );

@@ -81,7 +81,7 @@ export default function AiStrip({
       {ai.message && (
         <p
           className="mt-2 text-xs leading-relaxed"
-          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : ai.state === "empty" ? "var(--faint)" : "#fca5a5" }}
+          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "var(--warn)" : ai.state === "empty" ? "var(--faint)" : "var(--danger)" }}
         >
           {ai.message}
         </p>

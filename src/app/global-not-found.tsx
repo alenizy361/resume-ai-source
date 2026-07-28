@@ -66,8 +66,8 @@ export default function GlobalNotFound() {
               <a href="/" className="btn-accent px-6 py-3">Back home</a>
               <a
                 href="/optimize"
-                className="rounded-xl px-6 py-3 font-semibold"
-                style={{ border: "1px solid rgba(255,255,255,0.18)", color: "var(--fg)" }}
+                className="btn-ghost px-6 py-3 font-semibold"
+                style={{ color: "var(--fg)" }}
               >
                 Scan a resume
               </a>

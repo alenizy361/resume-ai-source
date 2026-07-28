@@ -93,7 +93,7 @@ type LangMode = "en" | "ar" | "bi";
 interface Tpl { slug: string; name: string; nameAr: string; variant: TemplateVariant; accent: string; tag: string; tagAr: string; best?: boolean }
 
 const TEMPLATES: Tpl[] = [
-  { slug: "ats-pro", name: "ATS Pro", nameAr: "إيه تي إس برو", variant: "column", accent: "#0f766e", tag: "Single-column · Best ATS pass-rate", tagAr: "عمود واحد · الأعلى في اجتياز ATS", best: true },
+  { slug: "ats-pro", name: "ATS Pro", nameAr: "ATS برو", variant: "column", accent: "#0f766e", tag: "Single-column · Best ATS pass-rate", tagAr: "عمود واحد · الأعلى في اجتياز ATS", best: true },
   { slug: "onyx", name: "Onyx", nameAr: "أونيكس", variant: "classic", accent: "#0f766e", tag: "Classic rule · Balanced", tagAr: "كلاسيكي · متوازن" },
   { slug: "riyadh", name: "Riyadh", nameAr: "الرياض", variant: "classic", accent: "#b45309", tag: "Warm · Gulf", tagAr: "دافئ · خليجي" },
   { slug: "azure", name: "Azure", nameAr: "أزور", variant: "modern", accent: "#1d4ed8", tag: "Accent bars · Modern", tagAr: "لمسات جانبية · عصري" },
@@ -120,12 +120,15 @@ export default function TemplatesGallery({ ar = false }: { ar?: boolean }) {
 
   return (
     <div>
-      {/* Language mode toggle */}
+      {/* Language mode toggle. `.seg` carries the inactive state AND its hover (globals.css);
+          only the selected fill stays inline, because only that one varies per instance — an
+          inline background is unreachable by a CSS `:hover`, which is why these three buttons
+          had no pointer response at all. */}
       <div className="mb-8 flex justify-center gap-2">
         {modeBtns.map((b) => (
-          <button key={b.id} onClick={() => setMode(b.id)}
-            className="rounded-lg px-4 py-2 text-sm font-semibold transition-all"
-            style={mode === b.id ? { background: "var(--accent)", color: "#ffffff" } : { background: "var(--surface)", color: "var(--muted)", border: "1px solid var(--line)" }}>
+          <button key={b.id} onClick={() => setMode(b.id)} aria-pressed={mode === b.id}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold ${mode === b.id ? "" : "seg"}`}
+            style={mode === b.id ? { background: "var(--accent-deep)", color: "#ffffff" } : undefined}>
             {b.label}
           </button>
         ))}

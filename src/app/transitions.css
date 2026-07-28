@@ -79,6 +79,52 @@
 }
 .t-tap:active { transform: scale(0.97); }
 
+/*
+ * ...and it must be BIG enough to press.
+ *
+ * Measured at 390px on the Arabic flows: builder step-index links 14px tall, the optimize
+ * template chips 30px, the account tabs 37px, ten "use this template" CTAs 40px, the checkout
+ * modal's only dismissal 28px. 44px is the floor Apple and the WCAG target-size rule agree on,
+ * and this is the class every one of those controls already carries — so it is stated once.
+ *
+ * `inline-flex` + centring rather than a padding bump: padding would move the text off its
+ * baseline in a row of siblings, where extra HEIGHT around a centred label does not.
+ */
+.t-tap {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* A tap target inside running prose is a link, not a button — forcing 44px there would
+   break the line box it sits in. */
+p .t-tap, li .t-tap, .t-tap-inline { min-height: 0; display: inline; }
+
+/*
+ * ── the hover this class was already paying for ──
+ *
+ * `.t-tap` has transitioned `background-color` and `border-color` since it was written, and
+ * nothing ever changed either one. Measured across the product: the /account tab bar (six tabs),
+ * every "Related" chip rail on /optimize, /interview, /builder and /templates, the brand link and
+ * the language toggle in every header — base and hover computed styles byte-identical. On a
+ * desktop, a control that does not respond to the pointer does not read as a control, which is
+ * the "everything looks flat, as if nothing is clickable" note in `.ps-cta` restated on the
+ * secondary tier.
+ *
+ * Deliberately quiet, and deliberately the SAME wash `.btn-ghost:hover` already uses — the point
+ * is that the secondary tier answers, not that it competes with the primary one.
+ *
+ * `@media (hover: hover)` so a touch device never latches the hover state after a tap, which on
+ * iOS leaves a control looking permanently pressed until something else is touched.
+ */
+@media (hover: hover) {
+  /* Selected tabs are excluded rather than overridden: they paint their own fill, and washing
+     over it would make the current tab flicker toward the colour of the ones around it. */
+  .t-tap:not([aria-selected="true"]):not([aria-current]):not(:disabled):hover {
+    background-color: rgba(15, 20, 35, 0.05);
+  }
+}
+
 /* ──────────────────────────────────────────────────────────────────────────────
    2. t-land — the accepted item arriving where it now lives
    ────────────────────────────────────────────────────────────────────────────── */

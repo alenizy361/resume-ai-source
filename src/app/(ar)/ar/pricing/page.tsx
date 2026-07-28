@@ -23,15 +23,16 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
   const p = PLANS[id];
   return (
     <div className="card p-8" style={highlight ? { borderColor: "rgba(139,92,246,0.5)", background: "rgba(139,92,246,0.06)", position: "relative", boxShadow: "0 30px 80px -30px rgba(139,92,246,0.55)" } : undefined}>
-      {/* left-5 on the RTL card: the plan name starts at the RIGHT here, and the badge —
-          copied from the EN page's right-5 — sat directly on top of it at every width. */}
-      {highlight && (
-        <div className="absolute left-5 top-5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold" style={{ background: "var(--accent)", color: "#ffffff" }}>الأفضل قيمة</div>
-      )}
-      {/* Room for the corner badge: the name line spans the card, so on narrow cards the
-          long label ran under the badge whichever side it sat on. inline-end = the badge's
-          side in this direction. */}
-      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)", paddingInlineEnd: highlight ? 92 : undefined }}>{p.nameAr} · دفعة واحدة</div>
+      {/* In flow, matching the EN card — see that file for why reserving padding for an
+          absolutely-positioned badge could not hold. A flex row needs no side-awareness at all:
+          `justify-between` follows the writing direction on its own, which is what the old
+          left-5/right-5 pair was hand-simulating. */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.nameAr}</div>
+        {highlight && (
+          <div className="shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>الأفضل قيمة</div>
+        )}
+      </div>
       <div className="mt-4 flex items-baseline gap-1">
         {/* formatPrice, not p.priceSar: the raw number renders as "35 ريالاً" — Western
             digits on an Arabic page — and it bypasses any configured promotion. */}

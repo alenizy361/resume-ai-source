@@ -72,6 +72,6 @@ export const ORB_PALETTE = {
   energy: "#3b82f6",
   spark: "#67e8f9",
   rim: "#93c5fd",
-  success: "#34d399",
-  warning: "#fbbf24",
+  success: "var(--ok)",
+  warning: "var(--warn)",
 };

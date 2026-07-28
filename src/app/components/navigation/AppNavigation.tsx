@@ -42,7 +42,7 @@ export default function AppNavigation({ lang, active, orbState = "idle" }: {
   return (
     <nav
       aria-label={ar ? "تنقّل التطبيق" : "Application navigation"}
-      className="flex items-center gap-1 overflow-x-auto"
+      className="scroll-strip flex items-center gap-1"
       style={{ padding: "10px 4px", borderBottom: "1px solid var(--line)", marginBottom: 20 }}
     >
       <span style={{ flexShrink: 0, marginInlineEnd: 8 }}>

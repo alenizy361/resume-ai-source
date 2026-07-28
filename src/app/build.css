@@ -361,7 +361,9 @@
   max-height: min(70dvh, 560px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: #0d0a1f;
+  /* Was #0d0a1f — a dark-theme literal left behind, under rows coloured `var(--muted)`.
+     Measured 1.02–1.12:1: the ONLY navigation of an eleven-step wizard, black on black. */
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 20px 20px 0 0;
   padding: 14px 14px calc(14px + env(safe-area-inset-bottom));

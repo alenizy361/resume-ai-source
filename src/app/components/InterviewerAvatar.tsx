@@ -8,8 +8,19 @@
  */
 export default function InterviewerAvatar({ speaking = false, label = "المُقابِل", lang = "ar" }: { speaking?: boolean; label?: string; lang?: "ar" | "en" }) {
   const status = lang === "en" ? (speaking ? "· speaking…" : "· listening") : (speaking ? "· يتحدّث…" : "· ينصت");
+  /*
+   * Sized by its CONTENT, not by its caller.
+   *
+   * This was `h-full w-full` inside a `h-40 w-40` box — a 160px frame around a stack that is
+   * really ~250px tall (a 172px face, a 24px equalizer, two 12px gaps and the caption). Nothing
+   * clipped, because nothing said `overflow: hidden`; the caption simply drew 30px BELOW its own
+   * parent, on top of the "AI video interview" chip underneath it, so "listening" appeared struck
+   * through the chip's border. Measured 10px of overlap at both 390 and 1280.
+   *
+   * The caller now controls only the width, which is all it ever had a reason to control.
+   */
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+    <div className="flex w-full flex-col items-center justify-center gap-3">
       <div className="relative flex items-center justify-center" style={{ width: 172, height: 172 }}>
         {speaking && (
           <>

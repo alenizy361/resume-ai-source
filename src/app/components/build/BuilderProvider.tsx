@@ -39,7 +39,7 @@ import { applyVersionToProfile, buildTranslationSource, translationFresh } from 
 import { computeProgress } from "@/app/lib/interviewGuards";
 import { readDraft } from "@/app/lib/draftStore";
 import {
-  endAnonymousVisit, listResumes, markMirrored, mayRestore, migrateLegacy, newResumeId, readResume, titleOf, writeResume,
+  endAnonymousVisit, keepVisitAlive, listResumes, markMirrored, mayRestore, migrateLegacy, newResumeId, readResume, titleOf, writeResume,
 } from "@/app/lib/resumeStore";
 import { useOwner } from "../useOwner";
 import { useServerSync } from "./useServerSync";
@@ -172,6 +172,9 @@ export default function BuilderProvider({
    * hydration itself, the pack seeding the bag, and a generation being cached with its cost.
    */
   const touched = useRef(false);
+  /* Set by the two hydrations that bring content storage does not already hold — see the autosave
+     gate for why an untouched document is otherwise never written. */
+  const mustPersist = useRef(false);
   const dispatchUser = useCallback((a: Action) => {
     if (a.t !== "hydrate" && a.t !== "seed" && a.t !== "ai") touched.current = true;
     dispatch(a);
@@ -245,6 +248,7 @@ export default function BuilderProvider({
     /* A fresh hydration is a fresh document: nothing has been touched IN it yet, whatever was
        true of the resume loaded before it. */
     touched.current = false;
+    mustPersist.current = false;
 
     /*
      * ══════════════════════════════════════════════════════════════════════════════
@@ -322,11 +326,15 @@ export default function BuilderProvider({
          jump from "loading" to "saved" past an upgrade claims none took place. */
       const brought = migrateBuilder(saved);
       upgraded = brought.migrated;
+      /* An upgraded record must reach disk in its new shape without waiting for a keystroke —
+         otherwise every load re-runs the same migration over the same stale bytes. */
+      if (upgraded) mustPersist.current = true;
       dispatch({ t: "hydrate", state: brought.state });
     } else if (fromChat) {
       // A draft started in the chat: carry the confirmed resume across, which is the
       // entire point of the two doors sharing a key. Only `profile` crosses, because
       // only `profile` is confirmed content — the chat has no suggestion bag.
+      mustPersist.current = true;   // real content, and nothing in storage holds it yet
       dispatch({ t: "hydrate", state: { ...fresh, profile: readDraft(lang).profile } });
     } else {
       dispatch({ t: "hydrate", state: fresh });
@@ -410,6 +418,10 @@ export default function BuilderProvider({
    */
   const flush = useCallback(() => {
     if (!resumeId || !mayWrite(lifecycle)) return;
+    /* The same gate the debounced autosave uses. `flush` runs on navigation and `pagehide`, so
+       without it merely opening /builder and clicking away still wrote the phantom empty record
+       the autosave now refuses. */
+    if (!touched.current && !mustPersist.current) return;
     if (writeResume(owner, resumeId, lang, live.current)) {
       setWritten(live.current);
       setFailed(false);
@@ -420,8 +432,35 @@ export default function BuilderProvider({
     syncPush.current();
   }, [resumeId, lang, lifecycle, owner]);
 
+  /*
+   * Hold the anonymous visit open while a builder tab is on screen, so a SECOND tab is not
+   * mistaken for a new visit — which used to delete every stored CV. See the lease block in
+   * `resumeStore`. Mounted here rather than in the page because this provider is the one thing
+   * every builder route shares, and the lease must outlive any single step.
+   */
+  useEffect(() => keepVisitAlive(), []);
+
   useEffect(() => {
     if (!hydrated || !resumeId || damagedDraft) return;
+    /*
+     * Nothing is written until the user has actually touched the document.
+     *
+     * The autosave was unconditional, so merely LOADING /builder minted an id and saved an empty
+     * record 450ms later — and then `BuilderStart` listed it. A visitor who had created nothing
+     * was shown "Untitled · 0 of 11 steps done" under "Your CVs here", twice over if they pressed
+     * "Build a new CV" and came back. Phantom rows in the one list that is supposed to mean
+     * "these are yours".
+     *
+     * `touched` is false for `hydrate`/`seed`/`ai` (see its declaration), which is exactly right
+     * here: an AI seeding suggestions into a draft nobody has typed in is not a document either.
+     *
+     * `mustPersist` is the carve-out for the two hydrations that DO bring content storage does not
+     * already hold — a resume carried across from the chat door, and a stored record upgraded to a
+     * newer schema. Those must reach disk without waiting for a keystroke. A plain read of an
+     * existing record sets neither flag, so re-opening a CV no longer bumps its revision and
+     * reshuffles "most recent" just for having been looked at.
+     */
+    if (!touched.current && !mustPersist.current) return;
     const id = setTimeout(() => {
       if (writeResume(owner, resumeId, lang, state)) { setWritten(state); setFailed(false); }
       else setFailed(true);

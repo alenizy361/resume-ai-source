@@ -80,6 +80,11 @@ export default function CheckoutButton({
    */
   useEffect(() => {
     if (!open) return;
+    /* Escape closes it, like every other dialog in the product. It did not, and a modal that
+       locks the page's scroll while refusing the standard way out is a trap — never mid-payment,
+       and never while the request is in flight. */
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && !loading && !paying) reset(); };
+    window.addEventListener("keydown", onKey);
     /* BOTH elements: with only body locked, the wheel still scrolled the page through the
        root scroller (measured scrollY 0 → 400 with body already overflow:hidden). */
     const prevBody = document.body.style.overflow;
@@ -87,10 +92,11 @@ export default function CheckoutButton({
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     return () => {
+      window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevBody;
       document.documentElement.style.overflow = prevRoot;
     };
-  }, [open]);
+  }, [open, loading, paying]);
 
   // Bind the Paylink SDK to the card fields ONLY AFTER they've rendered (phase
   // "card"). Initializing earlier bound to elements that weren't in the DOM yet,
@@ -158,7 +164,10 @@ export default function CheckoutButton({
       const res = await fetch("/api/pay", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan, name, email, mobile, locale: ar ? "ar" : "en" }) });
       const data = await res.json();
-      if (!res.ok || !data.url || !data.transactionNo) throw new Error(data.error || t.failed);
+      /* The localized string wins on an Arabic surface: a server error is written in one
+         language and the payment step is the worst place to leak it. The server's text is kept
+         for English, where it is more specific than the generic fallback. */
+      if (!res.ok || !data.url || !data.transactionNo) throw new Error(ar ? t.failed : (data.error || t.failed));
       txRef.current = String(data.transactionNo);
       urlRef.current = String(data.url);
       setPayUrl(String(data.url));

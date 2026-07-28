@@ -17,10 +17,10 @@ interface KeywordResult {
 const inputStyle = { background: "var(--surface)", border: "1px solid var(--line)", color: "var(--fg)" };
 
 const SECTIONS: Array<{ key: keyof KeywordResult; en: string; ar: string; pillBg: string; pillFg: string }> = [
-  { key: "mustHave", en: "Must-have (highest priority)", ar: "الأهم (أولوية عالية)", pillBg: "rgba(251,191,36,0.14)", pillFg: "#fbbf24" },
+  { key: "mustHave", en: "Must-have (highest priority)", ar: "الأهم (أولوية عالية)", pillBg: "rgba(251,191,36,0.14)", pillFg: "var(--warn)" },
   { key: "hardSkills", en: "Hard skills", ar: "المهارات التقنية", pillBg: "rgba(139,92,246,0.14)", pillFg: "var(--accent)" },
   { key: "tools", en: "Tools & systems", ar: "الأدوات والأنظمة", pillBg: "rgba(139,92,246,0.14)", pillFg: "var(--accent)" },
-  { key: "certifications", en: "Certifications", ar: "الشهادات", pillBg: "rgba(52,211,153,0.14)", pillFg: "#34d399" },
+  { key: "certifications", en: "Certifications", ar: "الشهادات", pillBg: "rgba(52,211,153,0.14)", pillFg: "var(--ok)" },
   { key: "softSkills", en: "Soft skills", ar: "المهارات الشخصية", pillBg: "rgba(148,163,184,0.14)", pillFg: "var(--muted)" },
 ];
 
@@ -88,12 +88,12 @@ export default function JdKeywordExtractor({ defaultAr }: { defaultAr: boolean }
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "نص الإعلان الوظيفي" : "Job description text"}</label>
               <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={10} required
                 placeholder={ar ? "الصق نص الإعلان الوظيفي كاملاً…" : "Paste the full job posting text…"}
-                className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                className="w-full resize-none rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "المسمى الوظيفي (اختياري)" : "Role title (optional)"}</label>
               <input value={roleTitle} onChange={(e) => setRoleTitle(e.target.value)}
-                placeholder={ar ? "مثال: محلل بيانات" : "e.g. Data Analyst"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "مثال: محلل بيانات" : "e.g. Data Analyst"} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
             <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">

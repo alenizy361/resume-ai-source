@@ -95,5 +95,26 @@ console.log("\n── the existing standard-block behaviour is unchanged ──"
   ok("empty text defaults to en", dominantScript("") === "en");
 }
 
+console.log("\n── punctuation from the Arabic block is not Arabic CONTENT ──");
+{
+  /*
+   * The builder joined confirmed skills with `، ` regardless of CV language, so a wholly English
+   * CV read as Arabic to `hasArabic` — and `pdfRefusesArabic` then took the plain ATS PDF download
+   * away from it and explained that "an Arabic CV downloads as Word". Two skills was the trigger;
+   * with one there is no separator, so it looked unrelated to skills entirely.
+   *
+   * The join is fixed at its two sources, but every CV already saved in a browser still carries the
+   * Arabic comma — so the detector has to be right too, or those CVs stay broken until edited.
+   */
+  ok("an English skills line joined with an Arabic comma is NOT Arabic",
+    !hasArabic("General X-ray، Computed Tomography"),
+    "this is the exact string that removed the PDF download from English CVs");
+  ok("nor is an Arabic question mark or semicolon alone", !hasArabic("Ready? Yes؛ always؟"));
+  ok("but one real Arabic LETTER beside the same punctuation still is",
+    hasArabic("General X-ray، تصوير"));
+  ok("and a genuine Arabic skills line is unaffected",
+    hasArabic("أشعة عامة، التصوير المقطعي"));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

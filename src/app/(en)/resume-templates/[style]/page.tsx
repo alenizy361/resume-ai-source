@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ style: string
               <Link href="/optimize" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Already have a resume? Check it</Link>
             </div>
             <div className="card mt-6 p-4 text-sm" style={{ color: "var(--muted)" }}>
-              <span style={{ color: t.atsScore >= 90 ? "var(--accent)" : "#fbbf24" }}>● ATS note:</span> {t.atsNote}
+              <span style={{ color: t.atsScore >= 90 ? "var(--accent)" : "var(--warn)" }}>● ATS note:</span> {t.atsNote}
             </div>
           </div>
           <div className="mx-auto w-full max-w-xs"><TemplatePreview t={t} /></div>

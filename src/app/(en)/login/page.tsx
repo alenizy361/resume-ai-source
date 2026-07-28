@@ -113,7 +113,7 @@ function LoginInner() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   required
-                  className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
+                  className="w-full rounded-xl px-4 py-3 text-sm"
                   /* 16px, not smaller: iOS Safari zooms the whole page when a focused input's
                      text is under 16px, which then leaves the layout scrolled sideways. */
                   style={{ background: "rgba(15, 20, 35, 0.08)", border: "1px solid var(--line)", color: "var(--fg)", fontSize: 16 }}

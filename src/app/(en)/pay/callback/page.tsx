@@ -7,6 +7,7 @@ import Link from "next/link";
 import AuroraBurst from "@/app/components/orb/AuroraBurst";
 import { useOwner } from "@/app/components/useOwner";
 import { removePersonal, writePersonal } from "@/app/lib/personalStore";
+import { BRAND } from "@/app/lib/brand";
 
 function CallbackInner() {
   const params = useSearchParams();
@@ -262,7 +263,7 @@ function CallbackInner() {
         </p>
         {showSupport && (
           <p className="mt-3 text-sm">
-            <a href="mailto:alanziabdulaziz4@gmail.com?subject=Payment%20issue" className="font-semibold underline" style={{ color: paid ? "var(--gold)" : "var(--accent)" }}>
+            <a href={`mailto:${BRAND.supportEmail}?subject=Payment%20issue`} className="font-semibold underline" style={{ color: paid ? "var(--gold)" : "var(--accent)" }}>
               {t.contactSupport}
             </a>
           </p>

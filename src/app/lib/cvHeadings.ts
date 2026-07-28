@@ -81,9 +81,29 @@ const ARABIC_RANGE =
   "ﭐ-﷿" +  // U+FB50–FDFF  Arabic Presentation Forms-A
   "ﹰ-﻿";   // U+FE70–FEFF  Arabic Presentation Forms-B
 
+/*
+ * PUNCTUATION IS NOT A SCRIPT.
+ *
+ * These live inside the U+0600–06FF block but are marks, not letters — Unicode itself classes the
+ * comma, semicolon and question mark as shared punctuation rather than Arabic script. A string
+ * whose only "Arabic" is one of them is not an Arabic string.
+ *
+ * That distinction was worth real money. The builder joined confirmed skills with `، ` regardless
+ * of CV language, so an all-English CV came out as "General X-ray، Computed Tomography" — and
+ * `hasArabic` said yes, and `pdfRefusesArabic` said yes, and the design step REMOVED the plain
+ * ATS PDF download and printed "an Arabic CV downloads as Word" over a CV with no Arabic in it.
+ * Two skills was the whole trigger; one skill needs no separator, so the defect appeared at the
+ * third click and looked like nothing to do with skills.
+ *
+ * The join is fixed at the source (`builderDoc.confirmItem`, `builderState.removeSkill`), but every
+ * CV already stored in a browser still carries the Arabic comma. Fixing the detector is what makes
+ * those whole again without a migration.
+ */
+const ARABIC_MARKS = /[،؛؟٪-٭۔]/g;
+
 /** Anything with Arabic letters in it. */
 export function hasArabic(s: string): boolean {
-  return new RegExp(`[${ARABIC_RANGE}]`).test(s);
+  return new RegExp(`[${ARABIC_RANGE}]`).test(s.replace(ARABIC_MARKS, ""));
 }
 
 /**

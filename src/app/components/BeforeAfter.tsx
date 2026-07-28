@@ -22,7 +22,7 @@ export default function BeforeAfter({
     return () => clearTimeout(id);
   }, [after]);
 
-  const barColor = (v: number) => (v >= 75 ? "#a78bfa" : v >= 55 ? "#fbbf24" : "#f87171");
+  const barColor = (v: number) => (v >= 75 ? "#6d28d9" : v >= 55 ? "var(--warn)" : "var(--danger)");
   const t = (en: string, arText: string) => (ar ? arText : en);
 
   if (gain <= 0) return null;

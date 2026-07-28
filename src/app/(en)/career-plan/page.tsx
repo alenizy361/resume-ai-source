@@ -108,21 +108,21 @@ export default function CareerPlanPage() {
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "دورك الحالي" : "Current role"}</label>
               <input value={currentRole} onChange={(e) => setCurrentRole(e.target.value)} required
-                placeholder={ar ? "مثال: محاسب" : "e.g. Accountant"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "مثال: محاسب" : "e.g. Accountant"} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "الدور المستهدف" : "Target role"}</label>
               <input value={targetRole} onChange={(e) => setTargetRole(e.target.value)} required
-                placeholder={ar ? "مثال: مدير مالي" : "e.g. Finance Manager"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "مثال: مدير مالي" : "e.g. Finance Manager"} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "الدولة (اختياري)" : "Country (optional)"}</label>
               <input value={country} onChange={(e) => setCountry(e.target.value)}
-                placeholder={ar ? "مثال: السعودية" : "e.g. Saudi Arabia"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "مثال: السعودية" : "e.g. Saudi Arabia"} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "الجدول الزمني" : "Timeline"}</label>
-              <select value={timeline} onChange={(e) => setTimeline(e.target.value)} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle}>
+              <select value={timeline} onChange={(e) => setTimeline(e.target.value)} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle}>
                 {timelines.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>

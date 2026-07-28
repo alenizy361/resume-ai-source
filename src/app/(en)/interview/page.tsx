@@ -162,12 +162,12 @@ export default function InterviewPage() {
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "سيرتك" : "Your resume"}</label>
               <textarea value={resume} onChange={(e) => setResume(e.target.value)} rows={8} required
-                placeholder={ar ? "الصق سيرتك…" : "Paste your resume..."} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "الصق سيرتك…" : "Paste your resume..."} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "إعلان الوظيفة" : "Job description"}</label>
               <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={6} required
-                placeholder={ar ? "الصق إعلان الوظيفة…" : "Paste the job posting..."} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "الصق إعلان الوظيفة…" : "Paste the job posting..."} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             {error && (
               <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>
@@ -262,7 +262,7 @@ export default function InterviewPage() {
                                         value={draft[field]}
                                         onChange={(e) => setStars((s) => ({ ...s, [i]: { ...(s[i] ?? EMPTY_STAR), [field]: e.target.value } }))}
                                         rows={2}
-                                        className="w-full resize-none rounded-lg px-3 py-2 text-xs focus:outline-none"
+                                        className="w-full resize-none rounded-lg px-3 py-2 text-xs"
                                         style={inputStyle}
                                       />
                                     </div>

@@ -506,7 +506,7 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       const kept = String(s.profile.skills || "")
         .split(/[,،]/).map((x) => x.trim()).filter(Boolean)
         .filter((x) => x !== a.text);
-      return { ...s, profile: { ...s.profile, skills: kept.join("، ") } };
+      return { ...s, profile: { ...s.profile, skills: kept.join(cvLang(s.target) === "ar" ? "، " : ", ") } };
     }
 
     case "confirm":

@@ -40,7 +40,7 @@ const STATUS_COLORS: Record<JobStatus, string> = {
   applied: "#1d4ed8",
   interview: "var(--warn)",
   offer: "#6d28d9",
-  rejected: "#f87171",
+  rejected: "var(--danger)",
 };
 
 // Bilingual UI strings — the account page is a shared route, so an Arabic
@@ -105,7 +105,10 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   // otherwise make the banner flash and immediately vanish.
   const [welcome] = useState(useSearchParams().get("welcome") === "1");
   useEffect(() => {
-    if (welcome) router.replace("/account", { scroll: false });
+    /* The path the reader is ON, not the English one — this bounced every Arabic
+       visitor (including everyone completing a magic link) onto the English dashboard
+       and dropped the welcome banner with it. */
+    if (welcome) router.replace(lang === "ar" ? "/ar/account" : "/account", { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -345,7 +348,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
               <p className="text-sm" style={{ color: "var(--muted)" }}>
                 {t.notSignedIn}
               </p>
-              <Link href="/login" className="btn-accent mt-4 inline-block px-8 py-2.5">{t.signIn}</Link>
+              <Link href={lang === "ar" ? "/ar/login" : "/login"} className="btn-accent mt-4 inline-block px-8 py-2.5">{t.signIn}</Link>
             </div>
           )}
         </div>
@@ -362,15 +365,15 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
             <form onSubmit={submitJob} className="mt-4 space-y-2">
               <div className="grid gap-2 sm:grid-cols-2">
                 <input value={jc} onChange={(e) => setJc(e.target.value)} placeholder={t.company}
-                  className="rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                  className="rounded-lg px-3 py-2 text-sm" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
                 <input value={jt} onChange={(e) => setJt(e.target.value)} placeholder={t.jobTitle}
-                  className="rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                  className="rounded-lg px-3 py-2 text-sm" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
               </div>
               <input value={ju} onChange={(e) => setJu(e.target.value)} placeholder={t.jobLink} dir="ltr"
-                className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
+                className="w-full rounded-lg px-3 py-2 text-sm" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: "var(--fg)" }} />
               {resumes.length > 0 && (
                 <select value={jr} onChange={(e) => setJr(e.target.value)}
-                  className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: jr ? "var(--fg)" : "var(--faint)" }}>
+                  className="w-full rounded-lg px-3 py-2 text-sm" style={{ background: "var(--bg)", border: "1px solid var(--line)", color: jr ? "var(--fg)" : "var(--faint)" }}>
                   <option value="">{t.resumeUsed}</option>
                   {resumes.map((r) => (
                     <option key={r.id} value={r.id}>{r.title || (lang === "ar" ? "سيرة بلا عنوان" : "Untitled CV")}</option>
@@ -401,7 +404,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                   <select
                     value={j.status}
                     onChange={(e) => { updateJob(owner, j.id, { status: e.target.value as JobStatus }); setJobs(getJobs(owner)); }}
-                    className="rounded-lg px-2 py-1 text-xs font-semibold focus:outline-none"
+                    className="rounded-lg px-2 py-1 text-xs font-semibold"
                     style={{ background: "var(--bg)", border: "1px solid var(--line)", color: STATUS_COLORS[j.status] }}>
                     {(Object.keys(STATUS_LABELS) as JobStatus[]).map((st) => (
                       <option key={st} value={st}>{STATUS_LABELS[st]}</option>

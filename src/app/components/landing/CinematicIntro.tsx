@@ -74,6 +74,14 @@ export default function CinematicIntro({ lang, onDone }: { lang: "ar" | "en"; on
       setTimeout(() => setPhase(2), 3300),
       setTimeout(() => setPhase(3), 5600),
       setTimeout(() => { setPhase(4); setOrbState("idle"); }, 7700),
+      /*
+       * ...and then it LEAVES. This was missing: the timers only advanced the phase, so the
+       * overlay reached phase 4 and held the page hostage indefinitely — scroll locked, every
+       * nav link covered — until someone clicked Skip or pressed Escape. Measured still up and
+       * still blocking after 45s. The CTA stays for anyone who wants to act on it; the film
+       * itself now hands the page over on its own, which is what its header always claimed.
+       */
+      setTimeout(finish, 9700),
     ];
     return () => {
       timers.forEach(clearTimeout);

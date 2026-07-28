@@ -290,7 +290,7 @@ export default function BlueprintStrip({
       {!busy && gen.message && (
         <p
           className="mt-2 text-xs leading-relaxed"
-          style={{ color: gen.state === "refused" ? "#fcd34d" : "#fca5a5" }}
+          style={{ color: gen.state === "refused" ? "var(--warn)" : "var(--danger)" }}
         >
           {gen.message}
         </p>

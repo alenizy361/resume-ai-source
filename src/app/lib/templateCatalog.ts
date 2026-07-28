@@ -12,7 +12,7 @@ export interface TemplateDef {
 }
 
 export const TEMPLATE_CATALOG: TemplateDef[] = [
-  { slug: "ats-pro", name: "ATS Pro", nameAr: "إيه تي إس برو", variant: "column", accent: "#0f766e", best: true },
+  { slug: "ats-pro", name: "ATS Pro", nameAr: "ATS برو", variant: "column", accent: "#0f766e", best: true },
   { slug: "onyx", name: "Onyx", nameAr: "أونيكس", variant: "classic", accent: "#0f766e" },
   { slug: "riyadh", name: "Riyadh", nameAr: "الرياض", variant: "classic", accent: "#b45309" },
   { slug: "azure", name: "Azure", nameAr: "أزور", variant: "modern", accent: "#1d4ed8" },

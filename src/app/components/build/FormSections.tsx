@@ -302,7 +302,7 @@ export function PersonalFields(p: Common) {
   const [openExtra, setOpenExtra] = useState(false);
   const L = ar
     ? { name: "الاسم الكامل", title: "المسمى المهني", city: "المدينة", country: "الدولة",
-        phone: "الجوال", email: "البريد", li: "LinkedIn", pf: "الأعمال/Portfolio",
+        phone: "الجوال", email: "البريد", li: "لينكدإن", pf: "معرض الأعمال",
         opt: "اختياري", more: "تفاصيل إضافية يتوقعها بعض أصحاب العمل في الخليج",
         nat: "الجنسية", visa: "حالة الإقامة",
         why: "هذه الحقول اختيارية تماماً — أضفها فقط إن كان سوقك يتوقعها." }

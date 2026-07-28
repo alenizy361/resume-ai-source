@@ -489,7 +489,7 @@ function RoleCard({
             onClick={ai.busy ? ai.cancel : () => suggest(true)}
             className={`t-tap mt-3 flex items-center gap-2 rounded-full px-3 text-xs font-bold${
               ai.busy ? " t-busy" : ""}`}
-            style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
+            style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "var(--info)" }}
           >
             <BrandOrb variant="button" size={20} busy={ai.busy && ai.task === "duties_draft"} />
             {ai.busy ? c.stop : c.more}
@@ -513,7 +513,7 @@ function RoleCard({
         {(ai.message || deduped) && (
           <p
             className="mt-2 text-xs leading-relaxed"
-            style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : (deduped || ai.state === "empty") ? "var(--faint)" : "#fca5a5" }}
+            style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "var(--warn)" : (deduped || ai.state === "empty") ? "var(--faint)" : "var(--danger)" }}
           >
             {ai.message || c.allKnown}
           </p>

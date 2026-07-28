@@ -12,7 +12,7 @@ export default function NotFound() {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/" className="btn-accent px-6 py-3">Back home</Link>
-          <Link href="/optimize" className="rounded-xl px-6 py-3 font-semibold" style={{ border: "1px solid rgba(255,255,255,0.18)", color: "var(--fg)" }}>Scan a resume</Link>
+          <Link href="/optimize" className="btn-ghost px-6 py-3 font-semibold" style={{ color: "var(--fg)" }}>Scan a resume</Link>
         </div>
       </div>
     </main>

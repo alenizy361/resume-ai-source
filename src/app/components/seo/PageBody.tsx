@@ -31,18 +31,8 @@ import Link from "next/link";
 export interface FaqItem { q: string; a: string }
 export interface LinkItem { href: string; label: string }
 
-export default function PageBody({
-  dir = "ltr",
-  heading,
-  intro,
-  steps,
-  stepsHeading,
-  faq,
-  faqHeading,
-  related,
-  relatedHeading,
-}: {
-  dir?: "ltr" | "rtl";
+/** One language's worth of this section. */
+export interface PageBodyContent {
   heading: string;
   intro: string[];
   stepsHeading: string;
@@ -51,7 +41,25 @@ export default function PageBody({
   faq: FaqItem[];
   relatedHeading: string;
   related: LinkItem[];
-}) {
+}
+
+/**
+ * ── the bilingual pages, and why both languages ship in the HTML ──
+ *
+ * `/interview`, `/linkedin` and `/career-plan` have no `/ar/*` PAGE — `/ar/interview` is a stub
+ * that redirects to `?lang=ar` on this same URL, and the language is then chosen in the browser.
+ * That works for the tool above, which is a client component. It could not work here: this half
+ * is server-rendered precisely so a crawler can read it, and a server component cannot know a
+ * choice the client has not made yet.
+ *
+ * So a page that has an `ar` bundle renders BOTH, and the one that does not match the document's
+ * language is hidden by CSS keyed on `<html lang>` — which `useLang` already sets on these exact
+ * routes. A crawler reads a genuinely bilingual page under one canonical URL; an Arabic reader
+ * reads Arabic. Measured before this: /interview?lang=ar was 89% Latin characters inside a
+ * `dir="rtl"` document — an Arabic shell wrapped around an English article.
+ */
+function Body({ dir, c }: { dir: "ltr" | "rtl"; c: PageBodyContent }) {
+  const { heading, intro, steps, stepsHeading, faq, faqHeading, related, relatedHeading } = c;
   return (
     <section dir={dir} className="mx-auto max-w-3xl px-5 py-16" style={{ color: "var(--fg)" }}>
       {/* An h2, not an h1: the tool above owns the page's single h1, and two of them is a signal
@@ -121,5 +129,18 @@ export default function PageBody({
         }}
       />
     </section>
+  );
+}
+
+export default function PageBody(
+  props: PageBodyContent & { dir?: "ltr" | "rtl"; ar?: PageBodyContent },
+) {
+  const { dir = "ltr", ar, ...en } = props;
+  if (!ar) return <Body dir={dir} c={en} />;
+  return (
+    <>
+      <div data-seo-lang="en"><Body dir="ltr" c={en} /></div>
+      <div data-seo-lang="ar"><Body dir="rtl" c={ar} /></div>
+    </>
   );
 }

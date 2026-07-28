@@ -70,12 +70,12 @@ export default function GapFiller({
           <div key={g}>
             <label className="mb-1 block text-xs font-semibold" style={{ color: "var(--fg)" }}>{t.q(g)}</label>
             <input value={answers[g] || ""} onChange={(e) => setAnswers((a) => ({ ...a, [g]: e.target.value }))}
-              placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={inp} />
+              placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm" style={inp} />
           </div>
         ))}
         <div>
           <label className="mb-1 block text-xs font-semibold" style={{ color: "var(--fg)" }}>{t.extra}</label>
-          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none" style={inp} />
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.ph} className="w-full rounded-lg px-3 py-2 text-sm" style={inp} />
         </div>
       </div>
       <button onClick={apply} disabled={busy || !anyFilled}

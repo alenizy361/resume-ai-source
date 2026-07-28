@@ -36,7 +36,7 @@ export default function Hub() {
               </div>
               <div className="mt-3 flex items-center justify-between">
                 <div className="font-bold">{t.name}</div>
-                <div className="font-mono text-xs" style={{ color: t.atsScore >= 90 ? "var(--accent)" : "#fbbf24" }}>ATS {t.atsScore}</div>
+                <div className="font-mono text-xs" style={{ color: t.atsScore >= 90 ? "var(--accent)" : "var(--warn)" }}>ATS {t.atsScore}</div>
               </div>
               <div className="text-xs" style={{ color: "var(--faint)" }}>{t.keyword}</div>
             </Link>

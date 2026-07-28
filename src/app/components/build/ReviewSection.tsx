@@ -86,9 +86,9 @@ const C = {
 
 /** Bands borrowed from the existing result screen so one number means one thing. */
 function band(score: number): string {
-  if (score >= 80) return "#34d399";
-  if (score >= 60) return "#fbbf24";
-  return "#f87171";
+  if (score >= 80) return "var(--ok)";
+  if (score >= 60) return "var(--warn)";
+  return "var(--danger)";
 }
 
 export default function ReviewSection({
@@ -142,7 +142,7 @@ export default function ReviewSection({
         ) : (
           <p
             className="rounded-xl p-3 text-xs"
-            style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.35)", color: "#6ee7b7" }}
+            style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.35)", color: "var(--ok)" }}
           >
             {c.allClear}
           </p>
@@ -225,19 +225,31 @@ function FindingRow({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <div className="text-xs font-bold" style={{ color: red ? "#fca5a5" : "var(--fg)" }}>{t.title}</div>
+          <div className="text-xs font-bold" style={{ color: red ? "var(--danger)" : "var(--fg)" }}>{t.title}</div>
           <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--muted)" }}>{t.detail}</p>
           {f.fixHint && (
             <p className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{f.fixHint}</p>
           )}
         </div>
-        <button
-          onClick={() => onJump(f.section as SectionId)}
-          className="rounded-full px-2.5 text-[11px] font-semibold"
-          style={{ minHeight: 32, border: "1px solid var(--line)", color: "var(--muted)", whiteSpace: "nowrap" }}
-        >
-          {jump}
-        </button>
+        {/*
+          Offered only when there is somewhere to go.
+
+          Three findings — `pending-suggestions`, `missing-from-cv` and `unsupported-requirements`
+          — are declared with `section: "review"` because they are about the document as a whole
+          rather than any one step. The button was rendered unconditionally, so on the review page
+          those three offered "Go to section" and then navigated to the review page: a control that
+          visibly did nothing, sitting beside four identical buttons that worked. Better to not
+          offer the trip than to offer it and stay put.
+        */}
+        {f.section !== "review" && (
+          <button
+            onClick={() => onJump(f.section as SectionId)}
+            className="rounded-full px-2.5 text-[11px] font-semibold"
+            style={{ minHeight: 32, border: "1px solid var(--line)", color: "var(--muted)", whiteSpace: "nowrap" }}
+          >
+            {jump}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -277,7 +289,7 @@ function Group({
   head: string; items: string[]; tone: "good" | "warn" | "none"; note?: string; empty?: boolean;
 }) {
   if (!items.length && !empty) return null;
-  const color = tone === "good" ? "#6ee7b7" : tone === "warn" ? "#fcd34d" : "var(--muted)";
+  const color = tone === "good" ? "var(--ok)" : tone === "warn" ? "var(--warn)" : "var(--muted)";
   return (
     <div className="mt-4">
       <div className="bd-label" style={{ color }}>{head} ({items.length})</div>

@@ -25,10 +25,25 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
   const p = PLANS[id];
   return (
     <div className="card p-8" style={highlight ? { borderColor: "rgba(139,92,246,0.5)", background: "rgba(139,92,246,0.06)", position: "relative", boxShadow: "0 30px 80px -30px rgba(139,92,246,0.55)" } : undefined}>
-      {highlight && (
-        <div className="absolute right-5 top-5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent)", color: "#ffffff" }}>BEST VALUE</div>
-      )}
-      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)", paddingInlineEnd: highlight ? 92 : undefined }}>{p.name} · one-time</div>
+      {/*
+        The badge is IN FLOW, not absolutely positioned over the eyebrow.
+
+        It used to be `absolute right-5 top-5` with the eyebrow reserving 92px of padding for it.
+        92px was not enough: "COMPLETE PACK · ONE-TIME" needs about 230px and had 196px, so it
+        wrapped — splitting the hyphen as "ONE-" / "TIME", doubling the eyebrow's height, and
+        pushing every row of the right-hand card 16px below its twin on the left. The two plan
+        CTAs, the one comparison the page exists to make, ended up 46px apart.
+
+        A flex row cannot overlap, and `min-w-0` lets the eyebrow shrink rather than shove the
+        badge out. The `· one-time` suffix is gone with it: on the left card it rendered
+        "ONE-TIME OPTIMIZATION · ONE-TIME", and the price line one row below already says "once".
+      */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.name}</div>
+        {highlight && (
+          <div className="shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent-deep)", color: "#ffffff" }}>BEST VALUE</div>
+        )}
+      </div>
       <div className="mt-4 flex items-baseline gap-1">
         <span className="text-5xl font-extrabold">SAR {p.priceSar}</span>
         <span className="text-sm" style={{ color: "var(--muted)" }}>once ({p.priceUsd})</span>

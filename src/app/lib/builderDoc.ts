@@ -523,7 +523,10 @@ export function confirmItem(
       if (have.length >= 12) return { state, blocked: "skill-cap" };
       have.push(item.text);
     }
-    profile.skills = have.join("، ");
+    /* Separator follows the CV's language, not the author's keyboard — `withLangs` already got
+       this right for the languages line. An Arabic comma on an English CV is both wrong to read
+       and, until `hasArabic` was corrected, enough to delete the PDF download. */
+    profile.skills = have.join(cvLang(state.target) === "ar" ? "، " : ", ");
   } else if (item.type === "summary") {
     profile.summary = item.text;
   } else if (item.type === "education") {

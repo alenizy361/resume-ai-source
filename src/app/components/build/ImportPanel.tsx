@@ -448,7 +448,7 @@ export default function ImportPanel({
                 </label>
               ))}
               {overflow > 0 && (
-                <p className="mt-1 text-xs" style={{ color: "#fcd34d" }}>{c.budget(overflow)}</p>
+                <p className="mt-1 text-xs" style={{ color: "var(--warn)" }}>{c.budget(overflow)}</p>
               )}
             </div>
           )}

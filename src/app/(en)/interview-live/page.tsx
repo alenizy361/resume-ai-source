@@ -325,13 +325,17 @@ export default function InterviewLivePage() {
 
   const avg = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0;
 
+  /* `langToggle` — this page had none, the one header in the product without one, on a bilingual
+     product: an Arabic reader who landed here had no way back to Arabic short of editing the URL.
+     It is a single-address route (`/ar/interview-live` redirects here carrying `?lang=ar`), so the
+     toggle flips the query string rather than swapping an `/ar/…` path like the two-address pages. */
   return (
-    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
+    <PageShell lang={ar ? "ar" : "en"} cta={navCta(ar ? "ar" : "en")} langToggle={ar ? "/interview-live" : "/interview-live?lang=ar"} authNav={<AuthNav ar={ar} />} mobileMenu={<MobileMenu ar={ar} />}>
       <div className="mx-auto max-w-3xl py-10">
         {phase === "setup" && (
           <>
             <div className="mb-8 text-center">
-              <div className="mx-auto mb-5 h-40 w-40"><InterviewerAvatar speaking={false} label={t.interviewerLabel} lang={ar ? "ar" : "en"} /></div>
+              <div className="mx-auto mb-5 w-44"><InterviewerAvatar speaking={false} label={t.interviewerLabel} lang={ar ? "ar" : "en"} /></div>
               <div className="chip mb-4">{t.chipSetup}</div>
               <h1 className="text-4xl font-extrabold tracking-tight">{t.h1}</h1>
               <p className="mt-3" style={{ color: "var(--muted)" }}>{t.intro}</p>
@@ -351,11 +355,11 @@ export default function InterviewLivePage() {
               />
               <div>
                 <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{t.resumeLabel}</label>
-                <textarea value={resume} onChange={(e) => setResume(e.target.value)} rows={7} placeholder={t.resumePlaceholder} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                <textarea value={resume} onChange={(e) => setResume(e.target.value)} rows={7} placeholder={t.resumePlaceholder} className="w-full resize-none rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
               </div>
               <div>
                 <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{t.roleLabel}</label>
-                <input value={role} onChange={(e) => setRole(e.target.value)} placeholder={t.rolePlaceholder} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                <input value={role} onChange={(e) => setRole(e.target.value)} placeholder={t.rolePlaceholder} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
               </div>
               {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
               <button onClick={start} disabled={busy} className="btn-accent w-full py-3 disabled:opacity-50">
@@ -368,7 +372,7 @@ export default function InterviewLivePage() {
 
         {phase === "paywall" && (
           <div className="text-center">
-            <div className="mx-auto mb-4 h-44 w-44"><InterviewerAvatar speaking={aiSpeaking} label={t.interviewerShort} lang={ar ? "ar" : "en"} /></div>
+            <div className="mx-auto mb-4 w-48"><InterviewerAvatar speaking={aiSpeaking} label={t.interviewerShort} lang={ar ? "ar" : "en"} /></div>
             <div className="card mx-auto max-w-lg p-7" style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.05)" }}>
               <div className="chip mb-3">{t.lockChip}</div>
               <p className="text-lg font-bold leading-relaxed">{paywallMsg}</p>
@@ -435,7 +439,7 @@ export default function InterviewLivePage() {
               <>
                 <textarea value={transcript} onChange={(e) => setTranscript(e.target.value)} rows={4}
                   placeholder={t.transcriptPlaceholder(micSupported)}
-                  className="w-full resize-none rounded-lg px-4 py-3 text-sm focus:outline-none" style={inputStyle} />
+                  className="w-full resize-none rounded-lg px-4 py-3 text-sm" style={inputStyle} />
                 <button onClick={stopAndGrade} disabled={busy} className="btn-accent w-full py-4 text-lg disabled:opacity-50">{t.finishAnswer}</button>
               </>
             )}
@@ -449,7 +453,7 @@ export default function InterviewLivePage() {
                 <div className="card p-5" style={{ borderColor: "rgba(139,92,246,0.4)" }}>
                   <div className="mb-2 flex items-center justify-between">
                     <span className="font-bold">{t.yourScore}</span>
-                    <span className="font-mono text-2xl font-bold" style={{ color: feedback.score >= 7 ? "#a78bfa" : feedback.score >= 5 ? "#fbbf24" : "#f87171" }}>{feedback.score}/10</span>
+                    <span className="font-mono text-2xl font-bold" style={{ color: feedback.score >= 7 ? "#6d28d9" : feedback.score >= 5 ? "var(--warn)" : "var(--danger)" }}>{feedback.score}/10</span>
                   </div>
                   {feedback.strengths && <p className="text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "#6d28d9" }}>{t.strength}</b> {feedback.strengths}</p>}
                   {feedback.improve && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}><b style={{ color: "var(--warn)" }}>{t.toImprove}</b> {feedback.improve}</p>}

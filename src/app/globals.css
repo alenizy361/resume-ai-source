@@ -34,6 +34,33 @@
  */
 [dir="rtl"] * { letter-spacing: normal; }
 
+/*
+ * ...and for the same reason, Arabic never gets the monospace stack.
+ *
+ * `ui-monospace, SF Mono, JetBrains Mono, Fira Code, Roboto Mono` contains no Arabic face, so
+ * every Arabic glyph is forced to a fixed advance width: measured 60% wider than the sans
+ * setting, with visible gaps where the letters should join — the same disease as
+ * letter-spacing, arriving through `font-family`. 91 of the product's `font-mono` usages sit
+ * on Arabic pages (footers, step counters, eyebrow labels, price lines).
+ *
+ * Digit-only elements are the deliberate exception: tabular figures are why mono is there at
+ * all. They opt back in with `.mono-nums`.
+ */
+[dir="rtl"] .font-mono:not(.mono-nums) {
+  font-family: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Segoe UI Arabic', Tahoma, sans-serif;
+}
+
+/*
+ * Arabic display headings need real leading.
+ *
+ * Tailwind's tight heading leading is tuned for Latin caps; Arabic carries a hamza above and
+ * dots and tails below, so its ink height at 42px is ~47px. Measured on /ar: the h1 computed
+ * `line-height: 42.84px` for `font-size: 42px` (1.02) and the two rendered line boxes
+ * OVERLAPPED by 4px — the tail of one line colliding with the hamza of the next.
+ */
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] .cine-h1, [dir="rtl"] .cine-h2,
+[dir="rtl"] .cine-final-s1 { line-height: 1.32; }
+
 :root {
   /*
    * ONE color world. This was #0b0626 — the violet "cosmos" — while the redesigned
@@ -48,7 +75,7 @@
   /* Bumped for WCAG AA contrast on the dark bg (flagged in audit):
      muted ~0.68 and faint ~0.5 clear 4.5:1 / 3:1 for text vs #05070d. */
   --muted: rgba(23, 26, 33, 0.72);
-  --faint: rgba(23, 26, 33, 0.55);
+  --faint: rgba(23, 26, 33, 0.68);   /* 0.55 measured 3.82:1 on #f6f7fa — under AA at the 11–14px it is used at */
   --line: rgba(15, 20, 35, 0.1);
   /* `--aurora-1/2/3` were here and in a second :root block, with the same values in
      both and no remaining users — the gradients that used them are gone with the
@@ -70,6 +97,11 @@
      the pale originals stay valid as background tints, which is where they still appear. */
   --warn: #b45309;
   --ok: #047857;
+  /* The fourth status hue, added late because its literal (#93c5fd) was only ever used for the
+     "Let AI write it" pills — which measured 1.55:1 on their own pale blue tint, i.e. the button
+     that offers the product's headline feature read as an empty pill. Same treatment as the three
+     above: the light blue survives as the tint, this is the ink. */
+  --info: #1d4ed8;
   --gold: #f5b840;
 }
 
@@ -284,7 +316,8 @@ body {
 
 /* Buttons */
 .btn-accent {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  /* Starts at the AA-safe cut so white sits at 5.70:1 along the whole sweep. */
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
   color: #ffffff;
   font-weight: 700;
   border-radius: 12px;
@@ -306,8 +339,12 @@ body {
   transform: skewX(-18deg);
   transition: left 0.6s ease;
 }
-.btn-accent:hover::after { left: 130%; }
-.btn-accent:hover {
+/* `:not(:disabled)`, matching the `:active` rule in transitions.css that already had it.
+   Without it a disabled primary lifted, brightened and ran its light-sweep on hover while
+   refusing the click — the strongest "this is ready" signal the design system has, fired on
+   the one state that means the opposite. */
+.btn-accent:not(:disabled):hover::after { left: 130%; }
+.btn-accent:not(:disabled):hover {
   filter: brightness(1.08);
   transform: translateY(-2px);
   box-shadow: 0 16px 44px -10px rgba(139, 92, 246, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.28);
@@ -407,7 +444,16 @@ prefers-reduced-motion: reduce) {
    So: named steps, in the order the brief asks for, and one enforcement rule.
    ══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --z-backdrop: 0;    /* the sky. one fixed layer, never repainted */
+  /*
+   * -1, not 0. A POSITIONED element at z-index 0 paints above a NON-positioned sibling's
+   * inline content — so the fixed backdrop covered every trailing `<section>` that sits
+   * outside `<main>` (`main` opts into z-index 10; those sections never did). Measured: 1661px
+   * of /ar/optimize, 1473px of /interview?lang=ar and 1435px of /linkedin?lang=ar rendered
+   * invisible while still holding scroll — those pages simply ended in a void. At -1 the sky
+   * paints behind ALL content and the body's own background still shows through beneath it,
+   * so nothing else moves.
+   */
+  --z-backdrop: -1;   /* the sky. one fixed layer, never repainted, always underneath */
   --z-decor: 1;       /* decorative orbs inside cards. always pointer-events:none */
   --z-content: 10;    /* everything a reader reads or presses */
   --z-header: 40;     /* the sticky page header */
@@ -800,13 +846,36 @@ main {
   min-height: 44px;
   padding: 10px 16px;
   border-radius: 12px;
-  background: var(--accent);
+  /* --accent-deep, not --accent: white on #8b5cf6 is 4.23:1 (under AA); on #7c3aed it is
+     5.70:1. The lighter violet stays for borders, rings and tints, where 3:1 applies. */
+  background: var(--accent-deep);
   color: #fff;
   font-size: 0.84rem;
   font-weight: 700;
   transition: background 0.15s ease, transform 0.12s ease;
 }
-.ps-cta:hover { background: var(--accent-deep); }
+.ps-cta:hover { background: #6d28d9; }
+
+/*
+ * ── segmented controls ──
+ *
+ * The language pickers on /templates and /optimize step 3, and any row of the same shape. They
+ * were styled entirely from inline `style={active ? … : …}` objects, which is why they had no
+ * hover: an inline background cannot be answered by a CSS `:hover`, so every attempt to add one
+ * would have silently lost. The INACTIVE state moves here so the cascade can reach it; the active
+ * state stays where it is, since that one is genuinely per-instance.
+ */
+.seg {
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+@media (hover: hover) {
+  .seg:hover { background: rgba(15, 20, 35, 0.05); border-color: rgba(15, 20, 35, 0.28); color: var(--fg); }
+}
+.seg:active { transform: translateY(1px); }
 /* The press must be felt. A control that looks identical before and after a tap is the
    "everything looks flat, as if nothing is clickable" complaint, and this is the whole fix. */
 .ps-cta:active { transform: translateY(1px); }
@@ -833,6 +902,76 @@ main {
   color: var(--faint);
 }
 
+/*
+ * ══════════════════════════════════════════════════════════════════════════════
+ * ONE FOCUS RING, FOR THE WHOLE PRODUCT
+ * ══════════════════════════════════════════════════════════════════════════════
+ *
+ * Before this rule there was exactly ONE focus declaration in globals.css — the `.ck-field`
+ * one below — and `focus:outline-none` was pasted onto 29 fields with nothing put back. So
+ * every text input, textarea and select in the product had a measured outline of `0px none`
+ * and a box-shadow of `none` while `:focus-visible` matched. On /login, the only field on
+ * the sign-in page, a keyboard user could not see where they were.
+ *
+ * The landing page meanwhile had its own designed ring (`landing.css`), so the product spoke
+ * two focus languages: a real one on `/` and Chrome's 1px default everywhere else. This is
+ * that ring, promoted to the shared layer; the landing rule now only restates the hue for
+ * its own dark intro.
+ *
+ * ── why the selector is doubled ──
+ *
+ * `:focus-visible` alone is one class of specificity and loses to Tailwind's
+ * `.focus\:outline-none:focus` (two). The utilities are gone from the components now, but
+ * this must also outrank any that come back — and a ring that silently loses a cascade fight
+ * is exactly how the product got here. Doubling costs nothing and cannot be undone by a
+ * pasted utility class.
+ *
+ * `:focus-visible`, not `:focus`: a mouse click on a button must not leave a ring behind it.
+ */
+:focus-visible:focus-visible {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 /* Checkout inputs: a clear focus ring, because a payment field a user cannot tell is active
-   is where they stall. Scoped to the class the modal sets. */
-.ck-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
+   is where they stall. Scoped to the class the modal sets.
+
+   The ring was `rgba(139,92,246,0.15)` — over the field's own white that composites to
+   rgb(238,232,252), a measured 1.15:1 against the field it is supposed to distinguish, well
+   under the 3:1 WCAG 2.2 asks of a focus indicator. It also set `border-color` that the
+   field's utility class then overrode, so the border never moved either. Now the ring carries
+   real contrast and the global outline above rides on top of it. */
+.ck-field:focus-visible { border-color: var(--accent-deep); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.45); }
+
+
+/*
+ * A strip that scrolls sideways must LOOK like it scrolls.
+ *
+ * Measured: the optimize template row hid 335px of 685px (5 of 10 chips fully off-screen,
+ * one sheared mid-glyph) and the account tab strip hid 185px of 535px — both with
+ * `overflow-x:auto`, no mask, and a 1px mobile scrollbar. Nothing on screen said there was
+ * more. The mask fades the cut edge and the padding leaves a half-item peeking, which is the
+ * affordance; `scroll-padding` keeps a focused chip clear of the fade for keyboard users.
+ */
+.scroll-strip {
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding-inline: 24px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 26px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 18px, #000 calc(100% - 26px), transparent 100%);
+  padding-inline-end: 18px;
+}
+.scroll-strip::-webkit-scrollbar { display: none; }
+
+
+/*
+ * The bilingual server-rendered page bodies (`components/seo/PageBody.tsx`).
+ *
+ * Both languages are in the HTML so a crawler reads the whole page; the reader sees the one the
+ * document is in. `useLang` sets `<html lang>` on exactly these routes, so this needs no JS of
+ * its own. Default (no lang, or lang="en") shows English.
+ */
+[data-seo-lang="ar"] { display: none; }
+html[lang="ar"] [data-seo-lang="ar"] { display: block; }
+html[lang="ar"] [data-seo-lang="en"] { display: none; }

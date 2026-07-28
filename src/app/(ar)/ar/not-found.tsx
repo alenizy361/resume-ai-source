@@ -31,8 +31,8 @@ export default function ArabicNotFound() {
           <Link href="/ar/builder" className="btn-accent px-6 py-3">أكمل سيرتك</Link>
           <Link
             href="/ar"
-            className="rounded-xl px-6 py-3 font-semibold"
-            style={{ border: "1px solid rgba(255,255,255,0.18)", color: "var(--fg)" }}
+            className="btn-ghost px-6 py-3 font-semibold"
+            style={{ color: "var(--fg)" }}
           >
             الصفحة الرئيسية
           </Link>

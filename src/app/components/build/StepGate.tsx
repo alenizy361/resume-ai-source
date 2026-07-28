@@ -84,7 +84,7 @@ export default function StepGate({ step }: { step: SectionId }) {
       className="mb-5 rounded-2xl p-4 t-reveal"
       style={{ background: "rgba(252,211,77,.07)", border: "1px solid rgba(252,211,77,.28)" }}
     >
-      <p className="text-sm font-semibold" style={{ color: "#fcd34d" }}>{c.head}</p>
+      <p className="text-sm font-semibold" style={{ color: "var(--warn)" }}>{c.head}</p>
 
       {/* The FIELD, not the step. "Target job is incomplete" makes someone open a form and hunt. */}
       <ul className="mt-2 space-y-1 text-xs" style={{ color: "var(--muted)" }}>

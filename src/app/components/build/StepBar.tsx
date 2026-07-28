@@ -37,7 +37,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { type SectionId } from "@/app/lib/builderDoc";
-import { stepMark } from "@/app/lib/stepReady";
+import { completedSteps, stepMark } from "@/app/lib/stepReady";
 import { toArabicDigits } from "@/app/lib/plans";
 import { STEPS, SECTION_COPY, stepHref } from "./steps";
 import type { BuilderState } from "@/app/lib/builderDoc";
@@ -64,10 +64,20 @@ export default function StepBar({
   const n = STEPS.length;
   /*
    * Progress is measured in steps whose data VALIDATES, not steps that were visited.
-   * `stepMark` is the same validator the sheet's ticks use, so the bar and the list can
-   * never disagree — which is exactly what the old rail and the old nav managed to do.
+   *
+   * Counted through `completedSteps`, NOT by filtering `stepMark(...) === "done"`. `stepMark`
+   * answers "how should this row LOOK", and it returns `current` for the step you are standing on
+   * before it ever looks at whether that step is finished — which is right for a marker and wrong
+   * for a total. Filtering on it meant the step under your feet was never counted, so:
+   *
+   *   finishing all eleven steps  →  stuck at "10 / 11", 91%, on every step, forever
+   *   pressing Back from step 5   →  "4 / 11", as if walking backwards undid the work
+   *
+   * `completedSteps` applies the same validator without the positional special case, so the bar
+   * and the sheet's ticks still agree about which steps are finished — they just no longer
+   * disagree about whether standing on one counts as being on it.
    */
-  const done = STEPS.filter((s) => stepMark(s, state, step) === "done").length;
+  const done = completedSteps(state, STEPS).length;
   const pct = Math.round((done / n) * 100);
 
   /*

@@ -183,7 +183,7 @@ export default function EnglishVersion() {
       {fresh && <p className="mt-3 text-xs" style={{ color: "#6ee7b7" }}>{c.fresh}</p>}
 
       {!fresh && stale.length > 0 && (
-        <p className="mt-3 text-xs" style={{ color: "#fcd34d" }}>
+        <p className="mt-3 text-xs" style={{ color: "var(--warn)" }}>
           {c.stale} {stale.join("، ")}
         </p>
       )}
@@ -220,7 +220,7 @@ export default function EnglishVersion() {
               >
                 <p className="text-xs" dir="rtl" style={{ color: "var(--faint)" }}>{item.text}</p>
                 <p className="mt-1.5 text-sm" dir="ltr" style={{ color: "var(--fg)" }}>{out}</p>
-                {flagged && <p className="mt-1 text-xs" style={{ color: "#fcd34d" }}>{c.changed}</p>}
+                {flagged && <p className="mt-1 text-xs" style={{ color: "var(--warn)" }}>{c.changed}</p>}
               </div>
             );
           })}

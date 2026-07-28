@@ -78,7 +78,7 @@ export default function OccupationClarify() {
       className="mt-3 rounded-2xl p-4"
       style={{ background: "rgba(252,211,77,.07)", border: "1px solid rgba(252,211,77,.28)" }}
     >
-      <p className="text-sm font-semibold" style={{ color: "#fcd34d" }}>
+      <p className="text-sm font-semibold" style={{ color: "var(--warn)" }}>
         {res.clarification.question[lang]}
       </p>
 

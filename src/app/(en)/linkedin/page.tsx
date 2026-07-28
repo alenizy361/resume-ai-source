@@ -103,12 +103,12 @@ export default function LinkedInPage() {
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "سيرتك أو نص ملف لينكدإن الحالي" : "Your resume or current LinkedIn profile text"}</label>
               <textarea value={profile} onChange={(e) => setProfile(e.target.value)} rows={10} required
                 placeholder={ar ? "الصق سيرتك أو العنوان والنبذة والخبرة الحالية…" : "Paste your resume or your current LinkedIn headline + about + experience..."}
-                className="w-full resize-none rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                className="w-full resize-none rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             <div>
               <label className="mb-2 block font-mono text-xs uppercase tracking-wider" style={{ color: "var(--faint)" }}>{ar ? "الدور المستهدف" : "Target role"}</label>
               <input value={targetRole} onChange={(e) => setTargetRole(e.target.value)} required
-                placeholder={ar ? "مثال: مدير منتج" : "e.g. Product Manager"} className="w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none" style={inputStyle} />
+                placeholder={ar ? "مثال: مدير منتج" : "e.g. Product Manager"} className="w-full rounded-lg px-4 py-2.5 text-sm" style={inputStyle} />
             </div>
             {error && <div className="rounded-lg px-3 py-2 text-xs" style={{ background: "rgba(248,113,113,0.1)", color: "var(--danger)" }}>{error}</div>}
             <button type="submit" disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50">

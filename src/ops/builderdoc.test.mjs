@@ -346,7 +346,34 @@ eq("the schema is versioned", SCHEMA_VERSION, 3);
   const r2 = confirmItem(st2, dup.id);
   ok("a duplicate at the cap just clears its chip", !r2.blocked
     && !r2.state.suggestions.some((i) => i.id === dup.id)
-    && r2.state.profile.skills.split("، ").length === 12);
+    && r2.state.profile.skills.split(/[,،]/).length === 12);
+
+  /*
+   * ── the separator follows the CV's language ──
+   *
+   * `confirmItem` joined skills with the Arabic comma unconditionally, so an all-English CV came
+   * out as "General X-ray، Computed Tomography". That is wrong to read, and it was also expensive:
+   * `hasArabic` matched U+060C, `pdfRefusesArabic` agreed, and the design step REMOVED the plain
+   * ATS PDF download from every English CV with two or more skills — while printing "an Arabic CV
+   * downloads as Word" over a document containing no Arabic at all.
+   *
+   * Split on either mark above, because the point of this pair is that the two differ.
+   */
+  {
+    const en = base();          // EMPTY_BUILDER.target.language is "en"
+    en.profile.skills = "General X-ray";
+    const s2 = newItem({ section: "skills", type: "skill", text: "Computed Tomography", createdAt: 1 });
+    en.suggestions = [s2];
+    const got = confirmItem(en, s2.id).state.profile.skills;
+    eq("an English CV separates skills with a Latin comma", got, "General X-ray, Computed Tomography");
+
+    const arSt = { ...base(), target: { ...base().target, language: "ar" } };
+    arSt.profile.skills = "أشعة عامة";
+    const s3 = newItem({ section: "skills", type: "skill", text: "التصوير المقطعي", createdAt: 1 });
+    arSt.suggestions = [s3];
+    const gotAr = confirmItem(arSt, s3.id).state.profile.skills;
+    eq("an Arabic CV keeps the Arabic comma", gotAr, "أشعة عامة، التصوير المقطعي");
+  }
 }
 
 /* ── a confirmed duty lands on the role its id names, not the first jobKey match ── */

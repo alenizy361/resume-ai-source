@@ -128,10 +128,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Keep within the optimizer's input budget.
-    if (text.length > 8000) text = text.slice(0, 8000);
+    /*
+     * Keep within the optimizer's input budget — and SAY SO.
+     *
+     * The client has a "we kept the first 8,000 characters" warning that could never fire,
+     * because this cut happened first and the client only checked the length of what it
+     * received. A 14,632-character CV arrived as exactly 8,000 with nothing on screen: 6,632
+     * characters of somebody's career, gone silently. The flag is what makes that visible.
+     */
+    let truncated = false;
+    if (text.length > 8000) { truncated = true; text = text.slice(0, 8000); }
 
-    return NextResponse.json({ text });
+    return NextResponse.json({ text, truncated });
   } catch (err) {
     console.error("Extract error:", err);
     return NextResponse.json({ error: "Failed to read the file. Try pasting the text instead." }, { status: 500 });

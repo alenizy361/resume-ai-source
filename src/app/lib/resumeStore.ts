@@ -370,6 +370,79 @@ const ss = (): Storage | null => {
   try { return typeof window === "undefined" ? null : window.sessionStorage; } catch { return null; }
 };
 
+/*
+ * ══════════════════════════════════════════════════════════════════════════════
+ * A SECOND TAB IS NOT A NEW VISIT — AND USED TO DESTROY THE FIRST TAB'S WORK
+ * ══════════════════════════════════════════════════════════════════════════════
+ *
+ * The rule above ("the visit is the tab session") is right, and the header even anticipated a
+ * second tab — it judged the cost to be "one clean builder rather than a stranger's half-built
+ * CV appearing". That was the intent. It is not what the code did.
+ *
+ * `sessionStorage` is per TAB. So a second tab has no marker, `mayRestore` answers false, and
+ * `BuilderProvider` then calls `endAnonymousVisit()` — which does not merely decline to restore,
+ * it `forgetOwner("anon")`s the entire anonymous keyspace. Measured: two real CVs (12,504 and
+ * 7,033 bytes) replaced by one empty 781-byte record, from nothing but opening cv.rabit.sa in a
+ * new tab while the first was still open and mid-edit. Silent, immediate, unrecoverable.
+ *
+ * The missing fact is "is another tab of this same browser session still alive?", which
+ * `sessionStorage` structurally cannot answer and `localStorage` can. That is a DIFFERENT
+ * question from "when does a visit end" — the header retired `VISIT_GAP_MS` so that question
+ * would have one answer, and this does not reopen it. A visit still ends when the last tab
+ * closes. This only stops one live tab being mistaken for zero.
+ *
+ * ── the numbers ──
+ *
+ * Every open builder tab restamps the lease each `LEASE_BEAT_MS`. A lease newer than
+ * `LEASE_FRESH_MS` means a sibling tab is live, so this tab joins the visit instead of ending it.
+ *
+ * The gap between the two is deliberate and large. Browsers throttle timers in BACKGROUND tabs to
+ * roughly once a minute, which is exactly the tab this has to protect — the one left open on the
+ * review step while the user reads a job advert in another. A 60s beat against a 5-minute
+ * threshold survives that throttling five times over. Erring long is the safe direction: the cost
+ * of a stale lease read as live is that an old anonymous draft survives a few extra minutes; the
+ * cost of a live lease read as stale is the bug above.
+ */
+const LIVE_LEASE = "ra_visit_live";
+const LEASE_BEAT_MS = 60_000;
+const LEASE_FRESH_MS = 5 * 60_000;
+
+/** Is a sibling tab of this browser session still holding the anonymous visit open? */
+function siblingTabIsLive(now = Date.now()): boolean {
+  const store = ls();
+  if (!store) return false;
+  try {
+    const raw = store.getItem(LIVE_LEASE);
+    if (!raw) return false;
+    const at = Number(raw);
+    /* A lease from the FUTURE is a clock that moved (a timezone change, an NTP correction, a
+       user setting the date back). Treated as live: this is the failure direction that costs
+       nothing, and refusing it would resurrect the data loss on exactly the machines least able
+       to explain it. */
+    return Number.isFinite(at) && now - at < LEASE_FRESH_MS;
+  } catch { return false; }
+}
+
+/**
+ * Hold the anonymous visit open for as long as this tab is on screen.
+ *
+ * Called by the builder on mount. Returns its own teardown — when the last tab stops beating,
+ * the lease goes stale on its own and the next visit starts clean, which is the rule intact.
+ */
+export function keepVisitAlive(): () => void {
+  const store = ls();
+  if (!store) return () => {};
+  const beat = () => { try { store.setItem(LIVE_LEASE, String(Date.now())); } catch { /* noop */ } };
+  beat();
+  const id = setInterval(beat, LEASE_BEAT_MS);
+  /* A tab returning to the foreground has just had its timer throttled for however long it was
+     hidden; restamping on the way back means the lease is never judged on a beat that the
+     browser refused to run. */
+  const onShow = () => { if (document.visibilityState === "visible") beat(); };
+  document.addEventListener("visibilitychange", onShow);
+  return () => { clearInterval(id); document.removeEventListener("visibilitychange", onShow); };
+}
+
 /**
  * Record that this owner is active in this visit. Called on every write.
  *
@@ -401,7 +474,11 @@ export function mayRestore(owner: string): boolean {
   if (owner !== "anon") return true;
   const sess = ss();
   if (!sess) return false;                    // fails closed — see the header
-  try { return Boolean(sess.getItem(SESSION_VISIT)); } catch { return false; }
+  try { if (sess.getItem(SESSION_VISIT)) return true; } catch { return false; }
+  /* No marker in THIS tab, but a sibling tab of the same browser session may still be holding
+     the visit open — see the lease block above. Without this, a second tab was a new visit, and
+     a new visit destroys the old one's CVs. */
+  return siblingTabIsLive();
 }
 
 /**
@@ -460,6 +537,9 @@ export function endAnonymousVisit(): number {
   /* The session marker too, so a builder opened twice in one lapsed tab does not decide differently
      the second time. */
   try { ss()?.removeItem(SESSION_VISIT); } catch { /* noop */ }
+  /* And the liveness lease, so the tab that just declared the visit over does not immediately
+     read its OWN stale stamp as a sibling and re-open it. */
+  try { store.removeItem(LIVE_LEASE); } catch { /* noop */ }
   return removed;
 }
 

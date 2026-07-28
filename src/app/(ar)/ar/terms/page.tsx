@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PLANS, formatPrice } from "@/app/lib/plans";
 import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
+import { BRAND } from "@/app/lib/brand";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -75,7 +76,7 @@ export default function ArTermsPage() {
             الخدمة تعمل على نطاق <span dir="ltr">cv.rabit.sa</span> التابع لـ«رابِت» (Rabit).
             لأي مشكلة دفع أو استفسار:
           </p>
-          <p dir="ltr">📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a></p>
+          <p dir="ltr">📧 <a href={`mailto:${BRAND.supportEmail}`} className="text-accent underline">{BRAND.supportEmail}</a></p>
         </Section>
 
         <div className="mt-10 flex gap-4">

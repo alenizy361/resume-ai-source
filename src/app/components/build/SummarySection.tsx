@@ -119,6 +119,9 @@ export default function SummarySection({
   const [editing, setEditing] = useState<{ id: string; text: string } | null>(null);
   const [editingOwn, setEditingOwn] = useState(false);
   const [own, setOwn] = useState("");
+  /* Held while the "write your own" field has focus, so committing on every keystroke does not
+     unmount the field the user is typing into. See the field itself for the full story. */
+  const [writingOwn, setWritingOwn] = useState(false);
 
   const roles = state.profile.roles || [];
   const hasRole = roles.some((r) => r.title.trim() && r.company.trim());
@@ -218,7 +221,9 @@ export default function SummarySection({
   return (
     <div>
       {/* ── what is on the CV now ── */}
-      {confirmed && (
+      {/* Hidden while the "write your own" field below has focus — otherwise committing on each
+          keystroke shows the half-typed paragraph twice, once here and once in the field. */}
+      {confirmed && !writingOwn && (
         <div className="mb-4">
           <div className="bd-label">{c.onCv}</div>
           <div className="bd-confirmed">
@@ -251,11 +256,11 @@ export default function SummarySection({
               className="mt-2 rounded-xl p-3"
               style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.35)" }}
             >
-              <p className="text-xs" style={{ color: "#fcd34d" }}>{c.stale}</p>
+              <p className="text-xs" style={{ color: "var(--warn)" }}>{c.stale}</p>
               <button
                 onClick={ai.busy ? ai.cancel : write}
                 className="mt-2 rounded-full px-3 text-xs font-bold"
-                style={{ border: "1px solid rgba(251,191,36,0.45)", color: "#fcd34d" }}
+                style={{ border: "1px solid rgba(251,191,36,0.45)", color: "var(--warn)" }}
               >
                 {ai.busy ? c.stop : c.staleAct}
               </button>
@@ -264,7 +269,7 @@ export default function SummarySection({
         </div>
       )}
 
-      {thin && <p className="mb-3 text-xs" style={{ color: "#fcd34d" }}>{c.thin}</p>}
+      {thin && <p className="mb-3 text-xs" style={{ color: "var(--warn)" }}>{c.thin}</p>}
 
       {/* ── the three variants ── */}
       {offered.length > 0 && (
@@ -324,7 +329,7 @@ export default function SummarySection({
       <button
         onClick={ai.busy ? ai.cancel : write}
         className={`t-tap flex items-center gap-2 rounded-full px-3 text-xs font-bold${ai.busy ? " t-busy" : ""}`}
-        style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "#93c5fd" }}
+        style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.35)", color: "var(--info)" }}
       >
         <BrandOrb variant="button" size={20} busy={ai.busy} />
         {ai.busy ? c.stop : offered.length || confirmed ? c.rewrite : c.write}
@@ -334,21 +339,36 @@ export default function SummarySection({
       {ai.message && (
         <p
           className="mt-2 text-xs leading-relaxed"
-          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "#fcd34d" : ai.state === "empty" ? "var(--faint)" : "#fca5a5" }}
+          style={{ color: ai.state === "loading" ? "var(--muted)" : ai.throttled ? "var(--warn)" : ai.state === "empty" ? "var(--faint)" : "var(--danger)" }}
         >
           {ai.message}
         </p>
       )}
 
       {/* The form must work with the AI switched off. This is that promise, kept in
-          the one section where a user is most likely to already know what to say. */}
-      {!confirmed && (
+          the one section where a user is most likely to already know what to say.
+
+          ── it used to lose what you wrote ──
+
+          This box committed ONLY on blur. Every other field in the builder dispatches as you
+          type, so the preview follows and the 450ms autosave persists; this one held the
+          paragraph in local component state, showed nothing in the preview, kept the header
+          reading "Saved", and threw the whole thing away on a reload. Typing a summary and
+          pressing F5 lost it silently — and pressing "Save & continue" worked, because the
+          click happened to blur the field first, which is what made it look fine in testing.
+
+          `writingOwn` exists because committing on change makes `confirmed` truthy on the FIRST
+          keystroke, and this box is rendered only when `confirmed` is empty — so a naive fix
+          unmounted the textarea out from under the cursor. The latch keeps the box (and hides
+          the confirmed block above it) for as long as the field has focus. */}
+      {(!confirmed || writingOwn) && (
         <div className="mt-4">
           <div className="bd-label">{c.own}</div>
           <textarea
             className="bd-textarea" value={own} placeholder={c.ownPh}
-            onChange={(e) => setOwn(e.target.value)}
-            onBlur={() => own.trim() && dispatch({ t: "summaryText", text: own })}
+            onFocus={() => setWritingOwn(true)}
+            onChange={(e) => { setOwn(e.target.value); dispatch({ t: "summaryText", text: e.target.value }); }}
+            onBlur={() => setWritingOwn(false)}
           />
         </div>
       )}

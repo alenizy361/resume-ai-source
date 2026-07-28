@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageShell from "@/app/components/PageShell";
 import Link from "next/link";
+import { BRAND } from "@/app/lib/brand";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -88,7 +89,7 @@ export default function ArPrivacyPage() {
             لأي استفسار عن بياناتك أو الدفع أو الحذف:
           </p>
           <p dir="ltr">
-            📧 <a href="mailto:alanziabdulaziz4@gmail.com" className="text-accent underline">alanziabdulaziz4@gmail.com</a>
+            📧 <a href={`mailto:${BRAND.supportEmail}`} className="text-accent underline">{BRAND.supportEmail}</a>
           </p>
           <p>نرد عادة خلال ٢٤–٤٨ ساعة.</p>
         </Section>
