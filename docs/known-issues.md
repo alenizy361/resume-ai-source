@@ -2988,9 +2988,9 @@ eleven names between them ("Build my resume" / "CV Builder" / "Build a CV" / "Bu
 scratch"; "Scan my resume" / "Analyze my resume" / "Screening Check"); `brand.ts` holds one
 `NAV_CTA` but the chips and the mobile menu do not read it. · Header composition varies six ways
 across ten pages. · Ten templates are one layout in ten accent hues. · Emoji stand in for an icon
-set beside a bespoke animated Orb, and `/interview-live` introduces a third visual identity. · A
-band of `var(--faint)` small text measures 3.4–3.9:1 — over the 3:1 bar this product set, under
-WCAG AA's 4.5:1.
+set beside a bespoke animated Orb, and `/interview-live` introduces a third visual identity. · ~~A
+band of `var(--faint)` small text measures 3.4–3.9:1~~ — **closed, see F-R9**: the token was bumped
+in this same round and now measures 5.81:1; only the comment beside it still quoted the old figure.
 
 ---
 
@@ -3372,3 +3372,36 @@ confirmed on the rendered panel in a browser.
 
 *Same shape as most of this session's worst findings: the codebase had already written the right
 answer, and the surface that reports it had not been told.*
+
+### F-R9 · P2 · The `var(--faint)` contrast finding, measured rather than argued — CLOSED
+
+R1 recorded "a band of `var(--faint)` small text measures 3.4–3.9:1 — over the 3:1 bar this product
+set, under WCAG AA's 4.5:1". The value was bumped from 0.55 to 0.68 alpha in that same round. The
+COMMENT beside the token kept quoting the old measurement, so the defect read as open long after it
+closed — which is its own kind of bug: an entry in this file that is wrong is worse than no entry,
+because it costs somebody an evening confirming a fix that already shipped.
+
+Measured out of a real browser, on the two grounds the product actually paints:
+
+| token | on `--bg` #f6f7fa | on `--surface` #ffffff |
+|---|---|---|
+| `--muted` | 6.66:1 | 6.89:1 |
+| `--faint` | **5.81:1** | **5.99:1** |
+
+Both clear AA at any size, which matters because `--faint` is used at 11–14px, where the large-text
+3:1 allowance does not apply.
+
+**And the finding is now a suite, not a memory.** `ops/contrast.test.mjs` walks every text node on
+eleven pages in both languages, resolves each one's colour against its nearest *painted* ancestor,
+and applies WCAG's own large-text rule. Result: **839 text nodes measured, zero under AA.**
+
+The interesting part is what it had to be taught not to say. The first version reported 21 failures
+at 1.07:1 — every one of them `.btn-accent`, whose ground is a `linear-gradient`. `getComputedStyle`
+returns the gradient *string*, not the pixel under the glyph, so the sweep read straight through to
+the page background and accused white-on-violet (5.70:1 by that rule's own comment) of being
+white-on-white. Elements on a gradient are now skipped **and counted** — 45 of them — because a
+silent skip and a false alarm both end the same way: nobody reads the output.
+
+Still open from R1's design debt, unchanged: six content widths under one 1152px header; eleven
+names for two destinations; header composition varying six ways; ten templates that are one layout
+in ten accent hues; emoji standing in for an icon set.

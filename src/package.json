@@ -13,6 +13,7 @@
     "bench": "node --experimental-strip-types ops/model-bench.mjs",
     "smoke": "node ops/form-smoke.mjs",
     "test:design": "node ops/design.test.mjs",
+    "test:contrast": "node ops/contrast.test.mjs",
     "test:aiwiring": "node --experimental-strip-types ops/aiwiring.test.mjs",
     "test:economics": "node --experimental-strip-types ops/economics.test.mjs",
     "ai:stages": "node --experimental-strip-types ops/ai-stages.mjs",
