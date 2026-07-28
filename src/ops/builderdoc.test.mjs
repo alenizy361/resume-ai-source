@@ -416,5 +416,40 @@ eq("the schema is versioned", SCHEMA_VERSION, 3);
   ok("the same first call in two sessions yields two different ids", a !== b, `both ${a}`);
 }
 
+/* ── the reducer's two suggestion-bag rules, asserted against source ── */
+{
+  /*
+   * `builderState.ts` imports through the `@/` alias, which Node cannot resolve, so this suite
+   * cannot call the reducer — the same constraint `ops/isolation.test.mjs` works under for
+   * `BuilderProvider`. Source assertions are weaker than behaviour and are said to be: they pin the
+   * MECHANISM, and the browser pass is what confirms the effect.
+   *
+   * Rule 1 — `seed` deduped against the suggestion BAG only, and a confirmed item has LEFT the bag
+   * (`confirmItem` removes it). So every cold load of a pack-titled resume re-offered the skills the
+   * user had already accepted: confirm 5 of 23, reject the rest, reload, and 5 chips are back — and
+   * the review raised a critical "Review 5 pending suggestions" counting items printed in the CV's
+   * own SKILLS line, which could not be cleared by accepting them because they were accepted.
+   *
+   * Rule 2 — a CV-LANGUAGE change now retires unanswered pack chips, as a title change already did.
+   * Without it, switching mid-build left 46 items in the bag: the same 23 skills in two scripts, one
+   * tap away from putting Arabic text into an English CV.
+   */
+  const { readFileSync } = await import("node:fs");
+  const code = readFileSync("app/components/build/builderState.ts", "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+
+  ok("seed dedupes against the skills already on the CV", /const onCv = String\(s\.profile\.skills/.test(code));
+  ok("using the same normalizer confirmItem compares with",
+    /onCv[\s\S]{0,200}normalizeLabel\(/.test(code));
+  ok("and both sets feed one lookup", /new Set\(\[\.\.\.s\.suggestions\.map\(\(i\) => i\.normalized\), \.\.\.onCv\]\)/.test(code));
+
+  ok("a CV-language change is recognised", /const relanguaged = a\.patch\.language !== undefined/.test(code));
+  ok("and retires unanswered pack chips with a retitle",
+    /\(retitled \|\| relanguaged\)[\s\S]{0,160}source === "occupation" && i\.status === "suggested"/.test(code));
+  /* A rejection must survive so a re-seed cannot re-offer refused text — the filter keeps anything
+     that is not BOTH pack-sourced AND still unanswered. */
+  ok("so a rejected chip is kept", /filter\(\(i\) => !\(i\.source === "occupation" && i\.status === "suggested"\)\)/.test(code));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

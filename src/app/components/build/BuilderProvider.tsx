@@ -252,6 +252,30 @@ export default function BuilderProvider({
        resumes MUST re-run this, and a boolean is what stopped it. */
     const pair = `${owner}::${urlId || ""}`;
     if (started.current === pair) return;
+    /*
+     * ══════════════════════════════════════════════════════════════════════════════════════
+     * ARRIVING AT THE ID WE ALREADY HOLD IS NOT A NEW DOCUMENT
+     * ══════════════════════════════════════════════════════════════════════════════════════
+     *
+     * `/builder` carries no id, so `urlId` is `undefined` and this effect RESOLVES one. Navigating
+     * from there to `/builder/<that same id>/target` changes `urlId` from `undefined` to the id we
+     * already loaded — and the key `anon::` → `anon::rms4…` looked like a different resume. So the
+     * effect re-ran, reset `touched`, and re-dispatched `hydrate` from storage, discarding whatever
+     * was in memory.
+     *
+     * That destroyed the ENTIRE import door. "Upload and improve my CV" parses a CV, shows the user
+     * exactly what it read, dispatches `import`, and navigates to step 1 — and this re-hydration
+     * threw every parsed fact away before the 450ms autosave could persist any of it. Measured four
+     * times: positions 0, skills 0, education "", credentials 0, into both an empty and a populated
+     * builder, on both viewports. The panel said "Brought across."
+     *
+     * Same id, same document, so the in-memory state stands. A DIFFERENT id still re-hydrates, which
+     * is the case the key was written for.
+     */
+    if (urlId && urlId === boot.id && started.current.startsWith(`${owner}::`)) {
+      started.current = pair;
+      return;
+    }
     started.current = pair;
     if (!owner) return;                 // owner unknown yet — wait rather than read `anon` and swap later
     /* A fresh hydration is a fresh document: nothing has been touched IN it yet, whatever was
@@ -373,9 +397,18 @@ export default function BuilderProvider({
   /*
    * The current state, readable from a callback without making the callback change.
    *
-   * Written in an effect rather than during render. `flush` is only ever called from an
-   * event handler or an unload listener, both of which run after the commit, so the ref
-   * is current by the time anyone reads it.
+   * Written in an effect, so it always describes state React actually COMMITTED — a render thrown
+   * away by concurrent rendering must not leave this ref describing a document that never existed.
+   * (Assigning during render would be simpler and is what the first attempt at the import fix did;
+   * it trips `Cannot access refs during render`, and the rule is right.)
+   *
+   * ── the consequence a caller has to know about ──
+   *
+   * A handler that DISPATCHES and then calls `flush()` in the same tick reads this ref BEFORE the
+   * commit, so it persists the pre-dispatch document. That is not hypothetical: the import door did
+   * exactly that and the one write it produced carried none of the import. The fix belongs at the
+   * call site — flush after the commit, not before — and `FormSections`' import handler shows the
+   * shape. Anything else here that dispatches and flushes together must do the same.
    */
   const live = useRef(state);
   useEffect(() => { live.current = state; }, [state]);

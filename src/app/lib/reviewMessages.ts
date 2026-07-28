@@ -27,6 +27,8 @@
 export interface LocalizedFinding {
   title: string;
   detail: string;
+  /** The one-line "how to fix it". Absent when the reader's language has none — see `AR_FIX`. */
+  fixHint?: string;
 }
 
 /**
@@ -130,6 +132,29 @@ const AR: Record<string, LocalizedFinding> = {
  * Separate table because they are labels, not findings: no detail, no count, and they appear whether
  * or not anything is wrong.
  */
+/**
+ * The one-line "how to fix it", in Arabic.
+ *
+ * A separate table rather than a field on every `AR` entry: only fourteen findings carry a hint, and
+ * threading an optional field through twenty-five entries to fill fourteen of them is a bigger diff
+ * that says less. Keyed by the same id — or its stem — that `localizeFinding` looks up.
+ */
+const AR_FIX: Record<string, string> = {
+  "missing-contact": "البيانات الشخصية ← الجوال والبريد الإلكتروني.",
+  "missing-dates": "الشهر والسنة يكفيان، مثل «سبتمبر ٢٠٢٤».",
+  "pending-suggestions": "كل عنصر يمكن اعتماده، أو تعديله أولاً، أو رفضه.",
+  "expired-credential": "حدِّث تاريخ الانتهاء، أو احذفها حتى تُجدَّد.",
+  "title-mismatch": "استخدم التهجئة التي يكتبها الإعلان الوظيفي.",
+  "repeated-duties": "أبقِها في الوظيفة التي كانت الأهم فيها، واذكر ما اختلف في الأخرى.",
+  "long-bullets": "إنجاز واحد لكل سطر؛ وزّع البقية على سطر ثانٍ.",
+  "weak-openers": "ابدأ بالفعل: شغّلت، قدت، خفّضت، دربت، بنيت.",
+  "keyword-stuffing": "أبقِها في قائمة المهارات وفي السطر الواحد الذي تستطيع إثباتها فيه.",
+  "past-role-heavier": "انقل سطراً من التفاصيل إلى الوظيفة الأحدث، أو اختصر الأقدم.",
+  "missing-from-cv": "أضِفها في القسم الذي تنتمي إليه، بكلماتك أنت.",
+  "unsupported-requirements": "تمتلكها فعلاً؟ أضِفها في القسم المناسب ثم أعد هذه المراجعة.",
+  "duplicate-skills": "احذف المكرّرة من قائمة المهارات.",
+};
+
 const AR_DIMENSIONS: Record<string, string> = {
   completeness: "الاكتمال",
   specificity: "التحديد",
@@ -158,17 +183,34 @@ const AR_DIMENSIONS: Record<string, string> = {
  * consistent.
  */
 export function localizeFinding(
-  f: { id: string; title: string; detail: string },
+  f: { id: string; title: string; detail: string; fixHint?: string },
   lang: "ar" | "en",
   count?: number,
 ): LocalizedFinding {
-  if (lang === "en") return { title: f.title, detail: f.detail };
-  const hit = AR[f.id];
-  if (!hit) return { title: f.title, detail: f.detail };
+  if (lang === "en") return { title: f.title, detail: f.detail, fixHint: f.fixHint };
+  /*
+   * Exact id first, then the STEM before the colon.
+   *
+   * Three findings mint per-item ids — `expired-credential:<id>`, `keyword-stuffing:<term>`,
+   * `thin-role:<i>` — so an exact-match table could never hold them and the "English fallback" was
+   * permanent rather than a degradation. One of them (an expired credential) is CRITICAL, so an
+   * Arabic reader met a red English block at the moment they decide whether the CV is finished.
+   */
+  const hit = AR[f.id] ?? AR[f.id.split(":")[0]];
+  /*
+   * The hint is localized SEPARATELY, and rendering the English one was the other half of the bug.
+   * `ReviewSection` printed `f.fixHint` raw, so an otherwise-Arabic finding ended in "Month and year
+   * is enough, e.g. \"Sep 2024\"." Returning `undefined` when there is no Arabic hint is deliberate:
+   * losing a line of help is better than a sentence that switches language mid-finding, and the
+   * title and detail already carry the substance.
+   */
+  const fixHint = AR_FIX[f.id] ?? AR_FIX[f.id.split(":")[0]];
+  if (!hit) return { title: f.title, detail: f.detail, fixHint };
   const n = typeof count === "number" ? toArabicDigits(count) : "";
   return {
     title: hit.title,
     detail: n ? hit.detail.replace(/\{n\}/g, n) : hit.detail.replace(/\s*\{n\}\s*/g, " "),
+    fixHint,
   };
 }
 

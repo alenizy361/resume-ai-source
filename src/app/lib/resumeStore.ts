@@ -148,11 +148,33 @@ export function readResume(owner: string, resumeId: string): { record: ResumeRec
   try { raw = store.getItem(recordKey(owner, resumeId)); } catch { return { record: null, damaged: false }; }
   if (!raw) return { record: null, damaged: false };
 
+/**
+ * Quarantine a record that cannot be trusted, and take its INDEX ROW with it.
+ *
+ * Both quarantine branches used to copy the bytes aside and remove the record while leaving the
+ * index entry in place — so `/builder` kept listing a CV that no longer existed, with a working
+ * "Continue →" that opened an empty form and a "Duplicate → tailor for a job" button that was
+ * completely dead (its `readResume` returns null and it returns silently). A phantom row that
+ * claims to be somebody's CV is worse than an absent one: it invites two clicks that cannot work.
+ *
+ * The BYTES are still kept under `ra_cv_bad:*` — that is the part that matters, and nothing here
+ * touches it. Only the listing that promised something the store can no longer deliver goes.
+ */
+function quarantine(store: Storage, owner: string, resumeId: string, raw: string): void {
+  try {
+    store.setItem(quarantineKey(owner, resumeId), raw);
+    store.removeItem(recordKey(owner, resumeId));
+    store.setItem(indexKey(owner), JSON.stringify(
+      listResumes(owner).filter((e) => e.resumeId !== resumeId),
+    ));
+  } catch { /* a blocked storage leaves the bytes where they are, which is the safe end */ }
+}
+
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch {
     /* Unparseable. Copy it aside before anything is allowed to write over it — this is somebody's
        only copy, and an autosave 450ms later used to be the thing that finished it off. */
-    try { store.setItem(quarantineKey(owner, resumeId), raw); store.removeItem(recordKey(owner, resumeId)); } catch { /* nothing more to do */ }
+    quarantine(store, owner, resumeId, raw);
     return { record: null, damaged: true };
   }
 
@@ -165,7 +187,7 @@ export function readResume(owner: string, resumeId: string): { record: ResumeRec
    * fault wearing a new key scheme, so it is quarantined and reported as damaged rather than used.
    */
   if (!r || typeof r !== "object" || !r.state || r.owner !== owner || r.resumeId !== resumeId) {
-    try { store.setItem(quarantineKey(owner, resumeId), raw); store.removeItem(recordKey(owner, resumeId)); } catch { /* noop */ }
+    quarantine(store, owner, resumeId, raw);
     return { record: null, damaged: true };
   }
 

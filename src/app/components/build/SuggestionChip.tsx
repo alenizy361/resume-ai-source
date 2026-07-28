@@ -42,7 +42,7 @@ import type { ItemSource } from "@/app/lib/builderDoc";
 import { WHY_LABEL, whySentence } from "@/app/lib/provenance";
 
 export default function SuggestionChip({
-  text, lang, source, reason, suffix, showWhy = true, onAdd, onReject,
+  text, lang, source, reason, suffix, showWhy = true, disabled = false, onAdd, onReject,
 }: {
   text: string;
   lang: "ar" | "en";
@@ -59,6 +59,15 @@ export default function SuggestionChip({
   showWhy?: boolean;
   /** Small trailing note inside the add button — a credential's kind, a language's script. */
   suffix?: React.ReactNode;
+  /**
+   * The section is at a cap and cannot accept another of these.
+   *
+   * Real `disabled`, not a swallowed click: a chip that looks available and does nothing when tapped
+   * is exactly the defect this closes — at 12 confirmed skills every further chip was a dead control
+   * with no message anywhere on the page. The section says WHY above the list; this makes the
+   * control agree with the sentence.
+   */
+  disabled?: boolean;
   onAdd: () => void;
   /** Omitted where a rejection could not be remembered. See the header. */
   onReject?: () => void;
@@ -95,6 +104,8 @@ export default function SuggestionChip({
         <button
           type="button"
           className="bd-chip-add t-tap"
+          disabled={disabled}
+          style={disabled ? { opacity: 0.45, cursor: "not-allowed" } : undefined}
           onClick={onAdd}
         >
           + {text}

@@ -227,8 +227,10 @@ function FindingRow({
         <div className="flex-1">
           <div className="text-xs font-bold" style={{ color: red ? "var(--danger)" : "var(--fg)" }}>{t.title}</div>
           <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--muted)" }}>{t.detail}</p>
-          {f.fixHint && (
-            <p className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{f.fixHint}</p>
+          {/* The LOCALIZED hint. This rendered `f.fixHint` — the raw English — so an otherwise
+              Arabic finding ended in "Month and year is enough, e.g. \"Sep 2024\"." */}
+          {t.fixHint && (
+            <p className="mt-1 text-xs" style={{ color: "var(--faint)" }}>{t.fixHint}</p>
           )}
         </div>
         {/*

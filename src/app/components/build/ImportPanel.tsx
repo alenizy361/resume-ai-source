@@ -27,6 +27,7 @@ import { useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 import { type ParsedCv, parseCv, worthImporting } from "@/app/lib/importCv";
 import { type SavedResume, getResumes } from "@/app/lib/localdata";
+import { type Role, BULLET_CAP_CURRENT, BULLET_CAP_PAST, isCurrent } from "@/app/lib/resumeDoc";
 
 type Lang = "ar" | "en";
 
@@ -56,7 +57,7 @@ const C = {
     unreadWhy: "Nothing is thrown away silently. Copy anything here into the right section yourself.",
     use: "Use what is ticked",
     cancel: "Start from scratch instead",
-    budget: (n: number) => `${n} extra ${n === 1 ? "duty" : "duties"} will be offered rather than added — a job shows six at most.`,
+    budget: (n: number) => `${n} extra ${n === 1 ? "duty" : "duties"} will be offered rather than added — a current job shows six, a past one four.`,
     nothing: "Tick at least one thing to bring across.",
     done: "Brought across. Everything is editable in the sections below.",
     saved: "Or continue from a CV you already made here",
@@ -90,7 +91,7 @@ const C = {
     unreadWhy: "لا شيء يُرمى بصمت. انسخ ما تريد منها إلى قسمه بنفسك.",
     use: "استخدم ما حدّدته",
     cancel: "أبدأ من الصفر",
-    budget: (n: number) => `${n} مهمة إضافية ستُعرض عليك بدل إضافتها — الوظيفة تُظهر ستاً كحد أعلى.`,
+    budget: (n: number) => `${n} مهمة إضافية ستُعرض عليك بدل إضافتها — الوظيفة الحالية تُظهر ستاً والسابقة أربعاً.`,
     nothing: "حدّد شيئاً واحداً على الأقل لنقله.",
     done: "تم النقل. وكل شيء قابل للتعديل في الأقسام أدناه.",
     saved: "أو واصل من سيرة أنشأتها هنا",
@@ -284,7 +285,12 @@ export default function ImportPanel({
   // up front: `capBullets` keeps the earliest six, so a silent import of ten would drop
   // four of the user's own lines with no trace.
   const overflow = parsed
-    ? parsed.roles.reduce((n, r, i) => n + (picks.roles[i] ? Math.max(0, r.bullets.length - 6) : 0), 0)
+    ? parsed.roles.reduce((n, r, i) => {
+      if (!picks.roles[i]) return n;
+      /* The SAME rule the reducer applies — a current job keeps six, an ended one four. */
+      const cap = isCurrent(r as unknown as Role) ? BULLET_CAP_CURRENT : BULLET_CAP_PAST;
+      return n + Math.max(0, r.bullets.length - cap);
+    }, 0)
     : 0;
 
   return (

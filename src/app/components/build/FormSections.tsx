@@ -149,7 +149,20 @@ export function StartCards(p: Common & {
           onImport={(cv) => {
             p.dispatch({ t: "import", cv, lang: p.lang });
             p.dispatch({ t: "entry", v: "upload" });
-            p.onPicked();
+            /*
+             * AFTER the commit, not in the same tick.
+             *
+             * `onPicked` flushes and then navigates, and `flush` reads the provider's `live` ref,
+             * which is written in an effect — so calling it here synchronously persisted the
+             * PRE-import document and marked it written. Combined with the re-hydration this
+             * navigation used to trigger, the entire import was discarded: the panel said "Brought
+             * across" and the document ended with zero positions, zero skills and no education.
+             *
+             * A zero-delay timeout runs after React has committed and after the effect that updates
+             * the ref, so the flush writes the imported document. The re-hydration is fixed
+             * separately in `BuilderProvider`; this is the other half.
+             */
+            setTimeout(() => p.onPicked(), 0);
           }}
         />
       )}
@@ -464,14 +477,20 @@ export function SkillsBody(p: Common) {
     ? {
       nothingYet: "لا توجد مهارات مقترحة بعد. اطلبها بالذكاء أو أضِفها بنفسك.",
       chosen: "في سيرتك", tapToAdd: "انقر لإضافتها لسيرتك",
+      atCap: "بلغت الحد الأقصى: ١٢ مهارة. احذف واحدة من قائمة «في سيرتك» أعلاه لإضافة غيرها.",
     }
     : {
       nothingYet: "No suggested skills yet. Ask the AI, or add your own.",
       chosen: "In your CV", tapToAdd: "Tap to add to your CV",
+      atCap: "12 skills is the maximum. Remove one from “In your CV” above to add another.",
     };
 
   const offered = pending(p.state, "skills");
   const chosen = String(p.state.profile.skills || "").split(/[,،]/).map((x) => x.trim()).filter(Boolean);
+  /* The same 12 `confirmItem` blocks at (`builderDoc.ts`), read here so the UI can say it before the
+     user finds out by tapping. One number, two readers — if it ever moves, this reads the same list
+     the reducer counts. */
+  const atCap = chosen.length >= 12;
   /* Skills have no ids — the text IS the identity, which is also how `removeSkill` addresses them. */
   const arrivedSkills = useJustArrived(chosen);
 
@@ -562,7 +581,18 @@ export function SkillsBody(p: Common) {
           </div>
         </div>
       )}
-      <p className="mb-2 text-xs" style={{ color: "var(--faint)" }}>{L.tapToAdd}</p>
+      {/*
+        At the cap, SAY SO.
+        `confirmItem` returns `blocked: "skill-cap"` and the reducer discards it, so a tap on a
+        thirteenth chip did nothing at all: the chip stayed, the CV did not change, and no text
+        anywhere on the page explained why — measured by regex over the whole document. The bullet
+        cap next door already prints its limit and disables its Add pill; this is the same
+        treatment. The chips stay tappable-looking but are disabled, because a control that looks
+        available and refuses is the thing being fixed.
+      */}
+      <p className="mb-2 text-xs" style={{ color: atCap ? "var(--warn)" : "var(--faint)" }}>
+        {atCap ? L.atCap : L.tapToAdd}
+      </p>
       {groups.map(([label, items]) => {
         /*
          * One provenance line for the group when every chip in it would say the same thing, and
@@ -587,7 +617,9 @@ export function SkillsBody(p: Common) {
                 source={it.source}
                 reason={it.reason}
                 showWhy={!shared}
+                disabled={atCap}
                 onAdd={() => {
+                  if (atCap) return;
                   p.dispatch({ t: "confirm", id: it.id });
                   track("builder_suggestion_accepted", { section: "skills", source: it.source });
                 }}

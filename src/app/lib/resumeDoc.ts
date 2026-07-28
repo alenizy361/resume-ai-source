@@ -54,7 +54,15 @@ export function jobKey(title: string, company: string): string {
  * four on the rest is the shape the sources agree on, and ten is the shape the
  * product was producing.
  */
-function isCurrent(r: Role): boolean {
+/**
+ * Exported so the IMPORT PANEL can count overflow with the same rule the reducer applies.
+ *
+ * It counted every role against 6, while the importer caps an ENDED role at 4 — so the "extra
+ * duties will be offered" number was too low for past jobs (measured: an 8-bullet past role reported
+ * "2 extra" where the real overflow is 4) and the sentence "a job shows six at most" was simply
+ * untrue of them. Two places deciding what a budget is, is how a warning drifts from what happens.
+ */
+export function isCurrent(r: Role): boolean {
   return /الآن|حالي|present|current|now/i.test(r.end) || !r.end;
 }
 

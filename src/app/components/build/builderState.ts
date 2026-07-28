@@ -169,7 +169,22 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
        * text), and imported/AI items were never tied to the old title's pack.
        */
       const retitled = a.patch.title !== undefined && a.patch.title !== s.target.title;
-      const suggestions = retitled
+      /*
+       * A CV-LANGUAGE change retires the pack's unanswered chips for the same reason a title change
+       * does — they are written in a language the document no longer speaks.
+       *
+       * Without it, switching mid-build left the retired language's 23 chips in the bag beside the
+       * 23 the provider then seeds in the new one: the skills step offered the same pack twice, in
+       * two scripts, and one tap wrote Arabic text into an English CV. Measured on a real draft —
+       * 46 items, all `suggested`, the same skills in both languages.
+       *
+       * Only UNANSWERED pack chips, exactly as above: a rejection must survive so a re-seed cannot
+       * re-offer text the user already refused, and imported/AI items were never tied to the pack.
+       * Anything already CONFIRMED stays on the CV in the language it was accepted in — retranslating
+       * a user's approved content behind their back is a different and worse bug.
+       */
+      const relanguaged = a.patch.language !== undefined && a.patch.language !== s.target.language;
+      const suggestions = (retitled || relanguaged)
         ? s.suggestions.filter((i) => !(i.source === "occupation" && i.status === "suggested"))
         : s.suggestions;
       const next: BuilderState = {
@@ -185,7 +200,7 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       // data — "valid to" and every proficiency word. Rebuilding them here is what
       // makes the language field retroactive instead of applying only to what comes
       // after it.
-      return a.patch.language !== undefined && a.patch.language !== s.target.language
+      return relanguaged
         ? withLangs(withCreds(next, next.credentials), next.languages)
         : next;
     }
@@ -222,7 +237,22 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       // the distinction is the whole reason the seeded duties were coming out Arabic
       // on an English CV.
       const L = a.cv;
-      const already = new Set(s.suggestions.map((i) => i.normalized));
+      /*
+       * Deduped against the BAG *and* against what is already ON THE CV.
+       *
+       * It checked the bag only — and a CONFIRMED item has left the bag (`confirmItem` removes it),
+       * so every cold load of a pack-titled resume re-offered the skills the user had already
+       * accepted. Measured: confirm 5 of 23 pack chips, reject the other 18 until the step is empty,
+       * then reload — 5 chips are back, and the pre-export review raises its critical "Review 5
+       * pending suggestions before exporting" counting items that are printed in the CV's own SKILLS
+       * line. The gate could never stay clear, and the five could not be cleared by accepting them
+       * because they had already been accepted.
+       *
+       * Same normalizer `confirmItem` compares with, so the two agree by construction.
+       */
+      const onCv = String(s.profile.skills || "")
+        .split(/[,،]/).map((x) => normalizeLabel(x.trim())).filter(Boolean);
+      const already = new Set([...s.suggestions.map((i) => i.normalized), ...onCv]);
       const fresh: Item[] = [];
       for (const g of a.pack.groups) {
         for (const it of g.items) {
