@@ -431,6 +431,33 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       };
 
       /*
+       * ══════════════════════════════════════════════════════════════════════════════════
+       * THE JOB TITLE, which the import filled everything EXCEPT
+       * ══════════════════════════════════════════════════════════════════════════════════
+       *
+       * Reported as "I upload a CV and the data disappears", and reproduced exactly: the importer
+       * reads two positions, education, contact, skills and languages — and then the builder lands
+       * the user on step 1, "The job you are aiming for", with EVERY FIELD EMPTY and a progress bar
+       * reading 0/11. Nothing on that screen says an import happened; the panel's own "Brought
+       * across" message renders in a component the same tick navigates away from.
+       *
+       * It compounds, because `target.title` is what `stepReady` keys on. Skills, Summary and
+       * Review each then announce "This step needs something from an earlier one · The job title
+       * you are aiming for is missing" — so four separate screens tell someone who just uploaded a
+       * complete CV that they have entered nothing.
+       *
+       * The CV's own most recent job title is right there in `cv.roles[0].title`. Filling it is not
+       * a guess about the user: it is their own fact, from their own document, landed in an
+       * editable field on the very screen they arrive at. Exactly the `keep()` contract the name,
+       * phone and email above already use — what the user typed wins, the CV fills the blank.
+       *
+       * The employer is deliberately NOT carried across the same way: `target.employer` is who they
+       * are applying TO, and the last employer is who they are applying FROM. Same-shaped field,
+       * opposite meaning.
+       */
+      const target = { ...s.target, title: keep(s.target.title, cv.roles[0]?.title || "") };
+
+      /*
        * Same file, applied twice — a plain re-pick of the importer, which stays reachable after a
        * first apply — used to double every position, credential card and education line, because
        * everything below was a bare append. Identity here is the same one the rest of the document
@@ -512,6 +539,7 @@ export function reducer(s: BuilderState, a: Action): BuilderState {
       const next: BuilderState = {
         ...s,
         entry: "upload",
+        target,
         personal,
         suggestions: [...s.suggestions, ...offered],
         profile: {

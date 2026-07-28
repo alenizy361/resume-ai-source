@@ -170,6 +170,73 @@ export function StartCards(p: Common & {
   );
 }
 
+/**
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * SAYING, ON THE SCREEN THEY LAND ON, THAT THE UPLOAD WORKED
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * The importer's own "Brought across. Everything is editable in the sections below." is rendered by
+ * `ImportPanel` — and `onImport` navigates away in the same tick, so **nobody has ever read it**.
+ * What the user actually sees, one instant after uploading their CV, is step 1 of 11 titled "The
+ * job you are aiming for", with empty fields and a progress bar reading 0/11.
+ *
+ * Reported as "I upload a CV and the data disappears", and that is a fair description of the
+ * screen. The data was never lost — two positions, education, contact, skills and languages were
+ * all in storage the whole time — but the first and only evidence offered was an empty form.
+ *
+ * So the receipt moves to where the user is, and it names what arrived rather than congratulating
+ * itself: counts, and where each thing went. It disappears the moment this step is completed,
+ * because by then the user has seen the document and the reassurance is noise.
+ *
+ * Counts, not a checkmark: "we read your file" is what the panel already said and it is not the
+ * thing in doubt. "2 positions, education, 4 skills offered" is checkable against the CV in their
+ * hand, which is the only form of reassurance worth printing.
+ */
+function ImportedReceipt({ lang, state }: { lang: "ar" | "en"; state: BuilderState }) {
+  const roles = state.profile.roles?.length ?? 0;
+  const offered = state.suggestions.filter((i) => i.status === "suggested" && i.source === "imported").length;
+  const langs = state.languages.filter((l) => l.source === "imported").length;
+  const creds = state.credentials.filter((c) => c.source === "imported").length;
+  const education = Boolean(String(state.profile.education || "").trim());
+  const anything = roles || offered || langs || creds || education;
+  /* Only for an upload, only before this step is finished, and only when something really came in —
+     an import that read nothing must not be congratulated for it. */
+  if (state.entry !== "upload" || state.sectionsDone.includes("target") || !anything) return null;
+
+  const ar = lang === "ar";
+  const n = (x: number) => (ar ? toArabicDigits(x) : String(x));
+  const parts: string[] = [];
+  if (roles) parts.push(ar ? `${n(roles)} ${roles === 1 ? "وظيفة" : "وظائف"}` : `${roles} position${roles === 1 ? "" : "s"}`);
+  if (education) parts.push(ar ? "التعليم" : "education");
+  if (creds) parts.push(ar ? `${n(creds)} شهادة` : `${creds} credential${creds === 1 ? "" : "s"}`);
+  if (offered) parts.push(ar ? `${n(offered)} مهارة معروضة` : `${offered} skill${offered === 1 ? "" : "s"} offered`);
+  if (langs) parts.push(ar ? `${n(langs)} لغة` : `${langs} language${langs === 1 ? "" : "s"}`);
+
+  return (
+    <div className="mb-4 rounded-xl p-4 t-enter"
+      style={{ background: "rgba(139,92,246,0.06)", border: "1px solid rgba(139,92,246,0.28)" }}>
+      <div className="text-sm font-bold">
+        {ar ? "قرأنا سيرتك ونقلناها" : "We read your CV and brought it across"}
+      </div>
+      <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+        {parts.join(ar ? " · " : " · ")}
+        {" — "}
+        {ar
+          ? "كلها محفوظة في الخطوات التالية وقابلة للتعديل. المعروض منها ينتظر اعتمادك."
+          : "all of it is saved in the steps ahead and editable. What is offered waits for you to accept it."}
+      </p>
+      {/* The one field the CV cannot answer for the user, said plainly where it is pre-filled. */}
+      {state.target.title && (
+        <p className="mt-2 text-xs" style={{ color: "var(--faint)" }}>
+          {ar
+            ? "المسمى بالأسفل مأخوذ من آخر وظيفة في سيرتك — غيّره إذا كنت تستهدف وظيفة أخرى."
+            : "The job title below came from your most recent position — change it if you are aiming at a different job."}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function TargetFields(p: Common) {
   const ar = p.lang === "ar";
   const L = ar
@@ -229,6 +296,7 @@ export function TargetFields(p: Common) {
 
   return (
     <>
+      <ImportedReceipt lang={p.lang} state={p.state} />
       <div className="bd-grid two">
         <Field label={L.title} value={p.state.target.title} onChange={(v) => set({ title: v })}
           placeholder={ar ? "أخصائي أشعة" : "Radiology Technologist"} optLabel={L.opt} />

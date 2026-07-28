@@ -3405,3 +3405,50 @@ silent skip and a false alarm both end the same way: nobody reads the output.
 Still open from R1's design debt, unchanged: six content widths under one 1152px header; eleven
 names for two destinations; header composition varying six ways; ten templates that are one layout
 in ten accent hues; emoji standing in for an icon set.
+
+### F-R10 · P0 · "I upload a CV and the data disappears" — FIXED
+
+Reported by the owner in those words, and reproduced on the first attempt.
+
+**The data was never lost.** Every measurement below was taken against `localStorage` while driving
+a real browser: after an upload the record holds two positions with their bullets, education,
+contact details, four skill offers and two languages — and it *keeps* holding them through every
+edit, every step, Save & continue, a reload, a second tab, and a return to `/builder`. A scripted
+sweep that typed into every field, toggled every checkbox and pressed every button on every step,
+snapshotting the document after each action, found no loss.
+
+**What disappears is the evidence.** One instant after the upload the product navigates the user to
+step 1 of 11 — *"The job you are aiming for"* — with **every field empty** and a progress bar
+reading **0/11**. Nothing on that screen said an import had happened: `ImportPanel`'s own
+*"Brought across. Everything is editable in the sections below."* renders in a component that
+`onImport` navigates away from **in the same tick**, so that sentence has never been read by anyone.
+
+Then it compounds. `stepReady` keys on `target.title`, and the import filled everything *except*
+`target` — so Skills, Summary and Review each greeted the user with *"This step needs something
+from an earlier one · The job title you are aiming for is missing."* **Four separate screens told
+someone who had just uploaded a complete CV that they had entered nothing.** "The data disappeared"
+is a fair description of that product, and no amount of correct storage makes it untrue.
+
+**Two changes, both small.**
+
+1 · **The import carries the CV's own most recent job title into `target.title`** — through the
+same `keep()` the name, phone and email already use, so what the user typed still wins and the CV
+only fills a blank. This is not a guess about the user: it is their own fact, from their own
+document, landing in an editable field on the very screen they arrive at. The target EMPLOYER is
+deliberately left alone — that is who they are applying *to*, and the last employer is who they are
+applying *from*: same-shaped field, opposite meaning.
+
+2 · **The receipt moves to where the user actually is.** `ImportedReceipt` sits at the top of the
+target step and names what arrived — *"2 positions · education · 4 skills offered · 2 languages"* —
+plus one line saying where the pre-filled title came from. It renders only after an upload, only
+before that step is completed, and only when something really came in; an import that read nothing
+is not congratulated for it. Counts rather than a checkmark, because *"we read your file"* is not
+the claim in doubt — a count is checkable against the CV in the user's hand.
+
+Verified in a browser in both languages: 22 assertions covering the receipt, the pre-filled title,
+the three steps that used to announce the CV was empty, the receipt retiring once the step is
+completed, nothing being lost along the way, and a from-scratch CV showing no receipt and no
+borrowed title. Pinned in `ops/builderdoc.test.mjs`.
+
+*The session's recurring shape again, in its sharpest form yet: the codebase had the right answer
+in storage the entire time, and the surface that reports it had not been told.*

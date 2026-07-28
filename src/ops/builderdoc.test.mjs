@@ -449,6 +449,37 @@ eq("the schema is versioned", SCHEMA_VERSION, 3);
   /* A rejection must survive so a re-seed cannot re-offer refused text — the filter keeps anything
      that is not BOTH pack-sourced AND still unanswered. */
   ok("so a rejected chip is kept", /filter\(\(i\) => !\(i\.source === "occupation" && i\.status === "suggested"\)\)/.test(code));
+
+  /*
+   * ── the import filled everything except the one field the rest of the builder is keyed on ──
+   *
+   * Reported as "I upload a CV and the data disappears". Reproduced: the importer reads two
+   * positions, education, contact, skills and languages, and the product then lands the user on
+   * step 1 of 11 — "The job you are aiming for" — with every field empty and a 0/11 progress bar.
+   * Nothing on that screen said an import had happened, because `ImportPanel`'s own "Brought
+   * across" message renders in a component the same tick navigates away from.
+   *
+   * It compounded through `stepReady`, which keys on `target.title`: Skills, Summary and Review
+   * each then announced "the job title you are aiming for is missing". Four screens told someone
+   * who had just uploaded a complete CV that they had entered nothing.
+   */
+  ok("the import carries the CV's own most recent job title into the target",
+    /const target = \{ \.\.\.s\.target, title: keep\(s\.target\.title, cv\.roles\[0\]\?\.title \|\| ""\) \}/.test(code));
+  ok("through the same keep() the name and phone use — what the user typed still wins",
+    /const keep = \(mine: string, theirs: string\) => mine\.trim\(\) \|\| theirs\.trim\(\)/.test(code));
+  ok("and it is actually committed to the next state", /entry: "upload",\s*target,/.test(code));
+  /* The target EMPLOYER is who they are applying TO. Carrying the last employer into it would be
+     the same-shaped field with the opposite meaning, and would read as an invented fact. */
+  ok("but the target employer is left alone", !/employer: keep\(/.test(code));
+
+  const form = readFileSync("app/components/build/FormSections.tsx", "utf8");
+  ok("the target step shows a receipt for what the upload brought", /<ImportedReceipt lang=\{p\.lang\} state=\{p\.state\} \/>/.test(form));
+  ok("only after an upload", /if \(state\.entry !== "upload"/.test(form));
+  ok("only until the step is completed", /state\.sectionsDone\.includes\("target"\)/.test(form));
+  ok("and never for an import that read nothing", /\|\| !anything\) return null/.test(form));
+  /* Counts, not a checkmark: "we read your file" is not the claim in doubt. */
+  ok("it counts what arrived rather than congratulating itself",
+    /positions/.test(form) && /skills/.test(form) && /education/.test(form) && /وظائف/.test(form));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
