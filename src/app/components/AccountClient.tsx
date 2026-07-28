@@ -497,17 +497,25 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         )}
 
         {/* ── Public links ── */}
+        {/* Was the one hardcoded-English card inside the Arabic dashboard — every string here
+            follows `lang` like the rest of the page. */}
         <div className={`${sectionCard} mt-6`}>
-          <h2 className={sectionTitle}>🔗 My public resume links ({links.length})</h2>
+          <h2 className={sectionTitle}>🔗 {lang === "ar" ? "روابط سيرتي العامة" : "My public resume links"} ({links.length})</h2>
           {links.length === 0 ? (
-            <p className="text-xs" style={{ color: "var(--faint)" }}>Links you publish from the builder appear here so you can unpublish them anytime.</p>
+            <p className="text-xs" style={{ color: "var(--faint)" }}>
+              {lang === "ar"
+                ? "الروابط التي تنشرها من البنّاء تظهر هنا لتتمكن من إلغاء نشرها في أي وقت."
+                : "Links you publish from the builder appear here so you can unpublish them anytime."}
+            </p>
           ) : (
             <ul className="space-y-2">
               {links.map((l) => (
                 <li key={l.slug} className="rounded-lg px-3 py-2 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--line)" }}>
                   <div className="flex items-center justify-between gap-3">
                     <a href={l.url} target="_blank" rel="noopener noreferrer" className="truncate text-accent" dir="ltr">{l.url}</a>
-                    <button onClick={() => removeLink(l.slug, l.token)} className="shrink-0 text-xs" style={{ color: "#f87171" }}>Unpublish</button>
+                    <button onClick={() => removeLink(l.slug, l.token)} className="shrink-0 text-xs" style={{ color: "#f87171" }}>
+                      {lang === "ar" ? "إلغاء النشر" : "Unpublish"}
+                    </button>
                   </div>
                   {linkError[l.slug] && (
                     <p className="mt-1.5 text-xs" style={{ color: "#f87171" }}>{linkError[l.slug]}</p>

@@ -28,7 +28,7 @@ function PlanCard({ id, highlight }: { id: "single" | "complete"; highlight?: bo
       {highlight && (
         <div className="absolute right-5 top-5 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider" style={{ background: "var(--accent)", color: "#ffffff" }}>BEST VALUE</div>
       )}
-      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)" }}>{p.name} · one-time</div>
+      <div className="font-mono text-xs uppercase tracking-widest" style={{ color: "var(--faint)", paddingInlineEnd: highlight ? 92 : undefined }}>{p.name} · one-time</div>
       <div className="mt-4 flex items-baseline gap-1">
         <span className="text-5xl font-extrabold">SAR {p.priceSar}</span>
         <span className="text-sm" style={{ color: "var(--muted)" }}>once ({p.priceUsd})</span>

@@ -103,9 +103,16 @@ export function salaryBasis(lang: "ar" | "en"): string {
  * exactly the "feels like separate products" complaint the IA redesign set out to fix. One
  * constant, one place — every `PageShell` `cta` prop that points at `/optimize` uses this.
  */
+/*
+ * ONE primary action, sitewide. The audit found the header CTA changing identity between
+ * systems — "Start Building" on the new homepage, "Scan my resume →" everywhere else, plus a
+ * third label on the SEO catalog — three names for the front door. The homepage defines the
+ * brand's one action now and every header agrees with it. Scanning is not demoted: /optimize
+ * keeps its own in-page CTAs and its three SEO landings funnel into it as before.
+ */
 export const NAV_CTA = {
-  en: { href: "/optimize", label: "Scan my resume →" },
-  ar: { href: "/ar/optimize", label: "افحص سيرتي مجاناً ←" },
+  en: { href: "/builder", label: "Start Building" },
+  ar: { href: "/ar/builder", label: "ابدأ البناء" },
 } as const;
 
 export function navCta(lang: "ar" | "en"): { href: string; label: string } {

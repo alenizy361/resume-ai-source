@@ -2796,3 +2796,70 @@ render it — deleting it drags `marketing.css`/dead-css test bookkeeping that d
 pass); `/interview-live`'s purpose-built avatar not yet swapped for the live orb; the stale
 `ops/design.test.mjs` (F-51's discovery) still needs reconciling with whichever landing it is
 now supposed to describe.
+
+### R-2 · One product, one sky: the old/new split audited and unified — SHIPPED
+
+The owner's screenshot said it plainly: the redesigned homepage and the rest of the site read
+as two different products. Two parallel audits (a visual classifier screenshotting 26 surfaces
+at two widths, and a wiring crawler walking 409 internal pages from 18 hubs) produced the map;
+everything below was verified broken first and verified fixed after.
+
+**The homepage itself was mixed — the audit's sharpest finding.** `RootShell` mounts the old
+violet-cosmos `SpaceBackdrop` globally as a fixed z-0 layer, and it painted OVER the cinematic
+page's own black (pixel-verified `rgb(7,4,23)` where the design says `rgb(3,4,7)`), with a hard
+violet→black seam mid-hero. **Fixed at the root, for every page at once**: `--bg` is now the
+black world's `#030407`, and `.space-backdrop` renders the SAME two faint lights the homepage's
+cinematic backdrop uses — the starfield is retired (hidden, its definitions kept for dead-css
+bookkeeping). The first click off the homepage now changes the page, not the universe.
+Re-measured after: `/optimize`, `/ar/optimize`, `/pricing`, `/templates`, `/resume-examples`
+and `/` itself all paint the identical `rgb(3,4,7)` sky.
+
+**The entire old-system mobile navigation was dead — both languages.** `MobileMenu`'s scrim
+(z 60) covered its own un-z-indexed dropdown panel: the menu opened, every link rendered, and
+every tap hit the scrim and merely closed the menu — verified by `elementFromPoint` on every
+link on `/pricing` and `/ar/pricing`, on every page carrying the component. The panel now sits
+on the scrim's own layer, later in the DOM, so it paints above it; a real Playwright tap now
+lands on the link and navigates. The Arabic entries also pointed at the ENGLISH `/login` and
+`/account`; they point at `/ar/login` and `/ar/account` now.
+
+**The Arabic "Share my score" link looped forever.** `/score` was still in `proxy.ts`'s
+`AR_TWINS` against that file's own documented rule (its `/ar` page is a redirect stub) — the
+fourth instance of the class after `/interview`, `/linkedin` and `/login`. Removed;
+`/score/{id}?lang=ar` now resolves in zero redirects.
+
+**One primary action, sitewide.** The crawler counted three different header-CTA identities
+("Start Building" / "Scan my resume →" / "Build my resume") and five conflicting nav labels
+across the two systems. `NAV_CTA` — the one constant every `PageShell` header reads — is now
+"Start Building" → the builder in both languages, matching the homepage that defines the brand;
+`/optimize` keeps its own in-page CTAs and its three SEO landings unchanged.
+
+**Wiring debts closed.** The homepage's Arabic footer sent readers to the English `/terms` and
+`/privacy` although Arabic versions exist (now language-aware); `/resume-templates` and its
+nine style pages had ZERO inbound links anywhere (one contextual cross-link from `/templates`,
+worded so the two "Templates" surfaces don't share a label); the Arabic pricing page's "الأفضل
+قيمة" badge sat on top of the plan name at every width (badge moved to the RTL card's empty
+corner AND the name line reserves the badge's inline-end space on both language pages — the
+long label ran under it whichever side it sat on); the Arabic dashboard's one hardcoded-English
+card ("My public resume links") now speaks Arabic.
+
+**Also fixed this round, found by production telemetry, shipped separately (`d897032`):**
+`meta/llama-4-maverick-17b-128e-instruct` reached its announced end of life on 2026-07-27 and
+NVIDIA began answering 410 Gone — `/api/optimize` and every sibling on the default free
+provider was down for real users (the owner's screenshot showed the resulting error banner).
+The dead id was hardcoded in six route files; it is now one constant (`NVIDIA_DEFAULT_MODEL`,
+set to `openai/gpt-oss-120b`, the successor Groq publicly named for this exact deprecation),
+env-overridable without code.
+
+**Verification.** `tsc` clean; 48/48 suites; build clean (439 pages). Live against the rebuilt
+bundle: the five sampled old-system pages + the homepage all paint the one black sky; the
+starfield is gone; a mobile-menu tap reaches its link and navigates; the sitewide CTA reads
+"Start Building"; the AR badge's glyph range is clear of the plan name; the AR dashboard card
+is Arabic; `/score/75?lang=ar` answers 200 with zero redirects. The wiring crawl's baseline
+stands: 0 dead links, 0 dead anchors across 409 pages.
+
+**Known, accepted, not this pass**: the builder keeps its own in-flow chrome (documented
+design); `/login` and the 404 stay minimal-chrome by design (the 404 now inherits the black
+world automatically); `/account` rendering in the stored language under an EN URL is `useLang`'s
+documented preference order; the old-system pages still use `ps-header` rather than the
+homepage's `cine-nav` — same black world, same brand mark, same CTA now, with full chrome
+convergence left as its own deliberate migration rather than a rushed find-and-replace.

@@ -35,7 +35,14 @@
 [dir="rtl"] * { letter-spacing: normal; }
 
 :root {
-  --bg: #0b0626;            /* COSMOS — the creation world (deep violet) */
+  /*
+   * ONE color world. This was #0b0626 — the violet "cosmos" — while the redesigned
+   * homepage introduced a near-black system (#030407, `landing.css`): two skies, meeting at
+   * the first click, and the fixed violet backdrop even painted OVER the homepage's own
+   * black (audited pixel-verified). The site is the black world now, everywhere; the violet
+   * survives only as the ACCENT it always was.
+   */
+  --bg: #030407;
   --surface: #101316;
   --fg: #f5f6fa;
   /* Bumped for WCAG AA contrast on the dark bg (flagged in audit):
@@ -423,14 +430,22 @@ main {
   z-index: var(--z-backdrop);
   pointer-events: none;
   overflow: hidden;
+  /* The BLACK world's sky — the same two faint lights the homepage's cinematic backdrop
+     uses, so the first click off the homepage changes the page, not the universe. The old
+     violet-cosmos gradients and the starfield are retired with it. */
   background:
-    radial-gradient(120% 80% at 50% -20%, #1a1040 0%, transparent 60%),
-    linear-gradient(180deg, #0b0626 0%, #070417 55%, #05030f 100%);
+    radial-gradient(900px 520px at 50% -10%, rgba(76, 29, 149, 0.14), transparent 62%),
+    radial-gradient(640px 380px at 82% 92%, rgba(59, 130, 246, 0.05), transparent 66%),
+    #030407;
 }
 .space-backdrop .sb-stars {
   position: absolute;
   inset: -1px;
   background-repeat: repeat;
+  /* The stars belonged to the violet cosmos. Hidden rather than deleted: the layers'
+     definitions below stay (cheap, documented, and dead-css bookkeeping intact) while the
+     one black system renders starless, matching the homepage that defines it. */
+  display: none;
 }
 /* Three depth layers: small and dim, medium, few and bright. Tiled, so the cost is
    one gradient per layer regardless of how many stars appear. */
