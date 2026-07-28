@@ -93,8 +93,9 @@ export default function CinematicLanding({ lang }: { lang: "ar" | "en" }) {
         <div className="cine-footer-in">
           <span>© {new Date().getFullYear()} {t.footer.rights}</span>
           <span style={{ display: "flex", gap: 18 }}>
-            <Link href="/terms">{t.footer.terms}</Link>
-            <Link href="/privacy">{t.footer.privacy}</Link>
+            {/* The Arabic legal pages exist — an Arabic reader gets them, not the English ones. */}
+            <Link href={ar ? "/ar/terms" : "/terms"}>{t.footer.terms}</Link>
+            <Link href={ar ? "/ar/privacy" : "/privacy"}>{t.footer.privacy}</Link>
           </span>
         </div>
       </footer>

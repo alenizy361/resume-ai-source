@@ -14,8 +14,10 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
     fetch("/api/auth/me").then((r) => r.json()).then((d) => setSignedIn(!!d.signedIn)).catch(() => setSignedIn(false));
   }, []);
 
+  /* The Arabic entries point at the ARABIC routes — the bare EN paths landed an Arabic user on
+     the English login/account pages (the path is what `useLang` trusts first). */
   const acct = ar
-    ? (signedIn ? { href: "/account", label: "● حسابي" } : { href: "/login", label: "تسجيل الدخول" })
+    ? (signedIn ? { href: "/ar/account", label: "● حسابي" } : { href: "/ar/login", label: "تسجيل الدخول" })
     : (signedIn ? { href: "/account", label: "● Account" } : { href: "/login", label: "Sign in" });
 
   const links = ar
@@ -57,7 +59,11 @@ export default function MobileMenu({ ar = false }: { ar?: boolean }) {
             style={{ background: "rgba(0,0,0,0.5)", zIndex: "var(--z-menu)" }} />
           <div
             className={`absolute mt-3 min-w-52 rounded-xl p-2 ${ar ? "left-0" : "right-0"}`}
-            style={{ background: "var(--surface)", border: "1px solid var(--line)", boxShadow: "0 20px 50px -15px rgba(0,0,0,0.7)" }}
+            /* Same layer as the scrim, LATER in the DOM, so it paints above it. Without an explicit
+               z-index the fixed scrim (z 60) covered this panel entirely: the menu opened, every
+               link rendered — and every tap hit the scrim and only closed the menu. The whole
+               mobile nav was dead, both languages, verified by elementFromPoint on every link. */
+            style={{ background: "var(--surface)", border: "1px solid var(--line)", boxShadow: "0 20px 50px -15px rgba(0,0,0,0.7)", zIndex: "var(--z-menu)" }}
           >
             {links.map((l) => (
               <Link

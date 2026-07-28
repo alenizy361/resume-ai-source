@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import HubLinks from "@/app/components/HubLinks";
 import PageShell from "@/app/components/PageShell";
 import { navCta } from "@/app/lib/brand";
@@ -31,6 +32,16 @@ export default function TemplatesPage() {
         <TemplatesGallery />
         <p className="mt-10 text-center text-sm" style={{ color: "var(--faint)" }}>
           Designed PDF is great for recruiters &amp; LinkedIn. For the applicant-tracking upload, use the plain ATS PDF/Word — both are included.
+        </p>
+        {/* The SEO template-style catalog's ONE in-product inbound link. HubLinks deliberately
+            lists a single "Templates" entry (two identical labels read as a mistake), which left
+            /resume-templates and its nine style pages reachable from nowhere — sitemap-only. A
+            contextual cross-link from the gallery names it differently, so no label collides. */}
+        <p className="mt-3 text-center text-sm" style={{ color: "var(--faint)" }}>
+          Want the long-form guides?{" "}
+          <Link href="/resume-templates" className="underline" style={{ color: "var(--muted)", textUnderlineOffset: 4 }}>
+            Resume template styles, explained
+          </Link>
         </p>
       </section>
       <HubLinks current="/templates" />

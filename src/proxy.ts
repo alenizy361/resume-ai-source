@@ -46,7 +46,10 @@ const AR_TWINS: RegExp[] = [
   /^\/pricing$/,
   /^\/templates$/,
   /^\/v1$/,
-  /^\/score(\/|$)/,
+  /* /score is NOT here — fourth member of the stub-loop club (after /interview, /linkedin,
+     /login): app/(ar)/ar/score/[id] is a redirect stub back to /score/{id}?lang=ar, so listing
+     it here made the Arabic "Share my score" link — and every shared Arabic score URL — an
+     infinite 308/307 loop. The rule stands: only routes whose /ar page renders real content. */
   /^\/resume-examples(\/|$)/,
   /^\/cover-letter-examples(\/|$)/,
   /^\/resume-skills(\/|$)/,
