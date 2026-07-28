@@ -2991,3 +2991,135 @@ across ten pages. · Ten templates are one layout in ten accent hues. · Emoji s
 set beside a bespoke animated Orb, and `/interview-live` introduces a third visual identity. · A
 band of `var(--faint)` small text measures 3.4–3.9:1 — over the 3:1 bar this product set, under
 WCAG AA's 4.5:1.
+
+---
+
+## Overnight adversarial round 2 (`77cb0df`) — 28 fixes, four agents, two of them mine
+
+Agents: bug hunters on the navigation graph and on `/optimize` + payments; a design critic on
+**Arabic mobile at 390×844**, the primary audience and the one viewport no earlier round had swept;
+and an adversarial verifier told to break round 1's twelve fixes. 29/29 re-measured in Chromium.
+
+### The verifier earned its keep: two of round 1's fixes were wrong
+
+**The liveness lease was worse than the bug it fixed.** `keepVisitAlive()` stamps on mount, and
+`BuilderProvider`'s hydration effect bails on its first pass because `useOwner()` has not answered
+yet — so by the time `mayRestore("anon")` ran, the only thing in the lease was a stamp *that tab*
+had written milliseconds earlier. Every tab read itself as a live sibling, the anonymous visit never
+expired, and a shared machine showed the next person the previous one's half-built CV: the exact
+complaint `resumeStore`'s header quotes, reintroduced by the fix for a different one. Proven with a
+negative control — block the lease write and correct wiping returns immediately.
+
+A single timestamp cannot answer "is somebody ELSE alive". The lease is now a registry of
+`{tabId: lastBeat}` (tab id in `sessionStorage`, so a reload keeps it). That also makes the
+multi-tab lifecycle correct, which one shared key could not be: closing one of three tabs removes
+only its own entry. `pagehide` clears it, so a clean close ends the visit at once instead of waiting
+out the freshness window. The residual case is documented rather than hidden: a KILLED tab (crash,
+force-quit, iOS reclaim) leaves its entry until it goes stale, ≤5 minutes.
+
+**The phantom-CV gate had a hole in the case the commit message named.** `BuilderStart.startNew()`
+wrote the empty record itself, outside the autosave gate, so pressing "Build a new CV" twice still
+listed two "Untitled · 0 of 11 steps done" rows. The write existed only so "most recent" would
+resolve, and the navigation carries the id in the URL — which the provider already prefers.
+
+Two more places the gate was too wide, both found by source reading rather than the browser:
+`{t:"ai"}` carries the spend ledger `mayCall` enforces the per-resume budget from, so gating it
+meant the cap reset on every reload and the same money could be spent again; and a server copy
+adopted on a second device reached the screen and never the disk.
+
+### Payments
+
+`/pay/callback` never checked `res.ok`. `/api/pay/verify` answers **500 with a JSON body** for every
+verification failure — including any unknown or replayed `transactionNo` — and that body parses, so
+the success chain handled it: `d.paid` falsy, `d.status` undefined, `isDeadStatus(undefined)` false,
+final `else`. The buyer was told "your payment is still being processed — don't pay again", with a
+Refresh button that replayed to the same screen forever. `verifyFail` and the Contact-support link
+were written for exactly this case and were reachable only from `.catch()`. **A buyer who may have
+been charged got reassurance and no way to reach anybody.**
+
+The Arabic checkout collapsed every non-OK response to one generic "تعذّر بدء الدفع" — defensible
+instinct (the server writes English, and a payment step is the worst place to leak it), wrong
+result: a buyer whose mobile was rejected could not learn which field was wrong, so retrying the
+same unfixable input failed identically. `/api/pay` now returns a language-neutral `code` per
+branch. And mobile validation stripped only spaces and `+`, so an ordinary `055-123-4567` was
+rejected — punctuation in a phone number is formatting, not data.
+
+The modal set `aria-modal` and implemented none of it: focus stayed on `<body>`, a keyboard buyer
+needed eight tabs to reach the first field, and could tab back out into a page whose scroll was
+locked.
+
+### Arabic mobile — the pattern is *documented fixes that don't reach*
+
+Four of the six worst findings were places where this codebase already knew the answer and the guard
+missed:
+
+| The file says | What it guarded | What slipped past |
+|---|---|---|
+| "Arabic never gets the monospace stack" | the `.font-mono` **class** | nine `var(--font-mono)` sites, incl. the footer on ten pages |
+| "white on #8b5cf6 is 4.23:1 (under AA)" | one button | `.text-accent` + 70 inline sites, as 12–14px ink |
+| "builder step-index links 14px tall, the optimize template chips 30px" | nothing — those controls never carried `.t-tap` | and an `li .t-tap` exception would have cancelled it anyway, for markup that is exactly `<li><a>` |
+| `PageBody`'s bilingual pair | `/interview`, `/linkedin` | `/interview-live`, which shipped 735 words at 99.4% Latin inside an RTL document |
+
+So the mono guard moved to the **token** (`[dir="rtl"] { --font-mono: … }`), which a tenth site
+cannot bypass; accent-as-ink resolves to the deep cut everywhere; and the 44px floor moved onto the
+button primitives instead of a utility that also set `display`. That `display: inline-flex` was
+itself a Critical: it broke the builder's two entry cards — the primary funnel's one decision screen
+— into flex ROWS, interleaving each card's title and description, unreadable in Arabic.
+
+Also: the parent company's name was misspelled «رابِط» — a different Arabic word — on ten pages
+while the homepage, Terms and Privacy had it right, and `ops/seo-audit.mjs` already asserts the
+correct form; the steps list numbered itself 1-2-3-4 directly under a counter reading «الخطوة ١ من
+٣»; forward arrows pointed backwards in five places; the 48px price sat in a 48px line box.
+
+### Navigation
+
+**Arabic was permanently sticky** on the four single-URL tools. The EN toggle navigated to the bare
+path with no `?lang=en`, so the stored preference outranked the click and the English version became
+unreachable for the life of the device. Two things were wrong: the missing parameter, and that the
+toggle was a `<Link>` — a same-route client navigation never remounts, so `useLang`'s writer effect
+(deps `[]`) never re-ran and `<html lang>` could not change. It is a plain `<a>` now, which is the
+honest thing regardless: language decides attributes on the document itself.
+
+`/ar/templates`' bilingual mode sent Arabic visitors to the **English** builder (`lang=bi` falls
+through the proxy's `lang === "ar"` check). 69 `?lang=ar` URLs 308-redirected into a 404 because the
+catalog patterns claimed 85 Arabic twins where 62 exist — the proxy's own header already promised
+"only when a twin actually exists". The 20 sector pages were the only bilingual pair in the product
+with no language toggle at all. `/ar/pricing` and `/ar/templates` were absent from the sitemap while
+their English twins declared them as `hreflang` alternates.
+
+### Optimize
+
+Every message the upload handler produced went to `error`, whose only render site is inside the
+**step-3** branch — so on step 1, where the file input is, a corrupt file, an unsupported type and a
+silently-truncated 33,000-character CV all looked identical to nothing happening, then resurfaced two
+steps later as a scan error beside a Retry-the-*scan* button. The server had added its `truncated`
+flag specifically so the cut would be visible; the client set the message and had nowhere to paint
+it. The job-posting upload discarded text twice (8,000 server-side, then 4,000 more) and reported
+success in the accent colour. The draft persisted only `{resume, jobDescription, mode}`, so employer
+and target country were dropped by a reload while the fields beside them came back.
+
+### OPEN · every page-level `notFound()` renders an empty document
+
+Not Arabic-specific, which is the finding. Measured on a production build:
+
+```
+/resume-examples/no-such-job   404  <html id="__next_error__">   no lang, no dir, no stylesheet
+/resume-skills/nope            404  <html id="__next_error__">   English homepage <title>
+/ar/zzz                        404  <html id="__next_error__">   Arabic 404 only in the flight payload
+/zzz                           404  <html lang="en" dir="ltr">   ← router-level, correct
+```
+
+Two hypotheses were tried against a real build and measured to change **nothing**: dropping the
+catch-all's `force-static` (a page whose whole body is `notFound()` has nothing to prerender), and
+adding `not-found.tsx` as a direct sibling of the throwing segment. With two root layouts in two
+route groups and no `not-found.tsx` above them, the boundary lookup does not resolve. The fix is
+structural — a shared boundary above the groups, or one root layout — and wants its own pass rather
+than a guess on a live revenue product. `app/(ar)/ar/[...missing]/page.tsx` carries the full
+diagnosis; `ops/failures.test.mjs` asserted this boundary "renders" and passed throughout, because
+it checks the hydrated DOM, which is exactly where the markup does arrive.
+
+**Still open from round 1**, unchanged: six content widths under one 1152px header; header
+composition varying across pages; ten templates that are one layout in ten accent hues; emoji
+standing in for an icon set beside a bespoke Orb; and the personal Gmail on the Terms page — now
+read from `brand.ts`, so `NEXT_PUBLIC_SUPPORT_EMAIL` moves all six call sites at once, but the
+address itself is the owner's to choose.
