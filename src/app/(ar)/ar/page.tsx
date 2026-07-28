@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Landing from "@/app/components/marketing/Landing";
+import CinematicLanding from "@/app/components/landing/CinematicLanding";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -27,5 +27,5 @@ export const metadata: Metadata = {
 };
 
 export default function ArabicHome() {
-  return <Landing lang="ar" />;
+  return <CinematicLanding lang="ar" />;
 }

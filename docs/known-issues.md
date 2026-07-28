@@ -2729,3 +2729,70 @@ letter-spaced Arabic elements on `/ar`; `/pricing` mobile header ≤64px with th
 served HTML; all four lang toggles present; body scroll locked under the checkout modal; template
 samples >90% visible in all three previously-blank language combinations; the Arabic-content CV
 preview visible inside the English UI; and no fabricated SUMMARY heading on the Arabic preview.
+
+### R-1 · The cinematic homepage: Sira as a Career Operating System — SHIPPED
+
+An owner-directed full redesign of the production homepage (`/` and `/ar`): a skippable
+30-second product film that becomes the product, replacing the previous `Landing.tsx` page on
+both routes. Not an audit fix — recorded here because this file is where the architecture's
+decisions and their reasons live.
+
+**The Orb is the identity, engineered inside the old constraints.** `components/brand-orb/` —
+`orbStates.ts` (ten states: dormant, awakening, idle, thinking, analyzing, listening,
+suggestion, success, warning, sleeping, each a parameter set: breath, internal energy, nebula,
+particles, scan, dim), `OrbEngine.ts` (one canvas-2D raster per frame: obsidian body, drifting
+purple nebula volumes, slow electric-blue plasma filaments, a capped cyan particle budget
+seeded once, rim light, one-shot success/warning rings via `pulse()`; parameter interpolation
+≈600ms so state changes are behaviour shifts, never cuts — and nothing rotates fast: it must
+never read as a spinner), and `BrandOrb.tsx` (the client wrapper: `role="img"` with state-aware
+bilingual labels, IntersectionObserver + visibilitychange gating the rAF, DPR capped at 2,
+ResizeObserver refit, a static obsidian face pre-hydration). **Deliberately a second component
+beside the CSS `BrandOrb` mark**: the mark stays a zero-JS server component in thirty-plus
+static headers (the F-23 bundle-weight class), the live orb acts wherever the assistant works —
+same palette, same breathing, one identity.
+
+**The film obeys the product, not the reverse.** `CinematicIntro` is MOUNTED only after a
+client-side check — first visit this tab session (`sessionStorage`, the product's own
+definition of a visit) and motion allowed — so the server HTML is always the complete readable
+page and a crawler or reduced-motion reader never meets the overlay at all. Skip control (focus
+starts on it), Escape, and the CTA all end it; the finale is a FLIP handoff, the intro orb
+translating onto the hero document's docked orb. Scroll is locked only while the overlay
+exists, restored on every exit path.
+
+**Eight scenes, one scroll owner, the F-7/F-8/F-10 rules kept.** Scene activation is
+IntersectionObserver + staged timers (`useScene` — under reduced motion every scene starts at
+its finished state); the "camera" is one rAF-written custom property (`--cam`) that a single
+fixed paint-only backdrop reads — no CSS scroll-timeline (the primitive that crashed iOS), no
+pinning, no scroll-jacking, transform/opacity transitions only, `content-visibility: auto` on
+below-fold scenes. The story: hero Career Profile fills itself (typed fields, landing chips,
+the docked orb thinking → success per fact) → job tailoring where the resume visibly reorders/
+emphasizes/quiets/adds lines and the 61→83→91 meter steps ONLY as its four named reasons appear
+→ the seven-station Career Road (vertical, line fills as stations are looked at) → Mission
+Control (the realistic set: 3 active applications, interview tomorrow, 2 follow-ups, one
+tailoring need, one ATS gap) → the interview, orb as interviewer (listening → analyzing →
+warning on the missing STAR Result) → pricing rendered from `plans.ts` itself (Free honestly
+watermarked; the real 35-SAR plan with its real 24-hour access label; the 99-SAR pack one
+link away) → finale. All copy in `landing/copy.ts`, both languages, all server-rendered.
+
+**Navigation split.** `navigation/PublicNavigation` (Explore · Product · Templates · Pricing ·
+Login + one CTA, transparent-to-solid, full-screen sheet on mobile with scroll lock and
+Escape); `navigation/AppNavigation` (Dashboard · Career Profile · Resumes · Applications ·
+Interview · Settings — every link a REAL existing surface, anchored to the account page's own
+sections which now carry ids) mounted in `AccountClient`, whose marketing CTA is gone: the
+public site ends at the door, the live orb carries the identity across it.
+
+**Verification (the prompt's own acceptance criteria, measured).** `tsc` clean, 48/48 suites,
+build clean (439 pages — no SEO route changed). Live Playwright, **49/49**: all four required
+viewports (1440×1000, 1280×800, 430×932, 390×844) × both languages — zero horizontal overflow,
+`h1` in the HTML, no meaningful text under 14px; reduced-motion never shows the overlay; the
+film plays on first visit, focus starts on Skip, Escape ends it, the page scrolls normally
+after, and it does not replay in the same session; the nav carries the five public links;
+keyboard focus is visible on black; ≥6 live orb instances; the hero demo fills; the score
+reaches 91% with all four reasons shown; every scene's content present. Desktop + mobile
+scroll-through recordings captured and delivered.
+
+**Deliberately left this pass**: `marketing/Landing.tsx` stays on disk UNMOUNTED (zero routes
+render it — deleting it drags `marketing.css`/dead-css test bookkeeping that deserves its own
+pass); `/interview-live`'s purpose-built avatar not yet swapped for the live orb; the stale
+`ops/design.test.mjs` (F-51's discovery) still needs reconciling with whichever landing it is
+now supposed to describe.

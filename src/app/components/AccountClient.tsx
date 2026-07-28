@@ -4,13 +4,13 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import useLang from "./useLang";
 import { accessExpiresAt, daysRemaining, entitlementFrom } from "@/app/lib/entitlement";
 import { toArabicDigits } from "@/app/lib/plans";
-import { navCta } from "@/app/lib/brand";
 import BrandOrb from "../components/BrandOrb";
 import CheckoutButton from "../components/CheckoutButton";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ScoreOrb from "../components/orb/ScoreOrb";
 import PageShell from "../components/PageShell";
+import AppNavigation from "../components/navigation/AppNavigation";
 import {
   getScans, removeScan, type ScanEntry,
   getResumes, removeResume, type SavedResume,
@@ -282,7 +282,9 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
   const sectionTitle = "mb-4 text-sm font-bold";
 
   return (
-    <PageShell lang={lang} cta={navCta(lang)} langToggle={lang === "ar" ? "/account" : "/ar/account"} width="reading">
+    <PageShell lang={lang} langToggle={lang === "ar" ? "/account" : "/ar/account"} width="reading">
+      {/* The authenticated app's own navigation — the marketing site ends at the door. */}
+      <AppNavigation lang={lang} active="dash" orbState={loading ? "thinking" : "idle"} />
       <div className="mx-auto max-w-2xl">
         {welcome && (
           <div className="mb-6 rounded-xl px-4 py-3 text-sm font-semibold"
@@ -297,7 +299,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         <h1 className="mb-8 text-3xl font-extrabold">{t.dashboard}</h1>
 
         {/* ── Plan card ── */}
-        <div className={sectionCard}>
+        <div id="settings" className={sectionCard} style={{ scrollMarginTop: 80 }}>
           {loading ? (
             <p className="text-sm" style={{ color: "var(--muted)" }}>{t.loading}</p>
           ) : me?.signedIn ? (
@@ -349,7 +351,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         </div>
 
         {/* ── Job application tracker ── */}
-        <div className={`${sectionCard} mt-6`}>
+        <div id="applications" className={`${sectionCard} mt-6`} style={{ scrollMarginTop: 80 }}>
           <div className="flex items-center justify-between">
             <h2 className={sectionTitle} style={{ marginBottom: 0 }}>📋 {t.jobApps} ({jobs.length})</h2>
             <button onClick={() => setShowJobForm((v) => !v)} className="btn-ghost px-3 py-1.5 text-xs font-semibold" style={{ color: "var(--accent)" }}>
@@ -435,7 +437,7 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
         </div>
 
         {/* ── Saved resumes ── */}
-        <div className={`${sectionCard} mt-6`}>
+        <div id="resumes" className={`${sectionCard} mt-6`} style={{ scrollMarginTop: 80 }}>
           <h2 className={sectionTitle}>{t.savedResumes} ({resumes.length})</h2>
           {resumes.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
