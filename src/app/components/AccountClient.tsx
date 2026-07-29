@@ -49,8 +49,15 @@ const STRINGS = {
   en: {
     optimizeCta: "Optimize a resume →", welcome: "You're signed in — welcome back!",
     myAccount: "● Career Dashboard", dashboard: "Your career dashboard", loading: "Loading…",
-    email: "Email", plan: "Plan", unlimited: "Unlimited — active", free: "Free",
-    accessUntil: "Access until", unlockUnlimited: "Unlock unlimited →",
+    /* NOT "Unlimited". This product sells a 24-hour pass and a 90-day pass and says "No
+       subscription, ever" on its own pricing page — nothing here is unlimited. Worse, the
+       row renders on `me.unlimited`, which `/api/auth/me` sets true for the 24-hour DEVICE
+       PASS while returning `until: 0` for it — so the expiry row disappears and the SAR 35
+       buyer is left with the word "Unlimited" standing alone. They stop working, come back
+       in two days, are locked out, and have a screenshot. */
+    email: "Email", plan: "Plan", unlimited: "Paid access — active", free: "Free",
+    windowUnknown: "Your pass is active on this device. Sign-in-linked access shows its end date here.",
+    accessUntil: "Access until", unlockUnlimited: "Unlock full access →",
     signOut: "Sign out", signingOut: "Signing out…",
     notSignedIn: "You're not signed in. Your history below lives on this device — sign in to link your paid access.",
     signIn: "Sign in →", jobApps: "Job applications", close: "Close", addJob: "+ Add job",
@@ -65,7 +72,8 @@ const STRINGS = {
   ar: {
     optimizeCta: "حسّن سيرتك ←", welcome: "سجّلت دخولك — أهلاً بعودتك!",
     myAccount: "● لوحتك المهنية", dashboard: "لوحة مسيرتك المهنية", loading: "جارٍ التحميل…",
-    email: "البريد", plan: "الباقة", unlimited: "كامل — نشط", free: "مجاني",
+    email: "البريد", plan: "الباقة", unlimited: "وصول مدفوع — نشط", free: "مجاني",
+    windowUnknown: "باقتك فعّالة على هذا الجهاز. الوصول المرتبط بحسابك يظهر تاريخ انتهائه هنا.",
     accessUntil: "الوصول حتى", unlockUnlimited: "افتح الوصول الكامل ←",
     signOut: "تسجيل الخروج", signingOut: "جارٍ الخروج…",
     notSignedIn: "لم تسجّل الدخول. سجلّك بالأسفل محفوظ على هذا الجهاز فقط — سجّل الدخول لربط وصولك المدفوع.",
@@ -318,6 +326,13 @@ function AccountInner({ initialLang = "en" }: { initialLang?: "en" | "ar" }) {
                     {me.unlimited ? t.unlimited : t.free}
                   </dd>
                 </div>
+                {/* When the pass is active but its end date is not known here — the device-pass
+                    case, where `/api/auth/me` returns `until: 0` — say so instead of rendering
+                    nothing. A plan row reading "active" with no end date underneath is how the
+                    old "Unlimited" claim did its damage even after the word changed. */}
+                {me.unlimited && !until && (
+                  <p className="text-xs" style={{ color: "var(--faint)" }}>{t.windowUnknown}</p>
+                )}
                 {until && (
                   <div className="flex items-center justify-between">
                     <dt className="text-sm" style={{ color: "var(--faint)" }}>{t.accessUntil}</dt>

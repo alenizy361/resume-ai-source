@@ -4,7 +4,8 @@ import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
 import MobileMenu from "@/app/components/MobileMenu";
 import { PLANS, formatPrice } from "@/app/lib/plans";
-import { navCta } from "@/app/lib/brand";
+import { BRAND, navCta } from "@/app/lib/brand";
+import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -98,6 +99,17 @@ export default function PricingPage() {
         </div>
         <p className="mt-8 text-center font-mono text-xs" style={{ color: "var(--faint)" }}>
           Secure Paylink checkout · Instant access · 7-day money-back guarantee on the Complete Pack · No subscription, ever
+        </p>
+
+        {/* The page that takes the money linked to nothing that governs it. A measured inventory
+            found four links on this page — brand, language toggle, sign in, builder — and no terms,
+            no refund policy and no way to reach a person. A buyer who wants to read the refund terms
+            BEFORE paying had to leave and go hunting; most just leave. */}
+        <p className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-xs" style={{ color: "var(--muted)" }}>
+          <Link href="/terms#refund" className="underline">Refund policy</Link>
+          <Link href="/terms" className="underline">Terms</Link>
+          <Link href="/privacy" className="underline">Privacy</Link>
+          <a href={`mailto:${BRAND.supportEmail}?subject=Payment%20question`} className="underline">Contact us</a>
         </p>
 
         <div className="mt-16">

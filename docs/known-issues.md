@@ -3452,3 +3452,136 @@ borrowed title. Pinned in `ops/builderdoc.test.mjs`.
 
 *The session's recurring shape again, in its sharpest form yet: the codebase had the right answer
 in storage the entire time, and the surface that reports it had not been told.*
+
+---
+
+## CX round — the money path, from the customer's side
+
+A hunter walked the product as a paying customer, in both languages, on a phone. Nine findings; six
+were real and are fixed below. Two were the owner's decisions rather than defects (VAT, the support
+address) and are recorded as such. One was wrong on inspection and is recorded as wrong, because a
+finding this file repeats without checking becomes folklore.
+
+### F-C1 · P0 · Every non-success payment outcome collapsed into "try again" — FIXED
+
+`/pay/callback` rendered its body as:
+
+```tsx
+{state === "failed" && !review ? t.neverLost : detail || t.wait}
+```
+
+`failed && !review` always won, so **`detail` was discarded on every failure**. Which made
+`t.statusLine` ("Payment status: declined.") and `t.noTx` **dead strings that could not render** —
+though both were written for exactly this screen. Every outcome that was not success showed one
+sentence: *"Payment didn't go through — try again. Your work is safe with you"*, with no reason, no
+support link, and a button back to the buy page.
+
+The dangerous case is the one with **no `transactionNo`** — the back button, a bookmark, or the
+provider dropping the parameter on the return hop. There we cannot tell whether the customer was
+charged, and telling them to try again is the double-payment path printed as an instruction.
+
+Two things were being conflated. `detail` is the REASON, which the customer needs; `neverLost` is
+the REASSURANCE, which is only TRUE when we actually know the payment did not complete. So:
+
+- a dead status now shows the reason **and** the reassurance, and offers support;
+- a missing reference is its own state (`unresolved`) with its own title — *"We couldn't read a
+  payment reference"* / *"لم نستطع قراءة رقم العملية"* — copy that says **do not pay again** and
+  asks them to contact us with the date and amount, the support link always shown, and the route
+  back to pricing demoted from a primary button to a quiet text link. The loudest control on a
+  screen where we cannot rule out a charge must not be the one that charges again.
+
+### F-C2 · P0 · Three refund policies, and the broadest one was on the screen they paid on — FIXED
+
+The promise lived in five places with three meanings:
+
+| Surface | What it said |
+|---|---|
+| **Checkout sheet, both plans, both languages** | *"🔒 Secure via Paylink · 7-day money-back"* — unconditional |
+| `/pricing`, homepage FAQ, JSON-LD | 7 days, **Complete Pack only** |
+| `/terms` §3 | a refund **only if the service failed** — explicitly not for "using the service in full and then asking" |
+| Receipt email | unconditional again |
+
+So the SAR 35 buyer was promised an unconditional refund on the sheet they paid on and would then be
+refused under §3. That is a chargeback rather than a support ticket, and the card scheme reads the
+screen the customer paid on.
+
+Fixed the way the PRICE was fixed: **one source**. `refundLine(plan, lang)` in `lib/plans.ts` — next
+to `planPrice`, for the same reason — returns the guarantee for the Complete Pack and an empty
+string for the single pass. The checkout sheet, the homepage FAQ, the JSON-LD and the receipt email
+all compose from it.
+
+**Nothing new is promised to anybody.** The wording is the one `/pricing` already advertised
+publicly; what changed is that the sheet stopped making a broader promise than the policy, and
+`/terms` §3 now **records the Complete-Pack guarantee in writing** — the one document where a refund
+promise actually binds, and the only one that had never mentioned it. What is advertised is owed, so
+writing it down is the honest direction to close the gap in.
+
+### F-C3 · P1 · The pages that take the money linked to nothing that governs it — FIXED
+
+Measured link inventory: `/pricing` and `/ar/pricing` carried four links between them — brand,
+language toggle, sign in, builder. **No terms, no refund policy, no way to reach a person.** The
+checkout sheet's own failure state rendered text only. A customer who wanted to read the refund
+terms *before* paying, or who could not pay and wanted to ask why, had to leave and go hunting.
+
+Both pricing pages now carry a legal row (refund policy · terms · privacy · contact), and the
+payment sheet itself links to the refund clause and to support. `Section` in both terms pages gained
+an `id`, so `#refund` lands on the clause instead of the top of a long legal page.
+
+### F-C4 · P1 · The upsell sold the SAR 99 pack for what SAR 35 already unlocks — FIXED
+
+The optimizer's cover-letter card read *"Part of the Complete Pack — unlock to generate"* / *"ضمن
+الحزمة الكاملة"* above a button hardcoded to `plan="complete"`. But `canUseCoverLetter`,
+`canUseLinkedInOptimizer` and `canUseInterviewPreparation` are each `active(e)` — **any valid pass
+unlocks all three.** A customer who believed the label paid SAR 64 more than they needed to.
+
+`lib/plans.ts` states the rule in its own header: *"Do not describe features as exclusive to the
+Complete Pack; the honest differentiator is duration."* `/pricing`'s FAQ says it correctly too
+(*"Nothing in features — both unlock everything"*), and `/interview-live`'s paywall already offers
+both plans. Only this card and `/terms` §2 disagreed — and §2 is the binding document.
+
+The card now says *"Unlocked by any pass"* and offers both plans, cheapest first, in the shape
+`/interview-live` already used. `/terms` §2 now leads with "Both plans unlock everything" and lists
+the two plans by duration alone.
+
+*The hunter also reported `/interview-live` as carrying the same defect. It does not — it has
+offered both plans all along. Recorded because a finding accepted without checking becomes folklore.*
+
+### F-C5 · P1 · A 24-hour buyer was told their plan is "Unlimited — active" — FIXED
+
+`/api/auth/me` sets `unlimited: unlimited || !!pass`, true for the 24-hour device pass, while
+returning `until: 0` for it — so the "Access until" row disappeared and the word **Unlimited** was
+left standing alone. The customer stops working, comes back in two days, is locked out, and has a
+screenshot.
+
+This product does not sell anything unlimited: both plans are one-time passes with an end date, and
+`/pricing`'s own line promises *"No subscription, ever"*. So the word is gone — "Paid access —
+active" / "وصول مدفوع — نشط", and `AuthNav`'s "Unlock unlimited →" is now "Unlock full access →".
+When the pass is active but its end date is not known on that surface, the page now says so rather
+than rendering nothing.
+
+### F-C6 · P2 · The receipt printed a fourth hardcoded price table — FIXED
+
+`const PLAN_VALUE = { single: 35, complete: 99, monthly: 75 }` inside the callback route fed both
+the on-screen receipt and the downloaded file, while `/api/pay/verify` had always returned `amount`
+— what Paylink actually collected — and the page ignored it. Run the promotion exactly as
+`plans.ts:90` documents (`PRICE_SINGLE=19`) and a buyer charged SAR 19 got a receipt saying SAR 35.
+
+That is precisely the divergence `plans.ts` was restructured to make impossible — *"a price table
+inside a route is the one place a divergence costs money"* — surviving in the one place it costs the
+most. The receipt now prints the charged amount. `PLAN_VALUE` stays for ad-conversion values, where
+a stale estimate is a rounding error in a dashboard.
+
+### OPEN · the owner's calls, not defects
+
+- **VAT.** A repo-wide search finds zero occurrences of VAT / ضريبة القيمة المضافة / ZATCA on any
+  pricing, checkout, terms or receipt surface, and "SAR 35" is never stated as VAT-inclusive. The
+  downloaded receipt is a 7-line `.txt` with no date, no seller and no VAT number, so a Saudi buyer
+  cannot expense it. Fixing this needs a VAT registration number and a decision on whether the
+  posted prices are inclusive — neither of which code can invent.
+- **The support address** is still a personal Gmail, and the subject line is English on the Arabic
+  surface. `brand.ts`'s own `supportEmailIsPersonal()` returns `true` and `/api/health/ai` reports
+  it. Unchanged since it was first recorded: it needs a mailbox, not a commit.
+
+*Same shape as this whole session: the codebase had already written the right answer — `plans.ts`'s
+header, `/pricing`'s FAQ, `entitlement.ts`'s gates, `verify`'s `amount` — and the surfaces that
+report it had not been told.*

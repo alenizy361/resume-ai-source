@@ -15,8 +15,10 @@ export const metadata: Metadata = {
   },
 };
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="t-enter mb-8">
+/* `id` so a deep link can land on a clause — the payment sheet now links straight to the
+   refund policy, and a customer sent to the top of a long legal page has not been shown it. */
+const Section = ({ title, children, id }: { title: string; children: React.ReactNode; id?: string }) => (
+  <section id={id} className="t-enter mb-8" style={{ scrollMarginTop: 90 }}>
     <h2 className="mb-3 text-xl font-bold">{title}</h2>
     <div className="space-y-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{children}</div>
   </section>
@@ -41,16 +43,22 @@ export default function ArTermsPage() {
 
         <Section title="٢. الأسعار">
           <ul className="mr-5 list-disc space-y-1">
-            <li><strong>{PLANS.single.nameAr} — {formatPrice("single", "ar")} (دفعة واحدة):</strong> {PLANS.single.accessLabelAr} يشمل السيرة المحسّنة كاملة وخطاب التعريف.</li>
-            <li><strong>{PLANS.complete.nameAr} — {formatPrice("complete", "ar")} دفعة واحدة:</strong> السيرة + خطاب التعريف + لينكدإن + تحضير المقابلة، {PLANS.complete.accessLabelAr}. دفعة واحدة بدون اشتراك ولا تجديد.</li>
+            {/* الباقتان تختلفان في المدة لا في المزايا — كل دوال الاستحقاق هي `active(e)`، فأي باقة
+                سارية تفتح كل شيء. حصر المزايا بالحزمة الكاملة يصف حصرية لا يطبّقها الكود. */}
+            <li><strong>الباقتان تفتحان كل شيء:</strong> السيرة المحسّنة كاملة، وخطاب التعريف، ومحسّن لينكدإن، وتحضير المقابلة، والتنزيل بلا علامة. الفرق بينهما في مدة الوصول فقط.</li>
+            <li><strong>{PLANS.single.nameAr} — {formatPrice("single", "ar")} (دفعة واحدة):</strong> {PLANS.single.accessLabelAr}</li>
+            <li><strong>{PLANS.complete.nameAr} — {formatPrice("complete", "ar")} دفعة واحدة:</strong> {PLANS.complete.accessLabelAr}. دفعة واحدة بدون اشتراك ولا تجديد.</li>
             <li>فحص الدرجة والتحليل مجاني دائماً بدون بطاقة.</li>
           </ul>
         </Section>
 
-        <Section title="٣. سياسة الاسترجاع">
+        <Section id="refund" title="٣. سياسة الاسترجاع">
           <p>ندفع لك فلوسك كاملة إذا لم تحصل على الخدمة:</p>
           <ul className="mr-5 list-disc space-y-1">
             <li>إذا دفعت ولم تُفعَّل خدمتك، أو فشل النظام بتوليد سيرتك المحسّنة — <strong>استرجاع كامل</strong> خلال ٧ أيام من الدفع.</li>
+            {/* الضمان كان معلناً في صفحة الأسعار وفي الأسئلة الشائعة وفي إيصال البريد، وغائباً عن هذه
+                الوثيقة وحدها — وهي المكان الوحيد الذي يُلزم. ما يُعلن يُلتزم به، فالأمانة أن يُكتب. */}
+            <li>وتحمل <strong>الحزمة الكاملة</strong> إضافةً إلى ذلك <strong>ضمان استرداد ٧ أيام</strong>: اطلب خلال ٧ أيام من الدفع ونعيد لك المبلغ بلا سبب.</li>
             <li>راسلنا بالبريد مع رقم العملية وسنعالج الطلب خلال ٣ أيام عمل، ويعود المبلغ عبر نفس وسيلة الدفع.</li>
             <li>لا يشمل الاسترجاع حالة استخدام الخدمة الكامل ثم طلب الاسترجاع لعدم الإعجاب بالأسلوب — لكن راسلنا وسنحاول إرضاءك.</li>
           </ul>

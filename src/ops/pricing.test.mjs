@@ -18,7 +18,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   PLANS, RETIRED_PRICES, planPrice, chargeableAmount, priceMismatch, formatPrice,
-  toArabicDigits,
+  toArabicDigits, refundLine,
 } from "../app/lib/plans.ts";
 
 /** Every .ts/.tsx under a directory. Shared by the two file-scanning checks below. */
@@ -166,6 +166,73 @@ const eq = (n, g, w) => ok(n, JSON.stringify(g) === JSON.stringify(w), `got ${JS
     }
   }
   ok("no price interpolation sits in JSX text", broken.length === 0, broken.join(", "));
+}
+
+
+/*
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE REFUND PROMISE, for the same reason the PRICE has one source
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * It was stated in five places with three different meanings, and the broadest one — an
+ * unconditional 7-day money-back — was printed on the checkout sheet for BOTH plans, including
+ * the SAR 35 pass that /terms §3 would then refuse. A card scheme resolves that dispute by
+ * looking at the screen the customer paid on, so this is a chargeback, not a support ticket.
+ */
+{
+  console.log("\n── one refund promise, scoped to the plan that carries it ──");
+
+  eq("the single pass makes no money-back claim", refundLine("single", "en"), "");
+  eq("in either language", refundLine("single", "ar"), "");
+  ok("the Complete Pack does, in both", /7-day money-back/.test(refundLine("complete", "en"))
+    && /ضمان استرداد ٧ أيام/.test(refundLine("complete", "ar")));
+
+  const checkout = readFileSync("app/components/CheckoutButton.tsx", "utf8");
+  ok("the checkout sheet composes its trust line from refundLine, not a literal",
+    (checkout.match(/secure: \[/g) || []).length === 2 && /refundLine\(plan === "complete"/.test(checkout));
+  ok("so no unconditional money-back literal survives in the sheet",
+    !/secure: "🔒 Secure via Paylink · 7-day money-back"/.test(checkout)
+    && !/ضمان استرجاع ٧ أيام"/.test(checkout));
+  /* The page that takes the money must link to the policy that governs it. */
+  ok("and the sheet links to the refund clause and to a human",
+    /terms#refund/.test(checkout) && /BRAND\.supportEmail/.test(checkout));
+
+  for (const [file, hash] of [["app/(en)/terms/page.tsx", "refund"], ["app/(ar)/ar/terms/page.tsx", "refund"]]) {
+    const src = readFileSync(file, "utf8");
+    ok(`${file} gives the refund clause an id to land on`, new RegExp(`<Section id="${hash}"`).test(src));
+  }
+  /* The guarantee was advertised in three places and written in none. What is promised publicly
+     is owed, so the fix is to record it — not to quietly drop it from the advertising. */
+  ok("the English terms now record the Complete-Pack guarantee",
+    /7-day money-back guarantee<\/strong>: ask within 7 days/.test(readFileSync("app/(en)/terms/page.tsx", "utf8")));
+  ok("and the Arabic terms do too",
+    /ضمان استرداد ٧ أيام<\/strong>: اطلب خلال ٧ أيام/.test(readFileSync("app/(ar)/ar/terms/page.tsx", "utf8")));
+
+  /* plans.ts states the rule in its own header: "Do not describe features as exclusive to the
+     Complete Pack; the honest differentiator is duration." Every entitlement gate is `active(e)`. */
+  const ent = readFileSync("app/lib/entitlement.ts", "utf8");
+  ok("every paid feature is still gated on ANY active pass",
+    ["canUseCoverLetter", "canUseLinkedInOptimizer", "canUseInterviewPreparation"]
+      .every((fn) => new RegExp(`${fn}[^}]*return active\\(e, now\\);`).test(ent)), ent.slice(0, 0));
+
+  const opt = readFileSync("app/components/tools/OptimizeTool.tsx", "utf8");
+  ok("so the cover-letter card no longer calls it Complete-Pack-only",
+    !/Part of the Complete Pack/.test(opt) && !/ضمن الحزمة الكاملة/.test(opt));
+  ok("and it offers the cheaper plan too", /plan="single"[\s\S]{0,200}plan="complete"/.test(opt));
+
+  const termsEn = readFileSync("app/(en)/terms/page.tsx", "utf8");
+  ok("the terms say both plans unlock everything", /Both plans unlock everything/.test(termsEn));
+  ok("and no longer list the extras under the Complete Pack alone",
+    !/resume \+ cover letter \+ LinkedIn \+ interview prep/.test(termsEn));
+
+  /* "Unlimited" is a word this product cannot use: both plans are one-time passes with an end
+     date, and /pricing's own line promises "No subscription, ever". */
+  const acct = readFileSync("app/components/AccountClient.tsx", "utf8");
+  ok("the account page does not call a 24-hour pass unlimited", !/"Unlimited — active"/.test(acct));
+  ok("and says so when the end date is not known here", /windowUnknown/.test(acct)
+    && /me\.unlimited && !until/.test(acct));
+  ok("the nav does not sell 'unlimited' either",
+    !/Unlock unlimited/.test(readFileSync("app/components/AuthNav.tsx", "utf8").replace(/\/\*[\s\S]*?\*\//g, "")));
 }
 
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);

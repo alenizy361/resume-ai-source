@@ -4,7 +4,8 @@ import PageShell from "@/app/components/PageShell";
 import AuthNav from "@/app/components/AuthNav";
 import MobileMenu from "@/app/components/MobileMenu";
 import { PLANS, formatPrice } from "@/app/lib/plans";
-import { navCta } from "@/app/lib/brand";
+import { BRAND, navCta } from "@/app/lib/brand";
+import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://cv.rabit.sa";
 
@@ -84,6 +85,15 @@ export default function ArabicPricingPage() {
         </div>
         <p className="mt-8 text-center font-mono text-xs" style={{ color: "var(--faint)" }}>
           دفع آمن عبر Paylink · وصول فوري · ضمان استرداد ٧ أيام على الحزمة الكاملة · بدون اشتراك أبداً
+        </p>
+
+        {/* الصفحة التي تأخذ المال لم تكن تربط بشيء يحكمها: لا شروط ولا سياسة استرجاع ولا وسيلة
+            للوصول إلى إنسان. من أراد قراءة سياسة الاسترجاع قبل الدفع كان عليه أن يغادر ويبحث. */}
+        <p className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-xs" style={{ color: "var(--muted)" }}>
+          <Link href="/ar/terms#refund" className="underline">سياسة الاسترجاع</Link>
+          <Link href="/ar/terms" className="underline">الشروط</Link>
+          <Link href="/ar/privacy" className="underline">الخصوصية</Link>
+          <a href={`mailto:${BRAND.supportEmail}?subject=${encodeURIComponent("استفسار عن الدفع")}`} className="underline">راسلنا</a>
         </p>
 
         <div className="mt-16">

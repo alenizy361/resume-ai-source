@@ -37,7 +37,7 @@
  *    be about the transaction rather than about the request.
  */
 
-import { chargeableAmount } from "./plans.ts";
+import { chargeableAmount, refundLine } from "./plans.ts";
 import { claimTransaction, getOrderEmail, grantEntitlement } from "./entitlements.ts";
 import { createMagicToken } from "./session.ts";
 import { emailShell, sendEmail } from "./email.ts";
@@ -178,7 +178,7 @@ export async function fulfilOrder(
         <p>Your <strong>${planName}</strong> access is active until <strong>${untilStr}</strong>.</p>
         <p>Open your paid access from any device with this link (valid 15 min; you stay signed in after):</p>
         <p><a href="${signin}" style="display:inline-block;background:#7c3aed;color:#ffffff;font-weight:bold;padding:12px 24px;border-radius:8px;text-decoration:none">Open my account →</a></p>
-        <p style="color:#666;font-size:13px">Plan: ${planName}<br/>Access until: ${untilStr}<br/>7-day money-back guarantee applies.</p>`),
+        <p style="color:#666;font-size:13px">Plan: ${planName}<br/>Access until: ${untilStr}${inv.plan === "complete" ? `<br/>${refundLine("complete", "en")} applies.` : ""}</p>`),
     });
   } catch (e) {
     /* The grant is already written, so the access works. A missing receipt is a support ticket, not

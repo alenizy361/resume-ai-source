@@ -1133,22 +1133,35 @@ export default function OptimizeTool({ defaultAr }: { defaultAr: boolean }) {
                       <h3 className="font-bold">{ar ? "خطاب تعريف مطابق" : "Matching cover letter"}</h3>
                       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
                         {marked
-                          ? (ar ? "ضمن الحزمة الكاملة — افتح الوصول لإنشاء خطاب تعريف مخصص لهذه الوظيفة." : "Part of the Complete Pack — unlock to generate a tailored cover letter from this job.")
+                          /* NOT "part of the Complete Pack". `canUseCoverLetter` is `active(e)` —
+                             ANY valid pass unlocks it — and plans.ts's own header states the rule
+                             this line broke: "Do not describe features as exclusive to the Complete
+                             Pack; the honest differentiator is duration." A customer who believed
+                             the label paid SAR 99 for what SAR 35 already unlocks. */
+                          ? (ar ? "يُفتح مع أي باقة — افتح الوصول لإنشاء خطاب تعريف مخصص لهذه الوظيفة." : "Unlocked by any pass — open access to generate a tailored cover letter from this job.")
                           : jobDescription.trim().length < 30
                             ? (ar ? "اضغط «فحص جديد ←»، أضِف إعلان الوظيفة، ثم أعد الفحص لإنشاء خطاب تعريف مطابق." : "Click ‘← New scan’, add the job posting, then re-scan to generate a matching cover letter.")
                             : (ar ? "خطاب تعريف مفصّل على نفس إعلان الوظيفة." : "Generate a tailored cover letter from the same job post.")}
                       </p>
                     </div>
                     {marked ? (
-                      /* The copy right above already says this is "part of the Complete Pack" —
-                         so the button buys that plan directly rather than sending the visitor to
-                         a separate page to say so again. `className` keeps it the same compact
-                         pill every sibling button in this row uses, instead of CheckoutButton's
-                         own default full-width block sizing. */
-                      <CheckoutButton
-                        ar={ar} plan="complete" label={ar ? "🔒 افتح الوصول لإنشائه" : "Unlock to generate"}
-                        variant="accent" className="btn-accent px-5 py-2.5 text-sm"
-                      />
+                      /*
+                       * BOTH plans, cheapest first — the shape `/interview-live`'s paywall already
+                       * uses. This offered only `complete`, under copy claiming the feature was
+                       * exclusive to it, so the single overcharge was SAR 64 on a false premise.
+                       * `className` keeps the compact pill every sibling button in this row uses,
+                       * instead of CheckoutButton's default full-width block.
+                       */
+                      <div className="flex flex-wrap items-center gap-2">
+                        <CheckoutButton
+                          ar={ar} plan="single" label={ar ? `🔒 ${formatPrice("single", "ar")}` : `🔒 ${formatPrice("single", "en")}`}
+                          variant="accent" className="btn-accent px-5 py-2.5 text-sm"
+                        />
+                        <CheckoutButton
+                          ar={ar} plan="complete" label={ar ? `${formatPrice("complete", "ar")} · ٩٠ يوماً` : `${formatPrice("complete", "en")} · 90 days`}
+                          variant="ghost" className="px-5 py-2.5 text-sm"
+                        />
+                      </div>
                     ) : !coverLetter ? (
                       <button
                         onClick={generateCoverLetter}

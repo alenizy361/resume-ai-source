@@ -3,7 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { trackStep } from "@/app/lib/funnelClient.ts";
-import { PLANS, formatPrice } from "@/app/lib/plans";
+import { PLANS, formatPrice, refundLine } from "@/app/lib/plans";
+import { BRAND } from "@/app/lib/brand";
 import BrandOrb from "./BrandOrb";
 
 /**
@@ -196,7 +197,13 @@ export default function CheckoutButton({
         starting: "جارٍ التحضير…", cancel: "إلغاء", failed: "تعذّر بدء الدفع، حاول مرة أخرى.",
         cardTitle: "بيانات البطاقة", cardName: "الاسم على البطاقة", cardNo: "رقم البطاقة",
         mm: "شهر", yy: "سنة", cvv: "CVV", payNow: "ادفع الآن", processing: "جارٍ الدفع…",
-        other: "طرق أخرى: تمارا · تابي · Apple Pay · STC ←", secure: "🔒 دفع آمن عبر Paylink · ضمان استرجاع ٧ أيام",
+        /* The refund clause is scoped to the plan being bought — see `refundLine` in plans.ts.
+           This string used to assert an unconditional 7-day money-back to BOTH plans, on the one
+           screen where the customer actually pays, while /pricing scoped it to the Complete Pack
+           and /terms granted it only on service failure. */
+        other: "طرق أخرى: تمارا · تابي · Apple Pay · STC ←",
+        secure: ["🔒 دفع آمن عبر Paylink", refundLine(plan === "complete" ? "complete" : "single", "ar")].filter(Boolean).join(" · "),
+        refundPolicy: "سياسة الاسترجاع",
         cardErr: "تحقّق من بيانات البطاقة وحاول مرة أخرى." }
     : { planLine: plan === "single"
           ? `One-time · ${formatPrice("single", "en")} (${PLANS.single.priceUsd})`
@@ -206,7 +213,9 @@ export default function CheckoutButton({
         starting: "Preparing…", cancel: "Cancel", failed: "Checkout failed. Please try again.",
         cardTitle: "Card details", cardName: "Name on card", cardNo: "Card number",
         mm: "MM", yy: "YY", cvv: "CVV", payNow: "Pay now", processing: "Processing…",
-        other: "Other ways: Tamara · Tabby · Apple Pay · STC →", secure: "🔒 Secure via Paylink · 7-day money-back",
+        other: "Other ways: Tamara · Tabby · Apple Pay · STC →",
+        secure: ["🔒 Secure via Paylink", refundLine(plan === "complete" ? "complete" : "single", "en")].filter(Boolean).join(" · "),
+        refundPolicy: "Refund policy",
         cardErr: "Please check your card details and try again." };
 
   /* A visible field on white: its own faint fill, a real border that darkens on focus, 16px text
@@ -355,7 +364,7 @@ export default function CheckoutButton({
                   <button type="submit" disabled={loading} className="btn-accent w-full disabled:opacity-50" style={{ padding: "14px", fontSize: 16 }}>{loading ? t.starting : t.pay}</button>
                   <button type="button" onClick={reset} disabled={loading} className="w-full py-1 text-center text-sm" style={{ color: "var(--faint)" }}>{t.cancel}</button>
                 </form>
-                <TrustRow ar={ar} secure={t.secure} />
+                <TrustRow ar={ar} secure={t.secure} refundPolicy={t.refundPolicy} />
               </div>
             ) : (
               <div className="relative">
@@ -388,7 +397,7 @@ export default function CheckoutButton({
                   <button type="button" onClick={payCard} disabled={paying} className="btn-accent w-full disabled:opacity-50" style={{ padding: "14px", fontSize: 16 }}>{paying ? t.processing : t.payNow}</button>
                   <a href={payUrl || "#"} className="block w-full py-2 text-center text-sm font-semibold" style={{ color: "var(--accent-deep)" }}>{t.other}</a>
                 </div>
-                <TrustRow ar={ar} secure={t.secure} />
+                <TrustRow ar={ar} secure={t.secure} refundPolicy={t.refundPolicy} />
               </div>
             )}
           </div>
@@ -406,7 +415,17 @@ export default function CheckoutButton({
  * an explicit "encrypted" line, and the money-back promise. Wordmarks are TEXT, not logo images —
  * a broken or mis-scaled card logo reads as LESS trustworthy than none, and text cannot 404.
  */
-function TrustRow({ ar, secure }: { ar: boolean; secure: string }) {
+/**
+ * The payment sheet's own trust row — and, since this pass, its only route OUT.
+ *
+ * The pages that take the money linked to nothing: a measured inventory of `/pricing` and
+ * `/ar/pricing` found four links between them (brand, language toggle, sign in, builder) and no
+ * terms, no refund policy and no way to reach a person. So a customer whose checkout failed — or
+ * who wanted to know the refund terms BEFORE paying — had to leave, find the homepage footer, open
+ * the terms and scroll. Most do not; they close the tab, and that is a lost sale rather than a
+ * support ticket, which is why it is worth two links.
+ */
+function TrustRow({ ar, secure, refundPolicy }: { ar: boolean; secure: string; refundPolicy: string }) {
   const nets = ["mada", "VISA", "Mastercard", "Apple Pay"];
   return (
     <div className="mt-5 border-t pt-4" style={{ borderColor: "var(--line)" }}>
@@ -416,6 +435,12 @@ function TrustRow({ ar, secure }: { ar: boolean; secure: string }) {
         ))}
       </div>
       <p className="mt-3 text-center text-xs" style={{ color: "var(--faint)" }}>{secure}</p>
+      <p className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-xs">
+        <a href={ar ? "/ar/terms#refund" : "/terms#refund"} target="_blank" rel="noopener noreferrer"
+          className="underline" style={{ color: "var(--muted)" }}>{refundPolicy}</a>
+        <a href={`mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(ar ? "استفسار عن الدفع" : "Payment question")}`}
+          className="underline" style={{ color: "var(--muted)" }}>{ar ? "راسلنا" : "Contact us"}</a>
+      </p>
     </div>
   );
 }

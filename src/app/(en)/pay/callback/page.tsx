@@ -25,7 +25,10 @@ function CallbackInner() {
         pendingMsg: "\u062f\u0641\u0639\u062a\u0643 \u0642\u064a\u062f \u0627\u0644\u0645\u0639\u0627\u0644\u062c\u0629 \u0648\u0644\u0645 \u062a\u0643\u062a\u0645\u0644 \u0628\u0639\u062f. \u0644\u0627 \u062a\u062f\u0641\u0639 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u2014 \u0627\u0636\u063a\u0637 \u201c\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629\u201d \u0628\u0639\u062f \u0644\u062d\u0638\u0627\u062a.",
         refresh: "\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629",
         wait: "\u0644\u062d\u0638\u0629 \u0645\u0646 \u0641\u0636\u0644\u0643.",
-        noTx: "\u0644\u0645 \u064a\u0635\u0644\u0646\u0627 \u0631\u0642\u0645 \u0627\u0644\u0639\u0645\u0644\u064a\u0629.",
+        /* Its own title and its own sentence. "Payment not completed" is a CLAIM, and this is
+           the one branch where we have no basis for it — see the render. */
+        unknownTitle: "\u0644\u0645 \u0646\u0633\u062a\u0637\u0639 \u0642\u0631\u0627\u0621\u0629 \u0631\u0642\u0645 \u0627\u0644\u0639\u0645\u0644\u064a\u0629",
+        noTx: "\u0641\u064f\u062a\u062d\u062a \u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062d\u0629 \u0628\u062f\u0648\u0646 \u0631\u0642\u0645 \u0639\u0645\u0644\u064a\u0629\u060c \u0641\u0644\u0627 \u0646\u0633\u062a\u0637\u064a\u0639 \u0645\u0639\u0631\u0641\u0629 \u0625\u0646 \u0643\u0627\u0646 \u0642\u062f \u062e\u064f\u0635\u0645 \u0645\u0646\u0643 \u0645\u0628\u0644\u063a. \u0644\u0627 \u062a\u062f\u0641\u0639 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u2014 \u0625\u0630\u0627 \u062e\u064f\u0635\u0645 \u0645\u0646\u0643 \u0634\u064a\u0621\u060c \u0631\u0627\u0633\u0644\u0646\u0627 \u0628\u0627\u0644\u062a\u0627\u0631\u064a\u062e \u0648\u0627\u0644\u0645\u0628\u0644\u063a \u0648\u0646\u062d\u0644\u0651\u0647\u0627 \u0644\u0643.",
         confirmed: (o: string) => `\u062a\u0645 \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 ${o}.`,
         amountMismatch: "\u0627\u0644\u0645\u0628\u0644\u063a \u0627\u0644\u0645\u062f\u0641\u0648\u0639 \u0644\u0627 \u064a\u0637\u0627\u0628\u0642 \u0633\u0639\u0631 \u0627\u0644\u0628\u0627\u0642\u0629. \u0625\u0630\u0627 \u062e\u064f\u0635\u0645 \u0645\u0646\u0643\u060c \u0631\u0627\u0633\u0644\u0646\u0627 \u0648\u0633\u0646\u062d\u0644\u0647\u0627 \u0641\u0648\u0631\u0627\u064b.",
         statusLine: (st: string) => `\u062d\u0627\u0644\u0629 \u0627\u0644\u062f\u0641\u0639: ${st || "\u063a\u064a\u0631 \u0645\u0643\u062a\u0645\u0644\u0629"}.`,
@@ -59,7 +62,8 @@ function CallbackInner() {
         pendingMsg: "Your payment is still being processed and hasn't completed yet. Don't pay again — tap “Refresh status” in a moment.",
         refresh: "Refresh status",
         wait: "Please wait a moment.",
-        noTx: "No transaction reference was returned.",
+        unknownTitle: "We couldn't read a payment reference",
+        noTx: "This page opened without a payment reference, so we cannot tell whether you were charged. Do not pay again — if money left your account, contact us with the date and amount and we will sort it out.",
         confirmed: (o: string) => `Order ${o} confirmed.`,
         amountMismatch: "The amount paid didn't match the plan price. If you were charged, contact support and we'll sort it out.",
         statusLine: (st: string) => `Payment status: ${st || "not completed"}.`,
@@ -86,8 +90,30 @@ function CallbackInner() {
   // title. showSupport surfaces a real support channel wherever we ask them to reach out.
   const [review, setReview] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  /*
+   * "We have no basis for an answer" — distinct from "the payment failed".
+   *
+   * The page opened with no `transactionNo` (back button, a bookmark, the provider dropping the
+   * parameter on the return hop). It used to be folded into `failed`, so a buyer whose card may
+   * well have been charged was told "Payment didn't go through — try again" and handed a button
+   * back to the pricing page. That is the double-payment path, printed as an instruction.
+   */
+  const [unresolved, setUnresolved] = useState(false);
+  /**
+   * What Paylink says was actually collected, in SAR. `/api/pay/verify` has always returned it and
+   * this page has always ignored it in favour of a hardcoded table — see `PLAN_VALUE` below.
+   */
+  const [paidAmount, setPaidAmount] = useState<number | null>(null);
 
-  // One-time SAR value per plan — used for ad conversion tracking.
+  /*
+   * One-time SAR value per plan — for AD CONVERSION TRACKING ONLY, never for the receipt.
+   *
+   * `lib/plans.ts` is the price's single source and reads `PRICE_SINGLE`/`NEXT_PUBLIC_PRICE_SINGLE`
+   * so a promotion can move it. This table cannot. Run the promotion the way `plans.ts` documents
+   * and a buyer charged SAR 19 was handed a receipt saying SAR 35 — the exact divergence `plans.ts`
+   * was restructured to make impossible, surviving in the one place it costs the most. The receipt
+   * now prints `paidAmount`; an analytics estimate being stale is a rounding error in a dashboard.
+   */
   const PLAN_VALUE: Record<string, number> = { single: 35, complete: 99, monthly: 75 };
 
   // Google Ads conversion tracking — fires ONLY on a confirmed payment so ad
@@ -147,12 +173,17 @@ function CallbackInner() {
     const tx = params.get("transactionNo") || params.get("TransactionNo");
     if (!tx) {
       setState("failed");
+      setUnresolved(true);
+      /* The one branch that must offer a human: we cannot tell this buyer whether they were
+         charged, so "try again" would be the worst possible advice. */
+      setShowSupport(true);
       setDetail(t.noTx);
       return;
     }
     setState("checking");
     setDetail("");
     setReview(false);
+    setUnresolved(false);
     setShowSupport(false);
     fetch(`/api/pay/verify?transactionNo=${encodeURIComponent(tx)}`)
       /*
@@ -187,6 +218,8 @@ function CallbackInner() {
              content pages earn anything. The plan name is an enum; no amount, no order id. */
           trackStep("paid", { plan: paidPlan });
           setOrderNo(String(d.orderNumber || tx));
+          /* The amount Paylink actually collected — what the receipt must print. */
+          setPaidAmount(Number(d.amount) > 0 ? Number(d.amount) : null);
           setDetail(t.confirmed(d.orderNumber || tx));
           /*
            * Mark this ACCOUNT as an owner — every later visit shows the gold stamp.
@@ -215,6 +248,9 @@ function CallbackInner() {
         } else if (isDeadStatus(d.status)) {
           setState("failed");
           setDetail(t.statusLine(d.status));
+          /* A declined card is not a support case, but a buyer staring at "not completed" while
+             their banking app shows a hold deserves somewhere to ask. It costs one line. */
+          setShowSupport(true);
         } else {
           // Not paid yet, but not dead either — keep it as "pending" and let the
           // buyer re-poll instead of showing a scary "failed" + pay-again path.
@@ -245,12 +281,16 @@ function CallbackInner() {
     checkStatus();
   }, [checkStatus]);
 
+  /* What Paylink actually collected, falling back to the plan's list price only when the provider
+     did not say. Never the other way round: the charged amount is the fact, the table is a guess. */
+  const receiptAmount = paidAmount ?? PLAN_VALUE[plan || "single"] ?? 35;
+
   function downloadReceipt() {
     const lines = [
       "cv.rabit.sa", "───────────────", t.paidTitle,
       `${t.orderNo}: ${orderNo}`,
       `${ar ? "الباقة" : "Plan"}: ${plan || "single"}`,
-      `SAR ${PLAN_VALUE[plan || "single"] ?? 35}`,
+      `SAR ${receiptAmount}`,
       "───────────────", t.yoursForever,
     ];
     const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
@@ -287,10 +327,28 @@ function CallbackInner() {
             : paid ? t.paidTitle
             /* `showSupport` on a pending state IS the verify-failure branch — see the fetch chain. */
             : state === "pending" ? (showSupport ? t.unverifiedTitle : t.pendingTitle)
+            : unresolved ? t.unknownTitle
             : review ? t.reviewTitle : t.failedTitle}
         </h1>
+        {/*
+          ── the reason used to be computed and then thrown away ──
+
+          This read `state === "failed" && !review ? t.neverLost : detail || t.wait`. Because
+          `failed && !review` always won, `detail` was discarded on every failure — which made
+          `t.statusLine` ("Payment status: declined.") and `t.noTx` DEAD STRINGS that could not
+          render, though both were written for exactly this screen. Every non-success outcome
+          collapsed into one sentence: "Payment didn't go through — try again."
+
+          Two different things were being conflated. `detail` is the REASON, which the customer
+          needs; `neverLost` is the REASSURANCE, which is only true when we actually know the
+          payment did not complete. So the reason is shown when there is one, the reassurance is
+          added only for a genuinely dead status, and the no-reference case — where we cannot tell
+          whether they were charged — says so instead of guessing.
+        */}
         <p className="mt-3 text-sm" style={{ color: paid ? "var(--glass-muted)" : "var(--muted)" }}>
-          {state === "failed" && !review ? t.neverLost : detail || t.wait}
+          {state === "failed" && !review && !unresolved
+            ? [detail, t.neverLost].filter(Boolean).join(" ")
+            : detail || t.wait}
         </p>
         {showSupport && (
           <p className="mt-3 text-sm">
@@ -314,7 +372,7 @@ function CallbackInner() {
             <div className="mt-6 rounded-2xl p-4 text-start" style={{ background: "rgba(11,18,32,0.05)", border: "1px solid rgba(11,18,32,0.1)" }}>
               <div className="mb-2 font-mono text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--glass-muted)" }}>{t.receipt}</div>
               <div className="flex items-center justify-between text-sm"><span style={{ color: "var(--glass-muted)" }}>{t.orderNo}</span><span dir="ltr" className="font-mono font-semibold">{orderNo}</span></div>
-              <div className="flex items-center justify-between text-sm"><span style={{ color: "var(--glass-muted)" }}>SAR</span><span className="font-mono font-semibold">{PLAN_VALUE[plan || "single"] ?? 35}</span></div>
+              <div className="flex items-center justify-between text-sm"><span style={{ color: "var(--glass-muted)" }}>SAR</span><span className="font-mono font-semibold">{receiptAmount}</span></div>
               <button onClick={downloadReceipt} className="mt-3 w-full rounded-lg py-2 text-xs font-bold" style={{ background: "rgba(11,18,32,0.06)", color: "var(--glass-text)" }}>↓ {t.downloadReceipt}</button>
             </div>
 
@@ -327,8 +385,20 @@ function CallbackInner() {
             <Link href={ar ? "/ar/pricing" : "/pricing"} className="text-sm font-semibold" style={{ color: "var(--muted)" }}>{t.back}</Link>
           </div>
         )}
+        {/*
+          On an UNRESOLVED outcome the primary action must not be a route back to the buy button.
+          We do not know whether this customer was charged, so the loudest control on the screen
+          cannot be the one that charges them again — the support link above is the action, and
+          pricing stays reachable as a quiet secondary.
+        */}
         {state === "failed" && (
-          <Link href={ar ? "/ar/pricing" : "/pricing"} className="mt-6 inline-block rounded-xl px-8 py-3 font-semibold" style={{ border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}>{t.back}</Link>
+          <Link
+            href={ar ? "/ar/pricing" : "/pricing"}
+            className={unresolved ? "mt-6 inline-block text-sm font-semibold" : "mt-6 inline-block rounded-xl px-8 py-3 font-semibold"}
+            style={unresolved ? { color: "var(--muted)" } : { border: "1px solid rgba(245,184,64,0.4)", color: "var(--fg)" }}
+          >
+            {t.back}
+          </Link>
         )}
       </div>
     </main>

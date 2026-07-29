@@ -311,5 +311,54 @@ console.log("\n── the webhook reads a payload whose shape we could not look 
     /resume-examples\\\/category/.test(px));
 }
 
+
+/*
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE FAILURE SCREEN COMPUTED A REASON AND THREW IT AWAY
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * The body read `state === "failed" && !review ? t.neverLost : detail || t.wait`. Because
+ * `failed && !review` always won, `detail` was discarded on every failure — which made
+ * `t.statusLine` ("Payment status: declined.") and `t.noTx` DEAD STRINGS that could not render,
+ * although both were written for exactly this screen. Every non-success outcome collapsed into one
+ * sentence — "Payment didn't go through — try again" — with no reason and no support link, above
+ * a button back to the buy page.
+ *
+ * The dangerous case is the one with NO transaction reference: the back button, a bookmark, or the
+ * provider dropping the parameter on the return hop. There we cannot tell whether the customer was
+ * charged, so "try again" is the worst available advice — it is the double-payment path printed as
+ * an instruction.
+ */
+{
+  console.log("\n── a failed payment says WHY, and an unknown one says it is unknown ──");
+  const cb = readFileSync("app/(en)/pay/callback/page.tsx", "utf8");
+
+  ok("the reason is rendered alongside the reassurance, not instead of it",
+    /\[detail, t\.neverLost\]\.filter\(Boolean\)\.join\(" "\)/.test(cb));
+  ok("so the dead strings are reachable again", /statusLine\(d\.status\)/.test(cb) && /setDetail\(t\.noTx\)/.test(cb));
+
+  ok("a missing reference is its own state, not 'payment failed'", /const \[unresolved, setUnresolved\]/.test(cb));
+  ok("with its own title", /unresolved \? t\.unknownTitle/.test(cb));
+  ok("and it always offers a human", /setUnresolved\(true\);[\s\S]{0,300}setShowSupport\(true\);/.test(cb));
+  ok("its copy tells the customer NOT to pay again, in both languages",
+    /Do not pay again/.test(cb) && /\\u0644\\u0627 \\u062a\\u062f\\u0641\\u0639 \\u0645\\u0631\\u0629 \\u0623\\u062e\\u0631\\u0649/.test(cb));
+  /* And the loudest control on that screen must not be the one that charges them a second time. */
+  ok("the pay-again route is demoted to a quiet secondary when the outcome is unknown",
+    /className=\{unresolved \? "mt-6 inline-block text-sm font-semibold"/.test(cb));
+  ok("a dead status offers support too", /setDetail\(t\.statusLine\(d\.status\)\);[\s\S]{0,400}setShowSupport\(true\);/.test(cb));
+
+  /*
+   * The receipt printed a fourth hardcoded price table. `lib/plans.ts` reads PRICE_SINGLE so a
+   * promotion can move the price; this table could not — run the promotion the way plans.ts
+   * documents and a buyer charged SAR 19 was handed a receipt saying SAR 35.
+   */
+  ok("the receipt prints what Paylink actually collected", /const receiptAmount = paidAmount \?\? PLAN_VALUE/.test(cb));
+  ok("captured from the verify response", /setPaidAmount\(Number\(d\.amount\)/.test(cb));
+  ok("and PLAN_VALUE no longer reaches either receipt surface",
+    !/SAR \$\{PLAN_VALUE\[plan/.test(cb) && !/\{PLAN_VALUE\[plan \|\| "single"\] \?\? 35\}<\/span>/.test(cb));
+  /* It stays for ad conversion values, where a stale estimate is a dashboard rounding error. */
+  ok("but it survives for conversion tracking", /const value = PLAN_VALUE\[paidPlan\] \?\? 35;/.test(cb));
+}
+
 console.log(`\n${fail === 0 ? "ALL PASS" : "FAILURES"} — ${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

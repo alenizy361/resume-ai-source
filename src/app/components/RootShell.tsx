@@ -65,7 +65,7 @@ const FAQ_EN: [string, string][] = [
   ["Does it invent experience or skills?",
    "It never invents a number, employer, date, degree, or certification — those come from you alone. To save you the blank page it drafts the duties and skills typical of your job title, which you then edit and prune; only what you keep goes into your resume."],
   ["Is it a subscription?",
-   `No subscription. Pay once — ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. There is a 7-day money-back guarantee.`],
+   `No subscription. Pay once — ${formatPrice("single", "en")} for 24-hour full access or ${formatPrice("complete", "en")} for 90 days. The Complete Pack carries a 7-day money-back guarantee.`],
   ["Does it support Arabic?",
    "Yes. Full Arabic (RTL) interface, Saudi/Gulf resume fields, and you can even write in Arabic and get a polished English resume back."],
 ];
@@ -76,7 +76,7 @@ const FAQ_AR: [string, string][] = [
   ["هل يختلق خبرة أو مهارات؟",
    "لا يختلق رقماً ولا جهة عمل ولا تاريخاً ولا شهادة — هذه منك وحدك. ولتوفير عناء الصفحة البيضاء يكتب المهام والمهارات المعتادة لمسمّاك الوظيفي، فتعدّلها وتحذف ما لا ينطبق؛ ولا يدخل سيرتك إلا ما أبقيته."],
   ["هل هو اشتراك؟",
-   `لا اشتراك. ادفع مرة واحدة — ${formatPrice("single", "ar")} لوصول كامل ٢٤ ساعة أو ${formatPrice("complete", "ar")} لتسعين يوماً. وهناك ضمان استرداد خلال ٧ أيام.`],
+   `لا اشتراك. ادفع مرة واحدة — ${formatPrice("single", "ar")} لوصول كامل ٢٤ ساعة أو ${formatPrice("complete", "ar")} لتسعين يوماً. وعلى الحزمة الكاملة ضمان استرداد خلال ٧ أيام.`],
   ["هل يدعم العربية؟",
    "نعم. واجهة عربية كاملة من اليمين إلى اليسار، وحقول السيرة المعتادة في السعودية والخليج، وتستطيع الكتابة بالعربية والحصول على سيرة إنجليزية مصقولة."],
 ];

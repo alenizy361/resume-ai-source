@@ -15,8 +15,10 @@ export const metadata: Metadata = {
   },
 };
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="t-enter mb-8">
+/* `id` so a deep link can land on a clause — the payment sheet now links straight to the
+   refund policy, and a customer sent to the top of a long legal page has not been shown it. */
+const Section = ({ title, children, id }: { title: string; children: React.ReactNode; id?: string }) => (
+  <section id={id} className="t-enter mb-8" style={{ scrollMarginTop: 90 }}>
     <h2 className="mb-3 text-xl font-bold">{title}</h2>
     <div className="space-y-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>{children}</div>
   </section>
@@ -49,16 +51,26 @@ export default function TermsPage() {
 
         <Section title="2. Pricing">
           <ul className="ml-5 list-disc space-y-1">
-            <li><strong>{PLANS.single.name} — {formatPrice("single", "en")} (one-time):</strong> {PLANS.single.accessLabel}. Includes the full optimized resume and a cover letter.</li>
-            <li><strong>{PLANS.complete.name} — {formatPrice("complete", "en")} one-time:</strong> resume + cover letter + LinkedIn + interview prep, {PLANS.complete.accessLabel}. One payment, no subscription and no renewal.</li>
+            {/* The two plans differ in DURATION, not in features — `canUseCoverLetter`,
+                `canUseLinkedInOptimizer` and `canUseInterviewPreparation` are each `active(e)`, so
+                any valid pass unlocks all of them. Listing the extras only under the Complete Pack
+                described an exclusivity the code does not enforce, in the one document that binds. */}
+            <li><strong>Both plans unlock everything:</strong> the full optimized resume, cover letters, the LinkedIn optimizer, interview preparation and watermark-free downloads. They differ only in how long access lasts.</li>
+            <li><strong>{PLANS.single.name} — {formatPrice("single", "en")} (one-time):</strong> {PLANS.single.accessLabel}.</li>
+            <li><strong>{PLANS.complete.name} — {formatPrice("complete", "en")} one-time:</strong> {PLANS.complete.accessLabel}. One payment, no subscription and no renewal.</li>
             <li>The score check and analysis are always free, no card required.</li>
           </ul>
         </Section>
 
-        <Section title="3. Refund policy">
+        <Section id="refund" title="3. Refund policy">
           <p>We refund you in full if you did not get the service:</p>
           <ul className="ml-5 list-disc space-y-1">
             <li>If you paid and your access was never activated, or the system failed to generate your optimized resume — a <strong>full refund</strong> within 7 days of payment.</li>
+            {/* The Complete Pack guarantee was advertised on /pricing, in the homepage FAQ and in the
+                receipt email, and appeared nowhere in this document — the one place a refund promise
+                actually binds. Written down here rather than quietly dropped from the advertising:
+                what is promised publicly is owed, so the honest move is to record it. */}
+            <li>The <strong>Complete Pack</strong> additionally carries a <strong>7-day money-back guarantee</strong>: ask within 7 days of payment and we refund it, no reason needed.</li>
             <li>Email us with your order reference and we handle the request within 3 business days; the amount returns via the same payment method.</li>
             <li>A refund does not cover using the service in full and then asking for one because you didn't like the style — but email us anyway and we'll try to make it right.</li>
           </ul>

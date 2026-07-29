@@ -21,10 +21,14 @@ export default function AuthNav({ ar = false }: { ar?: boolean }) {
   if (!me) return <span className="w-24" />; // reserve space, no flash
 
   /* Was `href={ar ? "/ar#pricing" : "/#pricing"}` — a dead anchor, no such element exists on the
-     homepage. "Unlimited" is the Complete Pack; buying it directly from wherever this nav renders
-     needs no separate pricing page in between. */
+     homepage. Buying the Complete Pack directly from wherever this nav renders needs no separate
+     pricing page in between.
+
+     It said "Unlimited", which this product does not sell: both plans are one-time passes with an
+     end date, and /pricing's own footer line promises "No subscription, ever". A word that means
+     "forever" over a button that buys 90 days is the kind of claim a customer screenshots. */
   const unlockButton = (
-    <CheckoutButton ar={ar} plan="complete" label={ar ? "فتح غير محدود ←" : "Unlock unlimited →"} variant="accent" className="btn-accent px-4 py-2 text-sm" />
+    <CheckoutButton ar={ar} plan="complete" label={ar ? "افتح الوصول الكامل ←" : "Unlock full access →"} variant="accent" className="btn-accent px-4 py-2 text-sm" />
   );
 
   if (me.signedIn) {

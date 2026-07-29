@@ -139,6 +139,36 @@ export function priceMismatch(): PlanId[] {
   });
 }
 
+/**
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ * THE REFUND PROMISE — one source, for the same reason the price has one
+ * ══════════════════════════════════════════════════════════════════════════════════════
+ *
+ * It was stated in five places with THREE different meanings, and the broadest one was the one
+ * printed on the screen where the customer actually pays:
+ *
+ *   · the checkout sheet, BOTH plans, both languages · "🔒 Secure via Paylink · 7-day money-back"
+ *     — unconditional, and shown to the SAR 35 buyer
+ *   · `/pricing` and the homepage FAQ ·················· 7 days, COMPLETE PACK only
+ *   · `/terms` §3 ····································· a refund only if the service FAILED —
+ *     explicitly "not for using the service in full and then asking because you didn't like it"
+ *   · the receipt email ································ unconditional again
+ *
+ * A SAR 35 buyer was therefore promised an unconditional refund in the sheet they paid on and
+ * would then be refused under §3. That is a chargeback rather than a support ticket, and the card
+ * scheme sides with the screen the customer paid on — which is why this belongs next to the price
+ * rather than in four copy blocks. Same lesson, same file: a promise with four homes is four
+ * promises.
+ *
+ * The wording below is the one the product ALREADY advertises publicly on `/pricing` — scoped to
+ * the Complete Pack. Nothing new is being promised to anybody; what changes is that the sheet stops
+ * making a broader promise than the policy, and `/terms` now records the narrower one in writing.
+ */
+export function refundLine(id: PlanId, lang: "ar" | "en"): string {
+  if (id !== "complete") return "";
+  return lang === "ar" ? "ضمان استرداد ٧ أيام" : "7-day money-back guarantee";
+}
+
 /** "SAR 35" / "٣٥ ريالاً" — one formatter, so the two languages cannot drift apart. */
 export function formatPrice(id: PlanId, lang: "ar" | "en"): string {
   const n = planPrice(id);
